@@ -83,15 +83,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>128</ButtonCode>
+        <ButtonCode>256</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>10</XInputIndex>
       </XInputButton>
       <InputMapping>Service2</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 10 RightShoulder</BindNameXi>
-      <BindName>Input Device 10 RightShoulder</BindName>
+      <BindNameXi>Input Device 10 LeftShoulder</BindNameXi>
+      <BindName>Input Device 10 LeftShoulder</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
