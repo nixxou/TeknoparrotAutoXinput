@@ -201,8 +201,8 @@
       </XInputButton>
       <InputMapping>ExtensionOne17</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 LeftTrigger</BindNameXi>
-      <BindName>Input Device 0 LeftTrigger</BindName>
+      <BindNameXi>Input Device 0 RightThumb</BindNameXi>
+      <BindName>Input Device 0 RightThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
