@@ -19,6 +19,7 @@ namespace TeknoparrotAutoXinput
 		public static string logoPath = "";
 		public static string playerAttributionDesc = "";
 		public static List<string> imagePaths = new List<string>();
+		public static string tpBasePath = "";
 
 
 
@@ -128,7 +129,10 @@ namespace TeknoparrotAutoXinput
 
 		private void GrabLoaderTimer_Tick(object sender, EventArgs e)
 		{
-			IntPtr externalWindowHandle = FindWindow(null, @"C:\teknoparrot\OpenParrotWin32\OpenParrotLoader.exe");
+			IntPtr externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "OpenParrotWin32", "OpenParrotLoader.exe"));
+			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "OpenParrotWin32", "OpenParrotKonamiLoader.exe"));
+			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "OpenParrotx64", "OpenParrotLoader64.exe"));
+			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "TeknoParrot", "BudgieLoader.exe"));
 
 			if (externalWindowHandle != IntPtr.Zero)
 			{

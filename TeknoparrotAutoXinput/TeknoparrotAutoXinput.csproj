@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">	
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
@@ -7,6 +6,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+	
+  <ItemGroup>
+    <Compile Remove="config\**" />
+    <Compile Remove="img\**" />
+    <EmbeddedResource Remove="config\**" />
+    <EmbeddedResource Remove="img\**" />
+    <None Remove="config\**" />
+    <None Remove="img\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Krypton.Toolkit" Version="80.23.11.321" />
@@ -29,6 +37,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="lib\SetDpi.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="lib\XinputEx.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

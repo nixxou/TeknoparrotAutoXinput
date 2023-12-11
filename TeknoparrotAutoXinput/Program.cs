@@ -44,8 +44,8 @@ namespace TeknoparrotAutoXinput
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
 #if DEBUG
 			List<string> fakeArgs = new List<string>();
-			fakeArgs.Add(@"C:\teknoparrot\UserProfiles\ArcanaHeart3Nesica.xml");
-			args = fakeArgs.ToArray();
+			fakeArgs.Add(@"C:\teknoparrot\UserProfiles\abc.xml");
+			//args = fakeArgs.ToArray();
 #endif
 
 			if (args.Length == 0)
@@ -424,6 +424,7 @@ namespace TeknoparrotAutoXinput
 							finalConfig = xmlFile + ".custom.xml";
 						}
 
+						Startup.tpBasePath = Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName;
 						Startup.gameTitle = originalConfigFileNameWithoutExt;
 						Startup.logoPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "Icons", originalConfigFileNameWithoutExt + ".png");
 						Startup.playerAttributionDesc = "";
@@ -464,10 +465,10 @@ namespace TeknoparrotAutoXinput
 						process.StartInfo.Arguments = "--profile=\"" + finalConfig + "\"";
 						process.StartInfo.WorkingDirectory = Path.GetDirectoryName(teknoparrotExe);
 
-						process.StartInfo.UseShellExecute = false;
-						process.StartInfo.RedirectStandardOutput = true;
-						process.StartInfo.RedirectStandardError = true;
-						process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+						process.StartInfo.UseShellExecute = true;
+						//process.StartInfo.RedirectStandardOutput = true;
+						//process.StartInfo.RedirectStandardError = true;
+						//process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
 
 						process.Start();
 
