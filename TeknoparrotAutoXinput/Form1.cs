@@ -1,8 +1,7 @@
 using Krypton.Toolkit;
-using Nefarius.ViGEm.Client.Exceptions;
 using Nefarius.ViGEm.Client;
+using Nefarius.ViGEm.Client.Exceptions;
 using TestVgme;
-using System.Security.Cryptography;
 
 namespace TeknoparrotAutoXinput
 {
@@ -20,7 +19,9 @@ namespace TeknoparrotAutoXinput
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			this.KeyPicker = new PickKeyCombo(this);
+			System.Diagnostics.Debugger.Break();
 
+			chk_FFB.Checked = (bool)Properties.Settings.Default["FFB"];
 			chk_showStartup.Checked = (bool)Properties.Settings.Default["showStartup"];
 			chk_enableVirtualKeyboard.Checked = (bool)Properties.Settings.Default["virtualKeyboard"];
 			txt_KeyTest.Text = Properties.Settings.Default["keyTest"].ToString();
@@ -150,6 +151,12 @@ namespace TeknoparrotAutoXinput
 		private void chk_showStartup_CheckedChanged(object sender, EventArgs e)
 		{
 			Properties.Settings.Default["showStartup"] = chk_showStartup.Checked;
+			Properties.Settings.Default.Save();
+		}
+
+		private void chk_FFB_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default["FFB"] = chk_FFB.Checked;
 			Properties.Settings.Default.Save();
 		}
 	}

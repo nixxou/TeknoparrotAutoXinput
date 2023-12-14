@@ -82,5 +82,17 @@ namespace TeknoparrotAutoXinput.Properties {
                 this["showStartup"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FFB {
+            get {
+                return ((bool)(this["FFB"]));
+            }
+            set {
+                this["FFB"] = value;
+            }
+        }
     }
 }

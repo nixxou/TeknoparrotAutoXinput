@@ -3,20 +3,15 @@ using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using Nefarius.ViGEm.Client.Targets;
 using Newtonsoft.Json;
+using SDL2;
 using System.Diagnostics;
-using System.IO.Pipes;
 using System.Security.Cryptography;
-using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
-using TestVgme;
 using XInput.Wrapper;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static SDL2.SDL;
 using static XInput.Wrapper.X;
-using static XInput.Wrapper.X.Gamepad;
 
 namespace TeknoparrotAutoXinput
 {
@@ -44,10 +39,10 @@ namespace TeknoparrotAutoXinput
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
 #if DEBUG
 			List<string> fakeArgs = new List<string>();
-			fakeArgs.Add(@"C:\teknoparrot\UserProfiles\abc.xml");
-			//args = fakeArgs.ToArray();
+			fakeArgs.Add(@"C:\teknoparrot\UserProfiles\Daytona3.xml");
+			args = fakeArgs.ToArray();
 #endif
-
+			MessageBox.Show("zog");
 			if (args.Length == 0)
 			{
 				ApplicationConfiguration.Initialize();
@@ -56,6 +51,7 @@ namespace TeknoparrotAutoXinput
 			if (args.Length > 0)
 			{
 
+				bool changeFFBConfig = (bool)Properties.Settings.Default["FFB"];
 				bool showStartup = (bool)Properties.Settings.Default["showStartup"];
 				//showStartup = false;
 				bool useVirtualKeyboard = (bool)Properties.Settings.Default["virtualKeyboard"];
@@ -69,7 +65,7 @@ namespace TeknoparrotAutoXinput
 				typeConfig.Add("gamepad");
 				typeConfig.Add("arcade");
 				typeConfig.Add("wheel");
-			
+
 
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 
@@ -156,7 +152,7 @@ namespace TeknoparrotAutoXinput
 						Dictionary<string, JoystickButton> joystickButtonArcade = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonGamepad = new Dictionary<string, JoystickButton>();
 
-						if(availableSlot != -1 && useVirtualKeyboard)
+						if (availableSlot != -1 && useVirtualKeyboard)
 						{
 							bool VigemInstalled = false;
 							try
@@ -165,7 +161,7 @@ namespace TeknoparrotAutoXinput
 								VigemInstalled = true;
 							}
 							catch (VigemBusNotFoundException e) { }
-							if(VigemInstalled)
+							if (VigemInstalled)
 							{
 								if (availableSlot == 0) gamepad = X.Gamepad_1;
 								if (availableSlot == 1) gamepad = X.Gamepad_2;
@@ -201,7 +197,7 @@ namespace TeknoparrotAutoXinput
 									client.Dispose();
 								}
 
-								if(virtualKeyboardXinputSlot > -1)
+								if (virtualKeyboardXinputSlot > -1)
 								{
 									var assignment = new Dictionary<Combination, Action>();
 
@@ -215,10 +211,10 @@ namespace TeknoparrotAutoXinput
 												ControllerAction(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.LeftThumb);
 
 											};
-											assignment.Add(keycombi,actionPauseMenu);
+											assignment.Add(keycombi, actionPauseMenu);
 
 										}
-										catch (Exception ex){}
+										catch (Exception ex) { }
 									}
 									if (!string.IsNullOrEmpty(keyService1))
 									{
@@ -349,9 +345,57 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 						}
+						
+						if (changeFFBConfig && ConfigPerPlayer.Count > 0)
+						{
+							var firstPlayer = ConfigPerPlayer.First();
+							XmlDocument xmlDocOri = new XmlDocument();
+							xmlDocOri.Load(xmlFile);
+							XmlNode gamePathNode = xmlDocOri.SelectSingleNode("/GameProfile/GamePath");
+							if (gamePathNode != null)
+							{
+								string gamePathContent = gamePathNode.InnerText;
+								string FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini");
+								if (File.Exists(FFBPluginIniFile))
+								{
+									var ConfigFFB = new IniFile(FFBPluginIniFile);
+									if (ConfigFFB.KeyExists("DeviceGUID", "Settings"))
+									{
 
 
+										SDL2.SDL.SDL_Quit();
+										SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
+										SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
+										SDL2.SDL.SDL_JoystickUpdate();
+										for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
+										{
+											var currentJoy = SDL.SDL_JoystickOpen(i);
+											string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
+											if (nameController.ToLower().StartsWith("xinput") && nameController.ToLower().EndsWith("#" + (firstPlayer.Value.Item2.XinputSlot + 1).ToString()))
+											{
 
+												const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
+												byte[] guidBuffer = new byte[bufferSize];
+												SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
+												string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
+												ConfigFFB.Write("DeviceGUID", guidString, "Settings");
+												SDL.SDL_JoystickClose(currentJoy);
+												SDL.SDL_JoystickClose(currentJoy);
+												break;
+											}
+											SDL.SDL_JoystickClose(currentJoy);
+										}
+										SDL2.SDL.SDL_Quit();
+
+
+									}
+
+								}
+
+							}
+
+						}
+						
 						foreach (var ConfigPlayer in ConfigPerPlayer)
 						{
 							int TargetXinput = ConfigPlayer.Key;
@@ -376,7 +420,7 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 						}
-						if (useVirtualKeyboard && ConfigPerPlayer.Count()>0 && virtualKeyboardXinputSlot >=0)
+						if (useVirtualKeyboard && ConfigPerPlayer.Count() > 0 && virtualKeyboardXinputSlot >= 0)
 						{
 							string ConfigType = ConfigPerPlayer.First().Value.Item1;
 							Dictionary<string, JoystickButton> joystickButtonData = new Dictionary<string, JoystickButton>();
@@ -386,7 +430,7 @@ namespace TeknoparrotAutoXinput
 
 							foreach (var buttonData in joystickButtonData)
 							{
-								if(buttonData.Value.XinputSlot == 10)
+								if (buttonData.Value.XinputSlot == 10)
 								{
 									emptyJoystickButtonDictionary[buttonData.Key] = buttonData.Value.RemapButtonData(virtualKeyboardXinputSlot);
 								}
@@ -515,11 +559,11 @@ namespace TeknoparrotAutoXinput
 		static List<int> GetPlayersList(Dictionary<string, JoystickButton> joystickButtonDictionary)
 		{
 			List<int> playerList = new List<int>();
-			foreach(var joystickButton in joystickButtonDictionary)
+			foreach (var joystickButton in joystickButtonDictionary)
 			{
-				if(joystickButton.Value.XinputSlot >= 0 && joystickButton.Value.XinputSlot <= 3)
+				if (joystickButton.Value.XinputSlot >= 0 && joystickButton.Value.XinputSlot <= 3)
 				{
-					if(!playerList.Contains(joystickButton.Value.XinputSlot)) playerList.Add(joystickButton.Value.XinputSlot);
+					if (!playerList.Contains(joystickButton.Value.XinputSlot)) playerList.Add(joystickButton.Value.XinputSlot);
 				}
 			}
 			playerList.Sort();
@@ -638,7 +682,7 @@ namespace TeknoparrotAutoXinput
 			button.Xml = button.Xml.Replace($"<XInputIndex>{XinputSlot}</XInputIndex>", $"<XInputIndex>{newXinputSlot}</XInputIndex>");
 			button.BindNameXi = button.BindNameXi.Replace($"Input Device {XinputSlot}", $"Input Device {newXinputSlot}");
 
-			
+
 			button.XinputSlot = newXinputSlot;
 			return button;
 		}

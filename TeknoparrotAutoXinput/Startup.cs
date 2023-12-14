@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace TeknoparrotAutoXinput
 {
@@ -101,13 +92,13 @@ namespace TeknoparrotAutoXinput
 			checkWindowTimer.Enabled = true;
 			checkWindowTimer.Start();
 
-			
+
 			grabLoaderTimer = new System.Windows.Forms.Timer();
 			grabLoaderTimer.Interval = 30; // Intervalle d'attente en millisecondes (1 seconde dans cet exemple)
 			grabLoaderTimer.Tick += GrabLoaderTimer_Tick;
 			grabLoaderTimer.Enabled = true;
 			grabLoaderTimer.Start();
-			
+
 			LoadImages();
 			AddImageToForm();
 		}
@@ -266,7 +257,7 @@ namespace TeknoparrotAutoXinput
 			stringSize = TextRenderer.MeasureText(titleLabel.Text, font);
 			posX = (this.Width / 4);
 
-			descLabel.Location = new Point(posX, (this.Height / 4)-((int)stringSize.Height/2) );
+			descLabel.Location = new Point(posX, (this.Height / 4) - ((int)stringSize.Height / 2));
 
 			// Ajouter le label au formulaire
 			Controls.Add(descLabel);

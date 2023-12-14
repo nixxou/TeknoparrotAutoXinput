@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TeknoparrotAutoXinput": {
+      "commandName": "Project",
+      "nativeDebugging": false,
+      "hotReloadEnabled": true,
+      "remoteDebugEnabled": false
+    }
+  }
+}

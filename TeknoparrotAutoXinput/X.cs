@@ -3,12 +3,7 @@
 // Version 0.3.2 (July 25, 2016)
 // Under the MIT License (MIT)
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace XInput.Wrapper
 {

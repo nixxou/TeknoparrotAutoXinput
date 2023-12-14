@@ -42,7 +42,7 @@
 			btn_ClearService2 = new Krypton.Toolkit.KryptonButton();
 			btn_setService2 = new Krypton.Toolkit.KryptonButton();
 			chk_showStartup = new Krypton.Toolkit.KryptonCheckBox();
-			button1 = new Button();
+			chk_FFB = new Krypton.Toolkit.KryptonCheckBox();
 			SuspendLayout();
 			// 
 			// chk_enableVirtualKeyboard
@@ -165,22 +165,21 @@
 			chk_showStartup.Values.Text = "Show Startup Screen on Game Launch";
 			chk_showStartup.CheckedChanged += chk_showStartup_CheckedChanged;
 			// 
-			// button1
+			// chk_FFB
 			// 
-			button1.Location = new Point(603, 98);
-			button1.Name = "button1";
-			button1.Size = new Size(75, 23);
-			button1.TabIndex = 15;
-			button1.Text = "button1";
-			button1.UseVisualStyleBackColor = true;
-			button1.Click += button1_Click;
+			chk_FFB.Location = new Point(12, 186);
+			chk_FFB.Name = "chk_FFB";
+			chk_FFB.Size = new Size(282, 20);
+			chk_FFB.TabIndex = 16;
+			chk_FFB.Values.Text = "Update FFBPlugin Device in the game config ini";
+			chk_FFB.CheckedChanged += chk_FFB_CheckedChanged;
 			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(800, 450);
-			Controls.Add(button1);
+			Controls.Add(chk_FFB);
 			Controls.Add(chk_showStartup);
 			Controls.Add(kryptonLabel3);
 			Controls.Add(txt_KeyService2);
@@ -218,6 +217,6 @@
 		private Krypton.Toolkit.KryptonButton btn_ClearService2;
 		private Krypton.Toolkit.KryptonButton btn_setService2;
 		private Krypton.Toolkit.KryptonCheckBox chk_showStartup;
-		private Button button1;
+		private Krypton.Toolkit.KryptonCheckBox chk_FFB;
 	}
 }
