@@ -40,9 +40,10 @@ namespace TeknoparrotAutoXinput
 #if DEBUG
 			List<string> fakeArgs = new List<string>();
 			fakeArgs.Add(@"C:\teknoparrot\UserProfiles\Daytona3.xml");
-			args = fakeArgs.ToArray();
+			//args = fakeArgs.ToArray();
+			//MessageBox.Show("zog");
 #endif
-			MessageBox.Show("zog");
+
 			if (args.Length == 0)
 			{
 				ApplicationConfiguration.Initialize();
