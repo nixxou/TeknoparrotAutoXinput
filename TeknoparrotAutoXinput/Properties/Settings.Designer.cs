@@ -94,5 +94,113 @@ namespace TeknoparrotAutoXinput.Properties {
                 this["FFB"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Type=Wheel")]
+        public string wheelXinputData {
+            get {
+                return ((string)(this["wheelXinputData"]));
+            }
+            set {
+                this["wheelXinputData"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Type=ArcadeStick,Type=ArcadePad")]
+        public string arcadeXinputData {
+            get {
+                return ((string)(this["arcadeXinputData"]));
+            }
+            set {
+                this["arcadeXinputData"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Type=Gamepad")]
+        public string gamepadXinputData {
+            get {
+                return ((string)(this["gamepadXinputData"]));
+            }
+            set {
+                this["gamepadXinputData"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool gamepadStooz {
+            get {
+                return ((bool)(this["gamepadStooz"]));
+            }
+            set {
+                this["gamepadStooz"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool wheelStooz {
+            get {
+                return ((bool)(this["wheelStooz"]));
+            }
+            set {
+                this["wheelStooz"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool enableStoozZone_Gamepad {
+            get {
+                return ((bool)(this["enableStoozZone_Gamepad"]));
+            }
+            set {
+                this["enableStoozZone_Gamepad"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int valueStooz_Gamepad {
+            get {
+                return ((int)(this["valueStooz_Gamepad"]));
+            }
+            set {
+                this["valueStooz_Gamepad"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool enableStoozZone_Wheel {
+            get {
+                return ((bool)(this["enableStoozZone_Wheel"]));
+            }
+            set {
+                this["enableStoozZone_Wheel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int valueStooz_Wheel {
+            get {
+                return ((int)(this["valueStooz_Wheel"]));
+            }
+            set {
+                this["valueStooz_Wheel"] = value;
+            }
+        }
     }
 }

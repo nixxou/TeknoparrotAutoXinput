@@ -20,5 +20,32 @@
     <Setting Name="FFB" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="wheelXinputData" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Type=Wheel</Value>
+    </Setting>
+    <Setting Name="arcadeXinputData" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Type=ArcadeStick,Type=ArcadePad</Value>
+    </Setting>
+    <Setting Name="gamepadXinputData" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Type=Gamepad</Value>
+    </Setting>
+    <Setting Name="gamepadStooz" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="wheelStooz" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="enableStoozZone_Gamepad" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="valueStooz_Gamepad" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="enableStoozZone_Wheel" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="valueStooz_Wheel" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

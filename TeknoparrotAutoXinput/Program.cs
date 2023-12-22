@@ -36,6 +36,13 @@ namespace TeknoparrotAutoXinput
 		[STAThread]
 		static void Main(string[] args)
 		{
+			string runtimedir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "runtimes");
+			if (Directory.Exists(runtimedir))
+			{
+				Directory.Delete(runtimedir, true);
+			}
+
+
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
 #if DEBUG
 			List<string> fakeArgs = new List<string>();

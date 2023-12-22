@@ -28,6 +28,23 @@ namespace TeknoparrotAutoXinput
 			txt_KeyService1.Text = Properties.Settings.Default["keyService1"].ToString();
 			txt_KeyService2.Text = Properties.Settings.Default["keyService2"].ToString();
 
+			txt_wheelXinputData.Text = Properties.Settings.Default["wheelXinputData"].ToString();
+			txt_arcadeXinputData.Text = Properties.Settings.Default["arcadeXinputData"].ToString();
+			txt_gamepadXinputData.Text = Properties.Settings.Default["gamepadXinputData"].ToString();
+
+
+			radio_useCustomStooz_Gamepad.Checked = (bool)Properties.Settings.Default["gamepadStooz"];
+			radio_useCustomStooz_Wheel.Checked = (bool)Properties.Settings.Default["wheelStooz"];
+			radio_useDefaultStooze_Gamepad.Checked = !radio_useCustomStooz_Gamepad.Checked;
+			radio_useDefaultStooze_Wheel.Checked = !radio_useCustomStooz_Wheel.Checked;
+
+			chk_enableStoozZone_Gamepad.Checked = (bool)Properties.Settings.Default["enableStoozZone_Gamepad"];
+			trk_useCustomStooz_Gamepad.Value = (int)Properties.Settings.Default["valueStooz_Gamepad"];
+			chk_enableStoozZone_Wheel.Checked = (bool)Properties.Settings.Default["enableStoozZone_Wheel"];
+			trk_useCustomStooz_Wheel.Value = (int)Properties.Settings.Default["valueStooz_Wheel"];
+
+			updateStooz();
+
 			if (!chk_enableVirtualKeyboard.Checked)
 			{
 				btn_ClearService1.Enabled = false;
@@ -158,6 +175,93 @@ namespace TeknoparrotAutoXinput
 		{
 			Properties.Settings.Default["FFB"] = chk_FFB.Checked;
 			Properties.Settings.Default.Save();
+		}
+
+		private void btn_testxinput_Click(object sender, EventArgs e)
+		{
+			txt_xinputdata.Text = HIDInfo.GetXINPUT(true);
+		}
+
+		private void kryptonLabel4_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void kryptonButton1_Click(object sender, EventArgs e)
+		{
+			txt_wheelXinputData.Text = "Type=Wheel";
+			txt_arcadeXinputData.Text = "Type=ArcadeStick,Type=ArcadePad";
+			txt_gamepadXinputData.Text = "Type=Gamepad";
+			Properties.Settings.Default["wheelXinputData"] = txt_wheelXinputData.Text;
+			Properties.Settings.Default["arcadeXinputData"] = txt_arcadeXinputData.Text;
+			Properties.Settings.Default["gamepadXinputData"] = txt_gamepadXinputData.Text;
+
+
+		}
+
+		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			Properties.Settings.Default["wheelXinputData"] = txt_wheelXinputData.Text;
+			Properties.Settings.Default["arcadeXinputData"] = txt_arcadeXinputData.Text;
+			Properties.Settings.Default["gamepadXinputData"] = txt_gamepadXinputData.Text;
+
+			Properties.Settings.Default["gamepadStooz"] = radio_useCustomStooz_Gamepad.Checked;
+			Properties.Settings.Default["wheelStooz"] = radio_useCustomStooz_Wheel.Checked;
+
+			Properties.Settings.Default["enableStoozZone_Gamepad"] = chk_enableStoozZone_Gamepad.Checked;
+			Properties.Settings.Default["valueStooz_Gamepad"] = trk_useCustomStooz_Gamepad.Value;
+			Properties.Settings.Default["enableStoozZone_Wheel"] = chk_enableStoozZone_Wheel.Checked;
+			Properties.Settings.Default["valueStooz_Wheel"] = trk_useCustomStooz_Wheel.Value;
+
+
+			Properties.Settings.Default.Save();
+		}
+
+		private void trk_useCustomStooz_Gamepad_Scroll(object sender, EventArgs e)
+		{
+			lbl_useCustomStooz_Gamepad.Text = trk_useCustomStooz_Gamepad.Value.ToString() + "%";
+		}
+
+		private void trk_useCustomStooz_Wheel_Scroll(object sender, EventArgs e)
+		{
+			lbl_useCustomStooz_Wheel.Text = trk_useCustomStooz_Wheel.Value.ToString() + "%";
+		}
+
+		private void updateStooz()
+		{
+			chk_enableStoozZone_Gamepad.Enabled = radio_useCustomStooz_Gamepad.Checked;
+			trk_useCustomStooz_Gamepad.Enabled = radio_useCustomStooz_Gamepad.Checked;
+			chk_enableStoozZone_Gamepad.Visible = radio_useCustomStooz_Gamepad.Checked;
+			trk_useCustomStooz_Gamepad.Visible = radio_useCustomStooz_Gamepad.Checked;
+			lbl_useCustomStooz_Gamepad.Text = trk_useCustomStooz_Gamepad.Value.ToString() + "%";
+			lbl_useCustomStooz_Gamepad.Visible = radio_useCustomStooz_Gamepad.Checked;
+
+			chk_enableStoozZone_Wheel.Enabled = radio_useCustomStooz_Wheel.Checked;
+			trk_useCustomStooz_Wheel.Enabled = radio_useCustomStooz_Wheel.Checked;
+			chk_enableStoozZone_Wheel.Visible = radio_useCustomStooz_Wheel.Checked;
+			trk_useCustomStooz_Wheel.Visible = radio_useCustomStooz_Wheel.Checked;
+			lbl_useCustomStooz_Wheel.Text = trk_useCustomStooz_Wheel.Value.ToString() + "%";
+			lbl_useCustomStooz_Wheel.Visible = radio_useCustomStooz_Wheel.Checked;
+		}
+
+		private void radio_useDefaultStooze_Gamepad_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useCustomStooz_Gamepad_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useDefaultStooze_Wheel_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useCustomStooz_Wheel_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
 		}
 	}
 }

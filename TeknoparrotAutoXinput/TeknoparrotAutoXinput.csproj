@@ -35,6 +35,7 @@
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ppy.SDL2-CS" Version="1.0.82" />
+    <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
