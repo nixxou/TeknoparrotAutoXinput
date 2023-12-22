@@ -85,7 +85,7 @@ namespace TeknoparrotAutoXinput
 				int valueStooz_Wheel = (int)Properties.Settings.Default["valueStooz_Wheel"];
 
 
-
+				bool passthrough = false;
 
 
 
@@ -109,6 +109,11 @@ namespace TeknoparrotAutoXinput
 							int slotNumber = int.Parse(match.Groups[1].Value);
 							string deviceType = match.Groups[2].Value.ToLower().Trim();
 							forceTypeController.Add(slotNumber, deviceType);
+						}
+
+						if(arg.ToLower().Trim() == "--passthrough")
+						{
+							passthrough = true;
 						}
 					}
 
@@ -147,7 +152,7 @@ namespace TeknoparrotAutoXinput
 							existingConfig.Add(type, configPath);
 						}
 					}
-					if (existingConfig.Count() == 0)
+					if (existingConfig.Count() == 0 || passthrough)
 					{
 						finalConfig = xmlFile;
 					}
