@@ -384,6 +384,7 @@
 			kryptonButton1.Size = new Size(121, 23);
 			kryptonButton1.TabIndex = 36;
 			kryptonButton1.Values.Text = "Reset To Default";
+			kryptonButton1.Click += kryptonButton1_Click;
 			// 
 			// kryptonLabel7
 			// 
@@ -445,6 +446,7 @@
 			btn_testxinput.Size = new Size(121, 108);
 			btn_testxinput.TabIndex = 28;
 			btn_testxinput.Values.Text = "Show Xinput \r\nDevices Data\r\n(Debug)";
+			btn_testxinput.Click += btn_testxinput_Click;
 			// 
 			// txt_xinputdata
 			// 

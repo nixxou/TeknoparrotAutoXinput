@@ -29,6 +29,9 @@ namespace TeknoparrotAutoXinput
 		private static Startup startupForm;
 		private static CancellationTokenSource cancellationTokenSource;
 
+		public static string wheelXinputData;
+		public static string arcadeXinputData;
+		public static string gamepadXinputData;
 
 		/// <summary>
 		///  The main entry point for the application.
@@ -66,6 +69,21 @@ namespace TeknoparrotAutoXinput
 				string keyTest = Properties.Settings.Default["keyTest"].ToString();
 				string keyService1 = Properties.Settings.Default["keyService1"].ToString();
 				string keyService2 = Properties.Settings.Default["keyService2"].ToString();
+
+				wheelXinputData = Properties.Settings.Default["wheelXinputData"].ToString();
+				arcadeXinputData = Properties.Settings.Default["arcadeXinputData"].ToString();
+				gamepadXinputData = Properties.Settings.Default["gamepadXinputData"].ToString();
+
+
+				bool gamepadStooz = (bool)Properties.Settings.Default["gamepadStooz"];
+				bool wheelStooz = (bool)Properties.Settings.Default["wheelStooz"];
+				bool enableStoozZone_Gamepad = (bool)Properties.Settings.Default["enableStoozZone_Gamepad"];
+				int valueStooz_Gamepad = (int)Properties.Settings.Default["valueStooz_Gamepad"];
+				bool enableStoozZone_Wheel = (bool)Properties.Settings.Default["enableStoozZone_Wheel"];
+				int valueStooz_Wheel = (int)Properties.Settings.Default["valueStooz_Wheel"];
+
+
+
 
 
 
@@ -136,6 +154,7 @@ namespace TeknoparrotAutoXinput
 						if (availableSlot == -1 && !connectedGamePad.ContainsKey(3)) availableSlot = 3;
 						bool haveArcade = false;
 						bool haveWheel = false;
+						bool haveGamepad = false;
 						foreach (var gp in connectedGamePad.Values)
 						{
 							if (gp.Type == "arcade")
@@ -149,6 +168,14 @@ namespace TeknoparrotAutoXinput
 							if (gp.Type == "wheel")
 							{
 								haveWheel = true;
+								break;
+							}
+						}
+						foreach (var gp in connectedGamePad.Values)
+						{
+							if (gp.Type == "gamepad")
+							{
+								haveGamepad = true;
 								break;
 							}
 						}
@@ -327,6 +354,7 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 						}
+						if (haveGamepad)
 						{
 							joystickButtonGamepad = ParseConfig(existingConfig["gamepad"]);
 							var PlayerList = GetPlayersList(joystickButtonGamepad);
@@ -730,7 +758,48 @@ namespace TeknoparrotAutoXinput
 				RevisionID = revisionId;
 			}
 
+			Type = "";
+			string dataTxt = ToString();
+			MessageBox.Show(dataTxt);
+			
+			if(Type == "")
+			{
+				var MatchList = Program.wheelXinputData.ToLower().Trim().Split(',');
+				foreach (var m in MatchList)
+				{
+					if (m.Trim() != "" && dataTxt.ToLower().Trim().Contains(m.Trim()))
+					{
+						Type = "wheel";
+						break;
+					}
+				}
+			}
+			if (Type == "")
+			{
+				var MatchList = Program.arcadeXinputData.ToLower().Trim().Split(',');
+				foreach (var m in MatchList)
+				{
+					if (m.Trim() != "" && dataTxt.ToLower().Trim().Contains(m.Trim()))
+					{
+						Type = "arcade";
+						break;
+					}
+				}
+			}
+			if (Type == "")
+			{
+				var MatchList = Program.gamepadXinputData.ToLower().Trim().Split(',');
+				foreach (var m in MatchList)
+				{
+					if (m.Trim() != "" && dataTxt.ToLower().Trim().Contains(m.Trim()))
+					{
+						Type = "gamepad";
+						break;
+					}
+				}
+			}
 
+			/*
 			Type = "gamepad";
 			if (Type == "gamepad")
 			{
@@ -746,6 +815,7 @@ namespace TeknoparrotAutoXinput
 					Type = "wheel";
 				}
 			}
+			*/
 
 
 		}
