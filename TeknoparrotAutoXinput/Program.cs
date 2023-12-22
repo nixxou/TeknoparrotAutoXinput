@@ -33,6 +33,8 @@ namespace TeknoparrotAutoXinput
 		public static string arcadeXinputData;
 		public static string gamepadXinputData;
 
+		public static Dictionary<int, string> forceTypeController;
+
 		/// <summary>
 		///  The main entry point for the application.
 		/// </summary>
@@ -97,6 +99,20 @@ namespace TeknoparrotAutoXinput
 
 				if (args.Length > 0)
 				{
+
+					forceTypeController = new Dictionary<int, string>(); 
+					foreach (string arg in args)
+					{
+						Match match = Regex.Match(arg, @"--forceslot([0-3])=(arcade|wheel|gamepad)");
+						if (match.Success)
+						{
+							int slotNumber = int.Parse(match.Groups[1].Value);
+							string deviceType = match.Groups[2].Value.ToLower().Trim();
+							forceTypeController.Add(slotNumber, deviceType);
+						}
+					}
+
+
 					string finalConfig = "";
 					string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
 					string customConfigPath = "";
@@ -760,7 +776,11 @@ namespace TeknoparrotAutoXinput
 
 			Type = "";
 			string dataTxt = ToString();
-			MessageBox.Show(dataTxt);
+
+			if (Program.forceTypeController.ContainsKey(xinputSlot))
+			{
+				Type = Program.forceTypeController[xinputSlot];
+			}
 			
 			if(Type == "")
 			{
