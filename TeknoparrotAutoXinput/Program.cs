@@ -35,6 +35,11 @@ namespace TeknoparrotAutoXinput
 
 		public static Dictionary<int, string> forceTypeController;
 
+		public static string ParrotDataOriginal="";
+		public static string ParrotDataBackup="";
+		public static string FFBPluginIniFile = "";
+		public static string FFBPluginIniBackup = "";
+
 		/// <summary>
 		///  The main entry point for the application.
 		/// </summary>
@@ -136,6 +141,39 @@ namespace TeknoparrotAutoXinput
 					{
 						MessageBox.Show($"Can't find {teknoparrotExe}");
 						return;
+					}
+
+					ParrotDataOriginal = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml");
+					ParrotDataBackup = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml.AutoXinputBackup");
+					if (File.Exists(ParrotDataBackup))
+					{
+						try
+						{
+							File.Copy(ParrotDataBackup, ParrotDataOriginal, true);
+							File.Delete(ParrotDataBackup);
+						}
+						catch { }
+					}
+
+					FFBPluginIniFile = "";
+					FFBPluginIniBackup = "";
+					XmlDocument xmlDocOri = new XmlDocument();
+					xmlDocOri.Load(xmlFile);
+					XmlNode gamePathNode = xmlDocOri.SelectSingleNode("/GameProfile/GamePath");
+					if (gamePathNode != null)
+					{
+						string gamePathContent = gamePathNode.InnerText;
+						FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini");
+						FFBPluginIniBackup = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini.AutoXinputBackup");
+						if (File.Exists(FFBPluginIniBackup))
+						{
+							try
+							{
+								File.Copy(FFBPluginIniBackup, FFBPluginIniFile, true);
+								File.Delete(FFBPluginIniBackup);
+							}
+							catch { }
+						}
 					}
 
 					string emptyConfigPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "GameProfiles", originalConfigFileName); ;
@@ -402,19 +440,72 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 						}
-						
+
+						if(ConfigPerPlayer.Count > 0 && (gamepadStooz || wheelStooz))
+						{
+							MessageBox.Show("ici");
+							bool doChangeStooz = false;
+							bool enableStooz = false;
+							int valueStooz = 0;
+							var firstPlayer = ConfigPerPlayer.First();
+							if(firstPlayer.Value.Item2.Type == "gamepad" && gamepadStooz)
+							{
+								doChangeStooz = true;
+								enableStooz = enableStoozZone_Gamepad;
+								valueStooz = valueStooz_Gamepad;
+
+							}
+							if (firstPlayer.Value.Item2.Type == "wheel" && wheelStooz)
+							{
+								doChangeStooz = true;
+								enableStooz = enableStoozZone_Wheel;
+								valueStooz = valueStooz_Wheel;
+							}
+							if (doChangeStooz)
+							{
+								if (!String.IsNullOrEmpty(ParrotDataBackup))
+								{
+									try
+									{
+										File.Copy(ParrotDataOriginal, ParrotDataBackup, true);
+									}
+									catch { }
+								}
+								XmlDocument xmlDocParrotData = new XmlDocument();
+								xmlDocParrotData.Load(ParrotDataOriginal);
+								XmlNode useSto0ZDrivingHackNode = xmlDocParrotData.SelectSingleNode("/ParrotData/UseSto0ZDrivingHack");
+								XmlNode stoozPercentNode = xmlDocParrotData.SelectSingleNode("/ParrotData/StoozPercent");
+								useSto0ZDrivingHackNode.InnerText = enableStooz.ToString().ToLower();
+								stoozPercentNode.InnerText = valueStooz.ToString();
+								xmlDocParrotData.Save(ParrotDataOriginal);
+							}
+
+						}
+
 						if (changeFFBConfig && ConfigPerPlayer.Count > 0)
 						{
 							var firstPlayer = ConfigPerPlayer.First();
+							/*
 							XmlDocument xmlDocOri = new XmlDocument();
 							xmlDocOri.Load(xmlFile);
 							XmlNode gamePathNode = xmlDocOri.SelectSingleNode("/GameProfile/GamePath");
+							
 							if (gamePathNode != null)
 							{
 								string gamePathContent = gamePathNode.InnerText;
 								string FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini");
-								if (File.Exists(FFBPluginIniFile))
+								*/
+								if (!String.IsNullOrEmpty(FFBPluginIniFile) && File.Exists(FFBPluginIniFile))
 								{
+
+									if(!String.IsNullOrEmpty(FFBPluginIniBackup))
+									{
+										try
+										{
+											File.Copy(FFBPluginIniFile, FFBPluginIniBackup, true);
+										}
+										catch { }
+									}
 									var ConfigFFB = new IniFile(FFBPluginIniFile);
 									if (ConfigFFB.KeyExists("DeviceGUID", "Settings"))
 									{
@@ -449,7 +540,7 @@ namespace TeknoparrotAutoXinput
 
 								}
 
-							}
+							//}
 
 						}
 						
@@ -575,6 +666,39 @@ namespace TeknoparrotAutoXinput
 
 						process.WaitForExit();
 
+						if (!String.IsNullOrEmpty(ParrotDataOriginal) && !String.IsNullOrEmpty(ParrotDataBackup))
+						{
+							if (File.Exists(ParrotDataBackup))
+							{
+								try
+								{
+									File.Copy(ParrotDataBackup, ParrotDataOriginal, true);
+									File.Delete(ParrotDataBackup);
+								}
+								catch { }
+							}
+						}
+						if (!String.IsNullOrEmpty(FFBPluginIniFile) && !String.IsNullOrEmpty(FFBPluginIniBackup))
+						{
+							if (File.Exists(ParrotDataBackup))
+							{
+								try
+								{
+									File.Copy(FFBPluginIniBackup, FFBPluginIniFile, true);
+									File.Delete(FFBPluginIniBackup);
+								}
+								catch { }
+							}
+						}
+						if (virtualKeyboardXinputSlot > -1)
+						{
+							try
+							{
+								controller.Disconnect();
+								client.Dispose();
+							}
+							catch { }
+						}
 
 
 						if (startupForm != null && !startupForm.IsDisposed)
@@ -706,6 +830,7 @@ namespace TeknoparrotAutoXinput
 
 		private static void OnApplicationExit(object sender, EventArgs e)
 		{
+
 			if (virtualKeyboardXinputSlot > -1)
 			{
 				try
