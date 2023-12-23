@@ -291,16 +291,15 @@
 			// 
 			// btn_configureDinputWheel
 			// 
-			btn_configureDinputWheel.Enabled = false;
 			btn_configureDinputWheel.Location = new Point(292, 48);
 			btn_configureDinputWheel.Name = "btn_configureDinputWheel";
 			btn_configureDinputWheel.Size = new Size(110, 23);
 			btn_configureDinputWheel.TabIndex = 36;
 			btn_configureDinputWheel.Values.Text = "Configure";
+			btn_configureDinputWheel.Click += btn_configureDinputWheel_Click;
 			// 
 			// chk_useDinputWheel
 			// 
-			chk_useDinputWheel.Enabled = false;
 			chk_useDinputWheel.Location = new Point(13, 51);
 			chk_useDinputWheel.Name = "chk_useDinputWheel";
 			chk_useDinputWheel.Size = new Size(273, 20);

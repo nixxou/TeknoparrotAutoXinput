@@ -1,6 +1,7 @@
 using Krypton.Toolkit;
 using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
+using System.Security.Cryptography;
 using TestVgme;
 
 namespace TeknoparrotAutoXinput
@@ -264,7 +265,14 @@ namespace TeknoparrotAutoXinput
 			updateStooz();
 		}
 
+		private void btn_configureDinputWheel_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputwheel();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
 
-
+			}
+		}
 	}
 }
