@@ -44,6 +44,8 @@ namespace TeknoparrotAutoXinput
 			chk_enableStoozZone_Wheel.Checked = (bool)Properties.Settings.Default["enableStoozZone_Wheel"];
 			trk_useCustomStooz_Wheel.Value = (int)Properties.Settings.Default["valueStooz_Wheel"];
 
+			chk_useDinputWheel.Checked = (bool)Properties.Settings.Default["useDinputWheel"];
+
 			updateStooz();
 
 			if (!chk_enableVirtualKeyboard.Checked)
@@ -273,6 +275,12 @@ namespace TeknoparrotAutoXinput
 			{
 
 			}
+		}
+
+		private void chk_useDinputWheel_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default["useDinputWheel"] = chk_useDinputWheel.Checked;
+			Properties.Settings.Default.Save();
 		}
 	}
 }

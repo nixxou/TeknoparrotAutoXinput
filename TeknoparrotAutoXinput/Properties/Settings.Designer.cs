@@ -202,5 +202,29 @@ namespace TeknoparrotAutoXinput.Properties {
                 this["valueStooz_Wheel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string bindingDinputWheel {
+            get {
+                return ((string)(this["bindingDinputWheel"]));
+            }
+            set {
+                this["bindingDinputWheel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool useDinputWheel {
+            get {
+                return ((bool)(this["useDinputWheel"]));
+            }
+            set {
+                this["useDinputWheel"] = value;
+            }
+        }
     }
 }

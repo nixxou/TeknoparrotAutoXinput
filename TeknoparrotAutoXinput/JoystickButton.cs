@@ -7,4 +7,8 @@
 	public int PovDirection { get; set; }
 	public bool IsReverseAxis { get; set; }
 	public Guid JoystickGuid { get; set; }
+
+	public string Title { get; set; }
+	public string XinputTitle { get; set; }
+
 }

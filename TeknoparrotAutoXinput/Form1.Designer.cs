@@ -305,6 +305,7 @@
 			chk_useDinputWheel.Size = new Size(273, 20);
 			chk_useDinputWheel.TabIndex = 35;
 			chk_useDinputWheel.Values.Text = "Use Dinput Wheel instead of an Xinput Wheel";
+			chk_useDinputWheel.CheckedChanged += chk_useDinputWheel_CheckedChanged;
 			// 
 			// kryptonLabel9
 			// 

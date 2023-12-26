@@ -1,4 +1,5 @@
 ﻿using Krypton.Toolkit;
+using Newtonsoft.Json;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
 using System;
@@ -26,6 +27,8 @@ namespace TeknoparrotAutoXinput
 		private List<DeviceInstance> devices = new List<DeviceInstance>();
 		private Thread threadJoystick;
 
+		private Dictionary<string, JoystickButtonData> buttonData = new Dictionary<string, JoystickButtonData>();
+
 		public dinputwheel()
 		{
 
@@ -38,6 +41,7 @@ namespace TeknoparrotAutoXinput
 			{
 				cmb_devicelist.Items.Add(device.InstanceName);
 			}
+			LoadConfig();
 		}
 
 		private void cmb_devicelist_SelectedIndexChanged(object sender, EventArgs e)
@@ -169,6 +173,22 @@ namespace TeknoparrotAutoXinput
 									// Vérifier si le contrôle est un TextBox et s'il a le focus
 									if (control is KryptonTextBox textBox && textBox.Focused)
 									{
+										button.Title = deviceInstance.Type + " " + inputText;
+										string XinputTitle = control.Name.Substring(4).Trim();
+										if (XinputTitle.EndsWith("plus"))
+										{
+											XinputTitle = XinputTitle.Substring(0, XinputTitle.Length - 4) + "+";
+										}
+										button.XinputTitle = XinputTitle;
+
+										if (buttonData.ContainsKey(XinputTitle))
+										{
+											buttonData[XinputTitle] = button;
+										}
+										else
+										{
+											buttonData.Add(XinputTitle, button);
+										}
 
 										textBox.Text = deviceInstance.Type + " " + inputText;
 										break;
@@ -201,6 +221,63 @@ namespace TeknoparrotAutoXinput
 				threadJoystick = null;
 				_stopListening = false;
 			}
+		}
+
+		private void SaveConfig()
+		{
+			Dictionary<string, JoystickButtonData> buttonDataFinal = new Dictionary<string, JoystickButtonData>();
+			foreach (Control control in this.Controls)
+			{
+				// Vérifier si le contrôle est un TextBox et s'il a le focus
+				if (control is KryptonTextBox)
+				{
+					string XinputTitle = control.Name.Substring(4).Trim();
+					if (XinputTitle.EndsWith("plus"))
+					{
+						XinputTitle = XinputTitle.Substring(0, XinputTitle.Length - 4) + "+";
+					}
+					if (buttonData.ContainsKey(XinputTitle))
+					{
+						buttonDataFinal.Add(XinputTitle, buttonData[XinputTitle]);
+					}
+				}
+			}
+			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
+			Properties.Settings.Default["bindingDinputWheel"] = json;
+			Properties.Settings.Default.Save();
+
+		}
+
+		private void LoadConfig()
+		{
+			string json = Properties.Settings.Default["bindingDinputWheel"].ToString();
+			if (!string.IsNullOrEmpty(json))
+			{
+				buttonData = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(json);
+				foreach (Control control in this.Controls)
+				{
+					// Vérifier si le contrôle est un TextBox et s'il a le focus
+					if (control is KryptonTextBox)
+					{
+						string XinputTitle = control.Name.Substring(4).Trim();
+						if (XinputTitle.EndsWith("plus"))
+						{
+							XinputTitle = XinputTitle.Substring(0, XinputTitle.Length - 4) + "+";
+						}
+						if (buttonData.ContainsKey(XinputTitle))
+						{
+							control.Text = buttonData[XinputTitle].Title;
+						}
+					}
+				}
+			}
+			
+
+		}
+
+		private void btn_Save_Click(object sender, EventArgs e)
+		{
+			SaveConfig();
 		}
 	}
 }

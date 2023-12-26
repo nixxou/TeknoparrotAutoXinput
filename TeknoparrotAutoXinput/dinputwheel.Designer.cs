@@ -28,21 +28,21 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			kryptonTextBox1 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox2 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox3 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox4 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox5 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox6 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox7 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox8 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox9 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox10 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox11 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox12 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox13 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox14 = new Krypton.Toolkit.KryptonTextBox();
-			kryptonTextBox15 = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0X = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0Y = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0B = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0A = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0RightTrigger = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0LeftTrigger = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0LeftThumbInputDevice0Xplus = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0RightShoulder = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0LeftShoulder = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0Back = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0Start = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0DPadUp = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0DPadDown = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0DPadLeft = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0DPadRight = new Krypton.Toolkit.KryptonTextBox();
 			cmb_devicelist = new Krypton.Toolkit.KryptonComboBox();
 			label1 = new Label();
 			label2 = new Label();
@@ -55,113 +55,115 @@
 			label9 = new Label();
 			label10 = new Label();
 			label11 = new Label();
+			btn_Cancel = new Krypton.Toolkit.KryptonButton();
+			btn_Save = new Krypton.Toolkit.KryptonButton();
 			((System.ComponentModel.ISupportInitialize)cmb_devicelist).BeginInit();
 			SuspendLayout();
 			// 
-			// kryptonTextBox1
+			// txt_InputDevice0X
 			// 
-			kryptonTextBox1.Location = new Point(732, 208);
-			kryptonTextBox1.Name = "kryptonTextBox1";
-			kryptonTextBox1.Size = new Size(196, 23);
-			kryptonTextBox1.TabIndex = 0;
+			txt_InputDevice0X.Location = new Point(732, 208);
+			txt_InputDevice0X.Name = "txt_InputDevice0X";
+			txt_InputDevice0X.Size = new Size(196, 23);
+			txt_InputDevice0X.TabIndex = 0;
 			// 
-			// kryptonTextBox2
+			// txt_InputDevice0Y
 			// 
-			kryptonTextBox2.Location = new Point(732, 247);
-			kryptonTextBox2.Name = "kryptonTextBox2";
-			kryptonTextBox2.Size = new Size(196, 23);
-			kryptonTextBox2.TabIndex = 1;
+			txt_InputDevice0Y.Location = new Point(732, 247);
+			txt_InputDevice0Y.Name = "txt_InputDevice0Y";
+			txt_InputDevice0Y.Size = new Size(196, 23);
+			txt_InputDevice0Y.TabIndex = 1;
 			// 
-			// kryptonTextBox3
+			// txt_InputDevice0B
 			// 
-			kryptonTextBox3.Location = new Point(732, 285);
-			kryptonTextBox3.Name = "kryptonTextBox3";
-			kryptonTextBox3.Size = new Size(196, 23);
-			kryptonTextBox3.TabIndex = 2;
+			txt_InputDevice0B.Location = new Point(732, 285);
+			txt_InputDevice0B.Name = "txt_InputDevice0B";
+			txt_InputDevice0B.Size = new Size(196, 23);
+			txt_InputDevice0B.TabIndex = 2;
 			// 
-			// kryptonTextBox4
+			// txt_InputDevice0A
 			// 
-			kryptonTextBox4.Location = new Point(732, 327);
-			kryptonTextBox4.Name = "kryptonTextBox4";
-			kryptonTextBox4.Size = new Size(196, 23);
-			kryptonTextBox4.TabIndex = 3;
+			txt_InputDevice0A.Location = new Point(732, 327);
+			txt_InputDevice0A.Name = "txt_InputDevice0A";
+			txt_InputDevice0A.Size = new Size(196, 23);
+			txt_InputDevice0A.TabIndex = 3;
 			// 
-			// kryptonTextBox5
+			// txt_InputDevice0RightTrigger
 			// 
-			kryptonTextBox5.Location = new Point(743, 380);
-			kryptonTextBox5.Name = "kryptonTextBox5";
-			kryptonTextBox5.Size = new Size(196, 23);
-			kryptonTextBox5.TabIndex = 4;
+			txt_InputDevice0RightTrigger.Location = new Point(743, 380);
+			txt_InputDevice0RightTrigger.Name = "txt_InputDevice0RightTrigger";
+			txt_InputDevice0RightTrigger.Size = new Size(196, 23);
+			txt_InputDevice0RightTrigger.TabIndex = 4;
 			// 
-			// kryptonTextBox6
+			// txt_InputDevice0LeftTrigger
 			// 
-			kryptonTextBox6.Location = new Point(512, 420);
-			kryptonTextBox6.Name = "kryptonTextBox6";
-			kryptonTextBox6.Size = new Size(196, 23);
-			kryptonTextBox6.TabIndex = 5;
+			txt_InputDevice0LeftTrigger.Location = new Point(512, 420);
+			txt_InputDevice0LeftTrigger.Name = "txt_InputDevice0LeftTrigger";
+			txt_InputDevice0LeftTrigger.Size = new Size(196, 23);
+			txt_InputDevice0LeftTrigger.TabIndex = 5;
 			// 
-			// kryptonTextBox7
+			// txt_InputDevice0LeftThumbInputDevice0Xplus
 			// 
-			kryptonTextBox7.Location = new Point(382, 553);
-			kryptonTextBox7.Name = "kryptonTextBox7";
-			kryptonTextBox7.Size = new Size(196, 23);
-			kryptonTextBox7.TabIndex = 6;
+			txt_InputDevice0LeftThumbInputDevice0Xplus.Location = new Point(382, 553);
+			txt_InputDevice0LeftThumbInputDevice0Xplus.Name = "txt_InputDevice0LeftThumbInputDevice0Xplus";
+			txt_InputDevice0LeftThumbInputDevice0Xplus.Size = new Size(196, 23);
+			txt_InputDevice0LeftThumbInputDevice0Xplus.TabIndex = 6;
 			// 
-			// kryptonTextBox8
+			// txt_InputDevice0RightShoulder
 			// 
-			kryptonTextBox8.Location = new Point(512, 129);
-			kryptonTextBox8.Name = "kryptonTextBox8";
-			kryptonTextBox8.Size = new Size(196, 23);
-			kryptonTextBox8.TabIndex = 7;
+			txt_InputDevice0RightShoulder.Location = new Point(512, 129);
+			txt_InputDevice0RightShoulder.Name = "txt_InputDevice0RightShoulder";
+			txt_InputDevice0RightShoulder.Size = new Size(196, 23);
+			txt_InputDevice0RightShoulder.TabIndex = 7;
 			// 
-			// kryptonTextBox9
+			// txt_InputDevice0LeftShoulder
 			// 
-			kryptonTextBox9.Location = new Point(38, 129);
-			kryptonTextBox9.Name = "kryptonTextBox9";
-			kryptonTextBox9.Size = new Size(196, 23);
-			kryptonTextBox9.TabIndex = 8;
+			txt_InputDevice0LeftShoulder.Location = new Point(38, 129);
+			txt_InputDevice0LeftShoulder.Name = "txt_InputDevice0LeftShoulder";
+			txt_InputDevice0LeftShoulder.Size = new Size(196, 23);
+			txt_InputDevice0LeftShoulder.TabIndex = 8;
 			// 
-			// kryptonTextBox10
+			// txt_InputDevice0Back
 			// 
-			kryptonTextBox10.Location = new Point(77, 43);
-			kryptonTextBox10.Name = "kryptonTextBox10";
-			kryptonTextBox10.Size = new Size(196, 23);
-			kryptonTextBox10.TabIndex = 9;
+			txt_InputDevice0Back.Location = new Point(77, 43);
+			txt_InputDevice0Back.Name = "txt_InputDevice0Back";
+			txt_InputDevice0Back.Size = new Size(196, 23);
+			txt_InputDevice0Back.TabIndex = 9;
 			// 
-			// kryptonTextBox11
+			// txt_InputDevice0Start
 			// 
-			kryptonTextBox11.Location = new Point(401, 43);
-			kryptonTextBox11.Name = "kryptonTextBox11";
-			kryptonTextBox11.Size = new Size(196, 23);
-			kryptonTextBox11.TabIndex = 10;
+			txt_InputDevice0Start.Location = new Point(401, 43);
+			txt_InputDevice0Start.Name = "txt_InputDevice0Start";
+			txt_InputDevice0Start.Size = new Size(196, 23);
+			txt_InputDevice0Start.TabIndex = 10;
 			// 
-			// kryptonTextBox12
+			// txt_InputDevice0DPadUp
 			// 
-			kryptonTextBox12.Location = new Point(91, 377);
-			kryptonTextBox12.Name = "kryptonTextBox12";
-			kryptonTextBox12.Size = new Size(196, 23);
-			kryptonTextBox12.TabIndex = 11;
+			txt_InputDevice0DPadUp.Location = new Point(91, 377);
+			txt_InputDevice0DPadUp.Name = "txt_InputDevice0DPadUp";
+			txt_InputDevice0DPadUp.Size = new Size(196, 23);
+			txt_InputDevice0DPadUp.TabIndex = 11;
 			// 
-			// kryptonTextBox13
+			// txt_InputDevice0DPadDown
 			// 
-			kryptonTextBox13.Location = new Point(91, 406);
-			kryptonTextBox13.Name = "kryptonTextBox13";
-			kryptonTextBox13.Size = new Size(196, 23);
-			kryptonTextBox13.TabIndex = 12;
+			txt_InputDevice0DPadDown.Location = new Point(91, 406);
+			txt_InputDevice0DPadDown.Name = "txt_InputDevice0DPadDown";
+			txt_InputDevice0DPadDown.Size = new Size(196, 23);
+			txt_InputDevice0DPadDown.TabIndex = 12;
 			// 
-			// kryptonTextBox14
+			// txt_InputDevice0DPadLeft
 			// 
-			kryptonTextBox14.Location = new Point(91, 435);
-			kryptonTextBox14.Name = "kryptonTextBox14";
-			kryptonTextBox14.Size = new Size(196, 23);
-			kryptonTextBox14.TabIndex = 13;
+			txt_InputDevice0DPadLeft.Location = new Point(91, 435);
+			txt_InputDevice0DPadLeft.Name = "txt_InputDevice0DPadLeft";
+			txt_InputDevice0DPadLeft.Size = new Size(196, 23);
+			txt_InputDevice0DPadLeft.TabIndex = 13;
 			// 
-			// kryptonTextBox15
+			// txt_InputDevice0DPadRight
 			// 
-			kryptonTextBox15.Location = new Point(91, 464);
-			kryptonTextBox15.Name = "kryptonTextBox15";
-			kryptonTextBox15.Size = new Size(196, 23);
-			kryptonTextBox15.TabIndex = 14;
+			txt_InputDevice0DPadRight.Location = new Point(91, 464);
+			txt_InputDevice0DPadRight.Name = "txt_InputDevice0DPadRight";
+			txt_InputDevice0DPadRight.Size = new Size(196, 23);
+			txt_InputDevice0DPadRight.TabIndex = 14;
 			// 
 			// cmb_devicelist
 			// 
@@ -274,12 +276,31 @@
 			label11.TabIndex = 26;
 			label11.Text = "Wheel";
 			// 
+			// btn_Cancel
+			// 
+			btn_Cancel.Location = new Point(742, 564);
+			btn_Cancel.Name = "btn_Cancel";
+			btn_Cancel.Size = new Size(90, 25);
+			btn_Cancel.TabIndex = 27;
+			btn_Cancel.Values.Text = "Cancel";
+			// 
+			// btn_Save
+			// 
+			btn_Save.Location = new Point(838, 564);
+			btn_Save.Name = "btn_Save";
+			btn_Save.Size = new Size(90, 25);
+			btn_Save.TabIndex = 28;
+			btn_Save.Values.Text = "Save";
+			btn_Save.Click += btn_Save_Click;
+			// 
 			// dinputwheel
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackgroundImage = Properties.Resources.Wheel;
 			ClientSize = new Size(940, 601);
+			Controls.Add(btn_Save);
+			Controls.Add(btn_Cancel);
 			Controls.Add(label11);
 			Controls.Add(label10);
 			Controls.Add(label9);
@@ -292,21 +313,21 @@
 			Controls.Add(label2);
 			Controls.Add(label1);
 			Controls.Add(cmb_devicelist);
-			Controls.Add(kryptonTextBox15);
-			Controls.Add(kryptonTextBox14);
-			Controls.Add(kryptonTextBox13);
-			Controls.Add(kryptonTextBox12);
-			Controls.Add(kryptonTextBox11);
-			Controls.Add(kryptonTextBox10);
-			Controls.Add(kryptonTextBox9);
-			Controls.Add(kryptonTextBox8);
-			Controls.Add(kryptonTextBox7);
-			Controls.Add(kryptonTextBox6);
-			Controls.Add(kryptonTextBox5);
-			Controls.Add(kryptonTextBox4);
-			Controls.Add(kryptonTextBox3);
-			Controls.Add(kryptonTextBox2);
-			Controls.Add(kryptonTextBox1);
+			Controls.Add(txt_InputDevice0DPadRight);
+			Controls.Add(txt_InputDevice0DPadLeft);
+			Controls.Add(txt_InputDevice0DPadDown);
+			Controls.Add(txt_InputDevice0DPadUp);
+			Controls.Add(txt_InputDevice0Start);
+			Controls.Add(txt_InputDevice0Back);
+			Controls.Add(txt_InputDevice0LeftShoulder);
+			Controls.Add(txt_InputDevice0RightShoulder);
+			Controls.Add(txt_InputDevice0LeftThumbInputDevice0Xplus);
+			Controls.Add(txt_InputDevice0LeftTrigger);
+			Controls.Add(txt_InputDevice0RightTrigger);
+			Controls.Add(txt_InputDevice0A);
+			Controls.Add(txt_InputDevice0B);
+			Controls.Add(txt_InputDevice0Y);
+			Controls.Add(txt_InputDevice0X);
 			Name = "dinputwheel";
 			Text = "dinputwheel";
 			FormClosing += dinputwheel_FormClosing;
@@ -317,21 +338,21 @@
 
 		#endregion
 
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox1;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox2;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox3;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox4;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox5;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox6;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox7;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox8;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox9;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox10;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox11;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox12;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox13;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox14;
-		private Krypton.Toolkit.KryptonTextBox kryptonTextBox15;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0X;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0Y;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0B;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0A;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0RightTrigger;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0LeftTrigger;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0LeftThumbInputDevice0Xplus;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0RightShoulder;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0LeftShoulder;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0Back;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0Start;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0DPadUp;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0DPadDown;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0DPadLeft;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0DPadRight;
 		private Krypton.Toolkit.KryptonComboBox cmb_devicelist;
 		private Label label1;
 		private Label label2;
@@ -344,5 +365,7 @@
 		private Label label9;
 		private Label label10;
 		private Label label11;
+		private Krypton.Toolkit.KryptonButton btn_Cancel;
+		private Krypton.Toolkit.KryptonButton btn_Save;
 	}
 }
