@@ -226,5 +226,17 @@ namespace TeknoparrotAutoXinput.Properties {
                 this["useDinputWheel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ffbDinputWheel {
+            get {
+                return ((string)(this["ffbDinputWheel"]));
+            }
+            set {
+                this["ffbDinputWheel"] = value;
+            }
+        }
     }
 }

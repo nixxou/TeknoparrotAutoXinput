@@ -42,10 +42,20 @@ namespace TeknoparrotAutoXinput
 				cmb_devicelist.Items.Add(device.InstanceName);
 			}
 			LoadConfig();
+
 		}
 
 		private void cmb_devicelist_SelectedIndexChanged(object sender, EventArgs e)
 		{
+
+			foreach (Control control in this.Controls)
+			{
+				if (control is KryptonTextBox)
+				{
+					control.Enabled = true;
+				}
+			}
+
 			if (_stopListening == false && threadJoystick != null)
 			{
 				_stopListening = true;
@@ -250,6 +260,17 @@ namespace TeknoparrotAutoXinput
 
 		private void LoadConfig()
 		{
+			foreach (Control control in this.Controls)
+			{
+				// Vérifier si le contrôle est un TextBox et s'il a le focus
+				if (control is KryptonTextBox)
+				{
+					control.Enabled = false;
+					KryptonTextBox txtControl = (KryptonTextBox)control;
+					txtControl.ReadOnly = true;
+				}
+			}
+
 			string json = Properties.Settings.Default["bindingDinputWheel"].ToString();
 			if (!string.IsNullOrEmpty(json))
 			{
@@ -271,13 +292,21 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
-			
+
 
 		}
 
 		private void btn_Save_Click(object sender, EventArgs e)
 		{
 			SaveConfig();
+			this.DialogResult = DialogResult.OK;
+			this.Close();
+		}
+
+		private void btn_Cancel_Click(object sender, EventArgs e)
+		{
+			this.DialogResult = DialogResult.Cancel;
+			this.Close();
 		}
 	}
 }

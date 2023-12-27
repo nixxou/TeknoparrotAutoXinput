@@ -1,6 +1,7 @@
 using Krypton.Toolkit;
 using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
+using SDL2;
 using System.Security.Cryptography;
 using TestVgme;
 
@@ -11,6 +12,7 @@ namespace TeknoparrotAutoXinput
 		private PickKeyCombo KeyPicker { get; set; }
 		public Keys[] Keys { get; set; }
 
+		private List<string> FFBGuidList = new List<string>();
 		public Form1()
 		{
 			InitializeComponent();
@@ -45,6 +47,7 @@ namespace TeknoparrotAutoXinput
 			trk_useCustomStooz_Wheel.Value = (int)Properties.Settings.Default["valueStooz_Wheel"];
 
 			chk_useDinputWheel.Checked = (bool)Properties.Settings.Default["useDinputWheel"];
+			txt_ffbguid.Text = Properties.Settings.Default["ffbDinputWheel"].ToString();
 
 			updateStooz();
 
@@ -58,6 +61,38 @@ namespace TeknoparrotAutoXinput
 				btn_setTest.Enabled = false;
 			}
 
+
+			{
+				int selectedFFBIndex = -1;
+				SDL2.SDL.SDL_Quit();
+				SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
+				SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
+				SDL2.SDL.SDL_JoystickUpdate();
+				for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
+				{
+					var currentJoy = SDL.SDL_JoystickOpen(i);
+					string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
+					{
+
+						const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
+						byte[] guidBuffer = new byte[bufferSize];
+						SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
+						string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
+						FFBGuidList.Add(guidString);
+						cmb_ffbguid.Items.Add(nameController);
+						if (!string.IsNullOrEmpty(guidString) && guidString == txt_ffbguid.Text)
+						{
+							selectedFFBIndex = i;
+						}
+						SDL.SDL_JoystickClose(currentJoy);
+					}
+				}
+				SDL2.SDL.SDL_Quit();
+				if (selectedFFBIndex != -1)
+				{
+					cmb_ffbguid.SelectedIndex = selectedFFBIndex;
+				}
+			}
 
 		}
 
@@ -216,6 +251,7 @@ namespace TeknoparrotAutoXinput
 			Properties.Settings.Default["enableStoozZone_Wheel"] = chk_enableStoozZone_Wheel.Checked;
 			Properties.Settings.Default["valueStooz_Wheel"] = trk_useCustomStooz_Wheel.Value;
 
+			Properties.Settings.Default["ffbDinputWheel"] = txt_ffbguid.Text;
 
 			Properties.Settings.Default.Save();
 		}
@@ -281,6 +317,14 @@ namespace TeknoparrotAutoXinput
 		{
 			Properties.Settings.Default["useDinputWheel"] = chk_useDinputWheel.Checked;
 			Properties.Settings.Default.Save();
+		}
+
+		private void btn_setffbguid_Click(object sender, EventArgs e)
+		{
+			if (cmb_ffbguid.SelectedIndex >= 0)
+			{
+				txt_ffbguid.Text = FFBGuidList[cmb_ffbguid.SelectedIndex];
+			}
 		}
 	}
 }

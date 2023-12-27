@@ -4,6 +4,8 @@ using Nefarius.ViGEm.Client.Exceptions;
 using Nefarius.ViGEm.Client.Targets;
 using Newtonsoft.Json;
 using SDL2;
+using SharpDX.DirectInput;
+using SharpDX.Multimedia;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
@@ -35,10 +37,15 @@ namespace TeknoparrotAutoXinput
 
 		public static Dictionary<int, string> forceTypeController;
 
+		public static string WheelGuid = "";
+		public static string WheelFFBGuid = "";
+		public static Guid? FirstKeyboardGuid = null;
+
 		public static string ParrotDataOriginal="";
 		public static string ParrotDataBackup="";
 		public static string FFBPluginIniFile = "";
 		public static string FFBPluginIniBackup = "";
+
 
 		/// <summary>
 		///  The main entry point for the application.
@@ -55,10 +62,9 @@ namespace TeknoparrotAutoXinput
 
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
 #if DEBUG
-			List<string> fakeArgs = new List<string>();
-			fakeArgs.Add(@"C:\teknoparrot\UserProfiles\Daytona3.xml");
+			//List<string> fakeArgs = new List<string>();
+			//fakeArgs.Add(@"C:\teknoparrot\UserProfiles\Daytona3.xml");
 			//args = fakeArgs.ToArray();
-			//MessageBox.Show("zog");
 #endif
 
 			if (args.Length == 0)
@@ -71,7 +77,7 @@ namespace TeknoparrotAutoXinput
 
 				bool changeFFBConfig = (bool)Properties.Settings.Default["FFB"];
 				bool showStartup = (bool)Properties.Settings.Default["showStartup"];
-				//showStartup = false;
+
 				bool useVirtualKeyboard = (bool)Properties.Settings.Default["virtualKeyboard"];
 				string keyTest = Properties.Settings.Default["keyTest"].ToString();
 				string keyService1 = Properties.Settings.Default["keyService1"].ToString();
@@ -90,8 +96,9 @@ namespace TeknoparrotAutoXinput
 				int valueStooz_Wheel = (int)Properties.Settings.Default["valueStooz_Wheel"];
 
 
-				bool passthrough = false;
+				WheelFFBGuid = Properties.Settings.Default["ffbDinputWheel"].ToString();
 
+				bool passthrough = false;
 
 
 				List<string> typeConfig = new List<string>();
@@ -214,6 +221,49 @@ namespace TeknoparrotAutoXinput
 						bool haveArcade = false;
 						bool haveWheel = false;
 						bool haveGamepad = false;
+
+						bool checkDinputWheel = (bool)Properties.Settings.Default["useDinputWheel"];
+						Dictionary<string, JoystickButtonData> bindingDinputWheel = null;
+						string bindingDinputWheelJson = Properties.Settings.Default["bindingDinputWheel"].ToString();
+						
+						bool dinputWheelFound = false;
+						if (checkDinputWheel)
+						{
+							if (!string.IsNullOrEmpty(bindingDinputWheelJson))
+							{
+								bindingDinputWheel = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputWheelJson);
+								if (bindingDinputWheel.ContainsKey("InputDevice0LeftThumbInputDevice0X+"))
+								{
+									WheelGuid = bindingDinputWheel["InputDevice0LeftThumbInputDevice0X+"].JoystickGuid.ToString();
+								}
+							}
+							if (!string.IsNullOrEmpty(WheelGuid))
+							{
+								DirectInput directInput = new DirectInput();
+								List<DeviceInstance> devices = new List<DeviceInstance>();
+								devices.AddRange(directInput.GetDevices().Where(x => x.Type != DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+								foreach (var device in devices)
+								{
+									if(device.Type == DeviceType.Keyboard && FirstKeyboardGuid == null)
+									{
+										FirstKeyboardGuid = device.InstanceGuid;
+									}
+									if (device.InstanceGuid.ToString() == WheelGuid)
+									{
+										dinputWheelFound = true;
+										haveWheel = true;
+									}
+								}
+							}
+						}
+						bool useXinput = true;
+						bool useDinputWheel = false;
+						if (haveWheel && existingConfig.ContainsKey("wheel") && dinputWheelFound)
+						{
+							useXinput = false;
+							useDinputWheel = true;
+						}
+
 						foreach (var gp in connectedGamePad.Values)
 						{
 							if (gp.Type == "arcade")
@@ -246,204 +296,275 @@ namespace TeknoparrotAutoXinput
 						Dictionary<string, JoystickButton> joystickButtonArcade = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonGamepad = new Dictionary<string, JoystickButton>();
 
-						if (availableSlot != -1 && useVirtualKeyboard)
+						if (useXinput)
 						{
-							bool VigemInstalled = false;
-							try
+							if (availableSlot != -1 && useVirtualKeyboard)
 							{
-								client = new ViGEmClient();
-								VigemInstalled = true;
-							}
-							catch (VigemBusNotFoundException e) { }
-							if (VigemInstalled)
-							{
-								if (availableSlot == 0) gamepad = X.Gamepad_1;
-								if (availableSlot == 1) gamepad = X.Gamepad_2;
-								if (availableSlot == 2) gamepad = X.Gamepad_3;
-								if (availableSlot == 3) gamepad = X.Gamepad_4;
-
-								controller = client.CreateXbox360Controller();
-								controller.AutoSubmitReport = false;
-								controller.Connect();
-								Thread.Sleep(1000);
+								bool VigemInstalled = false;
 								try
 								{
-									virtualKeyboardXinputSlot = controller.UserIndex;
+									client = new ViGEmClient();
+									VigemInstalled = true;
 								}
-								catch (Exception e) { }
-								if (virtualKeyboardXinputSlot < 0 || virtualKeyboardXinputSlot > 3)
+								catch (VigemBusNotFoundException e) { }
+								if (VigemInstalled)
 								{
-									int maxloop = 10;
-									for (int i = 0; i < maxloop; i++)
+									if (availableSlot == 0) gamepad = X.Gamepad_1;
+									if (availableSlot == 1) gamepad = X.Gamepad_2;
+									if (availableSlot == 2) gamepad = X.Gamepad_3;
+									if (availableSlot == 3) gamepad = X.Gamepad_4;
+
+									controller = client.CreateXbox360Controller();
+									controller.AutoSubmitReport = false;
+									controller.Connect();
+									Thread.Sleep(1000);
+									try
 									{
-										Thread.Sleep(500);
-										if (gamepad.Capabilities.Type != 0)
+										virtualKeyboardXinputSlot = controller.UserIndex;
+									}
+									catch (Exception e) { }
+									if (virtualKeyboardXinputSlot < 0 || virtualKeyboardXinputSlot > 3)
+									{
+										int maxloop = 10;
+										for (int i = 0; i < maxloop; i++)
 										{
-											virtualKeyboardXinputSlot = availableSlot;
-											break;
+											Thread.Sleep(500);
+											if (gamepad.Capabilities.Type != 0)
+											{
+												virtualKeyboardXinputSlot = availableSlot;
+												break;
+											}
 										}
+									}
+
+									if (virtualKeyboardXinputSlot < 0 || virtualKeyboardXinputSlot > 3)
+									{
+										controller.Disconnect();
+										client.Dispose();
+									}
+
+									if (virtualKeyboardXinputSlot > -1)
+									{
+										var assignment = new Dictionary<Combination, Action>();
+
+										if (!string.IsNullOrEmpty(keyTest))
+										{
+											try
+											{
+												var keycombi = Combination.FromString(keyTest);
+												Action actionPauseMenu = () =>
+												{
+													ControllerAction(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.LeftThumb);
+
+												};
+												assignment.Add(keycombi, actionPauseMenu);
+
+											}
+											catch (Exception ex) { }
+										}
+										if (!string.IsNullOrEmpty(keyService1))
+										{
+											try
+											{
+												var keycombi = Combination.FromString(keyService1);
+												Action actionPauseMenu = () =>
+												{
+													ControllerAction(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.RightThumb);
+
+												};
+												assignment.Add(keycombi, actionPauseMenu);
+
+											}
+											catch (Exception ex) { }
+										}
+										if (!string.IsNullOrEmpty(keyService2))
+										{
+											try
+											{
+												var keycombi = Combination.FromString(keyService2);
+												Action actionPauseMenu = () =>
+												{
+													ControllerAction(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.LeftShoulder);
+
+												};
+												assignment.Add(keycombi, actionPauseMenu);
+
+											}
+											catch (Exception ex) { }
+										}
+
+										try
+										{
+											if (assignment.Count > 0)
+											{
+												_globalHook = Hook.GlobalEvents();
+												_globalHook.OnCombination(assignment);
+											}
+										}
+										catch { }
+
+
+									}
+
+								}
+							}
+
+
+
+							if (haveWheel && existingConfig.ContainsKey("wheel"))
+							{
+								joystickButtonWheel = ParseConfig(existingConfig["wheel"]);
+								var PlayerList = GetPlayersList(joystickButtonWheel);
+								int nb_wheel = connectedGamePad.Values.Where(c => c.Type == "wheel").Count();
+								int currentlyAttributed = 0;
+								List<XinputGamepad> gamepadList = new List<XinputGamepad>();
+								foreach (var cgp in connectedGamePad.Values)
+								{
+									if (cgp.Type == "wheel")
+									{
+										gamepadList.Add(cgp);
 									}
 								}
 
-								if (virtualKeyboardXinputSlot < 0 || virtualKeyboardXinputSlot > 3)
+								foreach (var PlayerXinputSlot in PlayerList)
 								{
-									controller.Disconnect();
-									client.Dispose();
+									if (currentlyAttributed < nb_wheel)
+									{
+										if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
+										{
+											ConfigPerPlayer.Add(PlayerXinputSlot, ("wheel", gamepadList[currentlyAttributed]));
+											currentlyAttributed++;
+										}
+									}
+								}
+							}
+							if (haveArcade && existingConfig.ContainsKey("arcade"))
+							{
+								joystickButtonArcade = ParseConfig(existingConfig["arcade"]);
+								var PlayerList = GetPlayersList(joystickButtonArcade);
+								int nb_arcade = connectedGamePad.Values.Where(c => c.Type == "arcade").Count();
+								int currentlyAttributed = 0;
+								List<XinputGamepad> gamepadList = new List<XinputGamepad>();
+								foreach (var cgp in connectedGamePad.Values)
+								{
+									if (cgp.Type == "arcade")
+									{
+										gamepadList.Add(cgp);
+									}
 								}
 
-								if (virtualKeyboardXinputSlot > -1)
+								foreach (var PlayerXinputSlot in PlayerList)
 								{
-									var assignment = new Dictionary<Combination, Action>();
+									if (currentlyAttributed < nb_arcade)
+									{
+										if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
+										{
+											ConfigPerPlayer.Add(PlayerXinputSlot, ("arcade", gamepadList[currentlyAttributed]));
+											currentlyAttributed++;
+										}
+									}
+								}
+							}
+							if (haveGamepad)
+							{
+								joystickButtonGamepad = ParseConfig(existingConfig["gamepad"]);
+								var PlayerList = GetPlayersList(joystickButtonGamepad);
+								int nb_gamepad = connectedGamePad.Values.Where(c => c.Type == "gamepad").Count();
+								int currentlyAttributed = 0;
+								List<XinputGamepad> gamepadList = new List<XinputGamepad>();
+								foreach (var cgp in connectedGamePad.Values)
+								{
+									if (cgp.Type == "gamepad")
+									{
+										gamepadList.Add(cgp);
+									}
+								}
 
+								foreach (var PlayerXinputSlot in PlayerList)
+								{
+									if (currentlyAttributed < nb_gamepad)
+									{
+										if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
+										{
+											ConfigPerPlayer.Add(PlayerXinputSlot, ("gamepad", gamepadList[currentlyAttributed]));
+											currentlyAttributed++;
+										}
+									}
+								}
+							}
+						}
+						else
+						{
+							if (useDinputWheel)
+							{
+								if (useVirtualKeyboard && FirstKeyboardGuid != null)
+								{
+									
 									if (!string.IsNullOrEmpty(keyTest))
 									{
-										try
+										if (Enum.TryParse<SharpDX.DirectInput.Key> (keyTest, out SharpDX.DirectInput.Key resultat))
 										{
-											var keycombi = Combination.FromString(keyTest);
-											Action actionPauseMenu = () =>
-											{
-												ControllerAction(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.LeftThumb);
-
-											};
-											assignment.Add(keycombi, actionPauseMenu);
-
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "InputDevice10LeftThumb";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputWheel.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
 										}
-										catch (Exception ex) { }
 									}
 									if (!string.IsNullOrEmpty(keyService1))
 									{
-										try
+										if (Enum.TryParse<SharpDX.DirectInput.Key>(keyService1, out SharpDX.DirectInput.Key resultat))
 										{
-											var keycombi = Combination.FromString(keyService1);
-											Action actionPauseMenu = () =>
-											{
-												ControllerAction(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.RightThumb);
-
-											};
-											assignment.Add(keycombi, actionPauseMenu);
-
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "InputDevice10RightThumb";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputWheel.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
 										}
-										catch (Exception ex) { }
 									}
 									if (!string.IsNullOrEmpty(keyService2))
 									{
-										try
+										if (Enum.TryParse<SharpDX.DirectInput.Key>(keyService2, out SharpDX.DirectInput.Key resultat))
 										{
-											var keycombi = Combination.FromString(keyService2);
-											Action actionPauseMenu = () =>
-											{
-												ControllerAction(Nefarius.ViGEm.Client.Targets.Xbox360.Xbox360Button.LeftShoulder);
-
-											};
-											assignment.Add(keycombi, actionPauseMenu);
-
-										}
-										catch (Exception ex) { }
-									}
-
-									try
-									{
-										if (assignment.Count > 0)
-										{
-											_globalHook = Hook.GlobalEvents();
-											_globalHook.OnCombination(assignment);
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "InputDevice10LeftShoulder";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputWheel.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
 										}
 									}
-									catch { }
-
-
 								}
-
+								joystickButtonWheel = ParseConfig(existingConfig["wheel"]);
+								XinputGamepad xinputGamepad = new XinputGamepad(0);
+								xinputGamepad.Type = "wheel";
+								ConfigPerPlayer.Add(0, ("wheel", xinputGamepad));
 							}
 						}
 
-
-
-						if (haveWheel && existingConfig.ContainsKey("wheel"))
-						{
-							joystickButtonWheel = ParseConfig(existingConfig["wheel"]);
-							var PlayerList = GetPlayersList(joystickButtonWheel);
-							int nb_wheel = connectedGamePad.Values.Where(c => c.Type == "wheel").Count();
-							int currentlyAttributed = 0;
-							List<XinputGamepad> gamepadList = new List<XinputGamepad>();
-							foreach (var cgp in connectedGamePad.Values)
-							{
-								if (cgp.Type == "wheel")
-								{
-									gamepadList.Add(cgp);
-								}
-							}
-
-							foreach (var PlayerXinputSlot in PlayerList)
-							{
-								if (currentlyAttributed < nb_wheel)
-								{
-									if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
-									{
-										ConfigPerPlayer.Add(PlayerXinputSlot, ("wheel", gamepadList[currentlyAttributed]));
-										currentlyAttributed++;
-									}
-								}
-							}
-						}
-						if (haveArcade && existingConfig.ContainsKey("arcade"))
-						{
-							joystickButtonArcade = ParseConfig(existingConfig["arcade"]);
-							var PlayerList = GetPlayersList(joystickButtonArcade);
-							int nb_arcade = connectedGamePad.Values.Where(c => c.Type == "arcade").Count();
-							int currentlyAttributed = 0;
-							List<XinputGamepad> gamepadList = new List<XinputGamepad>();
-							foreach (var cgp in connectedGamePad.Values)
-							{
-								if (cgp.Type == "arcade")
-								{
-									gamepadList.Add(cgp);
-								}
-							}
-
-							foreach (var PlayerXinputSlot in PlayerList)
-							{
-								if (currentlyAttributed < nb_arcade)
-								{
-									if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
-									{
-										ConfigPerPlayer.Add(PlayerXinputSlot, ("arcade", gamepadList[currentlyAttributed]));
-										currentlyAttributed++;
-									}
-								}
-							}
-						}
-						if (haveGamepad)
-						{
-							joystickButtonGamepad = ParseConfig(existingConfig["gamepad"]);
-							var PlayerList = GetPlayersList(joystickButtonGamepad);
-							int nb_gamepad = connectedGamePad.Values.Where(c => c.Type == "gamepad").Count();
-							int currentlyAttributed = 0;
-							List<XinputGamepad> gamepadList = new List<XinputGamepad>();
-							foreach (var cgp in connectedGamePad.Values)
-							{
-								if (cgp.Type == "gamepad")
-								{
-									gamepadList.Add(cgp);
-								}
-							}
-
-							foreach (var PlayerXinputSlot in PlayerList)
-							{
-								if (currentlyAttributed < nb_gamepad)
-								{
-									if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
-									{
-										ConfigPerPlayer.Add(PlayerXinputSlot, ("gamepad", gamepadList[currentlyAttributed]));
-										currentlyAttributed++;
-									}
-								}
-							}
-						}
 
 						if(ConfigPerPlayer.Count > 0 && (gamepadStooz || wheelStooz))
 						{
-							MessageBox.Show("ici");
 							bool doChangeStooz = false;
 							bool enableStooz = false;
 							int valueStooz = 0;
@@ -510,32 +631,36 @@ namespace TeknoparrotAutoXinput
 									if (ConfigFFB.KeyExists("DeviceGUID", "Settings"))
 									{
 
-
-										SDL2.SDL.SDL_Quit();
-										SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
-										SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
-										SDL2.SDL.SDL_JoystickUpdate();
-										for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
+										if (useXinput)
 										{
-											var currentJoy = SDL.SDL_JoystickOpen(i);
-											string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
-											if (nameController.ToLower().StartsWith("xinput") && nameController.ToLower().EndsWith("#" + (firstPlayer.Value.Item2.XinputSlot + 1).ToString()))
+											SDL2.SDL.SDL_Quit();
+											SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
+											SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
+											SDL2.SDL.SDL_JoystickUpdate();
+											for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
 											{
+												var currentJoy = SDL.SDL_JoystickOpen(i);
+												string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
+												if (nameController.ToLower().StartsWith("xinput") && nameController.ToLower().EndsWith("#" + (firstPlayer.Value.Item2.XinputSlot + 1).ToString()))
+												{
 
-												const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
-												byte[] guidBuffer = new byte[bufferSize];
-												SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
-												string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
-												ConfigFFB.Write("DeviceGUID", guidString, "Settings");
+													const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
+													byte[] guidBuffer = new byte[bufferSize];
+													SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
+													string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
+													ConfigFFB.Write("DeviceGUID", guidString, "Settings");
+													SDL.SDL_JoystickClose(currentJoy);
+													SDL.SDL_JoystickClose(currentJoy);
+													break;
+												}
 												SDL.SDL_JoystickClose(currentJoy);
-												SDL.SDL_JoystickClose(currentJoy);
-												break;
 											}
-											SDL.SDL_JoystickClose(currentJoy);
+											SDL2.SDL.SDL_Quit();
 										}
-										SDL2.SDL.SDL_Quit();
-
-
+										if (useDinputWheel)
+										{
+											ConfigFFB.Write("DeviceGUID", WheelFFBGuid, "Settings");
+										}
 									}
 
 								}
@@ -543,7 +668,7 @@ namespace TeknoparrotAutoXinput
 							//}
 
 						}
-						
+
 						foreach (var ConfigPlayer in ConfigPerPlayer)
 						{
 							int TargetXinput = ConfigPlayer.Key;
@@ -608,6 +733,86 @@ namespace TeknoparrotAutoXinput
 							NewLineHandling = NewLineHandling.Replace
 						};
 
+						string xpathExpression = $"/GameProfile/ConfigValues/FieldInformation[FieldName='Input API']/FieldValue";
+						XmlNode fieldValueNode = xmlDoc.SelectSingleNode(xpathExpression);
+
+						if (fieldValueNode != null)
+						{
+							if (useXinput)
+							{
+								fieldValueNode.InnerText = "XInput";
+							}
+							if (useDinputWheel)
+							{
+								fieldValueNode.InnerText = "DirectInput";
+							}
+						}
+						
+						if (useDinputWheel)
+						{
+							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+
+							foreach (XmlNode node in joystickButtonsNodes)
+							{
+								XmlNode existingDirectInputButtonNode = node.SelectSingleNode("DirectInputButton");
+								if (existingDirectInputButtonNode != null)
+								{
+									node.RemoveChild(existingDirectInputButtonNode);
+								}
+								XmlNode existingBindNameDiNode = node.SelectSingleNode("BindNameDi");
+								if (existingBindNameDiNode != null)
+								{
+									node.RemoveChild(existingBindNameDiNode);
+								}
+
+								XmlNode bindNameXiNode = node.SelectSingleNode("BindNameXi");
+								if(bindNameXiNode != null && !string.IsNullOrEmpty(bindNameXiNode.InnerText))
+								{
+									string bindkey = bindNameXiNode.InnerText.Trim().Replace(" ", "");
+									if (bindingDinputWheel.ContainsKey(bindkey))
+									{
+										var bindData = bindingDinputWheel[bindkey];
+
+										XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+
+										XmlNode buttonNode = xmlDoc.CreateElement("Button");
+										buttonNode.InnerText = bindData.Button.ToString();
+										newDirectInputButtonNode.AppendChild(buttonNode);
+
+										XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+										isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(isAxisNode);
+
+										XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+										IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+
+										XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+										IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+
+										XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+										PovDirectionNode.InnerText = bindData.PovDirection.ToString();
+										newDirectInputButtonNode.AppendChild(PovDirectionNode);
+
+										XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+										IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+
+										XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+										JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
+										newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+
+										node.AppendChild(newDirectInputButtonNode);
+
+										XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+										BindNameDiNode.InnerText = bindData.Title;
+										node.AppendChild(BindNameDiNode);
+									}
+								}
+							}
+
+						}
 
 						using (XmlWriter xmlWriter = XmlWriter.Create(xmlFile + ".custom.xml", settings))
 						{
@@ -632,11 +837,6 @@ namespace TeknoparrotAutoXinput
 							Startup.imagePaths.Add(imgPath);
 						}
 						Startup.playerAttributionDesc.TrimEnd('\n');
-
-
-
-
-
 					}
 
 					if (finalConfig != "")
@@ -884,6 +1084,12 @@ namespace TeknoparrotAutoXinput
 		public ushort VendorId { get; set; } = 0;
 		public ushort ProductId { get; set; } = 0;
 		public ushort RevisionID { get; set; } = 0;
+
+		public XinputGamepad(int xinputSlot)
+		{
+			XinputSlot = xinputSlot;
+			Gamepad = null;
+		}
 
 		public XinputGamepad(X.Gamepad gamepad, int xinputSlot)
 		{

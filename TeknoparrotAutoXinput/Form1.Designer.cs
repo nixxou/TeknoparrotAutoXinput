@@ -51,6 +51,10 @@
 			radio_useCustomStooz_Gamepad = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useDefaultStooze_Gamepad = new Krypton.Toolkit.KryptonRadioButton();
 			groupBox2 = new GroupBox();
+			btn_setffbguid = new Krypton.Toolkit.KryptonButton();
+			cmb_ffbguid = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel10 = new Krypton.Toolkit.KryptonLabel();
+			txt_ffbguid = new Krypton.Toolkit.KryptonTextBox();
 			btn_configureDinputWheel = new Krypton.Toolkit.KryptonButton();
 			chk_useDinputWheel = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel9 = new Krypton.Toolkit.KryptonLabel();
@@ -73,6 +77,7 @@
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_ffbguid).BeginInit();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
 			groupBox3.SuspendLayout();
 			SuspendLayout();
@@ -274,6 +279,10 @@
 			// 
 			// groupBox2
 			// 
+			groupBox2.Controls.Add(btn_setffbguid);
+			groupBox2.Controls.Add(cmb_ffbguid);
+			groupBox2.Controls.Add(kryptonLabel10);
+			groupBox2.Controls.Add(txt_ffbguid);
 			groupBox2.Controls.Add(btn_configureDinputWheel);
 			groupBox2.Controls.Add(chk_useDinputWheel);
 			groupBox2.Controls.Add(kryptonLabel9);
@@ -284,10 +293,45 @@
 			groupBox2.Controls.Add(radio_useDefaultStooze_Wheel);
 			groupBox2.Location = new Point(12, 518);
 			groupBox2.Name = "groupBox2";
-			groupBox2.Size = new Size(943, 92);
+			groupBox2.Size = new Size(943, 132);
 			groupBox2.TabIndex = 35;
 			groupBox2.TabStop = false;
 			groupBox2.Text = "Wheel Settings";
+			// 
+			// btn_setffbguid
+			// 
+			btn_setffbguid.Location = new Point(786, 77);
+			btn_setffbguid.Name = "btn_setffbguid";
+			btn_setffbguid.Size = new Size(110, 23);
+			btn_setffbguid.TabIndex = 39;
+			btn_setffbguid.Values.Text = "Set FFB GUID";
+			btn_setffbguid.Click += btn_setffbguid_Click;
+			// 
+			// cmb_ffbguid
+			// 
+			cmb_ffbguid.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_ffbguid.DropDownWidth = 483;
+			cmb_ffbguid.IntegralHeight = false;
+			cmb_ffbguid.Location = new Point(292, 77);
+			cmb_ffbguid.Name = "cmb_ffbguid";
+			cmb_ffbguid.Size = new Size(483, 21);
+			cmb_ffbguid.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_ffbguid.TabIndex = 38;
+			// 
+			// kryptonLabel10
+			// 
+			kryptonLabel10.Location = new Point(13, 77);
+			kryptonLabel10.Name = "kryptonLabel10";
+			kryptonLabel10.Size = new Size(146, 20);
+			kryptonLabel10.TabIndex = 37;
+			kryptonLabel10.Values.Text = "Dinput Wheel FFB GUID :";
+			// 
+			// txt_ffbguid
+			// 
+			txt_ffbguid.Location = new Point(292, 103);
+			txt_ffbguid.Name = "txt_ffbguid";
+			txt_ffbguid.Size = new Size(483, 23);
+			txt_ffbguid.TabIndex = 37;
 			// 
 			// btn_configureDinputWheel
 			// 
@@ -461,7 +505,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(965, 618);
+			ClientSize = new Size(965, 662);
 			Controls.Add(groupBox3);
 			Controls.Add(groupBox2);
 			Controls.Add(groupBox1);
@@ -481,7 +525,7 @@
 			Controls.Add(btn_setTest);
 			Controls.Add(chk_enableVirtualKeyboard);
 			Name = "Form1";
-			Text = "Form1";
+			Text = "Teknoparrot Auto Xinput Configuration";
 			FormClosing += Form1_FormClosing;
 			Load += Form1_Load;
 			groupBox1.ResumeLayout(false);
@@ -489,6 +533,7 @@
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).EndInit();
 			groupBox2.ResumeLayout(false);
 			groupBox2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_ffbguid).EndInit();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).EndInit();
 			groupBox3.ResumeLayout(false);
 			groupBox3.PerformLayout();
@@ -540,5 +585,9 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel4;
 		private Krypton.Toolkit.KryptonButton btn_testxinput;
 		private Krypton.Toolkit.KryptonTextBox txt_xinputdata;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel10;
+		private Krypton.Toolkit.KryptonTextBox txt_ffbguid;
+		private Krypton.Toolkit.KryptonButton btn_setffbguid;
+		private Krypton.Toolkit.KryptonComboBox cmb_ffbguid;
 	}
 }

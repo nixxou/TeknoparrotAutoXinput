@@ -283,6 +283,7 @@
 			btn_Cancel.Size = new Size(90, 25);
 			btn_Cancel.TabIndex = 27;
 			btn_Cancel.Values.Text = "Cancel";
+			btn_Cancel.Click += btn_Cancel_Click;
 			// 
 			// btn_Save
 			// 
