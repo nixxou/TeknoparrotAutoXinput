@@ -74,7 +74,7 @@ namespace TeknoparrotAutoXinput
 			}
 			if (args.Length > 0)
 			{
-
+				
 				bool changeFFBConfig = (bool)Properties.Settings.Default["FFB"];
 				bool showStartup = (bool)Properties.Settings.Default["showStartup"];
 
@@ -87,6 +87,7 @@ namespace TeknoparrotAutoXinput
 				arcadeXinputData = Properties.Settings.Default["arcadeXinputData"].ToString();
 				gamepadXinputData = Properties.Settings.Default["gamepadXinputData"].ToString();
 
+				bool favorAB = (bool)Properties.Settings.Default["favorAB"];
 
 				bool gamepadStooz = (bool)Properties.Settings.Default["gamepadStooz"];
 				bool wheelStooz = (bool)Properties.Settings.Default["wheelStooz"];
@@ -103,6 +104,7 @@ namespace TeknoparrotAutoXinput
 
 				List<string> typeConfig = new List<string>();
 				typeConfig.Add("gamepad");
+				typeConfig.Add("gamepadalt");
 				typeConfig.Add("arcade");
 				typeConfig.Add("wheel");
 
@@ -201,6 +203,9 @@ namespace TeknoparrotAutoXinput
 					{
 						finalConfig = xmlFile;
 					}
+
+					bool usealtgamepad = false;
+					if (favorAB && existingConfig.ContainsKey("gamepadalt") && existingConfig.ContainsKey("wheel")) usealtgamepad = true;
 
 					if (finalConfig == "")
 					{
@@ -467,7 +472,10 @@ namespace TeknoparrotAutoXinput
 							}
 							if (haveGamepad)
 							{
-								joystickButtonGamepad = ParseConfig(existingConfig["gamepad"]);
+								string configname = "gamepad";
+								if (usealtgamepad) configname = "gamepadalt";
+
+								joystickButtonGamepad = ParseConfig(existingConfig[configname]);
 								var PlayerList = GetPlayersList(joystickButtonGamepad);
 								int nb_gamepad = connectedGamePad.Values.Where(c => c.Type == "gamepad").Count();
 								int currentlyAttributed = 0;
@@ -628,8 +636,8 @@ namespace TeknoparrotAutoXinput
 										catch { }
 									}
 									var ConfigFFB = new IniFile(FFBPluginIniFile);
-									if (ConfigFFB.KeyExists("DeviceGUID", "Settings"))
-									{
+									//if (ConfigFFB.KeyExists("DeviceGUID", "Settings"))
+									//{
 
 										if (useXinput)
 										{
@@ -661,7 +669,7 @@ namespace TeknoparrotAutoXinput
 										{
 											ConfigFFB.Write("DeviceGUID", WheelFFBGuid, "Settings");
 										}
-									}
+									//}
 
 								}
 
@@ -830,10 +838,14 @@ namespace TeknoparrotAutoXinput
 						foreach (var ConfigPlayer in ConfigPerPlayer)
 						{
 							playernum++;
+							
 							string upperType = char.ToUpper(ConfigPlayer.Value.Item1[0]) + ConfigPlayer.Value.Item1.Substring(1);
 
 							Startup.playerAttributionDesc += $"P{playernum}={upperType}\n";
-							var imgPath = Path.Combine(basePath, "img", originalConfigFileNameWithoutExt + "." + ConfigPlayer.Value.Item1 + ".jpg");
+							string configname = ConfigPlayer.Value.Item1;
+							if (configname == "gamepad" && usealtgamepad) configname = "gamepadalt";
+
+							var imgPath = Path.Combine(basePath, "img", originalConfigFileNameWithoutExt + "." + configname + ".jpg");
 							Startup.imagePaths.Add(imgPath);
 						}
 						Startup.playerAttributionDesc.TrimEnd('\n');
@@ -873,6 +885,7 @@ namespace TeknoparrotAutoXinput
 								try
 								{
 									File.Copy(ParrotDataBackup, ParrotDataOriginal, true);
+									Thread.Sleep(50);
 									File.Delete(ParrotDataBackup);
 								}
 								catch { }
@@ -880,11 +893,12 @@ namespace TeknoparrotAutoXinput
 						}
 						if (!String.IsNullOrEmpty(FFBPluginIniFile) && !String.IsNullOrEmpty(FFBPluginIniBackup))
 						{
-							if (File.Exists(ParrotDataBackup))
+							if (File.Exists(FFBPluginIniBackup))
 							{
 								try
 								{
 									File.Copy(FFBPluginIniBackup, FFBPluginIniFile, true);
+									Thread.Sleep(50);
 									File.Delete(FFBPluginIniBackup);
 								}
 								catch { }

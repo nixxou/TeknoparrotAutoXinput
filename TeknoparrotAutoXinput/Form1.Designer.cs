@@ -44,6 +44,7 @@
 			chk_showStartup = new Krypton.Toolkit.KryptonCheckBox();
 			chk_FFB = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1 = new GroupBox();
+			chk_favorAB = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
 			lbl_useCustomStooz_Gamepad = new Krypton.Toolkit.KryptonLabel();
 			trk_useCustomStooz_Gamepad = new TrackBar();
@@ -213,6 +214,7 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(chk_favorAB);
 			groupBox1.Controls.Add(kryptonLabel8);
 			groupBox1.Controls.Add(lbl_useCustomStooz_Gamepad);
 			groupBox1.Controls.Add(trk_useCustomStooz_Gamepad);
@@ -221,10 +223,19 @@
 			groupBox1.Controls.Add(radio_useDefaultStooze_Gamepad);
 			groupBox1.Location = new Point(12, 445);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(943, 58);
+			groupBox1.Size = new Size(943, 101);
 			groupBox1.TabIndex = 31;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "GamePad Settings";
+			// 
+			// chk_favorAB
+			// 
+			chk_favorAB.Location = new Point(12, 49);
+			chk_favorAB.Name = "chk_favorAB";
+			chk_favorAB.Size = new Size(354, 20);
+			chk_favorAB.TabIndex = 40;
+			chk_favorAB.Values.Text = "On Drive game favor A/B for shift Up/Down Instead of LB/RB";
+			chk_favorAB.CheckedChanged += chk_favorAB_CheckedChanged;
 			// 
 			// kryptonLabel8
 			// 
@@ -291,7 +302,7 @@
 			groupBox2.Controls.Add(chk_enableStoozZone_Wheel);
 			groupBox2.Controls.Add(radio_useCustomStooz_Wheel);
 			groupBox2.Controls.Add(radio_useDefaultStooze_Wheel);
-			groupBox2.Location = new Point(12, 518);
+			groupBox2.Location = new Point(12, 552);
 			groupBox2.Name = "groupBox2";
 			groupBox2.Size = new Size(943, 132);
 			groupBox2.TabIndex = 35;
@@ -505,7 +516,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(965, 662);
+			ClientSize = new Size(965, 728);
 			Controls.Add(groupBox3);
 			Controls.Add(groupBox2);
 			Controls.Add(groupBox1);
@@ -589,5 +600,6 @@
 		private Krypton.Toolkit.KryptonTextBox txt_ffbguid;
 		private Krypton.Toolkit.KryptonButton btn_setffbguid;
 		private Krypton.Toolkit.KryptonComboBox cmb_ffbguid;
+		private Krypton.Toolkit.KryptonCheckBox chk_favorAB;
 	}
 }

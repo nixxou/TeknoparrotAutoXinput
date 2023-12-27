@@ -238,5 +238,17 @@ namespace TeknoparrotAutoXinput.Properties {
                 this["ffbDinputWheel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool favorAB {
+            get {
+                return ((bool)(this["favorAB"]));
+            }
+            set {
+                this["favorAB"] = value;
+            }
+        }
     }
 }

@@ -75,15 +75,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Coin</ButtonName>
-      <DirectInputButton>
-        <Button>104</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>6f1d2b61-d5a0-11cf-bfc7-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -99,7 +90,7 @@
       </XInputButton>
       <InputMapping>Coin1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Keyboard Button Space</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 Back</BindNameXi>
       <BindName>Input Device 0 Back</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -122,15 +113,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Insert AIME Card</ButtonName>
-      <DirectInputButton>
-        <Button>102</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>6f1d2b61-d5a0-11cf-bfc7-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -146,7 +128,7 @@
       </XInputButton>
       <InputMapping>ExtensionOne13</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Keyboard Button Multiply</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 RightThumb</BindNameXi>
       <BindName>Input Device 0 RightThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -169,15 +151,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Start</ButtonName>
-      <DirectInputButton>
-        <Button>75</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>6f1d2b61-d5a0-11cf-bfc7-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -193,7 +166,7 @@
       </XInputButton>
       <InputMapping>P1ButtonStart</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Keyboard Button Return</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 Start</BindNameXi>
       <BindName>Input Device 0 Start</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -297,15 +270,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Gas</ButtonName>
-      <DirectInputButton>
-        <Button>129</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>6f1d2b61-d5a0-11cf-bfc7-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -321,7 +285,7 @@
       </XInputButton>
       <InputMapping>Analog2</InputMapping>
       <AnalogType>Gas</AnalogType>
-      <BindNameDi>Keyboard Button NumberPad0</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 RightTrigger</BindNameXi>
       <BindName>Input Device 0 RightTrigger</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -492,15 +456,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Menu Up</ButtonName>
-      <DirectInputButton>
-        <Button>152</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>6f1d2b61-d5a0-11cf-bfc7-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -516,7 +471,7 @@
       </XInputButton>
       <InputMapping>P1ButtonUp</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Keyboard Button 105</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 DPadUp</BindNameXi>
       <BindName>Input Device 0 DPadUp</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -539,15 +494,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Menu Down</ButtonName>
-      <DirectInputButton>
-        <Button>157</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>6f1d2b61-d5a0-11cf-bfc7-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -563,7 +509,7 @@
       </XInputButton>
       <InputMapping>P1ButtonDown</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Keyboard Button 110</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 DPadDown</BindNameXi>
       <BindName>Input Device 0 DPadDown</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -586,15 +532,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Menu Left</ButtonName>
-      <DirectInputButton>
-        <Button>154</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>6f1d2b61-d5a0-11cf-bfc7-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -610,7 +547,7 @@
       </XInputButton>
       <InputMapping>P1ButtonLeft</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Keyboard Button 107</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 DPadLeft</BindNameXi>
       <BindName>Input Device 0 DPadLeft</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -633,15 +570,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Menu Right</ButtonName>
-      <DirectInputButton>
-        <Button>155</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>6f1d2b61-d5a0-11cf-bfc7-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -657,7 +585,7 @@
       </XInputButton>
       <InputMapping>P1ButtonRight</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Keyboard Button 108</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 DPadRight</BindNameXi>
       <BindName>Input Device 0 DPadRight</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>

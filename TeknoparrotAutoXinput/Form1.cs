@@ -49,6 +49,8 @@ namespace TeknoparrotAutoXinput
 			chk_useDinputWheel.Checked = (bool)Properties.Settings.Default["useDinputWheel"];
 			txt_ffbguid.Text = Properties.Settings.Default["ffbDinputWheel"].ToString();
 
+			chk_favorAB.Checked = (bool)Properties.Settings.Default["favorAB"];
+
 			updateStooz();
 
 			if (!chk_enableVirtualKeyboard.Checked)
@@ -325,6 +327,12 @@ namespace TeknoparrotAutoXinput
 			{
 				txt_ffbguid.Text = FFBGuidList[cmb_ffbguid.SelectedIndex];
 			}
+		}
+
+		private void chk_favorAB_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default["favorAB"] = chk_favorAB.Checked;
+			Properties.Settings.Default.Save();
 		}
 	}
 }
