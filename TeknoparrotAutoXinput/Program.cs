@@ -110,7 +110,6 @@ namespace TeknoparrotAutoXinput
 
 
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
-				MessageBox.Show("debug");
 				if (args.Length > 0)
 				{
 
