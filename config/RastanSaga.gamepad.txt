@@ -81,17 +81,17 @@
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
         <IsAxisMinus>false</IsAxisMinus>
-        <IsLeftTrigger>true</IsLeftTrigger>
+        <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>0</ButtonCode>
-        <IsButton>false</IsButton>
+        <ButtonCode>256</ButtonCode>
+        <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>10</XInputIndex>
       </XInputButton>
       <InputMapping>Service2</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 10 LeftTrigger</BindNameXi>
-      <BindName>Input Device 10 LeftTrigger</BindName>
+      <BindNameXi>Input Device 10 LeftShoulder</BindNameXi>
+      <BindName>Input Device 10 LeftShoulder</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -370,7 +370,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 1 Shoot</ButtonName>
+      <ButtonName>Player 1 Attack</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -629,7 +629,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 2 Shoot</ButtonName>
+      <ButtonName>Player 2 Attack</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
