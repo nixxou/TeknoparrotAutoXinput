@@ -16,6 +16,7 @@
       </XInputButton>
       <InputMapping>Test</InputMapping>
       <AnalogType>None</AnalogType>
+      <BindNameDi />
       <BindNameXi>Input Device 10 LeftThumb</BindNameXi>
       <BindName>Input Device 10 LeftThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -53,6 +54,7 @@
       </XInputButton>
       <InputMapping>Service1</InputMapping>
       <AnalogType>None</AnalogType>
+      <BindNameDi />
       <BindNameXi>Input Device 10 RightThumb</BindNameXi>
       <BindName>Input Device 10 RightThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -127,6 +129,7 @@
       </XInputButton>
       <InputMapping>Coin1</InputMapping>
       <AnalogType>None</AnalogType>
+      <BindNameDi />
       <BindNameXi>Input Device 0 Back</BindNameXi>
       <BindName>Input Device 0 Back</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -201,6 +204,7 @@
       </XInputButton>
       <InputMapping>P1ButtonStart</InputMapping>
       <AnalogType>None</AnalogType>
+      <BindNameDi />
       <BindNameXi>Input Device 0 Start</BindNameXi>
       <BindName>Input Device 0 Start</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -370,7 +374,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 1 Light Punch</ButtonName>
+      <ButtonName>Player 1 Button 1</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -407,7 +411,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 1 Medium Punch</ButtonName>
+      <ButtonName>Player 1 Button 2</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -444,7 +448,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 1 Heavy Punch</ButtonName>
+      <ButtonName>Player 1 Button 3</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -481,7 +485,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 1 Light Kick</ButtonName>
+      <ButtonName>Player 1 Button 4</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -518,7 +522,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 1 Medium Kick</ButtonName>
+      <ButtonName>Player 1 Button 5</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -555,7 +559,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 1 Heavy Kick</ButtonName>
+      <ButtonName>Player 1 Button 6</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -777,7 +781,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 2 Light Punch</ButtonName>
+      <ButtonName>Player 2 Button 1</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -814,7 +818,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 2 Medium Punch</ButtonName>
+      <ButtonName>Player 2 Button 2</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -851,7 +855,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 2 Heavy Punch</ButtonName>
+      <ButtonName>Player 2 Button 3</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -888,7 +892,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 2 Light Kick</ButtonName>
+      <ButtonName>Player 2 Button 4</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -925,7 +929,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 2 Medium Kick</ButtonName>
+      <ButtonName>Player 2 Button 5</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -962,7 +966,7 @@
       <HideWithProMode>false</HideWithProMode>
     </JoystickButtons>
     <JoystickButtons>
-      <ButtonName>Player 2 Heavy Kick</ButtonName>
+      <ButtonName>Player 2 Button 6</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
