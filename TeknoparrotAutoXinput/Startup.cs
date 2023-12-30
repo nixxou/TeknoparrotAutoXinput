@@ -44,6 +44,9 @@ namespace TeknoparrotAutoXinput
 		[DllImport("user32.dll", EntryPoint = "SetWindowPos")]
 		public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
 
+		[DllImport("user32.dll", EntryPoint = "SetWindowPos")]
+		static extern bool SetWindowPos2(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
 		[DllImport("user32.dll", SetLastError = true)]
 		static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
@@ -54,8 +57,14 @@ namespace TeknoparrotAutoXinput
 		const uint WS_CAPTION = 0x00C00000;
 		const uint WS_THICKFRAME = 0x00040000;
 
+		static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+		const UInt32 SWP_NOSIZE = 0x0001;
+		const UInt32 SWP_NOMOVE = 0x0002;
+		const UInt32 SWP_NOACTIVATE = 0x0010;
+
 		public Startup()
 		{
+
 			Screen MainScreen = null;
 			int MainScreenIndex = -1;
 			int MainScreenDpi = -1;
@@ -85,20 +94,20 @@ namespace TeknoparrotAutoXinput
 			this.Width = SizeWidth;
 			this.Height = SizeHeight;
 
-
+			
 			checkWindowTimer = new System.Windows.Forms.Timer();
 			checkWindowTimer.Interval = 30; // Intervalle d'attente en millisecondes (1 seconde dans cet exemple)
 			checkWindowTimer.Tick += CheckWindowTimer_Tick;
 			checkWindowTimer.Enabled = true;
 			checkWindowTimer.Start();
 
-
+			
 			grabLoaderTimer = new System.Windows.Forms.Timer();
 			grabLoaderTimer.Interval = 30; // Intervalle d'attente en millisecondes (1 seconde dans cet exemple)
 			grabLoaderTimer.Tick += GrabLoaderTimer_Tick;
 			grabLoaderTimer.Enabled = true;
 			grabLoaderTimer.Start();
-
+			
 			LoadImages();
 			AddImageToForm();
 		}
@@ -112,7 +121,8 @@ namespace TeknoparrotAutoXinput
 				Process targetProcess = processes[0];
 				if (!targetProcess.HasExited && IsWindowVisible(targetProcess.MainWindowHandle))
 				{
-					ShowWindow(targetProcess.MainWindowHandle, SW_MINIMIZE);
+					//ShowWindow(targetProcess.MainWindowHandle, SW_MINIMIZE);
+					SetWindowPos2(targetProcess.MainWindowHandle, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 					checkWindowTimer.Stop();
 				}
 			}
@@ -124,7 +134,7 @@ namespace TeknoparrotAutoXinput
 			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "OpenParrotWin32", "OpenParrotKonamiLoader.exe"));
 			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "OpenParrotx64", "OpenParrotLoader64.exe"));
 			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "TeknoParrot", "BudgieLoader.exe"));
-
+			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "ElfLdr2", "BudgieLoader.exe"));
 			if (externalWindowHandle != IntPtr.Zero)
 			{
 				//int style = GetWindowLong(externalWindowHandle, GWL_STYLE);

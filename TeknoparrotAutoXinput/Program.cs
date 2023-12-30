@@ -852,7 +852,7 @@ namespace TeknoparrotAutoXinput
 
 					if (finalConfig != "")
 					{
-
+						
 						if (showStartup)
 						{
 
@@ -861,7 +861,7 @@ namespace TeknoparrotAutoXinput
 							Task.Run(() => ShowFormAsync(cancellationTokenSource.Token));
 
 						}
-
+						
 						Process process = new Process();
 
 						process.StartInfo.FileName = teknoparrotExe;
