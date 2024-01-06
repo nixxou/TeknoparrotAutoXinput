@@ -1114,14 +1114,10 @@ namespace TeknoparrotAutoXinput
 			SubType = caps.SubType.ToString().Trim();
 
 
-			ushort vendorId, productId, revisionId;
-			bool result = XInputWrapper.GetControllerInfo((uint)xinputSlot, out vendorId, out productId, out revisionId);
-			if (result)
-			{
-				VendorId = vendorId;
-				ProductId = productId;
-				RevisionID = revisionId;
-			}
+			var capsEx = XExt.GetExtraData(XinputSlot);
+			VendorId = capsEx.vendorId;
+			ProductId = capsEx.productId;
+			RevisionID = capsEx.revisionId;
 
 			Type = "";
 			string dataTxt = ToString();
