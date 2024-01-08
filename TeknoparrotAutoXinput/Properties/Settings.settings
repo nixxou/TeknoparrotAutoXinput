@@ -65,5 +65,8 @@
     <Setting Name="ShowAllGames" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="Disposition" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;none&gt;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

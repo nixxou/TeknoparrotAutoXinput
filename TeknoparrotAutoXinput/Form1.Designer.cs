@@ -80,6 +80,9 @@
 			groupBox4 = new GroupBox();
 			btn_selectTP = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel11 = new Krypton.Toolkit.KryptonLabel();
+			txt_monitorswitch = new Krypton.Toolkit.KryptonTextBox();
+			kryptonLabel12 = new Krypton.Toolkit.KryptonLabel();
+			btn_editMonitorSwitch = new Krypton.Toolkit.KryptonButton();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -540,9 +543,9 @@
 			groupBox4.Controls.Add(btn_selectTP);
 			groupBox4.Controls.Add(kryptonLabel11);
 			groupBox4.Controls.Add(txt_tpfolder);
-			groupBox4.Location = new Point(12, 12);
+			groupBox4.Location = new Point(8, 6);
 			groupBox4.Name = "groupBox4";
-			groupBox4.Size = new Size(941, 75);
+			groupBox4.Size = new Size(941, 59);
 			groupBox4.TabIndex = 39;
 			groupBox4.TabStop = false;
 			// 
@@ -563,11 +566,39 @@
 			kryptonLabel11.TabIndex = 37;
 			kryptonLabel11.Values.Text = "Teknoparrot Folder :";
 			// 
+			// txt_monitorswitch
+			// 
+			txt_monitorswitch.Location = new Point(264, 71);
+			txt_monitorswitch.Name = "txt_monitorswitch";
+			txt_monitorswitch.ReadOnly = true;
+			txt_monitorswitch.Size = new Size(251, 23);
+			txt_monitorswitch.TabIndex = 37;
+			// 
+			// kryptonLabel12
+			// 
+			kryptonLabel12.Location = new Point(8, 74);
+			kryptonLabel12.Name = "kryptonLabel12";
+			kryptonLabel12.Size = new Size(250, 20);
+			kryptonLabel12.TabIndex = 37;
+			kryptonLabel12.Values.Text = "Change Monitor Resolution/Disposition To : ";
+			// 
+			// btn_editMonitorSwitch
+			// 
+			btn_editMonitorSwitch.Location = new Point(521, 71);
+			btn_editMonitorSwitch.Name = "btn_editMonitorSwitch";
+			btn_editMonitorSwitch.Size = new Size(58, 23);
+			btn_editMonitorSwitch.TabIndex = 40;
+			btn_editMonitorSwitch.Values.Text = "Edit";
+			btn_editMonitorSwitch.Click += btn_editMonitorSwitch_Click;
+			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(965, 833);
+			Controls.Add(btn_editMonitorSwitch);
+			Controls.Add(kryptonLabel12);
+			Controls.Add(txt_monitorswitch);
 			Controls.Add(groupBox4);
 			Controls.Add(btn_Save);
 			Controls.Add(groupBox3);
@@ -661,5 +692,8 @@
 		private GroupBox groupBox4;
 		private Krypton.Toolkit.KryptonButton btn_selectTP;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel11;
+		private Krypton.Toolkit.KryptonTextBox txt_monitorswitch;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel12;
+		private Krypton.Toolkit.KryptonButton btn_editMonitorSwitch;
 	}
 }

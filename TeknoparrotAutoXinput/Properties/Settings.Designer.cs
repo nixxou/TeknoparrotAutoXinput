@@ -274,5 +274,17 @@ namespace TeknoparrotAutoXinput.Properties {
                 this["ShowAllGames"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<none>")]
+        public string Disposition {
+            get {
+                return ((string)(this["Disposition"]));
+            }
+            set {
+                this["Disposition"] = value;
+            }
+        }
     }
 }

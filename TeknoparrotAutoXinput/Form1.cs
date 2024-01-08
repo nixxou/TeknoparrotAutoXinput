@@ -52,6 +52,7 @@ namespace TeknoparrotAutoXinput
 			chk_favorAB.Checked = (bool)Properties.Settings.Default["favorAB"];
 
 			txt_tpfolder.Text = Properties.Settings.Default["TpFolder"].ToString();
+			txt_monitorswitch.Text = Properties.Settings.Default["Disposition"].ToString();
 
 			updateStooz();
 
@@ -360,6 +361,21 @@ namespace TeknoparrotAutoXinput
 		{
 			this.DialogResult = DialogResult.OK;
 			this.Close();
+		}
+
+		private void btn_editMonitorSwitch_Click(object sender, EventArgs e)
+		{
+			var frm = new MonitorDispositionConfig();
+			var result = frm.ShowDialog();
+
+			if (result == DialogResult.OK)
+			{
+				txt_monitorswitch.Text = frm.result;
+				Properties.Settings.Default["Disposition"] = frm.result;
+				Properties.Settings.Default.Save();
+				//Profile.ActiveProfile.SetOption("monitorswitch", frm.result);
+				//ReloadDispositionCmb();
+			}
 		}
 	}
 }

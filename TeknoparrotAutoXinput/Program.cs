@@ -1,4 +1,5 @@
 using Gma.System.MouseKeyHook;
+using MonitorSwitcherGUI;
 using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using Nefarius.ViGEm.Client.Targets;
@@ -47,6 +48,9 @@ namespace TeknoparrotAutoXinput
 		public static string FFBPluginIniFile = "";
 		public static string FFBPluginIniBackup = "";
 
+		private static bool _restoreSwitch = false;
+		private static string _dispositionToSwitch = "";
+
 
 		/// <summary>
 		///  The main entry point for the application.
@@ -81,7 +85,10 @@ namespace TeknoparrotAutoXinput
 			}
 			if (args.Length > 0)
 			{
+
+
 				
+
 				bool changeFFBConfig = (bool)Properties.Settings.Default["FFB"];
 				bool showStartup = (bool)Properties.Settings.Default["showStartup"];
 
@@ -857,7 +864,24 @@ namespace TeknoparrotAutoXinput
 
 					if (finalConfig != "")
 					{
-						
+
+						_dispositionToSwitch = Properties.Settings.Default["Disposition"].ToString();
+						if (!string.IsNullOrEmpty(_dispositionToSwitch) && _dispositionToSwitch != "<none>")
+						{
+							var cfg = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions", "disposition_" + _dispositionToSwitch + ".xml");
+							if (File.Exists(cfg))
+							{
+								if (MonitorSwitcher.SaveDisplaySettings(Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions", "dispositionrestore_app.xml")))
+								{
+									if (UseMonitorDisposition(_dispositionToSwitch))
+									{
+										_restoreSwitch = true;
+										Thread.Sleep(1000);
+									}
+								}
+							}
+						}
+
 						if (showStartup)
 						{
 
@@ -923,6 +947,11 @@ namespace TeknoparrotAutoXinput
 						{
 							// Utilisez Invoke pour fermer le formulaire depuis un thread différent
 							startupForm.Invoke(new Action(() => startupForm.Close()));
+						}
+
+						if (_restoreSwitch)
+						{
+							MonitorSwitcher.LoadDisplaySettings(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dispositions", "dispositionrestore_app.xml"));
 						}
 
 					}
@@ -1248,6 +1277,17 @@ namespace TeknoparrotAutoXinput
 			}
 
 			return "Unknown";
+		}
+
+		public static bool UseMonitorDisposition(string key)
+		{
+			string dispositionDir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions");
+			var cfg = Path.Combine(dispositionDir, "disposition_" + key + ".xml");
+			if (File.Exists(cfg))
+			{
+				return MonitorSwitcher.LoadDisplaySettings(cfg);
+			}
+			return false;
 		}
 	}
 
