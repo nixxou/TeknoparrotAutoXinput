@@ -75,17 +75,23 @@
 			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
 			btn_testxinput = new Krypton.Toolkit.KryptonButton();
 			txt_xinputdata = new Krypton.Toolkit.KryptonTextBox();
+			btn_Save = new Krypton.Toolkit.KryptonButton();
+			txt_tpfolder = new Krypton.Toolkit.KryptonTextBox();
+			groupBox4 = new GroupBox();
+			btn_selectTP = new Krypton.Toolkit.KryptonButton();
+			kryptonLabel11 = new Krypton.Toolkit.KryptonLabel();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_ffbguid).BeginInit();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
 			groupBox3.SuspendLayout();
+			groupBox4.SuspendLayout();
 			SuspendLayout();
 			// 
 			// chk_enableVirtualKeyboard
 			// 
-			chk_enableVirtualKeyboard.Location = new Point(12, 12);
+			chk_enableVirtualKeyboard.Location = new Point(12, 109);
 			chk_enableVirtualKeyboard.Name = "chk_enableVirtualKeyboard";
 			chk_enableVirtualKeyboard.Size = new Size(295, 20);
 			chk_enableVirtualKeyboard.TabIndex = 0;
@@ -94,7 +100,7 @@
 			// 
 			// btn_setTest
 			// 
-			btn_setTest.Location = new Point(267, 38);
+			btn_setTest.Location = new Point(267, 135);
 			btn_setTest.Name = "btn_setTest";
 			btn_setTest.Size = new Size(70, 23);
 			btn_setTest.TabIndex = 2;
@@ -103,7 +109,7 @@
 			// 
 			// btn_ClearTest
 			// 
-			btn_ClearTest.Location = new Point(343, 38);
+			btn_ClearTest.Location = new Point(343, 135);
 			btn_ClearTest.Name = "btn_ClearTest";
 			btn_ClearTest.Size = new Size(58, 23);
 			btn_ClearTest.TabIndex = 3;
@@ -112,7 +118,7 @@
 			// 
 			// txt_KeyTest
 			// 
-			txt_KeyTest.Location = new Point(78, 38);
+			txt_KeyTest.Location = new Point(78, 135);
 			txt_KeyTest.Name = "txt_KeyTest";
 			txt_KeyTest.ReadOnly = true;
 			txt_KeyTest.Size = new Size(183, 23);
@@ -120,7 +126,7 @@
 			// 
 			// kryptonLabel1
 			// 
-			kryptonLabel1.Location = new Point(12, 41);
+			kryptonLabel1.Location = new Point(12, 138);
 			kryptonLabel1.Name = "kryptonLabel1";
 			kryptonLabel1.Size = new Size(39, 20);
 			kryptonLabel1.TabIndex = 5;
@@ -128,7 +134,7 @@
 			// 
 			// kryptonLabel2
 			// 
-			kryptonLabel2.Location = new Point(12, 70);
+			kryptonLabel2.Location = new Point(12, 167);
 			kryptonLabel2.Name = "kryptonLabel2";
 			kryptonLabel2.Size = new Size(65, 20);
 			kryptonLabel2.TabIndex = 9;
@@ -136,7 +142,7 @@
 			// 
 			// txt_KeyService1
 			// 
-			txt_KeyService1.Location = new Point(78, 67);
+			txt_KeyService1.Location = new Point(78, 164);
 			txt_KeyService1.Name = "txt_KeyService1";
 			txt_KeyService1.ReadOnly = true;
 			txt_KeyService1.Size = new Size(183, 23);
@@ -144,7 +150,7 @@
 			// 
 			// btn_ClearService1
 			// 
-			btn_ClearService1.Location = new Point(343, 67);
+			btn_ClearService1.Location = new Point(343, 164);
 			btn_ClearService1.Name = "btn_ClearService1";
 			btn_ClearService1.Size = new Size(58, 23);
 			btn_ClearService1.TabIndex = 7;
@@ -153,7 +159,7 @@
 			// 
 			// btn_setService1
 			// 
-			btn_setService1.Location = new Point(267, 67);
+			btn_setService1.Location = new Point(267, 164);
 			btn_setService1.Name = "btn_setService1";
 			btn_setService1.Size = new Size(70, 23);
 			btn_setService1.TabIndex = 6;
@@ -162,7 +168,7 @@
 			// 
 			// kryptonLabel3
 			// 
-			kryptonLabel3.Location = new Point(12, 99);
+			kryptonLabel3.Location = new Point(12, 196);
 			kryptonLabel3.Name = "kryptonLabel3";
 			kryptonLabel3.Size = new Size(65, 20);
 			kryptonLabel3.TabIndex = 13;
@@ -170,7 +176,7 @@
 			// 
 			// txt_KeyService2
 			// 
-			txt_KeyService2.Location = new Point(78, 96);
+			txt_KeyService2.Location = new Point(78, 193);
 			txt_KeyService2.Name = "txt_KeyService2";
 			txt_KeyService2.ReadOnly = true;
 			txt_KeyService2.Size = new Size(183, 23);
@@ -178,7 +184,7 @@
 			// 
 			// btn_ClearService2
 			// 
-			btn_ClearService2.Location = new Point(343, 96);
+			btn_ClearService2.Location = new Point(343, 193);
 			btn_ClearService2.Name = "btn_ClearService2";
 			btn_ClearService2.Size = new Size(58, 23);
 			btn_ClearService2.TabIndex = 11;
@@ -187,7 +193,7 @@
 			// 
 			// btn_setService2
 			// 
-			btn_setService2.Location = new Point(267, 96);
+			btn_setService2.Location = new Point(267, 193);
 			btn_setService2.Name = "btn_setService2";
 			btn_setService2.Size = new Size(70, 23);
 			btn_setService2.TabIndex = 10;
@@ -196,7 +202,7 @@
 			// 
 			// chk_showStartup
 			// 
-			chk_showStartup.Location = new Point(12, 134);
+			chk_showStartup.Location = new Point(12, 231);
 			chk_showStartup.Name = "chk_showStartup";
 			chk_showStartup.Size = new Size(231, 20);
 			chk_showStartup.TabIndex = 14;
@@ -205,7 +211,7 @@
 			// 
 			// chk_FFB
 			// 
-			chk_FFB.Location = new Point(12, 160);
+			chk_FFB.Location = new Point(12, 257);
 			chk_FFB.Name = "chk_FFB";
 			chk_FFB.Size = new Size(346, 20);
 			chk_FFB.TabIndex = 16;
@@ -221,7 +227,7 @@
 			groupBox1.Controls.Add(chk_enableStoozZone_Gamepad);
 			groupBox1.Controls.Add(radio_useCustomStooz_Gamepad);
 			groupBox1.Controls.Add(radio_useDefaultStooze_Gamepad);
-			groupBox1.Location = new Point(12, 445);
+			groupBox1.Location = new Point(12, 542);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(943, 101);
 			groupBox1.TabIndex = 31;
@@ -302,7 +308,7 @@
 			groupBox2.Controls.Add(chk_enableStoozZone_Wheel);
 			groupBox2.Controls.Add(radio_useCustomStooz_Wheel);
 			groupBox2.Controls.Add(radio_useDefaultStooze_Wheel);
-			groupBox2.Location = new Point(12, 552);
+			groupBox2.Location = new Point(12, 649);
 			groupBox2.Name = "groupBox2";
 			groupBox2.Size = new Size(943, 132);
 			groupBox2.TabIndex = 35;
@@ -425,7 +431,7 @@
 			groupBox3.Controls.Add(kryptonLabel4);
 			groupBox3.Controls.Add(btn_testxinput);
 			groupBox3.Controls.Add(txt_xinputdata);
-			groupBox3.Location = new Point(12, 186);
+			groupBox3.Location = new Point(12, 283);
 			groupBox3.Name = "groupBox3";
 			groupBox3.Size = new Size(943, 253);
 			groupBox3.TabIndex = 36;
@@ -512,11 +518,58 @@
 			txt_xinputdata.TabIndex = 27;
 			txt_xinputdata.Text = "Click on the button to the right to show your connected Xinput Data\r\n";
 			// 
+			// btn_Save
+			// 
+			btn_Save.Location = new Point(865, 788);
+			btn_Save.Name = "btn_Save";
+			btn_Save.Size = new Size(90, 25);
+			btn_Save.TabIndex = 37;
+			btn_Save.Values.Text = "Save";
+			btn_Save.Click += btn_Save_Click;
+			// 
+			// txt_tpfolder
+			// 
+			txt_tpfolder.Enabled = false;
+			txt_tpfolder.Location = new Point(133, 19);
+			txt_tpfolder.Name = "txt_tpfolder";
+			txt_tpfolder.Size = new Size(553, 23);
+			txt_tpfolder.TabIndex = 38;
+			// 
+			// groupBox4
+			// 
+			groupBox4.Controls.Add(btn_selectTP);
+			groupBox4.Controls.Add(kryptonLabel11);
+			groupBox4.Controls.Add(txt_tpfolder);
+			groupBox4.Location = new Point(12, 12);
+			groupBox4.Name = "groupBox4";
+			groupBox4.Size = new Size(941, 75);
+			groupBox4.TabIndex = 39;
+			groupBox4.TabStop = false;
+			// 
+			// btn_selectTP
+			// 
+			btn_selectTP.Location = new Point(692, 19);
+			btn_selectTP.Name = "btn_selectTP";
+			btn_selectTP.Size = new Size(70, 23);
+			btn_selectTP.TabIndex = 40;
+			btn_selectTP.Values.Text = "...";
+			btn_selectTP.Click += btn_selectTP_Click;
+			// 
+			// kryptonLabel11
+			// 
+			kryptonLabel11.Location = new Point(6, 22);
+			kryptonLabel11.Name = "kryptonLabel11";
+			kryptonLabel11.Size = new Size(121, 20);
+			kryptonLabel11.TabIndex = 37;
+			kryptonLabel11.Values.Text = "Teknoparrot Folder :";
+			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(965, 728);
+			ClientSize = new Size(965, 833);
+			Controls.Add(groupBox4);
+			Controls.Add(btn_Save);
 			Controls.Add(groupBox3);
 			Controls.Add(groupBox2);
 			Controls.Add(groupBox1);
@@ -548,6 +601,8 @@
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).EndInit();
 			groupBox3.ResumeLayout(false);
 			groupBox3.PerformLayout();
+			groupBox4.ResumeLayout(false);
+			groupBox4.PerformLayout();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -601,5 +656,10 @@
 		private Krypton.Toolkit.KryptonButton btn_setffbguid;
 		private Krypton.Toolkit.KryptonComboBox cmb_ffbguid;
 		private Krypton.Toolkit.KryptonCheckBox chk_favorAB;
+		private Krypton.Toolkit.KryptonButton btn_Save;
+		private Krypton.Toolkit.KryptonTextBox txt_tpfolder;
+		private GroupBox groupBox4;
+		private Krypton.Toolkit.KryptonButton btn_selectTP;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel11;
 	}
 }

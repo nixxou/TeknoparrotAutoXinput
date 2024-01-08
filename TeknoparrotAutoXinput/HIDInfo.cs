@@ -122,9 +122,11 @@ public static class HIDInfo
 			string json = JsonConvert.SerializeObject(caps, Newtonsoft.Json.Formatting.None);
 			string signature = GetMD5Short(json);
 			string extra = "\r\n";
+			
 
 			var capsEx = XExt.GetExtraData(slot);
-			LastXInput += $"XINPUT{slot}<>Type={gamepad.Capabilities.SubType.ToString().Trim()}<>Signature={signature}<>VendorID=0x{capsEx.vendorId:X04}<>ProductID=0x{capsEx.productId:X04}<>RevisionID=0x{capsEx.revisionId:X04}{extra}";
+			string controllerName = Program.GetJoyId(capsEx.vendorId, capsEx.productId);
+			LastXInput += $"XINPUT{slot}<>Type={gamepad.Capabilities.SubType.ToString().Trim()}<>Signature={signature}<>VendorID=0x{capsEx.vendorId:X04}<>ProductID=0x{capsEx.productId:X04}<>RevisionID=0x{capsEx.revisionId:X04}<>{controllerName}{extra}";
 		}
 
 
@@ -139,7 +141,8 @@ public static class HIDInfo
 
 
 			var capsEx = XExt.GetExtraData(slot);
-			LastXInput += $"XINPUT{slot}<>Type={gamepad.Capabilities.SubType.ToString().Trim()}<>Signature={signature}<>VendorID=0x{capsEx.vendorId:X04}<>ProductID=0x{capsEx.productId:X04}<>RevisionID=0x{capsEx.revisionId:X04}{extra}";
+			string controllerName = Program.GetJoyId(capsEx.vendorId, capsEx.productId);
+			LastXInput += $"XINPUT{slot}<>Type={gamepad.Capabilities.SubType.ToString().Trim()}<>Signature={signature}<>VendorID=0x{capsEx.vendorId:X04}<>ProductID=0x{capsEx.productId:X04}<>RevisionID=0x{capsEx.revisionId:X04}<>{controllerName}{extra}";
 		}
 
 		gamepad = X.Gamepad_3;
@@ -153,7 +156,8 @@ public static class HIDInfo
 
 
 			var capsEx = XExt.GetExtraData(slot);
-			LastXInput += $"XINPUT{slot}<>Type={gamepad.Capabilities.SubType.ToString().Trim()}<>Signature={signature}<>VendorID=0x{capsEx.vendorId:X04}<>ProductID=0x{capsEx.productId:X04}<>RevisionID=0x{capsEx.revisionId:X04}{extra}";
+			string controllerName = Program.GetJoyId(capsEx.vendorId, capsEx.productId);
+			LastXInput += $"XINPUT{slot}<>Type={gamepad.Capabilities.SubType.ToString().Trim()}<>Signature={signature}<>VendorID=0x{capsEx.vendorId:X04}<>ProductID=0x{capsEx.productId:X04}<>RevisionID=0x{capsEx.revisionId:X04}<>{controllerName}{extra}";
 		}
 
 		gamepad = X.Gamepad_4;
@@ -167,7 +171,8 @@ public static class HIDInfo
 
 
 			var capsEx = XExt.GetExtraData(slot);
-			LastXInput += $"XINPUT{slot}<>Type={gamepad.Capabilities.SubType.ToString().Trim()}<>Signature={signature}<>VendorID=0x{capsEx.vendorId:X04}<>ProductID=0x{capsEx.productId:X04}<>RevisionID=0x{capsEx.revisionId:X04}{extra}";
+			string controllerName = Program.GetJoyId(capsEx.vendorId, capsEx.productId);
+			LastXInput += $"XINPUT{slot}<>Type={gamepad.Capabilities.SubType.ToString().Trim()}<>Signature={signature}<>VendorID=0x{capsEx.vendorId:X04}<>ProductID=0x{capsEx.productId:X04}<>RevisionID=0x{capsEx.revisionId:X04}<>{controllerName}{extra}";
 		}
 		return LastXInput;
 	}

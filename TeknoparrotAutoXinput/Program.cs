@@ -21,6 +21,7 @@ namespace TeknoparrotAutoXinput
 	{
 
 		//private static NamedPipeClientStream pipeClient;
+		public static Dictionary<int, Dictionary<int, string>> joysticksIds = new Dictionary<int, Dictionary<int, string>>();
 
 		public static ViGEmClient client = null;
 		public static IXbox360Controller controller = null;
@@ -53,6 +54,9 @@ namespace TeknoparrotAutoXinput
 		[STAThread]
 		static void Main(string[] args)
 		{
+			joysticksIds.Clear();
+			InitJoyList();
+
 			string runtimedir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "runtimes");
 			if (Directory.Exists(runtimedir))
 			{
@@ -66,11 +70,14 @@ namespace TeknoparrotAutoXinput
 			//fakeArgs.Add(@"C:\teknoparrot\UserProfiles\Daytona3.xml");
 			//args = fakeArgs.ToArray();
 #endif
+			wheelXinputData = Properties.Settings.Default["wheelXinputData"].ToString();
+			arcadeXinputData = Properties.Settings.Default["arcadeXinputData"].ToString();
+			gamepadXinputData = Properties.Settings.Default["gamepadXinputData"].ToString();
 
 			if (args.Length == 0)
 			{
 				ApplicationConfiguration.Initialize();
-				Application.Run(new Form1());
+				Application.Run(new Main());
 			}
 			if (args.Length > 0)
 			{
@@ -83,9 +90,7 @@ namespace TeknoparrotAutoXinput
 				string keyService1 = Properties.Settings.Default["keyService1"].ToString();
 				string keyService2 = Properties.Settings.Default["keyService2"].ToString();
 
-				wheelXinputData = Properties.Settings.Default["wheelXinputData"].ToString();
-				arcadeXinputData = Properties.Settings.Default["arcadeXinputData"].ToString();
-				gamepadXinputData = Properties.Settings.Default["gamepadXinputData"].ToString();
+
 
 				bool favorAB = (bool)Properties.Settings.Default["favorAB"];
 
@@ -950,7 +955,7 @@ namespace TeknoparrotAutoXinput
 			await Task.Delay(Timeout.Infinite, cancellationToken);
 		}
 
-		static List<int> GetPlayersList(Dictionary<string, JoystickButton> joystickButtonDictionary)
+		public static List<int> GetPlayersList(Dictionary<string, JoystickButton> joystickButtonDictionary)
 		{
 			List<int> playerList = new List<int>();
 			foreach (var joystickButton in joystickButtonDictionary)
@@ -964,7 +969,7 @@ namespace TeknoparrotAutoXinput
 			return playerList;
 		}
 
-		static Dictionary<string, JoystickButton> ParseConfig(string configFilePath, bool skipMissingXinput = true)
+		public static Dictionary<string, JoystickButton> ParseConfig(string configFilePath, bool skipMissingXinput = true)
 		{
 			//string configFilePath = @"E:\TODO\teknoparrot\TeknoparrotXinputSetup\config\Batman.gamepad.txt";
 
@@ -1054,6 +1059,196 @@ namespace TeknoparrotAutoXinput
 				catch { }
 			}
 		}
+
+		public static void InitJoyList()
+		{
+			AddJoyId(0x0079, 0x18d4, "GPD Win 2 X-Box Controller");
+			AddJoyId(0x044f, 0xb326, "Thrustmaster Gamepad GP XID");
+			AddJoyId(0x045e, 0x028e, "Microsoft X-Box 360 pad");
+			AddJoyId(0x045e, 0x028f, "Microsoft X-Box 360 pad v2");
+			AddJoyId(0x045e, 0x0291, "Xbox 360 Wireless Receiver (XBOX)");
+			AddJoyId(0x045e, 0x02a0, "Microsoft X-Box 360 Big Button IR");
+			AddJoyId(0x045e, 0x02a1, "Microsoft X-Box 360 pad");
+			AddJoyId(0x045e, 0x02d1, "Microsoft X-Box One pad");
+			AddJoyId(0x045e, 0x02dd, "Microsoft X-Box One pad (Firmware 2015)");
+			AddJoyId(0x045e, 0x02e0, "Microsoft X-Box One S pad (Bluetooth)");
+			AddJoyId(0x045e, 0x02e3, "Microsoft X-Box One Elite pad");
+			AddJoyId(0x045e, 0x02ea, "Microsoft X-Box One S pad");
+			AddJoyId(0x045e, 0x02fd, "Microsoft X-Box One S pad (Bluetooth)");
+			AddJoyId(0x045e, 0x02ff, "Microsoft X-Box One Elite pad");
+			AddJoyId(0x045e, 0x0719, "Xbox 360 Wireless Receiver");
+			AddJoyId(0x046d, 0xc21d, "Logitech Gamepad F310");
+			AddJoyId(0x046d, 0xc21e, "Logitech Gamepad F510");
+			AddJoyId(0x046d, 0xc21f, "Logitech Gamepad F710");
+			AddJoyId(0x046d, 0xc242, "Logitech Chillstream Controller");
+			AddJoyId(0x056e, 0x2004, "Elecom JC-U3613M");
+			AddJoyId(0x06a3, 0xf51a, "Saitek P3600");
+			AddJoyId(0x0738, 0x4716, "Mad Catz Wired Xbox 360 Controller");
+			AddJoyId(0x0738, 0x4718, "Mad Catz Street Fighter IV FightStick SE");
+			AddJoyId(0x0738, 0x4726, "Mad Catz Xbox 360 Controller");
+			AddJoyId(0x0738, 0x4728, "Mad Catz Street Fighter IV FightPad");
+			AddJoyId(0x0738, 0x4736, "Mad Catz MicroCon Gamepad");
+			AddJoyId(0x0738, 0x4738, "Mad Catz Wired Xbox 360 Controller (SFIV)");
+			AddJoyId(0x0738, 0x4740, "Mad Catz Beat Pad");
+			AddJoyId(0x0738, 0x4a01, "Mad Catz FightStick TE 2");
+			AddJoyId(0x0738, 0xb726, "Mad Catz Xbox controller - MW2");
+			AddJoyId(0x0738, 0xbeef, "Mad Catz JOYTECH NEO SE Advanced GamePad");
+			AddJoyId(0x0738, 0xcb02, "Saitek Cyborg Rumble Pad - PC/Xbox 360");
+			AddJoyId(0x0738, 0xcb03, "Saitek P3200 Rumble Pad - PC/Xbox 360");
+			AddJoyId(0x0738, 0xf738, "Super SFIV FightStick TE S");
+			AddJoyId(0x0955, 0xb400, "NVIDIA Shield streaming controller");
+			AddJoyId(0x0e6f, 0x0105, "HSM3 Xbox360 dancepad");
+			AddJoyId(0x0e6f, 0x0113, "Afterglow AX.1 Gamepad for Xbox 360");
+			AddJoyId(0x0e6f, 0x011f, "Rock Candy Gamepad Wired Controller");
+			AddJoyId(0x0e6f, 0x0131, "PDP EA Sports Controller");
+			AddJoyId(0x0e6f, 0x0133, "Xbox 360 Wired Controller");
+			AddJoyId(0x0e6f, 0x0139, "Afterglow Prismatic Wired Controller");
+			AddJoyId(0x0e6f, 0x013a, "PDP Xbox One Controller");
+			AddJoyId(0x0e6f, 0x0146, "Rock Candy Wired Controller for Xbox One");
+			AddJoyId(0x0e6f, 0x0147, "PDP Marvel Xbox One Controller");
+			AddJoyId(0x0e6f, 0x015c, "PDP Xbox One Arcade Stick");
+			AddJoyId(0x0e6f, 0x0161, "PDP Xbox One Controller");
+			AddJoyId(0x0e6f, 0x0162, "PDP Xbox One Controller");
+			AddJoyId(0x0e6f, 0x0163, "PDP Xbox One Controller");
+			AddJoyId(0x0e6f, 0x0164, "PDP Battlefield One");
+			AddJoyId(0x0e6f, 0x0165, "PDP Titanfall 2");
+			AddJoyId(0x0e6f, 0x0201, "Pelican PL-3601 TSZ Wired Xbox 360 Controller");
+			AddJoyId(0x0e6f, 0x0213, "Afterglow Gamepad for Xbox 360");
+			AddJoyId(0x0e6f, 0x021f, "Rock Candy Gamepad for Xbox 360");
+			AddJoyId(0x0e6f, 0x0246, "Rock Candy Gamepad for Xbox One 2015");
+			AddJoyId(0x0e6f, 0x02a0, "Counterfeit 360Controller");
+			AddJoyId(0x0e6f, 0x0301, "Logic3 Controller");
+			AddJoyId(0x0e6f, 0x0346, "Rock Candy Gamepad for Xbox One 2016");
+			AddJoyId(0x0e6f, 0x0401, "Logic3 Controller");
+			AddJoyId(0x0e6f, 0x0413, "Afterglow AX.1 Gamepad for Xbox 360");
+			AddJoyId(0x0e6f, 0x0501, "PDP Xbox 360 Controller");
+			AddJoyId(0x0e6f, 0xf501, "Counterfeit 360 Controller");
+			AddJoyId(0x0e6f, 0xf900, "PDP Afterglow AX.1");
+			AddJoyId(0x0f0d, 0x000a, "Hori Co. DOA4 FightStick");
+			AddJoyId(0x0f0d, 0x000c, "Hori PadEX Turbo");
+			AddJoyId(0x0f0d, 0x000d, "Hori Fighting Stick EX2");
+			AddJoyId(0x0f0d, 0x0016, "Hori Real Arcade Pro.EX");
+			AddJoyId(0x0f0d, 0x001b, "Hori Real Arcade Pro VX");
+			AddJoyId(0x0f0d, 0x0063, "Hori Real Arcade Pro Hayabusa (USA) Xbox One");
+			AddJoyId(0x0f0d, 0x0067, "HORIPAD ONE");
+			AddJoyId(0x0f0d, 0x0078, "Hori Real Arcade Pro V Kai Xbox One");
+			AddJoyId(0x0f0d, 0x008c, "Hori Real Arcade Pro 4");
+			AddJoyId(0x11c9, 0x55f0, "Nacon GC-100XF");
+			AddJoyId(0x12ab, 0x0004, "Honey Bee Xbox360 dancepad");
+			AddJoyId(0x12ab, 0x0301, "PDP AFTERGLOW AX.1");
+			AddJoyId(0x12ab, 0x0303, "Mortal Kombat Klassic FightStick");
+			AddJoyId(0x1430, 0x02a0, "RedOctane Controller Adapter");
+			AddJoyId(0x1430, 0x4748, "RedOctane Guitar Hero X-plorer");
+			AddJoyId(0x1430, 0xf801, "RedOctane Controller");
+			AddJoyId(0x146b, 0x0601, "BigBen Interactive XBOX 360 Controller");
+			AddJoyId(0x1532, 0x0037, "Razer Sabertooth");
+			AddJoyId(0x1532, 0x0a00, "Razer Atrox Arcade Stick");
+			AddJoyId(0x1532, 0x0a03, "Razer Wildcat");
+			AddJoyId(0x15e4, 0x3f00, "Power A Mini Pro Elite");
+			AddJoyId(0x15e4, 0x3f0a, "Xbox Airflo wired controller");
+			AddJoyId(0x15e4, 0x3f10, "Batarang Xbox 360 controller");
+			AddJoyId(0x162e, 0xbeef, "Joytech Neo-Se Take2");
+			AddJoyId(0x1689, 0xfd00, "Razer Onza Tournament Edition");
+			AddJoyId(0x1689, 0xfd01, "Razer Onza Classic Edition");
+			AddJoyId(0x1689, 0xfe00, "Razer Sabertooth");
+			AddJoyId(0x1bad, 0x0002, "Harmonix Rock Band Guitar");
+			AddJoyId(0x1bad, 0x0003, "Harmonix Rock Band Drumkit");
+			AddJoyId(0x1bad, 0xf016, "Mad Catz Xbox 360 Controller");
+			AddJoyId(0x1bad, 0xf018, "Mad Catz Street Fighter IV SE Fighting Stick");
+			AddJoyId(0x1bad, 0xf019, "Mad Catz Brawlstick for Xbox 360");
+			AddJoyId(0x1bad, 0xf021, "Mad Cats Ghost Recon FS GamePad");
+			AddJoyId(0x1bad, 0xf023, "MLG Pro Circuit Controller (Xbox)");
+			AddJoyId(0x1bad, 0xf025, "Mad Catz Call Of Duty");
+			AddJoyId(0x1bad, 0xf027, "Mad Catz FPS Pro");
+			AddJoyId(0x1bad, 0xf028, "Street Fighter IV FightPad");
+			AddJoyId(0x1bad, 0xf02e, "Mad Catz Fightpad");
+			AddJoyId(0x1bad, 0xf036, "Mad Catz MicroCon GamePad Pro");
+			AddJoyId(0x1bad, 0xf038, "Street Fighter IV FightStick TE");
+			AddJoyId(0x1bad, 0xf039, "Mad Catz MvC2 TE");
+			AddJoyId(0x1bad, 0xf03a, "Mad Catz SFxT Fightstick Pro");
+			AddJoyId(0x1bad, 0xf03d, "Street Fighter IV Arcade Stick TE - Chun Li");
+			AddJoyId(0x1bad, 0xf03e, "Mad Catz MLG FightStick TE");
+			AddJoyId(0x1bad, 0xf03f, "Mad Catz FightStick SoulCaliber");
+			AddJoyId(0x1bad, 0xf042, "Mad Catz FightStick TES+");
+			AddJoyId(0x1bad, 0xf080, "Mad Catz FightStick TE2");
+			AddJoyId(0x1bad, 0xf501, "HoriPad EX2 Turbo");
+			AddJoyId(0x1bad, 0xf502, "Hori Real Arcade Pro.VX SA");
+			AddJoyId(0x1bad, 0xf503, "Hori Fighting Stick VX");
+			AddJoyId(0x1bad, 0xf504, "Hori Real Arcade Pro. EX");
+			AddJoyId(0x1bad, 0xf505, "Hori Fighting Stick EX2B");
+			AddJoyId(0x1bad, 0xf506, "Hori Real Arcade Pro.EX Premium VLX");
+			AddJoyId(0x1bad, 0xf900, "Harmonix Xbox 360 Controller");
+			AddJoyId(0x1bad, 0xf901, "Gamestop Xbox 360 Controller");
+			AddJoyId(0x1bad, 0xf902, "Mad Catz Gamepad2");
+			AddJoyId(0x1bad, 0xf903, "Tron Xbox 360 controller");
+			AddJoyId(0x1bad, 0xf904, "PDP Versus Fighting Pad");
+			AddJoyId(0x1bad, 0xf906, "MortalKombat FightStick");
+			AddJoyId(0x1bad, 0xfa01, "MadCatz GamePad");
+			AddJoyId(0x1bad, 0xfd00, "Razer Onza TE");
+			AddJoyId(0x1bad, 0xfd01, "Razer Onza");
+			AddJoyId(0x24c6, 0x5000, "Razer Atrox Arcade Stick");
+			AddJoyId(0x24c6, 0x5300, "PowerA MINI PROEX Controller");
+			AddJoyId(0x24c6, 0x5303, "Xbox Airflo wired controller");
+			AddJoyId(0x24c6, 0x530a, "Xbox 360 Pro EX Controller");
+			AddJoyId(0x24c6, 0x531a, "PowerA Pro Ex");
+			AddJoyId(0x24c6, 0x5397, "FUS1ON Tournament Controller");
+			AddJoyId(0x24c6, 0x541a, "PowerA Xbox One Mini Wired Controller");
+			AddJoyId(0x24c6, 0x542a, "Xbox ONE spectra");
+			AddJoyId(0x24c6, 0x543a, "PowerA Xbox One wired controller");
+			AddJoyId(0x24c6, 0x5500, "Hori XBOX 360 EX 2 with Turbo");
+			AddJoyId(0x24c6, 0x5501, "Hori Real Arcade Pro VX-SA");
+			AddJoyId(0x24c6, 0x5502, "Hori Fighting Stick VX Alt");
+			AddJoyId(0x24c6, 0x5503, "Hori Fighting Edge");
+			AddJoyId(0x24c6, 0x5506, "Hori SOULCALIBUR V Stick");
+			AddJoyId(0x24c6, 0x5510, "Hori Fighting Commander ONE");
+			AddJoyId(0x24c6, 0x550d, "Hori GEM Xbox controller");
+			AddJoyId(0x24c6, 0x550e, "Hori Real Arcade Pro V Kai 360");
+			AddJoyId(0x24c6, 0x551a, "PowerA FUSION Pro Controller");
+			AddJoyId(0x24c6, 0x561a, "PowerA FUSION Controller");
+			AddJoyId(0x24c6, 0x5b00, "ThrustMaster Ferrari Italia 458 Racing Wheel");
+			AddJoyId(0x24c6, 0x5b02, "Thrustmaster, Inc. GPX Controller");
+			AddJoyId(0x24c6, 0x5b03, "Thrustmaster Ferrari 458 Racing Wheel");
+			AddJoyId(0x24c6, 0x5d04, "Razer Sabertooth");
+			AddJoyId(0x24c6, 0xfafa, "Aplay Controller");
+			AddJoyId(0x24c6, 0xfafb, "Aplay Controller");
+			AddJoyId(0x24c6, 0xfafc, "Afterglow Gamepad 1");
+			AddJoyId(0x24c6, 0xfafe, "Rock Candy Gamepad for Xbox 360");
+			AddJoyId(0x24c6, 0xfafd, "Afterglow Gamepad 3");
+			AddJoyId(0x0955, 0x7210, "Nvidia Shield local controller");
+			AddJoyId(0x0e6f, 0x0205, "Victrix Pro FS Xbox One Edition");
+			AddJoyId(0x0c12, 0x0ef8, "Homemade fightstick");
+			AddJoyId(0x046d, 0x0401, "logitech xinput");
+			AddJoyId(0x046d, 0x0301, "logitech xinput");
+			AddJoyId(0x046d, 0xcaa3, "logitech xinput");
+			AddJoyId(0x046d, 0xc261, "logitech xinput");
+			AddJoyId(0x046d, 0x0291, "logitech xinput");
+			AddJoyId(0x1038, 0xb360, "SteelSeries Nimbus/Stratus XL");
+
+
+
+		}
+
+		// Méthode pour ajouter une valeur au dictionnaire à deux dimensions
+		static void AddJoyId(int cle1, int cle2, string valeur)
+		{
+			if (!joysticksIds.ContainsKey(cle1))
+			{
+				joysticksIds[cle1] = new Dictionary<int, string>();
+			}
+
+			joysticksIds[cle1][cle2] = valeur;
+		}
+
+		// Méthode pour obtenir une valeur du dictionnaire à deux dimensions
+		public static string GetJoyId(int cle1, int cle2)
+		{
+			if (joysticksIds.ContainsKey(cle1) && joysticksIds[cle1].ContainsKey(cle2))
+			{
+				return joysticksIds[cle1][cle2];
+			}
+
+			return "Unknown";
+		}
 	}
 
 
@@ -1098,13 +1293,15 @@ namespace TeknoparrotAutoXinput
 		public ushort ProductId { get; set; } = 0;
 		public ushort RevisionID { get; set; } = 0;
 
+		public string ControllerName { get; set; } = "";
+
 		public XinputGamepad(int xinputSlot)
 		{
 			XinputSlot = xinputSlot;
 			Gamepad = null;
 		}
 
-		public XinputGamepad(X.Gamepad gamepad, int xinputSlot)
+		public XinputGamepad(X.Gamepad gamepad, int xinputSlot, bool useForceType=true)
 		{
 			Gamepad = gamepad;
 			XinputSlot = xinputSlot;
@@ -1119,13 +1316,19 @@ namespace TeknoparrotAutoXinput
 			ProductId = capsEx.productId;
 			RevisionID = capsEx.revisionId;
 
+			ControllerName = Program.GetJoyId(VendorId, ProductId);
+
 			Type = "";
 			string dataTxt = ToString();
 
-			if (Program.forceTypeController.ContainsKey(xinputSlot))
+			if (useForceType)
 			{
-				Type = Program.forceTypeController[xinputSlot];
+				if (Program.forceTypeController.ContainsKey(xinputSlot))
+				{
+					Type = Program.forceTypeController[xinputSlot];
+				}
 			}
+
 			
 			if(Type == "")
 			{
@@ -1208,7 +1411,7 @@ namespace TeknoparrotAutoXinput
 
 		public override string ToString()
 		{
-			return $"XINPUT{XinputSlot}<>Type={SubType}<>Signature={Signature}<>VendorID=0x{VendorId:X04}<>ProductID=0x{ProductId:X04}<>RevisionID=0x{RevisionID:X04}";
+			return $"XINPUT{XinputSlot}<>Type={SubType}<>Signature={Signature}<>VendorID=0x{VendorId:X04}<>ProductID=0x{ProductId:X04}<>RevisionID=0x{RevisionID:X04}<>{ControllerName}";
 		}
 
 

@@ -51,6 +51,8 @@ namespace TeknoparrotAutoXinput
 
 			chk_favorAB.Checked = (bool)Properties.Settings.Default["favorAB"];
 
+			txt_tpfolder.Text = Properties.Settings.Default["TpFolder"].ToString();
+
 			updateStooz();
 
 			if (!chk_enableVirtualKeyboard.Checked)
@@ -333,6 +335,31 @@ namespace TeknoparrotAutoXinput
 		{
 			Properties.Settings.Default["favorAB"] = chk_favorAB.Checked;
 			Properties.Settings.Default.Save();
+		}
+
+
+		private void btn_selectTP_Click(object sender, EventArgs e)
+		{
+			using (var fbd = new FolderBrowserDialog())
+			{
+				DialogResult result = fbd.ShowDialog();
+
+				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+				{
+					txt_tpfolder.Text = fbd.SelectedPath;
+					Properties.Settings.Default["TpFolder"] = fbd.SelectedPath;
+					Properties.Settings.Default.Save();
+				}
+
+
+
+			}
+		}
+
+		private void btn_Save_Click(object sender, EventArgs e)
+		{
+			this.DialogResult = DialogResult.OK;
+			this.Close();
 		}
 	}
 }
