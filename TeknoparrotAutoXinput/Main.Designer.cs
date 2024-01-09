@@ -103,6 +103,7 @@
 			btn_gameoptions.Size = new Size(476, 47);
 			btn_gameoptions.TabIndex = 4;
 			btn_gameoptions.Values.Text = "Options";
+			btn_gameoptions.Click += btn_gameoptions_Click;
 			// 
 			// chk_showAll
 			// 

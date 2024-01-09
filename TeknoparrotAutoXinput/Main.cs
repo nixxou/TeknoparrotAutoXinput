@@ -54,7 +54,7 @@ namespace TeknoparrotAutoXinput
 					if (_playAutoEnabled) btn_playgame.Enabled = true;
 					if (_playDirectEnabled) btn_playgamedirect.Enabled = true;
 				}
-				
+
 			}
 		}
 
@@ -521,6 +521,7 @@ namespace TeknoparrotAutoXinput
 
 					if (FirstConfig != "" && File.Exists(FirstConfig))
 					{
+						btn_gameoptions.Enabled = true;
 						_playAutoEnabled = true;
 						_playDirectEnabled = true;
 						isPlaying = isPlaying;
@@ -561,6 +562,7 @@ namespace TeknoparrotAutoXinput
 						_playAutoEnabled = false;
 						_playDirectEnabled = true;
 						isPlaying = isPlaying;
+						btn_gameoptions.Enabled = false;
 
 						string fileDirectory = Path.GetDirectoryName(DataGame.UserConfigFile);
 						fileDirectory = Path.GetDirectoryName(fileDirectory);
@@ -736,7 +738,7 @@ namespace TeknoparrotAutoXinput
 
 		private async void btn_playgame_Click(object sender, EventArgs e)
 		{
-			
+
 			string finalConfig = "";
 			if (list_games.SelectedItems.Count > 0)
 			{
@@ -800,7 +802,7 @@ namespace TeknoparrotAutoXinput
 			if (!File.Exists(teknoparrotExe)) return;
 
 			isPlaying = true;
-			
+
 			await Task.Run(() =>
 			{
 				ProcessStartInfo startInfo = new ProcessStartInfo
@@ -826,6 +828,24 @@ namespace TeknoparrotAutoXinput
 			});
 
 			isPlaying = false;
+		}
+
+		private void btn_gameoptions_Click(object sender, EventArgs e)
+		{
+			string GameSelected = list_games.SelectedItems[0].ToString();
+			GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
+			if (_gameList.ContainsKey(GameSelected))
+			{
+				var frm = new GameOptions(_gameList[GameSelected]);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+
+				}
+			}
+
+
+
 		}
 	}
 
