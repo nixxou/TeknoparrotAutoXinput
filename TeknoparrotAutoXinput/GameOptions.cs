@@ -226,5 +226,17 @@ namespace TeknoparrotAutoXinput
 			this.DialogResult = DialogResult.Cancel;
 			this.Close();
 		}
+
+		private void btn_editMonitorSwitch_Click(object sender, EventArgs e)
+		{
+			var frm = new MonitorDispositionConfig();
+			var result = frm.ShowDialog();
+
+			if (result == DialogResult.OK)
+			{
+				txt_monitorswitch.Text = frm.result;
+				
+			}
+		}
 	}
 }

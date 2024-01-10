@@ -7,7 +7,9 @@ using Newtonsoft.Json;
 using SDL2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
+using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -66,6 +68,17 @@ namespace TeknoparrotAutoXinput
 		[STAThread]
 		static void Main(string[] args)
 		{
+
+			//RegisterTask
+			if (args.Length > 2 && args.First() == "--registerTask")
+			{
+				var filteredArgs = Utils.ArgsWithoutFirstElement(args);
+				var taskExe = filteredArgs[0];
+				var taskArguments = Utils.ArgsToCommandLine(Utils.ArgsWithoutFirstElement(filteredArgs));
+				Utils.RegisterTask(taskExe, taskArguments);
+				return;
+			}
+
 			joysticksIds.Clear();
 			InitJoyList();
 
@@ -961,21 +974,36 @@ namespace TeknoparrotAutoXinput
 							cancellationTokenSource = new CancellationTokenSource();
 							Task.Run(() => ShowFormAsync(cancellationTokenSource.Token));
 						}
-						
-						Process process = new Process();
 
-						process.StartInfo.FileName = teknoparrotExe;
-						process.StartInfo.Arguments = "--profile=\"" + finalConfig + "\"";
-						process.StartInfo.WorkingDirectory = Path.GetDirectoryName(teknoparrotExe);
-
-						process.StartInfo.UseShellExecute = true;
-						//process.StartInfo.RedirectStandardOutput = true;
-						//process.StartInfo.RedirectStandardError = true;
-						//process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-
-						process.Start();
-
-						process.WaitForExit();
+						string argumentTpExe = "--profile=\"" + finalConfig + "\"";
+						if (gameOptions.RunAsRoot && gameNeedAdmin)
+						{
+							if (!Utils.CheckTaskExist(teknoparrotExe, argumentTpExe))
+							{
+								
+								string exePath = Process.GetCurrentProcess().MainModule.FileName;
+								string exeDir = Path.GetDirectoryName(exePath);
+								Process process = new Process();
+								process.StartInfo.FileName = exePath;
+								process.StartInfo.Arguments = "--registerTask " + $"\"{teknoparrotExe}\" " +  argumentTpExe;
+								process.StartInfo.WorkingDirectory = exeDir;
+								process.StartInfo.UseShellExecute = true;
+								process.StartInfo.Verb = "runas";
+								process.Start();
+								process.WaitForExit();
+							}
+							Utils.ExecuteTask(Utils.ExeToTaskName(teknoparrotExe, argumentTpExe));
+						}
+						else
+						{
+							Process process = new Process();
+							process.StartInfo.FileName = teknoparrotExe;
+							process.StartInfo.Arguments = argumentTpExe;
+							process.StartInfo.WorkingDirectory = Path.GetDirectoryName(teknoparrotExe);
+							process.StartInfo.UseShellExecute = true;
+							process.Start();
+							process.WaitForExit();
+						}
 
 						Thread.Sleep(500);
 

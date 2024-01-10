@@ -82,6 +82,7 @@
 			btn_editMonitorSwitch.Size = new Size(58, 23);
 			btn_editMonitorSwitch.TabIndex = 43;
 			btn_editMonitorSwitch.Values.Text = "Edit";
+			btn_editMonitorSwitch.Click += btn_editMonitorSwitch_Click;
 			// 
 			// kryptonLabel12
 			// 

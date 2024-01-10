@@ -5,10 +5,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Win32.SafeHandles;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 using SharpDX.Multimedia;
 using System.Diagnostics;
+using Microsoft.Win32.TaskScheduler;
+using System.Security.Cryptography;
+using System.Security.Principal;
 
 
 namespace TeknoparrotAutoXinput
@@ -92,6 +94,8 @@ namespace TeknoparrotAutoXinput
   IntPtr lpSecurityAttributes
 );
 
+		[DllImport("shell32.dll", SetLastError = true)]
+		static extern IntPtr CommandLineToArgvW([MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine, out int pNumArgs);
 		public static void MakeLink(string source, string target)
 		{
 			if (!File.Exists(source)) return;
@@ -327,6 +331,230 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 		}
+
+		public static bool CheckTaskExist(string taskName)
+		{
+			using (TaskService taskService = new TaskService())
+			{
+				var task = taskService.GetTask(taskName);
+				if (task == null)
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
+
+		public static bool CheckTaskExist(string taskExe, string taskArgument)
+		{
+			string taskName = ExeToTaskName(taskExe, taskArgument);
+			return CheckTaskExist(taskName);
+		}
+
+		public static void RegisterTask(string taskExe, string taskArgument)
+		{
+			string taskName = ExeToTaskName(taskExe,taskArgument);
+			using (TaskService ts = new TaskService())
+			{
+				if (ts.GetTask(taskName) == null)
+				{
+					var UsersRights = TaskLogonType.InteractiveToken;
+					TaskDefinition td = ts.NewTask();
+					td.RegistrationInfo.Description = "Task as admin";
+					td.Principal.RunLevel = TaskRunLevel.Highest;
+					td.Principal.LogonType = UsersRights;
+					// Create an action that will launch Notepad whenever the trigger fires
+					td.Actions.Add(taskExe, taskArgument, null);
+					// Register the task in the root folder
+					ts.RootFolder.RegisterTaskDefinition(taskName, td, TaskCreation.CreateOrUpdate, Environment.GetEnvironmentVariable("USERNAME"), null, UsersRights, null);
+				}
+			}
+		}
+
+		public static string ExeToTaskName(string exeFile, string arguments)
+		{
+			var argsReformated = CommandLineToArgs(arguments);
+			arguments = ArgsToCommandLine(argsReformated);
+			using (MD5 md5 = MD5.Create())
+			{
+				byte[] inputBytes = Encoding.UTF8.GetBytes(exeFile.ToLower() + " " + arguments.ToLower());
+				byte[] hashBytes = md5.ComputeHash(inputBytes);
+				string hashString = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+				return "TPAutoXinput_" + hashString;
+			}
+		}
+
+		public static string ArgsToCommandLine(string[] arguments)
+		{
+			var sb = new StringBuilder();
+			foreach (string argument in arguments)
+			{
+				bool needsQuoting = argument.Any(c => char.IsWhiteSpace(c) || c == '\"');
+				if (!needsQuoting)
+				{
+					sb.Append(argument);
+				}
+				else
+				{
+					sb.Append('\"');
+					foreach (char c in argument)
+					{
+						int backslashes = 0;
+						while (backslashes < argument.Length && argument[backslashes] == '\\')
+						{
+							backslashes++;
+						}
+						if (c == '\"')
+						{
+							sb.Append('\\', backslashes * 2 + 1);
+							sb.Append(c);
+						}
+						else if (c == '\0')
+						{
+							sb.Append('\\', backslashes * 2);
+							break;
+						}
+						else
+						{
+							sb.Append('\\', backslashes);
+							sb.Append(c);
+						}
+					}
+					sb.Append('\"');
+				}
+				sb.Append(' ');
+			}
+			return sb.ToString().TrimEnd();
+		}
+
+		public static string[] ArgsWithoutFirstElement(string[] args)
+		{
+			string[] filteredArgs;
+			if (args.Length > 1)
+			{
+				filteredArgs = new string[args.Length - 1];
+
+				for (int i = 1; i < args.Length; i++)
+				{
+					filteredArgs[i - 1] = args[i];
+				}
+			}
+			else
+			{
+				filteredArgs = new string[0];
+			}
+			return filteredArgs;
+		}
+
+		public static bool IsUserAdministrator()
+		{
+			bool isAdmin;
+			try
+			{
+				WindowsIdentity user = WindowsIdentity.GetCurrent();
+				WindowsPrincipal principal = new WindowsPrincipal(user);
+				isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				isAdmin = false;
+			}
+			catch (Exception ex)
+			{
+				isAdmin = false;
+			}
+			return isAdmin;
+		}
+
+		public static string[] CommandLineToArgs(string commandLine, bool addfakeexe = true)
+		{
+			string executableName;
+			return CommandLineToArgs(commandLine, out executableName, addfakeexe);
+		}
+
+		public static string[] CommandLineToArgs(string commandLine, out string executableName, bool addfakeexe = true)
+		{
+			if (addfakeexe) commandLine = "test.exe " + commandLine;
+			int argCount;
+			IntPtr result;
+			string arg;
+			IntPtr pStr;
+			result = CommandLineToArgvW(commandLine, out argCount);
+			if (result == IntPtr.Zero)
+			{
+				throw new System.ComponentModel.Win32Exception();
+			}
+			else
+			{
+				try
+				{
+					// Jump to location 0*IntPtr.Size (in other words 0).  
+					pStr = Marshal.ReadIntPtr(result, 0 * IntPtr.Size);
+					executableName = Marshal.PtrToStringUni(pStr);
+					// Ignore the first parameter because it is the application   
+					// name which is not usually part of args in Managed code.   
+					string[] args = new string[argCount - 1];
+					for (int i = 0; i < args.Length; i++)
+					{
+						pStr = Marshal.ReadIntPtr(result, (i + 1) * IntPtr.Size);
+						arg = Marshal.PtrToStringUni(pStr);
+						args[i] = arg;
+					}
+					return args;
+				}
+				finally
+				{
+					Marshal.FreeHGlobal(result);
+				}
+			}
+		}
+
+		public static void ExecuteTask(string taskName, int delay = 2000)
+		{
+			string argTask = $@"/I /run /tn ""{taskName}""";
+
+
+
+			Process process = new Process();
+			process.StartInfo.FileName = "schtasks";
+			process.StartInfo.Arguments = argTask;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.CreateNoWindow = true;
+			process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+			process.Start();
+
+
+			TaskService ts = new TaskService();
+			Microsoft.Win32.TaskScheduler.Task task = ts.GetTask(taskName);
+			Microsoft.Win32.TaskScheduler.RunningTaskCollection instances = task.GetInstances();
+
+			//Code a enlever si execution sans attente
+			int nbrun = delay / 100;
+			if (instances.Count == 0)
+			{
+				//MessageBox.Show("icil");
+				instances = task.GetInstances();
+				Thread.Sleep(100);
+				int i = 0;
+				while (instances.Count == 0)
+				{
+					i++;
+					instances = task.GetInstances();
+					Thread.Sleep(100);
+					if (i > nbrun) break;
+				}
+			}
+			while (instances.Count == 1)
+			{
+				instances = task.GetInstances();
+				Thread.Sleep(100);
+			}
+
+		}
+
 
 	}
 }
