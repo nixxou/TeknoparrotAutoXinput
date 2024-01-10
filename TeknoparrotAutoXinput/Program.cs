@@ -152,6 +152,17 @@ namespace TeknoparrotAutoXinput
 						{
 							passthrough = true;
 						}
+
+						match = Regex.Match(arg, @"--disposition=[0-9a-zA-Z_]");
+						if (match.Success)
+						{
+							string folderDisposition = match.Groups[1].Value.Trim();
+							string newDispositionFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), folderDisposition);
+							if (Directory.Exists(newDispositionFolder))
+							{
+								DispositionFolder = newDispositionFolder;
+							}
+						}
 					}
 
 
