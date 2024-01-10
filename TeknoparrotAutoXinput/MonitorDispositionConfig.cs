@@ -17,8 +17,7 @@ namespace TeknoparrotAutoXinput
 		{
 			string name = Interaction.InputBox("Disposition Name :", "Name", "");
 			string truename = FilterFileName(name);
-			string dispositionDir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions");
-			string filename = Path.Combine(dispositionDir, "disposition_" + truename + ".xml");
+			string filename = Path.Combine(Program.DispositionFolder, "disposition_" + truename + ".xml");
 			if (File.Exists(filename))
 			{
 				MessageBox.Show("Name already exist");
@@ -53,8 +52,7 @@ namespace TeknoparrotAutoXinput
 			cmb_DispositionList.Items.Clear();
 			cmb_DispositionList.Items.Add("<none>");
 
-			string dispositionDir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions");
-			foreach (var disposition in Directory.GetFiles(dispositionDir, "disposition_*.xml"))
+			foreach (var disposition in Directory.GetFiles(Program.DispositionFolder, "disposition_*.xml"))
 			{
 				string disposition_name = Path.GetFileNameWithoutExtension(disposition);
 				disposition_name = disposition_name.Remove(0, 12);

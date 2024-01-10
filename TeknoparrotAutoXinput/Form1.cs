@@ -22,7 +22,7 @@ namespace TeknoparrotAutoXinput
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			this.KeyPicker = new PickKeyCombo(this);
-			System.Diagnostics.Debugger.Break();
+			//System.Diagnostics.Debugger.Break();
 
 			chk_FFB.Checked = (bool)Properties.Settings.Default["FFB"];
 			chk_showStartup.Checked = (bool)Properties.Settings.Default["showStartup"];

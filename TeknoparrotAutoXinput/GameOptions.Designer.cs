@@ -64,6 +64,7 @@
 			btn_Save = new Krypton.Toolkit.KryptonButton();
 			btn_Cancel = new Krypton.Toolkit.KryptonButton();
 			chk_runAsAdmin = new Krypton.Toolkit.KryptonCheckBox();
+			chk_WaitForExitBefore = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -399,6 +400,7 @@
 			btn_Cancel.Size = new Size(90, 25);
 			btn_Cancel.TabIndex = 55;
 			btn_Cancel.Values.Text = "Cancel";
+			btn_Cancel.Click += btn_Cancel_Click;
 			// 
 			// chk_runAsAdmin
 			// 
@@ -408,11 +410,22 @@
 			chk_runAsAdmin.TabIndex = 57;
 			chk_runAsAdmin.Values.Text = "Run Game As Administrator";
 			// 
+			// chk_WaitForExitBefore
+			// 
+			chk_WaitForExitBefore.Checked = true;
+			chk_WaitForExitBefore.CheckState = CheckState.Checked;
+			chk_WaitForExitBefore.Location = new Point(458, 171);
+			chk_WaitForExitBefore.Name = "chk_WaitForExitBefore";
+			chk_WaitForExitBefore.Size = new Size(92, 20);
+			chk_WaitForExitBefore.TabIndex = 58;
+			chk_WaitForExitBefore.Values.Text = "Wait For Exit";
+			// 
 			// GameOptions
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1116, 941);
+			Controls.Add(chk_WaitForExitBefore);
 			Controls.Add(chk_runAsAdmin);
 			Controls.Add(btn_Save);
 			Controls.Add(btn_Cancel);
@@ -485,5 +498,6 @@
 		private Krypton.Toolkit.KryptonButton btn_Save;
 		private Krypton.Toolkit.KryptonButton btn_Cancel;
 		private Krypton.Toolkit.KryptonCheckBox chk_runAsAdmin;
+		private Krypton.Toolkit.KryptonCheckBox chk_WaitForExitBefore;
 	}
 }

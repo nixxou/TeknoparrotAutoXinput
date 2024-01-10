@@ -760,7 +760,7 @@ namespace TeknoparrotAutoXinput
 				ProcessStartInfo startInfo = new ProcessStartInfo
 				{
 					FileName = Process.GetCurrentProcess().MainModule.FileName,
-					Arguments = finalConfig,
+					Arguments = $"\"{finalConfig}\"",
 					WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
 					UseShellExecute = true
 				};
@@ -784,6 +784,48 @@ namespace TeknoparrotAutoXinput
 
 		private async void btn_playgamedirect_Click(object sender, EventArgs e)
 		{
+			string finalConfig = "";
+			if (list_games.SelectedItems.Count > 0)
+			{
+				btn_playgamedirect.Enabled = true;
+				string GameSelected = list_games.SelectedItems[0].ToString();
+				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
+				if (_gameList.ContainsKey(GameSelected))
+				{
+					finalConfig = _gameList[GameSelected].UserConfigFile;
+				}
+			}
+			if (string.IsNullOrEmpty(finalConfig)) return;
+
+
+			isPlaying = true;
+
+			await Task.Run(() =>
+			{
+				ProcessStartInfo startInfo = new ProcessStartInfo
+				{
+					FileName = Process.GetCurrentProcess().MainModule.FileName,
+					Arguments = $"--passthrough \"{finalConfig}\"",
+					WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
+					UseShellExecute = true
+				};
+
+				using (Process process = new Process { StartInfo = startInfo })
+				{
+					try
+					{
+						process.Start();
+						process.WaitForExit();
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show("Erreur lors du lancement du programme : " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			});
+
+			isPlaying = false;
+			/*
 			string finalConfig = "";
 			if (list_games.SelectedItems.Count > 0)
 			{
@@ -828,6 +870,7 @@ namespace TeknoparrotAutoXinput
 			});
 
 			isPlaying = false;
+			*/
 		}
 
 		private void btn_gameoptions_Click(object sender, EventArgs e)

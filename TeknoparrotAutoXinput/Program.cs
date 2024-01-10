@@ -51,6 +51,14 @@ namespace TeknoparrotAutoXinput
 		private static bool _restoreSwitch = false;
 		private static string _dispositionToSwitch = "";
 
+		public static List<int> ProcessToKill = new List<int>();
+		public static List<string> FilesToDelete = new List<string>();
+
+		//Folder List
+		public static string DispositionFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions");
+		public static string GameOptionsFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions");
+
+
 
 		/// <summary>
 		///  The main entry point for the application.
@@ -86,9 +94,6 @@ namespace TeknoparrotAutoXinput
 			if (args.Length > 0)
 			{
 
-
-				
-
 				bool changeFFBConfig = (bool)Properties.Settings.Default["FFB"];
 				bool showStartup = (bool)Properties.Settings.Default["showStartup"];
 
@@ -96,8 +101,6 @@ namespace TeknoparrotAutoXinput
 				string keyTest = Properties.Settings.Default["keyTest"].ToString();
 				string keyService1 = Properties.Settings.Default["keyService1"].ToString();
 				string keyService2 = Properties.Settings.Default["keyService2"].ToString();
-
-
 
 				bool favorAB = (bool)Properties.Settings.Default["favorAB"];
 
@@ -108,11 +111,9 @@ namespace TeknoparrotAutoXinput
 				bool enableStoozZone_Wheel = (bool)Properties.Settings.Default["enableStoozZone_Wheel"];
 				int valueStooz_Wheel = (int)Properties.Settings.Default["valueStooz_Wheel"];
 
-
 				WheelFFBGuid = Properties.Settings.Default["ffbDinputWheel"].ToString();
 
 				bool passthrough = false;
-
 
 				List<string> typeConfig = new List<string>();
 				typeConfig.Add("gamepad");
@@ -120,11 +121,9 @@ namespace TeknoparrotAutoXinput
 				typeConfig.Add("arcade");
 				typeConfig.Add("wheel");
 
-
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
 				{
-
 					forceTypeController = new Dictionary<int, string>(); 
 					foreach (string arg in args)
 					{
@@ -154,14 +153,79 @@ namespace TeknoparrotAutoXinput
 						return;
 					}
 
+					string baseTpDir = Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName;
 					string originalConfigFileName = Path.GetFileName(xmlFile);
 					string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
-					string teknoparrotExe = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "TeknoParrotUi.exe");
+					string teknoparrotExe = Path.Combine(baseTpDir, "TeknoParrotUi.exe");
+					string linkSourceFolder = Path.Combine(baseTpDir, "AutoXinputLinks", originalConfigFileNameWithoutExt);
+					string linkTargetFolder = "";
+					bool gameNeedAdmin = false;
+
 					if (!File.Exists(teknoparrotExe))
 					{
 						MessageBox.Show($"Can't find {teknoparrotExe}");
 						return;
 					}
+
+					Utils.CleanHardLinksFiles(Path.Combine(baseTpDir, "TeknoParrot"), Path.Combine(baseTpDir, "AutoXinputLinks"));
+					Utils.CleanHardLinksFiles(Path.Combine(baseTpDir, "ElfLdr2"), Path.Combine(baseTpDir, "AutoXinputLinks"));
+
+					try
+					{
+						XmlDocument xmlDoc = new XmlDocument();
+						xmlDoc.Load(xmlFile);
+						XmlNode emulatorTypeNode = xmlDoc.SelectSingleNode("/GameProfile/EmulatorType");
+						if (emulatorTypeNode != null)
+						{
+							string emulatorTypeValue = emulatorTypeNode.InnerText.ToLower().Trim();
+							if (emulatorTypeValue == "elfldr2" || emulatorTypeValue == "lindbergh")
+							{
+
+								if (emulatorTypeValue == "elfldr2")
+								{
+									linkTargetFolder = Path.Combine(baseTpDir, "ElfLdr2");
+								}
+								if (emulatorTypeValue == "lindbergh")
+								{
+									linkTargetFolder = Path.Combine(baseTpDir, "TeknoParrot");
+								}
+							}
+						}
+						XmlNode requiresAdminNode = xmlDoc.SelectSingleNode("/GameProfile/RequiresAdmin");
+						if (requiresAdminNode != null)
+						{
+							string requiresAdminValue = requiresAdminNode.InnerText.ToLower().Trim();
+							if (requiresAdminValue == "true")
+							{
+								gameNeedAdmin = true;
+							}
+						}
+					}
+					catch { }
+
+					//GameOptionOverrite
+					_dispositionToSwitch = Properties.Settings.Default["Disposition"].ToString();
+					GameSettings gameOptions = new GameSettings();
+					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
+					if (File.Exists(optionFile))
+					{
+						gameOptions = new GameSettings(File.ReadAllText(optionFile)); 
+					}
+					if (gameOptions.UseGlobalDisposition == false) _dispositionToSwitch = gameOptions.Disposition;
+					if (gameOptions.UseGlobalStoozZoneGamepad == false)
+					{
+						gamepadStooz = gameOptions.gamepadStooz;
+						enableStoozZone_Gamepad = gameOptions.enableStoozZone_Gamepad;
+						valueStooz_Gamepad = gameOptions.valueStooz_Gamepad;
+					}
+					if(gameOptions.UseGlobalStoozZoneWheel == false)
+					{
+						wheelStooz = gameOptions.wheelStooz;
+						enableStoozZone_Wheel = gameOptions.enableStoozZone_Wheel;
+						valueStooz_Wheel = gameOptions.valueStooz_Wheel;
+					}
+
+
 
 					ParrotDataOriginal = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml");
 					ParrotDataBackup = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml.AutoXinputBackup");
@@ -213,6 +277,7 @@ namespace TeknoparrotAutoXinput
 					if (existingConfig.Count() == 0 || passthrough)
 					{
 						finalConfig = xmlFile;
+						showStartup = false;
 					}
 
 					bool usealtgamepad = false;
@@ -865,13 +930,17 @@ namespace TeknoparrotAutoXinput
 					if (finalConfig != "")
 					{
 
-						_dispositionToSwitch = Properties.Settings.Default["Disposition"].ToString();
+						if(gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
+						{
+							Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder);
+						}
+
 						if (!string.IsNullOrEmpty(_dispositionToSwitch) && _dispositionToSwitch != "<none>")
 						{
-							var cfg = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions", "disposition_" + _dispositionToSwitch + ".xml");
+							var cfg = Path.Combine(Program.DispositionFolder, "disposition_" + _dispositionToSwitch + ".xml");
 							if (File.Exists(cfg))
 							{
-								if (MonitorSwitcher.SaveDisplaySettings(Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions", "dispositionrestore_app.xml")))
+								if (MonitorSwitcher.SaveDisplaySettings(Path.Combine(Path.GetFullPath(Program.DispositionFolder), "dispositionrestore_app.xml")))
 								{
 									if (UseMonitorDisposition(_dispositionToSwitch))
 									{
@@ -882,13 +951,15 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
+						if(gameOptions.AhkBefore.Trim() != "")
+						{
+							Utils.ExecuteAHK(gameOptions.AhkBefore,gameOptions.WaitForExitAhkBefore);
+						}
+
 						if (showStartup)
 						{
-
-
 							cancellationTokenSource = new CancellationTokenSource();
 							Task.Run(() => ShowFormAsync(cancellationTokenSource.Token));
-
 						}
 						
 						Process process = new Process();
@@ -905,6 +976,20 @@ namespace TeknoparrotAutoXinput
 						process.Start();
 
 						process.WaitForExit();
+
+						Thread.Sleep(500);
+
+						if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
+						{
+							Utils.CleanHardLinksFiles(linkTargetFolder, linkSourceFolder);
+						}
+
+						if (gameOptions.AhkAfter.Trim() != "")
+						{
+							Utils.ExecuteAHK(gameOptions.AhkAfter,true);
+						}
+
+						Utils.CleanAndKillAhk();
 
 						if (!String.IsNullOrEmpty(ParrotDataOriginal) && !String.IsNullOrEmpty(ParrotDataBackup))
 						{
@@ -951,7 +1036,7 @@ namespace TeknoparrotAutoXinput
 
 						if (_restoreSwitch)
 						{
-							MonitorSwitcher.LoadDisplaySettings(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dispositions", "dispositionrestore_app.xml"));
+							MonitorSwitcher.LoadDisplaySettings(Path.Combine(Program.DispositionFolder, "dispositionrestore_app.xml"));
 						}
 
 					}
@@ -1281,8 +1366,7 @@ namespace TeknoparrotAutoXinput
 
 		public static bool UseMonitorDisposition(string key)
 		{
-			string dispositionDir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions");
-			var cfg = Path.Combine(dispositionDir, "disposition_" + key + ".xml");
+			var cfg = Path.Combine(Program.DispositionFolder, "disposition_" + key + ".xml");
 			if (File.Exists(cfg))
 			{
 				return MonitorSwitcher.LoadDisplaySettings(cfg);

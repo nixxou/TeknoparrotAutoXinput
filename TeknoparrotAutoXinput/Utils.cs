@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 using SharpDX.Multimedia;
+using System.Diagnostics;
 
 
 namespace TeknoparrotAutoXinput
@@ -109,9 +110,9 @@ namespace TeknoparrotAutoXinput
 			var sibling = GetFileSiblingHardLinks(fileToTestPath);
 			foreach(var siblingLink in sibling)
 			{
-				string siblingDir = Path.GetDirectoryName(siblingLink);
+				string siblingDir = Path.GetDirectoryName(siblingLink).ToLower();
 
-				if (siblingDir.StartsWith(fromDirPath)) return true;
+				if (siblingDir.StartsWith(fromDirPath) || siblingDir == fromDirPath) return true;
 			}
 			return false;
 		}
@@ -162,6 +163,10 @@ namespace TeknoparrotAutoXinput
 				{
 					Directory.CreateDirectory(newfiledir);
 				}
+				if(File.Exists(newfile))
+				{
+					File.Move(newfile, newfile + ".filetorestore");
+				}
 				MakeLink(file, newfile);
 			}
 
@@ -185,6 +190,143 @@ namespace TeknoparrotAutoXinput
 					File.Delete(file);
 				}
 			}
+			foreach (var file in filePaths)
+			{
+				if (file.EndsWith(".filetorestore"))
+				{
+					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file));
+					File.Move(file, newFilePath);
+				}
+			}
 		}
+
+
+
+		public static bool AHKSyntaxCheck(string ahkCode, out string errorTxt, string[] args = null)
+		{
+			errorTxt = "";
+
+			string currentDir = Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName));
+			string ahkExe = Path.Combine(currentDir, "AutoHotkeyU32.exe");
+			if (!File.Exists(ahkExe)) return true;
+
+			// Obtenez le chemin du répertoire temporaire
+			string tempDirectory = Path.GetTempPath();
+			string tempFileName = Path.GetRandomFileName() + ".ahk";
+			string tempFilePath = Path.Combine(tempDirectory, tempFileName);
+
+			if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
+			try
+			{
+				// Create a temporary file to store the AHK code
+
+				File.WriteAllText(tempFilePath, ahkCode);
+
+				// Create a process to run AutoHotkey and capture standard error
+				Process process = new Process();
+				process.StartInfo.FileName = ahkExe;
+				process.StartInfo.Arguments = $"/iLib nul /ErrorStdOut \"{tempFilePath}\"";
+				process.StartInfo.RedirectStandardError = true;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.CreateNoWindow = true;
+				process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+				process.Start();
+
+				// Read and print the standard error output
+				errorTxt = process.StandardError.ReadToEnd();
+
+				int index = errorTxt.IndexOf("\n");
+				if (index != -1) errorTxt = errorTxt.Substring(index);
+
+				process.WaitForExit();
+
+				// Delete the temporary file
+				File.Delete(tempFilePath);
+
+				// Check if the exit code is 0 (indicating successful syntax check)
+				if (process.ExitCode == 0)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+		}
+
+		public static void ExecuteAHK(string ahkCode, bool waitForExit)
+		{
+			try
+			{
+				string currentDir = Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName));
+				string ahkExe = Path.Combine(currentDir, "AutoHotkeyU32.exe");
+				string tempFilePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".ahk");
+				File.WriteAllText(tempFilePath, ahkCode);
+				Thread.Sleep(100);
+				if (File.Exists(tempFilePath))
+				{
+					Process process = new Process();
+					process.StartInfo.FileName = ahkExe;
+					process.StartInfo.Arguments = tempFilePath;
+					process.StartInfo.UseShellExecute = false;
+					process.StartInfo.CreateNoWindow = true;
+
+					// Démarrer le processus
+					process.Start();
+					if (waitForExit)
+					{
+						process.WaitForExit();
+						Thread.Sleep(100);
+						File.Delete(tempFilePath);
+					}
+					else
+					{
+						Thread.Sleep(100);
+						Program.ProcessToKill.Add(process.Id);
+						Program.FilesToDelete.Add(tempFilePath);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		public static void KillProcessById(int processId)
+		{
+			ProcessStartInfo psi = new ProcessStartInfo
+			{
+				FileName = "taskkill",
+				Arguments = $"/F /PID {processId}",
+				CreateNoWindow = true,
+				UseShellExecute = false
+			};
+
+			Process.Start(psi);
+		}
+
+		public static void CleanAndKillAhk()
+		{
+			foreach(var ahkpid in Program.ProcessToKill) 
+			{
+				KillProcessById(ahkpid);
+			}
+			Thread.Sleep(100);
+			foreach(var ahkfile in Program.FilesToDelete)
+			{
+				if (File.Exists(ahkfile))
+				{
+					File.Delete(ahkfile);
+				}
+			}
+		}
+
 	}
 }

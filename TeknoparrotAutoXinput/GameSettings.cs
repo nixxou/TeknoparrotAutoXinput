@@ -23,6 +23,8 @@ namespace TeknoparrotAutoXinput
 		public bool EnableLink {  get; set; } = false;
 		public string AhkBefore { get; set; } = string.Empty;
 		public string AhkAfter { get; set; } = string.Empty;
+		public bool WaitForExitAhkBefore { get; set; } = true;
+
 
 		public GameSettings() 
 		{
@@ -49,6 +51,7 @@ namespace TeknoparrotAutoXinput
 				this.EnableLink = DeserializeData.EnableLink;
 				this.AhkBefore = DeserializeData.AhkBefore;
 				this.AhkAfter = DeserializeData.AhkAfter;
+				this.WaitForExitAhkBefore = DeserializeData.WaitForExitAhkBefore;
 			}
 			catch (Exception ex)
 			{

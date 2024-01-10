@@ -23,7 +23,7 @@ namespace TeknoparrotAutoXinput
 		private string _linkTargetFolder = "";
 		private string _linkSourceFolder = "";
 
-		public string PerGameConfigDir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gamesettings");
+
 		public string PerGameConfigFile = "";
 
 		GameSettings gameSettings = new GameSettings();
@@ -37,11 +37,11 @@ namespace TeknoparrotAutoXinput
 			_tpBaseFolder = TpFolder;
 			_lindberghFolder = Path.Combine(_tpBaseFolder, "TeknoParrot");
 			_elfldr2Folder = Path.Combine(_tpBaseFolder, "ElfLdr2");
-			if (!Directory.Exists(PerGameConfigDir))
+			if (!Directory.Exists(Program.GameOptionsFolder))
 			{
-				Directory.CreateDirectory(PerGameConfigDir);
+				Directory.CreateDirectory(Program.GameOptionsFolder);
 			}
-			PerGameConfigFile = Path.Combine(PerGameConfigDir, Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + ".json");
+			PerGameConfigFile = Path.Combine(Program.GameOptionsFolder, Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + ".json");
 			if (File.Exists(PerGameConfigFile))
 			{
 				gameSettings = new GameSettings(File.ReadAllText(PerGameConfigFile));
@@ -49,8 +49,11 @@ namespace TeknoparrotAutoXinput
 
 		}
 
+
+
 		private void GameOptions_Load(object sender, EventArgs e)
 		{
+			chk_runAsAdmin.Enabled = false;
 			chk_group_StoozZone_Wheel.Location = new Point(chk_group_StoozZone_Wheel.Location.X, chk_group_StoozZone_Wheel.Location.Y + 15);
 			chk_group_StoozZone_Gamepad.Location = new Point(chk_group_StoozZone_Gamepad.Location.X, chk_group_StoozZone_Gamepad.Location.Y + 15);
 			chk_group_monitorDisposition.Location = new Point(chk_group_monitorDisposition.Location.X, chk_group_monitorDisposition.Location.Y + 15);
@@ -80,6 +83,17 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 				}
+
+				XmlNode requiresAdminNode = xmlDoc.SelectSingleNode("/GameProfile/RequiresAdmin");
+				if (requiresAdminNode != null)
+				{
+					string requiresAdminValue = requiresAdminNode.InnerText.ToLower().Trim();
+					if (requiresAdminValue == "true")
+					{
+						chk_runAsAdmin.Enabled = true;
+					}
+				}
+
 			}
 			catch { }
 
@@ -94,15 +108,16 @@ namespace TeknoparrotAutoXinput
 			txt_ahkafter.Text = gameSettings.AhkAfter;
 			txt_ahkbefore.Text = gameSettings.AhkBefore;
 			chk_linkfiles.Checked = gameSettings.EnableLink;
+			chk_WaitForExitBefore.Checked = gameSettings.WaitForExitAhkBefore;
 			Reload();
 
 		}
 
 		private void Reload()
 		{
-			grp_monitorDisposition.Enabled = chk_group_monitorDisposition.Checked;
-			grp_StoozZone_Gamepad.Enabled = chk_group_StoozZone_Gamepad.Checked;
-			grp_StoozZone_Wheel.Enabled = chk_group_StoozZone_Wheel.Checked;
+			grp_monitorDisposition.Enabled = !chk_group_monitorDisposition.Checked;
+			grp_StoozZone_Gamepad.Enabled = !chk_group_StoozZone_Gamepad.Checked;
+			grp_StoozZone_Wheel.Enabled = !chk_group_StoozZone_Wheel.Checked;
 		}
 
 		private void kryptonRichTextBox2_TextChanged(object sender, EventArgs e)
@@ -161,6 +176,33 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_Save_Click(object sender, EventArgs e)
 		{
+			string errorTxt = "";
+			if (!string.IsNullOrEmpty(txt_ahkbefore.Text.Trim()))
+			{
+				if (!Utils.AHKSyntaxCheck(txt_ahkbefore.Text.Trim(), out errorTxt))
+				{
+					DialogResult dialogResult = MessageBox.Show($"AHK Syntax error : {errorTxt} \n Are you sure you want to save ?", "AHK Syntax error", MessageBoxButtons.YesNo);
+					if (dialogResult == DialogResult.No)
+					{
+						return;
+					}
+				}
+			}
+			errorTxt = "";
+			if (!string.IsNullOrEmpty(txt_ahkafter.Text.Trim()))
+			{
+				if (!Utils.AHKSyntaxCheck(txt_ahkafter.Text.Trim(), out errorTxt))
+				{
+					DialogResult dialogResult = MessageBox.Show($"AHK Syntax error : {errorTxt} \n Are you sure you want to save ?", "AHK Syntax error", MessageBoxButtons.YesNo);
+					if (dialogResult == DialogResult.No)
+					{
+						return;
+					}
+				}
+			}
+
+
+
 			gameSettings.UseGlobalDisposition = chk_group_monitorDisposition.Checked;
 			gameSettings.UseGlobalStoozZoneGamepad = chk_group_StoozZone_Gamepad.Checked;
 			gameSettings.UseGlobalStoozZoneWheel = chk_group_StoozZone_Wheel.Checked;
@@ -169,11 +211,20 @@ namespace TeknoparrotAutoXinput
 			gameSettings.enableStoozZone_Wheel = chk_enableStoozZone_Wheel.Checked;
 			gameSettings.valueStooz_Gamepad = trk_useCustomStooz_Gamepad.Value;
 			gameSettings.valueStooz_Wheel = trk_useCustomStooz_Wheel.Value;
-			gameSettings.AhkAfter = txt_ahkafter.Text;
-			gameSettings.AhkBefore = txt_ahkbefore.Text;
+			gameSettings.AhkAfter = txt_ahkafter.Text.Trim();
+			gameSettings.AhkBefore = txt_ahkbefore.Text.Trim();
 			gameSettings.EnableLink = chk_linkfiles.Checked;
+			gameSettings.WaitForExitAhkBefore = chk_WaitForExitBefore.Checked;
 
 			gameSettings.Save(PerGameConfigFile);
+			this.DialogResult = DialogResult.OK;
+			this.Close();
+		}
+
+		private void btn_Cancel_Click(object sender, EventArgs e)
+		{
+			this.DialogResult = DialogResult.Cancel;
+			this.Close();
 		}
 	}
 }
