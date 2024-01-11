@@ -100,6 +100,7 @@ namespace TeknoparrotAutoXinput
 		{
 			if (!File.Exists(source)) return;
 			if (File.Exists(target)) return;
+			if (!AreFoldersOnSameDrive(source, target)) return;
 
 			CreateHardLink(target, source, IntPtr.Zero);
 		}
@@ -148,10 +149,12 @@ namespace TeknoparrotAutoXinput
 
 		public static void HardLinkFiles(string directorySource, string directoryDest)
 		{
-			if (!Directory.Exists(directorySource)) throw new Exception("directory does not exist");
-			if (!Directory.Exists(directoryDest)) throw new Exception("directory does not exist");
+			if (!Directory.Exists(directorySource)) return;
+			if (!Directory.Exists(directoryDest)) return;
 			directorySource = Path.GetFullPath(directorySource);
 			directoryDest = Path.GetFullPath(directoryDest);
+
+			if (!AreFoldersOnSameDrive(directorySource, directoryDest)) return;
 
 			var filePaths = Directory.EnumerateFiles(directorySource, "*", new EnumerationOptions
 			{
@@ -180,8 +183,11 @@ namespace TeknoparrotAutoXinput
 		{
 			directoryToClean = Path.GetFullPath(directoryToClean);
 			originalLinkDir = Path.GetFullPath(originalLinkDir);
-			if (!Directory.Exists(directoryToClean)) throw new Exception("directory does not exist");
-			if (!Directory.Exists(originalLinkDir)) throw new Exception("directory does not exist");
+			if (!Directory.Exists(directoryToClean)) return;
+			if (!Directory.Exists(originalLinkDir)) return;
+
+			if (!AreFoldersOnSameDrive(directoryToClean, originalLinkDir)) return;
+
 			var filePaths = Directory.EnumerateFiles(directoryToClean, "*", new EnumerationOptions
 			{
 				IgnoreInaccessible = true,
@@ -189,8 +195,10 @@ namespace TeknoparrotAutoXinput
 			});
 			foreach (var file in filePaths)
 			{
+				if (Program.DebugMode) Utils.LogMessage($"Check Link for {file}");
 				if (IsHardLink(file, originalLinkDir))
 				{
+					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
 					File.Delete(file);
 				}
 			}
@@ -198,6 +206,7 @@ namespace TeknoparrotAutoXinput
 			{
 				if (file.EndsWith(".filetorestore"))
 				{
+					if (Program.DebugMode) Utils.LogMessage($"{file} must be restored");
 					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file));
 					File.Move(file, newFilePath);
 				}
@@ -553,6 +562,47 @@ namespace TeknoparrotAutoXinput
 				Thread.Sleep(100);
 			}
 
+		}
+
+		public static bool IsEligibleHardLink(string path)
+		{
+			if(!Directory.Exists(path)) return false;
+
+			bool isWindows10OrNewer = (Environment.OSVersion.Version.Major >= 10);
+			if (!isWindows10OrNewer) return false;
+
+			try
+			{
+				DriveInfo driveInfo = new DriveInfo(Path.GetPathRoot(path));
+				return driveInfo.DriveFormat.Equals("NTFS", StringComparison.OrdinalIgnoreCase);
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+		}
+
+		public static void LogMessage(string message)
+		{
+			if (Program.DebugMode)
+			{
+				// Format [Date-Heure] Texte
+				string logEntry = $"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}] {message}";
+
+				Console.WriteLine(logEntry);
+				// Écrire dans le fichier de journal
+				File.AppendAllText("debug.log.txt", logEntry + Environment.NewLine);
+			}
+
+		}
+
+
+		public static bool AreFoldersOnSameDrive(string path1, string path2)
+		{
+			string drive1 = Path.GetPathRoot(path1);
+			string drive2 = Path.GetPathRoot(path2);
+
+			return string.Equals(drive1, drive2, StringComparison.OrdinalIgnoreCase);
 		}
 
 

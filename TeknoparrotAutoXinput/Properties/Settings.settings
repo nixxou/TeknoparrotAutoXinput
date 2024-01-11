@@ -68,5 +68,11 @@
     <Setting Name="Disposition" Type="System.String" Scope="User">
       <Value Profile="(Default)">&lt;none&gt;</Value>
     </Setting>
+    <Setting Name="debugMode" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="perGameLinkFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Default (&lt;YourTeknoparrotFolder&gt;\AutoXinputLinks)</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

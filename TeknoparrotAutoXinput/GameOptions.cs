@@ -68,7 +68,17 @@ namespace TeknoparrotAutoXinput
 					string emulatorTypeValue = emulatorTypeNode.InnerText.ToLower().Trim();
 					if (emulatorTypeValue == "elfldr2" || emulatorTypeValue == "lindbergh")
 					{
-						_linkSourceFolder = Path.Combine(_tpBaseFolder, "AutoXinputLinks", Path.GetFileNameWithoutExtension(GameData.FileName));
+						string perGameLinkFolder = Properties.Settings.Default["perGameLinkFolder"].ToString();
+						if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
+						{
+							_linkSourceFolder = Path.Combine(_tpBaseFolder, "AutoXinputLinks", Path.GetFileNameWithoutExtension(GameData.FileName));
+						}
+						else
+						{
+							_linkSourceFolder = Path.Combine(perGameLinkFolder, Path.GetFileNameWithoutExtension(GameData.FileName));
+						}
+						
+
 						lbl_linkFrom.Text = "Link from : " + _linkSourceFolder;
 						grp_link.Enabled = true;
 						if (emulatorTypeValue == "elfldr2")
@@ -96,6 +106,14 @@ namespace TeknoparrotAutoXinput
 
 			}
 			catch { }
+
+			if (grp_link.Enabled)
+			{
+				if (!Utils.IsEligibleHardLink(_linkTargetFolder))
+				{
+					grp_link.Enabled = false;
+				}
+			}
 
 			chk_group_monitorDisposition.Checked = gameSettings.UseGlobalDisposition;
 			chk_group_StoozZone_Gamepad.Checked = gameSettings.UseGlobalStoozZoneGamepad;

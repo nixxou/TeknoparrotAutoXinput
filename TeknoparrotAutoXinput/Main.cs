@@ -562,7 +562,7 @@ namespace TeknoparrotAutoXinput
 						_playAutoEnabled = false;
 						_playDirectEnabled = true;
 						isPlaying = isPlaying;
-						btn_gameoptions.Enabled = false;
+						btn_gameoptions.Enabled = true;
 
 						string fileDirectory = Path.GetDirectoryName(DataGame.UserConfigFile);
 						fileDirectory = Path.GetDirectoryName(fileDirectory);
@@ -875,6 +875,11 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_gameoptions_Click(object sender, EventArgs e)
 		{
+			if (list_games.SelectedItems.Count == 0)
+			{
+				return;
+			}
+
 			string GameSelected = list_games.SelectedItems[0].ToString();
 			GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
 			if (_gameList.ContainsKey(GameSelected))

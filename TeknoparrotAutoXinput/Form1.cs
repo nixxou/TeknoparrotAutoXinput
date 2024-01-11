@@ -3,6 +3,8 @@ using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using SDL2;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using TestVgme;
 
 namespace TeknoparrotAutoXinput
@@ -53,6 +55,10 @@ namespace TeknoparrotAutoXinput
 
 			txt_tpfolder.Text = Properties.Settings.Default["TpFolder"].ToString();
 			txt_monitorswitch.Text = Properties.Settings.Default["Disposition"].ToString();
+
+			chk_enableDebug.Checked = (bool)Properties.Settings.Default["debugMode"];
+
+			txt_linksourcefolder.Text = Properties.Settings.Default["perGameLinkFolder"].ToString();
 
 			updateStooz();
 
@@ -351,9 +357,6 @@ namespace TeknoparrotAutoXinput
 					Properties.Settings.Default["TpFolder"] = fbd.SelectedPath;
 					Properties.Settings.Default.Save();
 				}
-
-
-
 			}
 		}
 
@@ -375,6 +378,107 @@ namespace TeknoparrotAutoXinput
 				Properties.Settings.Default.Save();
 				//Profile.ActiveProfile.SetOption("monitorswitch", frm.result);
 				//ReloadDispositionCmb();
+			}
+		}
+
+		private void btn_checkConfig_Click(object sender, EventArgs e)
+		{
+			bool noerror = true;
+			if (string.IsNullOrEmpty(txt_tpfolder.Text))
+			{
+				MessageBox.Show("You need to setup TP Directory First");
+				return;
+			}
+			string gameProfilesDir = Path.Combine(txt_tpfolder.Text, "GameProfiles");
+			if (!Directory.Exists(gameProfilesDir))
+			{
+				MessageBox.Show("Invalid TP Directory");
+				return;
+			}
+			var gameProfileFiles = Directory.GetFiles(gameProfilesDir, "*.xml");
+			foreach (var gameProfileFile in gameProfileFiles)
+			{
+				// Charger le fichier XML
+				XDocument doc = XDocument.Load(gameProfileFile);
+
+				// Récupérer tous les éléments <ButtonName>
+				var buttonNames = doc.Descendants("ButtonName")
+									 .Select(button => button.Value);
+
+
+				string gamepadConfig = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "config", Path.GetFileNameWithoutExtension(gameProfileFile) + ".gamepad.txt");
+				if (File.Exists(gamepadConfig))
+				{
+					string gamepadConfigContent = File.ReadAllText(gamepadConfig);
+					// Utiliser une expression régulière pour extraire les valeurs des éléments <ButtonName>
+					var buttonNameMatches = Regex.Matches(gamepadConfigContent, "<ButtonName>(.*?)</ButtonName>")
+												 .Cast<Match>()
+												 .Select(match => match.Groups[1].Value);
+
+					if (buttonNameMatches.Count() != buttonNames.Count())
+					{
+						MessageBox.Show($"{Path.GetFileName(gameProfileFile)} : Button count not match");
+						noerror = false;
+					}
+					foreach (var buttonName in buttonNames)
+					{
+						bool found = false;
+						foreach (var buttonNameMatche in buttonNameMatches)
+						{
+							if (buttonName == buttonNameMatche)
+							{
+								found = true;
+								break;
+							}
+						}
+						if (!found)
+						{
+							MessageBox.Show($"{Path.GetFileName(gameProfileFile)} : Button {buttonName} not found");
+							noerror = false;
+						}
+					}
+
+
+				}
+
+			}
+			if (noerror)
+			{
+				MessageBox.Show("No Error found :)");
+			}
+		}
+
+		private void chk_enableDebug_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default["debugMode"] = chk_enableDebug.Checked;
+			Properties.Settings.Default.Save();
+		}
+
+		private void kryptonButton3_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_resetdefaultlinksource_Click(object sender, EventArgs e)
+		{
+			txt_linksourcefolder.Text = @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)";
+			Properties.Settings.Default["perGameLinkFolder"] = txt_linksourcefolder.Text;
+			Properties.Settings.Default.Save();
+		}
+
+		private void btn_selectLinkFolder_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("You have to make sure that the Link Folder use the same drive as Teknoparrot (That's why, by default, it use a Subfolder of Teknoparrot)");
+			using (var fbd = new FolderBrowserDialog())
+			{
+				DialogResult result = fbd.ShowDialog();
+
+				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+				{
+					txt_linksourcefolder.Text = fbd.SelectedPath;
+					Properties.Settings.Default["perGameLinkFolder"] = fbd.SelectedPath;
+					Properties.Settings.Default.Save();
+				}
 			}
 		}
 	}

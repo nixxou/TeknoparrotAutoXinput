@@ -1,4 +1,5 @@
 using Gma.System.MouseKeyHook;
+using Microsoft.Win32.SafeHandles;
 using MonitorSwitcherGUI;
 using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
@@ -10,6 +11,7 @@ using SharpDX.Multimedia;
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,11 +19,18 @@ using System.Xml;
 using XInput.Wrapper;
 using static SDL2.SDL;
 using static XInput.Wrapper.X;
+using static XInput.Wrapper.X.Gamepad;
 
 namespace TeknoparrotAutoXinput
 {
 	internal static class Program
 	{
+		// Importer la fonction AllocConsole depuis Kernel32.dll
+		[DllImport("kernel32.dll")]
+		public static extern bool AllocConsole();
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		public static extern IntPtr GetStdHandle(int nStdHandle);
 
 		//private static NamedPipeClientStream pipeClient;
 		public static Dictionary<int, Dictionary<int, string>> joysticksIds = new Dictionary<int, Dictionary<int, string>>();
@@ -60,6 +69,7 @@ namespace TeknoparrotAutoXinput
 		public static string DispositionFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "dispositions");
 		public static string GameOptionsFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions");
 
+		public static bool DebugMode = false;
 
 
 		/// <summary>
@@ -106,6 +116,20 @@ namespace TeknoparrotAutoXinput
 			}
 			if (args.Length > 0)
 			{
+				DebugMode = (bool)Properties.Settings.Default["debugMode"];
+				if (DebugMode)
+				{
+					// Allouer une nouvelle console
+					AllocConsole();
+					RedirectConsoleOutput();
+					if (File.Exists("debug.log.txt")) File.Delete("debug.log.txt");
+
+					Utils.LogMessage("Starting in DebugMode");
+					Utils.LogMessage("Exe : " + Process.GetCurrentProcess().MainModule.FileName);
+					Utils.LogMessage("Args : " + Utils.ArgsToCommandLine(args));
+
+				}
+
 
 				bool changeFFBConfig = (bool)Properties.Settings.Default["FFB"];
 				bool showStartup = (bool)Properties.Settings.Default["showStartup"];
@@ -128,6 +152,24 @@ namespace TeknoparrotAutoXinput
 
 				bool passthrough = false;
 
+
+				Utils.LogMessage("Initial values : ");
+				Utils.LogMessage($"changeFFBConfig = {changeFFBConfig}");
+				Utils.LogMessage($"showStartup = {changeFFBConfig}");
+				Utils.LogMessage($"useVirtualKeyboard = {useVirtualKeyboard}");
+				Utils.LogMessage($"keyTest = {keyTest}");
+				Utils.LogMessage($"keyService1 = {keyService1}");
+				Utils.LogMessage($"keyService2 = {keyService2}");
+				Utils.LogMessage($"favorAB = {favorAB}");
+				Utils.LogMessage($"gamepadStooz = {gamepadStooz}");
+				Utils.LogMessage($"wheelStooz = {wheelStooz}");
+				Utils.LogMessage($"enableStoozZone_Gamepad = {enableStoozZone_Gamepad}");
+				Utils.LogMessage($"valueStooz_Gamepad = {valueStooz_Gamepad}");
+				Utils.LogMessage($"enableStoozZone_Wheel = {enableStoozZone_Wheel}");
+				Utils.LogMessage($"valueStooz_Wheel = {valueStooz_Wheel}");
+				Utils.LogMessage($"WheelFFBGuid = {WheelFFBGuid}");
+				
+
 				List<string> typeConfig = new List<string>();
 				typeConfig.Add("gamepad");
 				typeConfig.Add("gamepadalt");
@@ -146,11 +188,13 @@ namespace TeknoparrotAutoXinput
 							int slotNumber = int.Parse(match.Groups[1].Value);
 							string deviceType = match.Groups[2].Value.ToLower().Trim();
 							forceTypeController.Add(slotNumber, deviceType);
+							Utils.LogMessage($"CMDLINE Option : forceslot = {slotNumber} : {deviceType}");
 						}
 
 						if(arg.ToLower().Trim() == "--passthrough")
 						{
 							passthrough = true;
+							Utils.LogMessage($"CMDLINE Option : passthrough = {passthrough}");
 						}
 
 						match = Regex.Match(arg, @"--disposition=[0-9a-zA-Z_]");
@@ -158,9 +202,15 @@ namespace TeknoparrotAutoXinput
 						{
 							string folderDisposition = match.Groups[1].Value.Trim();
 							string newDispositionFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), folderDisposition);
+							Utils.LogMessage($"CMDLINE Option : newDispositionFolder = {newDispositionFolder}");
+							
 							if (Directory.Exists(newDispositionFolder))
 							{
 								DispositionFolder = newDispositionFolder;
+							}
+							else
+							{
+								Utils.LogMessage($"CMDLINE Option : Disposition folder invalid");
 							}
 						}
 					}
@@ -171,8 +221,14 @@ namespace TeknoparrotAutoXinput
 					string customConfigPath = "";
 
 					string xmlFile = args.Last();
+
+					Utils.LogMessage($"basePath : {basePath}");
+					Utils.LogMessage($"xmlFile : {xmlFile}");
+					
+
 					if (!xmlFile.ToLower().EndsWith(".xml") || !File.Exists(xmlFile))
 					{
+						Utils.LogMessage($"Invalid XML File");
 						MessageBox.Show("Invalid parameters");
 						return;
 					}
@@ -181,19 +237,45 @@ namespace TeknoparrotAutoXinput
 					string originalConfigFileName = Path.GetFileName(xmlFile);
 					string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
 					string teknoparrotExe = Path.Combine(baseTpDir, "TeknoParrotUi.exe");
-					string linkSourceFolder = Path.Combine(baseTpDir, "AutoXinputLinks", originalConfigFileNameWithoutExt);
+
+					string perGameLinkFolder = Properties.Settings.Default["perGameLinkFolder"].ToString();
+					if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
+					{
+						perGameLinkFolder = Path.Combine(baseTpDir, "AutoXinputLinks");
+					}
+					string linkSourceFolder = Path.Combine(perGameLinkFolder, originalConfigFileNameWithoutExt);
+
 					string linkTargetFolder = "";
 					bool gameNeedAdmin = false;
 
+					Utils.LogMessage($"baseTpDir : {baseTpDir}");
+					Utils.LogMessage($"originalConfigFileName : {originalConfigFileName}");
+					Utils.LogMessage($"originalConfigFileNameWithoutExt : {originalConfigFileNameWithoutExt}");
+					Utils.LogMessage($"teknoparrotExe : {teknoparrotExe}");
+					Utils.LogMessage($"linkSourceFolder : {linkSourceFolder}");
+
 					if (!File.Exists(teknoparrotExe))
 					{
+						Utils.LogMessage($"Can't find {teknoparrotExe}");
 						MessageBox.Show($"Can't find {teknoparrotExe}");
 						return;
 					}
 
-					Utils.CleanHardLinksFiles(Path.Combine(baseTpDir, "TeknoParrot"), Path.Combine(baseTpDir, "AutoXinputLinks"));
-					Utils.CleanHardLinksFiles(Path.Combine(baseTpDir, "ElfLdr2"), Path.Combine(baseTpDir, "AutoXinputLinks"));
+					Utils.LogMessage($"check if eligigible to HardLink");
+					if (Utils.IsEligibleHardLink(baseTpDir))
+					{
+						Utils.LogMessage($"Starting Clean HardlinkFiles");
+						Utils.CleanHardLinksFiles(Path.Combine(baseTpDir, "TeknoParrot"), perGameLinkFolder);
+						Utils.CleanHardLinksFiles(Path.Combine(baseTpDir, "ElfLdr2"), perGameLinkFolder);
+						Utils.LogMessage($"End Clean HardlinkFiles");
+					}
+					else
+					{
+						Utils.LogMessage($"Not eligible for Hardlink");
+					}
 
+
+					Utils.LogMessage($"Load XML to get emulatorType and requiresAdmin");
 					try
 					{
 						XmlDocument xmlDoc = new XmlDocument();
@@ -214,7 +296,10 @@ namespace TeknoparrotAutoXinput
 									linkTargetFolder = Path.Combine(baseTpDir, "TeknoParrot");
 								}
 							}
+							Utils.LogMessage($"emulatorTypeValue = {emulatorTypeValue}");
+							Utils.LogMessage($"linkTargetFolder = {linkTargetFolder}");
 						}
+
 						XmlNode requiresAdminNode = xmlDoc.SelectSingleNode("/GameProfile/RequiresAdmin");
 						if (requiresAdminNode != null)
 						{
@@ -223,16 +308,22 @@ namespace TeknoparrotAutoXinput
 							{
 								gameNeedAdmin = true;
 							}
+							Utils.LogMessage($"requiresAdminValue = {requiresAdminValue}");
 						}
 					}
-					catch { }
+					catch 
+					{
+						Utils.LogMessage($"Error while parsing xml file");
+					}
 
+					Utils.LogMessage($"Checking gameOverride options");
 					//GameOptionOverrite
 					_dispositionToSwitch = Properties.Settings.Default["Disposition"].ToString();
 					GameSettings gameOptions = new GameSettings();
 					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
 					if (File.Exists(optionFile))
 					{
+						Utils.LogMessage($"gameoveride file found, loading it");
 						gameOptions = new GameSettings(File.ReadAllText(optionFile)); 
 					}
 					if (gameOptions.UseGlobalDisposition == false) _dispositionToSwitch = gameOptions.Disposition;
@@ -248,21 +339,29 @@ namespace TeknoparrotAutoXinput
 						enableStoozZone_Wheel = gameOptions.enableStoozZone_Wheel;
 						valueStooz_Wheel = gameOptions.valueStooz_Wheel;
 					}
-
+					Utils.LogMessage($"gameOptions Values = {gameOptions.Serialize()}");
 
 
 					ParrotDataOriginal = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml");
 					ParrotDataBackup = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml.AutoXinputBackup");
+					Utils.LogMessage($"ParrotDataOriginal = {ParrotDataOriginal}");
+					Utils.LogMessage($"ParrotDataBackup = {ParrotDataBackup}");
+					
 					if (File.Exists(ParrotDataBackup))
 					{
+						Utils.LogMessage($"Restore ParrotData");
 						try
 						{
 							File.Copy(ParrotDataBackup, ParrotDataOriginal, true);
 							File.Delete(ParrotDataBackup);
 						}
-						catch { }
+						catch 
+						{
+							Utils.LogMessage($"Error while restoring ParrotData");
+						}
 					}
 
+					Utils.LogMessage($"Get GamePath");
 					FFBPluginIniFile = "";
 					FFBPluginIniBackup = "";
 					XmlDocument xmlDocOri = new XmlDocument();
@@ -271,41 +370,60 @@ namespace TeknoparrotAutoXinput
 					if (gamePathNode != null)
 					{
 						string gamePathContent = gamePathNode.InnerText;
+						Utils.LogMessage($"gamePathContent = {gamePathContent}");
 						FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini");
 						FFBPluginIniBackup = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini.AutoXinputBackup");
+						Utils.LogMessage($"FFBPluginIniFile = {FFBPluginIniFile}");
+						Utils.LogMessage($"FFBPluginIniBackup = {FFBPluginIniBackup}");
 						if (File.Exists(FFBPluginIniBackup))
 						{
+							Utils.LogMessage($"FFBPluginIniBackup exist, restoring original");
 							try
 							{
 								File.Copy(FFBPluginIniBackup, FFBPluginIniFile, true);
 								File.Delete(FFBPluginIniBackup);
 							}
-							catch { }
+							catch 
+							{
+								Utils.LogMessage($"Error while restoring FFBPluginIniBackup");
+							}
 						}
 					}
 
-					string emptyConfigPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "GameProfiles", originalConfigFileName); ;
+
+					string emptyConfigPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "GameProfiles", originalConfigFileName);
+					Utils.LogMessage($"Base TP GameProfile : {emptyConfigPath}");
 					if (!File.Exists(emptyConfigPath))
 					{
+						Utils.LogMessage($"GameProfile Does not exist");
 						finalConfig = xmlFile;
 					}
 
+					Utils.LogMessage($"Load Availiable config :");
 					foreach (var type in typeConfig)
 					{
 						var configPath = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + type + ".txt");
 						if (File.Exists(configPath))
 						{
+							Utils.LogMessage($"Found {configPath}");
 							existingConfig.Add(type, configPath);
 						}
 					}
 					if (existingConfig.Count() == 0 || passthrough)
 					{
+						Utils.LogMessage($"passthrough Mode = ON");
 						finalConfig = xmlFile;
 						showStartup = false;
 					}
 
 					bool usealtgamepad = false;
-					if (favorAB && existingConfig.ContainsKey("gamepadalt") && existingConfig.ContainsKey("wheel")) usealtgamepad = true;
+					if (favorAB && existingConfig.ContainsKey("gamepadalt") && existingConfig.ContainsKey("wheel"))
+					{
+						usealtgamepad = true;
+						Utils.LogMessage($"usealtgamepad = ON");
+					}
+
+					Utils.LogMessage($"finalConfig = {finalConfig}");
 
 					if (finalConfig == "")
 					{
@@ -327,6 +445,8 @@ namespace TeknoparrotAutoXinput
 						bool haveWheel = false;
 						bool haveGamepad = false;
 
+						Utils.LogMessage($"availableSlot = {availableSlot}");
+
 						bool checkDinputWheel = (bool)Properties.Settings.Default["useDinputWheel"];
 						Dictionary<string, JoystickButtonData> bindingDinputWheel = null;
 						string bindingDinputWheelJson = Properties.Settings.Default["bindingDinputWheel"].ToString();
@@ -334,27 +454,30 @@ namespace TeknoparrotAutoXinput
 						bool dinputWheelFound = false;
 						if (checkDinputWheel)
 						{
+							Utils.LogMessage($"check Dinput Wheel");
 							if (!string.IsNullOrEmpty(bindingDinputWheelJson))
 							{
 								bindingDinputWheel = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputWheelJson);
 								if (bindingDinputWheel.ContainsKey("InputDevice0LeftThumbInputDevice0X+"))
 								{
 									WheelGuid = bindingDinputWheel["InputDevice0LeftThumbInputDevice0X+"].JoystickGuid.ToString();
+									Utils.LogMessage($"WheelGuid to Search = {WheelGuid}");
 								}
 							}
 							if (!string.IsNullOrEmpty(WheelGuid))
 							{
 								DirectInput directInput = new DirectInput();
 								List<DeviceInstance> devices = new List<DeviceInstance>();
-								devices.AddRange(directInput.GetDevices().Where(x => x.Type != DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+								devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
 								foreach (var device in devices)
 								{
-									if(device.Type == DeviceType.Keyboard && FirstKeyboardGuid == null)
+									if(device.Type == SharpDX.DirectInput.DeviceType.Keyboard && FirstKeyboardGuid == null)
 									{
 										FirstKeyboardGuid = device.InstanceGuid;
 									}
 									if (device.InstanceGuid.ToString() == WheelGuid)
 									{
+										Utils.LogMessage($"WheelGuid Found");
 										dinputWheelFound = true;
 										haveWheel = true;
 									}
@@ -368,6 +491,9 @@ namespace TeknoparrotAutoXinput
 							useXinput = false;
 							useDinputWheel = true;
 						}
+
+						Utils.LogMessage($"useXinput : {useXinput}");
+						Utils.LogMessage($"useDinputWheel : {useDinputWheel}");
 
 						foreach (var gp in connectedGamePad.Values)
 						{
@@ -394,12 +520,27 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
+						Utils.LogMessage($"haveArcade : {haveArcade}");
+						Utils.LogMessage($"haveWheel : {haveWheel}");
+						Utils.LogMessage($"haveGamepad : {haveGamepad}");
+						if (DebugMode)
+						{
+							Utils.LogMessage("Connected gamepad List : ");
+							foreach (var  gp in connectedGamePad.Values)
+							{
+								Utils.LogMessage($"{gp.ToString()}");
+							}
+						}
+
+
+
 						Dictionary<string, JoystickButton> finalJoystickButtonDictionary = ParseConfig(xmlFile, false);
 						Dictionary<string, JoystickButton> emptyJoystickButtonDictionary = ParseConfig(emptyConfigPath, false);
 						Dictionary<int, (string, XinputGamepad)> ConfigPerPlayer = new Dictionary<int, (string, XinputGamepad)>();
 						Dictionary<string, JoystickButton> joystickButtonWheel = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonArcade = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonGamepad = new Dictionary<string, JoystickButton>();
+
 
 						if (useXinput)
 						{
@@ -412,6 +553,9 @@ namespace TeknoparrotAutoXinput
 									VigemInstalled = true;
 								}
 								catch (VigemBusNotFoundException e) { }
+
+								Utils.LogMessage($"VigemInstalled : {VigemInstalled}");
+
 								if (VigemInstalled)
 								{
 									if (availableSlot == 0) gamepad = X.Gamepad_1;
@@ -518,6 +662,7 @@ namespace TeknoparrotAutoXinput
 
 							if (haveWheel && existingConfig.ContainsKey("wheel"))
 							{
+								Utils.LogMessage($"Assign Wheel");
 								joystickButtonWheel = ParseConfig(existingConfig["wheel"]);
 								var PlayerList = GetPlayersList(joystickButtonWheel);
 								int nb_wheel = connectedGamePad.Values.Where(c => c.Type == "wheel").Count();
@@ -545,6 +690,7 @@ namespace TeknoparrotAutoXinput
 							}
 							if (haveArcade && existingConfig.ContainsKey("arcade"))
 							{
+								Utils.LogMessage($"Assign Arcade");
 								joystickButtonArcade = ParseConfig(existingConfig["arcade"]);
 								var PlayerList = GetPlayersList(joystickButtonArcade);
 								int nb_arcade = connectedGamePad.Values.Where(c => c.Type == "arcade").Count();
@@ -572,6 +718,7 @@ namespace TeknoparrotAutoXinput
 							}
 							if (haveGamepad)
 							{
+								Utils.LogMessage($"Assign Gamepad");
 								string configname = "gamepad";
 								if (usealtgamepad) configname = "gamepadalt";
 
@@ -605,6 +752,7 @@ namespace TeknoparrotAutoXinput
 						{
 							if (useDinputWheel)
 							{
+								Utils.LogMessage($"Assign Dinput Wheel");
 								if (useVirtualKeyboard && FirstKeyboardGuid != null)
 								{
 									
@@ -692,6 +840,7 @@ namespace TeknoparrotAutoXinput
 							}
 							if (doChangeStooz)
 							{
+								Utils.LogMessage($"Change Stooz");
 								if (!String.IsNullOrEmpty(ParrotDataBackup))
 								{
 									try
@@ -726,7 +875,7 @@ namespace TeknoparrotAutoXinput
 								*/
 								if (!String.IsNullOrEmpty(FFBPluginIniFile) && File.Exists(FFBPluginIniFile))
 								{
-
+									Utils.LogMessage($"FFB Ini Exist");
 									if(!String.IsNullOrEmpty(FFBPluginIniBackup))
 									{
 										try
@@ -757,6 +906,7 @@ namespace TeknoparrotAutoXinput
 													SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
 													string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
 													ConfigFFB.Write("DeviceGUID", guidString, "Settings");
+													Utils.LogMessage($"Change FFB DeviceGUID To {guidString}");
 													SDL.SDL_JoystickClose(currentJoy);
 													SDL.SDL_JoystickClose(currentJoy);
 													break;
@@ -767,6 +917,7 @@ namespace TeknoparrotAutoXinput
 										}
 										if (useDinputWheel)
 										{
+											Utils.LogMessage($"Change FFB DeviceGUID To DINPUT {WheelFFBGuid}");
 											ConfigFFB.Write("DeviceGUID", WheelFFBGuid, "Settings");
 										}
 									//}
@@ -775,6 +926,19 @@ namespace TeknoparrotAutoXinput
 
 							//}
 
+						}
+
+						if (DebugMode)
+						{
+							Utils.LogMessage($"ConfigPerPlayer Data :");
+							foreach (var ConfigPlayer in ConfigPerPlayer)
+							{
+								int TargetXinput = ConfigPlayer.Key;
+								string ConfigType = ConfigPlayer.Value.Item1;
+								XinputGamepad ConfigGamePad = ConfigPlayer.Value.Item2;
+								int newXinputSlot = ConfigGamePad.XinputSlot;
+								Utils.LogMessage($"TargetXinput = {TargetXinput}, ConfigType = {ConfigType}, newXinputSlot = {newXinputSlot}");
+							}
 						}
 
 						foreach (var ConfigPlayer in ConfigPerPlayer)
@@ -956,7 +1120,12 @@ namespace TeknoparrotAutoXinput
 
 						if(gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{
-							Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder);
+							Utils.LogMessage($"HardLinkFiles {linkSourceFolder}, {linkTargetFolder}");
+							if (Utils.IsEligibleHardLink(linkTargetFolder))
+							{
+								Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder);
+							}
+							
 						}
 
 						if (!string.IsNullOrEmpty(_dispositionToSwitch) && _dispositionToSwitch != "<none>")
@@ -964,6 +1133,7 @@ namespace TeknoparrotAutoXinput
 							var cfg = Path.Combine(Program.DispositionFolder, "disposition_" + _dispositionToSwitch + ".xml");
 							if (File.Exists(cfg))
 							{
+								Utils.LogMessage($"Disposition {cfg} Exist, save Current Disposition");
 								if (MonitorSwitcher.SaveDisplaySettings(Path.Combine(Path.GetFullPath(Program.DispositionFolder), "dispositionrestore_app.xml")))
 								{
 									if (UseMonitorDisposition(_dispositionToSwitch))
@@ -977,11 +1147,13 @@ namespace TeknoparrotAutoXinput
 
 						if(gameOptions.AhkBefore.Trim() != "")
 						{
+							Utils.LogMessage($"Execute AHK Before");
 							Utils.ExecuteAHK(gameOptions.AhkBefore,gameOptions.WaitForExitAhkBefore);
 						}
 
 						if (showStartup)
 						{
+							Utils.LogMessage($"showStartup");
 							cancellationTokenSource = new CancellationTokenSource();
 							Task.Run(() => ShowFormAsync(cancellationTokenSource.Token));
 						}
@@ -989,6 +1161,7 @@ namespace TeknoparrotAutoXinput
 						string argumentTpExe = "--profile=\"" + finalConfig + "\"";
 						if (gameOptions.RunAsRoot && gameNeedAdmin)
 						{
+							Utils.LogMessage($"Force RunAsRoot");
 							if (!Utils.CheckTaskExist(teknoparrotExe, argumentTpExe))
 							{
 								
@@ -1007,6 +1180,7 @@ namespace TeknoparrotAutoXinput
 						}
 						else
 						{
+							Utils.LogMessage($"Starting {teknoparrotExe} {argumentTpExe}");
 							Process process = new Process();
 							process.StartInfo.FileName = teknoparrotExe;
 							process.StartInfo.Arguments = argumentTpExe;
@@ -1017,23 +1191,32 @@ namespace TeknoparrotAutoXinput
 						}
 
 						Thread.Sleep(500);
+						Utils.LogMessage($"End Execution");
 
 						if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{
-							Utils.CleanHardLinksFiles(linkTargetFolder, linkSourceFolder);
+							Utils.LogMessage($"CleanHardLinksFiles");
+							if (Utils.IsEligibleHardLink(linkTargetFolder))
+							{
+								Utils.CleanHardLinksFiles(linkTargetFolder, linkSourceFolder);
+							}
 						}
 
 						if (gameOptions.AhkAfter.Trim() != "")
 						{
+							Utils.LogMessage($"Execute AhkAfter");
 							Utils.ExecuteAHK(gameOptions.AhkAfter,true);
 						}
 
+						Utils.LogMessage($"CleanAndKillAhk");
 						Utils.CleanAndKillAhk();
 
+						
 						if (!String.IsNullOrEmpty(ParrotDataOriginal) && !String.IsNullOrEmpty(ParrotDataBackup))
 						{
 							if (File.Exists(ParrotDataBackup))
 							{
+								Utils.LogMessage($"Restore ParrotDataOriginal");
 								try
 								{
 									File.Copy(ParrotDataBackup, ParrotDataOriginal, true);
@@ -1043,10 +1226,12 @@ namespace TeknoparrotAutoXinput
 								catch { }
 							}
 						}
+						
 						if (!String.IsNullOrEmpty(FFBPluginIniFile) && !String.IsNullOrEmpty(FFBPluginIniBackup))
 						{
 							if (File.Exists(FFBPluginIniBackup))
 							{
+								Utils.LogMessage($"Restore FFBPluginIniFile");
 								try
 								{
 									File.Copy(FFBPluginIniBackup, FFBPluginIniFile, true);
@@ -1056,8 +1241,10 @@ namespace TeknoparrotAutoXinput
 								catch { }
 							}
 						}
+						
 						if (virtualKeyboardXinputSlot > -1)
 						{
+							Utils.LogMessage($"Dispose virtualKeyboard");
 							try
 							{
 								controller.Disconnect();
@@ -1066,16 +1253,24 @@ namespace TeknoparrotAutoXinput
 							catch { }
 						}
 
-
+						
 						if (startupForm != null && !startupForm.IsDisposed)
 						{
+							Utils.LogMessage($"Close startupForm");
 							// Utilisez Invoke pour fermer le formulaire depuis un thread différent
 							startupForm.Invoke(new Action(() => startupForm.Close()));
 						}
 
 						if (_restoreSwitch)
 						{
+							Utils.LogMessage($"Restore Disposition");
 							MonitorSwitcher.LoadDisplaySettings(Path.Combine(Program.DispositionFolder, "dispositionrestore_app.xml"));
+						}
+
+						if (DebugMode)
+						{
+							Console.WriteLine("Press any key to quit");
+							Console.ReadKey();
 						}
 
 					}
@@ -1411,6 +1606,16 @@ namespace TeknoparrotAutoXinput
 				return MonitorSwitcher.LoadDisplaySettings(cfg);
 			}
 			return false;
+		}
+
+		static void RedirectConsoleOutput()
+		{
+			// Rediriger la sortie standard vers la nouvelle console
+			IntPtr stdHandle = GetStdHandle(-11); // -11 correspond à STD_OUTPUT_HANDLE
+			var fileStream = new FileStream(new SafeFileHandle(stdHandle, true), FileAccess.Write);
+			var streamWriter = new StreamWriter(fileStream, Console.OutputEncoding) { AutoFlush = true };
+			Console.SetOut(streamWriter);
+			Console.SetError(streamWriter);
 		}
 	}
 

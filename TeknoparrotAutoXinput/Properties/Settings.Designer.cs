@@ -286,5 +286,29 @@ namespace TeknoparrotAutoXinput.Properties {
                 this["Disposition"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool debugMode {
+            get {
+                return ((bool)(this["debugMode"]));
+            }
+            set {
+                this["debugMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Default (<YourTeknoparrotFolder>\\AutoXinputLinks)")]
+        public string perGameLinkFolder {
+            get {
+                return ((string)(this["perGameLinkFolder"]));
+            }
+            set {
+                this["perGameLinkFolder"] = value;
+            }
+        }
     }
 }
