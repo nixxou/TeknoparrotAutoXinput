@@ -71,7 +71,6 @@ namespace TeknoparrotAutoXinput
 
 		public static bool DebugMode = false;
 
-
 		/// <summary>
 		///  The main entry point for the application.
 		/// </summary>
@@ -105,9 +104,12 @@ namespace TeknoparrotAutoXinput
 			//fakeArgs.Add(@"C:\teknoparrot\UserProfiles\Daytona3.xml");
 			//args = fakeArgs.ToArray();
 #endif
-			wheelXinputData = Properties.Settings.Default["wheelXinputData"].ToString();
-			arcadeXinputData = Properties.Settings.Default["arcadeXinputData"].ToString();
-			gamepadXinputData = Properties.Settings.Default["gamepadXinputData"].ToString();
+
+			ConfigurationManager.LoadConfig();
+
+			wheelXinputData = ConfigurationManager.MainConfig.wheelXinputData;
+			arcadeXinputData = ConfigurationManager.MainConfig.arcadeXinputData;
+			gamepadXinputData = ConfigurationManager.MainConfig.gamepadXinputData;
 
 			if (args.Length == 0)
 			{
@@ -116,7 +118,7 @@ namespace TeknoparrotAutoXinput
 			}
 			if (args.Length > 0)
 			{
-				DebugMode = (bool)Properties.Settings.Default["debugMode"];
+				DebugMode = ConfigurationManager.MainConfig.debugMode;
 				if (DebugMode)
 				{
 					// Allouer une nouvelle console
@@ -131,24 +133,24 @@ namespace TeknoparrotAutoXinput
 				}
 
 
-				bool changeFFBConfig = (bool)Properties.Settings.Default["FFB"];
-				bool showStartup = (bool)Properties.Settings.Default["showStartup"];
+				bool changeFFBConfig = ConfigurationManager.MainConfig.FFB;
+				bool showStartup = ConfigurationManager.MainConfig.showStartup;
 
-				bool useVirtualKeyboard = (bool)Properties.Settings.Default["virtualKeyboard"];
-				string keyTest = Properties.Settings.Default["keyTest"].ToString();
-				string keyService1 = Properties.Settings.Default["keyService1"].ToString();
-				string keyService2 = Properties.Settings.Default["keyService2"].ToString();
+				bool useVirtualKeyboard = ConfigurationManager.MainConfig.virtualKeyboard;
+				string keyTest = ConfigurationManager.MainConfig.keyTest;
+				string keyService1 = ConfigurationManager.MainConfig.keyService1;
+				string keyService2 = ConfigurationManager.MainConfig.keyService2;
 
-				bool favorAB = (bool)Properties.Settings.Default["favorAB"];
+				bool favorAB = ConfigurationManager.MainConfig.favorAB;
 
-				bool gamepadStooz = (bool)Properties.Settings.Default["gamepadStooz"];
-				bool wheelStooz = (bool)Properties.Settings.Default["wheelStooz"];
-				bool enableStoozZone_Gamepad = (bool)Properties.Settings.Default["enableStoozZone_Gamepad"];
-				int valueStooz_Gamepad = (int)Properties.Settings.Default["valueStooz_Gamepad"];
-				bool enableStoozZone_Wheel = (bool)Properties.Settings.Default["enableStoozZone_Wheel"];
-				int valueStooz_Wheel = (int)Properties.Settings.Default["valueStooz_Wheel"];
+				bool gamepadStooz = ConfigurationManager.MainConfig.gamepadStooz;
+				bool wheelStooz = ConfigurationManager.MainConfig.wheelStooz;
+				bool enableStoozZone_Gamepad = ConfigurationManager.MainConfig.enableStoozZone_Gamepad;
+				int valueStooz_Gamepad = ConfigurationManager.MainConfig.valueStooz_Gamepad;
+				bool enableStoozZone_Wheel = ConfigurationManager.MainConfig.enableStoozZone_Wheel;
+				int valueStooz_Wheel = ConfigurationManager.MainConfig.valueStooz_Wheel;
 
-				WheelFFBGuid = Properties.Settings.Default["ffbDinputWheel"].ToString();
+				WheelFFBGuid = ConfigurationManager.MainConfig.ffbDinputWheel;
 
 				bool passthrough = false;
 
@@ -219,6 +221,7 @@ namespace TeknoparrotAutoXinput
 					string finalConfig = "";
 					string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
 					string customConfigPath = "";
+					Dictionary<string, string> shifterData = new Dictionary<string, string>();
 
 					string xmlFile = args.Last();
 
@@ -238,7 +241,7 @@ namespace TeknoparrotAutoXinput
 					string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
 					string teknoparrotExe = Path.Combine(baseTpDir, "TeknoParrotUi.exe");
 
-					string perGameLinkFolder = Properties.Settings.Default["perGameLinkFolder"].ToString();
+					string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
 					if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
 					{
 						perGameLinkFolder = Path.Combine(baseTpDir, "AutoXinputLinks");
@@ -246,6 +249,7 @@ namespace TeknoparrotAutoXinput
 					string linkSourceFolder = Path.Combine(perGameLinkFolder, originalConfigFileNameWithoutExt);
 
 					string linkTargetFolder = "";
+					string executableGame = "";
 					bool gameNeedAdmin = false;
 
 					Utils.LogMessage($"baseTpDir : {baseTpDir}");
@@ -290,10 +294,12 @@ namespace TeknoparrotAutoXinput
 								if (emulatorTypeValue == "elfldr2")
 								{
 									linkTargetFolder = Path.Combine(baseTpDir, "ElfLdr2");
+									executableGame = Path.Combine(linkTargetFolder, "BudgieLoader.exe");
 								}
 								if (emulatorTypeValue == "lindbergh")
 								{
 									linkTargetFolder = Path.Combine(baseTpDir, "TeknoParrot");
+									executableGame = Path.Combine(linkTargetFolder, "BudgieLoader.exe");
 								}
 							}
 							Utils.LogMessage($"emulatorTypeValue = {emulatorTypeValue}");
@@ -318,7 +324,7 @@ namespace TeknoparrotAutoXinput
 
 					Utils.LogMessage($"Checking gameOverride options");
 					//GameOptionOverrite
-					_dispositionToSwitch = Properties.Settings.Default["Disposition"].ToString();
+					_dispositionToSwitch = ConfigurationManager.MainConfig.Disposition;
 					GameSettings gameOptions = new GameSettings();
 					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
 					if (File.Exists(optionFile))
@@ -370,6 +376,8 @@ namespace TeknoparrotAutoXinput
 					if (gamePathNode != null)
 					{
 						string gamePathContent = gamePathNode.InnerText;
+						if (gamePathContent.ToLower().EndsWith(".exe")) executableGame = gamePathContent;
+
 						Utils.LogMessage($"gamePathContent = {gamePathContent}");
 						FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini");
 						FFBPluginIniBackup = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini.AutoXinputBackup");
@@ -390,6 +398,11 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 
+					var shifterPath = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "shifter" + ".json");
+					if (File.Exists(shifterPath))
+					{
+						shifterData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(shifterPath));
+					}
 
 					string emptyConfigPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "GameProfiles", originalConfigFileName);
 					Utils.LogMessage($"Base TP GameProfile : {emptyConfigPath}");
@@ -424,6 +437,10 @@ namespace TeknoparrotAutoXinput
 					}
 
 					Utils.LogMessage($"finalConfig = {finalConfig}");
+					ShifterHack shifterHack = null;
+					bool useShifterHack = false;
+					if (gameOptions.EnableGearChange) useShifterHack = true;
+					Utils.LogMessage($"useShifterHack Option = " + (useShifterHack ? "ON" : "OFF"));
 
 					if (finalConfig == "")
 					{
@@ -447,10 +464,17 @@ namespace TeknoparrotAutoXinput
 
 						Utils.LogMessage($"availableSlot = {availableSlot}");
 
-						bool checkDinputWheel = (bool)Properties.Settings.Default["useDinputWheel"];
+						bool checkDinputWheel = ConfigurationManager.MainConfig.useDinputWheel;
 						Dictionary<string, JoystickButtonData> bindingDinputWheel = null;
-						string bindingDinputWheelJson = Properties.Settings.Default["bindingDinputWheel"].ToString();
-						
+						string bindingDinputWheelJson = ConfigurationManager.MainConfig.bindingDinputWheel;
+
+						bool checkDinputShifter = ConfigurationManager.MainConfig.useDinputShifter;
+						Dictionary<string, JoystickButtonData> bindingDinputShifter = null;
+						string bindingDinputShifterJson = ConfigurationManager.MainConfig.bindingDinputShifter;
+
+						Guid shifterGuid = new Guid();
+						bool shifterGuidFound = false;
+
 						bool dinputWheelFound = false;
 						if (checkDinputWheel)
 						{
@@ -481,6 +505,21 @@ namespace TeknoparrotAutoXinput
 										dinputWheelFound = true;
 										haveWheel = true;
 									}
+								}
+							}
+
+							if(dinputWheelFound && checkDinputShifter)
+							{
+								bindingDinputShifter = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputShifterJson);
+								if (bindingDinputShifter.ContainsKey("InputDeviceGear1"))
+								{
+									if(bindingDinputShifter["InputDeviceGear1"].JoystickGuid.ToString() != "")
+									{
+										shifterGuidFound = true;
+										shifterGuid = bindingDinputShifter["InputDeviceGear1"].JoystickGuid;
+										Utils.LogMessage($"shifterGuid = {shifterGuid}");
+									}
+
 								}
 							}
 						}
@@ -940,7 +979,6 @@ namespace TeknoparrotAutoXinput
 								Utils.LogMessage($"TargetXinput = {TargetXinput}, ConfigType = {ConfigType}, newXinputSlot = {newXinputSlot}");
 							}
 						}
-
 						foreach (var ConfigPlayer in ConfigPerPlayer)
 						{
 							int TargetXinput = ConfigPlayer.Key;
@@ -1019,7 +1057,18 @@ namespace TeknoparrotAutoXinput
 								fieldValueNode.InnerText = "DirectInput";
 							}
 						}
-						
+
+						string shiftUpKey = "";
+						string shiftDownKey = "";
+						string shiftUpKeyBind = "";
+						string shiftDownKeyBind = "";
+						if (shifterGuidFound && ShifterHack.supportedGames.ContainsKey(originalConfigFileNameWithoutExt))
+						{
+
+							shiftUpKey = ShifterHack.getShiftUp(originalConfigFileNameWithoutExt);
+							shiftDownKey = ShifterHack.getShifDown(originalConfigFileNameWithoutExt);
+						}
+
 						if (useDinputWheel)
 						{
 							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
@@ -1036,6 +1085,10 @@ namespace TeknoparrotAutoXinput
 								{
 									node.RemoveChild(existingBindNameDiNode);
 								}
+
+								XmlNode buttonNameNode = node.SelectSingleNode("ButtonName");
+								string buttonName = "";
+								if (buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText)) buttonName = buttonNameNode.InnerText;
 
 								XmlNode bindNameXiNode = node.SelectSingleNode("BindNameXi");
 								if(bindNameXiNode != null && !string.IsNullOrEmpty(bindNameXiNode.InnerText))
@@ -1080,9 +1133,206 @@ namespace TeknoparrotAutoXinput
 										XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
 										BindNameDiNode.InnerText = bindData.Title;
 										node.AppendChild(BindNameDiNode);
+
+
+										if(buttonName == shiftUpKey)
+										{
+											shiftUpKeyBind = bindData.Title;
+										}
+										if (buttonName == shiftDownKey)
+										{
+											shiftDownKeyBind = bindData.Title;
+										}
 									}
 								}
+
+								
+								if (buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText))
+								{
+									if (shifterData != null && shifterData.ContainsKey(buttonNameNode.InnerText) && bindingDinputShifter != null)
+									{
+										string deviceKey = shifterData[buttonNameNode.InnerText];
+										if (bindingDinputShifter.ContainsKey(deviceKey))
+										{
+											var bindData = bindingDinputShifter[deviceKey];
+
+											if (bindData.Title != "")
+											{
+
+												if (DebugMode)
+												{
+													Utils.LogMessage($"Shifter Overwrite {buttonNameNode.InnerText} with {bindData.Title}");
+												}
+
+												XmlNode existingBindNameDiNode2 = node.SelectSingleNode("BindNameDi");
+												if (existingBindNameDiNode2 != null)
+												{
+													node.RemoveChild(existingBindNameDiNode2);
+													if (DebugMode)
+													{
+														Utils.LogMessage($"Delete existing {buttonNameNode.InnerText}");
+													}
+												}
+												XmlNode existingDirectInputButtonNode2 = node.SelectSingleNode("DirectInputButton");
+												if (existingDirectInputButtonNode2 != null)
+												{
+													node.RemoveChild(existingDirectInputButtonNode2);
+												}
+
+												XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+
+												XmlNode buttonNode = xmlDoc.CreateElement("Button");
+												buttonNode.InnerText = bindData.Button.ToString();
+												newDirectInputButtonNode.AppendChild(buttonNode);
+
+												XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+												isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(isAxisNode);
+
+												XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+												IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+
+												XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+												IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+
+												XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+												PovDirectionNode.InnerText = bindData.PovDirection.ToString();
+												newDirectInputButtonNode.AppendChild(PovDirectionNode);
+
+												XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+												IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+
+												XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+												JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
+												newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+
+												node.AppendChild(newDirectInputButtonNode);
+
+												XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+												BindNameDiNode.InnerText = bindData.Title;
+												node.AppendChild(BindNameDiNode);
+											}
+										}
+
+									}
+								}
+
 							}
+
+							if (useShifterHack && shifterGuidFound && shiftDownKeyBind != "" && shiftUpKeyBind != "" && ShifterHack.supportedGames.ContainsKey(originalConfigFileNameWithoutExt))
+							{
+								Utils.LogMessage($"ShifterHack Start");
+								foreach (XmlNode node in joystickButtonsNodes)
+								{
+									XmlNode bindNameDiNode = node.SelectSingleNode("BindNameDi");
+									if (bindNameDiNode != null && !string.IsNullOrEmpty(bindNameDiNode.InnerText))
+									{
+										string bindkey = bindNameDiNode.InnerText.Trim();
+										if(bindkey == shiftUpKeyBind)
+										{
+
+											XmlNode existingBindNameDiNode2 = node.SelectSingleNode("BindNameDi");
+											if (existingBindNameDiNode2 != null)
+											{
+												node.RemoveChild(existingBindNameDiNode2);
+												if (DebugMode)
+												{
+													Utils.LogMessage($"Delete existing {existingBindNameDiNode2.InnerText}");
+												}
+											}
+											XmlNode existingDirectInputButtonNode2 = node.SelectSingleNode("DirectInputButton");
+											if (existingDirectInputButtonNode2 != null)
+											{
+												node.RemoveChild(existingDirectInputButtonNode2);
+											}
+
+
+											XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+											XmlNode buttonNode = xmlDoc.CreateElement("Button");
+											buttonNode.InnerText = "153";
+											newDirectInputButtonNode.AppendChild(buttonNode);
+											XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+											isAxisNode.InnerText = "false";
+											newDirectInputButtonNode.AppendChild(isAxisNode);
+											XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+											IsAxisMinusNode.InnerText = "false";
+											newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+											XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+											IsFullAxisNode.InnerText = "false";
+											newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+											XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+											PovDirectionNode.InnerText = "0";
+											newDirectInputButtonNode.AppendChild(PovDirectionNode);
+											XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+											IsReverseAxisNode.InnerText = "false";
+											newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+											XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+											JoystickGuidNode.InnerText = "6f1d2b61-d5a0-11cf-bfc7-444553540000";
+											newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+											node.AppendChild(newDirectInputButtonNode);
+											XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+											BindNameDiNode.InnerText = "Keyboard Button 106";
+											node.AppendChild(BindNameDiNode);
+
+
+										}
+										if (bindkey == shiftDownKeyBind)
+										{
+											XmlNode existingBindNameDiNode2 = node.SelectSingleNode("BindNameDi");
+											if (existingBindNameDiNode2 != null)
+											{
+												node.RemoveChild(existingBindNameDiNode2);
+												if (DebugMode)
+												{
+													Utils.LogMessage($"Delete existing {existingBindNameDiNode2.InnerText}");
+												}
+											}
+											XmlNode existingDirectInputButtonNode2 = node.SelectSingleNode("DirectInputButton");
+											if (existingDirectInputButtonNode2 != null)
+											{
+												node.RemoveChild(existingDirectInputButtonNode2);
+											}
+
+
+											XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+											XmlNode buttonNode = xmlDoc.CreateElement("Button");
+											buttonNode.InnerText = "158";
+											newDirectInputButtonNode.AppendChild(buttonNode);
+											XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+											isAxisNode.InnerText = "false";
+											newDirectInputButtonNode.AppendChild(isAxisNode);
+											XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+											IsAxisMinusNode.InnerText = "false";
+											newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+											XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+											IsFullAxisNode.InnerText = "false";
+											newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+											XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+											PovDirectionNode.InnerText = "0";
+											newDirectInputButtonNode.AppendChild(PovDirectionNode);
+											XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+											IsReverseAxisNode.InnerText = "false";
+											newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+											XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+											JoystickGuidNode.InnerText = "6f1d2b61-d5a0-11cf-bfc7-444553540000";
+											newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+											node.AppendChild(newDirectInputButtonNode);
+											XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+											BindNameDiNode.InnerText = "Keyboard Button 111";
+											node.AppendChild(BindNameDiNode);
+
+										}
+									}
+								}
+								shifterHack = new ShifterHack();
+								shifterHack.Start(originalConfigFileNameWithoutExt, shifterGuid.ToString(), WheelGuid, shiftUpKeyBind, shiftDownKeyBind, executableGame, bindingDinputShifter);
+
+							}
+
+
 
 						}
 
@@ -1180,6 +1430,8 @@ namespace TeknoparrotAutoXinput
 						}
 						else
 						{
+							//Thread.Sleep(5000);	
+							
 							Utils.LogMessage($"Starting {teknoparrotExe} {argumentTpExe}");
 							Process process = new Process();
 							process.StartInfo.FileName = teknoparrotExe;
@@ -1188,6 +1440,7 @@ namespace TeknoparrotAutoXinput
 							process.StartInfo.UseShellExecute = true;
 							process.Start();
 							process.WaitForExit();
+							
 						}
 
 						Thread.Sleep(500);
@@ -1272,7 +1525,7 @@ namespace TeknoparrotAutoXinput
 							Console.WriteLine("Press any key to quit");
 							Console.ReadKey();
 						}
-
+						if(shifterHack != null) shifterHack.Stop();
 					}
 
 

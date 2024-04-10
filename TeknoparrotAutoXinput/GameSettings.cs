@@ -24,6 +24,7 @@ namespace TeknoparrotAutoXinput
 		public string AhkBefore { get; set; } = string.Empty;
 		public string AhkAfter { get; set; } = string.Empty;
 		public bool WaitForExitAhkBefore { get; set; } = true;
+		public bool EnableGearChange { get; set; } = false;
 
 
 		public GameSettings() 
@@ -52,6 +53,7 @@ namespace TeknoparrotAutoXinput
 				this.AhkBefore = DeserializeData.AhkBefore;
 				this.AhkAfter = DeserializeData.AhkAfter;
 				this.WaitForExitAhkBefore = DeserializeData.WaitForExitAhkBefore;
+				this.EnableGearChange = DeserializeData.EnableGearChange;
 			}
 			catch (Exception ex)
 			{

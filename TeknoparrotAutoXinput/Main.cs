@@ -72,7 +72,7 @@ namespace TeknoparrotAutoXinput
 			this.Activated += VotreForm_Activated;
 			this.Deactivate += VotreForm_Deactivate;
 
-			chk_showAll.Checked = (bool)Properties.Settings.Default["ShowAllGames"];
+			chk_showAll.Checked = ConfigurationManager.MainConfig.ShowAllGames;
 
 			typeConfig.Add("gamepad");
 			typeConfig.Add("gamepadalt");
@@ -107,7 +107,7 @@ namespace TeknoparrotAutoXinput
 		{
 			list_games.Items.Clear();
 			_gameList = new Dictionary<string, Game>();
-			_tpFolder = Properties.Settings.Default["TpFolder"].ToString();
+			_tpFolder = ConfigurationManager.MainConfig.TpFolder;
 			if (Directory.Exists(_tpFolder))
 			{
 				string UserProfileDir = Path.Combine(Path.GetFullPath(_tpFolder), "UserProfiles");
@@ -189,9 +189,9 @@ namespace TeknoparrotAutoXinput
 			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(2, new XinputGamepad(gamepad, 2, false));
 			gamepad = X.Gamepad_4;
 			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(3, new XinputGamepad(gamepad, 3, false));
-			bool checkDinputWheel = (bool)Properties.Settings.Default["useDinputWheel"];
+			bool checkDinputWheel = ConfigurationManager.MainConfig.useDinputWheel;
 			Dictionary<string, JoystickButtonData> bindingDinputWheel = null;
-			string bindingDinputWheelJson = Properties.Settings.Default["bindingDinputWheel"].ToString();
+			string bindingDinputWheelJson = ConfigurationManager.MainConfig.bindingDinputWheel;
 
 			foreach (var cg in _connectedGamePad)
 			{
@@ -305,8 +305,8 @@ namespace TeknoparrotAutoXinput
 
 		private void chk_showAll_CheckedChanged(object sender, EventArgs e)
 		{
-			Properties.Settings.Default["ShowAllGames"] = chk_showAll.Checked;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.ShowAllGames = chk_showAll.Checked;
+			ConfigurationManager.SaveConfig();
 			Reload();
 		}
 
@@ -375,7 +375,7 @@ namespace TeknoparrotAutoXinput
 
 
 					bool usealtgamepad = false;
-					bool favorAB = (bool)Properties.Settings.Default["favorAB"];
+					bool favorAB = ConfigurationManager.MainConfig.favorAB;
 					if (favorAB && DataGame.existingConfig.ContainsKey("gamepadalt") && DataGame.existingConfig.ContainsKey("wheel")) usealtgamepad = true;
 
 					bool useXinput = true;
@@ -894,6 +894,12 @@ namespace TeknoparrotAutoXinput
 
 
 
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			Thread.Sleep(2000);
+			
 		}
 	}
 

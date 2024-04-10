@@ -253,8 +253,8 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
-			Properties.Settings.Default["bindingDinputWheel"] = json;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.bindingDinputWheel = json;
+			ConfigurationManager.SaveConfig();
 
 		}
 
@@ -271,7 +271,7 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			string json = Properties.Settings.Default["bindingDinputWheel"].ToString();
+			string json = ConfigurationManager.MainConfig.bindingDinputWheel;
 			if (!string.IsNullOrEmpty(json))
 			{
 				buttonData = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(json);

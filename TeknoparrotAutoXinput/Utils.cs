@@ -544,7 +544,6 @@ namespace TeknoparrotAutoXinput
 			int nbrun = delay / 100;
 			if (instances.Count == 0)
 			{
-				//MessageBox.Show("icil");
 				instances = task.GetInstances();
 				Thread.Sleep(100);
 				int i = 0;
@@ -591,7 +590,7 @@ namespace TeknoparrotAutoXinput
 
 				Console.WriteLine(logEntry);
 				// Écrire dans le fichier de journal
-				File.AppendAllText("debug.log.txt", logEntry + Environment.NewLine);
+				// File.AppendAllText("debug.log.txt", logEntry + Environment.NewLine);
 			}
 
 		}

@@ -157,15 +157,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>4</ButtonCode>
+        <ButtonCode>-32768</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button2</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 DPadLeft</BindNameXi>
-      <BindName>Input Device 0 DPadLeft</BindName>
+      <BindNameXi>Input Device 0 Y</BindNameXi>
+      <BindName>Input Device 0 Y</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -194,15 +194,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>2</ButtonCode>
+        <ButtonCode>16384</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button3</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 DPadDown</BindNameXi>
-      <BindName>Input Device 0 DPadDown</BindName>
+      <BindNameXi>Input Device 0 X</BindNameXi>
+      <BindName>Input Device 0 X</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -231,15 +231,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>8</ButtonCode>
+        <ButtonCode>4096</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button4</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 DPadRight</BindNameXi>
-      <BindName>Input Device 0 DPadRight</BindName>
+      <BindNameXi>Input Device 0 A</BindNameXi>
+      <BindName>Input Device 0 A</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -268,15 +268,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>-32768</ButtonCode>
+        <ButtonCode>1</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button5</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 Y</BindNameXi>
-      <BindName>Input Device 0 Y</BindName>
+      <BindNameXi>Input Device 0 DPadUp</BindNameXi>
+      <BindName>Input Device 0 DPadUp</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -336,21 +336,21 @@
       <ButtonName>Left</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
-        <IsRightThumbX>true</IsRightThumbX>
+        <IsRightThumbX>false</IsRightThumbX>
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
-        <IsAxisMinus>true</IsAxisMinus>
+        <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>0</ButtonCode>
-        <IsButton>false</IsButton>
+        <ButtonCode>4</ButtonCode>
+        <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1ButtonLeft</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 RightThumbInput Device 0 X-</BindNameXi>
-      <BindName>Input Device 0 RightThumbInput Device 0 X-</BindName>
+      <BindNameXi>Input Device 0 DPadLeft</BindNameXi>
+      <BindName>Input Device 0 DPadLeft</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -373,21 +373,21 @@
       <ButtonName>Right</ButtonName>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
-        <IsRightThumbX>true</IsRightThumbX>
+        <IsRightThumbX>false</IsRightThumbX>
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>0</ButtonCode>
-        <IsButton>false</IsButton>
+        <ButtonCode>8</ButtonCode>
+        <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1ButtonRight</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 RightThumbInput Device 0 X+</BindNameXi>
-      <BindName>Input Device 0 RightThumbInput Device 0 X+</BindName>
+      <BindNameXi>Input Device 0 DPadRight</BindNameXi>
+      <BindName>Input Device 0 DPadRight</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>

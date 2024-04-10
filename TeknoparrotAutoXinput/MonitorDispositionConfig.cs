@@ -7,7 +7,7 @@ namespace TeknoparrotAutoXinput
 {
 	public partial class MonitorDispositionConfig : KryptonForm
 	{
-		public string result = Properties.Settings.Default["Disposition"].ToString();
+		public string result = ConfigurationManager.MainConfig.Disposition;
 		public MonitorDispositionConfig()
 		{
 			InitializeComponent();
@@ -59,7 +59,7 @@ namespace TeknoparrotAutoXinput
 
 				cmb_DispositionList.Items.Add($"{disposition_name}");
 			}
-			string selected = Properties.Settings.Default["Disposition"].ToString();
+			string selected = ConfigurationManager.MainConfig.Disposition;
 			var index = cmb_DispositionList.Items.IndexOf(selected);
 			if (index >= 0) cmb_DispositionList.SelectedIndex = index;
 		}

@@ -26,39 +26,41 @@ namespace TeknoparrotAutoXinput
 			this.KeyPicker = new PickKeyCombo(this);
 			//System.Diagnostics.Debugger.Break();
 
-			chk_FFB.Checked = (bool)Properties.Settings.Default["FFB"];
-			chk_showStartup.Checked = (bool)Properties.Settings.Default["showStartup"];
-			chk_enableVirtualKeyboard.Checked = (bool)Properties.Settings.Default["virtualKeyboard"];
-			txt_KeyTest.Text = Properties.Settings.Default["keyTest"].ToString();
-			txt_KeyService1.Text = Properties.Settings.Default["keyService1"].ToString();
-			txt_KeyService2.Text = Properties.Settings.Default["keyService2"].ToString();
+			chk_FFB.Checked = ConfigurationManager.MainConfig.FFB;
+			chk_showStartup.Checked = ConfigurationManager.MainConfig.showStartup;
+			chk_enableVirtualKeyboard.Checked = ConfigurationManager.MainConfig.virtualKeyboard;
+			txt_KeyTest.Text = ConfigurationManager.MainConfig.keyTest;
+			txt_KeyService1.Text = ConfigurationManager.MainConfig.keyService1;
+			txt_KeyService2.Text = ConfigurationManager.MainConfig.keyService2;
 
-			txt_wheelXinputData.Text = Properties.Settings.Default["wheelXinputData"].ToString();
-			txt_arcadeXinputData.Text = Properties.Settings.Default["arcadeXinputData"].ToString();
-			txt_gamepadXinputData.Text = Properties.Settings.Default["gamepadXinputData"].ToString();
+			txt_wheelXinputData.Text = ConfigurationManager.MainConfig.wheelXinputData;
+			txt_arcadeXinputData.Text = ConfigurationManager.MainConfig.arcadeXinputData;
+			txt_gamepadXinputData.Text = ConfigurationManager.MainConfig.gamepadXinputData;
 
 
-			radio_useCustomStooz_Gamepad.Checked = (bool)Properties.Settings.Default["gamepadStooz"];
-			radio_useCustomStooz_Wheel.Checked = (bool)Properties.Settings.Default["wheelStooz"];
+			radio_useCustomStooz_Gamepad.Checked = ConfigurationManager.MainConfig.gamepadStooz;
+			radio_useCustomStooz_Wheel.Checked = ConfigurationManager.MainConfig.wheelStooz;
 			radio_useDefaultStooze_Gamepad.Checked = !radio_useCustomStooz_Gamepad.Checked;
 			radio_useDefaultStooze_Wheel.Checked = !radio_useCustomStooz_Wheel.Checked;
 
-			chk_enableStoozZone_Gamepad.Checked = (bool)Properties.Settings.Default["enableStoozZone_Gamepad"];
-			trk_useCustomStooz_Gamepad.Value = (int)Properties.Settings.Default["valueStooz_Gamepad"];
-			chk_enableStoozZone_Wheel.Checked = (bool)Properties.Settings.Default["enableStoozZone_Wheel"];
-			trk_useCustomStooz_Wheel.Value = (int)Properties.Settings.Default["valueStooz_Wheel"];
+			chk_enableStoozZone_Gamepad.Checked = ConfigurationManager.MainConfig.enableStoozZone_Gamepad;
+			trk_useCustomStooz_Gamepad.Value = ConfigurationManager.MainConfig.valueStooz_Gamepad;
+			chk_enableStoozZone_Wheel.Checked = ConfigurationManager.MainConfig.enableStoozZone_Wheel;
+			trk_useCustomStooz_Wheel.Value = ConfigurationManager.MainConfig.valueStooz_Wheel;
 
-			chk_useDinputWheel.Checked = (bool)Properties.Settings.Default["useDinputWheel"];
-			txt_ffbguid.Text = Properties.Settings.Default["ffbDinputWheel"].ToString();
+			chk_useDinputWheel.Checked = ConfigurationManager.MainConfig.useDinputWheel;
+			chk_useDinputShifter.Checked = ConfigurationManager.MainConfig.useDinputShifter;
 
-			chk_favorAB.Checked = (bool)Properties.Settings.Default["favorAB"];
+			txt_ffbguid.Text = ConfigurationManager.MainConfig.ffbDinputWheel;
 
-			txt_tpfolder.Text = Properties.Settings.Default["TpFolder"].ToString();
-			txt_monitorswitch.Text = Properties.Settings.Default["Disposition"].ToString();
+			chk_favorAB.Checked = ConfigurationManager.MainConfig.favorAB;
 
-			chk_enableDebug.Checked = (bool)Properties.Settings.Default["debugMode"];
+			txt_tpfolder.Text = ConfigurationManager.MainConfig.TpFolder;
+			txt_monitorswitch.Text = ConfigurationManager.MainConfig.Disposition;
 
-			txt_linksourcefolder.Text = Properties.Settings.Default["perGameLinkFolder"].ToString();
+			chk_enableDebug.Checked = ConfigurationManager.MainConfig.debugMode;
+
+			txt_linksourcefolder.Text = ConfigurationManager.MainConfig.perGameLinkFolder;
 
 			updateStooz();
 
@@ -130,8 +132,8 @@ namespace TeknoparrotAutoXinput
 			btn_setService1.Enabled = chk_enableVirtualKeyboard.Checked;
 			btn_setService2.Enabled = chk_enableVirtualKeyboard.Checked;
 			btn_setTest.Enabled = chk_enableVirtualKeyboard.Checked;
-			Properties.Settings.Default["virtualKeyboard"] = chk_enableVirtualKeyboard.Checked;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.virtualKeyboard = chk_enableVirtualKeyboard.Checked;
+			ConfigurationManager.SaveConfig();
 		}
 		public void DrawKeyDisplay(string TextBoxName)
 		{
@@ -140,10 +142,10 @@ namespace TeknoparrotAutoXinput
 			if (TextBoxName == "txt_KeyService1") txt_KeyService1.Text = PickKeyCombo.GetKeyCombo(this.Keys, true);
 			if (TextBoxName == "txt_KeyService2") txt_KeyService2.Text = PickKeyCombo.GetKeyCombo(this.Keys, true);
 
-			Properties.Settings.Default["keyTest"] = txt_KeyTest.Text;
-			Properties.Settings.Default["keyService1"] = txt_KeyService1.Text;
-			Properties.Settings.Default["keyService2"] = txt_KeyService2.Text;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.keyTest = txt_KeyTest.Text;
+			ConfigurationManager.MainConfig.keyService1 = txt_KeyService1.Text;
+			ConfigurationManager.MainConfig.keyService2 = txt_KeyService2.Text;
+			ConfigurationManager.SaveConfig();
 
 		}
 
@@ -189,22 +191,22 @@ namespace TeknoparrotAutoXinput
 		private void btn_ClearTest_Click(object sender, EventArgs e)
 		{
 			txt_KeyTest.Text = "";
-			Properties.Settings.Default["keyTest"] = txt_KeyTest.Text;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.keyTest = txt_KeyTest.Text;
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void btn_ClearService1_Click(object sender, EventArgs e)
 		{
 			txt_KeyService1.Text = "";
-			Properties.Settings.Default["keyService1"] = txt_KeyService1.Text;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.keyService1 = txt_KeyService1.Text;
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void btn_ClearService2_Click(object sender, EventArgs e)
 		{
 			txt_KeyService2.Text = "";
-			Properties.Settings.Default["keyService2"] = txt_KeyService2.Text;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.keyService2 = txt_KeyService2.Text;
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -216,14 +218,14 @@ namespace TeknoparrotAutoXinput
 
 		private void chk_showStartup_CheckedChanged(object sender, EventArgs e)
 		{
-			Properties.Settings.Default["showStartup"] = chk_showStartup.Checked;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.showStartup = chk_showStartup.Checked;
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void chk_FFB_CheckedChanged(object sender, EventArgs e)
 		{
-			Properties.Settings.Default["FFB"] = chk_FFB.Checked;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.FFB = chk_FFB.Checked;
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void btn_testxinput_Click(object sender, EventArgs e)
@@ -241,30 +243,30 @@ namespace TeknoparrotAutoXinput
 			txt_wheelXinputData.Text = "Type=Wheel";
 			txt_arcadeXinputData.Text = "Type=ArcadeStick,Type=ArcadePad";
 			txt_gamepadXinputData.Text = "Type=Gamepad";
-			Properties.Settings.Default["wheelXinputData"] = txt_wheelXinputData.Text;
-			Properties.Settings.Default["arcadeXinputData"] = txt_arcadeXinputData.Text;
-			Properties.Settings.Default["gamepadXinputData"] = txt_gamepadXinputData.Text;
+			ConfigurationManager.MainConfig.wheelXinputData = txt_wheelXinputData.Text;
+			ConfigurationManager.MainConfig.arcadeXinputData = txt_arcadeXinputData.Text;
+			ConfigurationManager.MainConfig.gamepadXinputData = txt_gamepadXinputData.Text;
 
 
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			Properties.Settings.Default["wheelXinputData"] = txt_wheelXinputData.Text;
-			Properties.Settings.Default["arcadeXinputData"] = txt_arcadeXinputData.Text;
-			Properties.Settings.Default["gamepadXinputData"] = txt_gamepadXinputData.Text;
+			ConfigurationManager.MainConfig.wheelXinputData = txt_wheelXinputData.Text;
+			ConfigurationManager.MainConfig.arcadeXinputData = txt_arcadeXinputData.Text;
+			ConfigurationManager.MainConfig.gamepadXinputData = txt_gamepadXinputData.Text;
 
-			Properties.Settings.Default["gamepadStooz"] = radio_useCustomStooz_Gamepad.Checked;
-			Properties.Settings.Default["wheelStooz"] = radio_useCustomStooz_Wheel.Checked;
+			ConfigurationManager.MainConfig.gamepadStooz = radio_useCustomStooz_Gamepad.Checked;
+			ConfigurationManager.MainConfig.wheelStooz = radio_useCustomStooz_Wheel.Checked;
 
-			Properties.Settings.Default["enableStoozZone_Gamepad"] = chk_enableStoozZone_Gamepad.Checked;
-			Properties.Settings.Default["valueStooz_Gamepad"] = trk_useCustomStooz_Gamepad.Value;
-			Properties.Settings.Default["enableStoozZone_Wheel"] = chk_enableStoozZone_Wheel.Checked;
-			Properties.Settings.Default["valueStooz_Wheel"] = trk_useCustomStooz_Wheel.Value;
+			ConfigurationManager.MainConfig.enableStoozZone_Gamepad = chk_enableStoozZone_Gamepad.Checked;
+			ConfigurationManager.MainConfig.valueStooz_Gamepad = trk_useCustomStooz_Gamepad.Value;
+			ConfigurationManager.MainConfig.enableStoozZone_Wheel = chk_enableStoozZone_Wheel.Checked;
+			ConfigurationManager.MainConfig.valueStooz_Wheel = trk_useCustomStooz_Wheel.Value;
 
-			Properties.Settings.Default["ffbDinputWheel"] = txt_ffbguid.Text;
+			ConfigurationManager.MainConfig.ffbDinputWheel = txt_ffbguid.Text;
 
-			Properties.Settings.Default.Save();
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void trk_useCustomStooz_Gamepad_Scroll(object sender, EventArgs e)
@@ -326,8 +328,8 @@ namespace TeknoparrotAutoXinput
 
 		private void chk_useDinputWheel_CheckedChanged(object sender, EventArgs e)
 		{
-			Properties.Settings.Default["useDinputWheel"] = chk_useDinputWheel.Checked;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.useDinputWheel = chk_useDinputWheel.Checked;
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void btn_setffbguid_Click(object sender, EventArgs e)
@@ -340,8 +342,8 @@ namespace TeknoparrotAutoXinput
 
 		private void chk_favorAB_CheckedChanged(object sender, EventArgs e)
 		{
-			Properties.Settings.Default["favorAB"] = chk_favorAB.Checked;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.favorAB = chk_favorAB.Checked;
+			ConfigurationManager.SaveConfig();
 		}
 
 
@@ -354,8 +356,8 @@ namespace TeknoparrotAutoXinput
 				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
 				{
 					txt_tpfolder.Text = fbd.SelectedPath;
-					Properties.Settings.Default["TpFolder"] = fbd.SelectedPath;
-					Properties.Settings.Default.Save();
+					ConfigurationManager.MainConfig.TpFolder = fbd.SelectedPath;
+					ConfigurationManager.SaveConfig();
 				}
 			}
 		}
@@ -374,8 +376,8 @@ namespace TeknoparrotAutoXinput
 			if (result == DialogResult.OK)
 			{
 				txt_monitorswitch.Text = frm.result;
-				Properties.Settings.Default["Disposition"] = frm.result;
-				Properties.Settings.Default.Save();
+				ConfigurationManager.MainConfig.Disposition = frm.result;
+				ConfigurationManager.SaveConfig();
 				//Profile.ActiveProfile.SetOption("monitorswitch", frm.result);
 				//ReloadDispositionCmb();
 			}
@@ -450,8 +452,8 @@ namespace TeknoparrotAutoXinput
 
 		private void chk_enableDebug_CheckedChanged(object sender, EventArgs e)
 		{
-			Properties.Settings.Default["debugMode"] = chk_enableDebug.Checked;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.debugMode = chk_enableDebug.Checked;
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void kryptonButton3_Click(object sender, EventArgs e)
@@ -462,8 +464,8 @@ namespace TeknoparrotAutoXinput
 		private void btn_resetdefaultlinksource_Click(object sender, EventArgs e)
 		{
 			txt_linksourcefolder.Text = @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)";
-			Properties.Settings.Default["perGameLinkFolder"] = txt_linksourcefolder.Text;
-			Properties.Settings.Default.Save();
+			ConfigurationManager.MainConfig.perGameLinkFolder = txt_linksourcefolder.Text;
+			ConfigurationManager.SaveConfig();
 		}
 
 		private void btn_selectLinkFolder_Click(object sender, EventArgs e)
@@ -476,10 +478,26 @@ namespace TeknoparrotAutoXinput
 				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
 				{
 					txt_linksourcefolder.Text = fbd.SelectedPath;
-					Properties.Settings.Default["perGameLinkFolder"] = fbd.SelectedPath;
-					Properties.Settings.Default.Save();
+					ConfigurationManager.MainConfig.perGameLinkFolder = fbd.SelectedPath;
+					ConfigurationManager.SaveConfig();
 				}
 			}
+		}
+
+		private void btn_configureDinputShifter_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputshifter();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+			}
+		}
+
+		private void chk_useDinputShifter_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.useDinputShifter = chk_useDinputShifter.Checked;
+			ConfigurationManager.SaveConfig();
 		}
 	}
 }

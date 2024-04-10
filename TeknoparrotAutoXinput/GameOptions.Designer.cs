@@ -65,6 +65,7 @@
 			btn_Cancel = new Krypton.Toolkit.KryptonButton();
 			chk_runAsAdmin = new Krypton.Toolkit.KryptonCheckBox();
 			chk_WaitForExitBefore = new Krypton.Toolkit.KryptonCheckBox();
+			chk_enableGearChange = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -421,11 +422,21 @@
 			chk_WaitForExitBefore.TabIndex = 58;
 			chk_WaitForExitBefore.Values.Text = "Wait For Exit";
 			// 
+			// chk_enableGearChange
+			// 
+			chk_enableGearChange.Enabled = false;
+			chk_enableGearChange.Location = new Point(19, 891);
+			chk_enableGearChange.Name = "chk_enableGearChange";
+			chk_enableGearChange.Size = new Size(306, 20);
+			chk_enableGearChange.TabIndex = 59;
+			chk_enableGearChange.Values.Text = "Enable Gear Change (Hack, only with Wheel Dinput)";
+			// 
 			// GameOptions
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1116, 941);
+			Controls.Add(chk_enableGearChange);
 			Controls.Add(chk_WaitForExitBefore);
 			Controls.Add(chk_runAsAdmin);
 			Controls.Add(btn_Save);
@@ -500,5 +511,6 @@
 		private Krypton.Toolkit.KryptonButton btn_Cancel;
 		private Krypton.Toolkit.KryptonCheckBox chk_runAsAdmin;
 		private Krypton.Toolkit.KryptonCheckBox chk_WaitForExitBefore;
+		private Krypton.Toolkit.KryptonCheckBox chk_enableGearChange;
 	}
 }

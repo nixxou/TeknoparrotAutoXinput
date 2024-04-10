@@ -47,6 +47,8 @@ namespace TeknoparrotAutoXinput
 				gameSettings = new GameSettings(File.ReadAllText(PerGameConfigFile));
 			}
 
+			if(ShifterHack.supportedGames.ContainsKey(Path.GetFileNameWithoutExtension(GameData.UserConfigFile))) chk_enableGearChange.Enabled = true;
+
 		}
 
 
@@ -68,7 +70,7 @@ namespace TeknoparrotAutoXinput
 					string emulatorTypeValue = emulatorTypeNode.InnerText.ToLower().Trim();
 					if (emulatorTypeValue == "elfldr2" || emulatorTypeValue == "lindbergh")
 					{
-						string perGameLinkFolder = Properties.Settings.Default["perGameLinkFolder"].ToString();
+						string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
 						if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
 						{
 							_linkSourceFolder = Path.Combine(_tpBaseFolder, "AutoXinputLinks", Path.GetFileNameWithoutExtension(GameData.FileName));
@@ -127,6 +129,8 @@ namespace TeknoparrotAutoXinput
 			txt_ahkbefore.Text = gameSettings.AhkBefore;
 			chk_linkfiles.Checked = gameSettings.EnableLink;
 			chk_WaitForExitBefore.Checked = gameSettings.WaitForExitAhkBefore;
+			chk_enableGearChange.Checked = gameSettings.EnableGearChange;
+			txt_monitorswitch.Text = gameSettings.Disposition == "" ? "<none>" : gameSettings.Disposition;
 			Reload();
 
 		}
@@ -233,6 +237,8 @@ namespace TeknoparrotAutoXinput
 			gameSettings.AhkBefore = txt_ahkbefore.Text.Trim();
 			gameSettings.EnableLink = chk_linkfiles.Checked;
 			gameSettings.WaitForExitAhkBefore = chk_WaitForExitBefore.Checked;
+			gameSettings.EnableGearChange = chk_enableGearChange.Checked;
+			gameSettings.Disposition = txt_monitorswitch.Text.Trim();
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;

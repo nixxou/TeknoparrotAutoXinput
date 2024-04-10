@@ -52,6 +52,8 @@
 			radio_useCustomStooz_Gamepad = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useDefaultStooze_Gamepad = new Krypton.Toolkit.KryptonRadioButton();
 			groupBox2 = new GroupBox();
+			btn_configureDinputShifter = new Krypton.Toolkit.KryptonButton();
+			chk_useDinputShifter = new Krypton.Toolkit.KryptonCheckBox();
 			btn_setffbguid = new Krypton.Toolkit.KryptonButton();
 			cmb_ffbguid = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel10 = new Krypton.Toolkit.KryptonLabel();
@@ -307,6 +309,8 @@
 			// 
 			// groupBox2
 			// 
+			groupBox2.Controls.Add(btn_configureDinputShifter);
+			groupBox2.Controls.Add(chk_useDinputShifter);
 			groupBox2.Controls.Add(btn_setffbguid);
 			groupBox2.Controls.Add(cmb_ffbguid);
 			groupBox2.Controls.Add(kryptonLabel10);
@@ -321,10 +325,28 @@
 			groupBox2.Controls.Add(radio_useDefaultStooze_Wheel);
 			groupBox2.Location = new Point(12, 720);
 			groupBox2.Name = "groupBox2";
-			groupBox2.Size = new Size(943, 132);
+			groupBox2.Size = new Size(943, 169);
 			groupBox2.TabIndex = 35;
 			groupBox2.TabStop = false;
 			groupBox2.Text = "Wheel Settings";
+			// 
+			// btn_configureDinputShifter
+			// 
+			btn_configureDinputShifter.Location = new Point(308, 132);
+			btn_configureDinputShifter.Name = "btn_configureDinputShifter";
+			btn_configureDinputShifter.Size = new Size(110, 23);
+			btn_configureDinputShifter.TabIndex = 41;
+			btn_configureDinputShifter.Values.Text = "Configure";
+			btn_configureDinputShifter.Click += btn_configureDinputShifter_Click;
+			// 
+			// chk_useDinputShifter
+			// 
+			chk_useDinputShifter.Location = new Point(13, 135);
+			chk_useDinputShifter.Name = "chk_useDinputShifter";
+			chk_useDinputShifter.Size = new Size(305, 20);
+			chk_useDinputShifter.TabIndex = 40;
+			chk_useDinputShifter.Values.Text = "Use shifter and/or handbrake with the dinput wheel";
+			chk_useDinputShifter.CheckedChanged += chk_useDinputShifter_CheckedChanged;
 			// 
 			// btn_setffbguid
 			// 
@@ -340,9 +362,9 @@
 			cmb_ffbguid.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_ffbguid.DropDownWidth = 483;
 			cmb_ffbguid.IntegralHeight = false;
-			cmb_ffbguid.Location = new Point(292, 77);
+			cmb_ffbguid.Location = new Point(308, 77);
 			cmb_ffbguid.Name = "cmb_ffbguid";
-			cmb_ffbguid.Size = new Size(483, 21);
+			cmb_ffbguid.Size = new Size(467, 21);
 			cmb_ffbguid.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_ffbguid.TabIndex = 38;
 			// 
@@ -356,14 +378,14 @@
 			// 
 			// txt_ffbguid
 			// 
-			txt_ffbguid.Location = new Point(292, 103);
+			txt_ffbguid.Location = new Point(308, 103);
 			txt_ffbguid.Name = "txt_ffbguid";
-			txt_ffbguid.Size = new Size(483, 23);
+			txt_ffbguid.Size = new Size(467, 23);
 			txt_ffbguid.TabIndex = 37;
 			// 
 			// btn_configureDinputWheel
 			// 
-			btn_configureDinputWheel.Location = new Point(292, 48);
+			btn_configureDinputWheel.Location = new Point(308, 48);
 			btn_configureDinputWheel.Name = "btn_configureDinputWheel";
 			btn_configureDinputWheel.Size = new Size(110, 23);
 			btn_configureDinputWheel.TabIndex = 36;
@@ -531,7 +553,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(865, 859);
+			btn_Save.Location = new Point(859, 940);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 37;
@@ -601,7 +623,7 @@
 			// 
 			// chk_enableDebug
 			// 
-			chk_enableDebug.Location = new Point(14, 864);
+			chk_enableDebug.Location = new Point(8, 945);
 			chk_enableDebug.Name = "chk_enableDebug";
 			chk_enableDebug.Size = new Size(135, 20);
 			chk_enableDebug.TabIndex = 41;
@@ -610,7 +632,7 @@
 			// 
 			// btn_checkConfig
 			// 
-			btn_checkConfig.Location = new Point(155, 859);
+			btn_checkConfig.Location = new Point(149, 940);
 			btn_checkConfig.Name = "btn_checkConfig";
 			btn_checkConfig.Size = new Size(223, 25);
 			btn_checkConfig.TabIndex = 42;
@@ -668,7 +690,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(965, 900);
+			ClientSize = new Size(965, 977);
 			Controls.Add(groupBox5);
 			Controls.Add(btn_checkConfig);
 			Controls.Add(chk_enableDebug);
@@ -780,5 +802,7 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel13;
 		private Krypton.Toolkit.KryptonTextBox txt_linksourcefolder;
 		private Krypton.Toolkit.KryptonButton btn_resetdefaultlinksource;
+		private Krypton.Toolkit.KryptonButton btn_configureDinputShifter;
+		private Krypton.Toolkit.KryptonCheckBox chk_useDinputShifter;
 	}
 }

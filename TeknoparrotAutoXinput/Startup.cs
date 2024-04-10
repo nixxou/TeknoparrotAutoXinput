@@ -80,7 +80,9 @@ namespace TeknoparrotAutoXinput
 					MainScreen = screen;
 				}
 			}
-
+			//Temp
+			MainScreenDpi = 100;
+			//FinTemp
 			int SizeWidth = MainScreen.Bounds.Width;
 			int SizeHeight = MainScreen.Bounds.Height;
 			SizeWidth = (int)Math.Floor((double)SizeWidth * ((double)MainScreenDpi / 100.0));
