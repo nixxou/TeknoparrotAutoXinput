@@ -20,12 +20,13 @@ namespace TeknoparrotAutoXinput
 		public bool enableStoozZone_Wheel { get; set; } = false;
 		public int valueStooz_Wheel { get; set; } = 10;
 		public string Disposition { get; set; } = "";
-		public bool EnableLink {  get; set; } = false;
+		public bool EnableLink {  get; set; } = true;
 		public string AhkBefore { get; set; } = string.Empty;
 		public string AhkAfter { get; set; } = string.Empty;
 		public bool WaitForExitAhkBefore { get; set; } = true;
 		public bool EnableGearChange { get; set; } = false;
-
+		public string CustomPerGameLinkFolder { get; set; } = "";
+		public string CustomTpExe { get; set; } = "";
 
 		public GameSettings() 
 		{
@@ -54,6 +55,8 @@ namespace TeknoparrotAutoXinput
 				this.AhkAfter = DeserializeData.AhkAfter;
 				this.WaitForExitAhkBefore = DeserializeData.WaitForExitAhkBefore;
 				this.EnableGearChange = DeserializeData.EnableGearChange;
+				this.CustomPerGameLinkFolder = DeserializeData.CustomPerGameLinkFolder;
+				this.CustomTpExe = DeserializeData.CustomTpExe;
 			}
 			catch (Exception ex)
 			{

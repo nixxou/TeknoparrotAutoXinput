@@ -60,6 +60,7 @@ namespace TeknoparrotAutoXinput
 		public string perGameLinkFolder { get; set; } = @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)";
 		public string bindingDinputShifter { get; set; } = "";
 		public bool useDinputShifter { get; set; } = false;
+		public string perGameLinkFolderExe { get; set; } = @"";
 
 		public Configuration()
 		{
@@ -97,6 +98,7 @@ namespace TeknoparrotAutoXinput
 				this.perGameLinkFolder = DeserializeData.perGameLinkFolder;
 				this.bindingDinputShifter = DeserializeData.bindingDinputShifter;
 				this.useDinputShifter = DeserializeData.useDinputShifter;
+				this.perGameLinkFolderExe = DeserializeData.perGameLinkFolderExe;
 			}
 			catch (Exception ex)
 			{

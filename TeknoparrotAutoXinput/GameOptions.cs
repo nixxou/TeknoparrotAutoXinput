@@ -47,7 +47,7 @@ namespace TeknoparrotAutoXinput
 				gameSettings = new GameSettings(File.ReadAllText(PerGameConfigFile));
 			}
 
-			if(ShifterHack.supportedGames.ContainsKey(Path.GetFileNameWithoutExtension(GameData.UserConfigFile))) chk_enableGearChange.Enabled = true;
+			if (ShifterHack.supportedGames.ContainsKey(Path.GetFileNameWithoutExtension(GameData.UserConfigFile))) chk_enableGearChange.Enabled = true;
 
 		}
 
@@ -60,16 +60,35 @@ namespace TeknoparrotAutoXinput
 			chk_group_StoozZone_Gamepad.Location = new Point(chk_group_StoozZone_Gamepad.Location.X, chk_group_StoozZone_Gamepad.Location.Y + 15);
 			chk_group_monitorDisposition.Location = new Point(chk_group_monitorDisposition.Location.X, chk_group_monitorDisposition.Location.Y + 15);
 			grp_link.Enabled = false;
+
+			string executableGame = "";
+			string executableGameDir = "";
+			bool linkTypeExe = true;
 			try
 			{
 				XmlDocument xmlDoc = new XmlDocument();
 				xmlDoc.Load(GameData.UserConfigFile);
+
+				XmlNode gamePathNode = xmlDoc.SelectSingleNode("/GameProfile/GamePath");
+				if (gamePathNode != null)
+				{
+					string gamePathContent = gamePathNode.InnerText;
+					if (gamePathContent.ToLower().EndsWith(".exe")) executableGame = gamePathContent;
+					if (executableGame != "" && File.Exists(executableGame))
+					{
+						executableGameDir = Path.GetFullPath(Directory.GetParent(executableGame).ToString());
+					}
+				}
+
+
 				XmlNode emulatorTypeNode = xmlDoc.SelectSingleNode("/GameProfile/EmulatorType");
 				if (emulatorTypeNode != null)
 				{
 					string emulatorTypeValue = emulatorTypeNode.InnerText.ToLower().Trim();
 					if (emulatorTypeValue == "elfldr2" || emulatorTypeValue == "lindbergh")
 					{
+						linkTypeExe = false;
+						btn_selectLinkFolder.Enabled = false;
 						string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
 						if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
 						{
@@ -79,21 +98,51 @@ namespace TeknoparrotAutoXinput
 						{
 							_linkSourceFolder = Path.Combine(perGameLinkFolder, Path.GetFileNameWithoutExtension(GameData.FileName));
 						}
-						
 
-						lbl_linkFrom.Text = "Link from : " + _linkSourceFolder;
+
+						//lbl_linkFrom.Text = "Link from : " + _linkSourceFolder;
+						txt_linkFrom.Text = _linkSourceFolder;
+
 						grp_link.Enabled = true;
 						if (emulatorTypeValue == "elfldr2")
 						{
-							lbl_LinkTo.Text = "To : " + _elfldr2Folder;
+							//lbl_LinkTo.Text = "To : " + _elfldr2Folder;
+							txt_linkTo.Text = _elfldr2Folder;
 							_linkTargetFolder = _elfldr2Folder;
 						}
 						if (emulatorTypeValue == "lindbergh")
 						{
-							lbl_LinkTo.Text = "To : " + _lindberghFolder;
+							//lbl_LinkTo.Text = "To : " + _lindberghFolder;
+							txt_linkTo.Text = _lindberghFolder;
 							_linkTargetFolder = _lindberghFolder;
 						}
 					}
+				}
+				if (linkTypeExe && executableGame != "" && Directory.Exists(executableGameDir))
+				{
+					_linkSourceFolder = "";
+					_linkTargetFolder = executableGameDir;
+					grp_link.Enabled = true;
+					grp_link.Text = "Links Files before Execute (exe version)";
+					_linkTargetFolder = executableGameDir;
+					if (gameSettings.CustomPerGameLinkFolder != null && gameSettings.CustomPerGameLinkFolder != "")
+					{
+						string lastFolder = Path.GetFileName(gameSettings.CustomPerGameLinkFolder);
+						if (lastFolder == Path.GetFileNameWithoutExtension(GameData.FileName))
+						{
+							_linkSourceFolder = gameSettings.CustomPerGameLinkFolder;
+						}
+					}
+					else
+					{
+						if (!String.IsNullOrEmpty(ConfigurationManager.MainConfig.perGameLinkFolderExe))
+						{
+							_linkSourceFolder = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, Path.GetFileNameWithoutExtension(GameData.FileName));
+						}
+
+					}
+					txt_linkFrom.Text = _linkSourceFolder;
+					txt_linkTo.Text = _linkTargetFolder;
 				}
 
 				XmlNode requiresAdminNode = xmlDoc.SelectSingleNode("/GameProfile/RequiresAdmin");
@@ -103,6 +152,7 @@ namespace TeknoparrotAutoXinput
 					if (requiresAdminValue == "true")
 					{
 						chk_runAsAdmin.Enabled = true;
+
 					}
 				}
 
@@ -113,7 +163,47 @@ namespace TeknoparrotAutoXinput
 			{
 				if (!Utils.IsEligibleHardLink(_linkTargetFolder))
 				{
+					if (btn_selectLinkFolder.Enabled) btn_selectLinkFolder.Enabled = false;
 					grp_link.Enabled = false;
+					chk_linkfiles.Visible = false;
+					lbl_linkNumber.Text = "Target folder is not eligible for HardLink";
+					btn_link_open.Enabled = false;
+				}
+				else
+				{
+					if (Directory.Exists(_linkSourceFolder))
+					{
+						if (!Utils.IsEligibleHardLink(_linkSourceFolder, _linkTargetFolder))
+						{
+							lbl_linkNumber.Text = "Source folder is not eligible for HardLink";
+							btn_link_open.Enabled = false;
+						}
+						else
+						{
+							try
+							{
+								int count = Directory.EnumerateFiles(_linkSourceFolder, "*", SearchOption.AllDirectories).Count();
+								lbl_linkNumber.Text = "Number of files = " + count;
+							}
+							catch
+							{
+								lbl_linkNumber.Text = "Number of files = ??? (error reading directory)";
+							}
+						}
+					}
+					else
+					{
+						if (!Utils.IsEligibleHardLink(_linkSourceFolder, _linkTargetFolder, false))
+						{
+							lbl_linkNumber.Text = "Target folder does not exist and is not eligible for HardLink";
+							btn_link_open.Enabled = false;
+						}
+						else
+						{
+							lbl_linkNumber.Text = "Number of files = 0 (Source dir does not exist)";
+						}
+					}
+
 				}
 			}
 
@@ -131,6 +221,7 @@ namespace TeknoparrotAutoXinput
 			chk_WaitForExitBefore.Checked = gameSettings.WaitForExitAhkBefore;
 			chk_enableGearChange.Checked = gameSettings.EnableGearChange;
 			txt_monitorswitch.Text = gameSettings.Disposition == "" ? "<none>" : gameSettings.Disposition;
+			txt_customTp.Text = gameSettings.CustomTpExe;
 			Reload();
 
 		}
@@ -239,6 +330,7 @@ namespace TeknoparrotAutoXinput
 			gameSettings.WaitForExitAhkBefore = chk_WaitForExitBefore.Checked;
 			gameSettings.EnableGearChange = chk_enableGearChange.Checked;
 			gameSettings.Disposition = txt_monitorswitch.Text.Trim();
+			gameSettings.CustomTpExe = txt_customTp.Text.Trim();
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;
@@ -259,8 +351,86 @@ namespace TeknoparrotAutoXinput
 			if (result == DialogResult.OK)
 			{
 				txt_monitorswitch.Text = frm.result;
-				
+
 			}
+		}
+
+		private void groupBox3_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_selectLinkFolder_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("You must select a directory that use the same Drive as your game folder.");
+			using (var fbd = new FolderBrowserDialog())
+			{
+				DialogResult result = fbd.ShowDialog();
+
+				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+				{
+					string selectedPath = fbd.SelectedPath;
+					selectedPath = Path.GetFullPath(selectedPath);
+
+					if (!Utils.IsEligibleHardLink(selectedPath, _linkTargetFolder))
+					{
+						MessageBox.Show("This folder is not eligible for HardLink");
+						return;
+					}
+
+					string gameName = Path.GetFileNameWithoutExtension(GameData.FileName);
+					string lastFolder = Path.GetFileName(selectedPath);
+					if (lastFolder != gameName)
+					{
+						DialogResult dr = MessageBox.Show($"The last folder must be {gameName} do you want to create {Path.Combine(selectedPath, gameName)} ?",
+					  "Create Link folder", MessageBoxButtons.YesNo);
+						if (dr == DialogResult.Yes)
+						{
+							selectedPath = Path.Combine(selectedPath, gameName);
+							if (!Directory.Exists(selectedPath)) Directory.CreateDirectory(selectedPath);
+						}
+						else return;
+
+						//_linkSourceFolder = gameSettings.CustomPerGameLinkFolder;
+					}
+					txt_linkFrom.Text = selectedPath;
+					gameSettings.CustomPerGameLinkFolder = selectedPath;
+					gameSettings.Save(PerGameConfigFile);
+					btn_link_open.Enabled = true;
+
+					try
+					{
+						int count = Directory.EnumerateFiles(_linkSourceFolder, "*", SearchOption.AllDirectories).Count();
+						lbl_linkNumber.Text = "Number of files = " + count;
+					}
+					catch
+					{
+						lbl_linkNumber.Text = "Number of files = ??? (error reading directory)";
+					}
+					//txt_linksourcefolderexe.Text = fbd.SelectedPath;
+					//ConfigurationManager.MainConfig.perGameLinkFolderExe = fbd.SelectedPath;
+					//ConfigurationManager.SaveConfig();
+				}
+			}
+		}
+
+		private void btn_customTp_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog openFileDialog1 = new OpenFileDialog();
+			openFileDialog1.Filter = "Fichiers TeknoParrotUi.exe|TeknoParrotUi.exe";
+			openFileDialog1.Title = "Select TeknoParrotUi.exe";
+			DialogResult result = openFileDialog1.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				string fichierSelectionne = openFileDialog1.FileName;
+				txt_customTp.Text = fichierSelectionne;
+			}
+
+		}
+
+		private void txt_customTp_TextChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

@@ -10,6 +10,7 @@ using SharpDX.DirectInput;
 using SharpDX.Multimedia;
 using System;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -181,6 +182,9 @@ namespace TeknoparrotAutoXinput
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
 				{
+
+					MessageBox.Show("oco0");
+
 					forceTypeController = new Dictionary<int, string>(); 
 					foreach (string arg in args)
 					{
@@ -241,22 +245,41 @@ namespace TeknoparrotAutoXinput
 					string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
 					string teknoparrotExe = Path.Combine(baseTpDir, "TeknoParrotUi.exe");
 
+					GameSettings gameOptions = new GameSettings();
+					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
+					if (File.Exists(optionFile))
+					{
+						Utils.LogMessage($"gameoveride file found : " + optionFile);
+						gameOptions = new GameSettings(File.ReadAllText(optionFile));
+					}
+
+					string baseTpDirOriginal = baseTpDir;
+					if (!string.IsNullOrEmpty(gameOptions.CustomTpExe) && File.Exists(gameOptions.CustomTpExe))
+					{
+						teknoparrotExe = Path.GetFullPath(gameOptions.CustomTpExe);
+						baseTpDir = Path.GetDirectoryName(teknoparrotExe);
+					}
+
+					
+
 					string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
 					if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
 					{
-						perGameLinkFolder = Path.Combine(baseTpDir, "AutoXinputLinks");
+						perGameLinkFolder = Path.Combine(baseTpDirOriginal, "AutoXinputLinks");
 					}
 					string linkSourceFolder = Path.Combine(perGameLinkFolder, originalConfigFileNameWithoutExt);
 
 					string linkTargetFolder = "";
 					string executableGame = "";
+					string executableGameDir = "";
 					bool gameNeedAdmin = false;
+
 
 					Utils.LogMessage($"baseTpDir : {baseTpDir}");
 					Utils.LogMessage($"originalConfigFileName : {originalConfigFileName}");
 					Utils.LogMessage($"originalConfigFileNameWithoutExt : {originalConfigFileNameWithoutExt}");
 					Utils.LogMessage($"teknoparrotExe : {teknoparrotExe}");
-					Utils.LogMessage($"linkSourceFolder : {linkSourceFolder}");
+					Utils.LogMessage($"linkSourceFolder Elf : {linkSourceFolder}");
 
 					if (!File.Exists(teknoparrotExe))
 					{
@@ -284,6 +307,14 @@ namespace TeknoparrotAutoXinput
 					{
 						XmlDocument xmlDoc = new XmlDocument();
 						xmlDoc.Load(xmlFile);
+
+						XmlNode gamePathNode = xmlDoc.SelectSingleNode("/GameProfile/GamePath");
+						if (gamePathNode != null)
+						{
+							string gamePathContent = gamePathNode.InnerText;
+							if (gamePathContent.ToLower().EndsWith(".exe")) executableGame = gamePathContent;
+						}
+
 						XmlNode emulatorTypeNode = xmlDoc.SelectSingleNode("/GameProfile/EmulatorType");
 						if (emulatorTypeNode != null)
 						{
@@ -321,17 +352,17 @@ namespace TeknoparrotAutoXinput
 					{
 						Utils.LogMessage($"Error while parsing xml file");
 					}
+					if (executableGame != "" && File.Exists(executableGame))
+					{
+						executableGameDir = Path.GetFullPath(Directory.GetParent(executableGame).ToString());
+					}
+					Utils.LogMessage($"executableGame = {executableGame}");
+					Utils.LogMessage($"executableGameDir = {executableGameDir}");
 
-					Utils.LogMessage($"Checking gameOverride options");
+					//Utils.LogMessage($"Checking gameOverride options");
 					//GameOptionOverrite
 					_dispositionToSwitch = ConfigurationManager.MainConfig.Disposition;
-					GameSettings gameOptions = new GameSettings();
-					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
-					if (File.Exists(optionFile))
-					{
-						Utils.LogMessage($"gameoveride file found, loading it");
-						gameOptions = new GameSettings(File.ReadAllText(optionFile)); 
-					}
+
 					if (gameOptions.UseGlobalDisposition == false) _dispositionToSwitch = gameOptions.Disposition;
 					if (gameOptions.UseGlobalStoozZoneGamepad == false)
 					{
@@ -346,6 +377,22 @@ namespace TeknoparrotAutoXinput
 						valueStooz_Wheel = gameOptions.valueStooz_Wheel;
 					}
 					Utils.LogMessage($"gameOptions Values = {gameOptions.Serialize()}");
+
+
+					if (linkTargetFolder == "" && executableGameDir != "")
+					{
+						linkSourceFolder = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, originalConfigFileNameWithoutExt);
+						linkTargetFolder = executableGameDir;
+						if (gameOptions.CustomPerGameLinkFolder != null && gameOptions.CustomPerGameLinkFolder != "")
+						{
+							string lastFolder = Path.GetFileName(gameOptions.CustomPerGameLinkFolder);
+							if (lastFolder == originalConfigFileNameWithoutExt)
+							{
+								linkSourceFolder = gameOptions.CustomPerGameLinkFolder;
+							}
+						}
+						Utils.CleanHardLinksFiles(linkTargetFolder, linkSourceFolder);
+					}
 
 
 					ParrotDataOriginal = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml");
@@ -367,20 +414,12 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 
-					Utils.LogMessage($"Get GamePath");
 					FFBPluginIniFile = "";
 					FFBPluginIniBackup = "";
-					XmlDocument xmlDocOri = new XmlDocument();
-					xmlDocOri.Load(xmlFile);
-					XmlNode gamePathNode = xmlDocOri.SelectSingleNode("/GameProfile/GamePath");
-					if (gamePathNode != null)
+					if (!string.IsNullOrEmpty(executableGame) && !string.IsNullOrEmpty(executableGameDir))
 					{
-						string gamePathContent = gamePathNode.InnerText;
-						if (gamePathContent.ToLower().EndsWith(".exe")) executableGame = gamePathContent;
-
-						Utils.LogMessage($"gamePathContent = {gamePathContent}");
-						FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini");
-						FFBPluginIniBackup = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini.AutoXinputBackup");
+						FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(executableGameDir), "FFBPlugin.ini");
+						FFBPluginIniBackup = Path.Combine(Path.GetDirectoryName(executableGameDir), "FFBPlugin.ini.AutoXinputBackup");
 						Utils.LogMessage($"FFBPluginIniFile = {FFBPluginIniFile}");
 						Utils.LogMessage($"FFBPluginIniBackup = {FFBPluginIniBackup}");
 						if (File.Exists(FFBPluginIniBackup))
@@ -1371,7 +1410,7 @@ namespace TeknoparrotAutoXinput
 						if(gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{
 							Utils.LogMessage($"HardLinkFiles {linkSourceFolder}, {linkTargetFolder}");
-							if (Utils.IsEligibleHardLink(linkTargetFolder))
+							if (Utils.IsEligibleHardLink(linkSourceFolder,linkTargetFolder))
 							{
 								Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder);
 							}

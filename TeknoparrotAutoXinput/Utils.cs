@@ -195,7 +195,7 @@ namespace TeknoparrotAutoXinput
 			});
 			foreach (var file in filePaths)
 			{
-				if (Program.DebugMode) Utils.LogMessage($"Check Link for {file}");
+				//if (Program.DebugMode) Utils.LogMessage($"Check Link for {file}");
 				if (IsHardLink(file, originalLinkDir))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
@@ -579,6 +579,53 @@ namespace TeknoparrotAutoXinput
 			{
 				return false;
 			}
+		}
+
+		public static bool IsEligibleHardLink(string source, string dest, bool checkExist = true)
+		{
+			if (string.IsNullOrEmpty(source)) return false;
+			if (string.IsNullOrEmpty(dest)) return false;
+
+			source = Path.GetFullPath(source);
+			dest = Path.GetFullPath(dest);
+
+			if (checkExist)
+			{
+				if (!Directory.Exists(source)) return false;
+				if (!Directory.Exists(dest)) return false;
+			}
+
+
+			string drive1 = Path.GetPathRoot(source);
+			string drive2 = Path.GetPathRoot(dest);
+
+			bool sameDrive = string.Equals(drive1, drive2, StringComparison.OrdinalIgnoreCase);
+			if (!sameDrive) return false;
+
+			bool isWindows10OrNewer = (Environment.OSVersion.Version.Major >= 10);
+			if (!isWindows10OrNewer) return false;
+
+			try
+			{
+				DriveInfo driveInfo = new DriveInfo(Path.GetPathRoot(source));
+				if(!driveInfo.DriveFormat.Equals("NTFS", StringComparison.OrdinalIgnoreCase)) return false;
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+
+			try
+			{
+				DriveInfo driveInfo = new DriveInfo(Path.GetPathRoot(dest));
+				if (!driveInfo.DriveFormat.Equals("NTFS", StringComparison.OrdinalIgnoreCase)) return false;
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		public static void LogMessage(string message)

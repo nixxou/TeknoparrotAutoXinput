@@ -61,6 +61,7 @@ namespace TeknoparrotAutoXinput
 			chk_enableDebug.Checked = ConfigurationManager.MainConfig.debugMode;
 
 			txt_linksourcefolder.Text = ConfigurationManager.MainConfig.perGameLinkFolder;
+			txt_linksourcefolderexe.Text = ConfigurationManager.MainConfig.perGameLinkFolderExe;
 
 			updateStooz();
 
@@ -498,6 +499,42 @@ namespace TeknoparrotAutoXinput
 		{
 			ConfigurationManager.MainConfig.useDinputShifter = chk_useDinputShifter.Checked;
 			ConfigurationManager.SaveConfig();
+		}
+
+		private void kryptonLabel15_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void kryptonLabel18_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_selectLinkFolderExe_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("You must select a directory that use the same Drive as your game folder.");
+			using (var fbd = new FolderBrowserDialog())
+			{
+				DialogResult result = fbd.ShowDialog();
+
+				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+				{
+					txt_linksourcefolderexe.Text = fbd.SelectedPath;
+					ConfigurationManager.MainConfig.perGameLinkFolderExe = fbd.SelectedPath;
+					ConfigurationManager.SaveConfig();
+				}
+			}
+		}
+
+		private void btn_configureDinputHotas_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputhotas();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+			}
 		}
 	}
 }
