@@ -245,6 +245,7 @@ namespace TeknoparrotAutoXinput
 					string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
 					string teknoparrotExe = Path.Combine(baseTpDir, "TeknoParrotUi.exe");
 
+					MessageBox.Show("t1");
 					GameSettings gameOptions = new GameSettings();
 					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
 					if (File.Exists(optionFile))

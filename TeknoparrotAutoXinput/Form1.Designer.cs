@@ -948,6 +948,7 @@
 			chk_useDinputHotas.Size = new Size(259, 20);
 			chk_useDinputHotas.TabIndex = 35;
 			chk_useDinputHotas.Values.Text = "Use Dinput Hotas for games that support it";
+			chk_useDinputHotas.CheckedChanged += chk_useDinputHotas_CheckedChanged;
 			// 
 			// kryptonLabel25
 			// 
@@ -972,6 +973,7 @@
 			trk_useCustomStooz_Hotas.Name = "trk_useCustomStooz_Hotas";
 			trk_useCustomStooz_Hotas.Size = new Size(244, 45);
 			trk_useCustomStooz_Hotas.TabIndex = 34;
+			trk_useCustomStooz_Hotas.Scroll += trk_useCustomStooz_Hotas_Scroll;
 			// 
 			// chk_enableStoozZone_Hotas
 			// 
@@ -988,6 +990,7 @@
 			radio_useCustomStooz_Hotas.Size = new Size(135, 20);
 			radio_useCustomStooz_Hotas.TabIndex = 32;
 			radio_useCustomStooz_Hotas.Values.Text = "Use Custom Settings";
+			radio_useCustomStooz_Hotas.CheckedChanged += radio_useCustomStooz_Hotas_CheckedChanged;
 			// 
 			// radio_useDefaultStooze_Hotas
 			// 
@@ -996,6 +999,7 @@
 			radio_useDefaultStooze_Hotas.Size = new Size(102, 20);
 			radio_useDefaultStooze_Hotas.TabIndex = 31;
 			radio_useDefaultStooze_Hotas.Values.Text = "Use TP Setting";
+			radio_useDefaultStooze_Hotas.CheckedChanged += radio_useDefaultStooze_Hotas_CheckedChanged;
 			// 
 			// groupBox10
 			// 

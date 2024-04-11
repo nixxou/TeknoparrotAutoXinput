@@ -40,18 +40,24 @@ namespace TeknoparrotAutoXinput
 
 			radio_useCustomStooz_Gamepad.Checked = ConfigurationManager.MainConfig.gamepadStooz;
 			radio_useCustomStooz_Wheel.Checked = ConfigurationManager.MainConfig.wheelStooz;
+			radio_useCustomStooz_Hotas.Checked = ConfigurationManager.MainConfig.hotasStooz;
 			radio_useDefaultStooze_Gamepad.Checked = !radio_useCustomStooz_Gamepad.Checked;
 			radio_useDefaultStooze_Wheel.Checked = !radio_useCustomStooz_Wheel.Checked;
+			radio_useDefaultStooze_Hotas.Checked = !radio_useCustomStooz_Hotas.Checked;
 
 			chk_enableStoozZone_Gamepad.Checked = ConfigurationManager.MainConfig.enableStoozZone_Gamepad;
 			trk_useCustomStooz_Gamepad.Value = ConfigurationManager.MainConfig.valueStooz_Gamepad;
 			chk_enableStoozZone_Wheel.Checked = ConfigurationManager.MainConfig.enableStoozZone_Wheel;
 			trk_useCustomStooz_Wheel.Value = ConfigurationManager.MainConfig.valueStooz_Wheel;
+			chk_enableStoozZone_Hotas.Checked = ConfigurationManager.MainConfig.enableStoozZone_Hotas;
+			trk_useCustomStooz_Hotas.Value = ConfigurationManager.MainConfig.valueStooz_Hotas;
 
 			chk_useDinputWheel.Checked = ConfigurationManager.MainConfig.useDinputWheel;
 			chk_useDinputShifter.Checked = ConfigurationManager.MainConfig.useDinputShifter;
+			chk_useDinputHotas.Checked = ConfigurationManager.MainConfig.useDinputHotas;
 
 			txt_ffbguid.Text = ConfigurationManager.MainConfig.ffbDinputWheel;
+			txt_ffbguidHotas.Text = ConfigurationManager.MainConfig.ffbDinputHotas;
 
 			chk_favorAB.Checked = ConfigurationManager.MainConfig.favorAB;
 
@@ -259,13 +265,17 @@ namespace TeknoparrotAutoXinput
 
 			ConfigurationManager.MainConfig.gamepadStooz = radio_useCustomStooz_Gamepad.Checked;
 			ConfigurationManager.MainConfig.wheelStooz = radio_useCustomStooz_Wheel.Checked;
+			ConfigurationManager.MainConfig.hotasStooz = radio_useCustomStooz_Hotas.Checked;
 
 			ConfigurationManager.MainConfig.enableStoozZone_Gamepad = chk_enableStoozZone_Gamepad.Checked;
 			ConfigurationManager.MainConfig.valueStooz_Gamepad = trk_useCustomStooz_Gamepad.Value;
 			ConfigurationManager.MainConfig.enableStoozZone_Wheel = chk_enableStoozZone_Wheel.Checked;
 			ConfigurationManager.MainConfig.valueStooz_Wheel = trk_useCustomStooz_Wheel.Value;
+			ConfigurationManager.MainConfig.enableStoozZone_Hotas = chk_enableStoozZone_Hotas.Checked;
+			ConfigurationManager.MainConfig.valueStooz_Hotas = trk_useCustomStooz_Hotas.Value;
 
 			ConfigurationManager.MainConfig.ffbDinputWheel = txt_ffbguid.Text;
+			ConfigurationManager.MainConfig.ffbDinputHotas = txt_ffbguidHotas.Text;
 
 			ConfigurationManager.SaveConfig();
 		}
@@ -278,6 +288,11 @@ namespace TeknoparrotAutoXinput
 		private void trk_useCustomStooz_Wheel_Scroll(object sender, EventArgs e)
 		{
 			lbl_useCustomStooz_Wheel.Text = trk_useCustomStooz_Wheel.Value.ToString() + "%";
+		}
+
+		private void trk_useCustomStooz_Hotas_Scroll(object sender, EventArgs e)
+		{
+			lbl_useCustomStooz_Hotas.Text = trk_useCustomStooz_Hotas.Value.ToString() + "%";
 		}
 
 		private void updateStooz()
@@ -295,6 +310,13 @@ namespace TeknoparrotAutoXinput
 			trk_useCustomStooz_Wheel.Visible = radio_useCustomStooz_Wheel.Checked;
 			lbl_useCustomStooz_Wheel.Text = trk_useCustomStooz_Wheel.Value.ToString() + "%";
 			lbl_useCustomStooz_Wheel.Visible = radio_useCustomStooz_Wheel.Checked;
+
+			chk_enableStoozZone_Hotas.Enabled = radio_useCustomStooz_Hotas.Checked;
+			trk_useCustomStooz_Hotas.Enabled = radio_useCustomStooz_Hotas.Checked;
+			chk_enableStoozZone_Hotas.Visible = radio_useCustomStooz_Hotas.Checked;
+			trk_useCustomStooz_Hotas.Visible = radio_useCustomStooz_Hotas.Checked;
+			lbl_useCustomStooz_Hotas.Text = trk_useCustomStooz_Hotas.Value.ToString() + "%";
+			lbl_useCustomStooz_Hotas.Visible = radio_useCustomStooz_Hotas.Checked;
 		}
 
 		private void radio_useDefaultStooze_Gamepad_CheckedChanged(object sender, EventArgs e)
@@ -313,6 +335,16 @@ namespace TeknoparrotAutoXinput
 		}
 
 		private void radio_useCustomStooz_Wheel_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useDefaultStooze_Hotas_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useCustomStooz_Hotas_CheckedChanged(object sender, EventArgs e)
 		{
 			updateStooz();
 		}
@@ -501,6 +533,12 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.SaveConfig();
 		}
 
+		private void chk_useDinputHotas_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.useDinputHotas = chk_useDinputHotas.Checked;
+			ConfigurationManager.SaveConfig();
+		}
+
 		private void kryptonLabel15_Click(object sender, EventArgs e)
 		{
 
@@ -536,5 +574,7 @@ namespace TeknoparrotAutoXinput
 
 			}
 		}
+
+
 	}
 }

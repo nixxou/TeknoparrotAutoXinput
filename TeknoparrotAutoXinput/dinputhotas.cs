@@ -243,8 +243,8 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			/*
-			string json = ConfigurationManager.MainConfig.bindingDinputShifter;
+			
+			string json = ConfigurationManager.MainConfig.bindingDinputHotas;
 			if (!string.IsNullOrEmpty(json))
 			{
 				buttonData = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(json);
@@ -265,7 +265,7 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
-			*/
+			
 		}
 
 		private void SaveConfig()
@@ -289,7 +289,7 @@ namespace TeknoparrotAutoXinput
 			}
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
 			//MessageBox.Show(json);
-			ConfigurationManager.MainConfig.bindingDinputShifter = json;
+			ConfigurationManager.MainConfig.bindingDinputHotas = json;
 			ConfigurationManager.SaveConfig();
 
 		}

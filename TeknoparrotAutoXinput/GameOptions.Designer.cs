@@ -76,13 +76,14 @@
 			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
 			groupBox4 = new GroupBox();
 			chk_group_StoozZone_Hotas = new Krypton.Toolkit.KryptonCheckBox();
-			groupBox5 = new GroupBox();
+			grp_StoozZone_Hotas = new GroupBox();
 			trk_useCustomStooz_Hotas = new TrackBar();
 			lbl_useCustomStooz_Hotas = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel5 = new Krypton.Toolkit.KryptonLabel();
 			radio_useDefaultStooze_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useCustomStooz_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			chk_enableStoozZone_Hotas = new Krypton.Toolkit.KryptonCheckBox();
+			btn_customTpClear = new Krypton.Toolkit.KryptonButton();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -93,7 +94,7 @@
 			grp_link.SuspendLayout();
 			groupBox3.SuspendLayout();
 			groupBox4.SuspendLayout();
-			groupBox5.SuspendLayout();
+			grp_StoozZone_Hotas.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Hotas).BeginInit();
 			SuspendLayout();
 			// 
@@ -183,6 +184,7 @@
 			radio_useDefaultStooze_Wheel.Size = new Size(102, 20);
 			radio_useDefaultStooze_Wheel.TabIndex = 31;
 			radio_useDefaultStooze_Wheel.Values.Text = "Use TP Setting";
+			radio_useDefaultStooze_Wheel.CheckedChanged += radio_useDefaultStooze_Wheel_CheckedChanged;
 			// 
 			// radio_useCustomStooz_Wheel
 			// 
@@ -191,6 +193,7 @@
 			radio_useCustomStooz_Wheel.Size = new Size(135, 20);
 			radio_useCustomStooz_Wheel.TabIndex = 32;
 			radio_useCustomStooz_Wheel.Values.Text = "Use Custom Settings";
+			radio_useCustomStooz_Wheel.CheckedChanged += radio_useCustomStooz_Wheel_CheckedChanged;
 			// 
 			// trk_useCustomStooz_Wheel
 			// 
@@ -199,6 +202,7 @@
 			trk_useCustomStooz_Wheel.Name = "trk_useCustomStooz_Wheel";
 			trk_useCustomStooz_Wheel.Size = new Size(424, 45);
 			trk_useCustomStooz_Wheel.TabIndex = 34;
+			trk_useCustomStooz_Wheel.Scroll += trk_useCustomStooz_Wheel_Scroll;
 			// 
 			// chk_enableStoozZone_Wheel
 			// 
@@ -254,6 +258,7 @@
 			trk_useCustomStooz_Gamepad.Name = "trk_useCustomStooz_Gamepad";
 			trk_useCustomStooz_Gamepad.Size = new Size(424, 45);
 			trk_useCustomStooz_Gamepad.TabIndex = 34;
+			trk_useCustomStooz_Gamepad.Scroll += trk_useCustomStooz_Gamepad_Scroll;
 			// 
 			// lbl_useCustomStooz_Gamepad
 			// 
@@ -278,6 +283,7 @@
 			radio_useDefaultStooze_Gamepad.Size = new Size(102, 20);
 			radio_useDefaultStooze_Gamepad.TabIndex = 31;
 			radio_useDefaultStooze_Gamepad.Values.Text = "Use TP Setting";
+			radio_useDefaultStooze_Gamepad.CheckedChanged += radio_useDefaultStooze_Gamepad_CheckedChanged;
 			// 
 			// radio_useCustomStooz_Gamepad
 			// 
@@ -286,6 +292,7 @@
 			radio_useCustomStooz_Gamepad.Size = new Size(135, 20);
 			radio_useCustomStooz_Gamepad.TabIndex = 32;
 			radio_useCustomStooz_Gamepad.Values.Text = "Use Custom Settings";
+			radio_useCustomStooz_Gamepad.CheckedChanged += radio_useCustomStooz_Gamepad_CheckedChanged;
 			// 
 			// chk_enableStoozZone_Gamepad
 			// 
@@ -380,9 +387,9 @@
 			// 
 			// txt_linkTo
 			// 
-			txt_linkTo.Enabled = false;
 			txt_linkTo.Location = new Point(62, 71);
 			txt_linkTo.Name = "txt_linkTo";
+			txt_linkTo.ReadOnly = true;
 			txt_linkTo.Size = new Size(371, 23);
 			txt_linkTo.TabIndex = 64;
 			// 
@@ -405,9 +412,9 @@
 			// 
 			// txt_linkFrom
 			// 
-			txt_linkFrom.Enabled = false;
 			txt_linkFrom.Location = new Point(62, 44);
 			txt_linkFrom.Name = "txt_linkFrom";
+			txt_linkFrom.ReadOnly = true;
 			txt_linkFrom.Size = new Size(371, 23);
 			txt_linkFrom.TabIndex = 63;
 			// 
@@ -493,7 +500,7 @@
 			// 
 			btn_customTp.Location = new Point(439, 22);
 			btn_customTp.Name = "btn_customTp";
-			btn_customTp.Size = new Size(81, 23);
+			btn_customTp.Size = new Size(45, 23);
 			btn_customTp.TabIndex = 66;
 			btn_customTp.Values.Text = "...";
 			btn_customTp.Click += btn_customTp_Click;
@@ -509,6 +516,7 @@
 			// 
 			// groupBox3
 			// 
+			groupBox3.Controls.Add(btn_customTpClear);
 			groupBox3.Controls.Add(kryptonLabel4);
 			groupBox3.Controls.Add(btn_customTp);
 			groupBox3.Controls.Add(txt_customTp);
@@ -530,7 +538,7 @@
 			// groupBox4
 			// 
 			groupBox4.Controls.Add(chk_group_StoozZone_Hotas);
-			groupBox4.Controls.Add(groupBox5);
+			groupBox4.Controls.Add(grp_StoozZone_Hotas);
 			groupBox4.Location = new Point(1117, 619);
 			groupBox4.Name = "groupBox4";
 			groupBox4.Size = new Size(531, 144);
@@ -547,22 +555,23 @@
 			chk_group_StoozZone_Hotas.Size = new Size(130, 20);
 			chk_group_StoozZone_Hotas.TabIndex = 47;
 			chk_group_StoozZone_Hotas.Values.Text = "Use Global Settings";
+			chk_group_StoozZone_Hotas.CheckedChanged += chk_group_StoozZone_Hotas_CheckedChanged;
 			// 
-			// groupBox5
+			// grp_StoozZone_Hotas
 			// 
-			groupBox5.Controls.Add(trk_useCustomStooz_Hotas);
-			groupBox5.Controls.Add(lbl_useCustomStooz_Hotas);
-			groupBox5.Controls.Add(kryptonLabel5);
-			groupBox5.Controls.Add(radio_useDefaultStooze_Hotas);
-			groupBox5.Controls.Add(radio_useCustomStooz_Hotas);
-			groupBox5.Controls.Add(chk_enableStoozZone_Hotas);
-			groupBox5.Enabled = false;
-			groupBox5.Location = new Point(13, 34);
-			groupBox5.Name = "groupBox5";
-			groupBox5.Size = new Size(480, 96);
-			groupBox5.TabIndex = 35;
-			groupBox5.TabStop = false;
-			groupBox5.Text = "Sto0z Zone Configuration";
+			grp_StoozZone_Hotas.Controls.Add(trk_useCustomStooz_Hotas);
+			grp_StoozZone_Hotas.Controls.Add(lbl_useCustomStooz_Hotas);
+			grp_StoozZone_Hotas.Controls.Add(kryptonLabel5);
+			grp_StoozZone_Hotas.Controls.Add(radio_useDefaultStooze_Hotas);
+			grp_StoozZone_Hotas.Controls.Add(radio_useCustomStooz_Hotas);
+			grp_StoozZone_Hotas.Controls.Add(chk_enableStoozZone_Hotas);
+			grp_StoozZone_Hotas.Enabled = false;
+			grp_StoozZone_Hotas.Location = new Point(13, 34);
+			grp_StoozZone_Hotas.Name = "grp_StoozZone_Hotas";
+			grp_StoozZone_Hotas.Size = new Size(480, 96);
+			grp_StoozZone_Hotas.TabIndex = 35;
+			grp_StoozZone_Hotas.TabStop = false;
+			grp_StoozZone_Hotas.Text = "Sto0z Zone Configuration";
 			// 
 			// trk_useCustomStooz_Hotas
 			// 
@@ -571,6 +580,7 @@
 			trk_useCustomStooz_Hotas.Name = "trk_useCustomStooz_Hotas";
 			trk_useCustomStooz_Hotas.Size = new Size(424, 45);
 			trk_useCustomStooz_Hotas.TabIndex = 34;
+			trk_useCustomStooz_Hotas.Scroll += trk_useCustomStooz_Hotas_Scroll;
 			// 
 			// lbl_useCustomStooz_Hotas
 			// 
@@ -595,6 +605,7 @@
 			radio_useDefaultStooze_Hotas.Size = new Size(102, 20);
 			radio_useDefaultStooze_Hotas.TabIndex = 31;
 			radio_useDefaultStooze_Hotas.Values.Text = "Use TP Setting";
+			radio_useDefaultStooze_Hotas.CheckedChanged += radio_useDefaultStooze_Hotas_CheckedChanged;
 			// 
 			// radio_useCustomStooz_Hotas
 			// 
@@ -603,6 +614,7 @@
 			radio_useCustomStooz_Hotas.Size = new Size(135, 20);
 			radio_useCustomStooz_Hotas.TabIndex = 32;
 			radio_useCustomStooz_Hotas.Values.Text = "Use Custom Settings";
+			radio_useCustomStooz_Hotas.CheckedChanged += radio_useCustomStooz_Hotas_CheckedChanged;
 			// 
 			// chk_enableStoozZone_Hotas
 			// 
@@ -611,6 +623,15 @@
 			chk_enableStoozZone_Hotas.Size = new Size(125, 20);
 			chk_enableStoozZone_Hotas.TabIndex = 33;
 			chk_enableStoozZone_Hotas.Values.Text = "Enable Sto0z Zone";
+			// 
+			// btn_customTpClear
+			// 
+			btn_customTpClear.Location = new Point(490, 22);
+			btn_customTpClear.Name = "btn_customTpClear";
+			btn_customTpClear.Size = new Size(39, 23);
+			btn_customTpClear.TabIndex = 69;
+			btn_customTpClear.Values.Text = "Clear";
+			btn_customTpClear.Click += btn_customTpClear_Click;
 			// 
 			// GameOptions
 			// 
@@ -655,8 +676,8 @@
 			groupBox3.PerformLayout();
 			groupBox4.ResumeLayout(false);
 			groupBox4.PerformLayout();
-			groupBox5.ResumeLayout(false);
-			groupBox5.PerformLayout();
+			grp_StoozZone_Hotas.ResumeLayout(false);
+			grp_StoozZone_Hotas.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Hotas).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
@@ -712,12 +733,13 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel4;
 		private GroupBox groupBox4;
 		private Krypton.Toolkit.KryptonCheckBox chk_group_StoozZone_Hotas;
-		private GroupBox groupBox5;
+		private GroupBox grp_StoozZone_Hotas;
 		private TrackBar trk_useCustomStooz_Hotas;
 		private Krypton.Toolkit.KryptonLabel lbl_useCustomStooz_Hotas;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel5;
 		private Krypton.Toolkit.KryptonRadioButton radio_useDefaultStooze_Hotas;
 		private Krypton.Toolkit.KryptonRadioButton radio_useCustomStooz_Hotas;
 		private Krypton.Toolkit.KryptonCheckBox chk_enableStoozZone_Hotas;
+		private Krypton.Toolkit.KryptonButton btn_customTpClear;
 	}
 }

@@ -28,6 +28,12 @@ namespace TeknoparrotAutoXinput
 		public string CustomPerGameLinkFolder { get; set; } = "";
 		public string CustomTpExe { get; set; } = "";
 
+		public bool UseGlobalStoozZoneHotas { get; set; } = true;
+		public bool hotasStooz { get; set; } = false;
+		public bool enableStoozZone_Hotas { get; set; } = false;
+		public int valueStooz_Hotas { get; set; } = 10;
+
+
 		public GameSettings() 
 		{
 			
@@ -57,6 +63,10 @@ namespace TeknoparrotAutoXinput
 				this.EnableGearChange = DeserializeData.EnableGearChange;
 				this.CustomPerGameLinkFolder = DeserializeData.CustomPerGameLinkFolder;
 				this.CustomTpExe = DeserializeData.CustomTpExe;
+				this.UseGlobalStoozZoneHotas = DeserializeData.UseGlobalStoozZoneHotas;
+				this.hotasStooz = DeserializeData.hotasStooz;
+				this.enableStoozZone_Hotas = DeserializeData.enableStoozZone_Hotas;
+				this.valueStooz_Hotas = DeserializeData.valueStooz_Hotas;
 			}
 			catch (Exception ex)
 			{

@@ -62,6 +62,13 @@ namespace TeknoparrotAutoXinput
 		public bool useDinputShifter { get; set; } = false;
 		public string perGameLinkFolderExe { get; set; } = @"";
 
+		public bool hotasStooz { get; set; } = false;
+		public bool enableStoozZone_Hotas { get; set; } = false;
+		public int valueStooz_Hotas { get; set; } = 0;
+		public string bindingDinputHotas { get; set; } = "";
+		public bool useDinputHotas { get; set; } = false;
+		public string ffbDinputHotas { get; set; } = "";
+
 		public Configuration()
 		{
 
@@ -99,6 +106,12 @@ namespace TeknoparrotAutoXinput
 				this.bindingDinputShifter = DeserializeData.bindingDinputShifter;
 				this.useDinputShifter = DeserializeData.useDinputShifter;
 				this.perGameLinkFolderExe = DeserializeData.perGameLinkFolderExe;
+				this.hotasStooz = DeserializeData.hotasStooz;
+				this.enableStoozZone_Hotas = DeserializeData.enableStoozZone_Hotas;
+				this.valueStooz_Hotas = DeserializeData.valueStooz_Hotas;
+				this.bindingDinputHotas = DeserializeData.bindingDinputHotas;
+				this.useDinputHotas = DeserializeData.useDinputHotas;
+				this.ffbDinputHotas = DeserializeData.ffbDinputHotas;
 			}
 			catch (Exception ex)
 			{

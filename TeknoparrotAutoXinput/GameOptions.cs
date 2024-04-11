@@ -51,15 +51,26 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-
-
-		private void GameOptions_Load(object sender, EventArgs e)
+		private void LinkLoad()
 		{
-			chk_runAsAdmin.Enabled = false;
-			chk_group_StoozZone_Wheel.Location = new Point(chk_group_StoozZone_Wheel.Location.X, chk_group_StoozZone_Wheel.Location.Y + 15);
-			chk_group_StoozZone_Gamepad.Location = new Point(chk_group_StoozZone_Gamepad.Location.X, chk_group_StoozZone_Gamepad.Location.Y + 15);
-			chk_group_monitorDisposition.Location = new Point(chk_group_monitorDisposition.Location.X, chk_group_monitorDisposition.Location.Y + 15);
 			grp_link.Enabled = false;
+			btn_link_open.Enabled = true;
+			txt_linkFrom.Text = "";
+			txt_linkTo.Text = "";
+			lbl_linkNumber.Text = "";
+
+			if (gameSettings.CustomTpExe != "" && File.Exists(gameSettings.CustomTpExe))
+			{
+				string TpFolder = Path.GetDirectoryName(gameSettings.CustomTpExe);
+				_lindberghFolder = Path.Combine(TpFolder, "TeknoParrot");
+				_elfldr2Folder = Path.Combine(TpFolder, "ElfLdr2");
+			}
+			else
+			{
+				_lindberghFolder = Path.Combine(_tpBaseFolder, "TeknoParrot");
+				_elfldr2Folder = Path.Combine(_tpBaseFolder, "ElfLdr2");
+			}
+
 
 			string executableGame = "";
 			string executableGameDir = "";
@@ -206,15 +217,36 @@ namespace TeknoparrotAutoXinput
 
 				}
 			}
+		}
+
+		private void GameOptions_Load(object sender, EventArgs e)
+		{
+			chk_runAsAdmin.Enabled = false;
+			chk_group_StoozZone_Wheel.Location = new Point(chk_group_StoozZone_Wheel.Location.X, chk_group_StoozZone_Wheel.Location.Y + 15);
+			chk_group_StoozZone_Gamepad.Location = new Point(chk_group_StoozZone_Gamepad.Location.X, chk_group_StoozZone_Gamepad.Location.Y + 15);
+			chk_group_StoozZone_Hotas.Location = new Point(chk_group_StoozZone_Hotas.Location.X, chk_group_StoozZone_Hotas.Location.Y + 15);
+			chk_group_monitorDisposition.Location = new Point(chk_group_monitorDisposition.Location.X, chk_group_monitorDisposition.Location.Y + 15);
+
+			LinkLoad();
+
+			radio_useCustomStooz_Gamepad.Checked = gameSettings.gamepadStooz;
+			radio_useCustomStooz_Wheel.Checked = gameSettings.wheelStooz;
+			radio_useCustomStooz_Hotas.Checked = gameSettings.hotasStooz;
+			radio_useDefaultStooze_Gamepad.Checked = !radio_useCustomStooz_Gamepad.Checked;
+			radio_useDefaultStooze_Wheel.Checked = !radio_useCustomStooz_Wheel.Checked;
+			radio_useDefaultStooze_Hotas.Checked = !radio_useCustomStooz_Hotas.Checked;
 
 			chk_group_monitorDisposition.Checked = gameSettings.UseGlobalDisposition;
 			chk_group_StoozZone_Gamepad.Checked = gameSettings.UseGlobalStoozZoneGamepad;
 			chk_group_StoozZone_Wheel.Checked = gameSettings.UseGlobalStoozZoneWheel;
+			chk_group_StoozZone_Hotas.Checked = gameSettings.UseGlobalStoozZoneHotas;
 			chk_runAsAdmin.Checked = gameSettings.RunAsRoot;
 			chk_enableStoozZone_Gamepad.Checked = gameSettings.enableStoozZone_Gamepad;
 			chk_enableStoozZone_Wheel.Checked = gameSettings.enableStoozZone_Wheel;
+			chk_enableStoozZone_Hotas.Checked = gameSettings.enableStoozZone_Hotas;
 			trk_useCustomStooz_Gamepad.Value = gameSettings.valueStooz_Gamepad;
 			trk_useCustomStooz_Wheel.Value = gameSettings.valueStooz_Wheel;
+			trk_useCustomStooz_Hotas.Value = gameSettings.valueStooz_Hotas;
 			txt_ahkafter.Text = gameSettings.AhkAfter;
 			txt_ahkbefore.Text = gameSettings.AhkBefore;
 			chk_linkfiles.Checked = gameSettings.EnableLink;
@@ -231,6 +263,7 @@ namespace TeknoparrotAutoXinput
 			grp_monitorDisposition.Enabled = !chk_group_monitorDisposition.Checked;
 			grp_StoozZone_Gamepad.Enabled = !chk_group_StoozZone_Gamepad.Checked;
 			grp_StoozZone_Wheel.Enabled = !chk_group_StoozZone_Wheel.Checked;
+			grp_StoozZone_Hotas.Enabled = !chk_group_StoozZone_Hotas.Checked;
 		}
 
 		private void kryptonRichTextBox2_TextChanged(object sender, EventArgs e)
@@ -287,6 +320,11 @@ namespace TeknoparrotAutoXinput
 			Reload();
 		}
 
+		private void chk_group_StoozZone_Hotas_CheckedChanged(object sender, EventArgs e)
+		{
+			Reload();
+		}
+
 		private void btn_Save_Click(object sender, EventArgs e)
 		{
 			string errorTxt = "";
@@ -315,22 +353,28 @@ namespace TeknoparrotAutoXinput
 			}
 
 
+			gameSettings.gamepadStooz = radio_useCustomStooz_Gamepad.Checked;
+			gameSettings.wheelStooz = radio_useCustomStooz_Wheel.Checked;
+			gameSettings.hotasStooz = radio_useCustomStooz_Hotas.Checked;
 
 			gameSettings.UseGlobalDisposition = chk_group_monitorDisposition.Checked;
 			gameSettings.UseGlobalStoozZoneGamepad = chk_group_StoozZone_Gamepad.Checked;
 			gameSettings.UseGlobalStoozZoneWheel = chk_group_StoozZone_Wheel.Checked;
+			gameSettings.UseGlobalStoozZoneHotas = chk_group_StoozZone_Hotas.Checked;
 			gameSettings.RunAsRoot = chk_runAsAdmin.Checked;
 			gameSettings.enableStoozZone_Gamepad = chk_enableStoozZone_Gamepad.Checked;
 			gameSettings.enableStoozZone_Wheel = chk_enableStoozZone_Wheel.Checked;
+			gameSettings.enableStoozZone_Hotas = chk_enableStoozZone_Hotas.Checked;
 			gameSettings.valueStooz_Gamepad = trk_useCustomStooz_Gamepad.Value;
 			gameSettings.valueStooz_Wheel = trk_useCustomStooz_Wheel.Value;
+			gameSettings.valueStooz_Hotas = trk_useCustomStooz_Hotas.Value;
 			gameSettings.AhkAfter = txt_ahkafter.Text.Trim();
 			gameSettings.AhkBefore = txt_ahkbefore.Text.Trim();
 			gameSettings.EnableLink = chk_linkfiles.Checked;
 			gameSettings.WaitForExitAhkBefore = chk_WaitForExitBefore.Checked;
 			gameSettings.EnableGearChange = chk_enableGearChange.Checked;
 			gameSettings.Disposition = txt_monitorswitch.Text.Trim();
-			gameSettings.CustomTpExe = txt_customTp.Text.Trim();
+			//gameSettings.CustomTpExe = txt_customTp.Text.Trim();
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;
@@ -424,13 +468,94 @@ namespace TeknoparrotAutoXinput
 			{
 				string fichierSelectionne = openFileDialog1.FileName;
 				txt_customTp.Text = fichierSelectionne;
+				gameSettings.CustomTpExe = txt_customTp.Text.Trim();
+				gameSettings.Save(PerGameConfigFile);
+				LinkLoad();
 			}
 
+		}
+
+		private void btn_customTpClear_Click(object sender, EventArgs e)
+		{
+			txt_customTp.Text = "";
+			gameSettings.CustomTpExe = txt_customTp.Text.Trim();
+			gameSettings.Save(PerGameConfigFile);
+			LinkLoad();
 		}
 
 		private void txt_customTp_TextChanged(object sender, EventArgs e)
 		{
 
 		}
+
+		private void trk_useCustomStooz_Gamepad_Scroll(object sender, EventArgs e)
+		{
+			lbl_useCustomStooz_Gamepad.Text = trk_useCustomStooz_Gamepad.Value.ToString() + "%";
+		}
+
+		private void trk_useCustomStooz_Wheel_Scroll(object sender, EventArgs e)
+		{
+			lbl_useCustomStooz_Wheel.Text = trk_useCustomStooz_Wheel.Value.ToString() + "%";
+		}
+
+		private void trk_useCustomStooz_Hotas_Scroll(object sender, EventArgs e)
+		{
+			lbl_useCustomStooz_Hotas.Text = trk_useCustomStooz_Hotas.Value.ToString() + "%";
+		}
+
+		private void radio_useDefaultStooze_Gamepad_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useCustomStooz_Gamepad_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useDefaultStooze_Wheel_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useCustomStooz_Wheel_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useDefaultStooze_Hotas_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void radio_useCustomStooz_Hotas_CheckedChanged(object sender, EventArgs e)
+		{
+			updateStooz();
+		}
+
+		private void updateStooz()
+		{
+			chk_enableStoozZone_Gamepad.Enabled = radio_useCustomStooz_Gamepad.Checked;
+			trk_useCustomStooz_Gamepad.Enabled = radio_useCustomStooz_Gamepad.Checked;
+			chk_enableStoozZone_Gamepad.Visible = radio_useCustomStooz_Gamepad.Checked;
+			trk_useCustomStooz_Gamepad.Visible = radio_useCustomStooz_Gamepad.Checked;
+			lbl_useCustomStooz_Gamepad.Text = trk_useCustomStooz_Gamepad.Value.ToString() + "%";
+			lbl_useCustomStooz_Gamepad.Visible = radio_useCustomStooz_Gamepad.Checked;
+
+			chk_enableStoozZone_Wheel.Enabled = radio_useCustomStooz_Wheel.Checked;
+			trk_useCustomStooz_Wheel.Enabled = radio_useCustomStooz_Wheel.Checked;
+			chk_enableStoozZone_Wheel.Visible = radio_useCustomStooz_Wheel.Checked;
+			trk_useCustomStooz_Wheel.Visible = radio_useCustomStooz_Wheel.Checked;
+			lbl_useCustomStooz_Wheel.Text = trk_useCustomStooz_Wheel.Value.ToString() + "%";
+			lbl_useCustomStooz_Wheel.Visible = radio_useCustomStooz_Wheel.Checked;
+
+			chk_enableStoozZone_Hotas.Enabled = radio_useCustomStooz_Hotas.Checked;
+			trk_useCustomStooz_Hotas.Enabled = radio_useCustomStooz_Hotas.Checked;
+			chk_enableStoozZone_Hotas.Visible = radio_useCustomStooz_Hotas.Checked;
+			trk_useCustomStooz_Hotas.Visible = radio_useCustomStooz_Hotas.Checked;
+			lbl_useCustomStooz_Hotas.Text = trk_useCustomStooz_Hotas.Value.ToString() + "%";
+			lbl_useCustomStooz_Hotas.Visible = radio_useCustomStooz_Hotas.Checked;
+		}
+
 	}
 }
