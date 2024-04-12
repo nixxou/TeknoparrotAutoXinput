@@ -30,8 +30,13 @@ namespace TeknoparrotAutoXinput
 		private bool _dinputWheelFound = false;
 		private string _dinputWheelName = "";
 		private bool _haveWheel = false;
+
 		private bool _haveGamepad = false;
 		private bool _haveArcade = false;
+
+		private bool _dinputHotasFound = false;
+		private string _dinputHotasName = "";
+		private bool _haveHotas = false;
 
 		private bool _isPlaying = false;
 		public bool isPlaying
@@ -78,6 +83,7 @@ namespace TeknoparrotAutoXinput
 			typeConfig.Add("gamepadalt");
 			typeConfig.Add("arcade");
 			typeConfig.Add("wheel");
+			typeConfig.Add("hotas");
 
 			lbl_player1.Text = "";
 			lbl_player2.Text = "";
@@ -176,9 +182,10 @@ namespace TeknoparrotAutoXinput
 		private void UpdateGamePadList()
 		{
 			string wheelGuid = string.Empty;
+			string hotasGuid = string.Empty;
 			_dinputWheelName = string.Empty;
 			_dinputWheelFound = false;
-			_haveWheel = _haveArcade = _haveGamepad = false;
+			_haveWheel = _haveArcade = _haveGamepad = _haveHotas = false;
 
 			_connectedGamePad.Clear();
 			var gamepad = X.Gamepad_1;
@@ -192,6 +199,9 @@ namespace TeknoparrotAutoXinput
 			bool checkDinputWheel = ConfigurationManager.MainConfig.useDinputWheel;
 			Dictionary<string, JoystickButtonData> bindingDinputWheel = null;
 			string bindingDinputWheelJson = ConfigurationManager.MainConfig.bindingDinputWheel;
+			bool checkDinputHotas = ConfigurationManager.MainConfig.useDinputHotas;
+			Dictionary<string, JoystickButtonData> bindingDinputHotas = null;
+			string bindingDinputHotasJson = ConfigurationManager.MainConfig.bindingDinputHotas;
 
 			foreach (var cg in _connectedGamePad)
 			{
@@ -222,6 +232,35 @@ namespace TeknoparrotAutoXinput
 							_dinputWheelFound = true;
 							_dinputWheelName = device.ProductName;
 							_haveWheel = true;
+							break;
+						}
+					}
+				}
+			}
+
+			if (checkDinputHotas)
+			{
+				if (!string.IsNullOrEmpty(bindingDinputHotasJson))
+				{
+					bindingDinputHotas = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputHotasJson);
+					if (bindingDinputHotas.ContainsKey("InputDevice0LeftThumbInputDevice0X+"))
+					{
+						hotasGuid = bindingDinputHotas["InputDevice0LeftThumbInputDevice0X+"].JoystickGuid.ToString();
+					}
+				}
+				if (!string.IsNullOrEmpty(hotasGuid))
+				{
+					DirectInput directInput = new DirectInput();
+					List<DeviceInstance> devices = new List<DeviceInstance>();
+					devices.AddRange(directInput.GetDevices().Where(x => x.Type != DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+					foreach (var device in devices)
+					{
+						if (device.InstanceGuid.ToString() == hotasGuid)
+						{
+							_dinputHotasFound = true;
+							_dinputHotasName = device.ProductName;
+							_haveHotas = true;
+							break;
 						}
 					}
 				}
@@ -335,6 +374,7 @@ namespace TeknoparrotAutoXinput
 				if (gp.Value.Type == "wheel") lbl_wheellist.Text += $"{displayControllerName}, ";
 			}
 			if (_dinputWheelFound) lbl_wheellist.Text = _dinputWheelName;
+			if (_dinputHotasFound) lbl_hotaslist.Text = _dinputHotasName;
 			lbl_arcadelist.Text = lbl_arcadelist.Text.TrimEnd().TrimEnd(',');
 			lbl_gamepadlist.Text = lbl_gamepadlist.Text.TrimEnd().TrimEnd(',');
 			lbl_wheellist.Text = lbl_wheellist.Text.TrimEnd().TrimEnd(',');
@@ -380,11 +420,19 @@ namespace TeknoparrotAutoXinput
 
 					bool useXinput = true;
 					bool useDinputWheel = false;
+					bool useDinputHotas = false;
 					if (_haveWheel && DataGame.existingConfig.ContainsKey("wheel") && _dinputWheelFound)
 					{
 						useXinput = false;
 						useDinputWheel = true;
 					}
+					if (_haveHotas && DataGame.existingConfig.ContainsKey("hotas") && _dinputHotasFound)
+					{
+						useXinput = false;
+						useDinputWheel = false;
+						useDinputHotas = true;
+					}
+
 					Dictionary<int, (string, XinputGamepad)> ConfigPerPlayer = new Dictionary<int, (string, XinputGamepad)>();
 					if (useXinput)
 					{
@@ -482,6 +530,14 @@ namespace TeknoparrotAutoXinput
 							xinputGamepad.ControllerName = _dinputWheelName;
 							ConfigPerPlayer.Add(0, ("wheel", xinputGamepad));
 						}
+						if (useDinputHotas)
+						{
+							var joystickButtonHotas = Program.ParseConfig(DataGame.existingConfig["hotas"]);
+							XinputGamepad xinputGamepad = new XinputGamepad(0);
+							xinputGamepad.Type = "hotas";
+							xinputGamepad.ControllerName = _dinputHotasName;
+							ConfigPerPlayer.Add(0, ("hotas", xinputGamepad));
+						}
 					}
 
 					int currentcpp = 0;
@@ -498,6 +554,10 @@ namespace TeknoparrotAutoXinput
 						else
 						{
 							if (useDinputWheel)
+							{
+								lbl_player1.Text = "Player 1 : " + cpp.Value.Item1 + " -> " + "DINPUT " + $" ({cpp.Value.Item2.ControllerName})";
+							}
+							if (useDinputHotas)
 							{
 								lbl_player1.Text = "Player 1 : " + cpp.Value.Item1 + " -> " + "DINPUT " + $" ({cpp.Value.Item2.ControllerName})";
 							}

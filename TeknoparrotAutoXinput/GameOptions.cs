@@ -374,6 +374,8 @@ namespace TeknoparrotAutoXinput
 			gameSettings.WaitForExitAhkBefore = chk_WaitForExitBefore.Checked;
 			gameSettings.EnableGearChange = chk_enableGearChange.Checked;
 			gameSettings.Disposition = txt_monitorswitch.Text.Trim();
+
+			gameSettings.reverseYAxis_Hotas = chk_reverseYAxis_Hotas.Checked;
 			//gameSettings.CustomTpExe = txt_customTp.Text.Trim();
 
 			gameSettings.Save(PerGameConfigFile);
@@ -557,5 +559,14 @@ namespace TeknoparrotAutoXinput
 			lbl_useCustomStooz_Hotas.Visible = radio_useCustomStooz_Hotas.Checked;
 		}
 
+		private void chk_enableStoozZone_Hotas_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void chk_invertYAxis_Hotas_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

@@ -32,6 +32,7 @@ namespace TeknoparrotAutoXinput
 		public bool hotasStooz { get; set; } = false;
 		public bool enableStoozZone_Hotas { get; set; } = false;
 		public int valueStooz_Hotas { get; set; } = 10;
+		public bool reverseYAxis_Hotas { get; set; } = false;
 
 
 		public GameSettings() 
@@ -67,6 +68,7 @@ namespace TeknoparrotAutoXinput
 				this.hotasStooz = DeserializeData.hotasStooz;
 				this.enableStoozZone_Hotas = DeserializeData.enableStoozZone_Hotas;
 				this.valueStooz_Hotas = DeserializeData.valueStooz_Hotas;
+				this.reverseYAxis_Hotas = DeserializeData.reverseYAxis_Hotas;
 			}
 			catch (Exception ex)
 			{

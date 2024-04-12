@@ -575,6 +575,10 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-
+		private void chk_reverseYAxis_Hotas_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.reverseYAxis_Hotas = chk_reverseYAxis_Hotas.Checked;
+			ConfigurationManager.SaveConfig();
+		}
 	}
 }

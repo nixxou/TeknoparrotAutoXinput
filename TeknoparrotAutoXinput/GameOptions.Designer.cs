@@ -73,8 +73,10 @@
 			btn_customTp = new Krypton.Toolkit.KryptonButton();
 			txt_customTp = new Krypton.Toolkit.KryptonTextBox();
 			groupBox3 = new GroupBox();
+			btn_customTpClear = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
 			groupBox4 = new GroupBox();
+			chk_reverseYAxis_Hotas = new Krypton.Toolkit.KryptonCheckBox();
 			chk_group_StoozZone_Hotas = new Krypton.Toolkit.KryptonCheckBox();
 			grp_StoozZone_Hotas = new GroupBox();
 			trk_useCustomStooz_Hotas = new TrackBar();
@@ -83,7 +85,6 @@
 			radio_useDefaultStooze_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useCustomStooz_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			chk_enableStoozZone_Hotas = new Krypton.Toolkit.KryptonCheckBox();
-			btn_customTpClear = new Krypton.Toolkit.KryptonButton();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -129,7 +130,7 @@
 			groupBox2.Controls.Add(grp_StoozZone_Wheel);
 			groupBox2.Location = new Point(568, 619);
 			groupBox2.Name = "groupBox2";
-			groupBox2.Size = new Size(531, 144);
+			groupBox2.Size = new Size(531, 161);
 			groupBox2.TabIndex = 45;
 			groupBox2.TabStop = false;
 			groupBox2.Text = "Wheel Settings";
@@ -218,7 +219,7 @@
 			groupBox1.Controls.Add(grp_StoozZone_Gamepad);
 			groupBox1.Location = new Point(19, 619);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(531, 144);
+			groupBox1.Size = new Size(531, 161);
 			groupBox1.TabIndex = 44;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "GamePad Settings";
@@ -453,7 +454,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(1559, 769);
+			btn_Save.Location = new Point(1559, 784);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 56;
@@ -462,7 +463,7 @@
 			// 
 			// btn_Cancel
 			// 
-			btn_Cancel.Location = new Point(1462, 769);
+			btn_Cancel.Location = new Point(1462, 784);
 			btn_Cancel.Name = "btn_Cancel";
 			btn_Cancel.Size = new Size(90, 25);
 			btn_Cancel.TabIndex = 55;
@@ -527,6 +528,15 @@
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Use an other version of Teknoparrot :";
 			// 
+			// btn_customTpClear
+			// 
+			btn_customTpClear.Location = new Point(490, 22);
+			btn_customTpClear.Name = "btn_customTpClear";
+			btn_customTpClear.Size = new Size(39, 23);
+			btn_customTpClear.TabIndex = 69;
+			btn_customTpClear.Values.Text = "Clear";
+			btn_customTpClear.Click += btn_customTpClear_Click;
+			// 
 			// kryptonLabel4
 			// 
 			kryptonLabel4.Location = new Point(5, 51);
@@ -541,10 +551,19 @@
 			groupBox4.Controls.Add(grp_StoozZone_Hotas);
 			groupBox4.Location = new Point(1117, 619);
 			groupBox4.Name = "groupBox4";
-			groupBox4.Size = new Size(531, 144);
+			groupBox4.Size = new Size(531, 161);
 			groupBox4.TabIndex = 48;
 			groupBox4.TabStop = false;
 			groupBox4.Text = "Hotas Settings";
+			// 
+			// chk_reverseYAxis_Hotas
+			// 
+			chk_reverseYAxis_Hotas.Location = new Point(19, 95);
+			chk_reverseYAxis_Hotas.Name = "chk_reverseYAxis_Hotas";
+			chk_reverseYAxis_Hotas.Size = new Size(101, 20);
+			chk_reverseYAxis_Hotas.TabIndex = 48;
+			chk_reverseYAxis_Hotas.Values.Text = "Reverse Y Axis";
+			chk_reverseYAxis_Hotas.CheckedChanged += chk_invertYAxis_Hotas_CheckedChanged;
 			// 
 			// chk_group_StoozZone_Hotas
 			// 
@@ -559,6 +578,7 @@
 			// 
 			// grp_StoozZone_Hotas
 			// 
+			grp_StoozZone_Hotas.Controls.Add(chk_reverseYAxis_Hotas);
 			grp_StoozZone_Hotas.Controls.Add(trk_useCustomStooz_Hotas);
 			grp_StoozZone_Hotas.Controls.Add(lbl_useCustomStooz_Hotas);
 			grp_StoozZone_Hotas.Controls.Add(kryptonLabel5);
@@ -568,7 +588,7 @@
 			grp_StoozZone_Hotas.Enabled = false;
 			grp_StoozZone_Hotas.Location = new Point(13, 34);
 			grp_StoozZone_Hotas.Name = "grp_StoozZone_Hotas";
-			grp_StoozZone_Hotas.Size = new Size(480, 96);
+			grp_StoozZone_Hotas.Size = new Size(480, 121);
 			grp_StoozZone_Hotas.TabIndex = 35;
 			grp_StoozZone_Hotas.TabStop = false;
 			grp_StoozZone_Hotas.Text = "Sto0z Zone Configuration";
@@ -623,15 +643,7 @@
 			chk_enableStoozZone_Hotas.Size = new Size(125, 20);
 			chk_enableStoozZone_Hotas.TabIndex = 33;
 			chk_enableStoozZone_Hotas.Values.Text = "Enable Sto0z Zone";
-			// 
-			// btn_customTpClear
-			// 
-			btn_customTpClear.Location = new Point(490, 22);
-			btn_customTpClear.Name = "btn_customTpClear";
-			btn_customTpClear.Size = new Size(39, 23);
-			btn_customTpClear.TabIndex = 69;
-			btn_customTpClear.Values.Text = "Clear";
-			btn_customTpClear.Click += btn_customTpClear_Click;
+			chk_enableStoozZone_Hotas.CheckedChanged += chk_enableStoozZone_Hotas_CheckedChanged;
 			// 
 			// GameOptions
 			// 
@@ -741,5 +753,6 @@
 		private Krypton.Toolkit.KryptonRadioButton radio_useCustomStooz_Hotas;
 		private Krypton.Toolkit.KryptonCheckBox chk_enableStoozZone_Hotas;
 		private Krypton.Toolkit.KryptonButton btn_customTpClear;
+		private Krypton.Toolkit.KryptonCheckBox chk_reverseYAxis_Hotas;
 	}
 }

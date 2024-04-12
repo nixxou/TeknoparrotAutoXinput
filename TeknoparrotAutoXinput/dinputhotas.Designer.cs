@@ -29,33 +29,33 @@
 		private void InitializeComponent()
 		{
 			label6 = new Label();
-			txt_InputDeviceHotasThrottleAxis = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0RightThumbInputDevice0Yplus = new Krypton.Toolkit.KryptonTextBox();
 			label1 = new Label();
-			txt_InputDeviceHotasAnalogX = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0LeftThumbInputDevice0Xplus = new Krypton.Toolkit.KryptonTextBox();
 			label2 = new Label();
-			txt_InputDeviceHotasAnalogY = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0LeftThumbInputDevice0Yplus = new Krypton.Toolkit.KryptonTextBox();
 			label3 = new Label();
-			txt_InputDeviceHotasThrottleButton = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0RightShoulder = new Krypton.Toolkit.KryptonTextBox();
 			label4 = new Label();
-			txt_InputDeviceHotasGun = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0A = new Krypton.Toolkit.KryptonTextBox();
 			label5 = new Label();
-			txt_InputDeviceHotasExtra2 = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0Y = new Krypton.Toolkit.KryptonTextBox();
 			label7 = new Label();
-			txt_InputDeviceHotasUp = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0DPadUp = new Krypton.Toolkit.KryptonTextBox();
 			label8 = new Label();
-			txt_InputDeviceHotasDown = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0DPadDown = new Krypton.Toolkit.KryptonTextBox();
 			label9 = new Label();
-			txt_InputDeviceHotasLeft = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0DPadLeft = new Krypton.Toolkit.KryptonTextBox();
 			label10 = new Label();
-			txt_InputDeviceHotasRight = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0DPadRight = new Krypton.Toolkit.KryptonTextBox();
 			label11 = new Label();
-			txt_InputDeviceHotasMissile = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0B = new Krypton.Toolkit.KryptonTextBox();
 			label12 = new Label();
-			txt_InputDeviceHotasExtra1 = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0X = new Krypton.Toolkit.KryptonTextBox();
 			label13 = new Label();
-			txt_InputDeviceCoin = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0Back = new Krypton.Toolkit.KryptonTextBox();
 			label14 = new Label();
-			txt_InputDeviceHotasStart = new Krypton.Toolkit.KryptonTextBox();
+			txt_InputDevice0Start = new Krypton.Toolkit.KryptonTextBox();
 			cmb_devicelist = new Krypton.Toolkit.KryptonComboBox();
 			btn_Save = new Krypton.Toolkit.KryptonButton();
 			btn_Cancel = new Krypton.Toolkit.KryptonButton();
@@ -71,12 +71,12 @@
 			label6.TabIndex = 23;
 			label6.Text = "Throttle Axis";
 			// 
-			// txt_InputDeviceHotasThrottleAxis
+			// txt_InputDevice0RightThumbInputDevice0Yplus
 			// 
-			txt_InputDeviceHotasThrottleAxis.Location = new Point(133, 537);
-			txt_InputDeviceHotasThrottleAxis.Name = "txt_InputDeviceHotasThrottleAxis";
-			txt_InputDeviceHotasThrottleAxis.Size = new Size(196, 23);
-			txt_InputDeviceHotasThrottleAxis.TabIndex = 22;
+			txt_InputDevice0RightThumbInputDevice0Yplus.Location = new Point(133, 537);
+			txt_InputDevice0RightThumbInputDevice0Yplus.Name = "txt_InputDevice0RightThumbInputDevice0Yplus";
+			txt_InputDevice0RightThumbInputDevice0Yplus.Size = new Size(196, 23);
+			txt_InputDevice0RightThumbInputDevice0Yplus.TabIndex = 22;
 			// 
 			// label1
 			// 
@@ -87,12 +87,12 @@
 			label1.TabIndex = 25;
 			label1.Text = "Analog X";
 			// 
-			// txt_InputDeviceHotasAnalogX
+			// txt_InputDevice0LeftThumbInputDevice0Xplus
 			// 
-			txt_InputDeviceHotasAnalogX.Location = new Point(614, 538);
-			txt_InputDeviceHotasAnalogX.Name = "txt_InputDeviceHotasAnalogX";
-			txt_InputDeviceHotasAnalogX.Size = new Size(196, 23);
-			txt_InputDeviceHotasAnalogX.TabIndex = 24;
+			txt_InputDevice0LeftThumbInputDevice0Xplus.Location = new Point(614, 538);
+			txt_InputDevice0LeftThumbInputDevice0Xplus.Name = "txt_InputDevice0LeftThumbInputDevice0Xplus";
+			txt_InputDevice0LeftThumbInputDevice0Xplus.Size = new Size(196, 23);
+			txt_InputDevice0LeftThumbInputDevice0Xplus.TabIndex = 24;
 			// 
 			// label2
 			// 
@@ -103,12 +103,12 @@
 			label2.TabIndex = 27;
 			label2.Text = "Analog Y";
 			// 
-			// txt_InputDeviceHotasAnalogY
+			// txt_InputDevice0LeftThumbInputDevice0Yplus
 			// 
-			txt_InputDeviceHotasAnalogY.Location = new Point(614, 567);
-			txt_InputDeviceHotasAnalogY.Name = "txt_InputDeviceHotasAnalogY";
-			txt_InputDeviceHotasAnalogY.Size = new Size(196, 23);
-			txt_InputDeviceHotasAnalogY.TabIndex = 26;
+			txt_InputDevice0LeftThumbInputDevice0Yplus.Location = new Point(614, 567);
+			txt_InputDevice0LeftThumbInputDevice0Yplus.Name = "txt_InputDevice0LeftThumbInputDevice0Yplus";
+			txt_InputDevice0LeftThumbInputDevice0Yplus.Size = new Size(196, 23);
+			txt_InputDevice0LeftThumbInputDevice0Yplus.TabIndex = 26;
 			// 
 			// label3
 			// 
@@ -120,12 +120,12 @@
 			label3.Text = "Throotle Button";
 			label3.Click += label3_Click;
 			// 
-			// txt_InputDeviceHotasThrottleButton
+			// txt_InputDevice0RightShoulder
 			// 
-			txt_InputDeviceHotasThrottleButton.Location = new Point(279, 347);
-			txt_InputDeviceHotasThrottleButton.Name = "txt_InputDeviceHotasThrottleButton";
-			txt_InputDeviceHotasThrottleButton.Size = new Size(196, 23);
-			txt_InputDeviceHotasThrottleButton.TabIndex = 28;
+			txt_InputDevice0RightShoulder.Location = new Point(279, 347);
+			txt_InputDevice0RightShoulder.Name = "txt_InputDevice0RightShoulder";
+			txt_InputDevice0RightShoulder.Size = new Size(196, 23);
+			txt_InputDevice0RightShoulder.TabIndex = 28;
 			// 
 			// label4
 			// 
@@ -136,12 +136,12 @@
 			label4.TabIndex = 31;
 			label4.Text = "Gun";
 			// 
-			// txt_InputDeviceHotasGun
+			// txt_InputDevice0A
 			// 
-			txt_InputDeviceHotasGun.Location = new Point(374, 262);
-			txt_InputDeviceHotasGun.Name = "txt_InputDeviceHotasGun";
-			txt_InputDeviceHotasGun.Size = new Size(196, 23);
-			txt_InputDeviceHotasGun.TabIndex = 30;
+			txt_InputDevice0A.Location = new Point(374, 262);
+			txt_InputDevice0A.Name = "txt_InputDevice0A";
+			txt_InputDevice0A.Size = new Size(196, 23);
+			txt_InputDevice0A.TabIndex = 30;
 			// 
 			// label5
 			// 
@@ -152,12 +152,12 @@
 			label5.TabIndex = 33;
 			label5.Text = "Extra button 2";
 			// 
-			// txt_InputDeviceHotasExtra2
+			// txt_InputDevice0Y
 			// 
-			txt_InputDeviceHotasExtra2.Location = new Point(417, 430);
-			txt_InputDeviceHotasExtra2.Name = "txt_InputDeviceHotasExtra2";
-			txt_InputDeviceHotasExtra2.Size = new Size(196, 23);
-			txt_InputDeviceHotasExtra2.TabIndex = 32;
+			txt_InputDevice0Y.Location = new Point(417, 430);
+			txt_InputDevice0Y.Name = "txt_InputDevice0Y";
+			txt_InputDevice0Y.Size = new Size(196, 23);
+			txt_InputDevice0Y.TabIndex = 32;
 			// 
 			// label7
 			// 
@@ -168,12 +168,12 @@
 			label7.TabIndex = 35;
 			label7.Text = "Up";
 			// 
-			// txt_InputDeviceHotasUp
+			// txt_InputDevice0DPadUp
 			// 
-			txt_InputDeviceHotasUp.Location = new Point(764, 98);
-			txt_InputDeviceHotasUp.Name = "txt_InputDeviceHotasUp";
-			txt_InputDeviceHotasUp.Size = new Size(196, 23);
-			txt_InputDeviceHotasUp.TabIndex = 34;
+			txt_InputDevice0DPadUp.Location = new Point(764, 98);
+			txt_InputDevice0DPadUp.Name = "txt_InputDevice0DPadUp";
+			txt_InputDevice0DPadUp.Size = new Size(196, 23);
+			txt_InputDevice0DPadUp.TabIndex = 34;
 			// 
 			// label8
 			// 
@@ -185,12 +185,12 @@
 			label8.Text = "Down";
 			label8.Click += label8_Click;
 			// 
-			// txt_InputDeviceHotasDown
+			// txt_InputDevice0DPadDown
 			// 
-			txt_InputDeviceHotasDown.Location = new Point(764, 127);
-			txt_InputDeviceHotasDown.Name = "txt_InputDeviceHotasDown";
-			txt_InputDeviceHotasDown.Size = new Size(196, 23);
-			txt_InputDeviceHotasDown.TabIndex = 36;
+			txt_InputDevice0DPadDown.Location = new Point(764, 127);
+			txt_InputDevice0DPadDown.Name = "txt_InputDevice0DPadDown";
+			txt_InputDevice0DPadDown.Size = new Size(196, 23);
+			txt_InputDevice0DPadDown.TabIndex = 36;
 			// 
 			// label9
 			// 
@@ -201,12 +201,12 @@
 			label9.TabIndex = 39;
 			label9.Text = "Left";
 			// 
-			// txt_InputDeviceHotasLeft
+			// txt_InputDevice0DPadLeft
 			// 
-			txt_InputDeviceHotasLeft.Location = new Point(764, 156);
-			txt_InputDeviceHotasLeft.Name = "txt_InputDeviceHotasLeft";
-			txt_InputDeviceHotasLeft.Size = new Size(196, 23);
-			txt_InputDeviceHotasLeft.TabIndex = 38;
+			txt_InputDevice0DPadLeft.Location = new Point(764, 156);
+			txt_InputDevice0DPadLeft.Name = "txt_InputDevice0DPadLeft";
+			txt_InputDevice0DPadLeft.Size = new Size(196, 23);
+			txt_InputDevice0DPadLeft.TabIndex = 38;
 			// 
 			// label10
 			// 
@@ -217,12 +217,12 @@
 			label10.TabIndex = 41;
 			label10.Text = "Right";
 			// 
-			// txt_InputDeviceHotasRight
+			// txt_InputDevice0DPadRight
 			// 
-			txt_InputDeviceHotasRight.Location = new Point(764, 185);
-			txt_InputDeviceHotasRight.Name = "txt_InputDeviceHotasRight";
-			txt_InputDeviceHotasRight.Size = new Size(196, 23);
-			txt_InputDeviceHotasRight.TabIndex = 40;
+			txt_InputDevice0DPadRight.Location = new Point(764, 185);
+			txt_InputDevice0DPadRight.Name = "txt_InputDevice0DPadRight";
+			txt_InputDevice0DPadRight.Size = new Size(196, 23);
+			txt_InputDevice0DPadRight.TabIndex = 40;
 			// 
 			// label11
 			// 
@@ -233,12 +233,12 @@
 			label11.TabIndex = 43;
 			label11.Text = "Missile";
 			// 
-			// txt_InputDeviceHotasMissile
+			// txt_InputDevice0B
 			// 
-			txt_InputDeviceHotasMissile.Location = new Point(764, 238);
-			txt_InputDeviceHotasMissile.Name = "txt_InputDeviceHotasMissile";
-			txt_InputDeviceHotasMissile.Size = new Size(196, 23);
-			txt_InputDeviceHotasMissile.TabIndex = 42;
+			txt_InputDevice0B.Location = new Point(764, 238);
+			txt_InputDevice0B.Name = "txt_InputDevice0B";
+			txt_InputDevice0B.Size = new Size(196, 23);
+			txt_InputDevice0B.TabIndex = 42;
 			// 
 			// label12
 			// 
@@ -249,13 +249,13 @@
 			label12.TabIndex = 45;
 			label12.Text = "Extra Button 1";
 			// 
-			// txt_InputDeviceHotasExtra1
+			// txt_InputDevice0X
 			// 
-			txt_InputDeviceHotasExtra1.Location = new Point(730, 302);
-			txt_InputDeviceHotasExtra1.Name = "txt_InputDeviceHotasExtra1";
-			txt_InputDeviceHotasExtra1.Size = new Size(196, 23);
-			txt_InputDeviceHotasExtra1.TabIndex = 44;
-			txt_InputDeviceHotasExtra1.TextChanged += kryptonTextBox11_TextChanged;
+			txt_InputDevice0X.Location = new Point(730, 302);
+			txt_InputDevice0X.Name = "txt_InputDevice0X";
+			txt_InputDevice0X.Size = new Size(196, 23);
+			txt_InputDevice0X.TabIndex = 44;
+			txt_InputDevice0X.TextChanged += kryptonTextBox11_TextChanged;
 			// 
 			// label13
 			// 
@@ -266,28 +266,28 @@
 			label13.TabIndex = 49;
 			label13.Text = "Coin";
 			// 
-			// txt_InputDeviceCoin
+			// txt_InputDevice0Back
 			// 
-			txt_InputDeviceCoin.Location = new Point(133, 80);
-			txt_InputDeviceCoin.Name = "txt_InputDeviceCoin";
-			txt_InputDeviceCoin.Size = new Size(196, 23);
-			txt_InputDeviceCoin.TabIndex = 48;
+			txt_InputDevice0Back.Location = new Point(133, 80);
+			txt_InputDevice0Back.Name = "txt_InputDevice0Back";
+			txt_InputDevice0Back.Size = new Size(196, 23);
+			txt_InputDevice0Back.TabIndex = 48;
 			// 
 			// label14
 			// 
 			label14.AutoSize = true;
-			label14.Location = new Point(89, 59);
+			label14.Location = new Point(90, 114);
 			label14.Name = "label14";
 			label14.Size = new Size(31, 15);
 			label14.TabIndex = 47;
 			label14.Text = "Start";
 			// 
-			// txt_InputDeviceHotasStart
+			// txt_InputDevice0Start
 			// 
-			txt_InputDeviceHotasStart.Location = new Point(133, 51);
-			txt_InputDeviceHotasStart.Name = "txt_InputDeviceHotasStart";
-			txt_InputDeviceHotasStart.Size = new Size(196, 23);
-			txt_InputDeviceHotasStart.TabIndex = 46;
+			txt_InputDevice0Start.Location = new Point(133, 106);
+			txt_InputDevice0Start.Name = "txt_InputDevice0Start";
+			txt_InputDevice0Start.Size = new Size(196, 23);
+			txt_InputDevice0Start.TabIndex = 46;
 			// 
 			// cmb_devicelist
 			// 
@@ -329,36 +329,37 @@
 			Controls.Add(btn_Cancel);
 			Controls.Add(cmb_devicelist);
 			Controls.Add(label13);
-			Controls.Add(txt_InputDeviceCoin);
+			Controls.Add(txt_InputDevice0Back);
 			Controls.Add(label14);
-			Controls.Add(txt_InputDeviceHotasStart);
+			Controls.Add(txt_InputDevice0Start);
 			Controls.Add(label12);
-			Controls.Add(txt_InputDeviceHotasExtra1);
+			Controls.Add(txt_InputDevice0X);
 			Controls.Add(label11);
-			Controls.Add(txt_InputDeviceHotasMissile);
+			Controls.Add(txt_InputDevice0B);
 			Controls.Add(label10);
-			Controls.Add(txt_InputDeviceHotasRight);
+			Controls.Add(txt_InputDevice0DPadRight);
 			Controls.Add(label9);
-			Controls.Add(txt_InputDeviceHotasLeft);
+			Controls.Add(txt_InputDevice0DPadLeft);
 			Controls.Add(label8);
-			Controls.Add(txt_InputDeviceHotasDown);
+			Controls.Add(txt_InputDevice0DPadDown);
 			Controls.Add(label7);
-			Controls.Add(txt_InputDeviceHotasUp);
+			Controls.Add(txt_InputDevice0DPadUp);
 			Controls.Add(label5);
-			Controls.Add(txt_InputDeviceHotasExtra2);
+			Controls.Add(txt_InputDevice0Y);
 			Controls.Add(label4);
-			Controls.Add(txt_InputDeviceHotasGun);
+			Controls.Add(txt_InputDevice0A);
 			Controls.Add(label3);
-			Controls.Add(txt_InputDeviceHotasThrottleButton);
+			Controls.Add(txt_InputDevice0RightShoulder);
 			Controls.Add(label2);
-			Controls.Add(txt_InputDeviceHotasAnalogY);
+			Controls.Add(txt_InputDevice0LeftThumbInputDevice0Yplus);
 			Controls.Add(label1);
-			Controls.Add(txt_InputDeviceHotasAnalogX);
+			Controls.Add(txt_InputDevice0LeftThumbInputDevice0Xplus);
 			Controls.Add(label6);
-			Controls.Add(txt_InputDeviceHotasThrottleAxis);
+			Controls.Add(txt_InputDevice0RightThumbInputDevice0Yplus);
 			Name = "dinputhotas";
 			Text = "dinputhotas";
 			FormClosing += dinputhotas_FormClosing;
+			Load += dinputhotas_Load;
 			((System.ComponentModel.ISupportInitialize)cmb_devicelist).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
@@ -367,33 +368,33 @@
 		#endregion
 
 		private Label label6;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasThrottleAxis;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0RightThumbInputDevice0Yplus;
 		private Label label1;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasAnalogX;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0LeftThumbInputDevice0Xplus;
 		private Label label2;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasAnalogY;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0LeftThumbInputDevice0Yplus;
 		private Label label3;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasThrottleButton;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0RightShoulder;
 		private Label label4;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasGun;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0A;
 		private Label label5;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasExtra2;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0Y;
 		private Label label7;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasUp;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0DPadUp;
 		private Label label8;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasDown;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0DPadDown;
 		private Label label9;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasLeft;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0DPadLeft;
 		private Label label10;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasRight;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0DPadRight;
 		private Label label11;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasMissile;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0B;
 		private Label label12;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasExtra1;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0X;
 		private Label label13;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceCoin;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0Back;
 		private Label label14;
-		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHotasStart;
+		private Krypton.Toolkit.KryptonTextBox txt_InputDevice0Start;
 		private Krypton.Toolkit.KryptonComboBox cmb_devicelist;
 		private Krypton.Toolkit.KryptonButton btn_Save;
 		private Krypton.Toolkit.KryptonButton btn_Cancel;

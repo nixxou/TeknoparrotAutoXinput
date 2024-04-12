@@ -243,7 +243,7 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			
+
 			string json = ConfigurationManager.MainConfig.bindingDinputHotas;
 			if (!string.IsNullOrEmpty(json))
 			{
@@ -265,7 +265,7 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
-			
+
 		}
 
 		private void SaveConfig()
@@ -296,7 +296,7 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_Save_Click(object sender, EventArgs e)
 		{
-			//SaveConfig();
+			SaveConfig();
 			this.DialogResult = DialogResult.OK;
 			this.Close();
 		}
@@ -316,6 +316,11 @@ namespace TeknoparrotAutoXinput
 				threadJoystick = null;
 				_stopListening = false;
 			}
+		}
+
+		private void dinputhotas_Load(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

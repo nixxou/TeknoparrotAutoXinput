@@ -53,6 +53,10 @@ namespace TeknoparrotAutoXinput
 
 		public static string WheelGuid = "";
 		public static string WheelFFBGuid = "";
+
+		public static string HotasGuid = "";
+		public static string HotasFFBGuid = "";
+
 		public static Guid? FirstKeyboardGuid = null;
 
 		public static string ParrotDataOriginal="";
@@ -146,12 +150,18 @@ namespace TeknoparrotAutoXinput
 
 				bool gamepadStooz = ConfigurationManager.MainConfig.gamepadStooz;
 				bool wheelStooz = ConfigurationManager.MainConfig.wheelStooz;
+				bool hotasStooz = ConfigurationManager.MainConfig.hotasStooz;
 				bool enableStoozZone_Gamepad = ConfigurationManager.MainConfig.enableStoozZone_Gamepad;
 				int valueStooz_Gamepad = ConfigurationManager.MainConfig.valueStooz_Gamepad;
 				bool enableStoozZone_Wheel = ConfigurationManager.MainConfig.enableStoozZone_Wheel;
 				int valueStooz_Wheel = ConfigurationManager.MainConfig.valueStooz_Wheel;
+				bool enableStoozZone_Hotas = ConfigurationManager.MainConfig.enableStoozZone_Hotas;
+				int valueStooz_Hotas = ConfigurationManager.MainConfig.valueStooz_Hotas;
+				bool reverseYAxis_Hotas = ConfigurationManager.MainConfig.reverseYAxis_Hotas;
+
 
 				WheelFFBGuid = ConfigurationManager.MainConfig.ffbDinputWheel;
+				HotasFFBGuid = ConfigurationManager.MainConfig.ffbDinputHotas;
 
 				bool passthrough = false;
 
@@ -167,17 +177,24 @@ namespace TeknoparrotAutoXinput
 				Utils.LogMessage($"gamepadStooz = {gamepadStooz}");
 				Utils.LogMessage($"wheelStooz = {wheelStooz}");
 				Utils.LogMessage($"enableStoozZone_Gamepad = {enableStoozZone_Gamepad}");
+				Utils.LogMessage($"enableStoozZone_Wheel = {enableStoozZone_Wheel}");
+				Utils.LogMessage($"enableStoozZone_Hotas = {enableStoozZone_Hotas}");
 				Utils.LogMessage($"valueStooz_Gamepad = {valueStooz_Gamepad}");
 				Utils.LogMessage($"enableStoozZone_Wheel = {enableStoozZone_Wheel}");
 				Utils.LogMessage($"valueStooz_Wheel = {valueStooz_Wheel}");
+				Utils.LogMessage($"enableStoozZone_Hotas = {enableStoozZone_Hotas}");
+				Utils.LogMessage($"valueStooz_Hotas = {valueStooz_Hotas}");
+				Utils.LogMessage($"reverseYAxis_Hotas = {reverseYAxis_Hotas}");
 				Utils.LogMessage($"WheelFFBGuid = {WheelFFBGuid}");
-				
+				Utils.LogMessage($"WheelFFBGuid = {HotasFFBGuid}");
+
 
 				List<string> typeConfig = new List<string>();
 				typeConfig.Add("gamepad");
 				typeConfig.Add("gamepadalt");
 				typeConfig.Add("arcade");
 				typeConfig.Add("wheel");
+				typeConfig.Add("hotas");
 
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
@@ -245,7 +262,6 @@ namespace TeknoparrotAutoXinput
 					string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
 					string teknoparrotExe = Path.Combine(baseTpDir, "TeknoParrotUi.exe");
 
-					MessageBox.Show("t1");
 					GameSettings gameOptions = new GameSettings();
 					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
 					if (File.Exists(optionFile))
@@ -260,8 +276,6 @@ namespace TeknoparrotAutoXinput
 						teknoparrotExe = Path.GetFullPath(gameOptions.CustomTpExe);
 						baseTpDir = Path.GetDirectoryName(teknoparrotExe);
 					}
-
-					
 
 					string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
 					if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
@@ -376,6 +390,13 @@ namespace TeknoparrotAutoXinput
 						wheelStooz = gameOptions.wheelStooz;
 						enableStoozZone_Wheel = gameOptions.enableStoozZone_Wheel;
 						valueStooz_Wheel = gameOptions.valueStooz_Wheel;
+					}
+					if (gameOptions.UseGlobalStoozZoneHotas == false)
+					{
+						hotasStooz = gameOptions.hotasStooz;
+						enableStoozZone_Hotas = gameOptions.enableStoozZone_Hotas;
+						valueStooz_Hotas = gameOptions.valueStooz_Hotas;
+						reverseYAxis_Hotas = gameOptions.reverseYAxis_Hotas;
 					}
 					Utils.LogMessage($"gameOptions Values = {gameOptions.Serialize()}");
 
@@ -501,6 +522,7 @@ namespace TeknoparrotAutoXinput
 						bool haveArcade = false;
 						bool haveWheel = false;
 						bool haveGamepad = false;
+						bool haveHotas = false;
 
 						Utils.LogMessage($"availableSlot = {availableSlot}");
 
@@ -511,6 +533,11 @@ namespace TeknoparrotAutoXinput
 						bool checkDinputShifter = ConfigurationManager.MainConfig.useDinputShifter;
 						Dictionary<string, JoystickButtonData> bindingDinputShifter = null;
 						string bindingDinputShifterJson = ConfigurationManager.MainConfig.bindingDinputShifter;
+
+						bool checkDinputHotas = ConfigurationManager.MainConfig.useDinputHotas;
+						Dictionary<string, JoystickButtonData> bindingDinputHotas = null;
+						string bindingDinputHotasJson = ConfigurationManager.MainConfig.bindingDinputHotas;
+
 
 						Guid shifterGuid = new Guid();
 						bool shifterGuidFound = false;
@@ -563,16 +590,60 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 						}
+
+						bool dinputHotasFound = false;
+						if (checkDinputHotas)
+						{
+							Utils.LogMessage($"check Dinput Hotas");
+							if (!string.IsNullOrEmpty(bindingDinputHotasJson))
+							{
+								bindingDinputHotas = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputHotasJson);
+								if (bindingDinputHotas.ContainsKey("InputDevice0LeftThumbInputDevice0X+"))
+								{
+									HotasGuid = bindingDinputHotas["InputDevice0LeftThumbInputDevice0X+"].JoystickGuid.ToString();
+									Utils.LogMessage($"bindingDinputHotasGuid to Search = {HotasGuid}");
+								}
+							}
+							if (!string.IsNullOrEmpty(HotasGuid))
+							{
+								DirectInput directInput = new DirectInput();
+								List<DeviceInstance> devices = new List<DeviceInstance>();
+								devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+								foreach (var device in devices)
+								{
+									if (device.Type == SharpDX.DirectInput.DeviceType.Keyboard && FirstKeyboardGuid == null)
+									{
+										FirstKeyboardGuid = device.InstanceGuid;
+									}
+									if (device.InstanceGuid.ToString() == HotasGuid)
+									{
+										Utils.LogMessage($"HotasGuid Found");
+										dinputHotasFound = true;
+										haveHotas = true;
+									}
+								}
+							}
+						}
+
+
 						bool useXinput = true;
 						bool useDinputWheel = false;
+						bool useDinputHotas = false;
 						if (haveWheel && existingConfig.ContainsKey("wheel") && dinputWheelFound)
 						{
 							useXinput = false;
 							useDinputWheel = true;
 						}
+						if (haveHotas && existingConfig.ContainsKey("hotas") && dinputHotasFound)
+						{
+							useXinput = false;
+							useDinputWheel = false;
+							useDinputHotas = true;
+						}
 
 						Utils.LogMessage($"useXinput : {useXinput}");
 						Utils.LogMessage($"useDinputWheel : {useDinputWheel}");
+						Utils.LogMessage($"useDinputHotas : {useDinputHotas}");
 
 						foreach (var gp in connectedGamePad.Values)
 						{
@@ -619,6 +690,7 @@ namespace TeknoparrotAutoXinput
 						Dictionary<string, JoystickButton> joystickButtonWheel = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonArcade = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonGamepad = new Dictionary<string, JoystickButton>();
+						Dictionary<string, JoystickButton> joystickButtonHotas = new Dictionary<string, JoystickButton>();
 
 
 						if (useXinput)
@@ -895,10 +967,76 @@ namespace TeknoparrotAutoXinput
 								xinputGamepad.Type = "wheel";
 								ConfigPerPlayer.Add(0, ("wheel", xinputGamepad));
 							}
+							if (useDinputHotas)
+							{
+								Utils.LogMessage($"Assign Dinput Hotas");
+								if (useVirtualKeyboard && FirstKeyboardGuid != null)
+								{
+
+									if (!string.IsNullOrEmpty(keyTest))
+									{
+										if (Enum.TryParse<SharpDX.DirectInput.Key>(keyTest, out SharpDX.DirectInput.Key resultat))
+										{
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "InputDevice10LeftThumb";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputHotas.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
+										}
+									}
+									if (!string.IsNullOrEmpty(keyService1))
+									{
+										if (Enum.TryParse<SharpDX.DirectInput.Key>(keyService1, out SharpDX.DirectInput.Key resultat))
+										{
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "InputDevice10RightThumb";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputHotas.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
+										}
+									}
+									if (!string.IsNullOrEmpty(keyService2))
+									{
+										if (Enum.TryParse<SharpDX.DirectInput.Key>(keyService2, out SharpDX.DirectInput.Key resultat))
+										{
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "InputDevice10LeftShoulder";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputHotas.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
+										}
+									}
+								}
+								joystickButtonHotas = ParseConfig(existingConfig["hotas"]);
+								XinputGamepad xinputGamepad = new XinputGamepad(0);
+								xinputGamepad.Type = "hotas";
+								ConfigPerPlayer.Add(0, ("hotas", xinputGamepad));
+							}
 						}
 
 
-						if(ConfigPerPlayer.Count > 0 && (gamepadStooz || wheelStooz))
+						if(ConfigPerPlayer.Count > 0 && (gamepadStooz || wheelStooz || hotasStooz))
 						{
 							bool doChangeStooz = false;
 							bool enableStooz = false;
@@ -916,6 +1054,12 @@ namespace TeknoparrotAutoXinput
 								doChangeStooz = true;
 								enableStooz = enableStoozZone_Wheel;
 								valueStooz = valueStooz_Wheel;
+							}
+							if (firstPlayer.Value.Item2.Type == "hotas" && hotasStooz)
+							{
+								doChangeStooz = true;
+								enableStooz = enableStoozZone_Hotas;
+								valueStooz = valueStooz_Hotas;
 							}
 							if (doChangeStooz)
 							{
@@ -942,68 +1086,59 @@ namespace TeknoparrotAutoXinput
 						if (changeFFBConfig && ConfigPerPlayer.Count > 0)
 						{
 							var firstPlayer = ConfigPerPlayer.First();
-							/*
-							XmlDocument xmlDocOri = new XmlDocument();
-							xmlDocOri.Load(xmlFile);
-							XmlNode gamePathNode = xmlDocOri.SelectSingleNode("/GameProfile/GamePath");
-							
-							if (gamePathNode != null)
+
+							if (!String.IsNullOrEmpty(FFBPluginIniFile) && File.Exists(FFBPluginIniFile))
 							{
-								string gamePathContent = gamePathNode.InnerText;
-								string FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(gamePathContent), "FFBPlugin.ini");
-								*/
-								if (!String.IsNullOrEmpty(FFBPluginIniFile) && File.Exists(FFBPluginIniFile))
+								Utils.LogMessage($"FFB Ini Exist");
+								if(!String.IsNullOrEmpty(FFBPluginIniBackup))
 								{
-									Utils.LogMessage($"FFB Ini Exist");
-									if(!String.IsNullOrEmpty(FFBPluginIniBackup))
+									try
 									{
-										try
-										{
-											File.Copy(FFBPluginIniFile, FFBPluginIniBackup, true);
-										}
-										catch { }
+										File.Copy(FFBPluginIniFile, FFBPluginIniBackup, true);
 									}
-									var ConfigFFB = new IniFile(FFBPluginIniFile);
-									//if (ConfigFFB.KeyExists("DeviceGUID", "Settings"))
-									//{
-
-										if (useXinput)
-										{
-											SDL2.SDL.SDL_Quit();
-											SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
-											SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
-											SDL2.SDL.SDL_JoystickUpdate();
-											for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
-											{
-												var currentJoy = SDL.SDL_JoystickOpen(i);
-												string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
-												if (nameController.ToLower().StartsWith("xinput") && nameController.ToLower().EndsWith("#" + (firstPlayer.Value.Item2.XinputSlot + 1).ToString()))
-												{
-
-													const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
-													byte[] guidBuffer = new byte[bufferSize];
-													SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
-													string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
-													ConfigFFB.Write("DeviceGUID", guidString, "Settings");
-													Utils.LogMessage($"Change FFB DeviceGUID To {guidString}");
-													SDL.SDL_JoystickClose(currentJoy);
-													SDL.SDL_JoystickClose(currentJoy);
-													break;
-												}
-												SDL.SDL_JoystickClose(currentJoy);
-											}
-											SDL2.SDL.SDL_Quit();
-										}
-										if (useDinputWheel)
-										{
-											Utils.LogMessage($"Change FFB DeviceGUID To DINPUT {WheelFFBGuid}");
-											ConfigFFB.Write("DeviceGUID", WheelFFBGuid, "Settings");
-										}
-									//}
-
+									catch { }
 								}
+								var ConfigFFB = new IniFile(FFBPluginIniFile);
 
-							//}
+
+								if (useXinput)
+								{
+									SDL2.SDL.SDL_Quit();
+									SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
+									SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
+									SDL2.SDL.SDL_JoystickUpdate();
+									for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
+									{
+										var currentJoy = SDL.SDL_JoystickOpen(i);
+										string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
+										if (nameController.ToLower().StartsWith("xinput") && nameController.ToLower().EndsWith("#" + (firstPlayer.Value.Item2.XinputSlot + 1).ToString()))
+										{
+
+											const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
+											byte[] guidBuffer = new byte[bufferSize];
+											SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
+											string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
+											ConfigFFB.Write("DeviceGUID", guidString, "Settings");
+											Utils.LogMessage($"Change FFB DeviceGUID To {guidString}");
+											SDL.SDL_JoystickClose(currentJoy);
+											SDL.SDL_JoystickClose(currentJoy);
+											break;
+										}
+										SDL.SDL_JoystickClose(currentJoy);
+									}
+									SDL2.SDL.SDL_Quit();
+								}
+								if (useDinputWheel)
+								{
+									Utils.LogMessage($"Change FFB DeviceGUID To DINPUT {WheelFFBGuid}");
+									ConfigFFB.Write("DeviceGUID", WheelFFBGuid, "Settings");
+								}
+								if (useDinputHotas)
+								{
+									Utils.LogMessage($"Change FFB DeviceGUID To DINPUT {HotasFFBGuid}");
+									ConfigFFB.Write("DeviceGUID", HotasFFBGuid, "Settings");
+								}
+							}
 
 						}
 
@@ -1027,6 +1162,7 @@ namespace TeknoparrotAutoXinput
 							int newXinputSlot = ConfigGamePad.XinputSlot;
 
 							Dictionary<string, JoystickButton> joystickButtonData = new Dictionary<string, JoystickButton>();
+							if (ConfigType == "hotas") joystickButtonData = joystickButtonHotas;
 							if (ConfigType == "wheel") joystickButtonData = joystickButtonWheel;
 							if (ConfigType == "arcade") joystickButtonData = joystickButtonArcade;
 							if (ConfigType == "gamepad") joystickButtonData = joystickButtonGamepad;
@@ -1047,6 +1183,7 @@ namespace TeknoparrotAutoXinput
 						{
 							string ConfigType = ConfigPerPlayer.First().Value.Item1;
 							Dictionary<string, JoystickButton> joystickButtonData = new Dictionary<string, JoystickButton>();
+							if (ConfigType == "hotas") joystickButtonData = joystickButtonHotas;
 							if (ConfigType == "wheel") joystickButtonData = joystickButtonWheel;
 							if (ConfigType == "arcade") joystickButtonData = joystickButtonArcade;
 							if (ConfigType == "gamepad") joystickButtonData = joystickButtonGamepad;
@@ -1092,7 +1229,7 @@ namespace TeknoparrotAutoXinput
 							{
 								fieldValueNode.InnerText = "XInput";
 							}
-							if (useDinputWheel)
+							if (useDinputWheel || useDinputHotas)
 							{
 								fieldValueNode.InnerText = "DirectInput";
 							}
@@ -1374,6 +1511,93 @@ namespace TeknoparrotAutoXinput
 
 
 
+						}
+
+						if (useDinputHotas)
+						{
+
+							XmlNodeList fieldNodes = xmlDoc.SelectNodes("//FieldInformation");
+							foreach (XmlNode fieldNode in fieldNodes)
+							{
+								XmlNode categoryNameNode = fieldNode.SelectSingleNode("CategoryName");
+								XmlNode fieldNameNode = fieldNode.SelectSingleNode("FieldName");
+
+								if (categoryNameNode != null && categoryNameNode.InnerText == "General" &&
+									fieldNameNode != null && fieldNameNode.InnerText == "Reverse Y Axis")
+								{
+									XmlNode fieldValueNodeReverseY = fieldNode.SelectSingleNode("FieldValue");
+									if (fieldValueNodeReverseY != null)
+									{
+										fieldValueNodeReverseY.InnerText = reverseYAxis_Hotas ? "1" : "0";
+									}
+								}
+							}
+
+							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+
+							foreach (XmlNode node in joystickButtonsNodes)
+							{
+								XmlNode existingDirectInputButtonNode = node.SelectSingleNode("DirectInputButton");
+								if (existingDirectInputButtonNode != null)
+								{
+									node.RemoveChild(existingDirectInputButtonNode);
+								}
+								XmlNode existingBindNameDiNode = node.SelectSingleNode("BindNameDi");
+								if (existingBindNameDiNode != null)
+								{
+									node.RemoveChild(existingBindNameDiNode);
+								}
+
+								XmlNode buttonNameNode = node.SelectSingleNode("ButtonName");
+								string buttonName = "";
+								if (buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText)) buttonName = buttonNameNode.InnerText;
+
+								XmlNode bindNameXiNode = node.SelectSingleNode("BindNameXi");
+								if (bindNameXiNode != null && !string.IsNullOrEmpty(bindNameXiNode.InnerText))
+								{
+									string bindkey = bindNameXiNode.InnerText.Trim().Replace(" ", "");
+									if (bindingDinputHotas.ContainsKey(bindkey))
+									{
+										var bindData = bindingDinputHotas[bindkey];
+
+										XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+
+										XmlNode buttonNode = xmlDoc.CreateElement("Button");
+										buttonNode.InnerText = bindData.Button.ToString();
+										newDirectInputButtonNode.AppendChild(buttonNode);
+
+										XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+										isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(isAxisNode);
+
+										XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+										IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+
+										XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+										IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+
+										XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+										PovDirectionNode.InnerText = bindData.PovDirection.ToString();
+										newDirectInputButtonNode.AppendChild(PovDirectionNode);
+
+										XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+										IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+
+										XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+										JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
+										newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+
+										node.AppendChild(newDirectInputButtonNode);
+
+										XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+										BindNameDiNode.InnerText = bindData.Title;
+										node.AppendChild(BindNameDiNode);
+									}
+								}
+							}
 						}
 
 						using (XmlWriter xmlWriter = XmlWriter.Create(xmlFile + ".custom.xml", settings))

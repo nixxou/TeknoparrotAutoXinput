@@ -122,6 +122,7 @@
 			radio_useDefaultStooze_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			groupBox10 = new GroupBox();
 			kryptonLabel27 = new Krypton.Toolkit.KryptonLabel();
+			chk_reverseYAxis_Hotas = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -879,6 +880,7 @@
 			// 
 			// groupBox9
 			// 
+			groupBox9.Controls.Add(chk_reverseYAxis_Hotas);
 			groupBox9.Controls.Add(btn_setffbguidHotas);
 			groupBox9.Controls.Add(cmb_ffbguidHotas);
 			groupBox9.Controls.Add(kryptonLabel24);
@@ -1018,6 +1020,15 @@
 			kryptonLabel27.Size = new Size(200, 20);
 			kryptonLabel27.TabIndex = 0;
 			kryptonLabel27.Values.Text = "Not availiable yet, in future version";
+			// 
+			// chk_reverseYAxis_Hotas
+			// 
+			chk_reverseYAxis_Hotas.Location = new Point(13, 103);
+			chk_reverseYAxis_Hotas.Name = "chk_reverseYAxis_Hotas";
+			chk_reverseYAxis_Hotas.Size = new Size(101, 20);
+			chk_reverseYAxis_Hotas.TabIndex = 49;
+			chk_reverseYAxis_Hotas.Values.Text = "Reverse Y Axis";
+			chk_reverseYAxis_Hotas.CheckedChanged += chk_reverseYAxis_Hotas_CheckedChanged;
 			// 
 			// Form1
 			// 
@@ -1168,5 +1179,6 @@
 		private Krypton.Toolkit.KryptonRadioButton radio_useDefaultStooze_Hotas;
 		private GroupBox groupBox10;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel27;
+		private Krypton.Toolkit.KryptonCheckBox chk_reverseYAxis_Hotas;
 	}
 }

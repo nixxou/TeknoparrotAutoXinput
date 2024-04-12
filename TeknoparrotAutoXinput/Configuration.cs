@@ -69,6 +69,8 @@ namespace TeknoparrotAutoXinput
 		public bool useDinputHotas { get; set; } = false;
 		public string ffbDinputHotas { get; set; } = "";
 
+		public bool reverseYAxis_Hotas { get; set; } = true;
+
 		public Configuration()
 		{
 
@@ -112,6 +114,7 @@ namespace TeknoparrotAutoXinput
 				this.bindingDinputHotas = DeserializeData.bindingDinputHotas;
 				this.useDinputHotas = DeserializeData.useDinputHotas;
 				this.ffbDinputHotas = DeserializeData.ffbDinputHotas;
+				this.reverseYAxis_Hotas = DeserializeData.reverseYAxis_Hotas;
 			}
 			catch (Exception ex)
 			{

@@ -51,6 +51,8 @@
 			lbl_player2 = new Krypton.Toolkit.KryptonLabel();
 			lbl_player3 = new Krypton.Toolkit.KryptonLabel();
 			lbl_player4 = new Krypton.Toolkit.KryptonLabel();
+			lbl_hotaslist = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel5 = new Krypton.Toolkit.KryptonLabel();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox_gameControls).BeginInit();
 			flowLayoutPanelThumbs.SuspendLayout();
@@ -116,6 +118,8 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(lbl_hotaslist);
+			groupBox1.Controls.Add(kryptonLabel5);
 			groupBox1.Controls.Add(lbl_wheellist);
 			groupBox1.Controls.Add(lbl_arcadelist);
 			groupBox1.Controls.Add(lbl_gamepadlist);
@@ -124,7 +128,7 @@
 			groupBox1.Controls.Add(kryptonLabel1);
 			groupBox1.Location = new Point(12, 710);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(975, 100);
+			groupBox1.Size = new Size(975, 123);
 			groupBox1.TabIndex = 7;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Controller Status";
@@ -252,11 +256,27 @@
 			lbl_player4.TabIndex = 14;
 			lbl_player4.Values.Text = "kryptonLabel7";
 			// 
+			// lbl_hotaslist
+			// 
+			lbl_hotaslist.Location = new Point(129, 97);
+			lbl_hotaslist.Name = "lbl_hotaslist";
+			lbl_hotaslist.Size = new Size(19, 20);
+			lbl_hotaslist.TabIndex = 7;
+			lbl_hotaslist.Values.Text = "...";
+			// 
+			// kryptonLabel5
+			// 
+			kryptonLabel5.Location = new Point(6, 97);
+			kryptonLabel5.Name = "kryptonLabel5";
+			kryptonLabel5.Size = new Size(70, 20);
+			kryptonLabel5.TabIndex = 6;
+			kryptonLabel5.Values.Text = "Hotas List :";
+			// 
 			// Main
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1011, 822);
+			ClientSize = new Size(1011, 842);
 			Controls.Add(lbl_player4);
 			Controls.Add(lbl_player3);
 			Controls.Add(lbl_player2);
@@ -307,5 +327,7 @@
 		private Krypton.Toolkit.KryptonLabel lbl_player2;
 		private Krypton.Toolkit.KryptonLabel lbl_player3;
 		private Krypton.Toolkit.KryptonLabel lbl_player4;
+		private Krypton.Toolkit.KryptonLabel lbl_hotaslist;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel5;
 	}
 }
