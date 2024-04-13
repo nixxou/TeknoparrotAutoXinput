@@ -287,6 +287,7 @@ namespace TeknoparrotAutoXinput
 					string executableGame = "";
 					string executableGameDir = "";
 					bool gameNeedAdmin = false;
+					bool linkedFFBIni = false;
 
 
 					Utils.LogMessage($"baseTpDir : {baseTpDir}");
@@ -412,9 +413,12 @@ namespace TeknoparrotAutoXinput
 								linkSourceFolder = gameOptions.CustomPerGameLinkFolder;
 							}
 						}
+						if (File.Exists(Path.Combine(linkSourceFolder, "FFBPlugin.ini")))
+						{
+							linkedFFBIni = true;
+						}
 						Utils.CleanHardLinksFiles(linkTargetFolder, linkSourceFolder);
 					}
-
 
 					ParrotDataOriginal = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml");
 					ParrotDataBackup = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml.AutoXinputBackup");
@@ -437,10 +441,16 @@ namespace TeknoparrotAutoXinput
 
 					FFBPluginIniFile = "";
 					FFBPluginIniBackup = "";
-					if (!string.IsNullOrEmpty(executableGame) && !string.IsNullOrEmpty(executableGameDir))
+					string DirFFBPlugin = Path.GetDirectoryName(executableGameDir);
+					if (linkedFFBIni)
 					{
-						FFBPluginIniFile = Path.Combine(Path.GetDirectoryName(executableGameDir), "FFBPlugin.ini");
-						FFBPluginIniBackup = Path.Combine(Path.GetDirectoryName(executableGameDir), "FFBPlugin.ini.AutoXinputBackup");
+						DirFFBPlugin = linkSourceFolder;
+					}
+
+					if (!string.IsNullOrEmpty(executableGame) && !string.IsNullOrEmpty(DirFFBPlugin))
+					{
+						FFBPluginIniFile = Path.Combine(DirFFBPlugin, "FFBPlugin.ini");
+						FFBPluginIniBackup = Path.Combine(DirFFBPlugin, "FFBPlugin.ini.AutoXinputBackup");
 						Utils.LogMessage($"FFBPluginIniFile = {FFBPluginIniFile}");
 						Utils.LogMessage($"FFBPluginIniBackup = {FFBPluginIniBackup}");
 						if (File.Exists(FFBPluginIniBackup))
