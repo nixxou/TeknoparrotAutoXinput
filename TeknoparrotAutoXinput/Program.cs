@@ -199,9 +199,6 @@ namespace TeknoparrotAutoXinput
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
 				{
-
-					MessageBox.Show("oco0");
-
 					forceTypeController = new Dictionary<int, string>(); 
 					foreach (string arg in args)
 					{
@@ -243,6 +240,8 @@ namespace TeknoparrotAutoXinput
 					string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
 					string customConfigPath = "";
 					Dictionary<string, string> shifterData = new Dictionary<string, string>();
+					Dictionary<string, string> throttleData = new Dictionary<string, string>();
+					
 
 					string xmlFile = args.Last();
 
@@ -465,6 +464,12 @@ namespace TeknoparrotAutoXinput
 						shifterData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(shifterPath));
 					}
 
+					var throttlePath = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "throttle" + ".json");
+					if (File.Exists(throttlePath))
+					{
+						throttleData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(throttlePath));
+					}
+
 					string emptyConfigPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "GameProfiles", originalConfigFileName);
 					Utils.LogMessage($"Base TP GameProfile : {emptyConfigPath}");
 					if (!File.Exists(emptyConfigPath))
@@ -539,8 +544,71 @@ namespace TeknoparrotAutoXinput
 						string bindingDinputHotasJson = ConfigurationManager.MainConfig.bindingDinputHotas;
 
 
+						bool checkDinputThrottle = (ConfigurationManager.MainConfig.useDinputHotas && ConfigurationManager.MainConfig.useDinputWheel && ConfigurationManager.MainConfig.useHotasWithWheel);
+
+						Guid throttleGuid = new Guid();
+						bool throttleGuidFound = false;
+
 						Guid shifterGuid = new Guid();
 						bool shifterGuidFound = false;
+
+						bool dinputHotasFound = false;
+						if (checkDinputHotas)
+						{
+							Utils.LogMessage($"check Dinput Hotas");
+							if (!string.IsNullOrEmpty(bindingDinputHotasJson))
+							{
+								bindingDinputHotas = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputHotasJson);
+								if (bindingDinputHotas.ContainsKey("InputDevice0LeftThumbInputDevice0X+"))
+								{
+									HotasGuid = bindingDinputHotas["InputDevice0LeftThumbInputDevice0X+"].JoystickGuid.ToString();
+									Utils.LogMessage($"bindingDinputHotasGuid to Search = {HotasGuid}");
+								}
+							}
+							if (!string.IsNullOrEmpty(HotasGuid))
+							{
+								DirectInput directInput = new DirectInput();
+								List<DeviceInstance> devices = new List<DeviceInstance>();
+								devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+								foreach (var device in devices)
+								{
+									if (device.Type == SharpDX.DirectInput.DeviceType.Keyboard && FirstKeyboardGuid == null)
+									{
+										FirstKeyboardGuid = device.InstanceGuid;
+									}
+									if (device.InstanceGuid.ToString() == HotasGuid)
+									{
+										Utils.LogMessage($"HotasGuid Found");
+										dinputHotasFound = true;
+										haveHotas = true;
+									}
+								}
+							}
+						}
+
+						if (checkDinputThrottle)
+						{
+							Utils.LogMessage($"check Dinput Throttle");
+							if (bindingDinputHotas != null && bindingDinputHotas.ContainsKey("InputDevice0RightThumbInputDevice0Y+"))
+							{
+								throttleGuid = bindingDinputHotas["InputDevice0RightThumbInputDevice0Y+"].JoystickGuid;
+								Utils.LogMessage($"bindingDinputThrottleGuid to Search = {throttleGuid}");
+							}
+							if (!string.IsNullOrEmpty(throttleGuid.ToString()))
+							{
+								DirectInput directInput = new DirectInput();
+								List<DeviceInstance> devices = new List<DeviceInstance>();
+								devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+								foreach (var device in devices)
+								{
+									if (device.InstanceGuid.ToString() == HotasGuid)
+									{
+										Utils.LogMessage($"ThrottleGuid Found");
+										throttleGuidFound = true;
+									}
+								}
+							}
+						}
 
 						bool dinputWheelFound = false;
 						if (checkDinputWheel)
@@ -591,39 +659,7 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
-						bool dinputHotasFound = false;
-						if (checkDinputHotas)
-						{
-							Utils.LogMessage($"check Dinput Hotas");
-							if (!string.IsNullOrEmpty(bindingDinputHotasJson))
-							{
-								bindingDinputHotas = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputHotasJson);
-								if (bindingDinputHotas.ContainsKey("InputDevice0LeftThumbInputDevice0X+"))
-								{
-									HotasGuid = bindingDinputHotas["InputDevice0LeftThumbInputDevice0X+"].JoystickGuid.ToString();
-									Utils.LogMessage($"bindingDinputHotasGuid to Search = {HotasGuid}");
-								}
-							}
-							if (!string.IsNullOrEmpty(HotasGuid))
-							{
-								DirectInput directInput = new DirectInput();
-								List<DeviceInstance> devices = new List<DeviceInstance>();
-								devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
-								foreach (var device in devices)
-								{
-									if (device.Type == SharpDX.DirectInput.DeviceType.Keyboard && FirstKeyboardGuid == null)
-									{
-										FirstKeyboardGuid = device.InstanceGuid;
-									}
-									if (device.InstanceGuid.ToString() == HotasGuid)
-									{
-										Utils.LogMessage($"HotasGuid Found");
-										dinputHotasFound = true;
-										haveHotas = true;
-									}
-								}
-							}
-						}
+
 
 
 						bool useXinput = true;
@@ -1324,7 +1360,7 @@ namespace TeknoparrotAutoXinput
 								}
 
 								
-								if (buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText))
+								if (shifterGuidFound && buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText))
 								{
 									if (shifterData != null && shifterData.ContainsKey(buttonNameNode.InnerText) && bindingDinputShifter != null)
 									{
@@ -1339,6 +1375,79 @@ namespace TeknoparrotAutoXinput
 												if (DebugMode)
 												{
 													Utils.LogMessage($"Shifter Overwrite {buttonNameNode.InnerText} with {bindData.Title}");
+												}
+
+												XmlNode existingBindNameDiNode2 = node.SelectSingleNode("BindNameDi");
+												if (existingBindNameDiNode2 != null)
+												{
+													node.RemoveChild(existingBindNameDiNode2);
+													if (DebugMode)
+													{
+														Utils.LogMessage($"Delete existing {buttonNameNode.InnerText}");
+													}
+												}
+												XmlNode existingDirectInputButtonNode2 = node.SelectSingleNode("DirectInputButton");
+												if (existingDirectInputButtonNode2 != null)
+												{
+													node.RemoveChild(existingDirectInputButtonNode2);
+												}
+
+												XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+
+												XmlNode buttonNode = xmlDoc.CreateElement("Button");
+												buttonNode.InnerText = bindData.Button.ToString();
+												newDirectInputButtonNode.AppendChild(buttonNode);
+
+												XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+												isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(isAxisNode);
+
+												XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+												IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+
+												XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+												IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+
+												XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+												PovDirectionNode.InnerText = bindData.PovDirection.ToString();
+												newDirectInputButtonNode.AppendChild(PovDirectionNode);
+
+												XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+												IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+
+												XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+												JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
+												newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+
+												node.AppendChild(newDirectInputButtonNode);
+
+												XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+												BindNameDiNode.InnerText = bindData.Title;
+												node.AppendChild(BindNameDiNode);
+											}
+										}
+
+									}
+								}
+
+								if (throttleGuidFound && buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText))
+								{
+									if (throttleData != null && throttleData.ContainsKey(buttonNameNode.InnerText) && bindingDinputHotas != null)
+									{
+										string deviceKey = throttleData[buttonNameNode.InnerText];
+										if (bindingDinputHotas.ContainsKey(deviceKey))
+										{
+											var bindData = bindingDinputHotas[deviceKey];
+
+											if (bindData.Title != "")
+											{
+
+												if (DebugMode)
+												{
+													Utils.LogMessage($"Throttle Overwrite {buttonNameNode.InnerText} with {bindData.Title}");
 												}
 
 												XmlNode existingBindNameDiNode2 = node.SelectSingleNode("BindNameDi");

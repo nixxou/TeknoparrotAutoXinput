@@ -254,6 +254,7 @@ namespace TeknoparrotAutoXinput
 			chk_enableGearChange.Checked = gameSettings.EnableGearChange;
 			txt_monitorswitch.Text = gameSettings.Disposition == "" ? "<none>" : gameSettings.Disposition;
 			txt_customTp.Text = gameSettings.CustomTpExe;
+			chk_reverseYAxis_Hotas.Checked = gameSettings.reverseYAxis_Hotas;
 			Reload();
 
 		}

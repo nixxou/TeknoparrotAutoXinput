@@ -68,6 +68,7 @@ namespace TeknoparrotAutoXinput
 
 			txt_linksourcefolder.Text = ConfigurationManager.MainConfig.perGameLinkFolder;
 			txt_linksourcefolderexe.Text = ConfigurationManager.MainConfig.perGameLinkFolderExe;
+			chk_useHotasWithWheel.Checked = ConfigurationManager.MainConfig.useHotasWithWheel;
 
 			updateStooz();
 
@@ -84,6 +85,7 @@ namespace TeknoparrotAutoXinput
 
 			{
 				int selectedFFBIndex = -1;
+				int selectedFTBIndexHotas = -1;
 				SDL2.SDL.SDL_Quit();
 				SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
 				SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
@@ -100,9 +102,14 @@ namespace TeknoparrotAutoXinput
 						string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
 						FFBGuidList.Add(guidString);
 						cmb_ffbguid.Items.Add(nameController);
+						cmb_ffbguidHotas.Items.Add(nameController);
 						if (!string.IsNullOrEmpty(guidString) && guidString == txt_ffbguid.Text)
 						{
 							selectedFFBIndex = i;
+						}
+						if (!string.IsNullOrEmpty(guidString) && guidString == txt_ffbguidHotas.Text)
+						{
+							selectedFTBIndexHotas = i;
 						}
 						SDL.SDL_JoystickClose(currentJoy);
 					}
@@ -111,6 +118,10 @@ namespace TeknoparrotAutoXinput
 				if (selectedFFBIndex != -1)
 				{
 					cmb_ffbguid.SelectedIndex = selectedFFBIndex;
+				}
+				if (selectedFTBIndexHotas != -1)
+				{
+					cmb_ffbguidHotas.SelectedIndex = selectedFTBIndexHotas;
 				}
 			}
 
@@ -578,6 +589,30 @@ namespace TeknoparrotAutoXinput
 		private void chk_reverseYAxis_Hotas_CheckedChanged(object sender, EventArgs e)
 		{
 			ConfigurationManager.MainConfig.reverseYAxis_Hotas = chk_reverseYAxis_Hotas.Checked;
+			ConfigurationManager.SaveConfig();
+		}
+
+		private void cmb_ffbguid_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_setffbguidHotas_Click(object sender, EventArgs e)
+		{
+			if (cmb_ffbguidHotas.SelectedIndex >= 0)
+			{
+				txt_ffbguidHotas.Text = FFBGuidList[cmb_ffbguidHotas.SelectedIndex];
+			}
+		}
+
+		private void groupBox1_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void chk_useHotasWithWheel_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.useHotasWithWheel = chk_useHotasWithWheel.Checked;
 			ConfigurationManager.SaveConfig();
 		}
 	}

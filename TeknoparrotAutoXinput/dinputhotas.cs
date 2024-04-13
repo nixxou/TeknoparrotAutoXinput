@@ -285,6 +285,25 @@ namespace TeknoparrotAutoXinput
 					{
 						buttonDataFinal.Add(XinputTitle, buttonData[XinputTitle]);
 					}
+					if (control.Name == "txt_InputDevice0RightThumbInputDevice0Yplus" && buttonDataFinal[XinputTitle].IsAxis && (buttonData[XinputTitle].Title.EndsWith("+") || buttonData[XinputTitle].Title.EndsWith("-")))
+					{
+						string reverseKey = "InputDevice0RightThumbInputDevice0YReverse";
+						string reversedTitle = buttonData[XinputTitle].Title;
+						if (reversedTitle.EndsWith("+")) reversedTitle = reversedTitle.Replace('+', '-');
+						else if (reversedTitle.EndsWith("-")) reversedTitle = reversedTitle.Replace('-', '+');
+
+						var reverseButton = new JoystickButtonData
+						{
+							Title = reversedTitle,
+							Button = buttonData[XinputTitle].Button,
+							IsAxis = buttonData[XinputTitle].IsAxis,
+							IsAxisMinus = !buttonData[XinputTitle].IsAxisMinus,
+							JoystickGuid = buttonData[XinputTitle].JoystickGuid
+						};
+						buttonDataFinal.Add(reverseKey, reverseButton);
+						
+					}
+
 				}
 			}
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);

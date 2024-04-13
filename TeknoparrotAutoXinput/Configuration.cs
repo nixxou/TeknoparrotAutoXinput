@@ -71,6 +71,8 @@ namespace TeknoparrotAutoXinput
 
 		public bool reverseYAxis_Hotas { get; set; } = true;
 
+		public bool useHotasWithWheel { get; set; } = false;
+
 		public Configuration()
 		{
 
@@ -115,6 +117,7 @@ namespace TeknoparrotAutoXinput
 				this.useDinputHotas = DeserializeData.useDinputHotas;
 				this.ffbDinputHotas = DeserializeData.ffbDinputHotas;
 				this.reverseYAxis_Hotas = DeserializeData.reverseYAxis_Hotas;
+				this.useHotasWithWheel = DeserializeData.useHotasWithWheel;
 			}
 			catch (Exception ex)
 			{

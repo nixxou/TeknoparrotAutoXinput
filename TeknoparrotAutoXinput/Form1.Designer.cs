@@ -52,6 +52,7 @@
 			radio_useCustomStooz_Gamepad = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useDefaultStooze_Gamepad = new Krypton.Toolkit.KryptonRadioButton();
 			groupBox2 = new GroupBox();
+			chk_useHotasWithWheel = new Krypton.Toolkit.KryptonCheckBox();
 			btn_configureDinputShifter = new Krypton.Toolkit.KryptonButton();
 			chk_useDinputShifter = new Krypton.Toolkit.KryptonCheckBox();
 			btn_setffbguid = new Krypton.Toolkit.KryptonButton();
@@ -108,6 +109,7 @@
 			kryptonLabel23 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel22 = new Krypton.Toolkit.KryptonLabel();
 			groupBox9 = new GroupBox();
+			chk_reverseYAxis_Hotas = new Krypton.Toolkit.KryptonCheckBox();
 			btn_setffbguidHotas = new Krypton.Toolkit.KryptonButton();
 			cmb_ffbguidHotas = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel24 = new Krypton.Toolkit.KryptonLabel();
@@ -122,7 +124,6 @@
 			radio_useDefaultStooze_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			groupBox10 = new GroupBox();
 			kryptonLabel27 = new Krypton.Toolkit.KryptonLabel();
-			chk_reverseYAxis_Hotas = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -284,6 +285,7 @@
 			groupBox1.TabIndex = 31;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "GamePad Settings";
+			groupBox1.Enter += groupBox1_Enter;
 			// 
 			// chk_favorAB
 			// 
@@ -347,6 +349,7 @@
 			// 
 			// groupBox2
 			// 
+			groupBox2.Controls.Add(chk_useHotasWithWheel);
 			groupBox2.Controls.Add(btn_configureDinputShifter);
 			groupBox2.Controls.Add(chk_useDinputShifter);
 			groupBox2.Controls.Add(btn_setffbguid);
@@ -367,6 +370,15 @@
 			groupBox2.TabIndex = 35;
 			groupBox2.TabStop = false;
 			groupBox2.Text = "Wheel Settings";
+			// 
+			// chk_useHotasWithWheel
+			// 
+			chk_useHotasWithWheel.Location = new Point(526, 135);
+			chk_useHotasWithWheel.Name = "chk_useHotasWithWheel";
+			chk_useHotasWithWheel.Size = new Size(243, 20);
+			chk_useHotasWithWheel.TabIndex = 42;
+			chk_useHotasWithWheel.Values.Text = "Use Hotas throttle for Ballistics and HO2";
+			chk_useHotasWithWheel.CheckedChanged += chk_useHotasWithWheel_CheckedChanged;
 			// 
 			// btn_configureDinputShifter
 			// 
@@ -405,6 +417,7 @@
 			cmb_ffbguid.Size = new Size(337, 21);
 			cmb_ffbguid.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_ffbguid.TabIndex = 38;
+			cmb_ffbguid.SelectedIndexChanged += cmb_ffbguid_SelectedIndexChanged;
 			// 
 			// kryptonLabel10
 			// 
@@ -900,6 +913,15 @@
 			groupBox9.TabStop = false;
 			groupBox9.Text = "Hotas Settings";
 			// 
+			// chk_reverseYAxis_Hotas
+			// 
+			chk_reverseYAxis_Hotas.Location = new Point(13, 103);
+			chk_reverseYAxis_Hotas.Name = "chk_reverseYAxis_Hotas";
+			chk_reverseYAxis_Hotas.Size = new Size(101, 20);
+			chk_reverseYAxis_Hotas.TabIndex = 49;
+			chk_reverseYAxis_Hotas.Values.Text = "Reverse Y Axis";
+			chk_reverseYAxis_Hotas.CheckedChanged += chk_reverseYAxis_Hotas_CheckedChanged;
+			// 
 			// btn_setffbguidHotas
 			// 
 			btn_setffbguidHotas.Location = new Point(651, 77);
@@ -907,6 +929,7 @@
 			btn_setffbguidHotas.Size = new Size(110, 23);
 			btn_setffbguidHotas.TabIndex = 39;
 			btn_setffbguidHotas.Values.Text = "Set FFB GUID";
+			btn_setffbguidHotas.Click += btn_setffbguidHotas_Click;
 			// 
 			// cmb_ffbguidHotas
 			// 
@@ -1020,15 +1043,6 @@
 			kryptonLabel27.Size = new Size(200, 20);
 			kryptonLabel27.TabIndex = 0;
 			kryptonLabel27.Values.Text = "Not availiable yet, in future version";
-			// 
-			// chk_reverseYAxis_Hotas
-			// 
-			chk_reverseYAxis_Hotas.Location = new Point(13, 103);
-			chk_reverseYAxis_Hotas.Name = "chk_reverseYAxis_Hotas";
-			chk_reverseYAxis_Hotas.Size = new Size(101, 20);
-			chk_reverseYAxis_Hotas.TabIndex = 49;
-			chk_reverseYAxis_Hotas.Values.Text = "Reverse Y Axis";
-			chk_reverseYAxis_Hotas.CheckedChanged += chk_reverseYAxis_Hotas_CheckedChanged;
 			// 
 			// Form1
 			// 
@@ -1180,5 +1194,6 @@
 		private GroupBox groupBox10;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel27;
 		private Krypton.Toolkit.KryptonCheckBox chk_reverseYAxis_Hotas;
+		private Krypton.Toolkit.KryptonCheckBox chk_useHotasWithWheel;
 	}
 }
