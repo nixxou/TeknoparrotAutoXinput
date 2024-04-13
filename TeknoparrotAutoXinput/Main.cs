@@ -1,4 +1,6 @@
-﻿using Krypton.Toolkit;
+﻿using Henooh.DeviceEmulator.Net;
+using Krypton.Toolkit;
+using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
@@ -391,6 +393,8 @@ namespace TeknoparrotAutoXinput
 			btn_playgame.Enabled = false;
 			btn_playgamedirect.Enabled = false;
 			btn_gameoptions.Enabled = false;
+			btn_tpsettings.Enabled = false;
+
 			_playAutoEnabled = false;
 			_playDirectEnabled = false;
 			lbl_player1.Text = "";
@@ -582,6 +586,7 @@ namespace TeknoparrotAutoXinput
 					if (FirstConfig != "" && File.Exists(FirstConfig))
 					{
 						btn_gameoptions.Enabled = true;
+						btn_tpsettings.Enabled = true;
 						_playAutoEnabled = true;
 						_playDirectEnabled = true;
 						isPlaying = isPlaying;
@@ -623,6 +628,7 @@ namespace TeknoparrotAutoXinput
 						_playDirectEnabled = true;
 						isPlaying = isPlaying;
 						btn_gameoptions.Enabled = true;
+						btn_tpsettings.Enabled = true;
 
 						string fileDirectory = Path.GetDirectoryName(DataGame.UserConfigFile);
 						fileDirectory = Path.GetDirectoryName(fileDirectory);
@@ -798,6 +804,18 @@ namespace TeknoparrotAutoXinput
 
 		private async void btn_playgame_Click(object sender, EventArgs e)
 		{
+			string teknoparrotExe = Path.Combine(_tpFolder, "TeknoParrotUi.exe");
+			if (!File.Exists(teknoparrotExe)) MessageBox.Show($"Can't find {teknoparrotExe}");
+			Process[] existingProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(teknoparrotExe));
+			if (existingProcesses.Length > 0)
+			{
+				foreach (var existingProcess in existingProcesses)
+				{
+					existingProcess.Kill();
+					Thread.Sleep(1000);
+				}
+			}
+
 
 			string finalConfig = "";
 			if (list_games.SelectedItems.Count > 0)
@@ -844,6 +862,19 @@ namespace TeknoparrotAutoXinput
 
 		private async void btn_playgamedirect_Click(object sender, EventArgs e)
 		{
+			string teknoparrotExe = Path.Combine(_tpFolder, "TeknoParrotUi.exe");
+			if (!File.Exists(teknoparrotExe)) MessageBox.Show($"Can't find {teknoparrotExe}");
+			Process[] existingProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(teknoparrotExe));
+			if (existingProcesses.Length > 0)
+			{
+				foreach (var existingProcess in existingProcesses)
+				{
+					existingProcess.Kill();
+					Thread.Sleep(1000);
+				}
+			}
+
+
 			string finalConfig = "";
 			if (list_games.SelectedItems.Count > 0)
 			{
@@ -959,7 +990,73 @@ namespace TeknoparrotAutoXinput
 		private void button1_Click(object sender, EventArgs e)
 		{
 			Thread.Sleep(2000);
+
+		}
+
+		private void btn_tpsettings_Click(object sender, EventArgs e)
+		{
+			// Chemin de l'application à lancer
+			string teknoparrotExe = Path.Combine(_tpFolder, "TeknoParrotUi.exe");
+			if (!File.Exists(teknoparrotExe)) MessageBox.Show($"Can't find {teknoparrotExe}");
+			Process[] existingProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(teknoparrotExe));
+			if (existingProcesses.Length > 0)
+			{
+				foreach (var existingProcess in existingProcesses)
+				{
+					existingProcess.Kill();
+					Thread.Sleep(1000);
+				}
+			}
 			
+
+			Process process = Process.Start(teknoparrotExe);
+			process.WaitForInputIdle();
+			int tries = 0;
+			while (!Utils.IsWindowVisible(process.MainWindowHandle))
+			{
+				if (tries >= 50) // 50 * 100ms = 5 secondes
+				{
+					Console.WriteLine("La fenêtre de l'application n'est pas visible après 5 secondes. Sortie du programme.");
+					return;
+				}
+
+				tries++; // Incrémenter le compteur de tentatives
+						 // Attendre un court instant avant de vérifier à nouveau
+				System.Threading.Thread.Sleep(100);
+			}
+
+
+
+			// Envoie du texte caractère par caractère
+			string escapedTitle = lbl_GameTitle.Text;
+			foreach (char c in escapedTitle)
+			{
+				if (c.ToString() == "(")
+					SendKeys.SendWait("{(}");
+				else if (c.ToString() == ")")
+					SendKeys.SendWait("{)}");
+				else if (c.ToString() == "^")
+					SendKeys.SendWait("{^}");
+				else if (c.ToString() == "+")
+					SendKeys.SendWait("{+}");
+				else if (c.ToString() == "%")
+					SendKeys.SendWait("{%}");
+				else if (c.ToString() == "~")
+					SendKeys.SendWait("{~}");
+				else if (c.ToString() == "{")
+					SendKeys.SendWait("{{}");
+				else if (c.ToString() == "}")
+					SendKeys.SendWait("{}}");
+				else SendKeys.SendWait(c.ToString());
+				Thread.Sleep(50); // Attendre un court instant entre chaque caractère (facultatif)
+			}
+
+			SendKeys.SendWait("{TAB}");
+			SendKeys.SendWait("{TAB}");
+			SendKeys.SendWait("{TAB}");
+			SendKeys.SendWait("{ENTER}");
+
+
 		}
 	}
 

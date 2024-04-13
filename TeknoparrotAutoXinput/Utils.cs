@@ -105,6 +105,11 @@ namespace TeknoparrotAutoXinput
 			CreateHardLink(target, source, IntPtr.Zero);
 		}
 
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool IsWindowVisible(IntPtr hWnd);
+
+
 		public static bool IsHardLink(string fileToTestPath, string fromDirPath)
 		{
 			if (!File.Exists(fileToTestPath)) throw new Exception("file does not exist");
