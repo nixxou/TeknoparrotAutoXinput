@@ -63,6 +63,9 @@ namespace TeknoparrotAutoXinput
 			lbl_linkNumber.Text = "";
 
 			grp_linkExe.Enabled = false;
+			txt_linkFromExe.Text = "";
+			txt_linkToExe.Text = "";
+			lbl_linkNumberExe.Text = "";
 
 			if (gameSettings.CustomTpExe != "" && File.Exists(gameSettings.CustomTpExe))
 			{
@@ -136,27 +139,37 @@ namespace TeknoparrotAutoXinput
 
 				if (Directory.Exists(executableGameDir))
 				{
-					grp_linkExe.Enabled = true;
-					_linkSourceFolderExe = "";
 					_linkTargetFolderExe = executableGameDir;
-					if (gameSettings.CustomPerGameLinkFolder != null && gameSettings.CustomPerGameLinkFolder != "")
+
+					if (String.IsNullOrEmpty(ConfigurationManager.MainConfig.perGameLinkFolderExe))
 					{
-						string lastFolder = Path.GetFileName(gameSettings.CustomPerGameLinkFolder);
-						if (lastFolder == Path.GetFileNameWithoutExtension(GameData.FileName))
-						{
-							_linkSourceFolderExe = gameSettings.CustomPerGameLinkFolder;
-						}
+						_linkSourceFolderExe = "";
+						lbl_linkNumberExe.Text = "You must define a default link folder in the general config first";
+						grp_linkExe.Enabled = false;
 					}
 					else
 					{
-						if (!String.IsNullOrEmpty(ConfigurationManager.MainConfig.perGameLinkFolderExe))
+						grp_linkExe.Enabled = true;
+						_linkSourceFolderExe = "";
+						
+						if (gameSettings.CustomPerGameLinkFolder != null && gameSettings.CustomPerGameLinkFolder != "")
+						{
+							string lastFolder = Path.GetFileName(gameSettings.CustomPerGameLinkFolder);
+							if (lastFolder == Path.GetFileNameWithoutExtension(GameData.FileName))
+							{
+								_linkSourceFolderExe = gameSettings.CustomPerGameLinkFolder;
+							}
+						}
+						else
 						{
 							_linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, Path.GetFileNameWithoutExtension(GameData.FileName));
 						}
-
+						txt_linkFromExe.Text = _linkSourceFolderExe;
+						
 					}
-					txt_linkFromExe.Text = _linkSourceFolderExe;
 					txt_linkToExe.Text = _linkTargetFolderExe;
+
+
 				}
 
 				/*
@@ -245,6 +258,14 @@ namespace TeknoparrotAutoXinput
 
 				}
 			}
+			else
+			{
+				if (linkTypeExe)
+				{
+					lbl_linkNumber.Text = "This game does not use BudgieLoader";
+				}
+			}
+
 			if (grp_linkExe.Enabled)
 			{
 				if (!Utils.IsEligibleHardLink(_linkTargetFolderExe))
@@ -367,8 +388,10 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_link_open_Click(object sender, EventArgs e)
 		{
+			
 			if (!string.IsNullOrEmpty(_linkSourceFolder))
 			{
+				bool needUpdate = false;
 				if (!Directory.Exists(_linkSourceFolder) && Directory.Exists(Directory.GetParent(_linkSourceFolder).FullName))
 				{
 					DialogResult dialogResult = MessageBox.Show($"Do you want to create {_linkSourceFolder} ?", "Create Directory ?", MessageBoxButtons.YesNo);
@@ -376,6 +399,7 @@ namespace TeknoparrotAutoXinput
 					{
 						Directory.CreateDirectory(_linkSourceFolder);
 						Thread.Sleep(100);
+						needUpdate = true;
 					}
 				}
 				if (Directory.Exists(_linkSourceFolder))
@@ -391,6 +415,7 @@ namespace TeknoparrotAutoXinput
 				{
 					MessageBox.Show($"Directory {_linkSourceFolder} does not exist");
 				}
+				if (needUpdate) LinkLoad();
 			}
 		}
 
@@ -709,6 +734,7 @@ namespace TeknoparrotAutoXinput
 					//txt_linksourcefolderexe.Text = fbd.SelectedPath;
 					//ConfigurationManager.MainConfig.perGameLinkFolderExe = fbd.SelectedPath;
 					//ConfigurationManager.SaveConfig();
+					LinkLoad();
 				}
 			}
 		}
@@ -737,6 +763,7 @@ namespace TeknoparrotAutoXinput
 		{
 			if (!string.IsNullOrEmpty(_linkSourceFolderExe))
 			{
+				bool needupdate = false;
 				if (!Directory.Exists(_linkSourceFolderExe) && Directory.Exists(Directory.GetParent(_linkSourceFolderExe).FullName))
 				{
 					DialogResult dialogResult = MessageBox.Show($"Do you want to create {_linkSourceFolderExe} ?", "Create Directory ?", MessageBoxButtons.YesNo);
@@ -744,6 +771,7 @@ namespace TeknoparrotAutoXinput
 					{
 						Directory.CreateDirectory(_linkSourceFolderExe);
 						Thread.Sleep(100);
+						needupdate = true;
 					}
 				}
 				if (Directory.Exists(_linkSourceFolderExe))
@@ -759,6 +787,7 @@ namespace TeknoparrotAutoXinput
 				{
 					MessageBox.Show($"Directory {_linkSourceFolderExe} does not exist");
 				}
+				if(needupdate) LinkLoad();
 			}
 		}
 

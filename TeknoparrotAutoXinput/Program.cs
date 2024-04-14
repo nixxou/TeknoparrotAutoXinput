@@ -410,7 +410,7 @@ namespace TeknoparrotAutoXinput
 					}
 					Utils.LogMessage($"executableGame = {executableGame}");
 					Utils.LogMessage($"executableGameDir = {executableGameDir}");
-					if (gameDir != "")
+					if (gameDir != "" && !string.IsNullOrEmpty(ConfigurationManager.MainConfig.perGameLinkFolderExe))
 					{
 						linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, originalConfigFileNameWithoutExt);
 						linkTargetFolderExe = gameDir;
