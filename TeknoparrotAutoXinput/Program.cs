@@ -404,8 +404,6 @@ namespace TeknoparrotAutoXinput
 					}
 					Utils.LogMessage($"gameOptions Values = {gameOptions.Serialize()}");
 
-					MessageBox.Show("ici");
-
 					if (executableGame != "" && File.Exists(executableGame))
 					{
 						executableGameDir = Path.GetFullPath(Directory.GetParent(executableGame).ToString());
