@@ -23,6 +23,9 @@ namespace TeknoparrotAutoXinput
 		private string _linkTargetFolder = "";
 		private string _linkSourceFolder = "";
 
+		private string _linkTargetFolderExe = "";
+		private string _linkSourceFolderExe = "";
+
 
 		public string PerGameConfigFile = "";
 
@@ -59,6 +62,8 @@ namespace TeknoparrotAutoXinput
 			txt_linkTo.Text = "";
 			lbl_linkNumber.Text = "";
 
+			grp_linkExe.Enabled = false;
+
 			if (gameSettings.CustomTpExe != "" && File.Exists(gameSettings.CustomTpExe))
 			{
 				string TpFolder = Path.GetDirectoryName(gameSettings.CustomTpExe);
@@ -84,7 +89,7 @@ namespace TeknoparrotAutoXinput
 				if (gamePathNode != null)
 				{
 					string gamePathContent = gamePathNode.InnerText;
-					if (gamePathContent.ToLower().EndsWith(".exe")) executableGame = gamePathContent;
+					executableGame = gamePathContent;
 					if (executableGame != "" && File.Exists(executableGame))
 					{
 						executableGameDir = Path.GetFullPath(Directory.GetParent(executableGame).ToString());
@@ -99,7 +104,6 @@ namespace TeknoparrotAutoXinput
 					if (emulatorTypeValue == "elfldr2" || emulatorTypeValue == "lindbergh")
 					{
 						linkTypeExe = false;
-						btn_selectLinkFolder.Enabled = false;
 						string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
 						if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
 						{
@@ -129,6 +133,33 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 				}
+
+				if (Directory.Exists(executableGameDir))
+				{
+					grp_linkExe.Enabled = true;
+					_linkSourceFolderExe = "";
+					_linkTargetFolderExe = executableGameDir;
+					if (gameSettings.CustomPerGameLinkFolder != null && gameSettings.CustomPerGameLinkFolder != "")
+					{
+						string lastFolder = Path.GetFileName(gameSettings.CustomPerGameLinkFolder);
+						if (lastFolder == Path.GetFileNameWithoutExtension(GameData.FileName))
+						{
+							_linkSourceFolderExe = gameSettings.CustomPerGameLinkFolder;
+						}
+					}
+					else
+					{
+						if (!String.IsNullOrEmpty(ConfigurationManager.MainConfig.perGameLinkFolderExe))
+						{
+							_linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, Path.GetFileNameWithoutExtension(GameData.FileName));
+						}
+
+					}
+					txt_linkFromExe.Text = _linkSourceFolderExe;
+					txt_linkToExe.Text = _linkTargetFolderExe;
+				}
+
+				/*
 				if (linkTypeExe && executableGame != "" && Directory.Exists(executableGameDir))
 				{
 					_linkSourceFolder = "";
@@ -155,6 +186,7 @@ namespace TeknoparrotAutoXinput
 					txt_linkFrom.Text = _linkSourceFolder;
 					txt_linkTo.Text = _linkTargetFolder;
 				}
+				*/
 
 				XmlNode requiresAdminNode = xmlDoc.SelectSingleNode("/GameProfile/RequiresAdmin");
 				if (requiresAdminNode != null)
@@ -174,11 +206,9 @@ namespace TeknoparrotAutoXinput
 			{
 				if (!Utils.IsEligibleHardLink(_linkTargetFolder))
 				{
-					if (btn_selectLinkFolder.Enabled) btn_selectLinkFolder.Enabled = false;
 					grp_link.Enabled = false;
 					chk_linkfiles.Visible = false;
 					lbl_linkNumber.Text = "Target folder is not eligible for HardLink";
-					btn_link_open.Enabled = false;
 				}
 				else
 				{
@@ -187,7 +217,6 @@ namespace TeknoparrotAutoXinput
 						if (!Utils.IsEligibleHardLink(_linkSourceFolder, _linkTargetFolder))
 						{
 							lbl_linkNumber.Text = "Source folder is not eligible for HardLink";
-							btn_link_open.Enabled = false;
 						}
 						else
 						{
@@ -207,7 +236,6 @@ namespace TeknoparrotAutoXinput
 						if (!Utils.IsEligibleHardLink(_linkSourceFolder, _linkTargetFolder, false))
 						{
 							lbl_linkNumber.Text = "Target folder does not exist and is not eligible for HardLink";
-							btn_link_open.Enabled = false;
 						}
 						else
 						{
@@ -217,6 +245,54 @@ namespace TeknoparrotAutoXinput
 
 				}
 			}
+			if (grp_linkExe.Enabled)
+			{
+				if (!Utils.IsEligibleHardLink(_linkTargetFolderExe))
+				{
+					if (btn_selectLinkFolderExe.Enabled) btn_selectLinkFolderExe.Enabled = false;
+					grp_linkExe.Enabled = false;
+					chk_linkfilesExe.Visible = false;
+					lbl_linkNumberExe.Text = "Target folder is not eligible for HardLink";
+					btn_link_openExe.Enabled = false;
+				}
+				else
+				{
+					if (Directory.Exists(_linkSourceFolderExe))
+					{
+						if (!Utils.IsEligibleHardLink(_linkSourceFolderExe, _linkTargetFolderExe))
+						{
+							lbl_linkNumberExe.Text = "Source folder is not eligible for HardLink";
+							btn_link_openExe.Enabled = false;
+						}
+						else
+						{
+							try
+							{
+								int count = Directory.EnumerateFiles(_linkSourceFolderExe, "*", SearchOption.AllDirectories).Count();
+								lbl_linkNumberExe.Text = "Number of files = " + count;
+							}
+							catch
+							{
+								lbl_linkNumberExe.Text = "Number of files = ??? (error reading directory)";
+							}
+						}
+					}
+					else
+					{
+						if (!Utils.IsEligibleHardLink(_linkSourceFolderExe, _linkTargetFolderExe, false))
+						{
+							lbl_linkNumberExe.Text = "Target folder does not exist and is not eligible for HardLink";
+							btn_link_openExe.Enabled = false;
+						}
+						else
+						{
+							lbl_linkNumberExe.Text = "Number of files = 0 (Source dir does not exist)";
+						}
+					}
+
+				}
+			}
+
 		}
 
 		private void GameOptions_Load(object sender, EventArgs e)
@@ -250,6 +326,7 @@ namespace TeknoparrotAutoXinput
 			txt_ahkafter.Text = gameSettings.AhkAfter;
 			txt_ahkbefore.Text = gameSettings.AhkBefore;
 			chk_linkfiles.Checked = gameSettings.EnableLink;
+			chk_linkfilesExe.Checked = gameSettings.EnableLinkExe;
 			chk_WaitForExitBefore.Checked = gameSettings.WaitForExitAhkBefore;
 			chk_enableGearChange.Checked = gameSettings.EnableGearChange;
 			txt_monitorswitch.Text = gameSettings.Disposition == "" ? "<none>" : gameSettings.Disposition;
@@ -292,17 +369,28 @@ namespace TeknoparrotAutoXinput
 		{
 			if (!string.IsNullOrEmpty(_linkSourceFolder))
 			{
-				if (!Directory.Exists(_linkSourceFolder))
+				if (!Directory.Exists(_linkSourceFolder) && Directory.Exists(Directory.GetParent(_linkSourceFolder).FullName))
 				{
-					Directory.CreateDirectory(_linkSourceFolder);
-					Thread.Sleep(100);
+					DialogResult dialogResult = MessageBox.Show($"Do you want to create {_linkSourceFolder} ?", "Create Directory ?", MessageBoxButtons.YesNo);
+					if (dialogResult == DialogResult.Yes)
+					{
+						Directory.CreateDirectory(_linkSourceFolder);
+						Thread.Sleep(100);
+					}
 				}
-				ProcessStartInfo startInfo = new ProcessStartInfo
+				if (Directory.Exists(_linkSourceFolder))
 				{
-					Arguments = _linkSourceFolder,
-					FileName = "explorer.exe"
-				};
-				Process.Start(startInfo);
+					ProcessStartInfo startInfo = new ProcessStartInfo
+					{
+						Arguments = _linkSourceFolder,
+						FileName = "explorer.exe"
+					};
+					Process.Start(startInfo);
+				}
+				else
+				{
+					MessageBox.Show($"Directory {_linkSourceFolder} does not exist");
+				}
 			}
 		}
 
@@ -372,6 +460,7 @@ namespace TeknoparrotAutoXinput
 			gameSettings.AhkAfter = txt_ahkafter.Text.Trim();
 			gameSettings.AhkBefore = txt_ahkbefore.Text.Trim();
 			gameSettings.EnableLink = chk_linkfiles.Checked;
+			gameSettings.EnableLinkExe = chk_linkfilesExe.Checked;
 			gameSettings.WaitForExitAhkBefore = chk_WaitForExitBefore.Checked;
 			gameSettings.EnableGearChange = chk_enableGearChange.Checked;
 			gameSettings.Disposition = txt_monitorswitch.Text.Trim();
@@ -568,6 +657,129 @@ namespace TeknoparrotAutoXinput
 		private void chk_invertYAxis_Hotas_CheckedChanged(object sender, EventArgs e)
 		{
 
+		}
+
+		private void btn_selectLinkFolderExe_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("You must select a directory that use the same Drive as your game folder.");
+			using (var fbd = new FolderBrowserDialog())
+			{
+				DialogResult result = fbd.ShowDialog();
+
+				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+				{
+					string selectedPath = fbd.SelectedPath;
+					selectedPath = Path.GetFullPath(selectedPath);
+
+					if (!Utils.IsEligibleHardLink(selectedPath, _linkTargetFolderExe))
+					{
+						MessageBox.Show("This folder is not eligible for HardLink");
+						return;
+					}
+
+					string gameName = Path.GetFileNameWithoutExtension(GameData.FileName);
+					string lastFolder = Path.GetFileName(selectedPath);
+					if (lastFolder != gameName)
+					{
+						DialogResult dr = MessageBox.Show($"The last folder must be {gameName} do you want to create {Path.Combine(selectedPath, gameName)} ?",
+					  "Create Link folder", MessageBoxButtons.YesNo);
+						if (dr == DialogResult.Yes)
+						{
+							selectedPath = Path.Combine(selectedPath, gameName);
+							if (!Directory.Exists(selectedPath)) Directory.CreateDirectory(selectedPath);
+						}
+						else return;
+
+						//_linkSourceFolder = gameSettings.CustomPerGameLinkFolder;
+					}
+					txt_linkFromExe.Text = selectedPath;
+					gameSettings.CustomPerGameLinkFolder = selectedPath;
+					gameSettings.Save(PerGameConfigFile);
+					btn_link_openExe.Enabled = true;
+
+					try
+					{
+						int count = Directory.EnumerateFiles(_linkSourceFolderExe, "*", SearchOption.AllDirectories).Count();
+						lbl_linkNumberExe.Text = "Number of files = " + count;
+					}
+					catch
+					{
+						lbl_linkNumberExe.Text = "Number of files = ??? (error reading directory)";
+					}
+					//txt_linksourcefolderexe.Text = fbd.SelectedPath;
+					//ConfigurationManager.MainConfig.perGameLinkFolderExe = fbd.SelectedPath;
+					//ConfigurationManager.SaveConfig();
+				}
+			}
+		}
+
+		private void btn_linkTarget_open_Click(object sender, EventArgs e)
+		{
+			if (!string.IsNullOrEmpty(_linkTargetFolder))
+			{
+				if (Directory.Exists(_linkTargetFolder))
+				{
+					ProcessStartInfo startInfo = new ProcessStartInfo
+					{
+						Arguments = _linkTargetFolder,
+						FileName = "explorer.exe"
+					};
+					Process.Start(startInfo);
+				}
+				else
+				{
+					MessageBox.Show($"Directory {_linkTargetFolder} does not exist");
+				}
+			}
+		}
+
+		private void btn_link_openExe_Click(object sender, EventArgs e)
+		{
+			if (!string.IsNullOrEmpty(_linkSourceFolderExe))
+			{
+				if (!Directory.Exists(_linkSourceFolderExe) && Directory.Exists(Directory.GetParent(_linkSourceFolderExe).FullName))
+				{
+					DialogResult dialogResult = MessageBox.Show($"Do you want to create {_linkSourceFolderExe} ?", "Create Directory ?", MessageBoxButtons.YesNo);
+					if (dialogResult == DialogResult.Yes)
+					{
+						Directory.CreateDirectory(_linkSourceFolderExe);
+						Thread.Sleep(100);
+					}
+				}
+				if (Directory.Exists(_linkSourceFolderExe))
+				{
+					ProcessStartInfo startInfo = new ProcessStartInfo
+					{
+						Arguments = _linkSourceFolderExe,
+						FileName = "explorer.exe"
+					};
+					Process.Start(startInfo);
+				}
+				else
+				{
+					MessageBox.Show($"Directory {_linkSourceFolderExe} does not exist");
+				}
+			}
+		}
+
+		private void btn_linkTarget_openExe_Click(object sender, EventArgs e)
+		{
+			if (!string.IsNullOrEmpty(_linkTargetFolderExe))
+			{
+				if (Directory.Exists(_linkTargetFolderExe))
+				{
+					ProcessStartInfo startInfo = new ProcessStartInfo
+					{
+						Arguments = _linkTargetFolderExe,
+						FileName = "explorer.exe"
+					};
+					Process.Start(startInfo);
+				}
+				else
+				{
+					MessageBox.Show($"Directory {_linkTargetFolderExe} does not exist");
+				}
+			}
 		}
 	}
 }

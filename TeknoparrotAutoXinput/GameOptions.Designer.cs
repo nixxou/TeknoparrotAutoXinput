@@ -57,8 +57,8 @@
 			kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
 			lbl_Titre = new Krypton.Toolkit.KryptonLabel();
 			grp_link = new GroupBox();
+			btn_linkTarget_open = new Krypton.Toolkit.KryptonButton();
 			txt_linkTo = new Krypton.Toolkit.KryptonTextBox();
-			btn_selectLinkFolder = new Krypton.Toolkit.KryptonButton();
 			lbl_linkNumber = new Krypton.Toolkit.KryptonLabel();
 			txt_linkFrom = new Krypton.Toolkit.KryptonTextBox();
 			btn_link_open = new Krypton.Toolkit.KryptonButton();
@@ -76,15 +76,26 @@
 			btn_customTpClear = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
 			groupBox4 = new GroupBox();
-			chk_reverseYAxis_Hotas = new Krypton.Toolkit.KryptonCheckBox();
 			chk_group_StoozZone_Hotas = new Krypton.Toolkit.KryptonCheckBox();
 			grp_StoozZone_Hotas = new GroupBox();
+			chk_reverseYAxis_Hotas = new Krypton.Toolkit.KryptonCheckBox();
 			trk_useCustomStooz_Hotas = new TrackBar();
 			lbl_useCustomStooz_Hotas = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel5 = new Krypton.Toolkit.KryptonLabel();
 			radio_useDefaultStooze_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useCustomStooz_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			chk_enableStoozZone_Hotas = new Krypton.Toolkit.KryptonCheckBox();
+			grp_linkExe = new GroupBox();
+			btn_linkTarget_openExe = new Krypton.Toolkit.KryptonButton();
+			txt_linkToExe = new Krypton.Toolkit.KryptonTextBox();
+			btn_selectLinkFolderExe = new Krypton.Toolkit.KryptonButton();
+			lbl_linkNumberExe = new Krypton.Toolkit.KryptonLabel();
+			txt_linkFromExe = new Krypton.Toolkit.KryptonTextBox();
+			btn_link_openExe = new Krypton.Toolkit.KryptonButton();
+			kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
+			chk_linkfilesExe = new Krypton.Toolkit.KryptonCheckBox();
+			groupBox5 = new GroupBox();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -97,6 +108,7 @@
 			groupBox4.SuspendLayout();
 			grp_StoozZone_Hotas.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Hotas).BeginInit();
+			grp_linkExe.SuspendLayout();
 			SuspendLayout();
 			// 
 			// btn_editMonitorSwitch
@@ -128,7 +140,7 @@
 			// 
 			groupBox2.Controls.Add(chk_group_StoozZone_Wheel);
 			groupBox2.Controls.Add(grp_StoozZone_Wheel);
-			groupBox2.Location = new Point(568, 619);
+			groupBox2.Location = new Point(572, 68);
 			groupBox2.Name = "groupBox2";
 			groupBox2.Size = new Size(531, 161);
 			groupBox2.TabIndex = 45;
@@ -217,7 +229,7 @@
 			// 
 			groupBox1.Controls.Add(chk_group_StoozZone_Gamepad);
 			groupBox1.Controls.Add(grp_StoozZone_Gamepad);
-			groupBox1.Location = new Point(19, 619);
+			groupBox1.Location = new Point(23, 68);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(531, 161);
 			groupBox1.TabIndex = 44;
@@ -311,7 +323,7 @@
 			grp_monitorDisposition.Enabled = false;
 			grp_monitorDisposition.Location = new Point(1117, 126);
 			grp_monitorDisposition.Name = "grp_monitorDisposition";
-			grp_monitorDisposition.Size = new Size(531, 64);
+			grp_monitorDisposition.Size = new Size(584, 64);
 			grp_monitorDisposition.TabIndex = 46;
 			grp_monitorDisposition.TabStop = false;
 			grp_monitorDisposition.Text = "Custom Monitor Disposition";
@@ -329,23 +341,23 @@
 			// 
 			// txt_ahkbefore
 			// 
-			txt_ahkbefore.Location = new Point(19, 68);
+			txt_ahkbefore.Location = new Point(23, 441);
 			txt_ahkbefore.Name = "txt_ahkbefore";
-			txt_ahkbefore.Size = new Size(531, 538);
+			txt_ahkbefore.Size = new Size(531, 509);
 			txt_ahkbefore.TabIndex = 49;
 			txt_ahkbefore.Text = "";
 			// 
 			// txt_ahkafter
 			// 
-			txt_ahkafter.Location = new Point(568, 68);
+			txt_ahkafter.Location = new Point(572, 441);
 			txt_ahkafter.Name = "txt_ahkafter";
-			txt_ahkafter.Size = new Size(531, 538);
+			txt_ahkafter.Size = new Size(531, 509);
 			txt_ahkafter.TabIndex = 50;
 			txt_ahkafter.Text = "";
 			// 
 			// kryptonLabel1
 			// 
-			kryptonLabel1.Location = new Point(19, 42);
+			kryptonLabel1.Location = new Point(23, 415);
 			kryptonLabel1.Name = "kryptonLabel1";
 			kryptonLabel1.Size = new Size(170, 20);
 			kryptonLabel1.TabIndex = 51;
@@ -353,7 +365,7 @@
 			// 
 			// kryptonLabel2
 			// 
-			kryptonLabel2.Location = new Point(568, 42);
+			kryptonLabel2.Location = new Point(572, 415);
 			kryptonLabel2.Name = "kryptonLabel2";
 			kryptonLabel2.Size = new Size(161, 20);
 			kryptonLabel2.TabIndex = 52;
@@ -371,8 +383,8 @@
 			// 
 			// grp_link
 			// 
+			grp_link.Controls.Add(btn_linkTarget_open);
 			grp_link.Controls.Add(txt_linkTo);
-			grp_link.Controls.Add(btn_selectLinkFolder);
 			grp_link.Controls.Add(lbl_linkNumber);
 			grp_link.Controls.Add(txt_linkFrom);
 			grp_link.Controls.Add(btn_link_open);
@@ -381,10 +393,19 @@
 			grp_link.Controls.Add(chk_linkfiles);
 			grp_link.Location = new Point(1119, 196);
 			grp_link.Name = "grp_link";
-			grp_link.Size = new Size(529, 129);
+			grp_link.Size = new Size(582, 129);
 			grp_link.TabIndex = 54;
 			grp_link.TabStop = false;
-			grp_link.Text = "Links Files before Execute (elf version)";
+			grp_link.Text = "Links Files before Execute (BudgieLoader Directory, for elf only)";
+			// 
+			// btn_linkTarget_open
+			// 
+			btn_linkTarget_open.Location = new Point(448, 71);
+			btn_linkTarget_open.Name = "btn_linkTarget_open";
+			btn_linkTarget_open.Size = new Size(125, 23);
+			btn_linkTarget_open.TabIndex = 65;
+			btn_linkTarget_open.Values.Text = "Open Folder";
+			btn_linkTarget_open.Click += btn_linkTarget_open_Click;
 			// 
 			// txt_linkTo
 			// 
@@ -393,15 +414,6 @@
 			txt_linkTo.ReadOnly = true;
 			txt_linkTo.Size = new Size(371, 23);
 			txt_linkTo.TabIndex = 64;
-			// 
-			// btn_selectLinkFolder
-			// 
-			btn_selectLinkFolder.Location = new Point(439, 44);
-			btn_selectLinkFolder.Name = "btn_selectLinkFolder";
-			btn_selectLinkFolder.Size = new Size(81, 23);
-			btn_selectLinkFolder.TabIndex = 61;
-			btn_selectLinkFolder.Values.Text = "...";
-			btn_selectLinkFolder.Click += btn_selectLinkFolder_Click;
 			// 
 			// lbl_linkNumber
 			// 
@@ -421,11 +433,11 @@
 			// 
 			// btn_link_open
 			// 
-			btn_link_open.Location = new Point(439, 68);
+			btn_link_open.Location = new Point(448, 44);
 			btn_link_open.Name = "btn_link_open";
-			btn_link_open.Size = new Size(81, 47);
+			btn_link_open.Size = new Size(125, 23);
 			btn_link_open.TabIndex = 3;
-			btn_link_open.Values.Text = "Open Folder \r\nin Explorer";
+			btn_link_open.Values.Text = "Open Folder";
 			btn_link_open.Click += btn_link_open_Click;
 			// 
 			// lbl_LinkTo
@@ -454,7 +466,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(1559, 784);
+			btn_Save.Location = new Point(1610, 925);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 56;
@@ -463,7 +475,7 @@
 			// 
 			// btn_Cancel
 			// 
-			btn_Cancel.Location = new Point(1462, 784);
+			btn_Cancel.Location = new Point(1497, 925);
 			btn_Cancel.Name = "btn_Cancel";
 			btn_Cancel.Size = new Size(90, 25);
 			btn_Cancel.TabIndex = 55;
@@ -482,7 +494,7 @@
 			// 
 			chk_WaitForExitBefore.Checked = true;
 			chk_WaitForExitBefore.CheckState = CheckState.Checked;
-			chk_WaitForExitBefore.Location = new Point(458, 42);
+			chk_WaitForExitBefore.Location = new Point(462, 415);
 			chk_WaitForExitBefore.Name = "chk_WaitForExitBefore";
 			chk_WaitForExitBefore.Size = new Size(92, 20);
 			chk_WaitForExitBefore.TabIndex = 58;
@@ -501,7 +513,7 @@
 			// 
 			btn_customTp.Location = new Point(439, 22);
 			btn_customTp.Name = "btn_customTp";
-			btn_customTp.Size = new Size(45, 23);
+			btn_customTp.Size = new Size(51, 23);
 			btn_customTp.TabIndex = 66;
 			btn_customTp.Values.Text = "...";
 			btn_customTp.Click += btn_customTp_Click;
@@ -521,18 +533,18 @@
 			groupBox3.Controls.Add(kryptonLabel4);
 			groupBox3.Controls.Add(btn_customTp);
 			groupBox3.Controls.Add(txt_customTp);
-			groupBox3.Location = new Point(1119, 331);
+			groupBox3.Location = new Point(1117, 466);
 			groupBox3.Name = "groupBox3";
-			groupBox3.Size = new Size(529, 84);
+			groupBox3.Size = new Size(583, 84);
 			groupBox3.TabIndex = 68;
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Use an other version of Teknoparrot :";
 			// 
 			// btn_customTpClear
 			// 
-			btn_customTpClear.Location = new Point(490, 22);
+			btn_customTpClear.Location = new Point(496, 22);
 			btn_customTpClear.Name = "btn_customTpClear";
-			btn_customTpClear.Size = new Size(39, 23);
+			btn_customTpClear.Size = new Size(79, 23);
 			btn_customTpClear.TabIndex = 69;
 			btn_customTpClear.Values.Text = "Clear";
 			btn_customTpClear.Click += btn_customTpClear_Click;
@@ -549,21 +561,12 @@
 			// 
 			groupBox4.Controls.Add(chk_group_StoozZone_Hotas);
 			groupBox4.Controls.Add(grp_StoozZone_Hotas);
-			groupBox4.Location = new Point(1117, 619);
+			groupBox4.Location = new Point(23, 238);
 			groupBox4.Name = "groupBox4";
 			groupBox4.Size = new Size(531, 161);
 			groupBox4.TabIndex = 48;
 			groupBox4.TabStop = false;
 			groupBox4.Text = "Hotas Settings";
-			// 
-			// chk_reverseYAxis_Hotas
-			// 
-			chk_reverseYAxis_Hotas.Location = new Point(19, 95);
-			chk_reverseYAxis_Hotas.Name = "chk_reverseYAxis_Hotas";
-			chk_reverseYAxis_Hotas.Size = new Size(101, 20);
-			chk_reverseYAxis_Hotas.TabIndex = 48;
-			chk_reverseYAxis_Hotas.Values.Text = "Reverse Y Axis";
-			chk_reverseYAxis_Hotas.CheckedChanged += chk_invertYAxis_Hotas_CheckedChanged;
 			// 
 			// chk_group_StoozZone_Hotas
 			// 
@@ -592,6 +595,15 @@
 			grp_StoozZone_Hotas.TabIndex = 35;
 			grp_StoozZone_Hotas.TabStop = false;
 			grp_StoozZone_Hotas.Text = "Sto0z Zone Configuration";
+			// 
+			// chk_reverseYAxis_Hotas
+			// 
+			chk_reverseYAxis_Hotas.Location = new Point(19, 95);
+			chk_reverseYAxis_Hotas.Name = "chk_reverseYAxis_Hotas";
+			chk_reverseYAxis_Hotas.Size = new Size(101, 20);
+			chk_reverseYAxis_Hotas.TabIndex = 48;
+			chk_reverseYAxis_Hotas.Values.Text = "Reverse Y Axis";
+			chk_reverseYAxis_Hotas.CheckedChanged += chk_invertYAxis_Hotas_CheckedChanged;
 			// 
 			// trk_useCustomStooz_Hotas
 			// 
@@ -645,11 +657,115 @@
 			chk_enableStoozZone_Hotas.Values.Text = "Enable Sto0z Zone";
 			chk_enableStoozZone_Hotas.CheckedChanged += chk_enableStoozZone_Hotas_CheckedChanged;
 			// 
+			// grp_linkExe
+			// 
+			grp_linkExe.Controls.Add(btn_linkTarget_openExe);
+			grp_linkExe.Controls.Add(txt_linkToExe);
+			grp_linkExe.Controls.Add(btn_selectLinkFolderExe);
+			grp_linkExe.Controls.Add(lbl_linkNumberExe);
+			grp_linkExe.Controls.Add(txt_linkFromExe);
+			grp_linkExe.Controls.Add(btn_link_openExe);
+			grp_linkExe.Controls.Add(kryptonLabel6);
+			grp_linkExe.Controls.Add(kryptonLabel7);
+			grp_linkExe.Controls.Add(chk_linkfilesExe);
+			grp_linkExe.Location = new Point(1117, 331);
+			grp_linkExe.Name = "grp_linkExe";
+			grp_linkExe.Size = new Size(583, 129);
+			grp_linkExe.TabIndex = 65;
+			grp_linkExe.TabStop = false;
+			grp_linkExe.Text = "Links Files before Execute (Game Directory)";
+			// 
+			// btn_linkTarget_openExe
+			// 
+			btn_linkTarget_openExe.Location = new Point(496, 71);
+			btn_linkTarget_openExe.Name = "btn_linkTarget_openExe";
+			btn_linkTarget_openExe.Size = new Size(79, 23);
+			btn_linkTarget_openExe.TabIndex = 66;
+			btn_linkTarget_openExe.Values.Text = "Open Folder";
+			btn_linkTarget_openExe.Click += btn_linkTarget_openExe_Click;
+			// 
+			// txt_linkToExe
+			// 
+			txt_linkToExe.Location = new Point(62, 71);
+			txt_linkToExe.Name = "txt_linkToExe";
+			txt_linkToExe.ReadOnly = true;
+			txt_linkToExe.Size = new Size(371, 23);
+			txt_linkToExe.TabIndex = 64;
+			// 
+			// btn_selectLinkFolderExe
+			// 
+			btn_selectLinkFolderExe.Location = new Point(439, 44);
+			btn_selectLinkFolderExe.Name = "btn_selectLinkFolderExe";
+			btn_selectLinkFolderExe.Size = new Size(51, 23);
+			btn_selectLinkFolderExe.TabIndex = 61;
+			btn_selectLinkFolderExe.Values.Text = "...";
+			btn_selectLinkFolderExe.Click += btn_selectLinkFolderExe_Click;
+			// 
+			// lbl_linkNumberExe
+			// 
+			lbl_linkNumberExe.Location = new Point(13, 98);
+			lbl_linkNumberExe.Name = "lbl_linkNumberExe";
+			lbl_linkNumberExe.Size = new Size(133, 20);
+			lbl_linkNumberExe.TabIndex = 4;
+			lbl_linkNumberExe.Values.Text = "Number of files : XXXX";
+			// 
+			// txt_linkFromExe
+			// 
+			txt_linkFromExe.Location = new Point(62, 44);
+			txt_linkFromExe.Name = "txt_linkFromExe";
+			txt_linkFromExe.ReadOnly = true;
+			txt_linkFromExe.Size = new Size(371, 23);
+			txt_linkFromExe.TabIndex = 63;
+			// 
+			// btn_link_openExe
+			// 
+			btn_link_openExe.Location = new Point(496, 44);
+			btn_link_openExe.Name = "btn_link_openExe";
+			btn_link_openExe.Size = new Size(79, 23);
+			btn_link_openExe.TabIndex = 3;
+			btn_link_openExe.Values.Text = "Open Folder";
+			btn_link_openExe.Click += btn_link_openExe_Click;
+			// 
+			// kryptonLabel6
+			// 
+			kryptonLabel6.Location = new Point(13, 69);
+			kryptonLabel6.Name = "kryptonLabel6";
+			kryptonLabel6.Size = new Size(30, 20);
+			kryptonLabel6.TabIndex = 2;
+			kryptonLabel6.Values.Text = "To : ";
+			// 
+			// kryptonLabel7
+			// 
+			kryptonLabel7.Location = new Point(13, 47);
+			kryptonLabel7.Name = "kryptonLabel7";
+			kryptonLabel7.Size = new Size(45, 20);
+			kryptonLabel7.TabIndex = 1;
+			kryptonLabel7.Values.Text = "From : ";
+			// 
+			// chk_linkfilesExe
+			// 
+			chk_linkfilesExe.Location = new Point(13, 22);
+			chk_linkfilesExe.Name = "chk_linkfilesExe";
+			chk_linkfilesExe.Size = new Size(335, 20);
+			chk_linkfilesExe.TabIndex = 0;
+			chk_linkfilesExe.Values.Text = "Link Specific files Before Execute (and clean them on exit)";
+			// 
+			// groupBox5
+			// 
+			groupBox5.Location = new Point(572, 238);
+			groupBox5.Name = "groupBox5";
+			groupBox5.Size = new Size(531, 161);
+			groupBox5.TabIndex = 49;
+			groupBox5.TabStop = false;
+			groupBox5.Text = "Lightgun Settings";
+			// 
 			// GameOptions
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1661, 816);
+			ClientSize = new Size(1713, 962);
+			Controls.Add(groupBox5);
+			Controls.Add(grp_linkExe);
 			Controls.Add(groupBox4);
 			Controls.Add(groupBox3);
 			Controls.Add(chk_enableGearChange);
@@ -691,6 +807,8 @@
 			grp_StoozZone_Hotas.ResumeLayout(false);
 			grp_StoozZone_Hotas.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Hotas).EndInit();
+			grp_linkExe.ResumeLayout(false);
+			grp_linkExe.PerformLayout();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -736,7 +854,6 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_WaitForExitBefore;
 		private Krypton.Toolkit.KryptonCheckBox chk_enableGearChange;
 		private Krypton.Toolkit.KryptonLabel lbl_linkNumber;
-		private Krypton.Toolkit.KryptonButton btn_selectLinkFolder;
 		private Krypton.Toolkit.KryptonTextBox txt_linkTo;
 		private Krypton.Toolkit.KryptonTextBox txt_linkFrom;
 		private Krypton.Toolkit.KryptonButton btn_customTp;
@@ -754,5 +871,17 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_enableStoozZone_Hotas;
 		private Krypton.Toolkit.KryptonButton btn_customTpClear;
 		private Krypton.Toolkit.KryptonCheckBox chk_reverseYAxis_Hotas;
+		private GroupBox grp_linkExe;
+		private Krypton.Toolkit.KryptonTextBox txt_linkToExe;
+		private Krypton.Toolkit.KryptonButton btn_selectLinkFolderExe;
+		private Krypton.Toolkit.KryptonLabel lbl_linkNumberExe;
+		private Krypton.Toolkit.KryptonTextBox txt_linkFromExe;
+		private Krypton.Toolkit.KryptonButton btn_link_openExe;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel6;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel7;
+		private Krypton.Toolkit.KryptonCheckBox chk_linkfilesExe;
+		private Krypton.Toolkit.KryptonButton btn_linkTarget_open;
+		private Krypton.Toolkit.KryptonButton btn_linkTarget_openExe;
+		private GroupBox groupBox5;
 	}
 }

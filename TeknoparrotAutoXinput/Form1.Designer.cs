@@ -704,7 +704,7 @@
 			groupBox5.Size = new Size(770, 110);
 			groupBox5.TabIndex = 41;
 			groupBox5.TabStop = false;
-			groupBox5.Text = "Per Game Link Folder for elf files (Games that use BudgieLoader.exe / ElfLdr2)";
+			groupBox5.Text = "Per Game Link Folder to BudgieLoader dir (for elf files)";
 			// 
 			// kryptonLabel17
 			// 
@@ -777,7 +777,7 @@
 			groupBox6.Size = new Size(770, 95);
 			groupBox6.TabIndex = 42;
 			groupBox6.TabStop = false;
-			groupBox6.Text = "Per Game Link Folder for exe Games (games that run from an exe file)";
+			groupBox6.Text = "Per Game Link Folder to Game dir";
 			// 
 			// kryptonLabel19
 			// 
@@ -791,9 +791,9 @@
 			// 
 			kryptonLabel18.Location = new Point(7, 47);
 			kryptonLabel18.Name = "kryptonLabel18";
-			kryptonLabel18.Size = new Size(568, 20);
+			kryptonLabel18.Size = new Size(346, 20);
 			kryptonLabel18.TabIndex = 44;
-			kryptonLabel18.Values.Text = "Same as above but for exe games where extra files need to be put in the game folder. Both need NTFS";
+			kryptonLabel18.Values.Text = "Same as above but link into the game folder. Both need NTFS";
 			kryptonLabel18.Click += kryptonLabel18_Click;
 			// 
 			// btn_selectLinkFolderExe
