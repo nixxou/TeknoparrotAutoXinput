@@ -61,17 +61,32 @@ namespace TeknoparrotAutoXinput
 		public string bindingDinputShifter { get; set; } = "";
 		public bool useDinputShifter { get; set; } = false;
 		public string perGameLinkFolderExe { get; set; } = @"";
-
 		public bool hotasStooz { get; set; } = false;
 		public bool enableStoozZone_Hotas { get; set; } = false;
 		public int valueStooz_Hotas { get; set; } = 0;
 		public string bindingDinputHotas { get; set; } = "";
 		public bool useDinputHotas { get; set; } = false;
 		public string ffbDinputHotas { get; set; } = "";
-
 		public bool reverseYAxis_Hotas { get; set; } = true;
-
 		public bool useHotasWithWheel { get; set; } = false;
+
+		public bool reasignPedals { get; set; } = false;
+		public string gunAType { get; set; } = "<none>";
+		public string gunBType { get; set; } = "<none>";
+		public string bindingDinputGunAXbox { get; set; } = "";
+		public string bindingDinputGunASinden { get; set; } = "";
+		public string bindingDinputGunAGun4ir { get; set; } = "";
+		public string bindingDinputGunAWiimote { get; set; } = "";
+		public string bindingDinputGunBXbox { get; set; } = "";
+		public string bindingDinputGunBSinden { get; set; } = "";
+		public string bindingDinputGunBGun4ir { get; set; } = "";
+		public string bindingDinputGunBWiimote { get; set; } = "";
+
+		public int indexvjoy { get; set; } = 0;
+
+		public string vjoySettingsGunA { get; set; } = "";
+		public string vjoySettingsGunB { get; set; } = "";
+
 
 		public Configuration()
 		{
@@ -118,6 +133,21 @@ namespace TeknoparrotAutoXinput
 				this.ffbDinputHotas = DeserializeData.ffbDinputHotas;
 				this.reverseYAxis_Hotas = DeserializeData.reverseYAxis_Hotas;
 				this.useHotasWithWheel = DeserializeData.useHotasWithWheel;
+				this.reasignPedals = DeserializeData.reasignPedals;
+				this.gunAType = DeserializeData.gunAType;
+				this.gunBType = DeserializeData.gunBType;
+				this.bindingDinputGunAXbox = DeserializeData.bindingDinputGunAXbox;
+				this.bindingDinputGunASinden = DeserializeData.bindingDinputGunASinden;
+				this.bindingDinputGunAGun4ir = DeserializeData.bindingDinputGunAGun4ir;
+				this.bindingDinputGunAWiimote = DeserializeData.bindingDinputGunAWiimote;
+				this.bindingDinputGunBXbox = DeserializeData.bindingDinputGunBXbox;
+				this.bindingDinputGunBSinden = DeserializeData.bindingDinputGunBSinden;
+				this.bindingDinputGunBGun4ir = DeserializeData.bindingDinputGunBGun4ir;
+				this.bindingDinputGunBWiimote = DeserializeData.bindingDinputGunBWiimote;
+				this.indexvjoy = DeserializeData.indexvjoy;
+				this.vjoySettingsGunA = DeserializeData.vjoySettingsGunA;
+				this.vjoySettingsGunB = DeserializeData.vjoySettingsGunB;
+
 			}
 			catch (Exception ex)
 			{

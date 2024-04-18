@@ -96,6 +96,9 @@
 			kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
 			chk_linkfilesExe = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox5 = new GroupBox();
+			btn_vjoyconfig = new Krypton.Toolkit.KryptonButton();
+			kryptonLabel28 = new Krypton.Toolkit.KryptonLabel();
+			cmb_vjoy = new Krypton.Toolkit.KryptonComboBox();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -109,6 +112,8 @@
 			grp_StoozZone_Hotas.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Hotas).BeginInit();
 			grp_linkExe.SuspendLayout();
+			groupBox5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_vjoy).BeginInit();
 			SuspendLayout();
 			// 
 			// btn_editMonitorSwitch
@@ -752,12 +757,45 @@
 			// 
 			// groupBox5
 			// 
+			groupBox5.Controls.Add(btn_vjoyconfig);
+			groupBox5.Controls.Add(kryptonLabel28);
+			groupBox5.Controls.Add(cmb_vjoy);
 			groupBox5.Location = new Point(572, 238);
 			groupBox5.Name = "groupBox5";
 			groupBox5.Size = new Size(531, 161);
 			groupBox5.TabIndex = 49;
 			groupBox5.TabStop = false;
 			groupBox5.Text = "Lightgun Settings";
+			// 
+			// btn_vjoyconfig
+			// 
+			btn_vjoyconfig.Location = new Point(256, 126);
+			btn_vjoyconfig.Name = "btn_vjoyconfig";
+			btn_vjoyconfig.Size = new Size(110, 23);
+			btn_vjoyconfig.TabIndex = 57;
+			btn_vjoyconfig.Values.Text = "Configure";
+			btn_vjoyconfig.Click += btn_vjoyconfig_Click;
+			// 
+			// kryptonLabel28
+			// 
+			kryptonLabel28.Location = new Point(6, 129);
+			kryptonLabel28.Name = "kryptonLabel28";
+			kryptonLabel28.Size = new Size(64, 20);
+			kryptonLabel28.TabIndex = 56;
+			kryptonLabel28.Values.Text = "Use Vjoy :";
+			// 
+			// cmb_vjoy
+			// 
+			cmb_vjoy.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_vjoy.DropDownWidth = 150;
+			cmb_vjoy.IntegralHeight = false;
+			cmb_vjoy.Items.AddRange(new object[] { "Use Global Settings", "No", "Vjoy 1", "Vjoy 2", "Vjoy 3", "Vjoy 4", "Vjoy 5", "Vjoy 6" });
+			cmb_vjoy.Location = new Point(100, 128);
+			cmb_vjoy.Name = "cmb_vjoy";
+			cmb_vjoy.Size = new Size(150, 21);
+			cmb_vjoy.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_vjoy.TabIndex = 55;
+			cmb_vjoy.SelectedIndexChanged += cmb_vjoy_SelectedIndexChanged;
 			// 
 			// GameOptions
 			// 
@@ -809,6 +847,9 @@
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Hotas).EndInit();
 			grp_linkExe.ResumeLayout(false);
 			grp_linkExe.PerformLayout();
+			groupBox5.ResumeLayout(false);
+			groupBox5.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_vjoy).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -883,5 +924,8 @@
 		private Krypton.Toolkit.KryptonButton btn_linkTarget_open;
 		private Krypton.Toolkit.KryptonButton btn_linkTarget_openExe;
 		private GroupBox groupBox5;
+		private Krypton.Toolkit.KryptonButton btn_vjoyconfig;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel28;
+		private Krypton.Toolkit.KryptonComboBox cmb_vjoy;
 	}
 }

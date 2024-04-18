@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using TeknoParrotUi.Common;
+using XJoy;
 
 namespace TeknoparrotAutoXinput
 {
@@ -151,7 +152,7 @@ namespace TeknoparrotAutoXinput
 					{
 						grp_linkExe.Enabled = true;
 						_linkSourceFolderExe = "";
-						
+
 						if (gameSettings.CustomPerGameLinkFolder != null && gameSettings.CustomPerGameLinkFolder != "")
 						{
 							string lastFolder = Path.GetFileName(gameSettings.CustomPerGameLinkFolder);
@@ -165,7 +166,7 @@ namespace TeknoparrotAutoXinput
 							_linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, Path.GetFileNameWithoutExtension(GameData.FileName));
 						}
 						txt_linkFromExe.Text = _linkSourceFolderExe;
-						
+
 					}
 					txt_linkToExe.Text = _linkTargetFolderExe;
 
@@ -355,6 +356,14 @@ namespace TeknoparrotAutoXinput
 			chk_reverseYAxis_Hotas.Checked = gameSettings.reverseYAxis_Hotas;
 			Reload();
 
+			cmb_vjoy.SelectedIndex = gameSettings.indexvjoy + 1;
+			vJoyManager vJoyObj;
+			vJoyObj = new vJoyManager();
+			if (!vJoyObj.vJoyEnabled())
+			{
+				btn_vjoyconfig.Enabled = false;
+				cmb_vjoy.Enabled = false;
+			}
 		}
 
 		private void Reload()
@@ -388,7 +397,7 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_link_open_Click(object sender, EventArgs e)
 		{
-			
+
 			if (!string.IsNullOrEmpty(_linkSourceFolder))
 			{
 				bool needUpdate = false;
@@ -787,7 +796,7 @@ namespace TeknoparrotAutoXinput
 				{
 					MessageBox.Show($"Directory {_linkSourceFolderExe} does not exist");
 				}
-				if(needupdate) LinkLoad();
+				if (needupdate) LinkLoad();
 			}
 		}
 
@@ -809,6 +818,36 @@ namespace TeknoparrotAutoXinput
 					MessageBox.Show($"Directory {_linkTargetFolderExe} does not exist");
 				}
 			}
+		}
+
+		private void btn_vjoyconfig_Click(object sender, EventArgs e)
+		{
+			// Recherche de la fenêtre à fermer parmi les fenêtres ouvertes
+			foreach (Form form in Application.OpenForms)
+			{
+				if (form.GetType() == typeof(VjoyControl))
+				{
+					// La fenêtre Fenetre1 est ouverte, fermez-la
+					form.Close();
+					Thread.Sleep(100);
+					break; // Sortir de la boucle une fois que la fenêtre est trouvée et fermée
+				}
+			}
+
+			var frm = new VjoyControl(true, Path.GetFileNameWithoutExtension(GameData.UserConfigFile), gameSettings);
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				if (!string.IsNullOrEmpty(frm.GunA_json)) gameSettings.vjoySettingsGunA = frm.GunA_json;
+				if (!string.IsNullOrEmpty(frm.GunB_json)) gameSettings.vjoySettingsGunB = frm.GunB_json;
+				gameSettings.Save(PerGameConfigFile);
+			}
+		}
+
+		private void cmb_vjoy_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			gameSettings.indexvjoy = cmb_vjoy.SelectedIndex - 1;
+			gameSettings.Save(PerGameConfigFile);
 		}
 	}
 }

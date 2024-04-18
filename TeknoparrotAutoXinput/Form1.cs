@@ -2,10 +2,12 @@ using Krypton.Toolkit;
 using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using SDL2;
+using SharpDX.DirectInput;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using TestVgme;
+using XJoy;
 
 namespace TeknoparrotAutoXinput
 {
@@ -19,7 +21,6 @@ namespace TeknoparrotAutoXinput
 		{
 			InitializeComponent();
 		}
-
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
@@ -69,6 +70,38 @@ namespace TeknoparrotAutoXinput
 			txt_linksourcefolder.Text = ConfigurationManager.MainConfig.perGameLinkFolder;
 			txt_linksourcefolderexe.Text = ConfigurationManager.MainConfig.perGameLinkFolderExe;
 			chk_useHotasWithWheel.Checked = ConfigurationManager.MainConfig.useHotasWithWheel;
+
+			chk_reasignGunPedal.Checked = ConfigurationManager.MainConfig.reasignPedals;
+			cmb_gunA_type.SelectedIndex = 0;
+			for (int i = 0; i < cmb_gunA_type.Items.Count; i++)
+			{
+				if (cmb_gunA_type.Items[i].ToString() == ConfigurationManager.MainConfig.gunAType)
+				{
+					cmb_gunA_type.SelectedIndex = i;
+					break;
+				}
+			}
+			cmb_gunB_type.SelectedIndex = 0;
+			for (int i = 0; i < cmb_gunB_type.Items.Count; i++)
+			{
+				if (cmb_gunB_type.Items[i].ToString() == ConfigurationManager.MainConfig.gunBType)
+				{
+					cmb_gunB_type.SelectedIndex = i;
+					break;
+				}
+			}
+			if (cmb_gunA_type.SelectedIndex <= 0) btn_gunA_configure.Enabled = false;
+			if (cmb_gunB_type.SelectedIndex <= 0) btn_gunB_configure.Enabled = false;
+
+			cmb_vjoy.SelectedIndex = ConfigurationManager.MainConfig.indexvjoy;
+			vJoyManager vJoyObj;
+			vJoyObj = new vJoyManager();
+			if (!vJoyObj.vJoyEnabled())
+			{
+				btn_vjoyconfig.Enabled = false;
+				cmb_vjoy.Enabled = false;
+			}
+
 
 			updateStooz();
 
@@ -287,6 +320,9 @@ namespace TeknoparrotAutoXinput
 
 			ConfigurationManager.MainConfig.ffbDinputWheel = txt_ffbguid.Text;
 			ConfigurationManager.MainConfig.ffbDinputHotas = txt_ffbguidHotas.Text;
+
+			ConfigurationManager.MainConfig.gunAType = cmb_gunA_type.SelectedItem.ToString();
+			ConfigurationManager.MainConfig.gunBType = cmb_gunB_type.SelectedItem.ToString();
 
 			ConfigurationManager.SaveConfig();
 		}
@@ -613,6 +649,87 @@ namespace TeknoparrotAutoXinput
 		private void chk_useHotasWithWheel_CheckedChanged(object sender, EventArgs e)
 		{
 			ConfigurationManager.MainConfig.useHotasWithWheel = chk_useHotasWithWheel.Checked;
+			ConfigurationManager.SaveConfig();
+		}
+
+		private void kryptonGroupBox1_Paint(object sender, PaintEventArgs e)
+		{
+
+		}
+
+		private void btn_gunA_configure_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputgun(1, cmb_gunA_type.SelectedItem.ToString());
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+			}
+		}
+
+		private void cmb_gunA_type_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cmb_gunA_type.SelectedIndex > 0)
+			{
+				btn_gunA_configure.Enabled = true;
+			}
+			else
+			{
+				btn_gunA_configure.Enabled = false;
+			}
+
+		}
+
+		private void btn_gunB_configure_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputgun(2, cmb_gunB_type.SelectedItem.ToString());
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+			}
+		}
+
+		private void cmb_gunB_type_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cmb_gunB_type.SelectedIndex > 0)
+			{
+				btn_gunB_configure.Enabled = true;
+			}
+			else
+			{
+				btn_gunB_configure.Enabled = false;
+			}
+		}
+
+		private void btn_vjoyconfig_Click(object sender, EventArgs e)
+		{
+			// Recherche de la fenêtre à fermer parmi les fenêtres ouvertes
+			foreach (Form form in Application.OpenForms)
+			{
+				if (form.GetType() == typeof(VjoyControl))
+				{
+					// La fenêtre Fenetre1 est ouverte, fermez-la
+					form.Close();
+					Thread.Sleep(100);
+					break; // Sortir de la boucle une fois que la fenêtre est trouvée et fermée
+				}
+			}
+
+			var frm = new VjoyControl(true);
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				if(!string.IsNullOrEmpty(frm.GunA_json)) ConfigurationManager.MainConfig.vjoySettingsGunA = frm.GunA_json;
+				if(!string.IsNullOrEmpty(frm.GunB_json)) ConfigurationManager.MainConfig.vjoySettingsGunB = frm.GunB_json;
+				ConfigurationManager.SaveConfig();
+			}
+
+		}
+
+		private void cmb_vjoy_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.indexvjoy = cmb_vjoy.SelectedIndex;
 			ConfigurationManager.SaveConfig();
 		}
 	}

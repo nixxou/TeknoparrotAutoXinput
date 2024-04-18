@@ -1,11 +1,14 @@
 using Gma.System.MouseKeyHook;
+using Henooh.DeviceEmulator.Net.Native;
 using Microsoft.Win32.SafeHandles;
 using MonitorSwitcherGUI;
 using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using Nefarius.ViGEm.Client.Targets;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SDL2;
+using SharpDX;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
 using System;
@@ -17,7 +20,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.Linq;
+using vJoyInterfaceWrap;
+using WiimoteLib;
 using XInput.Wrapper;
+using XJoy;
 using static SDL2.SDL;
 using static XInput.Wrapper.X;
 using static XInput.Wrapper.X.Gamepad;
@@ -57,10 +64,13 @@ namespace TeknoparrotAutoXinput
 		public static string HotasGuid = "";
 		public static string HotasFFBGuid = "";
 
+		public static string GunAGuid = "";
+		public static string GunBGuid = "";
+
 		public static Guid? FirstKeyboardGuid = null;
 
-		public static string ParrotDataOriginal="";
-		public static string ParrotDataBackup="";
+		public static string ParrotDataOriginal = "";
+		public static string ParrotDataBackup = "";
 		public static string FFBPluginIniFile = "";
 		public static string FFBPluginIniBackup = "";
 
@@ -76,6 +86,7 @@ namespace TeknoparrotAutoXinput
 
 		public static bool DebugMode = false;
 
+
 		/// <summary>
 		///  The main entry point for the application.
 		/// </summary>
@@ -90,6 +101,33 @@ namespace TeknoparrotAutoXinput
 				var taskExe = filteredArgs[0];
 				var taskArguments = Utils.ArgsToCommandLine(Utils.ArgsWithoutFirstElement(filteredArgs));
 				Utils.RegisterTask(taskExe, taskArguments);
+				return;
+			}
+
+			//Vjoy
+			if (args.Length >= 2 && args.First() == "--runvjoy")
+			{
+				ConfigurationManager.LoadConfig();
+				string xmlFile = args.Last();
+				if (xmlFile.ToLower().EndsWith(".xml") && File.Exists(xmlFile))
+				{
+					string baseTpDir = Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName;
+					string originalConfigFileName = Path.GetFileName(xmlFile);
+					string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
+					GameSettings gameOptions = new GameSettings();
+					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
+					if (File.Exists(optionFile))
+					{
+						gameOptions = new GameSettings(File.ReadAllText(optionFile));
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt,gameOptions);
+						Application.Run(frm);
+					}
+				}
+				else
+				{
+					var frm = new VjoyControl(false);
+					Application.Run(frm);
+				}
 				return;
 			}
 
@@ -195,6 +233,7 @@ namespace TeknoparrotAutoXinput
 				typeConfig.Add("arcade");
 				typeConfig.Add("wheel");
 				typeConfig.Add("hotas");
+				typeConfig.Add("lightgun");
 
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
@@ -550,6 +589,7 @@ namespace TeknoparrotAutoXinput
 						bool haveWheel = false;
 						bool haveGamepad = false;
 						bool haveHotas = false;
+						bool haveLightgun = false;
 
 						Utils.LogMessage($"availableSlot = {availableSlot}");
 
@@ -564,6 +604,321 @@ namespace TeknoparrotAutoXinput
 						bool checkDinputHotas = ConfigurationManager.MainConfig.useDinputHotas;
 						Dictionary<string, JoystickButtonData> bindingDinputHotas = null;
 						string bindingDinputHotasJson = ConfigurationManager.MainConfig.bindingDinputHotas;
+
+
+						//Start LightGunCheck
+						MessageBox.Show("Start LightGunCheck");
+						bool checkDinputLightgun = false;
+						string LightgunA_Type = ConfigurationManager.MainConfig.gunAType;
+						string LightgunB_Type = ConfigurationManager.MainConfig.gunBType;
+						if (!string.IsNullOrEmpty(LightgunA_Type) && LightgunA_Type != "<none>") checkDinputLightgun = true;
+						if (!string.IsNullOrEmpty(LightgunB_Type) && LightgunB_Type != "<none>") checkDinputLightgun = true;
+
+
+						string bindingDinputLightgunAJson = "";
+						string bindingDinputLightgunBJson = "";
+						bool dinputLightgunAFound = false;
+						bool dinputLightgunBFound = false;
+						Dictionary<string, JoystickButtonData> bindingDinputLightGunA = null;
+						Dictionary<string, JoystickButtonData> bindingDinputLightGunB = null;
+						Dictionary<string, JoystickButtonData> bindingDinputLightGun = new Dictionary<string, JoystickButtonData>();
+
+						if (checkDinputLightgun)
+						{
+							int nb_wiimote = 0;
+							int current_wiimote = 0;
+							if (LightgunA_Type == "wiimote" || LightgunB_Type == "wiimote")
+							{
+								WiimoteCollection mWC = new WiimoteCollection();
+								try
+								{
+									mWC.FindAllWiimotes();
+								}
+								catch (Exception ex)
+								{
+
+								}
+								foreach (Wiimote wm in mWC)
+								{
+									nb_wiimote++;
+								}
+							}
+
+
+							if(LightgunA_Type == "sinden" || LightgunA_Type == "gun4ir" || LightgunA_Type == "wiimote" || LightgunA_Type == "gamepad")
+							{
+								if (LightgunA_Type == "gamepad") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
+								if (LightgunA_Type == "sinden") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunASinden;
+								if (LightgunA_Type == "gun4ir") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGun4ir;
+								if (LightgunA_Type == "wiimote") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
+								bindingDinputLightGunA = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunAJson);
+								if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
+								{
+									GunAGuid = bindingDinputLightGunA["LightgunX"].JoystickGuid.ToString();
+									Utils.LogMessage($"bindingDinputLightGunA to Search = {GunAGuid}");
+								}
+								if(LightgunA_Type == "wiimote")
+								{
+									current_wiimote++;
+									if(nb_wiimote < current_wiimote)
+									{
+										Utils.LogMessage($"bindingDinputLightGunA = No Wiimote connected");
+										GunAGuid = "";
+									}
+								}
+							}
+							if (LightgunB_Type == "sinden" || LightgunB_Type == "gun4ir" || LightgunB_Type == "wiimote" || LightgunB_Type == "gamepad")
+							{
+								if (LightgunB_Type == "gamepad") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
+								if (LightgunB_Type == "sinden") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
+								if (LightgunB_Type == "gun4ir") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGun4ir;
+								if (LightgunB_Type == "wiimote") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
+								bindingDinputLightGunB = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunBJson);
+								if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
+								{
+									GunBGuid = bindingDinputLightGunB["LightgunX"].JoystickGuid.ToString();
+									Utils.LogMessage($"bindingDinputLightGunB to Search = {GunBGuid}");
+								}
+								if (LightgunB_Type == "wiimote")
+								{
+									current_wiimote++;
+									if (nb_wiimote < current_wiimote)
+									{
+										Utils.LogMessage($"bindingDinputLightGunB = No Wiimote connected");
+										GunBGuid = "";
+									}
+								}
+							}
+							if (!string.IsNullOrEmpty(GunAGuid) || !string.IsNullOrEmpty(GunBGuid))
+							{
+								DirectInput directInput = new DirectInput();
+								List<DeviceInstance> devices = new List<DeviceInstance>();
+								devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+								foreach (var device in devices)
+								{
+									if (device.Type == SharpDX.DirectInput.DeviceType.Keyboard && FirstKeyboardGuid == null)
+									{
+										FirstKeyboardGuid = device.InstanceGuid;
+									}
+									if (device.InstanceGuid.ToString() == GunAGuid)
+									{
+										Utils.LogMessage($"GunAGuid Found");
+										dinputLightgunAFound = true;
+										haveLightgun = true;
+									}
+									if (device.InstanceGuid.ToString() == GunBGuid)
+									{
+										Utils.LogMessage($"GunBGuid Found");
+										dinputLightgunBFound = true;
+										haveLightgun = true;
+									}
+								}
+							}
+						}
+
+						Utils.LogMessage($"dinputLightgunAFound = {dinputLightgunAFound}");
+						Utils.LogMessage($"dinputLightgunBFound = {dinputLightgunBFound}");
+
+						bool replaceLightgunWithVjoy = ConfigurationManager.MainConfig.indexvjoy > 0 ? true : false;
+						int vjoyIndex = ConfigurationManager.MainConfig.indexvjoy;
+						bool useVjoy = false;
+						string vjoyGuid = "";
+						if(gameOptions.indexvjoy != -1) vjoyIndex = gameOptions.indexvjoy;
+
+						if (haveLightgun && vjoyIndex > 0)
+						{
+							try
+							{
+								var vJoyObj = new vJoyManager();
+								if (vJoyObj.vJoyEnabled())
+								{
+									VjdStat status = vJoyObj.m_joystick.GetVJDStatus((uint)(vjoyIndex));
+									if (status == VjdStat.VJD_STAT_FREE)
+									{
+										DirectInput directInput = new DirectInput();
+										List<DeviceInstance> devices = new List<DeviceInstance>();
+										devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+										Dictionary<string, Joystick> joyList = new Dictionary<string, Joystick>();
+										var joystickState = new JoystickState();
+										foreach (var device in devices)
+										{
+											if (device.ProductName.ToLower().Contains("vjoy"))
+											{
+												Joystick joystick = new Joystick(directInput, device.InstanceGuid);
+												joystick.Properties.BufferSize = 512;
+												joystick.Acquire();
+												joyList.Add(device.InstanceGuid.ToString(), joystick);
+											}
+										}
+
+
+										vJoyObj.InitDevice((uint)(vjoyIndex));
+										vJoyObj.SetButton(1, true);
+										vJoyObj.SetButton(2, false);
+										vJoyObj.SetButton(3, true);
+										Thread.Sleep(100);
+
+										foreach (var joy in joyList)
+										{
+											var joystick = joy.Value;
+											joystick.GetCurrentState(ref joystickState);
+											if (joystickState != null && joystickState.Buttons.Count() >= 3 && joystickState.Buttons[0] && !joystickState.Buttons[1] && joystickState.Buttons[2])
+											{
+												vjoyGuid = joy.Key;
+											}
+											joystick.Dispose();
+										}
+
+										vJoyObj.SetButton(1, false);
+										vJoyObj.SetButton(2, false);
+										vJoyObj.SetButton(3, false);
+										vJoyObj.ReleaseDevice();
+									}
+								}
+							}
+							catch (Exception ex) { }
+
+							if(vjoyGuid != "")
+							{
+								if (dinputLightgunAFound)
+								{
+									if (bindingDinputLightGunA.ContainsKey("LightgunX"))
+									{
+										bindingDinputLightGunA["LightgunX"].Button = (int)JoystickOffset.X;
+										bindingDinputLightGunA["LightgunX"].IsAxis = true;
+										bindingDinputLightGunA["LightgunX"].IsAxisMinus = false;
+										bindingDinputLightGunA["LightgunX"].IsFullAxis = false;
+										bindingDinputLightGunA["LightgunX"].PovDirection = 0;
+										bindingDinputLightGunA["LightgunX"].IsReverseAxis = false;
+										bindingDinputLightGunA["LightgunX"].JoystickGuid = new Guid(vjoyGuid);
+									}
+									if (bindingDinputLightGunA.ContainsKey("LightgunY"))
+									{
+										bindingDinputLightGunA["LightgunY"].Button = (int)JoystickOffset.Y;
+										bindingDinputLightGunA["LightgunY"].IsAxis = true;
+										bindingDinputLightGunA["LightgunY"].IsAxisMinus = false;
+										bindingDinputLightGunA["LightgunY"].IsFullAxis = false;
+										bindingDinputLightGunA["LightgunY"].PovDirection = 0;
+										bindingDinputLightGunA["LightgunY"].IsReverseAxis = false;
+										bindingDinputLightGunA["LightgunY"].JoystickGuid = new Guid(vjoyGuid);
+									}
+								}
+
+								if (dinputLightgunBFound)
+								{
+									if (bindingDinputLightGunB.ContainsKey("LightgunX"))
+									{
+										bindingDinputLightGunB["LightgunX"].Button = (int)JoystickOffset.RotationX;
+										bindingDinputLightGunB["LightgunX"].IsAxis = true;
+										bindingDinputLightGunB["LightgunX"].IsAxisMinus = false;
+										bindingDinputLightGunB["LightgunX"].IsFullAxis = false;
+										bindingDinputLightGunB["LightgunX"].PovDirection = 0;
+										bindingDinputLightGunB["LightgunX"].IsReverseAxis = false;
+										bindingDinputLightGunB["LightgunX"].JoystickGuid = new Guid(vjoyGuid);
+									}
+									if (bindingDinputLightGunB.ContainsKey("LightgunY"))
+									{
+										bindingDinputLightGunB["LightgunY"].Button = (int)JoystickOffset.RotationY;
+										bindingDinputLightGunB["LightgunY"].IsAxis = true;
+										bindingDinputLightGunB["LightgunY"].IsAxisMinus = false;
+										bindingDinputLightGunB["LightgunY"].IsFullAxis = false;
+										bindingDinputLightGunB["LightgunY"].PovDirection = 0;
+										bindingDinputLightGunB["LightgunY"].IsReverseAxis = false;
+										bindingDinputLightGunB["LightgunY"].JoystickGuid = new Guid(vjoyGuid);
+									}
+								}
+							}
+
+						}
+
+						string LightgunConfigAFile = "";
+						string LightgunConfigBFile = "";
+						Dictionary<string, string> LightgunConfigA = new Dictionary<string, string>();
+						Dictionary<string, string> LightgunConfigB = new Dictionary<string, string>();
+						Dictionary<string, string> LightgunConfigFinal = new Dictionary<string, string>();
+
+						if (haveLightgun)
+						{
+							if (dinputLightgunAFound)
+							{
+								LightgunConfigAFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + ".lightgun-" + LightgunA_Type + ".json");
+								Utils.LogMessage($"LightGunConfigA = {LightgunConfigAFile}");
+								if (File.Exists(LightgunConfigAFile))
+								{
+									LightgunConfigA = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(LightgunConfigAFile));
+								}
+								else
+								{
+									Utils.LogMessage($"LightGunConfigA does not exist");
+									dinputLightgunAFound = false;
+								}
+							}
+							if (dinputLightgunBFound)
+							{
+								LightgunConfigBFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + ".lightgun-" + LightgunB_Type + ".json");
+								Utils.LogMessage($"LightGunConfigB = {LightgunConfigBFile}");
+								if (File.Exists(LightgunConfigBFile))
+								{
+									LightgunConfigB = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(LightgunConfigBFile));
+								}
+								else
+								{
+									Utils.LogMessage($"LightGunConfigB does not exist");
+									dinputLightgunBFound = false;
+								}
+							}
+							if(!dinputLightgunAFound && !dinputLightgunBFound)
+							{
+								haveLightgun = false;
+							}
+							else
+							{
+								foreach(var lightgunConfig in LightgunConfigA)
+								{
+									if (LightgunConfigFinal.ContainsKey(lightgunConfig.Key))
+									{
+										LightgunConfigFinal[lightgunConfig.Key] = LightgunConfigFinal[lightgunConfig.Key] + "," + lightgunConfig.Value;
+									}
+									else
+									{
+										LightgunConfigFinal.Add(lightgunConfig.Key, lightgunConfig.Value);
+									}
+								}
+
+
+								//int gunindex = 0;
+								if (dinputLightgunAFound)
+								{
+									string gunprefix = "GunA_";
+									//if(gunindex == 1) gunprefix = "GunB_";
+
+									foreach (var bind in bindingDinputLightGunA)
+									{
+										if (bind.Key.StartsWith("Lightgun"))
+										{
+											bindingDinputLightGun.Add(gunprefix + bind.Key,bind.Value);
+										}
+									}
+									//gunindex++;
+								}
+								if (dinputLightgunBFound)
+								{
+									string gunprefix = "GunA_";
+									//if (gunindex == 1) gunprefix = "GunB_";
+
+									foreach (var bind in bindingDinputLightGunB)
+									{
+										if (bind.Key.StartsWith("Lightgun"))
+										{
+											bindingDinputLightGun.Add(gunprefix + bind.Key, bind.Value);
+										}
+									}
+									//gunindex++;
+								}
+							}
+						}
+
+						//End LightGun Check
 
 
 						bool checkDinputThrottle = (ConfigurationManager.MainConfig.useDinputHotas && ConfigurationManager.MainConfig.useDinputWheel && ConfigurationManager.MainConfig.useHotasWithWheel);
@@ -687,6 +1042,8 @@ namespace TeknoparrotAutoXinput
 						bool useXinput = true;
 						bool useDinputWheel = false;
 						bool useDinputHotas = false;
+						bool useDinputLightGun = false;
+
 						if (haveWheel && existingConfig.ContainsKey("wheel") && dinputWheelFound)
 						{
 							useXinput = false;
@@ -698,10 +1055,18 @@ namespace TeknoparrotAutoXinput
 							useDinputWheel = false;
 							useDinputHotas = true;
 						}
+						if(haveLightgun && existingConfig.ContainsKey("lightgun"))
+						{
+							useXinput = false;
+							useDinputWheel = false;
+							useDinputHotas = false;
+							useDinputLightGun = true;
+						}
 
 						Utils.LogMessage($"useXinput : {useXinput}");
 						Utils.LogMessage($"useDinputWheel : {useDinputWheel}");
 						Utils.LogMessage($"useDinputHotas : {useDinputHotas}");
+						Utils.LogMessage($"useLightgun : {useDinputLightGun}");
 
 						foreach (var gp in connectedGamePad.Values)
 						{
@@ -749,7 +1114,7 @@ namespace TeknoparrotAutoXinput
 						Dictionary<string, JoystickButton> joystickButtonArcade = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonGamepad = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonHotas = new Dictionary<string, JoystickButton>();
-
+						Dictionary<string, JoystickButton> joystickButtonLightgun = new Dictionary<string, JoystickButton>();
 
 						if (useXinput)
 						{
@@ -927,9 +1292,12 @@ namespace TeknoparrotAutoXinput
 							}
 							if (haveGamepad)
 							{
+								MessageBox.Show("ici");
 								Utils.LogMessage($"Assign Gamepad");
 								string configname = "gamepad";
 								if (usealtgamepad) configname = "gamepadalt";
+								if (existingConfig.ContainsKey("lightgun")) configname = "lightgun";
+
 
 								joystickButtonGamepad = ParseConfig(existingConfig[configname]);
 								var PlayerList = GetPlayersList(joystickButtonGamepad);
@@ -950,7 +1318,8 @@ namespace TeknoparrotAutoXinput
 									{
 										if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
 										{
-											ConfigPerPlayer.Add(PlayerXinputSlot, ("gamepad", gamepadList[currentlyAttributed]));
+											if(configname == "lightgun") ConfigPerPlayer.Add(PlayerXinputSlot, ("lightgun", gamepadList[currentlyAttributed]));
+											else ConfigPerPlayer.Add(PlayerXinputSlot, ("gamepad", gamepadList[currentlyAttributed]));
 											currentlyAttributed++;
 										}
 									}
@@ -1091,6 +1460,82 @@ namespace TeknoparrotAutoXinput
 								xinputGamepad.Type = "hotas";
 								ConfigPerPlayer.Add(0, ("hotas", xinputGamepad));
 							}
+							if (useDinputLightGun)
+							{
+								if (useVirtualKeyboard && FirstKeyboardGuid != null)
+								{
+
+									if (!string.IsNullOrEmpty(keyTest))
+									{
+										if (Enum.TryParse<SharpDX.DirectInput.Key>(keyTest, out SharpDX.DirectInput.Key resultat))
+										{
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "Test";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputLightGun.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
+										}
+									}
+									if (!string.IsNullOrEmpty(keyService1))
+									{
+										if (Enum.TryParse<SharpDX.DirectInput.Key>(keyService1, out SharpDX.DirectInput.Key resultat))
+										{
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "Service1";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputLightGun.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
+										}
+									}
+									if (!string.IsNullOrEmpty(keyService2))
+									{
+										if (Enum.TryParse<SharpDX.DirectInput.Key>(keyService2, out SharpDX.DirectInput.Key resultat))
+										{
+											var keyData = new JoystickButtonData();
+											keyData.Button = (int)resultat + 47;
+											keyData.IsAxis = false;
+											keyData.IsAxisMinus = false;
+											keyData.IsFullAxis = false;
+											keyData.PovDirection = 0;
+											keyData.IsReverseAxis = false;
+											keyData.XinputTitle = "Service2";
+											keyData.Title = "Keyboard Button " + keyTest;
+											keyData.JoystickGuid = (Guid)FirstKeyboardGuid;
+											bindingDinputLightGun.Add(keyData.XinputTitle, keyData);
+											virtualKeyboardXinputSlot = 10;
+										}
+									}
+								}
+								if (dinputLightgunAFound)
+								{
+									XinputGamepad xinputGamepadA = new XinputGamepad(0);
+									xinputGamepadA.Type = "lightgun";
+									ConfigPerPlayer.Add(0, ("lightgun", xinputGamepadA));
+								}
+
+								if (dinputLightgunBFound)
+								{
+									XinputGamepad xinputGamepadB = new XinputGamepad(0);
+									xinputGamepadB.Type = "lightgun";
+									ConfigPerPlayer.Add(1, ("lightgun", xinputGamepadB));
+								}
+								joystickButtonLightgun = ParseConfig(existingConfig["lightgun"]);
+
+							}
 						}
 
 
@@ -1224,6 +1669,7 @@ namespace TeknoparrotAutoXinput
 							if (ConfigType == "wheel") joystickButtonData = joystickButtonWheel;
 							if (ConfigType == "arcade") joystickButtonData = joystickButtonArcade;
 							if (ConfigType == "gamepad") joystickButtonData = joystickButtonGamepad;
+							if (ConfigType == "lightgun") joystickButtonData = joystickButtonLightgun;
 
 							foreach (var buttonData in joystickButtonData)
 							{
@@ -1245,6 +1691,7 @@ namespace TeknoparrotAutoXinput
 							if (ConfigType == "wheel") joystickButtonData = joystickButtonWheel;
 							if (ConfigType == "arcade") joystickButtonData = joystickButtonArcade;
 							if (ConfigType == "gamepad") joystickButtonData = joystickButtonGamepad;
+							if (ConfigType == "lightgun") joystickButtonData = joystickButtonLightgun;
 
 							foreach (var buttonData in joystickButtonData)
 							{
@@ -1281,15 +1728,17 @@ namespace TeknoparrotAutoXinput
 						string xpathExpression = $"/GameProfile/ConfigValues/FieldInformation[FieldName='Input API']/FieldValue";
 						XmlNode fieldValueNode = xmlDoc.SelectSingleNode(xpathExpression);
 
+						bool use_dinput = false;
 						if (fieldValueNode != null)
 						{
 							if (useXinput)
 							{
 								fieldValueNode.InnerText = "XInput";
 							}
-							if (useDinputWheel || useDinputHotas)
+							if (useDinputWheel || useDinputHotas || useDinputLightGun)
 							{
 								fieldValueNode.InnerText = "DirectInput";
+								use_dinput = true;
 							}
 						}
 
@@ -1731,6 +2180,268 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
+						if (useDinputLightGun)
+						{
+							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+
+							foreach (XmlNode node in joystickButtonsNodes)
+							{
+								XmlNode existingDirectInputButtonNode = node.SelectSingleNode("DirectInputButton");
+								if (existingDirectInputButtonNode != null)
+								{
+									node.RemoveChild(existingDirectInputButtonNode);
+								}
+								XmlNode existingBindNameDiNode = node.SelectSingleNode("BindNameDi");
+								if (existingBindNameDiNode != null)
+								{
+									node.RemoveChild(existingBindNameDiNode);
+								}
+
+								XmlNode buttonNameNode = node.SelectSingleNode("ButtonName");
+								string buttonName = "";
+								if (buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText))
+								{
+									buttonName = buttonNameNode.InnerText;
+									if (LightgunConfigFinal.ContainsKey(buttonName))
+									{
+										
+										var bindkey_list = LightgunConfigFinal[buttonName].Split(',');
+										if (bindkey_list.Count() == 1)
+										{
+											var bindkey = bindkey_list.First();
+											if (!string.IsNullOrEmpty(bindkey) && bindingDinputLightGun.ContainsKey(bindkey))
+											{
+												var bindData = bindingDinputLightGun[bindkey];
+												XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+
+												XmlNode buttonNode = xmlDoc.CreateElement("Button");
+												buttonNode.InnerText = bindData.Button.ToString();
+												newDirectInputButtonNode.AppendChild(buttonNode);
+
+												XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+												isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(isAxisNode);
+
+												XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+												IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+
+												XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+												IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+
+												XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+												PovDirectionNode.InnerText = bindData.PovDirection.ToString();
+												newDirectInputButtonNode.AppendChild(PovDirectionNode);
+
+												XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+												IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+
+												XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+												JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
+												newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+
+												XmlNode JoystickDiNameNode = xmlDoc.CreateElement("DiName");
+												JoystickDiNameNode.InnerText = bindData.Title;
+												newDirectInputButtonNode.AppendChild(JoystickDiNameNode);
+
+												node.AppendChild(newDirectInputButtonNode);
+
+												XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+												BindNameDiNode.InnerText = bindData.Title;
+												node.AppendChild(BindNameDiNode);
+											}
+										}
+										else if(bindkey_list.Count() > 1)
+										{
+
+											string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
+											node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+
+											foreach (var bindkey in bindkey_list)
+											{
+												var bindData = bindingDinputLightGun[bindkey];
+												ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title);
+
+											}
+										}
+
+										/*
+										foreach(var bindkey in bindkey_list)
+										{
+											if (string.IsNullOrEmpty(bindkey)) continue;
+											if (bindingDinputLightGun.ContainsKey(bindkey))
+											{
+												var bindData = bindingDinputLightGun[bindkey];
+												XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+
+												XmlNode buttonNode = xmlDoc.CreateElement("Button");
+												buttonNode.InnerText = bindData.Button.ToString();
+												newDirectInputButtonNode.AppendChild(buttonNode);
+
+												XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+												isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(isAxisNode);
+
+												XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+												IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+
+												XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+												IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+
+												XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+												PovDirectionNode.InnerText = bindData.PovDirection.ToString();
+												newDirectInputButtonNode.AppendChild(PovDirectionNode);
+
+												XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+												IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
+												newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+
+												XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+												JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
+												newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+
+												XmlNode JoystickDiNameNode = xmlDoc.CreateElement("DiName");
+												JoystickDiNameNode.InnerText = bindData.Title;
+												newDirectInputButtonNode.AppendChild(JoystickDiNameNode);
+
+												node.AppendChild(newDirectInputButtonNode);
+
+												XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+												BindNameDiNode.InnerText = bindData.Title;
+												node.AppendChild(BindNameDiNode);
+											}
+										}
+										*/
+									}
+
+									/*
+									string bindkey = buttonNameNode.InnerText.Trim().Replace(" ", "");
+									if (bindingDinputLightGun.ContainsKey(bindkey))
+									{
+										var bindData = bindingDinputHotas[bindkey];
+
+										XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+
+										XmlNode buttonNode = xmlDoc.CreateElement("Button");
+										buttonNode.InnerText = bindData.Button.ToString();
+										newDirectInputButtonNode.AppendChild(buttonNode);
+
+										XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+										isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(isAxisNode);
+
+										XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+										IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+
+										XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+										IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+
+										XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+										PovDirectionNode.InnerText = bindData.PovDirection.ToString();
+										newDirectInputButtonNode.AppendChild(PovDirectionNode);
+
+										XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+										IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
+										newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+
+										XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+										JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
+										newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+
+										node.AppendChild(newDirectInputButtonNode);
+
+										XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+										BindNameDiNode.InnerText = bindData.Title;
+										node.AppendChild(BindNameDiNode);
+									}
+									*/
+								}
+								
+							}
+						}
+
+
+						/*
+						//Fix Axis on button
+						if (use_dinput)
+						{
+							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+
+							foreach (XmlNode node in joystickButtonsNodes)
+							{
+								List<(XmlNode,string,string)> nodesToRemove = new List<(XmlNode, string, string)>();
+								XmlNode buttonNameNode = node.SelectSingleNode("ButtonName");
+								string buttonName = "";
+								if (buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText))
+								{
+									buttonName = buttonNameNode.InnerText;
+								}
+
+								XmlNode AnalogTypeNode = node.SelectSingleNode("AnalogType");
+								string analogType = "";
+								if (AnalogTypeNode != null && !string.IsNullOrEmpty(AnalogTypeNode.InnerText))
+								{
+									analogType = AnalogTypeNode.InnerText;
+									if (analogType.ToLower() == "none")
+									{
+										XmlNodeList DirectInputButtonNodes = node.SelectNodes("DirectInputButton");
+										foreach (XmlNode directInputButtonNode in DirectInputButtonNodes)
+										{
+
+											XmlNode DiNameNode = directInputButtonNode.SelectSingleNode("DiName");
+											string diName = "";
+											if (DiNameNode != null && !string.IsNullOrEmpty(DiNameNode.InnerText))
+											{
+												diName = DiNameNode.InnerText;
+											}
+
+											XmlNode JoystickGuidNode = directInputButtonNode.SelectSingleNode("JoystickGuid");
+											string joystickGuid = "";
+											if (JoystickGuidNode != null && !string.IsNullOrEmpty(JoystickGuidNode.InnerText))
+											{
+												joystickGuid = JoystickGuidNode.InnerText;
+											}
+
+
+
+											if (diName != "" && joystickGuid != "")
+											{
+												XmlNode IsAxisNode = directInputButtonNode.SelectSingleNode("IsAxis");
+												string isAxis = "";
+												if (IsAxisNode != null && !string.IsNullOrEmpty(IsAxisNode.InnerText))
+												{
+													isAxis = IsAxisNode.InnerText;
+													if (isAxis.ToLower() == "true")
+													{
+														Utils.LogMessage("ERROR FOR " + buttonName);
+														nodesToRemove.Add((directInputButtonNode, joystickGuid, diName));
+													}
+												}
+											}
+
+										}
+									}
+								}
+
+								foreach(var nodeToRemove in nodesToRemove)
+								{
+									string key = ButtonToKeyManager.buttonToKey.GetFreeKey(nodeToRemove.Item2, nodeToRemove.Item3);
+									node.RemoveChild(nodeToRemove.Item1);
+									node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+								}
+
+							}
+						}
+						ButtonToKeyManager.buttonToKey.StartMonitor();
+						*/
+						ButtonToKeyManager.buttonToKey.StartMonitor();
+
 						using (XmlWriter xmlWriter = XmlWriter.Create(xmlFile + ".custom.xml", settings))
 						{
 							// Enregistrez le XmlDocument avec l'indentation dans le XmlWriter
@@ -1753,6 +2464,7 @@ namespace TeknoparrotAutoXinput
 							Startup.playerAttributionDesc += $"P{playernum}={upperType}\n";
 							string configname = ConfigPlayer.Value.Item1;
 							if (configname == "gamepad" && usealtgamepad) configname = "gamepadalt";
+
 
 							var imgPath = Path.Combine(basePath, "img", originalConfigFileNameWithoutExt + "." + configname + ".jpg");
 							Startup.imagePaths.Add(imgPath);
@@ -1832,8 +2544,17 @@ namespace TeknoparrotAutoXinput
 						}
 						else
 						{
-							//Thread.Sleep(5000);	
+							/*
+							Process vjoy_process = new Process();
+							vjoy_process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
+							vjoy_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+							vjoy_process.StartInfo.Arguments = "--runvjoy " + $"\"{xmlFile}\"";
+							vjoy_process.StartInfo.UseShellExecute = true;
+							vjoy_process.Start();
+							*/
 							
+
+
 							Utils.LogMessage($"Starting {teknoparrotExe} {argumentTpExe}");
 							Process process = new Process();
 							process.StartInfo.FileName = teknoparrotExe;
@@ -1842,7 +2563,9 @@ namespace TeknoparrotAutoXinput
 							process.StartInfo.UseShellExecute = true;
 							process.Start();
 							process.WaitForExit();
-							
+
+
+							//vjoy_process.Kill();
 						}
 
 						Thread.Sleep(500);
@@ -1958,6 +2681,57 @@ namespace TeknoparrotAutoXinput
 			*/
 		}
 
+		
+		private static XmlNode NodeFromKey(Key value,XmlDocument xmlDoc)
+		{
+			var keyData = new JoystickButtonData();
+			keyData.Button = (int)value + 47;
+			keyData.IsAxis = false;
+			keyData.IsAxisMinus = false;
+			keyData.IsFullAxis = false;
+			keyData.PovDirection = 0;
+			keyData.IsReverseAxis = false;
+			keyData.XinputTitle = "Test";
+			keyData.Title = "Keyboard Button " + value.ToString();
+			keyData.JoystickGuid = new Guid("6f1d2b61-d5a0-11cf-bfc7-444553540000");
+
+			XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+
+			XmlNode buttonNode = xmlDoc.CreateElement("Button");
+			buttonNode.InnerText = keyData.Button.ToString();
+			newDirectInputButtonNode.AppendChild(buttonNode);
+
+			XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+			isAxisNode.InnerText = keyData.IsAxis ? "true" : "false";
+			newDirectInputButtonNode.AppendChild(isAxisNode);
+
+			XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+			IsAxisMinusNode.InnerText = keyData.IsAxisMinus ? "true" : "false";
+			newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+
+			XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+			IsFullAxisNode.InnerText = keyData.IsFullAxis ? "true" : "false";
+			newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+
+			XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+			PovDirectionNode.InnerText = keyData.PovDirection.ToString();
+			newDirectInputButtonNode.AppendChild(PovDirectionNode);
+
+			XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+			IsReverseAxisNode.InnerText = keyData.IsReverseAxis ? "true" : "false";
+			newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+
+			XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+			JoystickGuidNode.InnerText = keyData.JoystickGuid.ToString();
+			newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+
+			XmlNode JoystickDiNameNode = xmlDoc.CreateElement("DiName");
+			JoystickDiNameNode.InnerText = keyData.Title;
+			newDirectInputButtonNode.AppendChild(JoystickDiNameNode);
+
+			return newDirectInputButtonNode;
+		}
+		
 		private static async Task ShowFormAsync(CancellationToken cancellationToken)
 		{
 			startupForm = new Startup();
@@ -1980,6 +2754,7 @@ namespace TeknoparrotAutoXinput
 			playerList.Sort();
 			return playerList;
 		}
+
 
 		public static Dictionary<string, JoystickButton> ParseConfig(string configFilePath, bool skipMissingXinput = true)
 		{

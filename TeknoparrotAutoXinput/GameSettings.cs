@@ -35,7 +35,10 @@ namespace TeknoparrotAutoXinput
 		public bool reverseYAxis_Hotas { get; set; } = false;
 
 		public bool EnableLinkExe { get; set; } = true;
+		public string vjoySettingsGunA { get; set; } = "";
+		public string vjoySettingsGunB { get; set; } = "";
 
+		public int indexvjoy { get; set; } = -1;
 
 		public GameSettings() 
 		{
@@ -72,6 +75,9 @@ namespace TeknoparrotAutoXinput
 				this.valueStooz_Hotas = DeserializeData.valueStooz_Hotas;
 				this.reverseYAxis_Hotas = DeserializeData.reverseYAxis_Hotas;
 				this.EnableLinkExe = DeserializeData.EnableLinkExe;
+				this.vjoySettingsGunA = DeserializeData.vjoySettingsGunA;
+				this.vjoySettingsGunB = DeserializeData.vjoySettingsGunB;
+				this.indexvjoy = DeserializeData.indexvjoy;
 			}
 			catch (Exception ex)
 			{

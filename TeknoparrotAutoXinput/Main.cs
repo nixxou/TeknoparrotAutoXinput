@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using TeknoParrotUi.Common;
 using XInput.Wrapper;
 
@@ -86,6 +87,7 @@ namespace TeknoparrotAutoXinput
 			typeConfig.Add("arcade");
 			typeConfig.Add("wheel");
 			typeConfig.Add("hotas");
+			typeConfig.Add("lightgun");
 
 			lbl_player1.Text = "";
 			lbl_player2.Text = "";
@@ -417,6 +419,7 @@ namespace TeknoparrotAutoXinput
 					var DataGame = _gameList[GameSelected];
 					lbl_GameTitle.Text = DataGame.Name;
 
+					bool uselightgun = false;
 
 					bool usealtgamepad = false;
 					bool favorAB = ConfigurationManager.MainConfig.favorAB;
@@ -493,10 +496,15 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 						}
-						if (_haveGamepad && DataGame.existingConfig.ContainsKey("gamepad"))
+						if (_haveGamepad && (DataGame.existingConfig.ContainsKey("gamepad") || DataGame.existingConfig.ContainsKey("lightgun")))
 						{
 							string configname = "gamepad";
 							if (usealtgamepad) configname = "gamepadalt";
+							if (DataGame.existingConfig.ContainsKey("lightgun"))
+							{
+								uselightgun = true;
+								configname = "lightgun";
+							}
 
 							var joystickButtonGamepad = Program.ParseConfig(DataGame.existingConfig[configname]);
 							var PlayerList = Program.GetPlayersList(joystickButtonGamepad);
@@ -575,11 +583,16 @@ namespace TeknoparrotAutoXinput
 					{
 						FirstConfig = DataGame.existingConfig["gamepad"];
 					}
+					if (DataGame.existingConfig.ContainsKey("lightgun"))
+					{
+						FirstConfig = DataGame.existingConfig["lightgun"];
+					}
 					if (ConfigPerPlayer.Count() > 0)
 					{
 						var FirstPlayer = ConfigPerPlayer[0];
 						string FirstConfigLabel = FirstPlayer.Item1;
 						if (FirstConfigLabel == "gamepad" && usealtgamepad) FirstConfigLabel = "gamepadalt";
+						if (FirstConfigLabel == "gamepad" && uselightgun) FirstConfigLabel = "lightgun";
 						FirstConfig = DataGame.existingConfig[FirstConfigLabel];
 					}
 
@@ -1007,7 +1020,7 @@ namespace TeknoparrotAutoXinput
 					Thread.Sleep(1000);
 				}
 			}
-			
+
 
 			Process process = Process.Start(teknoparrotExe);
 			process.WaitForInputIdle();
@@ -1056,6 +1069,119 @@ namespace TeknoparrotAutoXinput
 			SendKeys.SendWait("{TAB}");
 			SendKeys.SendWait("{ENTER}");
 
+
+		}
+
+		private void button1_Click_1(object sender, EventArgs e)
+		{
+			string finalConfig = "";
+			if (list_games.SelectedItems.Count > 0)
+			{
+				string GameSelected = list_games.SelectedItems[0].ToString();
+				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
+				if (_gameList.ContainsKey(GameSelected))
+				{
+					finalConfig = _gameList[GameSelected].UserConfigFile;
+				}
+			}
+			if (string.IsNullOrEmpty(finalConfig)) return;
+			finalConfig = finalConfig.Replace("UserProfiles", "GameProfiles");
+			if (File.Exists(finalConfig))
+			{
+				string finalConfigData = File.ReadAllText(finalConfig);
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.LoadXml(finalConfigData);
+				XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+				string result = "";
+				foreach (XmlNode node in joystickButtonsNodes)
+				{
+					XmlNode buttonNameNode = node.SelectSingleNode("ButtonName");
+					string buttonName = "";
+					if (buttonNameNode != null && !string.IsNullOrEmpty(buttonNameNode.InnerText)) buttonName = buttonNameNode.InnerText;
+
+					bool hideWithDirectInput = false;
+					XmlNode HideWithDirectInputNode = node.SelectSingleNode("HideWithDirectInput");
+					if (HideWithDirectInputNode != null && !string.IsNullOrEmpty(HideWithDirectInputNode.InnerText)) hideWithDirectInput = HideWithDirectInputNode.InnerText.ToLower() == "true" ? true : false;
+
+					bool hideWithoutRelativeAxis = false;
+					XmlNode HideWithoutRelativeAxisNode = node.SelectSingleNode("HideWithoutRelativeAxis");
+					if (HideWithoutRelativeAxisNode != null && !string.IsNullOrEmpty(HideWithoutRelativeAxisNode.InnerText)) hideWithoutRelativeAxis = HideWithoutRelativeAxisNode.InnerText.ToLower() == "true" ? true : false;
+
+
+					bool hideWithoutKeyboardForAxis = false;
+					XmlNode HideWithoutKeyboardForAxisNode = node.SelectSingleNode("HideWithoutKeyboardForAxis");
+					if (HideWithoutKeyboardForAxisNode != null && !string.IsNullOrEmpty(HideWithoutKeyboardForAxisNode.InnerText)) hideWithoutKeyboardForAxis = HideWithoutKeyboardForAxisNode.InnerText.ToLower() == "true" ? true : false;
+
+
+
+
+					if (buttonName != "" && !hideWithDirectInput && !hideWithoutRelativeAxis && !hideWithoutKeyboardForAxis) result += buttonName + "\n";
+				}
+				MessageBox.Show(result);
+				Clipboard.SetText(result);
+
+			}
+
+
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			string finalConfig = "";
+			if (list_games.SelectedItems.Count > 0)
+			{
+				string GameSelected = list_games.SelectedItems[0].ToString();
+				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
+				if (_gameList.ContainsKey(GameSelected))
+				{
+					finalConfig = _gameList[GameSelected].UserConfigFile;
+				}
+			}
+			if (string.IsNullOrEmpty(finalConfig)) return;
+			Dictionary<string, string> XiToDi = new Dictionary<string, string>();
+			//finalConfig = finalConfig.Replace("UserProfiles", "GameProfiles");
+			if (File.Exists(finalConfig))
+			{
+				string finalConfigData = File.ReadAllText(finalConfig);
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.LoadXml(finalConfigData);
+				XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+				string result = "";
+				foreach (XmlNode node in joystickButtonsNodes)
+				{
+					XmlNode buttonNameNodeXi = node.SelectSingleNode("BindNameXi");
+					string buttonNameXi = "";
+					if (buttonNameNodeXi != null && !string.IsNullOrEmpty(buttonNameNodeXi.InnerText)) buttonNameXi = buttonNameNodeXi.InnerText;
+
+					XmlNode buttonNameNodeDi = node.SelectSingleNode("BindNameDi");
+					string buttonNameDi = "";
+					if (buttonNameNodeDi != null && !string.IsNullOrEmpty(buttonNameNodeDi.InnerText)) buttonNameDi = buttonNameNodeDi.InnerText;
+
+					result += $"{buttonNameXi} => {buttonNameDi} \n";
+					if (buttonNameXi != "")
+					{
+						XiToDi[buttonNameXi] = buttonNameDi;
+					}
+
+				}
+				string json = JsonConvert.SerializeObject(XiToDi, Newtonsoft.Json.Formatting.Indented);
+				File.WriteAllText("XiToDi.json", json);
+				MessageBox.Show(json);
+			}
+		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputconverter();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+			}
+		}
+
+		private void button4_Click(object sender, EventArgs e)
+		{
 
 		}
 	}
