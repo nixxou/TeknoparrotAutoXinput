@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using TeknoParrotUi.Common;
+using WiimoteLib;
 using XInput.Wrapper;
 
 namespace TeknoparrotAutoXinput
@@ -40,6 +41,15 @@ namespace TeknoparrotAutoXinput
 		private bool _dinputHotasFound = false;
 		private string _dinputHotasName = "";
 		private bool _haveHotas = false;
+
+		private bool _dinputLightgunAFound = false;
+		private bool _dinputLightgunBFound = false;
+		private bool _haveLightgun = false;
+		private string _dinputGunAName = "";
+		private string _dinputGunBName = "";
+		private string _dinputGunAType = "";
+		private string _dinputGunBType = "";
+
 
 		private bool _isPlaying = false;
 		public bool isPlaying
@@ -207,6 +217,117 @@ namespace TeknoparrotAutoXinput
 			Dictionary<string, JoystickButtonData> bindingDinputHotas = null;
 			string bindingDinputHotasJson = ConfigurationManager.MainConfig.bindingDinputHotas;
 
+			bool checkDinputLightgun = false;
+			string LightgunA_Type = ConfigurationManager.MainConfig.gunAType;
+			string LightgunB_Type = ConfigurationManager.MainConfig.gunBType;
+			if (!string.IsNullOrEmpty(LightgunA_Type) && LightgunA_Type != "<none>") checkDinputLightgun = true;
+			if (!string.IsNullOrEmpty(LightgunB_Type) && LightgunB_Type != "<none>") checkDinputLightgun = true;
+			string bindingDinputLightgunAJson = "";
+			string bindingDinputLightgunBJson = "";
+			Dictionary<string, JoystickButtonData> bindingDinputLightGunA = null;
+			Dictionary<string, JoystickButtonData> bindingDinputLightGunB = null;
+			Dictionary<string, JoystickButtonData> bindingDinputLightGun = new Dictionary<string, JoystickButtonData>();
+			string gunAGuid = string.Empty;
+			string gunBGuid = string.Empty;
+
+			_dinputGunBType = string.Empty;
+			_dinputGunAType = string.Empty;
+			_dinputGunAName = string.Empty;
+			_dinputGunBName = string.Empty;
+			_dinputLightgunAFound = false;
+			_dinputLightgunBFound = false;
+			_haveLightgun = false;
+			if (checkDinputLightgun)
+			{
+				int nb_wiimote = 0;
+				int current_wiimote = 0;
+				if (LightgunA_Type == "wiimote" || LightgunB_Type == "wiimote")
+				{
+					WiimoteCollection mWC = new WiimoteCollection();
+					try
+					{
+						mWC.FindAllWiimotes();
+					}
+					catch (Exception ex)
+					{
+
+					}
+					foreach (Wiimote wm in mWC)
+					{
+						nb_wiimote++;
+					}
+				}
+				if (LightgunA_Type == "sinden" || LightgunA_Type == "gun4ir" || LightgunA_Type == "wiimote" || LightgunA_Type == "gamepad")
+				{
+					_dinputGunAName = $"Gun A [{LightgunA_Type}] ";
+					if (LightgunA_Type == "gamepad") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
+					if (LightgunA_Type == "sinden") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunASinden;
+					if (LightgunA_Type == "gun4ir") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGun4ir;
+					if (LightgunA_Type == "wiimote") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
+					bindingDinputLightGunA = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunAJson);
+					if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
+					{
+						gunAGuid = bindingDinputLightGunA["LightgunX"].JoystickGuid.ToString();
+					}
+					if (LightgunA_Type == "wiimote")
+					{
+						current_wiimote++;
+						if (nb_wiimote < current_wiimote)
+						{
+							gunAGuid = "";
+						}
+					}
+				}
+				if (LightgunB_Type == "sinden" || LightgunB_Type == "gun4ir" || LightgunB_Type == "wiimote" || LightgunB_Type == "gamepad")
+				{
+					_dinputGunBName = $"Gun B [{LightgunB_Type}] ";
+					if (LightgunB_Type == "gamepad") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
+					if (LightgunB_Type == "sinden") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
+					if (LightgunB_Type == "gun4ir") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGun4ir;
+					if (LightgunB_Type == "wiimote") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
+					bindingDinputLightGunB = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunBJson);
+					if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
+					{
+						gunBGuid = bindingDinputLightGunB["LightgunX"].JoystickGuid.ToString();
+					}
+					if (LightgunB_Type == "wiimote")
+					{
+						current_wiimote++;
+						if (nb_wiimote < current_wiimote)
+						{
+							gunAGuid = "";
+						}
+					}
+				}
+				if (!string.IsNullOrEmpty(gunAGuid) || !string.IsNullOrEmpty(gunBGuid))
+				{
+					DirectInput directInput = new DirectInput();
+					List<DeviceInstance> devices = new List<DeviceInstance>();
+					devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+					foreach (var device in devices)
+					{
+						if (device.InstanceGuid.ToString() == gunAGuid)
+						{
+							Utils.LogMessage($"GunAGuid Found");
+							_dinputLightgunAFound = true;
+							_haveLightgun = true;
+							_dinputGunAName += device.ProductName;
+							_dinputGunAType = LightgunA_Type;
+						}
+						if (device.InstanceGuid.ToString() == gunBGuid)
+						{
+							Utils.LogMessage($"GunBGuid Found");
+							_dinputLightgunBFound = true;
+							_haveLightgun = true;
+							_dinputGunBName += device.ProductName;
+							_dinputGunBType = LightgunB_Type;
+						}
+					}
+				}
+
+			}
+
+
 			foreach (var cg in _connectedGamePad)
 			{
 				if (cg.Value.Type == "arcade") _haveArcade = true;
@@ -368,6 +489,7 @@ namespace TeknoparrotAutoXinput
 			lbl_gamepadlist.Text = "";
 			lbl_arcadelist.Text = "";
 			lbl_wheellist.Text = "";
+			lbl_gunslist.Text = "";
 			UpdateGamePadList();
 			foreach (var gp in _connectedGamePad)
 			{
@@ -382,6 +504,11 @@ namespace TeknoparrotAutoXinput
 			lbl_arcadelist.Text = lbl_arcadelist.Text.TrimEnd().TrimEnd(',');
 			lbl_gamepadlist.Text = lbl_gamepadlist.Text.TrimEnd().TrimEnd(',');
 			lbl_wheellist.Text = lbl_wheellist.Text.TrimEnd().TrimEnd(',');
+
+			if (_dinputLightgunAFound) lbl_gunslist.Text += $"{_dinputGunAName}, ";
+			if (_dinputLightgunBFound) lbl_gunslist.Text += $"{_dinputGunBName}, ";
+			lbl_gunslist.Text = lbl_gunslist.Text.TrimEnd().TrimEnd(',');
+
 
 		}
 
@@ -596,6 +723,8 @@ namespace TeknoparrotAutoXinput
 						FirstConfig = DataGame.existingConfig[FirstConfigLabel];
 					}
 
+
+
 					if (FirstConfig != "" && File.Exists(FirstConfig))
 					{
 						btn_gameoptions.Enabled = true;
@@ -608,7 +737,18 @@ namespace TeknoparrotAutoXinput
 							string fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
 							string fileDirectory = Path.GetDirectoryName(fileName);
 							fileDirectory = Path.GetDirectoryName(fileDirectory);
+
 							string imgFile = Path.Combine(fileDirectory, "img", fileNameWithoutExt + ".jpg");
+							if (imgFile.EndsWith("lightgun.jpg"))
+							{
+								string oldImgFile = imgFile;
+								if (_dinputGunAType != "")
+								{
+									imgFile = imgFile.Substring(0, imgFile.Length - 4) + "-" + _dinputGunAType + ".jpg";
+									if(!File.Exists(imgFile)) { imgFile = oldImgFile; }
+								}
+							}
+
 							if (File.Exists(imgFile))
 							{
 								Image originalImage = System.Drawing.Image.FromFile(imgFile);
@@ -616,8 +756,21 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
+						Dictionary<string, string> existingConfigClone = new Dictionary<string, string>();
+						foreach(var cfg in DataGame.existingConfig) existingConfigClone.Add(cfg.Key, cfg.Value);
+						if (DataGame.existingConfig.ContainsKey("lightgun"))
+						{
+							string valueExistingConfig = DataGame.existingConfig["lightgun"].Substring(0, DataGame.existingConfig["lightgun"].Length - 4);
+							existingConfigClone.Add("lightgun-sinden", valueExistingConfig + "-sinden.jpg");
+							existingConfigClone.Add("lightgun-wiimote", valueExistingConfig + "-wiimote.jpg");
+							existingConfigClone.Add("lightgun-gamepad", valueExistingConfig + "-gamepad.jpg");
+							existingConfigClone.Add("lightgun-gun4ir", valueExistingConfig + "-gun4ir.jpg");
+
+						}
+
+
 						List<string> AllImages = new List<string>();
-						foreach (var configFile in DataGame.existingConfig)
+						foreach (var configFile in existingConfigClone)
 						{
 							if (configFile.Key == "gamepad" && usealtgamepad) continue;
 							if (configFile.Key == "gamepadalt" && !usealtgamepad) continue;
