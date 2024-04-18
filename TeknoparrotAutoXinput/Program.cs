@@ -2571,6 +2571,8 @@ namespace TeknoparrotAutoXinput
 						Thread.Sleep(500);
 						Utils.LogMessage($"End Execution");
 
+						ButtonToKeyManager.buttonToKey.StopMonitor();
+
 						if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{
 							Utils.LogMessage($"CleanHardLinksFiles Elf");
