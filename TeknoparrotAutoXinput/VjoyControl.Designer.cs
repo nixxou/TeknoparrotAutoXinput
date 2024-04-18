@@ -29,6 +29,7 @@ namespace TeknoparrotAutoXinput
 		/// </summary>
 		private void InitializeComponent()
 		{
+			components = new System.ComponentModel.Container();
 			groupBox1 = new GroupBox();
 			lbl_profile = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
@@ -130,6 +131,7 @@ namespace TeknoparrotAutoXinput
 			min_BX = new Krypton.Toolkit.KryptonNumericUpDown();
 			btn_Save = new Krypton.Toolkit.KryptonButton();
 			btn_Cancel = new Krypton.Toolkit.KryptonButton();
+			timer1 = new System.Windows.Forms.Timer(components);
 			groupBox1.SuspendLayout();
 			grp_gunA.SuspendLayout();
 			grp_manual_A.SuspendLayout();
@@ -1125,6 +1127,11 @@ namespace TeknoparrotAutoXinput
 			btn_Cancel.Values.Text = "Cancel";
 			btn_Cancel.Click += btn_Cancel_Click;
 			// 
+			// timer1
+			// 
+			timer1.Interval = 1000;
+			timer1.Tick += timer1_Tick;
+			// 
 			// VjoyControl
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1256,5 +1263,6 @@ namespace TeknoparrotAutoXinput
 		private Krypton.Toolkit.KryptonButton btn_Cancel;
 		private Krypton.Toolkit.KryptonLabel lbl_profile;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel8;
+		private System.Windows.Forms.Timer timer1;
 	}
 }

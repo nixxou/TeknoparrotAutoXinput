@@ -720,8 +720,8 @@ namespace TeknoparrotAutoXinput
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				if(!string.IsNullOrEmpty(frm.GunA_json)) ConfigurationManager.MainConfig.vjoySettingsGunA = frm.GunA_json;
-				if(!string.IsNullOrEmpty(frm.GunB_json)) ConfigurationManager.MainConfig.vjoySettingsGunB = frm.GunB_json;
+				if (!string.IsNullOrEmpty(frm.GunA_json)) ConfigurationManager.MainConfig.vjoySettingsGunA = frm.GunA_json;
+				if (!string.IsNullOrEmpty(frm.GunB_json)) ConfigurationManager.MainConfig.vjoySettingsGunB = frm.GunB_json;
 				ConfigurationManager.SaveConfig();
 			}
 
@@ -731,6 +731,11 @@ namespace TeknoparrotAutoXinput
 		{
 			ConfigurationManager.MainConfig.indexvjoy = cmb_vjoy.SelectedIndex;
 			ConfigurationManager.SaveConfig();
+		}
+
+		private void chk_reasignGunPedal_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.reasignPedals = chk_reasignGunPedal.Checked;
 		}
 	}
 }

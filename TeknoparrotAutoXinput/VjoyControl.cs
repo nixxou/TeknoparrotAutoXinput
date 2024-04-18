@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WiimoteLib;
 using XJoy;
+using System.IO.Pipes;
 
 namespace TeknoparrotAutoXinput
 {
@@ -23,6 +24,7 @@ namespace TeknoparrotAutoXinput
 	{
 		private static NotifyIcon notifyIcon;
 		private static ContextMenuStrip contextMenu;
+		private System.Diagnostics.Process parentProcess = null;
 
 		private bool isActivated = false;
 
@@ -199,7 +201,7 @@ namespace TeknoparrotAutoXinput
 			_gameOptions = gameOptions;
 			_game = game;
 			_indexVjoy = ConfigurationManager.MainConfig.indexvjoy;
-			if(_gameOptions != null && _gameOptions.indexvjoy != -1) _indexVjoy = _gameOptions.indexvjoy;
+			if (_gameOptions != null && _gameOptions.indexvjoy != -1) _indexVjoy = _gameOptions.indexvjoy;
 
 
 
@@ -218,7 +220,14 @@ namespace TeknoparrotAutoXinput
 			}
 			else
 			{
-				btn_Cancel.Text = "Close";
+				System.Diagnostics.Process p = ParentProcessUtilities.GetParentProcess();
+				if (p != null)
+				{
+					parentProcess = p;
+					timer1.Enabled = true;
+				}
+
+				btn_Cancel.Visible = false;
 				// Créer le menu contextuel	
 				contextMenu = new ContextMenuStrip();
 				ToolStripMenuItem closeMenuItem = new ToolStripMenuItem("Close");
@@ -709,7 +718,7 @@ namespace TeknoparrotAutoXinput
 					assignment.Add(keycombi, actionPauseMenu);
 				}
 				catch (Exception ex) { }
-				
+
 
 			}
 
@@ -1772,7 +1781,13 @@ namespace TeknoparrotAutoXinput
 			trk_forceB_Y.Value = (int)Math.Round((double)trk_forceB_Y.Maximum / 2.0);
 		}
 
-
+		private void timer1_Tick(object sender, EventArgs e)
+		{
+			if (parentProcess.HasExited)
+			{
+				this.Close();
+			}
+		}
 	}
 
 

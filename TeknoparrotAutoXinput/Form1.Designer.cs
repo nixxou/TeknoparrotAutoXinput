@@ -624,7 +624,7 @@
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 37;
-			btn_Save.Values.Text = "Save";
+			btn_Save.Values.Text = "Close";
 			btn_Save.Click += btn_Save_Click;
 			// 
 			// txt_tpfolder
@@ -1091,9 +1091,10 @@
 			// 
 			chk_reasignGunPedal.Location = new Point(13, 174);
 			chk_reasignGunPedal.Name = "chk_reasignGunPedal";
-			chk_reasignGunPedal.Size = new Size(372, 20);
+			chk_reasignGunPedal.Size = new Size(361, 20);
 			chk_reasignGunPedal.TabIndex = 49;
-			chk_reasignGunPedal.Values.Text = "If game use one pedal, use Right Pedal from player 1 to Player 2";
+			chk_reasignGunPedal.Values.Text = "If game use one pedal, assign the unused pedal from P1 to P2";
+			chk_reasignGunPedal.CheckedChanged += chk_reasignGunPedal_CheckedChanged;
 			// 
 			// groupBox12
 			// 

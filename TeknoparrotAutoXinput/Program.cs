@@ -14,6 +14,7 @@ using SharpDX.Multimedia;
 using System;
 using System.Diagnostics;
 using System.Drawing.Printing;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -66,6 +67,7 @@ namespace TeknoparrotAutoXinput
 
 		public static string GunAGuid = "";
 		public static string GunBGuid = "";
+		public static string VjoyGuid = "";
 
 		public static Guid? FirstKeyboardGuid = null;
 
@@ -85,6 +87,11 @@ namespace TeknoparrotAutoXinput
 		public static string GameOptionsFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions");
 
 		public static bool DebugMode = false;
+
+		public static bool useXinput = true;
+		public static bool useDinputWheel = false;
+		public static bool useDinputHotas = false;
+		public static bool useDinputLightGun = false;
 
 
 		/// <summary>
@@ -722,7 +729,7 @@ namespace TeknoparrotAutoXinput
 						bool replaceLightgunWithVjoy = ConfigurationManager.MainConfig.indexvjoy > 0 ? true : false;
 						int vjoyIndex = ConfigurationManager.MainConfig.indexvjoy;
 						bool useVjoy = false;
-						string vjoyGuid = "";
+						//string vjoyGuid = "";
 						if(gameOptions.indexvjoy != -1) vjoyIndex = gameOptions.indexvjoy;
 
 						if (haveLightgun && vjoyIndex > 0)
@@ -764,7 +771,7 @@ namespace TeknoparrotAutoXinput
 											joystick.GetCurrentState(ref joystickState);
 											if (joystickState != null && joystickState.Buttons.Count() >= 3 && joystickState.Buttons[0] && !joystickState.Buttons[1] && joystickState.Buttons[2])
 											{
-												vjoyGuid = joy.Key;
+												VjoyGuid = joy.Key;
 											}
 											joystick.Dispose();
 										}
@@ -778,7 +785,7 @@ namespace TeknoparrotAutoXinput
 							}
 							catch (Exception ex) { }
 
-							if(vjoyGuid != "")
+							if(VjoyGuid != "")
 							{
 								if (dinputLightgunAFound)
 								{
@@ -790,7 +797,7 @@ namespace TeknoparrotAutoXinput
 										bindingDinputLightGunA["LightgunX"].IsFullAxis = false;
 										bindingDinputLightGunA["LightgunX"].PovDirection = 0;
 										bindingDinputLightGunA["LightgunX"].IsReverseAxis = false;
-										bindingDinputLightGunA["LightgunX"].JoystickGuid = new Guid(vjoyGuid);
+										bindingDinputLightGunA["LightgunX"].JoystickGuid = new Guid(VjoyGuid);
 									}
 									if (bindingDinputLightGunA.ContainsKey("LightgunY"))
 									{
@@ -800,7 +807,7 @@ namespace TeknoparrotAutoXinput
 										bindingDinputLightGunA["LightgunY"].IsFullAxis = false;
 										bindingDinputLightGunA["LightgunY"].PovDirection = 0;
 										bindingDinputLightGunA["LightgunY"].IsReverseAxis = false;
-										bindingDinputLightGunA["LightgunY"].JoystickGuid = new Guid(vjoyGuid);
+										bindingDinputLightGunA["LightgunY"].JoystickGuid = new Guid(VjoyGuid);
 									}
 								}
 
@@ -814,7 +821,7 @@ namespace TeknoparrotAutoXinput
 										bindingDinputLightGunB["LightgunX"].IsFullAxis = false;
 										bindingDinputLightGunB["LightgunX"].PovDirection = 0;
 										bindingDinputLightGunB["LightgunX"].IsReverseAxis = false;
-										bindingDinputLightGunB["LightgunX"].JoystickGuid = new Guid(vjoyGuid);
+										bindingDinputLightGunB["LightgunX"].JoystickGuid = new Guid(VjoyGuid);
 									}
 									if (bindingDinputLightGunB.ContainsKey("LightgunY"))
 									{
@@ -824,7 +831,7 @@ namespace TeknoparrotAutoXinput
 										bindingDinputLightGunB["LightgunY"].IsFullAxis = false;
 										bindingDinputLightGunB["LightgunY"].PovDirection = 0;
 										bindingDinputLightGunB["LightgunY"].IsReverseAxis = false;
-										bindingDinputLightGunB["LightgunY"].JoystickGuid = new Guid(vjoyGuid);
+										bindingDinputLightGunB["LightgunY"].JoystickGuid = new Guid(VjoyGuid);
 									}
 								}
 							}
@@ -873,15 +880,72 @@ namespace TeknoparrotAutoXinput
 							}
 							else
 							{
-								foreach(var lightgunConfig in LightgunConfigA)
+								Dictionary<string, string> AlreadyAddedGunValue = new Dictionary<string,string>();
+								foreach (var lightgunConfig in LightgunConfigA)
 								{
-									if (LightgunConfigFinal.ContainsKey(lightgunConfig.Key))
+									string arcadeKey = lightgunConfig.Key;
+									string[] gunValues = lightgunConfig.Value.Split(',');
+									string newvalues = "";
+									foreach (var gunValue in gunValues)
 									{
-										LightgunConfigFinal[lightgunConfig.Key] = LightgunConfigFinal[lightgunConfig.Key] + "," + lightgunConfig.Value;
+										if (gunValue.StartsWith("GunA_") || gunValue == "Test" || gunValue == "Service1" || gunValue == "Service2")
+										{
+											if (!AlreadyAddedGunValue.ContainsKey(gunValue))
+											{
+												AlreadyAddedGunValue.Add(gunValue, arcadeKey);
+											}
+										}
+									}
+								}
+								foreach (var lightgunConfig in LightgunConfigB)
+								{
+									string arcadeKey = lightgunConfig.Key;
+									string[] gunValues = lightgunConfig.Value.Split(',');
+									string newvalues = "";
+									foreach (var gunValue in gunValues)
+									{
+										if (gunValue.StartsWith("GunB_") || gunValue == "Test" || gunValue == "Service1" || gunValue == "Service2")
+										{
+											if (!AlreadyAddedGunValue.ContainsKey(gunValue))
+											{
+												AlreadyAddedGunValue.Add(gunValue, arcadeKey);
+											}
+										}
+									}
+								}
+
+								if (ConfigurationManager.MainConfig.reasignPedals)
+								{
+									string emptyPedal = "";
+									string usedPedal = "";
+									if(AlreadyAddedGunValue.ContainsKey("GunA_LightgunPedalRight") && !AlreadyAddedGunValue.ContainsKey("GunA_LightgunPedalLeft"))
+									{
+										emptyPedal = "LightgunPedalLeft";
+										usedPedal = "LightgunPedalRight";
+									}
+									if (!AlreadyAddedGunValue.ContainsKey("GunA_LightgunPedalRight") && AlreadyAddedGunValue.ContainsKey("GunA_LightgunPedalLeft"))
+									{
+										emptyPedal = "LightgunPedalRight";
+										usedPedal = "LightgunPedalLeft";
+									}
+									if(emptyPedal != "" && !AlreadyAddedGunValue.ContainsKey("GunB_" + emptyPedal) && AlreadyAddedGunValue.ContainsKey("GunB_" + usedPedal))
+									{
+										string valueUsed = AlreadyAddedGunValue["GunB_" + usedPedal];
+										AlreadyAddedGunValue.Add("GunA_" + emptyPedal, valueUsed);
+									}
+								}
+
+								foreach(var alreadyAddedData in AlreadyAddedGunValue)
+								{
+									string arcadeKey = alreadyAddedData.Value;
+									string gunValue = alreadyAddedData.Key;
+									if (LightgunConfigFinal.ContainsKey(arcadeKey))
+									{
+										LightgunConfigFinal[arcadeKey] = LightgunConfigFinal[arcadeKey] + "," + gunValue;
 									}
 									else
 									{
-										LightgunConfigFinal.Add(lightgunConfig.Key, lightgunConfig.Value);
+										LightgunConfigFinal.Add(arcadeKey, gunValue);
 									}
 								}
 
@@ -903,7 +967,7 @@ namespace TeknoparrotAutoXinput
 								}
 								if (dinputLightgunBFound)
 								{
-									string gunprefix = "GunA_";
+									string gunprefix = "GunB_";
 									//if (gunindex == 1) gunprefix = "GunB_";
 
 									foreach (var bind in bindingDinputLightGunB)
@@ -1038,11 +1102,6 @@ namespace TeknoparrotAutoXinput
 
 
 
-
-						bool useXinput = true;
-						bool useDinputWheel = false;
-						bool useDinputHotas = false;
-						bool useDinputLightGun = false;
 
 						if (haveWheel && existingConfig.ContainsKey("wheel") && dinputWheelFound)
 						{
@@ -2465,6 +2524,16 @@ namespace TeknoparrotAutoXinput
 							string configname = ConfigPlayer.Value.Item1;
 							if (configname == "gamepad" && usealtgamepad) configname = "gamepadalt";
 
+							if (configname == "lightgun" && dinputLightgunAFound && playernum == 1)
+							{
+								configname = "lightgun-" + LightgunA_Type;
+							}
+							if (configname == "lightgun" && dinputLightgunBFound && playernum == 2)
+							{
+								configname = "lightgun-" + LightgunB_Type;
+							}
+							
+
 
 							var imgPath = Path.Combine(basePath, "img", originalConfigFileNameWithoutExt + "." + configname + ".jpg");
 							Startup.imagePaths.Add(imgPath);
@@ -2522,6 +2591,16 @@ namespace TeknoparrotAutoXinput
 							Task.Run(() => ShowFormAsync(cancellationTokenSource.Token));
 						}
 
+						if(useDinputLightGun && VjoyGuid != "")
+						{
+							Process vjoy_process = new Process();
+							vjoy_process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
+							vjoy_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+							vjoy_process.StartInfo.Arguments = "--runvjoy " + $"\"{xmlFile}\"";
+							vjoy_process.StartInfo.UseShellExecute = true;
+							vjoy_process.Start();
+						}
+
 						string argumentTpExe = "--profile=\"" + finalConfig + "\"";
 						if (gameOptions.RunAsRoot && gameNeedAdmin)
 						{
@@ -2545,12 +2624,7 @@ namespace TeknoparrotAutoXinput
 						else
 						{
 							/*
-							Process vjoy_process = new Process();
-							vjoy_process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
-							vjoy_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-							vjoy_process.StartInfo.Arguments = "--runvjoy " + $"\"{xmlFile}\"";
-							vjoy_process.StartInfo.UseShellExecute = true;
-							vjoy_process.Start();
+
 							*/
 							
 
@@ -2565,8 +2639,9 @@ namespace TeknoparrotAutoXinput
 							process.WaitForExit();
 
 
-							//vjoy_process.Kill();
+							//
 						}
+
 
 						Thread.Sleep(500);
 						Utils.LogMessage($"End Execution");
