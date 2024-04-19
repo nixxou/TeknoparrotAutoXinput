@@ -41,12 +41,38 @@ namespace TeknoparrotAutoXinput
 					break;
 				case "gamepad":
 					BackgroundImage = Properties.Resources.gun360;
+					label11.Text = "Y";
+					label6.Text = "A";
+					label5.Text = "X";
+					label3.Text = "LB";
+
+					label11.Location = new Point(label11.Location.X+90, label11.Location.Y);
+					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
+					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
+					label3.Location = new Point(label3.Location.X + 20, label3.Location.Y);
+
 					break;
 				case "gun4ir":
 					BackgroundImage = Properties.Resources.gun4ir;
+					label11.Text = "B";
+					label6.Text = "2";
+					label5.Text = "A";
+					label3.Text = "1";
+					label11.Location = new Point(label11.Location.X + 90, label11.Location.Y);
+					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
+					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
+					label3.Location = new Point(label3.Location.X + 20, label3.Location.Y);
 					break;
 				case "wiimote":
 					BackgroundImage = Properties.Resources.wiimote;
+					label11.Text = "minus";
+					label6.Text = "2";
+					label5.Text = "1";
+					label3.Text = "A";
+					label11.Location = new Point(label11.Location.X + 60, label11.Location.Y);
+					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
+					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
+					label3.Location = new Point(label3.Location.X + 20, label3.Location.Y);
 					break;
 			}
 			GunIndex = gunIndex;
@@ -66,7 +92,7 @@ namespace TeknoparrotAutoXinput
 
 		private void dinputgun_Load(object sender, EventArgs e)
 		{
-
+			
 		}
 
 		private void cmb_devicelist_SelectedIndexChanged(object sender, EventArgs e)
@@ -156,7 +182,7 @@ namespace TeknoparrotAutoXinput
 							if (FocusedTextBoxName == "txt_LightgunX" && key.Offset == JoystickOffset.Y) continue;
 							if (FocusedTextBoxName == "txt_LightgunY" && key.Offset == JoystickOffset.X) continue;
 
-							if (FocusedTextBoxName != "txt_LightgunX" && FocusedTextBoxName != "txt_LightgunY" && FocusedTextBoxName != "txt_LightgunPedalRight" && FocusedTextBoxName != "txt_LightgunPedalLeft") continue;
+							if (FocusedTextBoxName != "txt_LightgunX" && FocusedTextBoxName != "txt_LightgunY" && FocusedTextBoxName != "txt_LightgunPedalRight" && FocusedTextBoxName != "txt_LightgunPedalLeft" && FocusedTextBoxName != "txt_LightgunRightX" && FocusedTextBoxName != "txt_LightgunRightY" && FocusedTextBoxName != "txt_LightgunWheelX") continue;
 							// Positive direction
 							if (key.Value > short.MaxValue + 15000)
 							{
@@ -198,9 +224,13 @@ namespace TeknoparrotAutoXinput
 							if (key.Value == 128)
 							{
 								if (deviceInstance.Type == DeviceType.Keyboard)
+								{
 									inputText = "Button " + ((Key)key.Offset - 47).ToString();
+								}
 								else
+								{
 									inputText = key.Offset.ToString();
+								}
 
 								button = new JoystickButtonData
 								{
@@ -339,7 +369,7 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		private void SaveConfig()
+		private bool SaveConfig()
 		{
 			Dictionary<string, JoystickButtonData> buttonDataFinal = new Dictionary<string, JoystickButtonData>();
 			foreach (Control control in this.Controls)
@@ -359,6 +389,49 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
+
+			bool validConfig = true;
+			string errorConfig = "ERROR ! \n";
+			if (!buttonDataFinal.ContainsKey("LightgunX") || !buttonDataFinal.ContainsKey("LightgunY") || !buttonDataFinal["LightgunX"].IsAxis || !buttonDataFinal["LightgunY"].IsAxis)
+			{
+				validConfig = false;
+				errorConfig += "You must define axis for Analog X and Y \r\n";
+			}
+
+			Dictionary<string, string> AssignedButtons = new Dictionary<string, string>();
+			foreach (var btnData in buttonDataFinal)
+			{
+				string assignedButton = btnData.Value.JoystickGuid.ToString() + "===" + btnData.Value.Button.ToString() + "===" + btnData.Value.PovDirection + "===" + (btnData.Value.IsAxis ? "true" : "false");
+				if (AssignedButtons.ContainsKey(assignedButton))
+				{
+					bool exceptionCase = false;
+					if(btnData.Key == "LightgunRightX" || btnData.Key == "LightgunWheelX")
+					{
+						if (AssignedButtons[assignedButton] == "LightgunRightX" || AssignedButtons[assignedButton] == "LightgunWheelX")
+						{
+							exceptionCase = true;
+						}
+					}
+					if(!exceptionCase)
+					{
+						validConfig = false;
+						errorConfig = $"{btnData.Value.Title} in {btnData.Key} is asigned multiple time \r\n";
+					}
+
+				}
+				else
+				{
+					AssignedButtons.Add(assignedButton, btnData.Key);
+				}
+			}
+
+			if (!validConfig)
+			{
+				MessageBox.Show(errorConfig);
+				return false;
+			}
+
+
 
 			if (GunIndex == 1)
 			{
@@ -405,14 +478,17 @@ namespace TeknoparrotAutoXinput
 			//MessageBox.Show(json);
 			//ConfigurationManager.MainConfig.bindingDinputWheel = json;
 			ConfigurationManager.SaveConfig();
+			return true;
 
 		}
 
 		private void btn_Save_Click(object sender, EventArgs e)
 		{
-			SaveConfig();
-			this.DialogResult = DialogResult.OK;
-			this.Close();
+			if (SaveConfig())
+			{
+				this.DialogResult = DialogResult.OK;
+				this.Close();
+			}
 		}
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
@@ -446,6 +522,40 @@ namespace TeknoparrotAutoXinput
 		private void txt_InputDevice0X_TextChanged(object sender, EventArgs e)
 		{
 
+		}
+
+		private void label2_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void txt_LightgunTrigger_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void dinputgun_Click(object sender, EventArgs e)
+		{
+			cmb_devicelist.Focus();
+		}
+
+		private void txt_clear(object sender, MouseEventArgs e)
+		{
+			if (sender is KryptonTextBox)
+			{
+				KryptonTextBox control = (KryptonTextBox)sender;
+				string XinputTitle = control.Name.Substring(4).Trim();
+				if (XinputTitle.EndsWith("plus"))
+				{
+					XinputTitle = XinputTitle.Substring(0, XinputTitle.Length - 4) + "+";
+				}
+				if (buttonData.ContainsKey(XinputTitle))
+				{
+					buttonData.Remove(XinputTitle);
+					control.Text = "";
+				}
+				
+			}
 		}
 	}
 }
