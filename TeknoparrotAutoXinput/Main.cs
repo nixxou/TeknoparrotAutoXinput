@@ -15,11 +15,13 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Xml;
 using TeknoParrotUi.Common;
 using WiimoteLib;
 using XInput.Wrapper;
+using Image = System.Drawing.Image;
 
 namespace TeknoparrotAutoXinput
 {
@@ -745,7 +747,7 @@ namespace TeknoparrotAutoXinput
 								if (_dinputGunAType != "")
 								{
 									imgFile = imgFile.Substring(0, imgFile.Length - 4) + "-" + _dinputGunAType + ".jpg";
-									if(!File.Exists(imgFile)) { imgFile = oldImgFile; }
+									if (!File.Exists(imgFile)) { imgFile = oldImgFile; }
 								}
 							}
 
@@ -757,7 +759,7 @@ namespace TeknoparrotAutoXinput
 						}
 
 						Dictionary<string, string> existingConfigClone = new Dictionary<string, string>();
-						foreach(var cfg in DataGame.existingConfig) existingConfigClone.Add(cfg.Key, cfg.Value);
+						foreach (var cfg in DataGame.existingConfig) existingConfigClone.Add(cfg.Key, cfg.Value);
 						if (DataGame.existingConfig.ContainsKey("lightgun"))
 						{
 							string valueExistingConfig = DataGame.existingConfig["lightgun"].Substring(0, DataGame.existingConfig["lightgun"].Length - 4);
@@ -1336,6 +1338,13 @@ namespace TeknoparrotAutoXinput
 		private void button4_Click(object sender, EventArgs e)
 		{
 
+		}
+
+		private void button5_Click(object sender, EventArgs e)
+		{
+			var frm = new VjoyControl(false);
+			frm.Show();
+			MessageBox.Show("ok");
 		}
 	}
 

@@ -36,6 +36,8 @@
 			btn_gameoptions = new Krypton.Toolkit.KryptonButton();
 			chk_showAll = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1 = new GroupBox();
+			lbl_gunslist = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
 			button4 = new Button();
 			button3 = new Button();
 			button2 = new Button();
@@ -58,8 +60,7 @@
 			lbl_player3 = new Krypton.Toolkit.KryptonLabel();
 			lbl_player4 = new Krypton.Toolkit.KryptonLabel();
 			btn_tpsettings = new Krypton.Toolkit.KryptonButton();
-			lbl_gunslist = new Krypton.Toolkit.KryptonLabel();
-			kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
+			button5 = new Button();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox_gameControls).BeginInit();
 			flowLayoutPanelThumbs.SuspendLayout();
@@ -125,6 +126,7 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(button5);
 			groupBox1.Controls.Add(lbl_gunslist);
 			groupBox1.Controls.Add(kryptonLabel6);
 			groupBox1.Controls.Add(button4);
@@ -145,6 +147,22 @@
 			groupBox1.TabIndex = 7;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Controller Status";
+			// 
+			// lbl_gunslist
+			// 
+			lbl_gunslist.Location = new Point(129, 119);
+			lbl_gunslist.Name = "lbl_gunslist";
+			lbl_gunslist.Size = new Size(19, 20);
+			lbl_gunslist.TabIndex = 13;
+			lbl_gunslist.Values.Text = "...";
+			// 
+			// kryptonLabel6
+			// 
+			kryptonLabel6.Location = new Point(6, 119);
+			kryptonLabel6.Name = "kryptonLabel6";
+			kryptonLabel6.Size = new Size(61, 20);
+			kryptonLabel6.TabIndex = 12;
+			kryptonLabel6.Values.Text = "Gun List :";
 			// 
 			// button4
 			// 
@@ -335,21 +353,15 @@
 			btn_tpsettings.Values.Text = "TP Game Settings";
 			btn_tpsettings.Click += btn_tpsettings_Click;
 			// 
-			// lbl_gunslist
+			// button5
 			// 
-			lbl_gunslist.Location = new Point(129, 119);
-			lbl_gunslist.Name = "lbl_gunslist";
-			lbl_gunslist.Size = new Size(19, 20);
-			lbl_gunslist.TabIndex = 13;
-			lbl_gunslist.Values.Text = "...";
-			// 
-			// kryptonLabel6
-			// 
-			kryptonLabel6.Location = new Point(6, 119);
-			kryptonLabel6.Name = "kryptonLabel6";
-			kryptonLabel6.Size = new Size(61, 20);
-			kryptonLabel6.TabIndex = 12;
-			kryptonLabel6.Values.Text = "Gun List :";
+			button5.Location = new Point(804, 57);
+			button5.Name = "button5";
+			button5.Size = new Size(75, 23);
+			button5.TabIndex = 14;
+			button5.Text = "button5";
+			button5.UseVisualStyleBackColor = true;
+			button5.Click += button5_Click;
 			// 
 			// Main
 			// 
@@ -416,5 +428,6 @@
 		private Button button4;
 		private Krypton.Toolkit.KryptonLabel lbl_gunslist;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel6;
+		private Button button5;
 	}
 }

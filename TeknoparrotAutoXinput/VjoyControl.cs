@@ -105,6 +105,7 @@ namespace TeknoparrotAutoXinput
 				if (value != _GunA_X) _GunA_X_change = true;
 				_GunA_X = value;
 				lbl_gunAX.Text = value.ToString();
+				//lbl_gunA_connected.Text = value.ToString();
 			}
 		}
 
@@ -234,14 +235,28 @@ namespace TeknoparrotAutoXinput
 				closeMenuItem.Click += CloseMenuItem_Click;
 				contextMenu.Items.Add(closeMenuItem);
 
-				// Créer et afficher l'icône dans la barre des tâches
-				notifyIcon = new NotifyIcon();
-				notifyIcon.Icon = SystemIcons.Information;
-				notifyIcon.ContextMenuStrip = contextMenu;
-				notifyIcon.Visible = true;
-				notifyIcon.Text = "TeknoparrotAutoXinput Vjoy Control Center";
-				notifyIcon.DoubleClick += VjoyControl_DoubleClick;
-				this.WindowState = FormWindowState.Minimized;
+				try
+				{
+					// Créer et afficher l'icône dans la barre des tâches
+					notifyIcon = new NotifyIcon();
+					notifyIcon.Icon = SystemIcons.Information;
+					notifyIcon.ContextMenuStrip = contextMenu;
+					notifyIcon.Visible = true;
+					notifyIcon.Text = "TeknoparrotAutoXinput Vjoy Control Center";
+					notifyIcon.DoubleClick += VjoyControl_DoubleClick;
+					//this.WindowState = FormWindowState.Minimized;
+					this.Hide();
+
+				}
+				catch { }
+
+
+
+				
+
+
+
+
 
 			}
 
@@ -434,7 +449,9 @@ namespace TeknoparrotAutoXinput
 				{
 					MonitorGunA = new Thread(() => SpawnDirectInputListener(_gunA_AnalogX.JoystickGuid.ToString(), 1));
 					MonitorGunA.Start();
+					if (_dinputLightgunBFound) Thread.Sleep(500);
 				}
+
 				if (_dinputLightgunBFound)
 				{
 					MonitorGunB = new Thread(() => SpawnDirectInputListener(_gunB_AnalogX.JoystickGuid.ToString(), 2));
@@ -447,6 +464,10 @@ namespace TeknoparrotAutoXinput
 				LoadSettings();
 				AssignNumpad();
 			}
+
+
+
+
 		}
 
 		private void LoadSettings()
@@ -780,7 +801,7 @@ namespace TeknoparrotAutoXinput
 				keyOffsetX = _gunB_AnalogX.Button;
 				keyOffsetY = _gunB_AnalogY.Button;
 			}
-			var directInput = _directInput;
+			var directInput = new DirectInput();
 			Joystick joystick = null;
 			var devicesInstance = new List<DeviceInstance>();
 			devicesInstance.AddRange(directInput.GetDevices().Where(x => x.Type != DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
@@ -804,10 +825,12 @@ namespace TeknoparrotAutoXinput
 			while (!directInput.IsDeviceAttached(device_guid))
 			{
 				Thread.Sleep(100);
+				if (_stopListening) return;
 			}
 			joystick = new Joystick(directInput, device_guid);
 			joystick.Properties.BufferSize = 512;
 			joystick.Acquire();
+			//MessageBox.Show("gun " + gunIndex.ToString());
 			while (!_stopListening)
 			{
 				try
@@ -858,141 +881,143 @@ namespace TeknoparrotAutoXinput
 					}
 
 
+					if (_vjoyFound)
+					{
+						int new_Ax = -1;
+						int new_Ay = -1;
+						int new_Bx = -1;
+						int new_By = -1;
 
-					int new_Ax = -1;
-					int new_Ay = -1;
-					int new_Bx = -1;
-					int new_By = -1;
+						//Debut Traitement
+						if (!GunA_manual)
+						{
+							if (_GunA_X_change)
+							{
+								int new_value = RemapValueToVJoy(GunA_X, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_X]);
+								x_original = new_value;
+								new_value = ReindexValueToVJoy(new_value, _settingsGunA.min_x, _settingsGunA.max_x, _settingsGunA.offset_x, HidExtents[HID_USAGES.HID_USAGE_X]);
+								new_Ax = new_value;
+								_GunA_X_change = false;
+							}
+							if (_GunA_Y_change)
+							{
+								int new_value = RemapValueToVJoy(GunA_Y, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_Y]);
+								y_original = new_value;
+								new_value = ReindexValueToVJoy(new_value, _settingsGunA.min_y, _settingsGunA.max_y, _settingsGunA.offset_y, HidExtents[HID_USAGES.HID_USAGE_Y]);
+								new_Ay = new_value;
+								_GunA_Y_change = false;
+							}
+						}
+						if (!GunB_manual)
+						{
+							if (_GunB_X_change)
+							{
+								int new_value = RemapValueToVJoy(GunB_X, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_RX]);
+								x2_original = new_value;
+								new_value = ReindexValueToVJoy(new_value, _settingsGunB.min_x, _settingsGunB.max_x, _settingsGunB.offset_x, HidExtents[HID_USAGES.HID_USAGE_RX]);
+								new_Bx = new_value;
+								_GunB_X_change = false;
+							}
+							if (_GunB_Y_change)
+							{
+								int new_value = RemapValueToVJoy(GunB_Y, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_RY]);
+								y2_original = new_value;
+								new_value = ReindexValueToVJoy(new_value, _settingsGunB.min_y, _settingsGunB.max_y, _settingsGunB.offset_y, HidExtents[HID_USAGES.HID_USAGE_RY]);
+								new_By = new_value;
+								_GunB_Y_change = false;
+							}
+						}
+						if (new_Ax >= 0 && expAX != null)
+						{
+							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_X];
+							expAX.Parameters["X"] = new_Ax;
+							expAX.Parameters["Y"] = new_Ay >= 0 ? new_Ay : vjoyA_Y;
+							expAX.Parameters["OX"] = x_original;
+							expAX.Parameters["OY"] = y_original;
+							try
+							{
+								var resultEvaluate = double.Parse(expAX.Evaluate().ToString());
+								new_Ax = (int)Math.Round(resultEvaluate);
+								if (new_Ax < vJoyLimit.Min) new_Ax = (int)vJoyLimit.Min;
+								if (new_Ax > vJoyLimit.Max) new_Ax = (int)vJoyLimit.Max;
+							}
+							catch { }
+						}
+						if (new_Ay >= 0 && expAY != null)
+						{
+							int original = new_Ay;
+							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_Y];
+							expAY.Parameters["Y"] = new_Ay;
+							expAY.Parameters["X"] = new_Ax >= 0 ? new_Ax : vjoyA_X;
+							expAY.Parameters["OX"] = x_original;
+							expAY.Parameters["OY"] = y_original;
 
-					//Debut Traitement
-					if (!GunA_manual)
-					{
-						if (_GunA_X_change)
-						{
-							int new_value = RemapValueToVJoy(GunA_X, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_X]);
-							x_original = new_value;
-							new_value = ReindexValueToVJoy(new_value, _settingsGunA.min_x, _settingsGunA.max_x, _settingsGunA.offset_x, HidExtents[HID_USAGES.HID_USAGE_X]);
-							new_Ax = new_value;
-							_GunA_X_change = false;
+							try
+							{
+								var resultEvaluate = double.Parse(expAY.Evaluate().ToString());
+								new_Ay = (int)Math.Round(resultEvaluate);
+								if (new_Ay < vJoyLimit.Min) new_Ay = (int)vJoyLimit.Min;
+								if (new_Ay > vJoyLimit.Max) new_Ay = (int)vJoyLimit.Max;
+							}
+							catch { }
 						}
-						if (_GunA_Y_change)
+						if (new_Bx >= 0 && expBX != null)
 						{
-							int new_value = RemapValueToVJoy(GunA_Y, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_Y]);
-							y_original = new_value;
-							new_value = ReindexValueToVJoy(new_value, _settingsGunA.min_y, _settingsGunA.max_y, _settingsGunA.offset_y, HidExtents[HID_USAGES.HID_USAGE_Y]);
-							new_Ay = new_value;
-							_GunA_Y_change = false;
-						}
-					}
-					if (!GunB_manual)
-					{
-						if (_GunB_X_change)
-						{
-							int new_value = RemapValueToVJoy(GunB_X, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_RX]);
-							x2_original = new_value;
-							new_value = ReindexValueToVJoy(new_value, _settingsGunB.min_x, _settingsGunB.max_x, _settingsGunB.offset_x, HidExtents[HID_USAGES.HID_USAGE_RX]);
-							new_Bx = new_value;
-							_GunB_X_change = false;
-						}
-						if (_GunB_Y_change)
-						{
-							int new_value = RemapValueToVJoy(GunB_Y, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_RY]);
-							y2_original = new_value;
-							new_value = ReindexValueToVJoy(new_value, _settingsGunB.min_y, _settingsGunB.max_y, _settingsGunB.offset_y, HidExtents[HID_USAGES.HID_USAGE_RY]);
-							new_By = new_value;
-							_GunB_Y_change = false;
-						}
-					}
-					if (new_Ax >= 0 && expAX != null)
-					{
-						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_X];
-						expAX.Parameters["X"] = new_Ax;
-						expAX.Parameters["Y"] = new_Ay >= 0 ? new_Ay : vjoyA_Y;
-						expAX.Parameters["OX"] = x_original;
-						expAX.Parameters["OY"] = y_original;
-						try
-						{
-							var resultEvaluate = double.Parse(expAX.Evaluate().ToString());
-							new_Ax = (int)Math.Round(resultEvaluate);
-							if (new_Ax < vJoyLimit.Min) new_Ax = (int)vJoyLimit.Min;
-							if (new_Ax > vJoyLimit.Max) new_Ax = (int)vJoyLimit.Max;
-						}
-						catch { }
-					}
-					if (new_Ay >= 0 && expAY != null)
-					{
-						int original = new_Ay;
-						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_Y];
-						expAY.Parameters["Y"] = new_Ay;
-						expAY.Parameters["X"] = new_Ax >= 0 ? new_Ax : vjoyA_X;
-						expAY.Parameters["OX"] = x_original;
-						expAY.Parameters["OY"] = y_original;
+							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RX];
+							expBX.Parameters["X"] = new_Bx;
+							expBX.Parameters["Y"] = new_By >= 0 ? new_By : vjoyB_Y;
+							expBX.Parameters["OX"] = x2_original;
+							expBX.Parameters["OY"] = y2_original;
 
-						try
-						{
-							var resultEvaluate = double.Parse(expAY.Evaluate().ToString());
-							new_Ay = (int)Math.Round(resultEvaluate);
-							if (new_Ay < vJoyLimit.Min) new_Ay = (int)vJoyLimit.Min;
-							if (new_Ay > vJoyLimit.Max) new_Ay = (int)vJoyLimit.Max;
+							try
+							{
+								var resultEvaluate = double.Parse(expBX.Evaluate().ToString());
+								new_Bx = (int)Math.Round(resultEvaluate);
+								if (new_Bx < vJoyLimit.Min) new_Bx = (int)vJoyLimit.Min;
+								if (new_Bx > vJoyLimit.Max) new_Bx = (int)vJoyLimit.Max;
+							}
+							catch { }
 						}
-						catch { }
-					}
-					if (new_Bx >= 0 && expBX != null)
-					{
-						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RX];
-						expBX.Parameters["X"] = new_Bx;
-						expBX.Parameters["Y"] = new_By >= 0 ? new_By : vjoyB_Y;
-						expBX.Parameters["OX"] = x2_original;
-						expBX.Parameters["OY"] = y2_original;
+						if (new_By >= 0 && expBY != null)
+						{
+							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RY];
+							expBY.Parameters["Y"] = new_By;
+							expBY.Parameters["X"] = new_Bx >= 0 ? new_Bx : vjoyB_X;
+							expBY.Parameters["OX"] = x2_original;
+							expBY.Parameters["OY"] = y2_original;
 
-						try
-						{
-							var resultEvaluate = double.Parse(expBX.Evaluate().ToString());
-							new_Bx = (int)Math.Round(resultEvaluate);
-							if (new_Bx < vJoyLimit.Min) new_Bx = (int)vJoyLimit.Min;
-							if (new_Bx > vJoyLimit.Max) new_Bx = (int)vJoyLimit.Max;
+							try
+							{
+								var resultEvaluate = double.Parse(expBY.Evaluate().ToString());
+								new_By = (int)Math.Round(resultEvaluate);
+								if (new_By < vJoyLimit.Min) new_By = (int)vJoyLimit.Min;
+								if (new_By > vJoyLimit.Max) new_By = (int)vJoyLimit.Max;
+							}
+							catch { }
 						}
-						catch { }
-					}
-					if (new_By >= 0 && expBY != null)
-					{
-						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RY];
-						expBY.Parameters["Y"] = new_By;
-						expBY.Parameters["X"] = new_Bx >= 0 ? new_Bx : vjoyB_X;
-						expBY.Parameters["OX"] = x2_original;
-						expBY.Parameters["OY"] = y2_original;
-
-						try
+						if (new_Ax >= 0)
 						{
-							var resultEvaluate = double.Parse(expBY.Evaluate().ToString());
-							new_By = (int)Math.Round(resultEvaluate);
-							if (new_By < vJoyLimit.Min) new_By = (int)vJoyLimit.Min;
-							if (new_By > vJoyLimit.Max) new_By = (int)vJoyLimit.Max;
+							vJoyObj.SetAxis(HID_USAGES.HID_USAGE_X, new_Ax);
+							vjoyA_X = new_Ax;
 						}
-						catch { }
-					}
-					if (new_Ax >= 0)
-					{
-						vJoyObj.SetAxis(HID_USAGES.HID_USAGE_X, new_Ax);
-						vjoyA_X = new_Ax;
-					}
-					if (new_Ay >= 0)
-					{
-						vJoyObj.SetAxis(HID_USAGES.HID_USAGE_Y, new_Ay);
-						vjoyA_Y = new_Ay;
-					}
-					if (new_Bx >= 0)
-					{
-						vJoyObj.SetAxis(HID_USAGES.HID_USAGE_RX, new_Bx);
-						vjoyB_X = new_Bx;
-					}
-					if (new_By >= 0)
-					{
-						vJoyObj.SetAxis(HID_USAGES.HID_USAGE_RY, new_By);
-						vjoyB_Y = new_By;
-					}
+						if (new_Ay >= 0)
+						{
+							vJoyObj.SetAxis(HID_USAGES.HID_USAGE_Y, new_Ay);
+							vjoyA_Y = new_Ay;
+						}
+						if (new_Bx >= 0)
+						{
+							vJoyObj.SetAxis(HID_USAGES.HID_USAGE_RX, new_Bx);
+							vjoyB_X = new_Bx;
+						}
+						if (new_By >= 0)
+						{
+							vJoyObj.SetAxis(HID_USAGES.HID_USAGE_RY, new_By);
+							vjoyB_Y = new_By;
+						}
 
 
+					}
 
 					//Fin Traitement
 					Thread.Sleep(10);
@@ -1012,6 +1037,7 @@ namespace TeknoparrotAutoXinput
 					while (!directInput.IsDeviceAttached(device_guid))
 					{
 						Thread.Sleep(100);
+						if (_stopListening) return;
 					}
 					joystick = new Joystick(new DirectInput(), device_guid);
 					joystick.Properties.BufferSize = 512;
