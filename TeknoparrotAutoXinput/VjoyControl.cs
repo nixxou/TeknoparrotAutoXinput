@@ -244,8 +244,8 @@ namespace TeknoparrotAutoXinput
 					notifyIcon.Visible = true;
 					notifyIcon.Text = "TeknoparrotAutoXinput Vjoy Control Center";
 					notifyIcon.DoubleClick += VjoyControl_DoubleClick;
-					//this.WindowState = FormWindowState.Minimized;
-					this.Hide();
+					this.WindowState = FormWindowState.Minimized;
+					//this.Hide();
 
 				}
 				catch { }

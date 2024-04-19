@@ -231,20 +231,24 @@ namespace TeknoparrotAutoXinput
 								key.Offset == JoystickOffset.AccelerationY ||
 								key.Offset == JoystickOffset.AccelerationZ)
 						{
-							/*
+							
 							// Positive direction
 							if (key.Value > short.MaxValue + 15000)
 							{
 								inputText = key.Offset + " +";
-								pressed = key.Value;
+								pressed = 1;
 							}
 							// Negative direction
 							else if (key.Value < short.MaxValue - 15000)
 							{
 								inputText = key.Offset + " -";
-								pressed = key.Value;
+								pressed = 1;
 							}
-							*/
+							else {
+								inputText = key.Offset + " =";
+								pressed = 0; 
+							}
+							
 						}
 						// Digital input
 						else
@@ -278,6 +282,17 @@ namespace TeknoparrotAutoXinput
 						{
 							inputText = deviceInstance.Type + " " + inputText;
 							Utils.LogMessage(inputText + " : " + key.Value + " : " + pressed);
+
+							if (inputText.EndsWith(" ="))
+							{
+								string direction = inputText.Replace(" =", " +");
+								if (!keyPressedValue.ContainsKey(direction)) keyPressedValue.Add(direction, pressed);
+								else keyPressedValue[direction] = pressed;
+
+								direction = inputText.Replace(" =", " -");
+								if (!keyPressedValue.ContainsKey(direction)) keyPressedValue.Add(direction, pressed);
+								else keyPressedValue[direction] = pressed;
+							}
 
 							if (inputText.EndsWith("DirNeutral"))
 							{

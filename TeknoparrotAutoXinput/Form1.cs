@@ -736,6 +736,8 @@ namespace TeknoparrotAutoXinput
 		private void chk_reasignGunPedal_CheckedChanged(object sender, EventArgs e)
 		{
 			ConfigurationManager.MainConfig.reasignPedals = chk_reasignGunPedal.Checked;
+			ConfigurationManager.SaveConfig();
 		}
+
 	}
 }

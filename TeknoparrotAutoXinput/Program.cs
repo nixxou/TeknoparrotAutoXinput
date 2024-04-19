@@ -1623,6 +1623,12 @@ namespace TeknoparrotAutoXinput
 								enableStooz = enableStoozZone_Hotas;
 								valueStooz = valueStooz_Hotas;
 							}
+							if (firstPlayer.Value.Item2.Type == "lightgun")
+							{
+								doChangeStooz = true;
+								enableStooz = false;
+								valueStooz = 0;
+							}
 							if (doChangeStooz)
 							{
 								Utils.LogMessage($"Change Stooz");
@@ -2263,7 +2269,6 @@ namespace TeknoparrotAutoXinput
 									buttonName = buttonNameNode.InnerText;
 									if (LightgunConfigFinal.ContainsKey(buttonName))
 									{
-										
 										var bindkey_list = LightgunConfigFinal[buttonName].Split(',');
 										if (bindkey_list.Count() == 1)
 										{
@@ -2271,45 +2276,61 @@ namespace TeknoparrotAutoXinput
 											if (!string.IsNullOrEmpty(bindkey) && bindingDinputLightGun.ContainsKey(bindkey))
 											{
 												var bindData = bindingDinputLightGun[bindkey];
-												XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
 
-												XmlNode buttonNode = xmlDoc.CreateElement("Button");
-												buttonNode.InnerText = bindData.Button.ToString();
-												newDirectInputButtonNode.AppendChild(buttonNode);
+												if(!bindkey.EndsWith("_LightgunX") && !bindkey.EndsWith("_LightgunY") && bindData.IsAxis)
+												{
+													string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
+													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title);
+												}
+												else
+												{
+													XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
 
-												XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
-												isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
-												newDirectInputButtonNode.AppendChild(isAxisNode);
+													XmlNode buttonNode = xmlDoc.CreateElement("Button");
+													buttonNode.InnerText = bindData.Button.ToString();
+													newDirectInputButtonNode.AppendChild(buttonNode);
 
-												XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
-												IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
-												newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
+													XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+													isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
+													newDirectInputButtonNode.AppendChild(isAxisNode);
 
-												XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
-												IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
-												newDirectInputButtonNode.AppendChild(IsFullAxisNode);
+													XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+													IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
+													newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
 
-												XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
-												PovDirectionNode.InnerText = bindData.PovDirection.ToString();
-												newDirectInputButtonNode.AppendChild(PovDirectionNode);
+													XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+													IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
+													newDirectInputButtonNode.AppendChild(IsFullAxisNode);
 
-												XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
-												IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
-												newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
+													XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+													PovDirectionNode.InnerText = bindData.PovDirection.ToString();
+													newDirectInputButtonNode.AppendChild(PovDirectionNode);
 
-												XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
-												JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
-												newDirectInputButtonNode.AppendChild(JoystickGuidNode);
+													XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+													IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
+													newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
 
-												XmlNode JoystickDiNameNode = xmlDoc.CreateElement("DiName");
-												JoystickDiNameNode.InnerText = bindData.Title;
-												newDirectInputButtonNode.AppendChild(JoystickDiNameNode);
+													XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+													JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
+													newDirectInputButtonNode.AppendChild(JoystickGuidNode);
 
-												node.AppendChild(newDirectInputButtonNode);
+													XmlNode JoystickDiNameNode = xmlDoc.CreateElement("DiName");
+													JoystickDiNameNode.InnerText = bindData.Title;
+													newDirectInputButtonNode.AppendChild(JoystickDiNameNode);
 
-												XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
-												BindNameDiNode.InnerText = bindData.Title;
-												node.AppendChild(BindNameDiNode);
+													node.AppendChild(newDirectInputButtonNode);
+
+													XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+													BindNameDiNode.InnerText = bindData.Title;
+													node.AppendChild(BindNameDiNode);
+
+
+												}
+
+
+
+
 											}
 										}
 										else if(bindkey_list.Count() > 1)

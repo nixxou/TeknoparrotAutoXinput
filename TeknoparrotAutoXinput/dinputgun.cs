@@ -152,10 +152,11 @@ namespace TeknoparrotAutoXinput
 								key.Offset == JoystickOffset.AccelerationZ)
 						{
 
+
 							if (FocusedTextBoxName == "txt_LightgunX" && key.Offset == JoystickOffset.Y) continue;
 							if (FocusedTextBoxName == "txt_LightgunY" && key.Offset == JoystickOffset.X) continue;
 
-							if (FocusedTextBoxName != "txt_LightgunX" && FocusedTextBoxName != "txt_LightgunY") continue;
+							if (FocusedTextBoxName != "txt_LightgunX" && FocusedTextBoxName != "txt_LightgunY" && FocusedTextBoxName != "txt_LightgunPedalRight" && FocusedTextBoxName != "txt_LightgunPedalLeft") continue;
 							// Positive direction
 							if (key.Value > short.MaxValue + 15000)
 							{
