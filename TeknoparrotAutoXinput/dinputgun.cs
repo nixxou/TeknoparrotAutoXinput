@@ -50,10 +50,37 @@ namespace TeknoparrotAutoXinput
 					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
 					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
 					label3.Location = new Point(label3.Location.X + 20, label3.Location.Y);
-
 					break;
-				case "gun4ir":
-					BackgroundImage = Properties.Resources.gun4ir;
+				case "guncon1":
+					BackgroundImage = Properties.Resources.guncon1;
+					label11.Text = "B";
+					label6.Text = "2";
+					label5.Text = "A";
+					label3.Text = "1";
+					label11.Location = new Point(label11.Location.X + 90, label11.Location.Y);
+					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
+					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
+					label3.Location = new Point(label3.Location.X + 20, label3.Location.Y);
+					txt_LightgunUp.Visible = false;
+					txt_LightgunDown.Visible = false;
+					txt_LightgunRight.Visible = false;
+					txt_LightgunLeft.Visible = false;
+					label7.Visible = false;
+					label8.Visible = false;
+					label9.Visible = false;
+					label10.Visible = false;
+					txt_LightgunFrontLeftBtn.Visible = false;
+					txt_LightgunPump.Visible = false;
+					label6.Visible = false;
+					label3.Visible = false;
+					txt_LightgunCoin.Visible = false;
+					txt_LightgunStart.Visible = false;
+					label21.Visible = false;
+					label12.Visible = false;
+					label15.Visible = false;
+					break;
+				case "guncon2":
+					BackgroundImage = Properties.Resources.guncon2;
 					label11.Text = "B";
 					label6.Text = "2";
 					label5.Text = "A";
@@ -65,14 +92,14 @@ namespace TeknoparrotAutoXinput
 					break;
 				case "wiimote":
 					BackgroundImage = Properties.Resources.wiimote;
-					label11.Text = "minus";
-					label6.Text = "2";
-					label5.Text = "1";
-					label3.Text = "A";
-					label11.Location = new Point(label11.Location.X + 60, label11.Location.Y);
+					label11.Text = "2";
+					label6.Text = "1";
+					label5.Text = "A";
+					label3.Text = "minus";
+					label11.Location = new Point(label11.Location.X + 82, label11.Location.Y);
 					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
 					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
-					label3.Location = new Point(label3.Location.X + 20, label3.Location.Y);
+					label3.Location = new Point(label3.Location.X, label3.Location.Y);
 					break;
 			}
 			GunIndex = gunIndex;
@@ -313,8 +340,11 @@ namespace TeknoparrotAutoXinput
 					case "gamepad":
 						json = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
 						break;
-					case "gun4ir":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAGun4ir;
+					case "guncon1":
+						json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon1;
+						break;
+					case "guncon2":
+						json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2;
 						break;
 					case "wiimote":
 						json = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
@@ -334,8 +364,11 @@ namespace TeknoparrotAutoXinput
 					case "gamepad":
 						json = ConfigurationManager.MainConfig.bindingDinputGunBXbox;
 						break;
-					case "gun4ir":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBGun4ir;
+					case "guncon1":
+						json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1;
+						break;
+					case "guncon2":
+						json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2;
 						break;
 					case "wiimote":
 						json = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
@@ -401,7 +434,7 @@ namespace TeknoparrotAutoXinput
 			Dictionary<string, string> AssignedButtons = new Dictionary<string, string>();
 			foreach (var btnData in buttonDataFinal)
 			{
-				string assignedButton = btnData.Value.JoystickGuid.ToString() + "===" + btnData.Value.Button.ToString() + "===" + btnData.Value.PovDirection + "===" + (btnData.Value.IsAxis ? "true" : "false");
+				string assignedButton = btnData.Value.JoystickGuid.ToString() + "===" + btnData.Value.Button.ToString() + "===" + btnData.Value.PovDirection + "===" + (btnData.Value.IsAxis ? "true" : "false") + "===" + (btnData.Value.IsAxisMinus ? "true" : "false");
 				if (AssignedButtons.ContainsKey(assignedButton))
 				{
 					bool exceptionCase = false;
@@ -443,8 +476,11 @@ namespace TeknoparrotAutoXinput
 					case "gamepad":
 						json = ConfigurationManager.MainConfig.bindingDinputGunAXbox = json;
 						break;
-					case "gun4ir":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAGun4ir = json;
+					case "guncon1":
+						json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon1 = json;
+						break;
+					case "guncon2":
+						json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2 = json;
 						break;
 					case "wiimote":
 						json = ConfigurationManager.MainConfig.bindingDinputGunAWiimote = json;
@@ -464,8 +500,11 @@ namespace TeknoparrotAutoXinput
 					case "gamepad":
 						json = ConfigurationManager.MainConfig.bindingDinputGunBXbox = json;
 						break;
-					case "gun4ir":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBGun4ir = json;
+					case "guncon1":
+						json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1 = json;
+						break;
+					case "guncon2":
+						json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2 = json;
 						break;
 					case "wiimote":
 						json = ConfigurationManager.MainConfig.bindingDinputGunBWiimote = json;

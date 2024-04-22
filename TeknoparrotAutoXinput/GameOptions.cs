@@ -364,6 +364,15 @@ namespace TeknoparrotAutoXinput
 				btn_vjoyconfig.Enabled = false;
 				cmb_vjoy.Enabled = false;
 			}
+
+			cmb_gunA_recoil.SelectedIndex = gameSettings.gunA_recoil;
+			cmb_gunA_sindenPump.SelectedIndex = gameSettings.gunA_crosshair;
+			cmb_gunA_Crosshair.SelectedIndex = gameSettings.gunA_crosshair;
+			cmb_gunB_recoil.SelectedIndex = gameSettings.gunB_recoil;
+			cmb_gunB_sindenPump.SelectedIndex = gameSettings.gunB_pump;
+			cmb_gunB_Crosshair.SelectedIndex = gameSettings.gunB_crosshair;
+			chk_sindenextra.Checked = !gameSettings.gun_useExtraSinden;
+			txt_sindenextra.Text = gameSettings.gun_ExtraSinden;
 		}
 
 		private void Reload()
@@ -501,6 +510,17 @@ namespace TeknoparrotAutoXinput
 
 			gameSettings.reverseYAxis_Hotas = chk_reverseYAxis_Hotas.Checked;
 			//gameSettings.CustomTpExe = txt_customTp.Text.Trim();
+
+			gameSettings.gunA_recoil = cmb_gunA_recoil.SelectedIndex;
+			gameSettings.gunA_pump = cmb_gunA_sindenPump.SelectedIndex;
+			gameSettings.gunA_crosshair = cmb_gunA_Crosshair.SelectedIndex;
+
+			gameSettings.gunB_recoil = cmb_gunB_recoil.SelectedIndex;
+			gameSettings.gunB_pump = cmb_gunB_sindenPump.SelectedIndex;
+			gameSettings.gunB_crosshair = cmb_gunB_Crosshair.SelectedIndex;
+
+			gameSettings.gun_useExtraSinden = !chk_sindenextra.Checked;
+			gameSettings.gun_ExtraSinden = txt_sindenextra.Text;
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;
@@ -848,6 +868,16 @@ namespace TeknoparrotAutoXinput
 		{
 			gameSettings.indexvjoy = cmb_vjoy.SelectedIndex - 1;
 			gameSettings.Save(PerGameConfigFile);
+		}
+
+		private void groupBox5_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void kryptonLabel10_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

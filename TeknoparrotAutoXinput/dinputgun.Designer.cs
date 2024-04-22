@@ -77,6 +77,9 @@
 			txt_LightgunWheelX = new Krypton.Toolkit.KryptonTextBox();
 			label19 = new Label();
 			label20 = new Label();
+			txt_LightgunArcadeStartBis = new Krypton.Toolkit.KryptonTextBox();
+			txt_LightgunArcadeCoinBis = new Krypton.Toolkit.KryptonTextBox();
+			label21 = new Label();
 			((System.ComponentModel.ISupportInitialize)cmb_devicelist).BeginInit();
 			SuspendLayout();
 			// 
@@ -370,7 +373,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(1489, 589);
+			btn_Save.Location = new Point(1489, 639);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 73;
@@ -379,7 +382,7 @@
 			// 
 			// btn_Cancel
 			// 
-			btn_Cancel.Location = new Point(1393, 589);
+			btn_Cancel.Location = new Point(1393, 639);
 			btn_Cancel.Name = "btn_Cancel";
 			btn_Cancel.Size = new Size(90, 25);
 			btn_Cancel.TabIndex = 72;
@@ -391,7 +394,7 @@
 			cmb_devicelist.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_devicelist.DropDownWidth = 229;
 			cmb_devicelist.IntegralHeight = false;
-			cmb_devicelist.Location = new Point(1350, 15);
+			cmb_devicelist.Location = new Point(1350, 11);
 			cmb_devicelist.Name = "cmb_devicelist";
 			cmb_devicelist.Size = new Size(229, 21);
 			cmb_devicelist.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -400,7 +403,7 @@
 			// 
 			// txt_LightgunArcade1
 			// 
-			txt_LightgunArcade1.Location = new Point(1004, 170);
+			txt_LightgunArcade1.Location = new Point(1004, 234);
 			txt_LightgunArcade1.Name = "txt_LightgunArcade1";
 			txt_LightgunArcade1.Size = new Size(196, 23);
 			txt_LightgunArcade1.TabIndex = 75;
@@ -410,7 +413,7 @@
 			// 
 			// txt_LightgunArcade2
 			// 
-			txt_LightgunArcade2.Location = new Point(1004, 134);
+			txt_LightgunArcade2.Location = new Point(1004, 198);
 			txt_LightgunArcade2.Name = "txt_LightgunArcade2";
 			txt_LightgunArcade2.Size = new Size(196, 23);
 			txt_LightgunArcade2.TabIndex = 76;
@@ -420,7 +423,7 @@
 			// 
 			// txt_LightgunArcade3
 			// 
-			txt_LightgunArcade3.Location = new Point(1367, 131);
+			txt_LightgunArcade3.Location = new Point(1367, 195);
 			txt_LightgunArcade3.Name = "txt_LightgunArcade3";
 			txt_LightgunArcade3.Size = new Size(196, 23);
 			txt_LightgunArcade3.TabIndex = 78;
@@ -430,7 +433,7 @@
 			// 
 			// txt_LightgunArcade4
 			// 
-			txt_LightgunArcade4.Location = new Point(1367, 167);
+			txt_LightgunArcade4.Location = new Point(1367, 231);
 			txt_LightgunArcade4.Name = "txt_LightgunArcade4";
 			txt_LightgunArcade4.Size = new Size(196, 23);
 			txt_LightgunArcade4.TabIndex = 77;
@@ -440,7 +443,7 @@
 			// 
 			// txt_LightgunArcade8
 			// 
-			txt_LightgunArcade8.Location = new Point(1367, 361);
+			txt_LightgunArcade8.Location = new Point(1367, 425);
 			txt_LightgunArcade8.Name = "txt_LightgunArcade8";
 			txt_LightgunArcade8.Size = new Size(196, 23);
 			txt_LightgunArcade8.TabIndex = 82;
@@ -450,7 +453,7 @@
 			// 
 			// txt_LightgunArcade7
 			// 
-			txt_LightgunArcade7.Location = new Point(1367, 397);
+			txt_LightgunArcade7.Location = new Point(1367, 461);
 			txt_LightgunArcade7.Name = "txt_LightgunArcade7";
 			txt_LightgunArcade7.Size = new Size(196, 23);
 			txt_LightgunArcade7.TabIndex = 81;
@@ -460,7 +463,7 @@
 			// 
 			// txt_LightgunArcade5
 			// 
-			txt_LightgunArcade5.Location = new Point(1004, 364);
+			txt_LightgunArcade5.Location = new Point(1004, 428);
 			txt_LightgunArcade5.Name = "txt_LightgunArcade5";
 			txt_LightgunArcade5.Size = new Size(196, 23);
 			txt_LightgunArcade5.TabIndex = 80;
@@ -470,7 +473,7 @@
 			// 
 			// txt_LightgunArcade6
 			// 
-			txt_LightgunArcade6.Location = new Point(1004, 400);
+			txt_LightgunArcade6.Location = new Point(1004, 464);
 			txt_LightgunArcade6.Name = "txt_LightgunArcade6";
 			txt_LightgunArcade6.Size = new Size(196, 23);
 			txt_LightgunArcade6.TabIndex = 79;
@@ -481,7 +484,7 @@
 			// label16
 			// 
 			label16.AutoSize = true;
-			label16.Location = new Point(1003, 503);
+			label16.Location = new Point(1003, 567);
 			label16.Name = "label16";
 			label16.Size = new Size(72, 15);
 			label16.TabIndex = 86;
@@ -489,7 +492,7 @@
 			// 
 			// txt_LightgunRightX
 			// 
-			txt_LightgunRightX.Location = new Point(1079, 499);
+			txt_LightgunRightX.Location = new Point(1079, 563);
 			txt_LightgunRightX.Name = "txt_LightgunRightX";
 			txt_LightgunRightX.Size = new Size(196, 23);
 			txt_LightgunRightX.TabIndex = 85;
@@ -500,7 +503,7 @@
 			// label17
 			// 
 			label17.AutoSize = true;
-			label17.Location = new Point(1004, 529);
+			label17.Location = new Point(1004, 593);
 			label17.Name = "label17";
 			label17.Size = new Size(72, 15);
 			label17.TabIndex = 84;
@@ -508,7 +511,7 @@
 			// 
 			// txt_LightgunRightY
 			// 
-			txt_LightgunRightY.Location = new Point(1079, 525);
+			txt_LightgunRightY.Location = new Point(1079, 589);
 			txt_LightgunRightY.Name = "txt_LightgunRightY";
 			txt_LightgunRightY.Size = new Size(196, 23);
 			txt_LightgunRightY.TabIndex = 83;
@@ -519,7 +522,7 @@
 			// label18
 			// 
 			label18.AutoSize = true;
-			label18.Location = new Point(1311, 503);
+			label18.Location = new Point(1311, 567);
 			label18.Name = "label18";
 			label18.Size = new Size(50, 15);
 			label18.TabIndex = 88;
@@ -527,7 +530,7 @@
 			// 
 			// txt_LightgunWheelX
 			// 
-			txt_LightgunWheelX.Location = new Point(1367, 499);
+			txt_LightgunWheelX.Location = new Point(1367, 563);
 			txt_LightgunWheelX.Name = "txt_LightgunWheelX";
 			txt_LightgunWheelX.Size = new Size(196, 23);
 			txt_LightgunWheelX.TabIndex = 87;
@@ -538,7 +541,7 @@
 			// label19
 			// 
 			label19.AutoSize = true;
-			label19.Location = new Point(1262, 21);
+			label19.Location = new Point(1262, 17);
 			label19.Name = "label19";
 			label19.Size = new Size(82, 15);
 			label19.TabIndex = 89;
@@ -547,18 +550,44 @@
 			// label20
 			// 
 			label20.AutoSize = true;
-			label20.Location = new Point(1290, 43);
+			label20.Location = new Point(1294, 39);
 			label20.Name = "label20";
 			label20.Size = new Size(285, 15);
 			label20.TabIndex = 90;
 			label20.Text = "Double Click on box to clear, outside box to fix value";
+			// 
+			// txt_LightgunArcadeStartBis
+			// 
+			txt_LightgunArcadeStartBis.Location = new Point(1367, 156);
+			txt_LightgunArcadeStartBis.Name = "txt_LightgunArcadeStartBis";
+			txt_LightgunArcadeStartBis.Size = new Size(196, 23);
+			txt_LightgunArcadeStartBis.TabIndex = 92;
+			// 
+			// txt_LightgunArcadeCoinBis
+			// 
+			txt_LightgunArcadeCoinBis.Location = new Point(1004, 159);
+			txt_LightgunArcadeCoinBis.Name = "txt_LightgunArcadeCoinBis";
+			txt_LightgunArcadeCoinBis.Size = new Size(196, 23);
+			txt_LightgunArcadeCoinBis.TabIndex = 91;
+			// 
+			// label21
+			// 
+			label21.AutoSize = true;
+			label21.Location = new Point(57, 167);
+			label21.Name = "label21";
+			label21.Size = new Size(234, 15);
+			label21.TabIndex = 93;
+			label21.Text = "If coin non assigned, Coin = Start offscreen";
 			// 
 			// dinputgun
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackgroundImage = Properties.Resources.gun360;
-			ClientSize = new Size(1601, 623);
+			ClientSize = new Size(1601, 675);
+			Controls.Add(label21);
+			Controls.Add(txt_LightgunArcadeStartBis);
+			Controls.Add(txt_LightgunArcadeCoinBis);
 			Controls.Add(label20);
 			Controls.Add(label19);
 			Controls.Add(label18);
@@ -669,5 +698,8 @@
 		private Krypton.Toolkit.KryptonTextBox txt_LightgunWheelX;
 		private Label label19;
 		private Label label20;
+		private Krypton.Toolkit.KryptonTextBox txt_LightgunArcadeStartBis;
+		private Krypton.Toolkit.KryptonTextBox txt_LightgunArcadeCoinBis;
+		private Label label21;
 	}
 }

@@ -629,6 +629,13 @@ namespace TeknoparrotAutoXinput
 						Dictionary<string, JoystickButtonData> bindingDinputLightGunA = null;
 						Dictionary<string, JoystickButtonData> bindingDinputLightGunB = null;
 						Dictionary<string, JoystickButtonData> bindingDinputLightGun = new Dictionary<string, JoystickButtonData>();
+						Dictionary<int, (JoystickButtonData, JoystickButtonData)> originalJoystickPerGun = new Dictionary<int, (JoystickButtonData, JoystickButtonData)>();
+						originalJoystickPerGun.Add(1, (null, null));
+						originalJoystickPerGun.Add(2, (null, null));
+						bool GunCoinOverwriteA = false;
+						bool GunCoinOverwriteB = false;
+						bool GunCoinOverwrite = false;
+
 
 						if (checkDinputLightgun)
 						{
@@ -652,11 +659,12 @@ namespace TeknoparrotAutoXinput
 							}
 
 
-							if(LightgunA_Type == "sinden" || LightgunA_Type == "gun4ir" || LightgunA_Type == "wiimote" || LightgunA_Type == "gamepad")
+							if(LightgunA_Type == "sinden" || LightgunA_Type == "guncon1" || LightgunA_Type == "guncon2" || LightgunA_Type == "wiimote" || LightgunA_Type == "gamepad")
 							{
 								if (LightgunA_Type == "gamepad") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
 								if (LightgunA_Type == "sinden") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunASinden;
-								if (LightgunA_Type == "gun4ir") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGun4ir;
+								if (LightgunA_Type == "guncon1") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGuncon1;
+								if (LightgunA_Type == "guncon2") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2;
 								if (LightgunA_Type == "wiimote") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
 								bindingDinputLightGunA = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunAJson);
 								if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
@@ -674,11 +682,12 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 							}
-							if (LightgunB_Type == "sinden" || LightgunB_Type == "gun4ir" || LightgunB_Type == "wiimote" || LightgunB_Type == "gamepad")
+							if (LightgunB_Type == "sinden" || LightgunB_Type == "guncon1" || LightgunB_Type == "guncon2" || LightgunB_Type == "wiimote" || LightgunB_Type == "gamepad")
 							{
 								if (LightgunB_Type == "gamepad") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
 								if (LightgunB_Type == "sinden") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
-								if (LightgunB_Type == "gun4ir") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGun4ir;
+								if (LightgunB_Type == "guncon1") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1;
+								if (LightgunB_Type == "guncon2") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2;
 								if (LightgunB_Type == "wiimote") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
 								bindingDinputLightGunB = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunBJson);
 								if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
@@ -722,6 +731,27 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 						}
+
+
+						if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunStart") && !bindingDinputLightGunA.ContainsKey("LightgunCoin"))
+						{
+							if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunX") && bindingDinputLightGunA.ContainsKey("LightgunY"))
+							{
+								originalJoystickPerGun[1] = (bindingDinputLightGunA["LightgunX"], bindingDinputLightGunA["LightgunY"]);
+								GunCoinOverwriteA = true;
+								GunCoinOverwrite = true;
+							}
+						}
+						if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunStart") && !bindingDinputLightGunA.ContainsKey("LightgunCoin"))
+						{
+							if (dinputLightgunBFound && bindingDinputLightGunB.ContainsKey("LightgunX") && bindingDinputLightGunB.ContainsKey("LightgunY"))
+							{
+								originalJoystickPerGun[2] = (bindingDinputLightGunB["LightgunX"], bindingDinputLightGunB["LightgunY"]);
+								GunCoinOverwriteB = true;
+								GunCoinOverwrite = true;
+							}
+						}
+						ButtonToKeyManager.buttonToKey.originalJoystickPerGun = originalJoystickPerGun;
 
 						Utils.LogMessage($"dinputLightgunAFound = {dinputLightgunAFound}");
 						Utils.LogMessage($"dinputLightgunBFound = {dinputLightgunBFound}");
@@ -843,6 +873,7 @@ namespace TeknoparrotAutoXinput
 						Dictionary<string, string> LightgunConfigA = new Dictionary<string, string>();
 						Dictionary<string, string> LightgunConfigB = new Dictionary<string, string>();
 						Dictionary<string, string> LightgunConfigFinal = new Dictionary<string, string>();
+						
 
 						if (haveLightgun)
 						{
@@ -897,6 +928,8 @@ namespace TeknoparrotAutoXinput
 										}
 									}
 								}
+
+
 								foreach (var lightgunConfig in LightgunConfigB)
 								{
 									string arcadeKey = lightgunConfig.Key;
@@ -960,10 +993,25 @@ namespace TeknoparrotAutoXinput
 									{
 										if (bind.Key.StartsWith("Lightgun"))
 										{
-											bindingDinputLightGun.Add(gunprefix + bind.Key,bind.Value);
+											bindingDinputLightGun.Add(gunprefix + bind.Key, bind.Value);
 										}
 									}
 									//gunindex++;
+									if (GunCoinOverwriteA && bindingDinputLightGunA.ContainsKey("LightgunStart") && !bindingDinputLightGunA.ContainsKey("LightgunCoin"))
+									{
+										JoystickButtonData newCoinBtn = new JoystickButtonData();
+										newCoinBtn.Button = (int)int.MinValue;
+										newCoinBtn.PovDirection = bindingDinputLightGunA["LightgunStart"].PovDirection;
+										newCoinBtn.IsAxis = bindingDinputLightGunA["LightgunStart"].IsAxis;
+										newCoinBtn.IsFullAxis = bindingDinputLightGunA["LightgunStart"].IsFullAxis;
+										newCoinBtn.IsAxisMinus = bindingDinputLightGunA["LightgunStart"].IsAxisMinus;
+										newCoinBtn.IsReverseAxis = bindingDinputLightGunA["LightgunStart"].IsReverseAxis;
+										newCoinBtn.JoystickGuid = bindingDinputLightGunA["LightgunStart"].JoystickGuid;
+										newCoinBtn.Title = "NEW COIN GUN 1";
+										newCoinBtn.XinputTitle = "NEW COIN GUN 1";
+										bindingDinputLightGun.Add(gunprefix + "LightgunCoin", newCoinBtn);
+										
+									}
 								}
 								if (dinputLightgunBFound)
 								{
@@ -978,6 +1026,21 @@ namespace TeknoparrotAutoXinput
 										}
 									}
 									//gunindex++;
+
+									if (GunCoinOverwriteB && bindingDinputLightGunB.ContainsKey("LightgunStart") && !bindingDinputLightGunB.ContainsKey("LightgunCoin"))
+									{
+										JoystickButtonData newCoinBtn = new JoystickButtonData();
+										newCoinBtn.Button = (int)int.MinValue;
+										newCoinBtn.PovDirection = bindingDinputLightGunB["LightgunStart"].PovDirection;
+										newCoinBtn.IsAxis = bindingDinputLightGunB["LightgunStart"].IsAxis;
+										newCoinBtn.IsFullAxis = bindingDinputLightGunB["LightgunStart"].IsFullAxis;
+										newCoinBtn.IsAxisMinus = bindingDinputLightGunB["LightgunStart"].IsAxisMinus;
+										newCoinBtn.IsReverseAxis = bindingDinputLightGunB["LightgunStart"].IsReverseAxis;
+										newCoinBtn.JoystickGuid = bindingDinputLightGunB["LightgunStart"].JoystickGuid;
+										newCoinBtn.Title = "NEW COIN GUN 2";
+										newCoinBtn.XinputTitle = "NEW COIN GUN 2";
+										bindingDinputLightGun.Add(gunprefix + "LightgunCoin", newCoinBtn);
+									}
 								}
 							}
 						}
@@ -2276,8 +2339,26 @@ namespace TeknoparrotAutoXinput
 											if (!string.IsNullOrEmpty(bindkey) && bindingDinputLightGun.ContainsKey(bindkey))
 											{
 												var bindData = bindingDinputLightGun[bindkey];
-
-												if(!bindkey.EndsWith("_LightgunX") && !bindkey.EndsWith("_LightgunY") && bindData.IsAxis)
+												if (((GunCoinOverwriteA && bindkey.StartsWith("GunA_")) || (GunCoinOverwriteB && bindkey.StartsWith("GunB_"))) && (bindkey.EndsWith("_LightgunCoin") || bindkey.EndsWith("_LightgunStart")))
+												{
+													int coinOrStart = 0;
+													if (GunCoinOverwriteA && bindkey.StartsWith("GunA_"))
+													{
+														coinOrStart = 10;
+														if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
+														if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+													}
+													if (GunCoinOverwriteB && bindkey.StartsWith("GunB_"))
+													{
+														coinOrStart = 20;
+														if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
+														if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+													}
+													string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
+													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
+												}
+												else if (!bindkey.EndsWith("_LightgunX") && !bindkey.EndsWith("_LightgunY") && bindData.IsAxis)
 												{
 													string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
 													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
@@ -2341,8 +2422,22 @@ namespace TeknoparrotAutoXinput
 
 											foreach (var bindkey in bindkey_list)
 											{
+												int coinOrStart = 0;
+												if (GunCoinOverwriteA && bindkey.StartsWith("GunA_"))
+												{
+													coinOrStart = 10;
+													if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
+													if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+												}
+												if (GunCoinOverwriteB && bindkey.StartsWith("GunB_"))
+												{
+													coinOrStart = 20;
+													if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
+													if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+												}
+
 												var bindData = bindingDinputLightGun[bindkey];
-												ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title);
+												ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
 
 											}
 										}

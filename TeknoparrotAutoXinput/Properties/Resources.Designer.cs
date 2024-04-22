@@ -103,6 +103,26 @@ namespace TeknoparrotAutoXinput.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap guncon1 {
+            get {
+                object obj = ResourceManager.GetObject("guncon1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap guncon2 {
+            get {
+                object obj = ResourceManager.GetObject("guncon2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap hotas {
             get {
                 object obj = ResourceManager.GetObject("hotas", resourceCulture);

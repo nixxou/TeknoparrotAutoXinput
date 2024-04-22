@@ -259,12 +259,13 @@ namespace TeknoparrotAutoXinput
 						nb_wiimote++;
 					}
 				}
-				if (LightgunA_Type == "sinden" || LightgunA_Type == "gun4ir" || LightgunA_Type == "wiimote" || LightgunA_Type == "gamepad")
+				if (LightgunA_Type == "sinden" || LightgunA_Type == "guncon1" || LightgunA_Type == "guncon2" || LightgunA_Type == "wiimote" || LightgunA_Type == "gamepad")
 				{
 					_dinputGunAName = $"Gun A [{LightgunA_Type}] ";
 					if (LightgunA_Type == "gamepad") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
 					if (LightgunA_Type == "sinden") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunASinden;
-					if (LightgunA_Type == "gun4ir") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGun4ir;
+					if (LightgunA_Type == "guncon1") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGuncon1;
+					if (LightgunA_Type == "guncon2") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2;
 					if (LightgunA_Type == "wiimote") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
 					bindingDinputLightGunA = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunAJson);
 					if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
@@ -280,12 +281,13 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 				}
-				if (LightgunB_Type == "sinden" || LightgunB_Type == "gun4ir" || LightgunB_Type == "wiimote" || LightgunB_Type == "gamepad")
+				if (LightgunB_Type == "sinden" || LightgunA_Type == "guncon1" || LightgunB_Type == "guncon2" || LightgunB_Type == "wiimote" || LightgunB_Type == "gamepad")
 				{
 					_dinputGunBName = $"Gun B [{LightgunB_Type}] ";
 					if (LightgunB_Type == "gamepad") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
 					if (LightgunB_Type == "sinden") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
-					if (LightgunB_Type == "gun4ir") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGun4ir;
+					if (LightgunB_Type == "guncon1") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1;
+					if (LightgunB_Type == "guncon2") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2;
 					if (LightgunB_Type == "wiimote") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
 					bindingDinputLightGunB = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunBJson);
 					if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
@@ -766,7 +768,8 @@ namespace TeknoparrotAutoXinput
 							existingConfigClone.Add("lightgun-sinden", valueExistingConfig + "-sinden.jpg");
 							existingConfigClone.Add("lightgun-wiimote", valueExistingConfig + "-wiimote.jpg");
 							existingConfigClone.Add("lightgun-gamepad", valueExistingConfig + "-gamepad.jpg");
-							existingConfigClone.Add("lightgun-gun4ir", valueExistingConfig + "-gun4ir.jpg");
+							existingConfigClone.Add("lightgun-guncon1", valueExistingConfig + "-guncon1.jpg");
+							existingConfigClone.Add("lightgun-guncon2", valueExistingConfig + "-guncon2.jpg");
 
 						}
 

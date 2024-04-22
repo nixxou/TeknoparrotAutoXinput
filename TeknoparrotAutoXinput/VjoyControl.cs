@@ -275,11 +275,12 @@ namespace TeknoparrotAutoXinput
 
 			string GunAGuid = "";
 			string GunBGuid = "";
-			if (_lightgunA_Type == "sinden" || _lightgunA_Type == "gun4ir" || _lightgunA_Type == "wiimote" || _lightgunA_Type == "gamepad")
+			if (_lightgunA_Type == "sinden" || _lightgunA_Type == "guncon1" || _lightgunA_Type == "guncon2" || _lightgunA_Type == "wiimote" || _lightgunA_Type == "gamepad")
 			{
 				if (_lightgunA_Type == "gamepad") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
 				if (_lightgunA_Type == "sinden") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunASinden;
-				if (_lightgunA_Type == "gun4ir") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGun4ir;
+				if (_lightgunA_Type == "guncon1") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGuncon1;
+				if (_lightgunA_Type == "guncon2") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2;
 				if (_lightgunA_Type == "wiimote") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
 				bindingDinputLightGunA = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunAJson);
 				if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX") && bindingDinputLightGunA.ContainsKey("LightgunY"))
@@ -290,11 +291,12 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
-			if (_lightgunB_Type == "sinden" || _lightgunB_Type == "gun4ir" || _lightgunB_Type == "wiimote" || _lightgunB_Type == "gamepad")
+			if (_lightgunB_Type == "sinden" || _lightgunB_Type == "guncon1" || _lightgunB_Type == "guncon2" || _lightgunB_Type == "wiimote" || _lightgunB_Type == "gamepad")
 			{
 				if (_lightgunB_Type == "gamepad") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBXbox;
 				if (_lightgunB_Type == "sinden") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
-				if (_lightgunB_Type == "gun4ir") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGun4ir;
+				if (_lightgunB_Type == "guncon1") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1;
+				if (_lightgunB_Type == "guncon2") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2;
 				if (_lightgunB_Type == "wiimote") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
 				bindingDinputLightGunB = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunBJson);
 				if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX") && bindingDinputLightGunB.ContainsKey("LightgunY"))

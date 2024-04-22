@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Antlr4.Runtime.Tree.Xpath;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -75,17 +76,39 @@ namespace TeknoparrotAutoXinput
 		public string gunBType { get; set; } = "<none>";
 		public string bindingDinputGunAXbox { get; set; } = "";
 		public string bindingDinputGunASinden { get; set; } = "";
-		public string bindingDinputGunAGun4ir { get; set; } = "";
+		public string bindingDinputGunAGuncon1 { get; set; } = "";
+		public string bindingDinputGunAGuncon2 { get; set; } = "";
 		public string bindingDinputGunAWiimote { get; set; } = "";
 		public string bindingDinputGunBXbox { get; set; } = "";
 		public string bindingDinputGunBSinden { get; set; } = "";
-		public string bindingDinputGunBGun4ir { get; set; } = "";
+		public string bindingDinputGunBGuncon1 { get; set; } = "";
+		public string bindingDinputGunBGuncon2 { get; set; } = "";
 		public string bindingDinputGunBWiimote { get; set; } = "";
 
 		public int indexvjoy { get; set; } = 0;
 
 		public string vjoySettingsGunA { get; set; } = "";
 		public string vjoySettingsGunB { get; set; } = "";
+
+		public string gunARecoil { get; set; } = "<none>";
+		public string gunBRecoil { get; set; } = "<none>";
+		public int gunAComPort { get; set; } = 0;
+		public int gunBComPort { get; set; } = 0;
+		public int gunASidenPump { get; set; } = 1;
+		public int gunBSidenPump { get; set; } = 1;
+
+		public string demulshooterFolder { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "demulshooter");
+
+		public string sindenFolder {  get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "sinden");
+
+		public string mamehookerFolder { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "mamehooker");
+
+		public string sindenExtraCmd { get; set; } = "";
+		public bool gunAAutoJoy { get; set; } = false;
+		public bool gunBAutoJoy { get; set; } = false;
+
+		public bool gunACrosshair { get; set; } = false;
+		public bool gunBCrosshair { get; set; } = false;
 
 
 		public Configuration()
@@ -138,15 +161,31 @@ namespace TeknoparrotAutoXinput
 				this.gunBType = DeserializeData.gunBType;
 				this.bindingDinputGunAXbox = DeserializeData.bindingDinputGunAXbox;
 				this.bindingDinputGunASinden = DeserializeData.bindingDinputGunASinden;
-				this.bindingDinputGunAGun4ir = DeserializeData.bindingDinputGunAGun4ir;
+				this.bindingDinputGunAGuncon1 = DeserializeData.bindingDinputGunAGuncon1;
+				this.bindingDinputGunAGuncon2 = DeserializeData.bindingDinputGunAGuncon2;
 				this.bindingDinputGunAWiimote = DeserializeData.bindingDinputGunAWiimote;
 				this.bindingDinputGunBXbox = DeserializeData.bindingDinputGunBXbox;
 				this.bindingDinputGunBSinden = DeserializeData.bindingDinputGunBSinden;
-				this.bindingDinputGunBGun4ir = DeserializeData.bindingDinputGunBGun4ir;
+				this.bindingDinputGunAGuncon1 = DeserializeData.bindingDinputGunAGuncon1;
+				this.bindingDinputGunBGuncon2 = DeserializeData.bindingDinputGunBGuncon2;
 				this.bindingDinputGunBWiimote = DeserializeData.bindingDinputGunBWiimote;
 				this.indexvjoy = DeserializeData.indexvjoy;
 				this.vjoySettingsGunA = DeserializeData.vjoySettingsGunA;
 				this.vjoySettingsGunB = DeserializeData.vjoySettingsGunB;
+				this.gunARecoil = DeserializeData.gunARecoil;
+				this.gunBRecoil = DeserializeData.gunBRecoil;
+				this.gunAComPort = DeserializeData.gunAComPort;
+				this.gunBComPort = DeserializeData.gunBComPort;
+				this.gunASidenPump = DeserializeData.gunASidenPump;
+				this.gunBSidenPump = DeserializeData.gunBSidenPump;
+				this.demulshooterFolder = DeserializeData.demulshooterFolder;
+				this.sindenFolder = DeserializeData.sindenFolder;
+				this.mamehookerFolder = DeserializeData.mamehookerFolder;
+				this.sindenExtraCmd = DeserializeData.sindenExtraCmd;
+				this.gunAAutoJoy = DeserializeData.gunAAutoJoy;
+				this.gunBAutoJoy = DeserializeData.gunBAutoJoy;
+				this.gunACrosshair = DeserializeData.gunACrosshair;
+				this.gunBCrosshair = DeserializeData.gunBCrosshair;
 
 			}
 			catch (Exception ex)

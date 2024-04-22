@@ -1,1 +1,8 @@
-abc elf2 : fix and make
+
+Offscreen coin
+
+With vjoy :
+Prevent return to 0,0
+
+Recoil system
+

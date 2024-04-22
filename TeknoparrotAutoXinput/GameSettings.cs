@@ -40,6 +40,18 @@ namespace TeknoparrotAutoXinput
 
 		public int indexvjoy { get; set; } = -1;
 
+		public int gunA_recoil { get; set; } = 0;
+		public int gunA_pump { get; set; } = 0;
+		public int gunA_crosshair { get; set; } = 0;
+		public int gunB_recoil { get; set; } = 0;
+		public int gunB_pump { get; set; } = 0;
+		public int gunB_crosshair { get; set; } = 0;
+
+		public bool gun_useExtraSinden { get; set; } = false;
+		public string gun_ExtraSinden { get; set; } = "";
+
+
+
 		public GameSettings() 
 		{
 			
@@ -78,6 +90,14 @@ namespace TeknoparrotAutoXinput
 				this.vjoySettingsGunA = DeserializeData.vjoySettingsGunA;
 				this.vjoySettingsGunB = DeserializeData.vjoySettingsGunB;
 				this.indexvjoy = DeserializeData.indexvjoy;
+				this.gunA_recoil = DeserializeData.gunA_recoil;
+				this.gunA_pump = DeserializeData.gunA_pump;
+				this.gunA_crosshair = DeserializeData.gunA_crosshair;
+				this.gunA_recoil = DeserializeData.gunB_recoil;
+				this.gunA_pump = DeserializeData.gunB_pump;
+				this.gunB_crosshair = DeserializeData.gunB_crosshair;
+				this.gun_useExtraSinden = DeserializeData.gun_useExtraSinden;
+				this.gun_ExtraSinden = DeserializeData.gun_ExtraSinden;
 			}
 			catch (Exception ex)
 			{

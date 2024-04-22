@@ -1,4 +1,5 @@
-﻿using Henooh.DeviceEmulator.Net;
+﻿using Antlr4.Runtime.Tree;
+using Henooh.DeviceEmulator.Net;
 using Henooh.DeviceEmulator.Net.Native;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
@@ -39,6 +40,82 @@ namespace TeknoparrotAutoXinput
 
 		private List<string> guids = new List<string>();
 		private Dictionary<string, int> KeyPressedStatus = new Dictionary<string, int>();
+		public Dictionary<int, (JoystickButtonData, JoystickButtonData)> originalJoystickPerGun = new Dictionary<int, (JoystickButtonData, JoystickButtonData)>();
+
+		private (string, int) joystick1X = ("", -100);
+		private (string, int) joystick1Y = ("", -100);
+		private (string, int) joystick2X = ("", -100);
+		private (string, int) joystick2Y = ("", -100);
+
+		public string GunA_coinKey = "";
+		public string GunA_startKey = "";
+		public string GunB_coinKey = "";
+		public string GunB_startKey = "";
+
+
+		private int _GunA_X = 15000;
+		public int GunA_X
+		{
+			get { return (_GunA_X); }
+			set
+			{
+				if (value != _GunA_X)
+				{
+					_GunA_X = value;
+					if ((_GunA_X < 1000 || GunA_X > 64535) || (_GunA_Y < 1000 || GunA_Y > 64535)) joystick1_offscreen = true;
+					else joystick1_offscreen = false;
+				}
+			}
+		}
+
+		private int _GunA_Y = 15000;
+		public int GunA_Y
+		{
+			get { return (_GunA_Y); }
+			set
+			{
+				if (value != _GunA_Y)
+				{
+					_GunA_Y = value;
+					if ((_GunA_X < 1000 || GunA_X > 64535) || (_GunA_Y < 1000 || GunA_Y > 64535)) joystick1_offscreen = true;
+					else joystick1_offscreen = false;
+				}
+			}
+		}
+
+		private int _GunB_X = 15000;
+		public int GunB_X
+		{
+			get { return (_GunB_X); }
+			set
+			{
+				if (value != _GunB_X)
+				{
+					_GunB_X = value;
+					if ((_GunB_X < 1000 || GunB_X > 64535) || (_GunB_Y < 1000 || GunB_Y > 64535)) joystick2_offscreen = true;
+					else joystick2_offscreen = false;
+				}
+			}
+		}
+
+		private int _GunB_Y = 15000;
+		public int GunB_Y
+		{
+			get { return (_GunB_Y); }
+			set
+			{
+				if (value != _GunB_Y)
+				{
+					_GunB_Y = value;
+					if ((_GunB_X < 1000 || GunB_X > 64535) || (_GunB_Y < 1000 || GunB_Y > 64535)) joystick2_offscreen = true;
+					else joystick2_offscreen = false;
+				}
+			}
+		}
+
+		private bool joystick1_offscreen = false;
+		private bool joystick2_offscreen = false;
+
 
 		KeyboardController keyboardController;
 
@@ -56,8 +133,13 @@ namespace TeknoparrotAutoXinput
 			return "";
 		}
 
-		public void Assign(string newKey, string OriginalGuid, string OriginalLabel)
+		public void Assign(string newKey, string OriginalGuid, string OriginalLabel, int coinOrStart=0)
 		{
+			if (coinOrStart == 11) GunA_coinKey = newKey;
+			if (coinOrStart == 12) GunA_startKey = newKey;
+			if (coinOrStart == 21) GunB_coinKey = newKey;
+			if (coinOrStart == 22) GunB_startKey = newKey;
+
 			if (!assignedKeys.ContainsKey(newKey))
 			{
 				assignedKeys.Add(newKey, new List<(string,string)>());
@@ -94,6 +176,36 @@ namespace TeknoparrotAutoXinput
 
 		public void StartMonitor()
 		{
+
+			//Add joystick GUID
+			foreach(var originalJoystick in originalJoystickPerGun)
+			{
+				if(originalJoystick.Value.Item1 != null && originalJoystick.Value.Item2 != null)
+				{
+					if(originalJoystick.Value.Item1.JoystickGuid != Guid.Empty && originalJoystick.Value.Item2.JoystickGuid != Guid.Empty)
+					{
+						if(originalJoystick.Key == 1)
+						{
+							joystick1X = (originalJoystick.Value.Item1.JoystickGuid.ToString(), originalJoystick.Value.Item1.Button);
+							joystick1Y = (originalJoystick.Value.Item2.JoystickGuid.ToString(), originalJoystick.Value.Item2.Button);
+						}
+						if (originalJoystick.Key == 2)
+						{
+							joystick2X = (originalJoystick.Value.Item1.JoystickGuid.ToString(), originalJoystick.Value.Item1.Button);
+							joystick2Y = (originalJoystick.Value.Item2.JoystickGuid.ToString(), originalJoystick.Value.Item2.Button);
+						}
+
+						if (!guids.Contains(originalJoystick.Value.Item1.JoystickGuid.ToString()))
+						{
+							guids.Add(originalJoystick.Value.Item1.JoystickGuid.ToString());
+						}
+						if (!guids.Contains(originalJoystick.Value.Item2.JoystickGuid.ToString()))
+						{
+							guids.Add(originalJoystick.Value.Item2.JoystickGuid.ToString());
+						}
+					}
+				}
+			}
 
 			foreach(var assignedKey in assignedKeys)
 			{
@@ -232,6 +344,31 @@ namespace TeknoparrotAutoXinput
 								key.Offset == JoystickOffset.AccelerationZ)
 						{
 							
+							if(joyGuid == joystick1X.Item1 && (int)key.Offset == joystick1X.Item2)
+							{
+								//Utils.LogMessage("JOY1 X=" + key.Value);
+								GunA_X = key.Value;
+								//if (joystick1_offscreen) Utils.LogMessage("JOY1 OFFSCREEN");
+							}
+							if (joyGuid == joystick1Y.Item1 && (int)key.Offset == joystick1Y.Item2)
+							{
+								GunA_Y = key.Value;
+								//Utils.LogMessage("JOY1 Y=" + key.Value);
+								//if (joystick1_offscreen) Utils.LogMessage("JOY1 OFFSCREEN");
+							}
+							if (joyGuid == joystick2X.Item1 && (int)key.Offset == joystick2X.Item2)
+							{
+								GunB_X = key.Value;
+								//Utils.LogMessage("JOY2 X=" + key.Value);
+								//if (joystick2_offscreen) Utils.LogMessage("JOY2 OFFSCREEN");
+							}
+							if (joyGuid == joystick2Y.Item1 && (int)key.Offset == joystick2Y.Item2)
+							{
+								GunB_Y = key.Value;
+								//Utils.LogMessage("JOY2 Y=" + key.Value);
+								//if (joystick2_offscreen) Utils.LogMessage("JOY2 OFFSCREEN");
+							}
+
 							// Positive direction
 							if (key.Value > short.MaxValue + 15000)
 							{
@@ -281,7 +418,7 @@ namespace TeknoparrotAutoXinput
 						if (!string.IsNullOrEmpty(inputText))
 						{
 							inputText = deviceInstance.Type + " " + inputText;
-							Utils.LogMessage(inputText + " : " + key.Value + " : " + pressed);
+							//Utils.LogMessage(inputText + " : " + key.Value + " : " + pressed);
 
 							if (inputText.EndsWith(" ="))
 							{
@@ -403,7 +540,7 @@ namespace TeknoparrotAutoXinput
 							if (LabelState[label] != state)
 							{
 								LabelState[label] = state;
-								Utils.LogMessage(label + " = " + (state ? "ON" : "OFF"));
+								//Utils.LogMessage(label + " = " + (state ? "ON" : "OFF"));
 
 								bool oldStateKey = (KeyPressedStatus[strKey] == 0) ? false : true;
 
@@ -414,8 +551,32 @@ namespace TeknoparrotAutoXinput
 
 								if (oldStateKey != newStateKey)
 								{
-									if (newStateKey) keyboardController.Down(keyToAssign[strKey].Item1);
-									else keyboardController.Up(keyToAssign[strKey].Item1);
+									if (newStateKey)
+									{
+										string targetKey = strKey;
+										if(strKey == GunA_startKey && joystick1_offscreen)
+										{
+											targetKey = GunA_coinKey;
+										}
+										if (strKey == GunB_startKey && joystick2_offscreen)
+										{
+											targetKey = GunB_coinKey;
+										}
+										keyboardController.Down(keyToAssign[targetKey].Item1);
+									}
+									else
+									{
+										keyboardController.Up(keyToAssign[strKey].Item1);
+										if (strKey == GunA_startKey)
+										{
+											keyboardController.Up(keyToAssign[GunA_coinKey].Item1);
+										}
+										if (strKey == GunB_startKey )
+										{
+											keyboardController.Up(keyToAssign[GunB_coinKey].Item1);
+										}
+
+									}
 
 									Utils.LogMessage(strKey + " -> " + (newStateKey ? "press" : "rlz"));
 								}

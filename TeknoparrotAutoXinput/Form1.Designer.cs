@@ -123,15 +123,47 @@
 			radio_useCustomStooz_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useDefaultStooze_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			groupBox10 = new GroupBox();
+			kryptonCheckBox3 = new Krypton.Toolkit.KryptonCheckBox();
+			txt_sindenextra = new Krypton.Toolkit.KryptonTextBox();
+			kryptonLabel33 = new Krypton.Toolkit.KryptonLabel();
+			kryptonButton4 = new Krypton.Toolkit.KryptonButton();
+			kryptonLabel32 = new Krypton.Toolkit.KryptonLabel();
+			txt_sindensoft = new Krypton.Toolkit.KryptonTextBox();
+			kryptonButton3 = new Krypton.Toolkit.KryptonButton();
+			kryptonLabel31 = new Krypton.Toolkit.KryptonLabel();
+			txt_mamehookersoft = new Krypton.Toolkit.KryptonTextBox();
+			btn_demulshooter = new Krypton.Toolkit.KryptonButton();
+			kryptonLabel30 = new Krypton.Toolkit.KryptonLabel();
+			txt_demulshootersoft = new Krypton.Toolkit.KryptonTextBox();
 			btn_vjoyconfig = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel28 = new Krypton.Toolkit.KryptonLabel();
 			cmb_vjoy = new Krypton.Toolkit.KryptonComboBox();
 			chk_reasignGunPedal = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox12 = new GroupBox();
+			chk_gunB_AutoJoy = new Krypton.Toolkit.KryptonCheckBox();
+			chk_gunB_Crosshair = new Krypton.Toolkit.KryptonCheckBox();
+			kryptonLabel38 = new Krypton.Toolkit.KryptonLabel();
+			radio_gunB_sindenPump3 = new Krypton.Toolkit.KryptonRadioButton();
+			radio_gunB_sindenPump2 = new Krypton.Toolkit.KryptonRadioButton();
+			radio_gunB_sindenPump1 = new Krypton.Toolkit.KryptonRadioButton();
+			kryptonLabel36 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel35 = new Krypton.Toolkit.KryptonLabel();
+			cmb_gunB_recoil = new Krypton.Toolkit.KryptonComboBox();
+			cmb_gunB_com = new Krypton.Toolkit.KryptonComboBox();
 			btn_gunB_configure = new Krypton.Toolkit.KryptonButton();
 			cmb_gunB_type = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel27 = new Krypton.Toolkit.KryptonLabel();
 			groupBox11 = new GroupBox();
+			chk_gunA_AutoJoy = new Krypton.Toolkit.KryptonCheckBox();
+			chk_gunA_Crosshair = new Krypton.Toolkit.KryptonCheckBox();
+			kryptonLabel29 = new Krypton.Toolkit.KryptonLabel();
+			radio_gunA_sindenPump3 = new Krypton.Toolkit.KryptonRadioButton();
+			radio_gunA_sindenPump2 = new Krypton.Toolkit.KryptonRadioButton();
+			radio_gunA_sindenPump1 = new Krypton.Toolkit.KryptonRadioButton();
+			kryptonLabel37 = new Krypton.Toolkit.KryptonLabel();
+			cmb_gunA_recoil = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel34 = new Krypton.Toolkit.KryptonLabel();
+			cmb_gunA_com = new Krypton.Toolkit.KryptonComboBox();
 			btn_gunA_configure = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel26 = new Krypton.Toolkit.KryptonLabel();
 			cmb_gunA_type = new Krypton.Toolkit.KryptonComboBox();
@@ -152,8 +184,12 @@
 			groupBox10.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_vjoy).BeginInit();
 			groupBox12.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_gunB_recoil).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_gunB_com).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunB_type).BeginInit();
 			groupBox11.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_gunA_com).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).BeginInit();
 			SuspendLayout();
 			// 
@@ -270,7 +306,7 @@
 			// 
 			// chk_showStartup
 			// 
-			chk_showStartup.Location = new Point(784, 674);
+			chk_showStartup.Location = new Point(787, 838);
 			chk_showStartup.Name = "chk_showStartup";
 			chk_showStartup.Size = new Size(231, 20);
 			chk_showStartup.TabIndex = 14;
@@ -279,7 +315,7 @@
 			// 
 			// chk_FFB
 			// 
-			chk_FFB.Location = new Point(784, 700);
+			chk_FFB.Location = new Point(787, 864);
 			chk_FFB.Name = "chk_FFB";
 			chk_FFB.Size = new Size(346, 20);
 			chk_FFB.TabIndex = 16;
@@ -533,7 +569,7 @@
 			groupBox3.Controls.Add(txt_xinputdata);
 			groupBox3.Location = new Point(8, 539);
 			groupBox3.Name = "groupBox3";
-			groupBox3.Size = new Size(770, 253);
+			groupBox3.Size = new Size(770, 325);
 			groupBox3.TabIndex = 36;
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Configure Xinput AutoDetection of controller Type";
@@ -604,7 +640,7 @@
 			// 
 			btn_testxinput.Location = new Point(663, 139);
 			btn_testxinput.Name = "btn_testxinput";
-			btn_testxinput.Size = new Size(101, 108);
+			btn_testxinput.Size = new Size(101, 180);
 			btn_testxinput.TabIndex = 28;
 			btn_testxinput.Values.Text = "Show Xinput \r\nDevices Data\r\n(Debug)";
 			btn_testxinput.Click += btn_testxinput_Click;
@@ -614,13 +650,13 @@
 			txt_xinputdata.Location = new Point(9, 135);
 			txt_xinputdata.Multiline = true;
 			txt_xinputdata.Name = "txt_xinputdata";
-			txt_xinputdata.Size = new Size(648, 108);
+			txt_xinputdata.Size = new Size(648, 184);
 			txt_xinputdata.TabIndex = 27;
 			txt_xinputdata.Text = "Click on the button to the right to show your connected Xinput Data\r\n";
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(1472, 767);
+			btn_Save.Location = new Point(1475, 893);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 37;
@@ -690,7 +726,7 @@
 			// 
 			// chk_enableDebug
 			// 
-			chk_enableDebug.Location = new Point(784, 726);
+			chk_enableDebug.Location = new Point(787, 890);
 			chk_enableDebug.Name = "chk_enableDebug";
 			chk_enableDebug.Size = new Size(135, 20);
 			chk_enableDebug.TabIndex = 41;
@@ -699,7 +735,7 @@
 			// 
 			// btn_checkConfig
 			// 
-			btn_checkConfig.Location = new Point(787, 767);
+			btn_checkConfig.Location = new Point(1246, 892);
 			btn_checkConfig.Name = "btn_checkConfig";
 			btn_checkConfig.Size = new Size(223, 25);
 			btn_checkConfig.TabIndex = 42;
@@ -928,6 +964,7 @@
 			groupBox9.TabIndex = 42;
 			groupBox9.TabStop = false;
 			groupBox9.Text = "Hotas Settings";
+			groupBox9.Enter += groupBox9_Enter;
 			// 
 			// chk_reverseYAxis_Hotas
 			// 
@@ -1044,6 +1081,18 @@
 			// 
 			// groupBox10
 			// 
+			groupBox10.Controls.Add(kryptonCheckBox3);
+			groupBox10.Controls.Add(txt_sindenextra);
+			groupBox10.Controls.Add(kryptonLabel33);
+			groupBox10.Controls.Add(kryptonButton4);
+			groupBox10.Controls.Add(kryptonLabel32);
+			groupBox10.Controls.Add(txt_sindensoft);
+			groupBox10.Controls.Add(kryptonButton3);
+			groupBox10.Controls.Add(kryptonLabel31);
+			groupBox10.Controls.Add(txt_mamehookersoft);
+			groupBox10.Controls.Add(btn_demulshooter);
+			groupBox10.Controls.Add(kryptonLabel30);
+			groupBox10.Controls.Add(txt_demulshootersoft);
 			groupBox10.Controls.Add(btn_vjoyconfig);
 			groupBox10.Controls.Add(kryptonLabel28);
 			groupBox10.Controls.Add(cmb_vjoy);
@@ -1052,14 +1101,111 @@
 			groupBox10.Controls.Add(groupBox11);
 			groupBox10.Location = new Point(787, 442);
 			groupBox10.Name = "groupBox10";
-			groupBox10.Size = new Size(775, 220);
+			groupBox10.Size = new Size(775, 390);
 			groupBox10.TabIndex = 45;
 			groupBox10.TabStop = false;
 			groupBox10.Text = "Lightgun Settings";
 			// 
+			// kryptonCheckBox3
+			// 
+			kryptonCheckBox3.Location = new Point(159, 308);
+			kryptonCheckBox3.Name = "kryptonCheckBox3";
+			kryptonCheckBox3.Size = new Size(106, 20);
+			kryptonCheckBox3.TabIndex = 72;
+			kryptonCheckBox3.Values.Text = "Auto Joy Mode";
+			// 
+			// txt_sindenextra
+			// 
+			txt_sindenextra.Enabled = false;
+			txt_sindenextra.Location = new Point(159, 221);
+			txt_sindenextra.Name = "txt_sindenextra";
+			txt_sindenextra.Size = new Size(557, 23);
+			txt_sindenextra.TabIndex = 69;
+			// 
+			// kryptonLabel33
+			// 
+			kryptonLabel33.Location = new Point(13, 224);
+			kryptonLabel33.Name = "kryptonLabel33";
+			kryptonLabel33.Size = new Size(105, 20);
+			kryptonLabel33.TabIndex = 68;
+			kryptonLabel33.Values.Text = "Extra arguments :";
+			// 
+			// kryptonButton4
+			// 
+			kryptonButton4.Location = new Point(722, 195);
+			kryptonButton4.Name = "kryptonButton4";
+			kryptonButton4.Size = new Size(32, 23);
+			kryptonButton4.TabIndex = 67;
+			kryptonButton4.Values.Text = "...";
+			// 
+			// kryptonLabel32
+			// 
+			kryptonLabel32.Location = new Point(6, 198);
+			kryptonLabel32.Name = "kryptonLabel32";
+			kryptonLabel32.Size = new Size(105, 20);
+			kryptonLabel32.TabIndex = 65;
+			kryptonLabel32.Values.Text = "Sinden Software :";
+			// 
+			// txt_sindensoft
+			// 
+			txt_sindensoft.Enabled = false;
+			txt_sindensoft.Location = new Point(159, 195);
+			txt_sindensoft.Name = "txt_sindensoft";
+			txt_sindensoft.Size = new Size(557, 23);
+			txt_sindensoft.TabIndex = 66;
+			// 
+			// kryptonButton3
+			// 
+			kryptonButton3.Location = new Point(722, 276);
+			kryptonButton3.Name = "kryptonButton3";
+			kryptonButton3.Size = new Size(32, 23);
+			kryptonButton3.TabIndex = 64;
+			kryptonButton3.Values.Text = "...";
+			// 
+			// kryptonLabel31
+			// 
+			kryptonLabel31.Location = new Point(12, 276);
+			kryptonLabel31.Name = "kryptonLabel31";
+			kryptonLabel31.Size = new Size(91, 20);
+			kryptonLabel31.TabIndex = 62;
+			kryptonLabel31.Values.Text = "MameHooker :";
+			// 
+			// txt_mamehookersoft
+			// 
+			txt_mamehookersoft.Enabled = false;
+			txt_mamehookersoft.Location = new Point(159, 279);
+			txt_mamehookersoft.Name = "txt_mamehookersoft";
+			txt_mamehookersoft.Size = new Size(557, 23);
+			txt_mamehookersoft.TabIndex = 63;
+			// 
+			// btn_demulshooter
+			// 
+			btn_demulshooter.Location = new Point(722, 250);
+			btn_demulshooter.Name = "btn_demulshooter";
+			btn_demulshooter.Size = new Size(32, 23);
+			btn_demulshooter.TabIndex = 61;
+			btn_demulshooter.Values.Text = "...";
+			btn_demulshooter.Click += btn_demulshooter_Click;
+			// 
+			// kryptonLabel30
+			// 
+			kryptonLabel30.Location = new Point(6, 250);
+			kryptonLabel30.Name = "kryptonLabel30";
+			kryptonLabel30.Size = new Size(147, 20);
+			kryptonLabel30.TabIndex = 59;
+			kryptonLabel30.Values.Text = "Demulshooter Directory :";
+			// 
+			// txt_demulshootersoft
+			// 
+			txt_demulshootersoft.Enabled = false;
+			txt_demulshootersoft.Location = new Point(159, 250);
+			txt_demulshootersoft.Name = "txt_demulshootersoft";
+			txt_demulshootersoft.Size = new Size(557, 23);
+			txt_demulshootersoft.TabIndex = 60;
+			// 
 			// btn_vjoyconfig
 			// 
-			btn_vjoyconfig.Location = new Point(256, 191);
+			btn_vjoyconfig.Location = new Point(255, 360);
 			btn_vjoyconfig.Name = "btn_vjoyconfig";
 			btn_vjoyconfig.Size = new Size(110, 23);
 			btn_vjoyconfig.TabIndex = 54;
@@ -1068,7 +1214,7 @@
 			// 
 			// kryptonLabel28
 			// 
-			kryptonLabel28.Location = new Point(6, 194);
+			kryptonLabel28.Location = new Point(5, 363);
 			kryptonLabel28.Name = "kryptonLabel28";
 			kryptonLabel28.Size = new Size(64, 20);
 			kryptonLabel28.TabIndex = 53;
@@ -1080,7 +1226,7 @@
 			cmb_vjoy.DropDownWidth = 150;
 			cmb_vjoy.IntegralHeight = false;
 			cmb_vjoy.Items.AddRange(new object[] { "No", "Vjoy 1", "Vjoy 2", "Vjoy 3", "Vjoy 4", "Vjoy 5", "Vjoy 6", "", "" });
-			cmb_vjoy.Location = new Point(100, 193);
+			cmb_vjoy.Location = new Point(99, 362);
 			cmb_vjoy.Name = "cmb_vjoy";
 			cmb_vjoy.Size = new Size(150, 21);
 			cmb_vjoy.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1089,7 +1235,7 @@
 			// 
 			// chk_reasignGunPedal
 			// 
-			chk_reasignGunPedal.Location = new Point(13, 174);
+			chk_reasignGunPedal.Location = new Point(12, 340);
 			chk_reasignGunPedal.Name = "chk_reasignGunPedal";
 			chk_reasignGunPedal.Size = new Size(361, 20);
 			chk_reasignGunPedal.TabIndex = 49;
@@ -1099,21 +1245,120 @@
 			// groupBox12
 			// 
 			groupBox12.BackColor = Color.FromArgb(249, 249, 255);
+			groupBox12.Controls.Add(chk_gunB_AutoJoy);
+			groupBox12.Controls.Add(chk_gunB_Crosshair);
+			groupBox12.Controls.Add(kryptonLabel38);
+			groupBox12.Controls.Add(radio_gunB_sindenPump3);
+			groupBox12.Controls.Add(radio_gunB_sindenPump2);
+			groupBox12.Controls.Add(radio_gunB_sindenPump1);
+			groupBox12.Controls.Add(kryptonLabel36);
+			groupBox12.Controls.Add(kryptonLabel35);
+			groupBox12.Controls.Add(cmb_gunB_recoil);
+			groupBox12.Controls.Add(cmb_gunB_com);
 			groupBox12.Controls.Add(btn_gunB_configure);
 			groupBox12.Controls.Add(cmb_gunB_type);
 			groupBox12.Controls.Add(kryptonLabel27);
 			groupBox12.Location = new Point(390, 22);
 			groupBox12.Name = "groupBox12";
-			groupBox12.Size = new Size(372, 145);
+			groupBox12.Size = new Size(372, 167);
 			groupBox12.TabIndex = 48;
 			groupBox12.TabStop = false;
 			groupBox12.Text = "Gun B";
 			// 
+			// chk_gunB_AutoJoy
+			// 
+			chk_gunB_AutoJoy.Location = new Point(239, 71);
+			chk_gunB_AutoJoy.Name = "chk_gunB_AutoJoy";
+			chk_gunB_AutoJoy.Size = new Size(106, 20);
+			chk_gunB_AutoJoy.TabIndex = 72;
+			chk_gunB_AutoJoy.Values.Text = "Auto Joy Mode";
+			// 
+			// chk_gunB_Crosshair
+			// 
+			chk_gunB_Crosshair.Location = new Point(95, 141);
+			chk_gunB_Crosshair.Name = "chk_gunB_Crosshair";
+			chk_gunB_Crosshair.Size = new Size(107, 20);
+			chk_gunB_Crosshair.TabIndex = 71;
+			chk_gunB_Crosshair.Values.Text = "Show Crosshair";
+			// 
+			// kryptonLabel38
+			// 
+			kryptonLabel38.Location = new Point(6, 101);
+			kryptonLabel38.Name = "kryptonLabel38";
+			kryptonLabel38.Size = new Size(89, 20);
+			kryptonLabel38.TabIndex = 67;
+			kryptonLabel38.Values.Text = "Sinden Pump :";
+			// 
+			// radio_gunB_sindenPump3
+			// 
+			radio_gunB_sindenPump3.Location = new Point(95, 123);
+			radio_gunB_sindenPump3.Name = "radio_gunB_sindenPump3";
+			radio_gunB_sindenPump3.Size = new Size(218, 20);
+			radio_gunB_sindenPump3.TabIndex = 66;
+			radio_gunB_sindenPump3.Values.Text = "Action if Reload Offscreen availiable";
+			// 
+			// radio_gunB_sindenPump2
+			// 
+			radio_gunB_sindenPump2.Location = new Point(161, 101);
+			radio_gunB_sindenPump2.Name = "radio_gunB_sindenPump2";
+			radio_gunB_sindenPump2.Size = new Size(58, 20);
+			radio_gunB_sindenPump2.TabIndex = 65;
+			radio_gunB_sindenPump2.Values.Text = "Action";
+			// 
+			// radio_gunB_sindenPump1
+			// 
+			radio_gunB_sindenPump1.Location = new Point(95, 101);
+			radio_gunB_sindenPump1.Name = "radio_gunB_sindenPump1";
+			radio_gunB_sindenPump1.Size = new Size(60, 20);
+			radio_gunB_sindenPump1.TabIndex = 64;
+			radio_gunB_sindenPump1.Values.Text = "Reload";
+			// 
+			// kryptonLabel36
+			// 
+			kryptonLabel36.Location = new Point(6, 48);
+			kryptonLabel36.Name = "kryptonLabel36";
+			kryptonLabel36.Size = new Size(79, 20);
+			kryptonLabel36.TabIndex = 56;
+			kryptonLabel36.Values.Text = "Recoil Type :";
+			// 
+			// kryptonLabel35
+			// 
+			kryptonLabel35.Location = new Point(6, 72);
+			kryptonLabel35.Name = "kryptonLabel35";
+			kryptonLabel35.Size = new Size(68, 20);
+			kryptonLabel35.TabIndex = 54;
+			kryptonLabel35.Values.Text = "Com Port :";
+			// 
+			// cmb_gunB_recoil
+			// 
+			cmb_gunB_recoil.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_gunB_recoil.DropDownWidth = 150;
+			cmb_gunB_recoil.IntegralHeight = false;
+			cmb_gunB_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden", "Rumble" });
+			cmb_gunB_recoil.Location = new Point(95, 48);
+			cmb_gunB_recoil.Name = "cmb_gunB_recoil";
+			cmb_gunB_recoil.Size = new Size(138, 21);
+			cmb_gunB_recoil.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_gunB_recoil.TabIndex = 55;
+			cmb_gunB_recoil.SelectedIndexChanged += cmb_gunB_recoil_SelectedIndexChanged;
+			// 
+			// cmb_gunB_com
+			// 
+			cmb_gunB_com.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_gunB_com.DropDownWidth = 150;
+			cmb_gunB_com.IntegralHeight = false;
+			cmb_gunB_com.Items.AddRange(new object[] { "<none>", "gamepad", "sinden", "guncon1", "guncon2", "wiimote" });
+			cmb_gunB_com.Location = new Point(95, 71);
+			cmb_gunB_com.Name = "cmb_gunB_com";
+			cmb_gunB_com.Size = new Size(138, 21);
+			cmb_gunB_com.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_gunB_com.TabIndex = 53;
+			// 
 			// btn_gunB_configure
 			// 
-			btn_gunB_configure.Location = new Point(246, 22);
+			btn_gunB_configure.Location = new Point(239, 22);
 			btn_gunB_configure.Name = "btn_gunB_configure";
-			btn_gunB_configure.Size = new Size(110, 23);
+			btn_gunB_configure.Size = new Size(122, 23);
 			btn_gunB_configure.TabIndex = 52;
 			btn_gunB_configure.Values.Text = "Configure";
 			btn_gunB_configure.Click += btn_gunB_configure_Click;
@@ -1123,10 +1368,10 @@
 			cmb_gunB_type.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_gunB_type.DropDownWidth = 150;
 			cmb_gunB_type.IntegralHeight = false;
-			cmb_gunB_type.Items.AddRange(new object[] { "<none>", "gamepad", "sinden", "gun4ir", "wiimote" });
-			cmb_gunB_type.Location = new Point(90, 24);
+			cmb_gunB_type.Items.AddRange(new object[] { "<none>", "gamepad", "sinden", "guncon1", "guncon2", "wiimote" });
+			cmb_gunB_type.Location = new Point(95, 22);
 			cmb_gunB_type.Name = "cmb_gunB_type";
-			cmb_gunB_type.Size = new Size(150, 21);
+			cmb_gunB_type.Size = new Size(138, 21);
 			cmb_gunB_type.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_gunB_type.TabIndex = 51;
 			cmb_gunB_type.SelectedIndexChanged += cmb_gunB_type_SelectedIndexChanged;
@@ -1142,21 +1387,121 @@
 			// groupBox11
 			// 
 			groupBox11.BackColor = Color.FromArgb(255, 244, 244);
+			groupBox11.Controls.Add(chk_gunA_AutoJoy);
+			groupBox11.Controls.Add(chk_gunA_Crosshair);
+			groupBox11.Controls.Add(kryptonLabel29);
+			groupBox11.Controls.Add(radio_gunA_sindenPump3);
+			groupBox11.Controls.Add(radio_gunA_sindenPump2);
+			groupBox11.Controls.Add(radio_gunA_sindenPump1);
+			groupBox11.Controls.Add(kryptonLabel37);
+			groupBox11.Controls.Add(cmb_gunA_recoil);
+			groupBox11.Controls.Add(kryptonLabel34);
+			groupBox11.Controls.Add(cmb_gunA_com);
 			groupBox11.Controls.Add(btn_gunA_configure);
 			groupBox11.Controls.Add(kryptonLabel26);
 			groupBox11.Controls.Add(cmb_gunA_type);
 			groupBox11.Location = new Point(12, 22);
 			groupBox11.Name = "groupBox11";
-			groupBox11.Size = new Size(372, 145);
+			groupBox11.Size = new Size(372, 167);
 			groupBox11.TabIndex = 47;
 			groupBox11.TabStop = false;
 			groupBox11.Text = "Gun A";
 			// 
+			// chk_gunA_AutoJoy
+			// 
+			chk_gunA_AutoJoy.Location = new Point(245, 76);
+			chk_gunA_AutoJoy.Name = "chk_gunA_AutoJoy";
+			chk_gunA_AutoJoy.Size = new Size(106, 20);
+			chk_gunA_AutoJoy.TabIndex = 71;
+			chk_gunA_AutoJoy.Values.Text = "Auto Joy Mode";
+			// 
+			// chk_gunA_Crosshair
+			// 
+			chk_gunA_Crosshair.Location = new Point(100, 141);
+			chk_gunA_Crosshair.Name = "chk_gunA_Crosshair";
+			chk_gunA_Crosshair.Size = new Size(107, 20);
+			chk_gunA_Crosshair.TabIndex = 70;
+			chk_gunA_Crosshair.Values.Text = "Show Crosshair";
+			chk_gunA_Crosshair.CheckedChanged += chk_gunA_Crosshair_CheckedChanged;
+			// 
+			// kryptonLabel29
+			// 
+			kryptonLabel29.Location = new Point(9, 100);
+			kryptonLabel29.Name = "kryptonLabel29";
+			kryptonLabel29.Size = new Size(89, 20);
+			kryptonLabel29.TabIndex = 63;
+			kryptonLabel29.Values.Text = "Sinden Pump :";
+			// 
+			// radio_gunA_sindenPump3
+			// 
+			radio_gunA_sindenPump3.Location = new Point(100, 121);
+			radio_gunA_sindenPump3.Name = "radio_gunA_sindenPump3";
+			radio_gunA_sindenPump3.Size = new Size(218, 20);
+			radio_gunA_sindenPump3.TabIndex = 62;
+			radio_gunA_sindenPump3.Values.Text = "Action if Reload Offscreen availiable";
+			// 
+			// radio_gunA_sindenPump2
+			// 
+			radio_gunA_sindenPump2.Location = new Point(166, 100);
+			radio_gunA_sindenPump2.Name = "radio_gunA_sindenPump2";
+			radio_gunA_sindenPump2.Size = new Size(58, 20);
+			radio_gunA_sindenPump2.TabIndex = 61;
+			radio_gunA_sindenPump2.Values.Text = "Action";
+			// 
+			// radio_gunA_sindenPump1
+			// 
+			radio_gunA_sindenPump1.Location = new Point(100, 100);
+			radio_gunA_sindenPump1.Name = "radio_gunA_sindenPump1";
+			radio_gunA_sindenPump1.Size = new Size(60, 20);
+			radio_gunA_sindenPump1.TabIndex = 60;
+			radio_gunA_sindenPump1.Values.Text = "Reload";
+			// 
+			// kryptonLabel37
+			// 
+			kryptonLabel37.Location = new Point(7, 49);
+			kryptonLabel37.Name = "kryptonLabel37";
+			kryptonLabel37.Size = new Size(79, 20);
+			kryptonLabel37.TabIndex = 58;
+			kryptonLabel37.Values.Text = "Recoil Type :";
+			// 
+			// cmb_gunA_recoil
+			// 
+			cmb_gunA_recoil.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_gunA_recoil.DropDownWidth = 150;
+			cmb_gunA_recoil.IntegralHeight = false;
+			cmb_gunA_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden", "Rumble" });
+			cmb_gunA_recoil.Location = new Point(100, 49);
+			cmb_gunA_recoil.Name = "cmb_gunA_recoil";
+			cmb_gunA_recoil.Size = new Size(138, 21);
+			cmb_gunA_recoil.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_gunA_recoil.TabIndex = 57;
+			cmb_gunA_recoil.SelectedIndexChanged += cmb_gunA_recoil_SelectedIndexChanged;
+			// 
+			// kryptonLabel34
+			// 
+			kryptonLabel34.Location = new Point(7, 76);
+			kryptonLabel34.Name = "kryptonLabel34";
+			kryptonLabel34.Size = new Size(68, 20);
+			kryptonLabel34.TabIndex = 50;
+			kryptonLabel34.Values.Text = "Com Port :";
+			// 
+			// cmb_gunA_com
+			// 
+			cmb_gunA_com.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_gunA_com.DropDownWidth = 150;
+			cmb_gunA_com.IntegralHeight = false;
+			cmb_gunA_com.Items.AddRange(new object[] { "<none>", "gamepad", "sinden", "guncon1", "guncon2", "wiimote" });
+			cmb_gunA_com.Location = new Point(100, 74);
+			cmb_gunA_com.Name = "cmb_gunA_com";
+			cmb_gunA_com.Size = new Size(138, 21);
+			cmb_gunA_com.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_gunA_com.TabIndex = 49;
+			// 
 			// btn_gunA_configure
 			// 
-			btn_gunA_configure.Location = new Point(256, 22);
+			btn_gunA_configure.Location = new Point(244, 22);
 			btn_gunA_configure.Name = "btn_gunA_configure";
-			btn_gunA_configure.Size = new Size(110, 23);
+			btn_gunA_configure.Size = new Size(122, 23);
 			btn_gunA_configure.TabIndex = 48;
 			btn_gunA_configure.Values.Text = "Configure";
 			btn_gunA_configure.Click += btn_gunA_configure_Click;
@@ -1174,10 +1519,10 @@
 			cmb_gunA_type.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_gunA_type.DropDownWidth = 150;
 			cmb_gunA_type.IntegralHeight = false;
-			cmb_gunA_type.Items.AddRange(new object[] { "<none>", "gamepad", "sinden", "gun4ir", "wiimote" });
+			cmb_gunA_type.Items.AddRange(new object[] { "<none>", "gamepad", "sinden", "guncon1", "guncon2", "wiimote" });
 			cmb_gunA_type.Location = new Point(100, 24);
 			cmb_gunA_type.Name = "cmb_gunA_type";
-			cmb_gunA_type.Size = new Size(150, 21);
+			cmb_gunA_type.Size = new Size(138, 21);
 			cmb_gunA_type.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_gunA_type.TabIndex = 46;
 			cmb_gunA_type.SelectedIndexChanged += cmb_gunA_type_SelectedIndexChanged;
@@ -1186,7 +1531,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1568, 803);
+			ClientSize = new Size(1568, 936);
 			Controls.Add(groupBox10);
 			Controls.Add(groupBox9);
 			Controls.Add(groupBox8);
@@ -1234,9 +1579,13 @@
 			((System.ComponentModel.ISupportInitialize)cmb_vjoy).EndInit();
 			groupBox12.ResumeLayout(false);
 			groupBox12.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_gunB_recoil).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_gunB_com).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunB_type).EndInit();
 			groupBox11.ResumeLayout(false);
 			groupBox11.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_gunA_com).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
@@ -1340,16 +1689,48 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_reverseYAxis_Hotas;
 		private Krypton.Toolkit.KryptonCheckBox chk_useHotasWithWheel;
 		private Krypton.Toolkit.KryptonComboBox cmb_gunA_type;
-		private GroupBox groupBox12;
 		private GroupBox groupBox11;
 		private Krypton.Toolkit.KryptonButton btn_gunA_configure;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel26;
-		private Krypton.Toolkit.KryptonLabel kryptonLabel27;
 		private Krypton.Toolkit.KryptonCheckBox chk_reasignGunPedal;
-		private Krypton.Toolkit.KryptonButton btn_gunB_configure;
-		private Krypton.Toolkit.KryptonComboBox cmb_gunB_type;
 		private Krypton.Toolkit.KryptonButton btn_vjoyconfig;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel28;
 		private Krypton.Toolkit.KryptonComboBox cmb_vjoy;
+		private Krypton.Toolkit.KryptonButton kryptonButton4;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel32;
+		private Krypton.Toolkit.KryptonTextBox txt_sindensoft;
+		private Krypton.Toolkit.KryptonButton kryptonButton3;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel31;
+		private Krypton.Toolkit.KryptonTextBox txt_mamehookersoft;
+		private Krypton.Toolkit.KryptonButton btn_demulshooter;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel30;
+		private Krypton.Toolkit.KryptonTextBox txt_demulshootersoft;
+		private Krypton.Toolkit.KryptonTextBox txt_sindenextra;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel33;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel37;
+		private Krypton.Toolkit.KryptonComboBox cmb_gunA_recoil;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel34;
+		private Krypton.Toolkit.KryptonComboBox cmb_gunA_com;
+		private Krypton.Toolkit.KryptonCheckBox chk_gunA_Crosshair;
+		private GroupBox groupBox12;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel36;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel35;
+		private Krypton.Toolkit.KryptonComboBox cmb_gunB_recoil;
+		private Krypton.Toolkit.KryptonComboBox cmb_gunB_com;
+		private Krypton.Toolkit.KryptonButton btn_gunB_configure;
+		private Krypton.Toolkit.KryptonComboBox cmb_gunB_type;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel27;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel29;
+		private Krypton.Toolkit.KryptonRadioButton radio_gunA_sindenPump3;
+		private Krypton.Toolkit.KryptonRadioButton radio_gunA_sindenPump2;
+		private Krypton.Toolkit.KryptonRadioButton radio_gunA_sindenPump1;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel38;
+		private Krypton.Toolkit.KryptonRadioButton radio_gunB_sindenPump3;
+		private Krypton.Toolkit.KryptonRadioButton radio_gunB_sindenPump2;
+		private Krypton.Toolkit.KryptonRadioButton radio_gunB_sindenPump1;
+		private Krypton.Toolkit.KryptonCheckBox chk_gunB_Crosshair;
+		private Krypton.Toolkit.KryptonCheckBox chk_gunB_AutoJoy;
+		private Krypton.Toolkit.KryptonCheckBox chk_gunA_AutoJoy;
+		private Krypton.Toolkit.KryptonCheckBox kryptonCheckBox3;
 	}
 }

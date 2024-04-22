@@ -3,6 +3,7 @@ using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using SDL2;
 using SharpDX.DirectInput;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -17,6 +18,10 @@ namespace TeknoparrotAutoXinput
 		public Keys[] Keys { get; set; }
 
 		private List<string> FFBGuidList = new List<string>();
+
+		private string previous_gunARecoil = "";
+		private string previous_gunBRecoil = "";
+		private bool DoRedoGunRecoilCombo = false;
 		public Form1()
 		{
 			InitializeComponent();
@@ -102,6 +107,38 @@ namespace TeknoparrotAutoXinput
 				cmb_vjoy.Enabled = false;
 			}
 
+			previous_gunARecoil = ConfigurationManager.MainConfig.gunARecoil;
+			previous_gunBRecoil = ConfigurationManager.MainConfig.gunBRecoil;
+			cmb_gunA_com.Items.Clear();
+			cmb_gunA_com.Items.Add("<none>");
+			for (int i = 0; i < 256; i++) cmb_gunA_com.Items.Add("COM " + (i + 1));
+			cmb_gunB_com.Items.Clear();
+			cmb_gunB_com.Items.Add("<none>");
+			for (int i = 0; i < 256; i++) cmb_gunB_com.Items.Add("COM " + (i + 1));
+
+
+			RedoGunRecoilCombo();
+
+			radio_gunA_sindenPump1.Checked = ConfigurationManager.MainConfig.gunASidenPump == 1 ? true : false;
+			radio_gunA_sindenPump2.Checked = ConfigurationManager.MainConfig.gunASidenPump == 2 ? true : false;
+			radio_gunA_sindenPump3.Checked = ConfigurationManager.MainConfig.gunASidenPump == 3 ? true : false;
+			radio_gunB_sindenPump1.Checked = ConfigurationManager.MainConfig.gunBSidenPump == 1 ? true : false;
+			radio_gunB_sindenPump2.Checked = ConfigurationManager.MainConfig.gunBSidenPump == 2 ? true : false;
+			radio_gunB_sindenPump3.Checked = ConfigurationManager.MainConfig.gunBSidenPump == 3 ? true : false;
+
+			txt_demulshootersoft.Text = ConfigurationManager.MainConfig.demulshooterFolder;
+			txt_sindensoft.Text = ConfigurationManager.MainConfig.sindenFolder;
+			txt_mamehookersoft.Text = ConfigurationManager.MainConfig.mamehookerFolder;
+
+			chk_gunA_Crosshair.Checked = ConfigurationManager.MainConfig.gunACrosshair;
+			chk_gunB_Crosshair.Checked = ConfigurationManager.MainConfig.gunBCrosshair;
+
+			chk_gunA_AutoJoy.Checked = ConfigurationManager.MainConfig.gunAAutoJoy;
+			chk_gunB_AutoJoy.Checked = ConfigurationManager.MainConfig.gunBAutoJoy;
+
+			cmb_gunA_com.SelectedIndex = ConfigurationManager.MainConfig.gunAComPort;
+			cmb_gunB_com.SelectedIndex = ConfigurationManager.MainConfig.gunBComPort;
+
 
 			updateStooz();
 
@@ -158,6 +195,86 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
+		}
+
+		public void RedoGunRecoilCombo()
+		{
+			DoRedoGunRecoilCombo = true;
+			cmb_gunA_recoil.Items.Clear();
+			cmb_gunB_recoil.Items.Clear();
+			cmb_gunA_recoil.Items.Add("<none>");
+			if (cmb_gunA_type.SelectedItem != null)
+			{
+				if (cmb_gunA_type.SelectedItem.ToString() == "sinden") cmb_gunA_recoil.Items.Add("sinden");
+				if (cmb_gunA_type.SelectedItem.ToString() == "guncon1" || cmb_gunA_type.SelectedItem.ToString() == "guncon2") cmb_gunA_recoil.Items.Add("gun4ir");
+				if (cmb_gunA_type.SelectedItem.ToString() == "gamepad") cmb_gunA_recoil.Items.Add("rumble");
+				if (cmb_gunA_type.SelectedItem.ToString() != "<none>") cmb_gunA_recoil.Items.Add("mamehooker");
+			}
+
+			cmb_gunB_recoil.Items.Add("<none>");
+			if (cmb_gunB_type.SelectedItem != null)
+			{
+				if (cmb_gunB_type.SelectedItem.ToString() == "sinden") cmb_gunB_recoil.Items.Add("sinden");
+				if (cmb_gunB_type.SelectedItem.ToString() == "guncon1" || cmb_gunB_type.SelectedItem.ToString() == "guncon2") cmb_gunB_recoil.Items.Add("gun4ir");
+				if (cmb_gunB_type.SelectedItem.ToString() == "gamepad") cmb_gunB_recoil.Items.Add("rumble");
+				if (cmb_gunB_type.SelectedItem.ToString() != "<none>") cmb_gunB_recoil.Items.Add("mamehooker");
+			}
+
+
+
+			cmb_gunA_recoil.SelectedIndex = 0;
+			for (int i = 0; i < cmb_gunA_recoil.Items.Count; i++)
+			{
+				if (cmb_gunA_recoil.Items[i].ToString() == previous_gunARecoil)
+				{
+					cmb_gunA_recoil.SelectedIndex = i;
+					break;
+				}
+			}
+			cmb_gunB_recoil.SelectedIndex = 0;
+			for (int i = 0; i < cmb_gunB_recoil.Items.Count; i++)
+			{
+				if (cmb_gunB_recoil.Items[i].ToString() == previous_gunBRecoil)
+				{
+					cmb_gunB_recoil.SelectedIndex = i;
+					break;
+				}
+			}
+
+			radio_gunA_sindenPump1.Enabled = false;
+			radio_gunA_sindenPump2.Enabled = false;
+			radio_gunA_sindenPump3.Enabled = false;
+			radio_gunB_sindenPump1.Enabled = false;
+			radio_gunB_sindenPump2.Enabled = false;
+			radio_gunB_sindenPump3.Enabled = false;
+			if (cmb_gunA_type.SelectedItem != null && cmb_gunA_type.SelectedItem.ToString() == "sinden")
+			{
+				radio_gunA_sindenPump1.Enabled = true;
+				radio_gunA_sindenPump2.Enabled = true;
+				radio_gunA_sindenPump3.Enabled = true;
+			}
+			if (cmb_gunB_type.SelectedItem != null && cmb_gunB_type.SelectedItem.ToString() == "sinden")
+			{
+				radio_gunB_sindenPump1.Enabled = true;
+				radio_gunB_sindenPump2.Enabled = true;
+				radio_gunB_sindenPump3.Enabled = true;
+			}
+
+			chk_gunA_AutoJoy.Enabled = false;
+			chk_gunB_AutoJoy.Enabled = false;
+			cmb_gunA_com.Enabled = false;
+			cmb_gunB_com.Enabled = false;
+			if (cmb_gunA_recoil.SelectedItem != null && cmb_gunA_recoil.SelectedItem.ToString() == "gun4ir")
+			{
+				cmb_gunA_com.Enabled = true;
+				chk_gunA_AutoJoy.Enabled = true;
+			}
+			if (cmb_gunB_recoil.SelectedItem != null && cmb_gunB_recoil.SelectedItem.ToString() == "gun4ir")
+			{
+				chk_gunB_AutoJoy.Enabled = true;
+				cmb_gunB_com.Enabled = true;
+			}
+			DoRedoGunRecoilCombo = false;
 		}
 
 		private void chk_enableVirtualKeyboard_CheckedChanged(object sender, EventArgs e)
@@ -320,9 +437,38 @@ namespace TeknoparrotAutoXinput
 
 			ConfigurationManager.MainConfig.ffbDinputWheel = txt_ffbguid.Text;
 			ConfigurationManager.MainConfig.ffbDinputHotas = txt_ffbguidHotas.Text;
-
 			ConfigurationManager.MainConfig.gunAType = cmb_gunA_type.SelectedItem.ToString();
 			ConfigurationManager.MainConfig.gunBType = cmb_gunB_type.SelectedItem.ToString();
+
+			ConfigurationManager.MainConfig.gunARecoil = "<none>";
+			ConfigurationManager.MainConfig.gunAComPort = 0;
+			ConfigurationManager.MainConfig.gunAAutoJoy = false;
+			if (cmb_gunA_recoil.SelectedItem != null)
+			{
+				string recoilValue = cmb_gunA_recoil.SelectedItem.ToString();
+				ConfigurationManager.MainConfig.gunARecoil = recoilValue;
+				if (recoilValue == "gun4ir")
+				{
+					ConfigurationManager.MainConfig.gunAComPort = cmb_gunA_com.SelectedIndex;
+					ConfigurationManager.MainConfig.gunAAutoJoy = chk_gunA_AutoJoy.Checked;
+				}
+			}
+
+			ConfigurationManager.MainConfig.gunBRecoil = "<none>";
+			ConfigurationManager.MainConfig.gunBComPort = 0;
+			ConfigurationManager.MainConfig.gunBAutoJoy = false;
+			if (cmb_gunB_recoil.SelectedItem != null)
+			{
+				string recoilValue = cmb_gunB_recoil.SelectedItem.ToString();
+				ConfigurationManager.MainConfig.gunBRecoil = recoilValue;
+				if (recoilValue == "gun4ir")
+				{
+					ConfigurationManager.MainConfig.gunBComPort = cmb_gunB_com.SelectedIndex;
+					ConfigurationManager.MainConfig.gunBAutoJoy = chk_gunB_AutoJoy.Checked;
+				}
+			}
+			ConfigurationManager.MainConfig.gunACrosshair = chk_gunA_Crosshair.Checked;
+			ConfigurationManager.MainConfig.gunACrosshair = chk_gunB_Crosshair.Checked;
 
 			ConfigurationManager.SaveConfig();
 		}
@@ -678,6 +824,8 @@ namespace TeknoparrotAutoXinput
 				btn_gunA_configure.Enabled = false;
 			}
 
+			RedoGunRecoilCombo();
+
 		}
 
 		private void btn_gunB_configure_Click(object sender, EventArgs e)
@@ -700,6 +848,7 @@ namespace TeknoparrotAutoXinput
 			{
 				btn_gunB_configure.Enabled = false;
 			}
+			RedoGunRecoilCombo();
 		}
 
 		private void btn_vjoyconfig_Click(object sender, EventArgs e)
@@ -739,5 +888,61 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.SaveConfig();
 		}
 
+		private void groupBox9_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_gunA_recoil_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!DoRedoGunRecoilCombo)
+			{
+				if (cmb_gunA_recoil.SelectedItem != null)
+				{
+					previous_gunARecoil = cmb_gunA_recoil.SelectedItem.ToString();
+				}
+				RedoGunRecoilCombo();
+			}
+
+			//ConfigurationManager.MainConfig.gunARecoil = cmb_gunA_recoil.SelectedItem.ToString();
+			//ConfigurationManager.SaveConfig();
+			//RedoGunRecoilCombo();
+		}
+
+		private void cmb_gunB_recoil_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			//ConfigurationManager.MainConfig.gunBRecoil = cmb_gunB_recoil.SelectedItem.ToString();
+			//ConfigurationManager.SaveConfig();
+			//RedoGunRecoilCombo();
+			if (!DoRedoGunRecoilCombo)
+			{
+				if (cmb_gunB_recoil.SelectedItem != null)
+				{
+					previous_gunBRecoil = cmb_gunB_recoil.SelectedItem.ToString();
+				}
+				RedoGunRecoilCombo();
+			}
+
+		}
+
+		private void btn_demulshooter_Click(object sender, EventArgs e)
+		{
+			using (var fbd = new FolderBrowserDialog())
+			{
+				DialogResult result = fbd.ShowDialog();
+
+				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+				{
+					txt_tpfolder.Text = fbd.SelectedPath;
+					ConfigurationManager.MainConfig.TpFolder = fbd.SelectedPath;
+					ConfigurationManager.SaveConfig();
+				}
+			}
+		}
+
+		private void chk_gunA_Crosshair_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
