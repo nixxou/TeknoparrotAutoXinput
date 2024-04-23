@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime.Tree;
 using Henooh.DeviceEmulator.Net;
 using Henooh.DeviceEmulator.Net.Native;
+using SDL2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
 using System;
@@ -611,5 +612,140 @@ namespace TeknoparrotAutoXinput
 			joystick.Unacquire();
 
 		}
+
+		public static string DSharpGuidToSDLGuid(string joyGuid)
+		{
+			int p_id = -1;
+			int v_id = -1;
+			var directInput = new DirectInput();
+			Joystick joystick = null;
+			var devicesInstance = new List<DeviceInstance>();
+			devicesInstance.AddRange(directInput.GetDevices().Where(x => x.Type != DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+			DeviceInstance deviceInstance = null;
+			bool found_device = false;
+			Guid device_guid = Guid.Empty;
+			foreach (var device in devicesInstance)
+			{
+				if (device.InstanceGuid.ToString() == joyGuid)
+				{
+					try
+					{
+						found_device = true;
+						deviceInstance = device;
+						device_guid = device.InstanceGuid;
+						joystick = new Joystick(directInput, device_guid);
+						v_id = joystick.Properties.VendorId;
+						p_id = joystick.Properties.ProductId;
+					}
+					catch { }
+					//break;
+				}
+			}
+			if (!found_device)
+			{
+				return "";
+			}
+
+			List<string> suspectDevice = new List<string>();
+			List<int> listsuspectIndex = new List<int>();
+
+			SDL2.SDL.SDL_Quit();
+			SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
+			SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
+			SDL2.SDL.SDL_JoystickUpdate();
+			for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
+			{
+				if (SDL.SDL_IsGameController(i) == SDL.SDL_bool.SDL_FALSE) continue;
+				{
+					var currentJoy = SDL.SDL_JoystickOpen(i);
+					string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
+					ushort vendorId = SDL2.SDL.SDL_JoystickGetVendor(currentJoy);
+					ushort productId = SDL2.SDL.SDL_JoystickGetProduct(currentJoy);
+					bool isSuspect = false;
+					if(vendorId == v_id && productId == p_id)
+					{
+						const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
+						byte[] guidBuffer = new byte[bufferSize];
+						SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
+						string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
+						suspectDevice.Add(guidString);
+						listsuspectIndex.Add(i);
+						isSuspect = true;
+					}
+					
+
+					SDL.SDL_JoystickClose(currentJoy);
+				}
+			}
+			//SDL2.SDL.SDL_Quit();
+			if (suspectDevice.Count == 0) return "";
+			if(suspectDevice.Count == 1) return suspectDevice[0];
+
+			if(suspectDevice.Count > 1)
+			{
+				bool found = false;
+				JoystickState stato = new JoystickState();
+				joystick = new Joystick(new DirectInput(), new Guid(joyGuid));
+				joystick.Properties.BufferSize = 512;
+				joystick.Acquire();
+
+				List<IntPtr> gameControllers = new List<IntPtr>();
+				foreach (var sdlIndex in listsuspectIndex)
+				{
+					gameControllers.Add(SDL.SDL_GameControllerOpen(sdlIndex));
+				}
+
+				while (!found)
+				{
+					joystick.Poll();
+					joystick.GetCurrentState(ref stato);
+					int limit = 0;
+					if (Math.Abs(stato.X - 32767) < 1000)
+					{
+						limit++;
+						Thread.Sleep(100);
+						if (limit > 100) return "";
+						continue;
+					}
+
+
+					Utils.LogMessage($"DSharp GUID = {joyGuid}, X={stato.X}");
+					List<int> nearTarget = new List<int>();
+					int i = 0;
+					foreach(var g in gameControllers)
+					{
+						SDL.SDL_GameControllerUpdate();
+						int valSDL = SDL.SDL_GameControllerGetAxis(g, 0) + 32767;
+
+						Utils.LogMessage($"SDL {i} = {valSDL}");
+
+						if (Math.Abs(valSDL-stato.X) < 1000) nearTarget.Add(i);
+						//MessageBox.Show(i.ToString() + "=" + valSDL.ToString());
+						i++;
+					}
+
+					if (nearTarget.Count == 1)
+					{
+						//MessageBox.Show("found !");
+						joystick.Unacquire();
+						foreach (var g in gameControllers)
+						{
+							SDL.SDL_GameControllerClose(g);
+						}
+						Utils.LogMessage($"RES = {suspectDevice[nearTarget[0]]}");
+						return suspectDevice[nearTarget[0]];
+					}
+
+					
+
+					Thread.Sleep(100);
+				}
+				
+			}
+
+			return "";
+		}
+
+
 	}
 }

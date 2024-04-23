@@ -109,6 +109,8 @@ namespace TeknoparrotAutoXinput
 
 			previous_gunARecoil = ConfigurationManager.MainConfig.gunARecoil;
 			previous_gunBRecoil = ConfigurationManager.MainConfig.gunBRecoil;
+
+
 			cmb_gunA_com.Items.Clear();
 			cmb_gunA_com.Items.Add("<none>");
 			for (int i = 0; i < 256; i++) cmb_gunA_com.Items.Add("COM " + (i + 1));
@@ -205,7 +207,11 @@ namespace TeknoparrotAutoXinput
 			cmb_gunA_recoil.Items.Add("<none>");
 			if (cmb_gunA_type.SelectedItem != null)
 			{
-				if (cmb_gunA_type.SelectedItem.ToString() == "sinden") cmb_gunA_recoil.Items.Add("sinden");
+				if (cmb_gunA_type.SelectedItem.ToString() == "sinden")
+				{
+					cmb_gunA_recoil.Items.Add("sinden-gun1");
+					cmb_gunA_recoil.Items.Add("sinden-gun2");
+				}
 				if (cmb_gunA_type.SelectedItem.ToString() == "guncon1" || cmb_gunA_type.SelectedItem.ToString() == "guncon2") cmb_gunA_recoil.Items.Add("gun4ir");
 				if (cmb_gunA_type.SelectedItem.ToString() == "gamepad") cmb_gunA_recoil.Items.Add("rumble");
 				if (cmb_gunA_type.SelectedItem.ToString() != "<none>") cmb_gunA_recoil.Items.Add("mamehooker");
@@ -214,7 +220,11 @@ namespace TeknoparrotAutoXinput
 			cmb_gunB_recoil.Items.Add("<none>");
 			if (cmb_gunB_type.SelectedItem != null)
 			{
-				if (cmb_gunB_type.SelectedItem.ToString() == "sinden") cmb_gunB_recoil.Items.Add("sinden");
+				if (cmb_gunB_type.SelectedItem.ToString() == "sinden")
+				{
+					cmb_gunB_recoil.Items.Add("sinden-gun1");
+					cmb_gunB_recoil.Items.Add("sinden-gun2");
+				}
 				if (cmb_gunB_type.SelectedItem.ToString() == "guncon1" || cmb_gunB_type.SelectedItem.ToString() == "guncon2") cmb_gunB_recoil.Items.Add("gun4ir");
 				if (cmb_gunB_type.SelectedItem.ToString() == "gamepad") cmb_gunB_recoil.Items.Add("rumble");
 				if (cmb_gunB_type.SelectedItem.ToString() != "<none>") cmb_gunB_recoil.Items.Add("mamehooker");

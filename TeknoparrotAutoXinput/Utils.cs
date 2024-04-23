@@ -540,7 +540,7 @@ namespace TeknoparrotAutoXinput
 			process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 			process.Start();
 
-
+			if (delay == -1) return;
 			TaskService ts = new TaskService();
 			Microsoft.Win32.TaskScheduler.Task task = ts.GetTask(taskName);
 			Microsoft.Win32.TaskScheduler.RunningTaskCollection instances = task.GetInstances();

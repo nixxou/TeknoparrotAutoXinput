@@ -1334,7 +1334,7 @@
 			cmb_gunB_recoil.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_gunB_recoil.DropDownWidth = 150;
 			cmb_gunB_recoil.IntegralHeight = false;
-			cmb_gunB_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden", "Rumble" });
+			cmb_gunB_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden-Gun1", "Sinden-Gun2", "Rumble" });
 			cmb_gunB_recoil.Location = new Point(95, 48);
 			cmb_gunB_recoil.Name = "cmb_gunB_recoil";
 			cmb_gunB_recoil.Size = new Size(138, 21);
@@ -1469,7 +1469,7 @@
 			cmb_gunA_recoil.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_gunA_recoil.DropDownWidth = 150;
 			cmb_gunA_recoil.IntegralHeight = false;
-			cmb_gunA_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden", "Rumble" });
+			cmb_gunA_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden-Gun1", "Sinden-Gun2", "Rumble" });
 			cmb_gunA_recoil.Location = new Point(100, 49);
 			cmb_gunA_recoil.Name = "cmb_gunA_recoil";
 			cmb_gunA_recoil.Size = new Size(138, 21);

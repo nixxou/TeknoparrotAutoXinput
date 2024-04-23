@@ -166,7 +166,7 @@ namespace TeknoparrotAutoXinput
 				this.bindingDinputGunAWiimote = DeserializeData.bindingDinputGunAWiimote;
 				this.bindingDinputGunBXbox = DeserializeData.bindingDinputGunBXbox;
 				this.bindingDinputGunBSinden = DeserializeData.bindingDinputGunBSinden;
-				this.bindingDinputGunAGuncon1 = DeserializeData.bindingDinputGunAGuncon1;
+				this.bindingDinputGunBGuncon1 = DeserializeData.bindingDinputGunBGuncon1;
 				this.bindingDinputGunBGuncon2 = DeserializeData.bindingDinputGunBGuncon2;
 				this.bindingDinputGunBWiimote = DeserializeData.bindingDinputGunBWiimote;
 				this.indexvjoy = DeserializeData.indexvjoy;

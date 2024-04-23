@@ -259,7 +259,7 @@ namespace TeknoparrotAutoXinput
 
 
 			}
-
+			MessageBox.Show("xx");
 			if (game == "") lbl_profile.Text = "Global";
 			else lbl_profile.Text = game;
 
@@ -328,8 +328,8 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
-			lbl_gunA_connected.Text = _dinputLightgunAFound ? "Present" : "Missing";
-			lbl_gunB_connected.Text = _dinputLightgunBFound ? "Present" : "Missing";
+			lbl_gunA_connected.Text = _dinputLightgunAFound ? GunAGuid.ToString() : "Missing";
+			lbl_gunB_connected.Text = _dinputLightgunBFound ? GunBGuid.ToString() : "Missing";
 			lbl_vjoy.Text = "Vjoy " + _indexVjoy;
 
 			int nbVjoyDevice = 0;

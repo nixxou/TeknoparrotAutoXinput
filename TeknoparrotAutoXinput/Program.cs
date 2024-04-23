@@ -27,6 +27,7 @@ using WiimoteLib;
 using XInput.Wrapper;
 using XJoy;
 using static SDL2.SDL;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using static XInput.Wrapper.X;
 using static XInput.Wrapper.X.Gamepad;
 
@@ -100,10 +101,34 @@ namespace TeknoparrotAutoXinput
 		[STAThread]
 		static void Main(string[] args)
 		{
+			//Up there to be load before demulshooter start
+			ConfigurationManager.LoadConfig();
 
-			//RegisterTask
+			//Demulshooter run as admin
+			if (args.Length == 1 && args.First() == "--demulshooter")
+			{
+				DemulshooterManager.SetPath(ConfigurationManager.MainConfig.demulshooterFolder);
+				if (DemulshooterManager.ValidPath)
+				{
+					DemulshooterManager.ReadConfig();
+					string exePath = DemulshooterManager.Is64bits ? DemulshooterManager.Demulshooter64 : DemulshooterManager.Demulshooter32;
+					string exeDir = Path.GetDirectoryName(exePath);
+					Process process = new Process();
+					process.StartInfo.FileName = exePath;
+					process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput";
+					process.StartInfo.WorkingDirectory = exeDir;
+					process.StartInfo.UseShellExecute = true;
+					process.StartInfo.Verb = "runas";
+					process.Start();
+					process.WaitForExit();
+				}
+				return;
+			}
+
+			//RegisterTask As admin
 			if (args.Length > 2 && args.First() == "--registerTask")
 			{
+				MessageBox.Show("oco");
 				var filteredArgs = Utils.ArgsWithoutFirstElement(args);
 				var taskExe = filteredArgs[0];
 				var taskArguments = Utils.ArgsToCommandLine(Utils.ArgsWithoutFirstElement(filteredArgs));
@@ -155,11 +180,13 @@ namespace TeknoparrotAutoXinput
 			//args = fakeArgs.ToArray();
 #endif
 
-			ConfigurationManager.LoadConfig();
+			
 
 			wheelXinputData = ConfigurationManager.MainConfig.wheelXinputData;
 			arcadeXinputData = ConfigurationManager.MainConfig.arcadeXinputData;
 			gamepadXinputData = ConfigurationManager.MainConfig.gamepadXinputData;
+
+			DemulshooterManager.SetPath(ConfigurationManager.MainConfig.demulshooterFolder);
 
 			if (args.Length == 0)
 			{
@@ -682,9 +709,10 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 							}
+
 							if (LightgunB_Type == "sinden" || LightgunB_Type == "guncon1" || LightgunB_Type == "guncon2" || LightgunB_Type == "wiimote" || LightgunB_Type == "gamepad")
 							{
-								if (LightgunB_Type == "gamepad") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
+								if (LightgunB_Type == "gamepad") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBXbox;
 								if (LightgunB_Type == "sinden") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
 								if (LightgunB_Type == "guncon1") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1;
 								if (LightgunB_Type == "guncon2") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2;
@@ -742,7 +770,7 @@ namespace TeknoparrotAutoXinput
 								GunCoinOverwrite = true;
 							}
 						}
-						if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunStart") && !bindingDinputLightGunA.ContainsKey("LightgunCoin"))
+						if (dinputLightgunBFound && bindingDinputLightGunB.ContainsKey("LightgunStart") && !bindingDinputLightGunB.ContainsKey("LightgunCoin"))
 						{
 							if (dinputLightgunBFound && bindingDinputLightGunB.ContainsKey("LightgunX") && bindingDinputLightGunB.ContainsKey("LightgunY"))
 							{
@@ -865,8 +893,9 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 							}
-
 						}
+
+						
 
 						string LightgunConfigAFile = "";
 						string LightgunConfigBFile = "";
@@ -982,6 +1011,8 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 
+								//AssignedButtons register buttons used to gunA, to be sure to not reuse the same joyguid + button to gunB
+								List<string> AssignedButtons = new List<string>();
 
 								//int gunindex = 0;
 								if (dinputLightgunAFound)
@@ -994,6 +1025,8 @@ namespace TeknoparrotAutoXinput
 										if (bind.Key.StartsWith("Lightgun"))
 										{
 											bindingDinputLightGun.Add(gunprefix + bind.Key, bind.Value);
+											string assignedButton = bind.Value.JoystickGuid.ToString() + "===" + bind.Value.Button.ToString() + "===" + bind.Value.PovDirection + "===" + (bind.Value.IsAxis ? "true" : "false") + "===" + (bind.Value.IsAxisMinus ? "true" : "false");
+											AssignedButtons.Add(assignedButton);
 										}
 									}
 									//gunindex++;
@@ -1010,7 +1043,8 @@ namespace TeknoparrotAutoXinput
 										newCoinBtn.Title = "NEW COIN GUN 1";
 										newCoinBtn.XinputTitle = "NEW COIN GUN 1";
 										bindingDinputLightGun.Add(gunprefix + "LightgunCoin", newCoinBtn);
-										
+										string assignedButton = newCoinBtn.JoystickGuid.ToString() + "===" + newCoinBtn.Button.ToString() + "===" + newCoinBtn.PovDirection + "===" + (newCoinBtn.IsAxis ? "true" : "false") + "===" + (newCoinBtn.IsAxisMinus ? "true" : "false");
+										AssignedButtons.Add(assignedButton);
 									}
 								}
 								if (dinputLightgunBFound)
@@ -1022,7 +1056,8 @@ namespace TeknoparrotAutoXinput
 									{
 										if (bind.Key.StartsWith("Lightgun"))
 										{
-											bindingDinputLightGun.Add(gunprefix + bind.Key, bind.Value);
+											string assignedButton = bind.Value.JoystickGuid.ToString() + "===" + bind.Value.Button.ToString() + "===" + bind.Value.PovDirection + "===" + (bind.Value.IsAxis ? "true" : "false") + "===" + (bind.Value.IsAxisMinus ? "true" : "false");
+											if(!AssignedButtons.Contains(assignedButton)) bindingDinputLightGun.Add(gunprefix + bind.Key, bind.Value);
 										}
 									}
 									//gunindex++;
@@ -1039,7 +1074,9 @@ namespace TeknoparrotAutoXinput
 										newCoinBtn.JoystickGuid = bindingDinputLightGunB["LightgunStart"].JoystickGuid;
 										newCoinBtn.Title = "NEW COIN GUN 2";
 										newCoinBtn.XinputTitle = "NEW COIN GUN 2";
-										bindingDinputLightGun.Add(gunprefix + "LightgunCoin", newCoinBtn);
+
+										string assignedButton = newCoinBtn.JoystickGuid.ToString() + "===" + newCoinBtn.Button.ToString() + "===" + newCoinBtn.PovDirection + "===" + (newCoinBtn.IsAxis ? "true" : "false") + "===" + (newCoinBtn.IsAxisMinus ? "true" : "false");
+										if (!AssignedButtons.Contains(assignedButton)) bindingDinputLightGun.Add(gunprefix + "LightgunCoin", newCoinBtn);
 									}
 								}
 							}
@@ -2692,6 +2729,119 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 							}
+						}
+
+						if (useDinputLightGun)
+						{
+							string RumbleTypeA = "<none>";
+							string RumbleParameterA = "";
+							string RumbleTypeB = "<none>";
+							string RumbleParameterB = "";
+
+							if (GunAGuid != "")
+							{
+								string RumbleType = ConfigurationManager.MainConfig.gunARecoil;
+								if (gameOptions.gunA_recoil == 1) RumbleType = "<none>";
+								if (gameOptions.gunA_recoil == 2) RumbleType = "mamehooker";
+
+								string RumbleParameter = "";
+								if(RumbleType == "gun4ir")
+								{
+									int comPort = ConfigurationManager.MainConfig.gunAComPort;
+									if (comPort > 0)
+									{
+										RumbleParameter = "COM" + comPort.ToString();
+									}
+									else RumbleType = "<none>";
+								}
+								if(RumbleType == "sinden-gun1" || RumbleType == "sinden-gun2")
+								{
+									RumbleType = "sinden";
+									if (RumbleType == "sinden-gun1") RumbleParameter = "RecoilSindenGunA";
+									if (RumbleType == "sinden-gun2") RumbleParameter = "RecoilSindenGunB";
+								}
+								if (RumbleType == "rumble")
+								{
+									string SDLGuid = GunAGuid.ToString();
+									/*
+									try
+									{
+										SDLGuid = ButtonToKey.DSharpGuidToSDLGuid(GunAGuid);
+									}
+									catch { }
+									*/
+									if(SDLGuid != "")
+									{
+										RumbleParameter = SDLGuid;
+									}
+									else
+									{
+										RumbleType = "<none>";
+									}
+								}
+								RumbleTypeA = RumbleType;
+								RumbleParameterA = RumbleParameter;
+							}
+							if (GunBGuid != "")
+							{
+								string RumbleType = ConfigurationManager.MainConfig.gunBRecoil;
+								if (gameOptions.gunB_recoil == 1) RumbleType = "<none>";
+								if (gameOptions.gunB_recoil == 2) RumbleType = "mamehooker";
+
+								string RumbleParameter = "";
+								if (RumbleType == "gun4ir")
+								{
+									int comPort = ConfigurationManager.MainConfig.gunBComPort;
+									if (comPort > 0)
+									{
+										RumbleParameter = "COM" + comPort.ToString();
+									}
+									else RumbleType = "<none>";
+								}
+								if (RumbleType == "sinden-gun1" || RumbleType == "sinden-gun2")
+								{
+									RumbleType = "sinden";
+									if (RumbleType == "sinden-gun1") RumbleParameter = "RecoilSindenGunA";
+									if (RumbleType == "sinden-gun2") RumbleParameter = "RecoilSindenGunB";
+								}
+								if (RumbleType == "rumble")
+								{
+									string SDLGuid = GunBGuid.ToString();
+									/*
+									try
+									{
+										SDLGuid = ButtonToKey.DSharpGuidToSDLGuid(GunBGuid);
+									}
+									catch { }
+									*/
+									if (SDLGuid != "")
+									{
+										RumbleParameter = SDLGuid;
+									}
+									else
+									{
+										RumbleType = "<none>";
+									}
+								}
+
+								if(RumbleParameter == RumbleParameterA && RumbleParameter != "")
+								{
+									RumbleType = "<none>";
+									RumbleParameter = "";
+								}
+								RumbleTypeB = RumbleType;
+								RumbleParameterB = RumbleParameter;
+							}
+
+							DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB);
+
+
+							DemulshooterManager.Is64bits = false;
+							DemulshooterManager.UseMamehooker = true;
+							DemulshooterManager.UseTcp = true;
+							DemulshooterManager.Rom = "sgg";
+							DemulshooterManager.Target = "ringwide";
+							DemulshooterManager.Start();
 						}
 
 						if(gameOptions.AhkBefore.Trim() != "")
