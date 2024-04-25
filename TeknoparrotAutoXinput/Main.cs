@@ -21,6 +21,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Effects;
 using System.Xml;
+using System.Xml.Linq;
 using TeknoParrotUi.Common;
 using WiimoteLib;
 using XInput.Wrapper;
@@ -549,8 +550,6 @@ namespace TeknoparrotAutoXinput
 				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
 				if (_gameList.ContainsKey(GameSelected))
 				{
-
-
 					var DataGame = _gameList[GameSelected];
 					lbl_GameTitle.Text = DataGame.Name;
 
@@ -768,12 +767,31 @@ namespace TeknoparrotAutoXinput
 						foreach (var cfg in DataGame.existingConfig) existingConfigClone.Add(cfg.Key, cfg.Value);
 						if (DataGame.existingConfig.ContainsKey("lightgun"))
 						{
+							int sindenPump = ConfigurationManager.MainConfig.gunASidenPump;
+							string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
+							if (File.Exists(optionFile))
+							{
+								var gameOptions = new GameSettings(File.ReadAllText(optionFile));
+								if(gameOptions.gunA_pump > 0) sindenPump = gameOptions.gunA_pump;
+							}
+
+
 							string valueExistingConfig = DataGame.existingConfig["lightgun"].Substring(0, DataGame.existingConfig["lightgun"].Length - 4);
-							existingConfigClone.Add("lightgun-sinden", valueExistingConfig + "-sinden.jpg");
+							existingConfigClone.Add("lightgun-sinden", valueExistingConfig + "-sinden" + sindenPump + ".jpg");
 							existingConfigClone.Add("lightgun-wiimote", valueExistingConfig + "-wiimote.jpg");
 							existingConfigClone.Add("lightgun-gamepad", valueExistingConfig + "-gamepad.jpg");
 							existingConfigClone.Add("lightgun-guncon1", valueExistingConfig + "-guncon1.jpg");
 							existingConfigClone.Add("lightgun-guncon2", valueExistingConfig + "-guncon2.jpg");
+
+							if (_haveLightgun && _dinputLightgunAFound && existingConfigClone.ContainsKey("lightgun-" + _dinputGunAType))
+							{
+								string newMainImgFile = existingConfigClone["lightgun-" + _dinputGunAType];
+								if (File.Exists(newMainImgFile))
+								{
+									Image originalImage = System.Drawing.Image.FromFile(newMainImgFile);
+									pictureBox_gameControls.Image = ResizeImageBest(originalImage, pictureBox_gameControls.Size);
+								}
+							}
 
 						}
 

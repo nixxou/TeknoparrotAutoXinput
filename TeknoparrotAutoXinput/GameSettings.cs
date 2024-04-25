@@ -93,8 +93,8 @@ namespace TeknoparrotAutoXinput
 				this.gunA_recoil = DeserializeData.gunA_recoil;
 				this.gunA_pump = DeserializeData.gunA_pump;
 				this.gunA_crosshair = DeserializeData.gunA_crosshair;
-				this.gunA_recoil = DeserializeData.gunB_recoil;
-				this.gunA_pump = DeserializeData.gunB_pump;
+				this.gunB_recoil = DeserializeData.gunB_recoil;
+				this.gunB_pump = DeserializeData.gunB_pump;
 				this.gunB_crosshair = DeserializeData.gunB_crosshair;
 				this.gun_useExtraSinden = DeserializeData.gun_useExtraSinden;
 				this.gun_ExtraSinden = DeserializeData.gun_ExtraSinden;

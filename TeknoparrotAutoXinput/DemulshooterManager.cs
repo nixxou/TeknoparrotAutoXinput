@@ -16,6 +16,7 @@ namespace TeknoparrotAutoXinput
 		public static string DemulshooterPath = "";
 		public static string Demulshooter32 = "";
 		public static string Demulshooter64 = "";
+		public static int ParentProcess = -1;
 		public static bool ValidPath = false;
 		public static bool Is64bits = false;
 		public static string Target = "";
@@ -88,6 +89,7 @@ namespace TeknoparrotAutoXinput
 			ini.Write("Launch_Rom", Rom);
 			ini.Write("Launch_64bits", Is64bits ? "True" : "False");
 			ini.Write("OutputEnabled", "True");
+			ini.Write("ParentProcess", Process.GetCurrentProcess().Id.ToString());
 			
 			ini.Write("WM_OutputsEnabled", UseMamehooker ? "True" : "False");
 			ini.Write("Net_OutputsEnabled", UseTcp ? "True" : "False");
@@ -105,6 +107,7 @@ namespace TeknoparrotAutoXinput
 				Rom = ini.Read("Launch_Rom");
 				Target = ini.Read("Launch_Target");
 				Is64bits = ini.Read("Launch64bits") == "True" ? true : false;
+				ParentProcess = int.Parse(ini.Read("ParentProcess"));
 			}
 
 		}
@@ -170,6 +173,7 @@ namespace TeknoparrotAutoXinput
 
 		public static void Stop()
 		{
+			_stopListening = true;
 			if (!ValidPath) return;
 		}
 

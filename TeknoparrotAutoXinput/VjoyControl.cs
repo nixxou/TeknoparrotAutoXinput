@@ -1340,7 +1340,7 @@ namespace TeknoparrotAutoXinput
 		{
 			if (txt_expAY.Text != "")
 			{
-				expAY = new Expression(txt_expAX.Text);
+				expAY = new Expression(txt_expAY.Text);
 				if (expAY.HasErrors())
 				{
 					MessageBox.Show("Invalid Expression");
@@ -1386,7 +1386,7 @@ namespace TeknoparrotAutoXinput
 		{
 			if (txt_expBY.Text != "")
 			{
-				expBY = new Expression(txt_expBX.Text);
+				expBY = new Expression(txt_expBY.Text);
 				if (expBY.HasErrors())
 				{
 					MessageBox.Show("Invalid Expression");

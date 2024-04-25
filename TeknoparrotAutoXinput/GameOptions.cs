@@ -366,7 +366,7 @@ namespace TeknoparrotAutoXinput
 			}
 
 			cmb_gunA_recoil.SelectedIndex = gameSettings.gunA_recoil;
-			cmb_gunA_sindenPump.SelectedIndex = gameSettings.gunA_crosshair;
+			cmb_gunA_sindenPump.SelectedIndex = gameSettings.gunA_pump;
 			cmb_gunA_Crosshair.SelectedIndex = gameSettings.gunA_crosshair;
 			cmb_gunB_recoil.SelectedIndex = gameSettings.gunB_recoil;
 			cmb_gunB_sindenPump.SelectedIndex = gameSettings.gunB_pump;

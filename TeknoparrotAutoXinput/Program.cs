@@ -94,6 +94,8 @@ namespace TeknoparrotAutoXinput
 		public static bool useDinputHotas = false;
 		public static bool useDinputLightGun = false;
 
+		public static Dictionary<string, string> GameInfo = new Dictionary<string, string>();
+
 
 		/// <summary>
 		///  The main entry point for the application.
@@ -111,11 +113,52 @@ namespace TeknoparrotAutoXinput
 				if (DemulshooterManager.ValidPath)
 				{
 					DemulshooterManager.ReadConfig();
+
+					ProcessStartInfo psi = new ProcessStartInfo
+					{
+						FileName = "taskkill",
+						Arguments = $"/F /IM DemulShooter.exe",
+						CreateNoWindow = true,
+						UseShellExecute = false
+					};
+					Process.Start(psi);
+					ProcessStartInfo psi2 = new ProcessStartInfo
+					{
+						FileName = "taskkill",
+						Arguments = $"/F /IM DemulShooterX64.exe",
+						CreateNoWindow = true,
+						UseShellExecute = false
+					};
+					Process.Start(psi2);
+
+					int pid = DemulshooterManager.ParentProcess;
+					if (pid == -1) return;
+					Process processParent = Process.GetProcessById(pid);
+					if (processParent != null)
+					{
+						Thread monitoringThread = new Thread(() =>
+						{
+							// Attendre que le processus associé au PID se termine
+							processParent.WaitForExit();
+
+							Process.Start(psi);
+							Process.Start(psi2);
+							Thread.Sleep(100);
+							Utils.KillProcessById(Process.GetCurrentProcess().Id);
+
+						});
+						monitoringThread.Start();
+					}
+
+					Thread.Sleep(1000);
+
+
+					
 					string exePath = DemulshooterManager.Is64bits ? DemulshooterManager.Demulshooter64 : DemulshooterManager.Demulshooter32;
 					string exeDir = Path.GetDirectoryName(exePath);
 					Process process = new Process();
 					process.StartInfo.FileName = exePath;
-					process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput";
+					process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput -nocrosshair";
 					process.StartInfo.WorkingDirectory = exeDir;
 					process.StartInfo.UseShellExecute = true;
 					process.StartInfo.Verb = "runas";
@@ -340,6 +383,14 @@ namespace TeknoparrotAutoXinput
 					{
 						Utils.LogMessage($"gameoveride file found : " + optionFile);
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
+					}
+
+					GameInfo = new Dictionary<string,string>();
+					string gameInfoFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "info" + ".json");
+					if (File.Exists(gameInfoFile))
+					{
+						Utils.LogMessage($"info file found : " + gameInfoFile);
+						GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
 					}
 
 					string baseTpDirOriginal = baseTpDir;
@@ -1273,7 +1324,7 @@ namespace TeknoparrotAutoXinput
 						Dictionary<string, JoystickButton> joystickButtonArcade = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonGamepad = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonHotas = new Dictionary<string, JoystickButton>();
-						Dictionary<string, JoystickButton> joystickButtonLightgun = new Dictionary<string, JoystickButton>();
+						//Dictionary<string, JoystickButton> joystickButtonLightgun = new Dictionary<string, JoystickButton>();
 
 						if (useXinput)
 						{
@@ -1692,7 +1743,7 @@ namespace TeknoparrotAutoXinput
 									xinputGamepadB.Type = "lightgun";
 									ConfigPerPlayer.Add(1, ("lightgun", xinputGamepadB));
 								}
-								joystickButtonLightgun = ParseConfig(existingConfig["lightgun"]);
+								//joystickButtonLightgun = ParseConfig(existingConfig["lightgun"]);
 
 							}
 						}
@@ -1834,7 +1885,7 @@ namespace TeknoparrotAutoXinput
 							if (ConfigType == "wheel") joystickButtonData = joystickButtonWheel;
 							if (ConfigType == "arcade") joystickButtonData = joystickButtonArcade;
 							if (ConfigType == "gamepad") joystickButtonData = joystickButtonGamepad;
-							if (ConfigType == "lightgun") joystickButtonData = joystickButtonLightgun;
+							if (ConfigType == "lightgun") joystickButtonData = joystickButtonGamepad;
 
 							foreach (var buttonData in joystickButtonData)
 							{
@@ -1856,7 +1907,7 @@ namespace TeknoparrotAutoXinput
 							if (ConfigType == "wheel") joystickButtonData = joystickButtonWheel;
 							if (ConfigType == "arcade") joystickButtonData = joystickButtonArcade;
 							if (ConfigType == "gamepad") joystickButtonData = joystickButtonGamepad;
-							if (ConfigType == "lightgun") joystickButtonData = joystickButtonLightgun;
+							if (ConfigType == "lightgun") joystickButtonData = joystickButtonGamepad;
 
 							foreach (var buttonData in joystickButtonData)
 							{
@@ -2459,22 +2510,26 @@ namespace TeknoparrotAutoXinput
 
 											foreach (var bindkey in bindkey_list)
 											{
-												int coinOrStart = 0;
-												if (GunCoinOverwriteA && bindkey.StartsWith("GunA_"))
+												if (!string.IsNullOrEmpty(bindkey) && bindingDinputLightGun.ContainsKey(bindkey))
 												{
-													coinOrStart = 10;
-													if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
-													if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
-												}
-												if (GunCoinOverwriteB && bindkey.StartsWith("GunB_"))
-												{
-													coinOrStart = 20;
-													if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
-													if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+													int coinOrStart = 0;
+													if (GunCoinOverwriteA && bindkey.StartsWith("GunA_"))
+													{
+														coinOrStart = 10;
+														if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
+														if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+													}
+													if (GunCoinOverwriteB && bindkey.StartsWith("GunB_"))
+													{
+														coinOrStart = 20;
+														if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
+														if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+													}
+
+													var bindData = bindingDinputLightGun[bindkey];
+													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
 												}
 
-												var bindData = bindingDinputLightGun[bindkey];
-												ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
 
 											}
 										}
@@ -2833,15 +2888,20 @@ namespace TeknoparrotAutoXinput
 								RumbleParameterB = RumbleParameter;
 							}
 
-							DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB);
+							if(GameInfo.ContainsKey("target") && GameInfo.ContainsKey("rom"))
+							{
+								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB);
+								if(GameInfo.ContainsKey("64bits") && GameInfo["64bits"].ToLower() == "true") DemulshooterManager.Is64bits = true;
+								else DemulshooterManager.Is64bits = false;
+								DemulshooterManager.UseMamehooker = true;
+								DemulshooterManager.UseTcp = true;
+								DemulshooterManager.Rom = GameInfo["rom"];
+								DemulshooterManager.Target = GameInfo["target"];
+								DemulshooterManager.Start();
+
+							}
 
 
-							DemulshooterManager.Is64bits = false;
-							DemulshooterManager.UseMamehooker = true;
-							DemulshooterManager.UseTcp = true;
-							DemulshooterManager.Rom = "sgg";
-							DemulshooterManager.Target = "ringwide";
-							DemulshooterManager.Start();
 						}
 
 						if(gameOptions.AhkBefore.Trim() != "")
@@ -2913,6 +2973,7 @@ namespace TeknoparrotAutoXinput
 						Utils.LogMessage($"End Execution");
 
 						ButtonToKeyManager.buttonToKey.StopMonitor();
+						DemulshooterManager.Stop();
 
 						if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{
@@ -2994,15 +3055,21 @@ namespace TeknoparrotAutoXinput
 						if (_restoreSwitch)
 						{
 							Utils.LogMessage($"Restore Disposition");
-							MonitorSwitcher.LoadDisplaySettings(Path.Combine(Program.DispositionFolder, "dispositionrestore_app.xml"));
+							bool resultSwitch = MonitorSwitcher.LoadDisplaySettings(Path.Combine(Program.DispositionFolder, "dispositionrestore_app.xml"));
+							if (!resultSwitch)
+							{
+								Thread.Sleep(3000);
+								MonitorSwitcher.LoadDisplaySettings(Path.Combine(Program.DispositionFolder, "dispositionrestore_app.xml"));
+							}
 						}
 
 						if (DebugMode)
 						{
-							Console.WriteLine("Press any key to quit");
-							Console.ReadKey();
+							Console.WriteLine("Press Enter Key to quit");
+							Console.ReadLine();
 						}
 						if(shifterHack != null) shifterHack.Stop();
+
 					}
 
 
@@ -3385,7 +3452,14 @@ namespace TeknoparrotAutoXinput
 			var cfg = Path.Combine(Program.DispositionFolder, "disposition_" + key + ".xml");
 			if (File.Exists(cfg))
 			{
-				return MonitorSwitcher.LoadDisplaySettings(cfg);
+				bool result1 = MonitorSwitcher.LoadDisplaySettings(cfg);
+				bool result2 = true;
+				if (!result1)
+				{
+					Thread.Sleep(3000);
+					result2 = MonitorSwitcher.LoadDisplaySettings(cfg);
+				}
+				return result2;
 			}
 			return false;
 		}
