@@ -50,6 +50,14 @@ namespace TeknoparrotAutoXinput
 		public bool gun_useExtraSinden { get; set; } = false;
 		public string gun_ExtraSinden { get; set; } = "";
 
+		public int gunA_useVjoy { get; set; } = 0;
+		public int gunB_useVjoy { get; set; } = 0;
+
+		public int gunA_4tiers { get; set; } = 0;
+		public int gunB_4tiers { get; set; } = 0;
+
+		public bool runRivaTuner { get; set; } = false;
+
 
 
 		public GameSettings() 
@@ -98,6 +106,12 @@ namespace TeknoparrotAutoXinput
 				this.gunB_crosshair = DeserializeData.gunB_crosshair;
 				this.gun_useExtraSinden = DeserializeData.gun_useExtraSinden;
 				this.gun_ExtraSinden = DeserializeData.gun_ExtraSinden;
+				this.gunA_useVjoy = DeserializeData.gunA_useVjoy;
+				this.gunB_useVjoy = DeserializeData.gunB_useVjoy;
+				this.gunA_4tiers = DeserializeData.gunA_4tiers;
+				this.gunB_4tiers = DeserializeData.gunB_4tiers;
+				this.runRivaTuner = DeserializeData.runRivaTuner;
+
 			}
 			catch (Exception ex)
 			{

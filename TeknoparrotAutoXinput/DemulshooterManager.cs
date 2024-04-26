@@ -58,15 +58,16 @@ namespace TeknoparrotAutoXinput
 		static string GunBSDLGuid = string.Empty;
 		static int GunBSDLIndex = -1;
 
-		public static bool SetPath(string dirDemul)
+		public static bool SetPath(string demulshooterExe)
 		{
 			DemulshooterPath = "";
 			Demulshooter32 = "";
 			Demulshooter64 = "";
 			ValidPath = false;
-			if(Directory.Exists(dirDemul))
+			if(File.Exists(demulshooterExe))
 			{
-				dirDemul = Path.GetFullPath(dirDemul);
+
+				string dirDemul = Path.GetFullPath(Path.GetDirectoryName(demulshooterExe));
 				string demulshooter32 = Path.Combine(dirDemul, "DemulShooter.exe");
 				string demulshooter64 = Path.Combine(dirDemul, "DemulShooterX64.exe");
 				if(File.Exists(demulshooter32) && File.Exists(demulshooter64))

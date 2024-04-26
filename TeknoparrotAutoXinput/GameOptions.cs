@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using TeknoParrotUi.Common;
 using XJoy;
 
@@ -368,11 +369,19 @@ namespace TeknoparrotAutoXinput
 			cmb_gunA_recoil.SelectedIndex = gameSettings.gunA_recoil;
 			cmb_gunA_sindenPump.SelectedIndex = gameSettings.gunA_pump;
 			cmb_gunA_Crosshair.SelectedIndex = gameSettings.gunA_crosshair;
+			cmb_gunA_4tiers.SelectedIndex = gameSettings.gunA_4tiers;
+			cmb_gunA_UseVjoy.SelectedIndex = gameSettings.gunA_useVjoy;
+
 			cmb_gunB_recoil.SelectedIndex = gameSettings.gunB_recoil;
 			cmb_gunB_sindenPump.SelectedIndex = gameSettings.gunB_pump;
 			cmb_gunB_Crosshair.SelectedIndex = gameSettings.gunB_crosshair;
+			cmb_gunB_4tiers.SelectedIndex = gameSettings.gunB_4tiers;
+			cmb_gunB_UseVjoy.SelectedIndex = gameSettings.gunB_useVjoy;
+
 			chk_sindenextra.Checked = !gameSettings.gun_useExtraSinden;
 			txt_sindenextra.Text = gameSettings.gun_ExtraSinden;
+
+			chk_runRivaTuner.Checked = gameSettings.runRivaTuner;
 		}
 
 		private void Reload()
@@ -514,13 +523,23 @@ namespace TeknoparrotAutoXinput
 			gameSettings.gunA_recoil = cmb_gunA_recoil.SelectedIndex;
 			gameSettings.gunA_pump = cmb_gunA_sindenPump.SelectedIndex;
 			gameSettings.gunA_crosshair = cmb_gunA_Crosshair.SelectedIndex;
+			gameSettings.gunA_4tiers = cmb_gunA_4tiers.SelectedIndex;
+			gameSettings.gunA_useVjoy = cmb_gunA_UseVjoy.SelectedIndex;
 
 			gameSettings.gunB_recoil = cmb_gunB_recoil.SelectedIndex;
 			gameSettings.gunB_pump = cmb_gunB_sindenPump.SelectedIndex;
 			gameSettings.gunB_crosshair = cmb_gunB_Crosshair.SelectedIndex;
+			gameSettings.gunB_4tiers = cmb_gunB_4tiers.SelectedIndex;
+			gameSettings.gunB_useVjoy = cmb_gunB_UseVjoy.SelectedIndex;
 
 			gameSettings.gun_useExtraSinden = !chk_sindenextra.Checked;
 			gameSettings.gun_ExtraSinden = txt_sindenextra.Text;
+
+
+
+			gameSettings.runRivaTuner = chk_runRivaTuner.Checked;
+
+
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;
@@ -854,7 +873,21 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			var frm = new VjoyControl(true, Path.GetFileNameWithoutExtension(GameData.UserConfigFile), gameSettings);
+			
+			bool vjoy_gunA = ConfigurationManager.MainConfig.gunAvjoy;
+			if (cmb_gunA_UseVjoy.SelectedIndex > 0)
+			{
+				if (cmb_gunA_UseVjoy.SelectedIndex == 1) vjoy_gunA = false;
+				if (cmb_gunA_UseVjoy.SelectedIndex == 2) vjoy_gunA = true;
+			}
+			bool vjoy_gunB = ConfigurationManager.MainConfig.gunBvjoy;
+			if (cmb_gunB_UseVjoy.SelectedIndex > 0)
+			{
+				if (cmb_gunB_UseVjoy.SelectedIndex == 1) vjoy_gunB = false;
+				if (cmb_gunB_UseVjoy.SelectedIndex == 2) vjoy_gunB = true;
+			}
+
+			var frm = new VjoyControl(true, Path.GetFileNameWithoutExtension(GameData.UserConfigFile), gameSettings, vjoy_gunA, vjoy_gunB);
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{

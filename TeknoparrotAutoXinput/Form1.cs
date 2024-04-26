@@ -128,9 +128,10 @@ namespace TeknoparrotAutoXinput
 			radio_gunB_sindenPump2.Checked = ConfigurationManager.MainConfig.gunBSidenPump == 2 ? true : false;
 			radio_gunB_sindenPump3.Checked = ConfigurationManager.MainConfig.gunBSidenPump == 3 ? true : false;
 
-			txt_demulshootersoft.Text = ConfigurationManager.MainConfig.demulshooterFolder;
-			txt_sindensoft.Text = ConfigurationManager.MainConfig.sindenFolder;
-			txt_mamehookersoft.Text = ConfigurationManager.MainConfig.mamehookerFolder;
+			txt_rivatunersoft.Text = ConfigurationManager.MainConfig.rivatunerExe;
+			txt_demulshootersoft.Text = ConfigurationManager.MainConfig.demulshooterExe;
+			txt_sindensoft.Text = ConfigurationManager.MainConfig.sindenExe;
+			txt_mamehookersoft.Text = ConfigurationManager.MainConfig.mamehookerExe;
 
 			chk_gunA_Crosshair.Checked = ConfigurationManager.MainConfig.gunACrosshair;
 			chk_gunB_Crosshair.Checked = ConfigurationManager.MainConfig.gunBCrosshair;
@@ -140,6 +141,18 @@ namespace TeknoparrotAutoXinput
 
 			cmb_gunA_com.SelectedIndex = ConfigurationManager.MainConfig.gunAComPort;
 			cmb_gunB_com.SelectedIndex = ConfigurationManager.MainConfig.gunBComPort;
+
+			chk_gunA_Vjoy.Checked = ConfigurationManager.MainConfig.gunAvjoy;
+			chk_gunB_Vjoy.Checked = ConfigurationManager.MainConfig.gunBvjoy;
+
+			chk_gunA_4tiers.Checked = ConfigurationManager.MainConfig.gunA4tiers;
+			chk_gunB_4tiers.Checked = ConfigurationManager.MainConfig.gunB4tiers;
+
+			chk_gunA_domagerumble.Checked = ConfigurationManager.MainConfig.gunAdomagerumble;
+			chk_gunB_domagerumble.Checked = ConfigurationManager.MainConfig.gunBdomagerumble;
+
+			chk_reversePedal.Checked = ConfigurationManager.MainConfig.reversePedals;
+			chk_alwaysrunmamehooker.Checked = ConfigurationManager.MainConfig.alwaysRunMamehooker;
 
 
 			updateStooz();
@@ -251,38 +264,46 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			radio_gunA_sindenPump1.Enabled = false;
-			radio_gunA_sindenPump2.Enabled = false;
-			radio_gunA_sindenPump3.Enabled = false;
-			radio_gunB_sindenPump1.Enabled = false;
-			radio_gunB_sindenPump2.Enabled = false;
-			radio_gunB_sindenPump3.Enabled = false;
+			grp_gunB_sindenOptions.Enabled = false;
+			grp_gunA_sindenOptions.Enabled = false;
+			//radio_gunA_sindenPump1.Enabled = false;
+			//radio_gunA_sindenPump2.Enabled = false;
+			//radio_gunA_sindenPump3.Enabled = false;
+			//radio_gunB_sindenPump1.Enabled = false;
+			//radio_gunB_sindenPump2.Enabled = false;
+			//radio_gunB_sindenPump3.Enabled = false;
 			if (cmb_gunA_type.SelectedItem != null && cmb_gunA_type.SelectedItem.ToString() == "sinden")
 			{
-				radio_gunA_sindenPump1.Enabled = true;
-				radio_gunA_sindenPump2.Enabled = true;
-				radio_gunA_sindenPump3.Enabled = true;
+				//radio_gunA_sindenPump1.Enabled = true;
+				//radio_gunA_sindenPump2.Enabled = true;
+				//radio_gunA_sindenPump3.Enabled = true;
+				grp_gunA_sindenOptions.Enabled = true;
 			}
 			if (cmb_gunB_type.SelectedItem != null && cmb_gunB_type.SelectedItem.ToString() == "sinden")
 			{
-				radio_gunB_sindenPump1.Enabled = true;
-				radio_gunB_sindenPump2.Enabled = true;
-				radio_gunB_sindenPump3.Enabled = true;
+				//radio_gunB_sindenPump1.Enabled = true;
+				//radio_gunB_sindenPump2.Enabled = true;
+				//radio_gunB_sindenPump3.Enabled = true;
+				grp_gunB_sindenOptions.Enabled = true;
 			}
 
-			chk_gunA_AutoJoy.Enabled = false;
-			chk_gunB_AutoJoy.Enabled = false;
-			cmb_gunA_com.Enabled = false;
-			cmb_gunB_com.Enabled = false;
+			grp_gunA_gun4irOptions.Enabled = false;
+			grp_gunB_gun4irOptions.Enabled = false;
+			//chk_gunA_AutoJoy.Enabled = false;
+			//chk_gunB_AutoJoy.Enabled = false;
+			//cmb_gunA_com.Enabled = false;
+			//cmb_gunB_com.Enabled = false;
 			if (cmb_gunA_recoil.SelectedItem != null && cmb_gunA_recoil.SelectedItem.ToString() == "gun4ir")
 			{
-				cmb_gunA_com.Enabled = true;
-				chk_gunA_AutoJoy.Enabled = true;
+				//cmb_gunA_com.Enabled = true;
+				//chk_gunA_AutoJoy.Enabled = true;
+				grp_gunA_gun4irOptions.Enabled = true;
 			}
 			if (cmb_gunB_recoil.SelectedItem != null && cmb_gunB_recoil.SelectedItem.ToString() == "gun4ir")
 			{
-				chk_gunB_AutoJoy.Enabled = true;
-				cmb_gunB_com.Enabled = true;
+				//chk_gunB_AutoJoy.Enabled = true;
+				//cmb_gunB_com.Enabled = true;
+				grp_gunB_gun4irOptions.Enabled = true;
 			}
 			DoRedoGunRecoilCombo = false;
 		}
@@ -453,6 +474,8 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.gunARecoil = "<none>";
 			ConfigurationManager.MainConfig.gunAComPort = 0;
 			ConfigurationManager.MainConfig.gunAAutoJoy = false;
+			ConfigurationManager.MainConfig.gunA4tiers = false;
+			ConfigurationManager.MainConfig.gunAdomagerumble = false;
 			if (cmb_gunA_recoil.SelectedItem != null)
 			{
 				string recoilValue = cmb_gunA_recoil.SelectedItem.ToString();
@@ -461,12 +484,16 @@ namespace TeknoparrotAutoXinput
 				{
 					ConfigurationManager.MainConfig.gunAComPort = cmb_gunA_com.SelectedIndex;
 					ConfigurationManager.MainConfig.gunAAutoJoy = chk_gunA_AutoJoy.Checked;
+					ConfigurationManager.MainConfig.gunA4tiers = chk_gunA_4tiers.Checked;
+					ConfigurationManager.MainConfig.gunAdomagerumble = chk_gunA_domagerumble.Checked;
 				}
 			}
 
 			ConfigurationManager.MainConfig.gunBRecoil = "<none>";
 			ConfigurationManager.MainConfig.gunBComPort = 0;
 			ConfigurationManager.MainConfig.gunBAutoJoy = false;
+			ConfigurationManager.MainConfig.gunB4tiers = false;
+			ConfigurationManager.MainConfig.gunBdomagerumble = false;
 			if (cmb_gunB_recoil.SelectedItem != null)
 			{
 				string recoilValue = cmb_gunB_recoil.SelectedItem.ToString();
@@ -475,10 +502,36 @@ namespace TeknoparrotAutoXinput
 				{
 					ConfigurationManager.MainConfig.gunBComPort = cmb_gunB_com.SelectedIndex;
 					ConfigurationManager.MainConfig.gunBAutoJoy = chk_gunB_AutoJoy.Checked;
+					ConfigurationManager.MainConfig.gunB4tiers = chk_gunB_4tiers.Checked;
+					ConfigurationManager.MainConfig.gunBdomagerumble = chk_gunB_domagerumble.Checked;
 				}
 			}
 			ConfigurationManager.MainConfig.gunACrosshair = chk_gunA_Crosshair.Checked;
-			ConfigurationManager.MainConfig.gunACrosshair = chk_gunB_Crosshair.Checked;
+			ConfigurationManager.MainConfig.gunBCrosshair = chk_gunB_Crosshair.Checked;
+
+			ConfigurationManager.MainConfig.gunAvjoy = chk_gunA_Vjoy.Checked;
+			ConfigurationManager.MainConfig.gunBvjoy = chk_gunB_Vjoy.Checked;
+
+			ConfigurationManager.MainConfig.reasignPedals = chk_reasignGunPedal.Checked;
+			ConfigurationManager.MainConfig.reversePedals = chk_reversePedal.Checked;
+			if (!chk_reasignGunPedal.Checked) ConfigurationManager.MainConfig.reversePedals = false;
+
+
+			ConfigurationManager.MainConfig.gunASidenPump = 1;
+			if (ConfigurationManager.MainConfig.gunAType == "sinden")
+			{
+				if (radio_gunA_sindenPump1.Checked) ConfigurationManager.MainConfig.gunASidenPump = 1;
+				if (radio_gunA_sindenPump2.Checked) ConfigurationManager.MainConfig.gunASidenPump = 2;
+				if (radio_gunA_sindenPump3.Checked) ConfigurationManager.MainConfig.gunASidenPump = 3;
+			}
+			ConfigurationManager.MainConfig.gunBSidenPump = 1;
+			if (ConfigurationManager.MainConfig.gunBType == "sinden")
+			{
+				if (radio_gunB_sindenPump1.Checked) ConfigurationManager.MainConfig.gunBSidenPump = 1;
+				if (radio_gunB_sindenPump2.Checked) ConfigurationManager.MainConfig.gunBSidenPump = 2;
+				if (radio_gunB_sindenPump3.Checked) ConfigurationManager.MainConfig.gunBSidenPump = 3;
+			}
+
 
 			ConfigurationManager.SaveConfig();
 		}
@@ -875,7 +928,10 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			var frm = new VjoyControl(true);
+			bool vjoy_gunA = chk_gunA_Vjoy.Checked;
+			bool vjoy_gunB = chk_gunB_Vjoy.Checked;
+
+			var frm = new VjoyControl(true, "", null, vjoy_gunA, vjoy_gunB);
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
@@ -894,8 +950,14 @@ namespace TeknoparrotAutoXinput
 
 		private void chk_reasignGunPedal_CheckedChanged(object sender, EventArgs e)
 		{
-			ConfigurationManager.MainConfig.reasignPedals = chk_reasignGunPedal.Checked;
-			ConfigurationManager.SaveConfig();
+			if (chk_reversePedal.Checked)
+			{
+				chk_reversePedal.Enabled = false;
+			}
+			else
+			{
+				chk_reversePedal.Enabled = true;
+			}
 		}
 
 		private void groupBox9_Enter(object sender, EventArgs e)
@@ -937,22 +999,73 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_demulshooter_Click(object sender, EventArgs e)
 		{
-			using (var fbd = new FolderBrowserDialog())
-			{
-				DialogResult result = fbd.ShowDialog();
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "DemulShooter executable (DemulShooter.exe)|DemulShooter.exe"; // Filtre pour n'afficher que RTSS.exe
+			openFileDialog.Title = "Select DemulShooter.exe"; // Titre de la boîte de dialogue
 
-				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-				{
-					txt_tpfolder.Text = fbd.SelectedPath;
-					ConfigurationManager.MainConfig.TpFolder = fbd.SelectedPath;
-					ConfigurationManager.SaveConfig();
-				}
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				txt_demulshootersoft.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
+				ConfigurationManager.MainConfig.demulshooterExe = Path.GetFullPath(openFileDialog.FileName);
+				ConfigurationManager.SaveConfig();
 			}
 		}
 
 		private void chk_gunA_Crosshair_CheckedChanged(object sender, EventArgs e)
 		{
 
+		}
+
+		private void kryptonButton4_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "Lightgun executable (Lightgun.exe)|Lightgun.exe"; // Filtre pour n'afficher que RTSS.exe
+			openFileDialog.Title = "Select Lightgun.exe"; // Titre de la boîte de dialogue
+
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				txt_sindensoft.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
+				ConfigurationManager.MainConfig.sindenExe = Path.GetFullPath(openFileDialog.FileName);
+				ConfigurationManager.SaveConfig();
+			}
+		}
+
+		private void chk_reversePedal_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void chk_gunA_AutoJoy_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_rivatuner_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "RTSS exécutable (RTSS.exe)|RTSS.exe"; // Filtre pour n'afficher que RTSS.exe
+			openFileDialog.Title = "Sélectionnez le fichier RTSS.exe"; // Titre de la boîte de dialogue
+
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				txt_rivatunersoft.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
+				ConfigurationManager.MainConfig.rivatunerExe = Path.GetFullPath(openFileDialog.FileName);
+				ConfigurationManager.SaveConfig();
+			}
+		}
+
+		private void btn_mamehooker_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "mamehooker executable (mamehook.exe)|mamehook.exe"; // Filtre pour n'afficher que RTSS.exe
+			openFileDialog.Title = "Select mamehook.exe"; // Titre de la boîte de dialogue
+
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				txt_mamehookersoft.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
+				ConfigurationManager.MainConfig.mamehookerExe = Path.GetFullPath(openFileDialog.FileName);
+				ConfigurationManager.SaveConfig();
+			}
 		}
 	}
 }

@@ -97,11 +97,11 @@ namespace TeknoparrotAutoXinput
 		public int gunASidenPump { get; set; } = 1;
 		public int gunBSidenPump { get; set; } = 1;
 
-		public string demulshooterFolder { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "demulshooter");
+		public string demulshooterExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "demulshooter", "DemulShooter.exe");
 
-		public string sindenFolder {  get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "sinden");
+		public string sindenExe {  get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "sinden", "Lightgun.exe");
 
-		public string mamehookerFolder { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "mamehooker");
+		public string mamehookerExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "mamehooker", "mamehook.exe");
 
 		public string sindenExtraCmd { get; set; } = "";
 		public bool gunAAutoJoy { get; set; } = false;
@@ -110,6 +110,19 @@ namespace TeknoparrotAutoXinput
 		public bool gunACrosshair { get; set; } = false;
 		public bool gunBCrosshair { get; set; } = false;
 
+		public bool gunA4tiers { get; set; } = false;
+		public bool gunB4tiers { get; set; } = false;
+
+		public bool gunAdomagerumble { get; set; } = false;
+		public bool gunBdomagerumble { get; set; } = false;
+
+		public bool gunAvjoy { get; set; } = false;
+		public bool gunBvjoy { get; set; } = false;
+
+		public bool reversePedals { get; set; } = false;
+		public bool alwaysRunMamehooker { get; set; } = false;
+
+		public string rivatunerExe { get; set; } = "";
 
 		public Configuration()
 		{
@@ -178,14 +191,23 @@ namespace TeknoparrotAutoXinput
 				this.gunBComPort = DeserializeData.gunBComPort;
 				this.gunASidenPump = DeserializeData.gunASidenPump;
 				this.gunBSidenPump = DeserializeData.gunBSidenPump;
-				this.demulshooterFolder = DeserializeData.demulshooterFolder;
-				this.sindenFolder = DeserializeData.sindenFolder;
-				this.mamehookerFolder = DeserializeData.mamehookerFolder;
+				this.demulshooterExe = DeserializeData.demulshooterExe;
+				this.sindenExe = DeserializeData.sindenExe;
+				this.mamehookerExe = DeserializeData.mamehookerExe;
 				this.sindenExtraCmd = DeserializeData.sindenExtraCmd;
 				this.gunAAutoJoy = DeserializeData.gunAAutoJoy;
 				this.gunBAutoJoy = DeserializeData.gunBAutoJoy;
 				this.gunACrosshair = DeserializeData.gunACrosshair;
 				this.gunBCrosshair = DeserializeData.gunBCrosshair;
+				this.gunA4tiers = DeserializeData.gunA4tiers;
+				this.gunB4tiers = DeserializeData.gunB4tiers;
+				this.gunAdomagerumble = DeserializeData.gunAdomagerumble;
+				this.gunBdomagerumble = DeserializeData.gunBdomagerumble;
+				this.gunAvjoy = DeserializeData.gunAvjoy;
+				this.gunBvjoy = DeserializeData.gunBvjoy;
+				this.reversePedals = DeserializeData.reversePedals;
+				this.alwaysRunMamehooker = DeserializeData.alwaysRunMamehooker;
+				this.rivatunerExe = DeserializeData.rivatunerExe;
 
 			}
 			catch (Exception ex)

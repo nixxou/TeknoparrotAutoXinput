@@ -96,6 +96,8 @@ namespace TeknoparrotAutoXinput
 
 		public static Dictionary<string, string> GameInfo = new Dictionary<string, string>();
 
+		public static bool vjoy_gunA = false;
+		public static bool vjoy_gunB = false;
 
 		/// <summary>
 		///  The main entry point for the application.
@@ -109,7 +111,7 @@ namespace TeknoparrotAutoXinput
 			//Demulshooter run as admin
 			if (args.Length == 1 && args.First() == "--demulshooter")
 			{
-				DemulshooterManager.SetPath(ConfigurationManager.MainConfig.demulshooterFolder);
+				DemulshooterManager.SetPath(ConfigurationManager.MainConfig.demulshooterExe);
 				if (DemulshooterManager.ValidPath)
 				{
 					DemulshooterManager.ReadConfig();
@@ -168,10 +170,82 @@ namespace TeknoparrotAutoXinput
 				return;
 			}
 
+			//rivatuner run as admin
+			if (args.Length == 1 && args.First() == "--rivatuner")
+			{
+				string rivaTunerExe = ConfigurationManager.MainConfig.rivatunerExe;
+				string rivaTunerIniFile = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "rivatuner.ini");
+
+				if (File.Exists(rivaTunerExe) && File.Exists(rivaTunerIniFile))
+				{
+					int pid = 0;
+					try
+					{
+						rivaTunerIniFile = Path.GetFullPath(rivaTunerIniFile);
+						IniFile ini = new IniFile(rivaTunerIniFile);
+						int.TryParse(ini.Read("ParentProcess"), out pid);
+					}
+					catch
+					{
+						return;
+					}
+					if (pid <= 0) return;
+
+					ProcessStartInfo psi = new ProcessStartInfo
+					{
+						FileName = "taskkill",
+						Arguments = $"/F /IM RTSS.exe",
+						CreateNoWindow = true,
+						UseShellExecute = false
+					};
+					Process.Start(psi);
+					Thread.Sleep(3000);
+					ProcessStartInfo psi2 = new ProcessStartInfo
+					{
+						FileName = "taskkill",
+						Arguments = $"/F /IM RTSS.exe",
+						CreateNoWindow = true,
+						UseShellExecute = false
+					};
+					Process.Start(psi2);
+
+					Process processParent = Process.GetProcessById(pid);
+					if (processParent != null)
+					{
+						Thread monitoringThread = new Thread(() =>
+						{
+							// Attendre que le processus associé au PID se termine
+							processParent.WaitForExit();
+
+							Process.Start(psi);
+							Thread.Sleep(3000);
+							Process.Start(psi2);
+							Thread.Sleep(100);
+							Utils.KillProcessById(Process.GetCurrentProcess().Id);
+						});
+						monitoringThread.Start();
+					}
+					Thread.Sleep(1000);
+
+
+					string exePath = rivaTunerExe;
+					string exeDir = Path.GetDirectoryName(exePath);
+					Process process = new Process();
+					process.StartInfo.FileName = exePath;
+					process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput -nocrosshair";
+					process.StartInfo.WorkingDirectory = exeDir;
+					process.StartInfo.UseShellExecute = true;
+					process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
+					process.StartInfo.Verb = "runas";
+					process.Start();
+					process.WaitForExit();
+				}
+				return;
+			}
+
 			//RegisterTask As admin
 			if (args.Length > 2 && args.First() == "--registerTask")
 			{
-				MessageBox.Show("oco");
 				var filteredArgs = Utils.ArgsWithoutFirstElement(args);
 				var taskExe = filteredArgs[0];
 				var taskArguments = Utils.ArgsToCommandLine(Utils.ArgsWithoutFirstElement(filteredArgs));
@@ -182,6 +256,18 @@ namespace TeknoparrotAutoXinput
 			//Vjoy
 			if (args.Length >= 2 && args.First() == "--runvjoy")
 			{
+				string gunOption = args[1];
+				bool enableGunA = false;
+				bool enableGunB = false;
+
+				if (gunOption == "gunA") enableGunA = true;
+				if (gunOption == "gunB") enableGunB = true;
+				if(gunOption == "all")
+				{
+					enableGunA = true;
+					enableGunB = true;
+				}
+
 				ConfigurationManager.LoadConfig();
 				string xmlFile = args.Last();
 				if (xmlFile.ToLower().EndsWith(".xml") && File.Exists(xmlFile))
@@ -194,7 +280,7 @@ namespace TeknoparrotAutoXinput
 					if (File.Exists(optionFile))
 					{
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
-						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt,gameOptions);
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB);
 						Application.Run(frm);
 					}
 				}
@@ -229,7 +315,7 @@ namespace TeknoparrotAutoXinput
 			arcadeXinputData = ConfigurationManager.MainConfig.arcadeXinputData;
 			gamepadXinputData = ConfigurationManager.MainConfig.gamepadXinputData;
 
-			DemulshooterManager.SetPath(ConfigurationManager.MainConfig.demulshooterFolder);
+			DemulshooterManager.SetPath(ConfigurationManager.MainConfig.demulshooterExe);
 
 			if (args.Length == 0)
 			{
@@ -841,7 +927,31 @@ namespace TeknoparrotAutoXinput
 						//string vjoyGuid = "";
 						if(gameOptions.indexvjoy != -1) vjoyIndex = gameOptions.indexvjoy;
 
-						if (haveLightgun && vjoyIndex > 0)
+						if(vjoyIndex > 0)
+						{
+							useVjoy = true;
+							vjoy_gunA = ConfigurationManager.MainConfig.gunAvjoy;
+							if(gameOptions.gunA_useVjoy > 0)
+							{
+								if (gameOptions.gunA_useVjoy == 1) vjoy_gunA = false;
+								if (gameOptions.gunA_useVjoy == 2) vjoy_gunA = true;
+							}
+							vjoy_gunB = ConfigurationManager.MainConfig.gunBvjoy;
+							if (gameOptions.gunB_useVjoy > 0)
+							{
+								if (gameOptions.gunB_useVjoy == 1) vjoy_gunB = false;
+								if (gameOptions.gunB_useVjoy == 2) vjoy_gunB = true;
+							}
+							if (!vjoy_gunA && !vjoy_gunB) useVjoy = false; 
+						}
+
+						Utils.LogMessage($"vjoy Index = {vjoyIndex}");
+						Utils.LogMessage($"vjoy gunA = {vjoy_gunA}");
+						Utils.LogMessage($"vjoy gunB = {vjoy_gunB}");
+						Utils.LogMessage($"vjoy use = {useVjoy}");
+
+
+						if (haveLightgun && useVjoy)
 						{
 							try
 							{
@@ -896,7 +1006,8 @@ namespace TeknoparrotAutoXinput
 
 							if(VjoyGuid != "")
 							{
-								if (dinputLightgunAFound)
+								Utils.LogMessage($"vjoy found ! = {VjoyGuid}");
+								if (dinputLightgunAFound && vjoy_gunA)
 								{
 									if (bindingDinputLightGunA.ContainsKey("LightgunX"))
 									{
@@ -920,7 +1031,7 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 
-								if (dinputLightgunBFound)
+								if (dinputLightgunBFound && vjoy_gunB)
 								{
 									if (bindingDinputLightGunB.ContainsKey("LightgunX"))
 									{
@@ -943,6 +1054,10 @@ namespace TeknoparrotAutoXinput
 										bindingDinputLightGunB["LightgunY"].JoystickGuid = new Guid(VjoyGuid);
 									}
 								}
+							}
+							else
+							{
+								Utils.LogMessage($"vjoy not found !");
 							}
 						}
 
@@ -1502,7 +1617,6 @@ namespace TeknoparrotAutoXinput
 							}
 							if (haveGamepad)
 							{
-								MessageBox.Show("ici");
 								Utils.LogMessage($"Assign Gamepad");
 								string configname = "gamepad";
 								if (usealtgamepad) configname = "gamepadalt";
@@ -2919,13 +3033,46 @@ namespace TeknoparrotAutoXinput
 
 						if(useDinputLightGun && VjoyGuid != "")
 						{
+							string gunOptions = "";
+							if (vjoy_gunA) gunOptions = "gunA";
+							if (vjoy_gunB) gunOptions = "gunB";
+							if (vjoy_gunA && vjoy_gunB) gunOptions = "all";
+
 							Process vjoy_process = new Process();
 							vjoy_process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
 							vjoy_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-							vjoy_process.StartInfo.Arguments = "--runvjoy " + $"\"{xmlFile}\"";
+							vjoy_process.StartInfo.Arguments = $"--runvjoy " + gunOptions + $" \"{xmlFile}\"";
 							vjoy_process.StartInfo.UseShellExecute = true;
 							vjoy_process.Start();
 						}
+
+						bool useRivaTuner = gameOptions.runRivaTuner;
+						string rivaTunerExe = ConfigurationManager.MainConfig.rivatunerExe;
+						if (useRivaTuner && rivaTunerExe != "" && File.Exists(rivaTunerExe))
+						{
+							Utils.LogMessage($"Use Riva Tuner = {rivaTunerExe}");
+							string rivaTunerIniFile = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "rivatuner.ini");
+							rivaTunerIniFile = Path.GetFullPath(rivaTunerIniFile);
+							IniFile ini = new IniFile(rivaTunerIniFile);
+							ini.Write("ParentProcess", Process.GetCurrentProcess().Id.ToString());
+							string selfExe = Process.GetCurrentProcess().MainModule.FileName;
+							if (!Utils.CheckTaskExist(selfExe, "--rivatuner"))
+							{
+								string exePath = selfExe;
+								string exeDir = Path.GetDirectoryName(exePath);
+								Process process = new Process();
+								process.StartInfo.FileName = selfExe;
+								process.StartInfo.Arguments = "--registerTask " + $"\"{selfExe}\" " + "--rivatuner";
+								process.StartInfo.WorkingDirectory = exeDir;
+								process.StartInfo.UseShellExecute = true;
+								process.StartInfo.Verb = "runas";
+								process.Start();
+								process.WaitForExit();
+							}
+							Utils.ExecuteTask(Utils.ExeToTaskName(selfExe, "--rivatuner"), -1);
+
+						}
+
 
 						string argumentTpExe = "--profile=\"" + finalConfig + "\"";
 						if (gameOptions.RunAsRoot && gameNeedAdmin)

@@ -55,6 +55,9 @@ namespace TeknoparrotAutoXinput
 
 		private IKeyboardMouseEvents _globalHook = null;
 
+		private bool _enableGunA = true;
+		private bool _enableGunB = true;
+
 		private bool _isDialog = false;
 		public string GunA_json = "";
 		public string GunB_json = "";
@@ -195,8 +198,10 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null)
+		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true)
 		{
+			_enableGunA = enableGunA;
+			_enableGunB = enableGunB;
 
 			_isDialog = isDialog;
 			_gameOptions = gameOptions;
@@ -250,16 +255,7 @@ namespace TeknoparrotAutoXinput
 				}
 				catch { }
 
-
-
-				
-
-
-
-
-
 			}
-			MessageBox.Show("xx");
 			if (game == "") lbl_profile.Text = "Global";
 			else lbl_profile.Text = game;
 
@@ -307,6 +303,10 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
+
+			if (!_enableGunA) GunAGuid = "";
+			if (!_enableGunB) GunBGuid = "";
+
 			if (!string.IsNullOrEmpty(GunAGuid) || !string.IsNullOrEmpty(GunBGuid))
 			{
 				DirectInput directInput = new DirectInput();
@@ -330,6 +330,10 @@ namespace TeknoparrotAutoXinput
 			}
 			lbl_gunA_connected.Text = _dinputLightgunAFound ? GunAGuid.ToString() : "Missing";
 			lbl_gunB_connected.Text = _dinputLightgunBFound ? GunBGuid.ToString() : "Missing";
+
+			if (!_enableGunA) lbl_gunA_connected.Text = "Disabled";
+			if (!_enableGunB) lbl_gunB_connected.Text = "Disabled";
+
 			lbl_vjoy.Text = "Vjoy " + _indexVjoy;
 
 			int nbVjoyDevice = 0;
@@ -1426,6 +1430,9 @@ namespace TeknoparrotAutoXinput
 			{
 				if (_gameOptions != null)
 				{
+					if(grp_gunA.Enabled) _gameOptions.vjoySettingsGunA = GunA_json;
+					if(grp_gunB.Enabled) _gameOptions.vjoySettingsGunB = GunB_json;
+
 					string GameOptionsFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions");
 					string optionFile = Path.Combine(GameOptionsFolder, _game + ".json");
 					_gameOptions.Save(optionFile);
