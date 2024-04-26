@@ -1142,6 +1142,7 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 
+								bool reversePedal = false;
 								if (ConfigurationManager.MainConfig.reasignPedals)
 								{
 									string emptyPedal = "";
@@ -1156,12 +1157,29 @@ namespace TeknoparrotAutoXinput
 										emptyPedal = "LightgunPedalRight";
 										usedPedal = "LightgunPedalLeft";
 									}
-									if(emptyPedal != "" && !AlreadyAddedGunValue.ContainsKey("GunB_" + emptyPedal) && AlreadyAddedGunValue.ContainsKey("GunB_" + usedPedal))
+
+									if(ConfigurationManager.MainConfig.reversePedals && emptyPedal != "" && AlreadyAddedGunValue.ContainsKey("GunA_LightgunPedalRight") && !AlreadyAddedGunValue.ContainsKey("GunA_LightgunPedalLeft") && AlreadyAddedGunValue.ContainsKey("GunB_LightgunPedalRight") && !AlreadyAddedGunValue.ContainsKey("GunB_LightgunPedalLeft"))
 									{
-										string valueUsed = AlreadyAddedGunValue["GunB_" + usedPedal];
-										AlreadyAddedGunValue.Add("GunA_" + emptyPedal, valueUsed);
+										reversePedal = true;
+										emptyPedal = "LightgunPedalRight";
+										usedPedal = "LightgunPedalLeft";
+
+										var usedValue = AlreadyAddedGunValue["GunA_LightgunPedalRight"];
+										AlreadyAddedGunValue.Add("GunA_LightgunPedalLeft", usedValue);
+										AlreadyAddedGunValue["GunA_LightgunPedalRight"] = AlreadyAddedGunValue["GunB_LightgunPedalRight"];
+
+									}
+									else
+									{
+										if (emptyPedal != "" && !AlreadyAddedGunValue.ContainsKey("GunB_" + emptyPedal) && AlreadyAddedGunValue.ContainsKey("GunB_" + usedPedal))
+										{
+											string valueUsed = AlreadyAddedGunValue["GunB_" + usedPedal];
+											AlreadyAddedGunValue.Add("GunA_" + emptyPedal, valueUsed);
+										}
+
 									}
 								}
+
 
 								foreach(var alreadyAddedData in AlreadyAddedGunValue)
 								{
@@ -1247,6 +1265,7 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 						}
+						
 
 						//End LightGun Check
 
