@@ -188,6 +188,12 @@
 			btn_rivatuner = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel39 = new Krypton.Toolkit.KryptonLabel();
 			txt_rivatunersoft = new Krypton.Toolkit.KryptonTextBox();
+			tabControl1 = new TabControl();
+			tabGlobal = new TabPage();
+			tabGamepad = new TabPage();
+			tabWheel = new TabPage();
+			tabHotas = new TabPage();
+			tabLightgun = new TabPage();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -217,6 +223,12 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).BeginInit();
 			groupBox13.SuspendLayout();
+			tabControl1.SuspendLayout();
+			tabGlobal.SuspendLayout();
+			tabGamepad.SuspendLayout();
+			tabWheel.SuspendLayout();
+			tabHotas.SuspendLayout();
+			tabLightgun.SuspendLayout();
 			SuspendLayout();
 			// 
 			// chk_enableVirtualKeyboard
@@ -357,7 +369,7 @@
 			groupBox1.Controls.Add(chk_enableStoozZone_Gamepad);
 			groupBox1.Controls.Add(radio_useCustomStooz_Gamepad);
 			groupBox1.Controls.Add(radio_useDefaultStooze_Gamepad);
-			groupBox1.Location = new Point(787, 12);
+			groupBox1.Location = new Point(6, 11);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(775, 101);
 			groupBox1.TabIndex = 31;
@@ -442,7 +454,7 @@
 			groupBox2.Controls.Add(chk_enableStoozZone_Wheel);
 			groupBox2.Controls.Add(radio_useCustomStooz_Wheel);
 			groupBox2.Controls.Add(radio_useDefaultStooze_Wheel);
-			groupBox2.Location = new Point(787, 119);
+			groupBox2.Location = new Point(6, 7);
 			groupBox2.Name = "groupBox2";
 			groupBox2.Size = new Size(775, 169);
 			groupBox2.TabIndex = 35;
@@ -593,7 +605,7 @@
 			groupBox3.Controls.Add(kryptonLabel4);
 			groupBox3.Controls.Add(btn_testxinput);
 			groupBox3.Controls.Add(txt_xinputdata);
-			groupBox3.Location = new Point(8, 539);
+			groupBox3.Location = new Point(6, 118);
 			groupBox3.Name = "groupBox3";
 			groupBox3.Size = new Size(770, 325);
 			groupBox3.TabIndex = 36;
@@ -682,7 +694,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(1472, 990);
+			btn_Save.Location = new Point(729, 768);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 37;
@@ -702,7 +714,7 @@
 			groupBox4.Controls.Add(btn_selectTP);
 			groupBox4.Controls.Add(kryptonLabel11);
 			groupBox4.Controls.Add(txt_tpfolder);
-			groupBox4.Location = new Point(8, 6);
+			groupBox4.Location = new Point(13, 14);
 			groupBox4.Name = "groupBox4";
 			groupBox4.Size = new Size(770, 59);
 			groupBox4.TabIndex = 39;
@@ -777,7 +789,7 @@
 			groupBox5.Controls.Add(btn_selectLinkFolder);
 			groupBox5.Controls.Add(kryptonLabel13);
 			groupBox5.Controls.Add(txt_linksourcefolder);
-			groupBox5.Location = new Point(8, 71);
+			groupBox5.Location = new Point(13, 79);
 			groupBox5.Name = "groupBox5";
 			groupBox5.Size = new Size(770, 110);
 			groupBox5.TabIndex = 41;
@@ -850,7 +862,7 @@
 			groupBox6.Controls.Add(btn_selectLinkFolderExe);
 			groupBox6.Controls.Add(kryptonLabel14);
 			groupBox6.Controls.Add(txt_linksourcefolderexe);
-			groupBox6.Location = new Point(8, 192);
+			groupBox6.Location = new Point(13, 200);
 			groupBox6.Name = "groupBox6";
 			groupBox6.Size = new Size(770, 95);
 			groupBox6.TabIndex = 42;
@@ -906,7 +918,7 @@
 			groupBox7.Controls.Add(txt_monitorswitch);
 			groupBox7.Controls.Add(kryptonLabel12);
 			groupBox7.Controls.Add(btn_editMonitorSwitch);
-			groupBox7.Location = new Point(8, 293);
+			groupBox7.Location = new Point(13, 301);
 			groupBox7.Name = "groupBox7";
 			groupBox7.Size = new Size(770, 101);
 			groupBox7.TabIndex = 43;
@@ -946,7 +958,7 @@
 			groupBox8.Controls.Add(btn_ClearService2);
 			groupBox8.Controls.Add(txt_KeyService2);
 			groupBox8.Controls.Add(kryptonLabel3);
-			groupBox8.Location = new Point(8, 400);
+			groupBox8.Location = new Point(13, 408);
 			groupBox8.Name = "groupBox8";
 			groupBox8.Size = new Size(770, 133);
 			groupBox8.TabIndex = 44;
@@ -984,7 +996,7 @@
 			groupBox9.Controls.Add(chk_enableStoozZone_Hotas);
 			groupBox9.Controls.Add(radio_useCustomStooz_Hotas);
 			groupBox9.Controls.Add(radio_useDefaultStooze_Hotas);
-			groupBox9.Location = new Point(787, 294);
+			groupBox9.Location = new Point(13, 18);
 			groupBox9.Name = "groupBox9";
 			groupBox9.Size = new Size(775, 137);
 			groupBox9.TabIndex = 42;
@@ -1125,7 +1137,7 @@
 			groupBox10.Controls.Add(cmb_vjoy);
 			groupBox10.Controls.Add(groupBox12);
 			groupBox10.Controls.Add(groupBox11);
-			groupBox10.Location = new Point(787, 442);
+			groupBox10.Location = new Point(15, 7);
 			groupBox10.Name = "groupBox10";
 			groupBox10.Size = new Size(775, 542);
 			groupBox10.TabIndex = 45;
@@ -1714,7 +1726,7 @@
 			groupBox13.Controls.Add(chk_showStartup);
 			groupBox13.Controls.Add(chk_enableDebug);
 			groupBox13.Controls.Add(btn_checkConfig);
-			groupBox13.Location = new Point(8, 870);
+			groupBox13.Location = new Point(13, 547);
 			groupBox13.Name = "groupBox13";
 			groupBox13.Size = new Size(770, 135);
 			groupBox13.TabIndex = 46;
@@ -1754,23 +1766,84 @@
 			txt_rivatunersoft.Size = new Size(343, 23);
 			txt_rivatunersoft.TabIndex = 77;
 			// 
+			// tabControl1
+			// 
+			tabControl1.Controls.Add(tabGlobal);
+			tabControl1.Controls.Add(tabGamepad);
+			tabControl1.Controls.Add(tabWheel);
+			tabControl1.Controls.Add(tabHotas);
+			tabControl1.Controls.Add(tabLightgun);
+			tabControl1.Location = new Point(12, 12);
+			tabControl1.Name = "tabControl1";
+			tabControl1.SelectedIndex = 0;
+			tabControl1.Size = new Size(807, 750);
+			tabControl1.TabIndex = 49;
+			// 
+			// tabGlobal
+			// 
+			tabGlobal.Controls.Add(groupBox4);
+			tabGlobal.Controls.Add(groupBox13);
+			tabGlobal.Controls.Add(groupBox5);
+			tabGlobal.Controls.Add(groupBox8);
+			tabGlobal.Controls.Add(groupBox6);
+			tabGlobal.Controls.Add(groupBox7);
+			tabGlobal.Location = new Point(4, 24);
+			tabGlobal.Name = "tabGlobal";
+			tabGlobal.Size = new Size(799, 722);
+			tabGlobal.TabIndex = 4;
+			tabGlobal.Text = "Global Settings";
+			tabGlobal.UseVisualStyleBackColor = true;
+			// 
+			// tabGamepad
+			// 
+			tabGamepad.Controls.Add(groupBox1);
+			tabGamepad.Controls.Add(groupBox3);
+			tabGamepad.Location = new Point(4, 24);
+			tabGamepad.Name = "tabGamepad";
+			tabGamepad.Padding = new Padding(3);
+			tabGamepad.Size = new Size(799, 722);
+			tabGamepad.TabIndex = 0;
+			tabGamepad.Text = "Gamepad & Xinputs";
+			tabGamepad.UseVisualStyleBackColor = true;
+			// 
+			// tabWheel
+			// 
+			tabWheel.Controls.Add(groupBox2);
+			tabWheel.Location = new Point(4, 24);
+			tabWheel.Name = "tabWheel";
+			tabWheel.Padding = new Padding(3);
+			tabWheel.Size = new Size(799, 722);
+			tabWheel.TabIndex = 1;
+			tabWheel.Text = "Wheel settings";
+			tabWheel.UseVisualStyleBackColor = true;
+			// 
+			// tabHotas
+			// 
+			tabHotas.Controls.Add(groupBox9);
+			tabHotas.Location = new Point(4, 24);
+			tabHotas.Name = "tabHotas";
+			tabHotas.Size = new Size(799, 722);
+			tabHotas.TabIndex = 2;
+			tabHotas.Text = "Hotas Settings";
+			tabHotas.UseVisualStyleBackColor = true;
+			// 
+			// tabLightgun
+			// 
+			tabLightgun.Controls.Add(groupBox10);
+			tabLightgun.Location = new Point(4, 24);
+			tabLightgun.Name = "tabLightgun";
+			tabLightgun.Size = new Size(799, 722);
+			tabLightgun.TabIndex = 3;
+			tabLightgun.Text = "Lightgun settings";
+			tabLightgun.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1568, 1017);
-			Controls.Add(groupBox13);
-			Controls.Add(groupBox10);
-			Controls.Add(groupBox9);
-			Controls.Add(groupBox8);
-			Controls.Add(groupBox7);
-			Controls.Add(groupBox6);
-			Controls.Add(groupBox5);
-			Controls.Add(groupBox4);
+			ClientSize = new Size(822, 800);
+			Controls.Add(tabControl1);
 			Controls.Add(btn_Save);
-			Controls.Add(groupBox3);
-			Controls.Add(groupBox2);
-			Controls.Add(groupBox1);
 			Name = "Form1";
 			Text = "Teknoparrot Auto Xinput Configuration";
 			FormClosing += Form1_FormClosing;
@@ -1821,6 +1894,12 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).EndInit();
 			groupBox13.ResumeLayout(false);
 			groupBox13.PerformLayout();
+			tabControl1.ResumeLayout(false);
+			tabGlobal.ResumeLayout(false);
+			tabGamepad.ResumeLayout(false);
+			tabWheel.ResumeLayout(false);
+			tabHotas.ResumeLayout(false);
+			tabLightgun.ResumeLayout(false);
 			ResumeLayout(false);
 		}
 
@@ -1986,5 +2065,11 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_gunA_Vjoy;
 		private Krypton.Toolkit.KryptonButton btn_runSinden;
 		private Krypton.Toolkit.KryptonCheckBox chk_reversePedal;
+		private TabControl tabControl1;
+		private TabPage tabGamepad;
+		private TabPage tabWheel;
+		private TabPage tabGlobal;
+		private TabPage tabHotas;
+		private TabPage tabLightgun;
 	}
 }

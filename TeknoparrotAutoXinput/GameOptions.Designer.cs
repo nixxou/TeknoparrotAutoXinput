@@ -125,6 +125,14 @@
 			kryptonLabel28 = new Krypton.Toolkit.KryptonLabel();
 			cmb_vjoy = new Krypton.Toolkit.KryptonComboBox();
 			chk_runRivaTuner = new Krypton.Toolkit.KryptonCheckBox();
+			tabControl1 = new TabControl();
+			tabGamepad = new TabPage();
+			tabWheel = new TabPage();
+			tabHotas = new TabPage();
+			tabLightgun = new TabPage();
+			tabControl2 = new TabControl();
+			tabPage1 = new TabPage();
+			tabPage2 = new TabPage();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -152,6 +160,14 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_sindenPump).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_vjoy).BeginInit();
+			tabControl1.SuspendLayout();
+			tabGamepad.SuspendLayout();
+			tabWheel.SuspendLayout();
+			tabHotas.SuspendLayout();
+			tabLightgun.SuspendLayout();
+			tabControl2.SuspendLayout();
+			tabPage1.SuspendLayout();
+			tabPage2.SuspendLayout();
 			SuspendLayout();
 			// 
 			// btn_editMonitorSwitch
@@ -183,7 +199,7 @@
 			// 
 			groupBox2.Controls.Add(chk_group_StoozZone_Wheel);
 			groupBox2.Controls.Add(grp_StoozZone_Wheel);
-			groupBox2.Location = new Point(572, 68);
+			groupBox2.Location = new Point(6, 6);
 			groupBox2.Name = "groupBox2";
 			groupBox2.Size = new Size(531, 144);
 			groupBox2.TabIndex = 45;
@@ -272,7 +288,7 @@
 			// 
 			groupBox1.Controls.Add(chk_group_StoozZone_Gamepad);
 			groupBox1.Controls.Add(grp_StoozZone_Gamepad);
-			groupBox1.Location = new Point(23, 68);
+			groupBox1.Location = new Point(6, 6);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(531, 144);
 			groupBox1.TabIndex = 44;
@@ -364,7 +380,7 @@
 			grp_monitorDisposition.Controls.Add(txt_monitorswitch);
 			grp_monitorDisposition.Controls.Add(kryptonLabel12);
 			grp_monitorDisposition.Enabled = false;
-			grp_monitorDisposition.Location = new Point(1117, 164);
+			grp_monitorDisposition.Location = new Point(575, 161);
 			grp_monitorDisposition.Name = "grp_monitorDisposition";
 			grp_monitorDisposition.Size = new Size(584, 64);
 			grp_monitorDisposition.TabIndex = 46;
@@ -375,7 +391,7 @@
 			// 
 			chk_group_monitorDisposition.Checked = true;
 			chk_group_monitorDisposition.CheckState = CheckState.Checked;
-			chk_group_monitorDisposition.Location = new Point(1525, 154);
+			chk_group_monitorDisposition.Location = new Point(983, 151);
 			chk_group_monitorDisposition.Name = "chk_group_monitorDisposition";
 			chk_group_monitorDisposition.Size = new Size(130, 20);
 			chk_group_monitorDisposition.TabIndex = 48;
@@ -384,23 +400,23 @@
 			// 
 			// txt_ahkbefore
 			// 
-			txt_ahkbefore.Location = new Point(23, 515);
+			txt_ahkbefore.Location = new Point(11, 23);
 			txt_ahkbefore.Name = "txt_ahkbefore";
-			txt_ahkbefore.Size = new Size(531, 435);
+			txt_ahkbefore.Size = new Size(531, 310);
 			txt_ahkbefore.TabIndex = 49;
 			txt_ahkbefore.Text = "";
 			// 
 			// txt_ahkafter
 			// 
-			txt_ahkafter.Location = new Point(572, 515);
+			txt_ahkafter.Location = new Point(6, 23);
 			txt_ahkafter.Name = "txt_ahkafter";
-			txt_ahkafter.Size = new Size(531, 435);
+			txt_ahkafter.Size = new Size(531, 314);
 			txt_ahkafter.TabIndex = 50;
 			txt_ahkafter.Text = "";
 			// 
 			// kryptonLabel1
 			// 
-			kryptonLabel1.Location = new Point(23, 493);
+			kryptonLabel1.Location = new Point(11, 5);
 			kryptonLabel1.Name = "kryptonLabel1";
 			kryptonLabel1.Size = new Size(170, 20);
 			kryptonLabel1.TabIndex = 51;
@@ -408,7 +424,7 @@
 			// 
 			// kryptonLabel2
 			// 
-			kryptonLabel2.Location = new Point(572, 493);
+			kryptonLabel2.Location = new Point(3, 6);
 			kryptonLabel2.Name = "kryptonLabel2";
 			kryptonLabel2.Size = new Size(161, 20);
 			kryptonLabel2.TabIndex = 52;
@@ -434,7 +450,7 @@
 			grp_link.Controls.Add(lbl_LinkTo);
 			grp_link.Controls.Add(lbl_linkFrom);
 			grp_link.Controls.Add(chk_linkfiles);
-			grp_link.Location = new Point(1119, 234);
+			grp_link.Location = new Point(577, 231);
 			grp_link.Name = "grp_link";
 			grp_link.Size = new Size(582, 129);
 			grp_link.TabIndex = 54;
@@ -509,7 +525,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(1610, 925);
+			btn_Save.Location = new Point(1069, 691);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 56;
@@ -518,7 +534,7 @@
 			// 
 			// btn_Cancel
 			// 
-			btn_Cancel.Location = new Point(1497, 925);
+			btn_Cancel.Location = new Point(975, 691);
 			btn_Cancel.Name = "btn_Cancel";
 			btn_Cancel.Size = new Size(90, 25);
 			btn_Cancel.TabIndex = 55;
@@ -527,7 +543,7 @@
 			// 
 			// chk_runAsAdmin
 			// 
-			chk_runAsAdmin.Location = new Point(1117, 105);
+			chk_runAsAdmin.Location = new Point(575, 102);
 			chk_runAsAdmin.Name = "chk_runAsAdmin";
 			chk_runAsAdmin.Size = new Size(175, 20);
 			chk_runAsAdmin.TabIndex = 57;
@@ -537,7 +553,7 @@
 			// 
 			chk_WaitForExitBefore.Checked = true;
 			chk_WaitForExitBefore.CheckState = CheckState.Checked;
-			chk_WaitForExitBefore.Location = new Point(462, 493);
+			chk_WaitForExitBefore.Location = new Point(426, 5);
 			chk_WaitForExitBefore.Name = "chk_WaitForExitBefore";
 			chk_WaitForExitBefore.Size = new Size(92, 20);
 			chk_WaitForExitBefore.TabIndex = 58;
@@ -546,7 +562,7 @@
 			// chk_enableGearChange
 			// 
 			chk_enableGearChange.Enabled = false;
-			chk_enableGearChange.Location = new Point(1117, 79);
+			chk_enableGearChange.Location = new Point(575, 76);
 			chk_enableGearChange.Name = "chk_enableGearChange";
 			chk_enableGearChange.Size = new Size(306, 20);
 			chk_enableGearChange.TabIndex = 59;
@@ -576,7 +592,7 @@
 			groupBox3.Controls.Add(kryptonLabel4);
 			groupBox3.Controls.Add(btn_customTp);
 			groupBox3.Controls.Add(txt_customTp);
-			groupBox3.Location = new Point(1117, 504);
+			groupBox3.Location = new Point(575, 501);
 			groupBox3.Name = "groupBox3";
 			groupBox3.Size = new Size(583, 84);
 			groupBox3.TabIndex = 68;
@@ -604,7 +620,7 @@
 			// 
 			groupBox4.Controls.Add(chk_group_StoozZone_Hotas);
 			groupBox4.Controls.Add(grp_StoozZone_Hotas);
-			groupBox4.Location = new Point(23, 218);
+			groupBox4.Location = new Point(3, 3);
 			groupBox4.Name = "groupBox4";
 			groupBox4.Size = new Size(531, 181);
 			groupBox4.TabIndex = 48;
@@ -711,7 +727,7 @@
 			grp_linkExe.Controls.Add(kryptonLabel6);
 			grp_linkExe.Controls.Add(kryptonLabel7);
 			grp_linkExe.Controls.Add(chk_linkfilesExe);
-			grp_linkExe.Location = new Point(1117, 369);
+			grp_linkExe.Location = new Point(575, 366);
 			grp_linkExe.Name = "grp_linkExe";
 			grp_linkExe.Size = new Size(583, 129);
 			grp_linkExe.TabIndex = 65;
@@ -803,7 +819,7 @@
 			groupBox5.Controls.Add(btn_vjoyconfig);
 			groupBox5.Controls.Add(kryptonLabel28);
 			groupBox5.Controls.Add(cmb_vjoy);
-			groupBox5.Location = new Point(572, 218);
+			groupBox5.Location = new Point(3, 3);
 			groupBox5.Name = "groupBox5";
 			groupBox5.Size = new Size(531, 247);
 			groupBox5.TabIndex = 49;
@@ -1109,37 +1125,119 @@
 			// 
 			// chk_runRivaTuner
 			// 
-			chk_runRivaTuner.Location = new Point(1117, 131);
+			chk_runRivaTuner.Location = new Point(575, 128);
 			chk_runRivaTuner.Name = "chk_runRivaTuner";
 			chk_runRivaTuner.Size = new Size(204, 20);
 			chk_runRivaTuner.TabIndex = 69;
 			chk_runRivaTuner.Values.Text = "Run Riva Tuner to limit framerate";
 			// 
+			// tabControl1
+			// 
+			tabControl1.Controls.Add(tabGamepad);
+			tabControl1.Controls.Add(tabWheel);
+			tabControl1.Controls.Add(tabHotas);
+			tabControl1.Controls.Add(tabLightgun);
+			tabControl1.Location = new Point(12, 52);
+			tabControl1.Name = "tabControl1";
+			tabControl1.SelectedIndex = 0;
+			tabControl1.Size = new Size(557, 285);
+			tabControl1.TabIndex = 70;
+			// 
+			// tabGamepad
+			// 
+			tabGamepad.Controls.Add(groupBox1);
+			tabGamepad.Location = new Point(4, 24);
+			tabGamepad.Name = "tabGamepad";
+			tabGamepad.Padding = new Padding(3);
+			tabGamepad.Size = new Size(549, 257);
+			tabGamepad.TabIndex = 0;
+			tabGamepad.Text = "Gamepad Options";
+			tabGamepad.UseVisualStyleBackColor = true;
+			// 
+			// tabWheel
+			// 
+			tabWheel.Controls.Add(groupBox2);
+			tabWheel.Location = new Point(4, 24);
+			tabWheel.Name = "tabWheel";
+			tabWheel.Padding = new Padding(3);
+			tabWheel.Size = new Size(549, 257);
+			tabWheel.TabIndex = 1;
+			tabWheel.Text = "Wheel Options";
+			tabWheel.UseVisualStyleBackColor = true;
+			// 
+			// tabHotas
+			// 
+			tabHotas.Controls.Add(groupBox4);
+			tabHotas.Location = new Point(4, 24);
+			tabHotas.Name = "tabHotas";
+			tabHotas.Size = new Size(549, 257);
+			tabHotas.TabIndex = 2;
+			tabHotas.Text = "Hotas Options";
+			tabHotas.UseVisualStyleBackColor = true;
+			// 
+			// tabLightgun
+			// 
+			tabLightgun.Controls.Add(groupBox5);
+			tabLightgun.Location = new Point(4, 24);
+			tabLightgun.Name = "tabLightgun";
+			tabLightgun.Size = new Size(549, 257);
+			tabLightgun.TabIndex = 3;
+			tabLightgun.Text = "Lightgun Options";
+			tabLightgun.UseVisualStyleBackColor = true;
+			// 
+			// tabControl2
+			// 
+			tabControl2.Controls.Add(tabPage1);
+			tabControl2.Controls.Add(tabPage2);
+			tabControl2.Location = new Point(16, 343);
+			tabControl2.Name = "tabControl2";
+			tabControl2.SelectedIndex = 0;
+			tabControl2.Size = new Size(553, 373);
+			tabControl2.TabIndex = 71;
+			// 
+			// tabPage1
+			// 
+			tabPage1.Controls.Add(txt_ahkbefore);
+			tabPage1.Controls.Add(kryptonLabel1);
+			tabPage1.Controls.Add(chk_WaitForExitBefore);
+			tabPage1.Location = new Point(4, 24);
+			tabPage1.Name = "tabPage1";
+			tabPage1.Padding = new Padding(3);
+			tabPage1.Size = new Size(545, 345);
+			tabPage1.TabIndex = 0;
+			tabPage1.Text = "AHK Before";
+			tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// tabPage2
+			// 
+			tabPage2.Controls.Add(kryptonLabel2);
+			tabPage2.Controls.Add(txt_ahkafter);
+			tabPage2.Location = new Point(4, 24);
+			tabPage2.Name = "tabPage2";
+			tabPage2.Padding = new Padding(3);
+			tabPage2.Size = new Size(545, 345);
+			tabPage2.TabIndex = 1;
+			tabPage2.Text = "AHK After";
+			tabPage2.UseVisualStyleBackColor = true;
+			// 
 			// GameOptions
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1713, 962);
+			ClientSize = new Size(1168, 725);
+			Controls.Add(tabControl2);
+			Controls.Add(tabControl1);
 			Controls.Add(chk_runRivaTuner);
-			Controls.Add(groupBox5);
 			Controls.Add(grp_linkExe);
-			Controls.Add(groupBox4);
 			Controls.Add(groupBox3);
 			Controls.Add(chk_enableGearChange);
-			Controls.Add(chk_WaitForExitBefore);
 			Controls.Add(chk_runAsAdmin);
 			Controls.Add(btn_Save);
 			Controls.Add(btn_Cancel);
 			Controls.Add(grp_link);
 			Controls.Add(lbl_Titre);
-			Controls.Add(kryptonLabel2);
-			Controls.Add(kryptonLabel1);
-			Controls.Add(txt_ahkafter);
-			Controls.Add(txt_ahkbefore);
 			Controls.Add(chk_group_monitorDisposition);
 			Controls.Add(grp_monitorDisposition);
-			Controls.Add(groupBox2);
-			Controls.Add(groupBox1);
 			Name = "GameOptions";
 			Text = "GameOptions";
 			Load += GameOptions_Load;
@@ -1183,6 +1281,16 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_sindenPump).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_vjoy).EndInit();
+			tabControl1.ResumeLayout(false);
+			tabGamepad.ResumeLayout(false);
+			tabWheel.ResumeLayout(false);
+			tabHotas.ResumeLayout(false);
+			tabLightgun.ResumeLayout(false);
+			tabControl2.ResumeLayout(false);
+			tabPage1.ResumeLayout(false);
+			tabPage1.PerformLayout();
+			tabPage2.ResumeLayout(false);
+			tabPage2.PerformLayout();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -1286,5 +1394,13 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_runRivaTuner;
 		private Krypton.Toolkit.KryptonComboBox cmb_gunB_4tiers;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel18;
+		private TabControl tabControl1;
+		private TabPage tabGamepad;
+		private TabPage tabWheel;
+		private TabPage tabHotas;
+		private TabPage tabLightgun;
+		private TabControl tabControl2;
+		private TabPage tabPage1;
+		private TabPage tabPage2;
 	}
 }

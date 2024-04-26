@@ -54,6 +54,35 @@ namespace TeknoparrotAutoXinput
 
 			if (ShifterHack.supportedGames.ContainsKey(Path.GetFileNameWithoutExtension(GameData.UserConfigFile))) chk_enableGearChange.Enabled = true;
 
+			List<string> typeConfig = new List<string>();
+			typeConfig.Add("gamepad");
+			typeConfig.Add("gamepadalt");
+			typeConfig.Add("arcade");
+			typeConfig.Add("wheel");
+			typeConfig.Add("hotas");
+			typeConfig.Add("lightgun");
+			string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+			foreach (var type in typeConfig)
+			{
+				var configPath = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + "." + type + ".txt");
+				if (File.Exists(configPath))
+				{
+					if (type == "wheel")
+					{
+						tabControl1.SelectedIndex = 1;
+					}
+					if (type == "hotas")
+					{
+						tabControl1.SelectedIndex = 2;
+					}
+					if (type == "lightgun")
+					{
+						tabControl1.SelectedIndex = 3;
+					}
+				}
+			}
+			
+
 		}
 
 		private void LinkLoad()
