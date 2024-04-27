@@ -838,12 +838,19 @@ namespace TeknoparrotAutoXinput
 								}
 								if(LightgunA_Type == "wiimote")
 								{
-									current_wiimote++;
-									if(nb_wiimote < current_wiimote)
+									if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
 									{
-										Utils.LogMessage($"bindingDinputLightGunA = No Wiimote connected");
-										GunAGuid = "";
+										if (bindingDinputLightGunA["LightgunX"].DeviceName.ToLower().Contains("vjoy"))
+										{
+											current_wiimote++;
+											if (nb_wiimote < current_wiimote)
+											{
+												Utils.LogMessage($"bindingDinputLightGunA = No Wiimote connected");
+												GunAGuid = "";
+											}
+										}
 									}
+
 								}
 							}
 
@@ -862,11 +869,17 @@ namespace TeknoparrotAutoXinput
 								}
 								if (LightgunB_Type == "wiimote")
 								{
-									current_wiimote++;
-									if (nb_wiimote < current_wiimote)
+									if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
 									{
-										Utils.LogMessage($"bindingDinputLightGunB = No Wiimote connected");
-										GunBGuid = "";
+										if (bindingDinputLightGunB["LightgunX"].DeviceName.ToLower().Contains("vjoy"))
+										{
+											current_wiimote++;
+											if (nb_wiimote < current_wiimote)
+											{
+												Utils.LogMessage($"bindingDinputLightGunB = No Wiimote connected");
+												GunBGuid = "";
+											}
+										}
 									}
 								}
 							}

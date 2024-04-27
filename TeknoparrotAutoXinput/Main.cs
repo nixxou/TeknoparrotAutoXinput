@@ -253,6 +253,9 @@ namespace TeknoparrotAutoXinput
 			{
 				int nb_wiimote = 0;
 				int current_wiimote = 0;
+				bool wiimoteA_unplugged = false;
+				bool wiimoteB_unplugged = false;
+
 				if (LightgunA_Type == "wiimote" || LightgunB_Type == "wiimote")
 				{
 					WiimoteCollection mWC = new WiimoteCollection();
@@ -269,6 +272,7 @@ namespace TeknoparrotAutoXinput
 						nb_wiimote++;
 					}
 				}
+
 				if (LightgunA_Type == "sinden" || LightgunA_Type == "guncon1" || LightgunA_Type == "guncon2" || LightgunA_Type == "wiimote" || LightgunA_Type == "gamepad")
 				{
 					_dinputGunAName = $"Gun A [{LightgunA_Type}] ";
@@ -284,10 +288,13 @@ namespace TeknoparrotAutoXinput
 					}
 					if (LightgunA_Type == "wiimote")
 					{
-						current_wiimote++;
-						if (nb_wiimote < current_wiimote)
+						if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
 						{
-							gunAGuid = "";
+							if (bindingDinputLightGunA["LightgunX"].DeviceName.ToLower().Contains("vjoy"))
+							{
+								current_wiimote++;
+								if (nb_wiimote < current_wiimote) gunAGuid = "";
+							}
 						}
 					}
 				}
@@ -306,10 +313,13 @@ namespace TeknoparrotAutoXinput
 					}
 					if (LightgunB_Type == "wiimote")
 					{
-						current_wiimote++;
-						if (nb_wiimote < current_wiimote)
+						if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
 						{
-							gunAGuid = "";
+							if (bindingDinputLightGunB["LightgunX"].DeviceName.ToLower().Contains("vjoy"))
+							{
+								current_wiimote++;
+								if (nb_wiimote < current_wiimote) gunBGuid = "";
+							}
 						}
 					}
 				}

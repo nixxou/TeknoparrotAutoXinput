@@ -220,7 +220,8 @@ namespace TeknoparrotAutoXinput
 									Button = (int)key.Offset,
 									IsAxis = true,
 									IsAxisMinus = false,
-									JoystickGuid = deviceInstance.InstanceGuid
+									JoystickGuid = deviceInstance.InstanceGuid,
+									DeviceName = deviceInstance.ProductName
 								};
 							}
 							// Negative direction
