@@ -25,6 +25,7 @@ namespace TeknoparrotAutoXinput
 		public static bool UseTcp = false;
 		public static Thread MonitorDemulshooter;
 		private static bool _stopListening = false;
+		public static bool HideCrosshair = false;
 
 
 		public static bool gunARecoil = false;
@@ -91,6 +92,7 @@ namespace TeknoparrotAutoXinput
 			ini.Write("Launch_64bits", Is64bits ? "True" : "False");
 			ini.Write("OutputEnabled", "True");
 			ini.Write("ParentProcess", Process.GetCurrentProcess().Id.ToString());
+			ini.Write("HideCrosshair", HideCrosshair ? "True" : "False");
 			
 			ini.Write("WM_OutputsEnabled", UseMamehooker ? "True" : "False");
 			ini.Write("Net_OutputsEnabled", UseTcp ? "True" : "False");
@@ -109,6 +111,7 @@ namespace TeknoparrotAutoXinput
 				Target = ini.Read("Launch_Target");
 				Is64bits = ini.Read("Launch64bits") == "True" ? true : false;
 				ParentProcess = int.Parse(ini.Read("ParentProcess"));
+				HideCrosshair = ini.Read("Launch64bits") == "True" ? true : false;
 			}
 
 		}

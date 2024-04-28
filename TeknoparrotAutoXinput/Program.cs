@@ -100,6 +100,10 @@ namespace TeknoparrotAutoXinput
 		public static bool vjoy_gunA = false;
 		public static bool vjoy_gunB = false;
 
+		public static bool crosshairA = true;
+		public static bool crosshairB = true;
+		public static bool hideCrosshair = false;
+
 		/// <summary>
 		///  The main entry point for the application.
 		/// </summary>
@@ -161,7 +165,7 @@ namespace TeknoparrotAutoXinput
 					string exeDir = Path.GetDirectoryName(exePath);
 					Process process = new Process();
 					process.StartInfo.FileName = exePath;
-					process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput -nocrosshair";
+					process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 					process.StartInfo.WorkingDirectory = exeDir;
 					process.StartInfo.UseShellExecute = true;
 					process.StartInfo.Verb = "runas";
@@ -691,6 +695,35 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 
+					if (!string.IsNullOrEmpty(executableGame))
+					{
+						string dirCrosshair = Path.GetDirectoryName(executableGameDir);
+						string p1Crosshair = Path.Combine(dirCrosshair, "p1.png");
+						string p2Crosshair = Path.Combine(dirCrosshair, "p2.png");
+						string p1CrosshairBackup = Path.Combine(dirCrosshair, "p1.png.AutoXinputBackup");
+						string p2CrosshairBackup = Path.Combine(dirCrosshair, "p2.png.AutoXinputBackup");
+						if (File.Exists(p1CrosshairBackup))
+						{
+							try
+							{
+								Utils.LogMessage($"Restore Crosshair p1.png.AutoXinputBackup");
+								File.Move(p1CrosshairBackup, p1Crosshair, true);
+							}
+							catch
+							{}
+						}
+						if (File.Exists(p2CrosshairBackup))
+						{
+							try
+							{
+								Utils.LogMessage($"Restore Crosshair p2.png.AutoXinputBackup");
+								File.Move(p2CrosshairBackup, p2Crosshair, true);
+							}
+							catch
+							{ }
+						}
+					}
+
 					var shifterPath = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "shifter" + ".json");
 					if (File.Exists(shifterPath))
 					{
@@ -909,7 +942,30 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 							}
+
+							if (haveLightgun)
+							{
+								crosshairA = ConfigurationManager.MainConfig.gunACrosshair;
+								if (gameOptions.gunA_crosshair > 0)
+								{
+									if (gameOptions.gunA_crosshair == 1) crosshairA = true;
+									if (gameOptions.gunA_crosshair == 2) crosshairA = false;
+								}
+								crosshairB = ConfigurationManager.MainConfig.gunBCrosshair;
+								if (gameOptions.gunB_crosshair > 0)
+								{
+									if (gameOptions.gunB_crosshair == 1) crosshairB = true;
+									if (gameOptions.gunB_crosshair == 2) crosshairB = false;
+								}
+								if (!dinputLightgunAFound) crosshairA = false;
+								if (!dinputLightgunBFound) crosshairB = false;
+								hideCrosshair = (!crosshairA || !crosshairB);
+
+							}
 						}
+						Utils.LogMessage($"gunA_crosshair = {(crosshairA ? "True" : "False")}");
+						Utils.LogMessage($"gunB_crosshair = {(crosshairB ? "True" : "False")}");
+						Utils.LogMessage($"hideCrosshair = {(hideCrosshair ? "True" : "False")}");
 
 
 						if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunStart") && !bindingDinputLightGunA.ContainsKey("LightgunCoin"))
@@ -2561,6 +2617,91 @@ namespace TeknoparrotAutoXinput
 
 						if (useDinputLightGun)
 						{
+
+							List<string> FieldsToEnable = new List<string>();
+							List<string> FieldsToDisable = new List<string>();
+							if(!hideCrosshair && GameInfo.ContainsKey("crosshairON") && GameInfo["crosshairON"] != "")
+							{
+								foreach (var cFields in GameInfo["crosshairON"].Split('|'))
+								{
+									if (cFields.Trim() == "") continue;
+									if (cFields.StartsWith("!")) FieldsToDisable.Add(cFields.Substring(1).Trim());
+									else FieldsToEnable.Add(cFields.Trim());
+								}
+							}
+							if (hideCrosshair && GameInfo.ContainsKey("crosshairOFF") && GameInfo["crosshairOFF"] != "")
+							{
+								foreach (var cFields in GameInfo["crosshairOFF"].Split('|'))
+								{
+									if (cFields.Trim() == "") continue;
+									if (cFields.StartsWith("!")) FieldsToDisable.Add(cFields.Substring(1).Trim());
+									else FieldsToEnable.Add(cFields.Trim());
+								}
+							}
+							if (crosshairA && GameInfo.ContainsKey("crosshairA") && GameInfo["crosshairA"] != "")
+							{
+								foreach (var cFields in GameInfo["crosshairA"].Split('|'))
+								{
+									if (cFields.Trim() == "") continue;
+									if (cFields.StartsWith("!")) FieldsToDisable.Add(cFields.Substring(1).Trim());
+									else FieldsToEnable.Add(cFields.Trim());
+								}
+							}
+							if (!crosshairA && GameInfo.ContainsKey("crosshairA") && GameInfo["crosshairA"] != "")
+							{
+								foreach (var cFields in GameInfo["crosshairA"].Split('|'))
+								{
+									if (cFields.Trim() == "") continue;
+									if (cFields.StartsWith("!")) FieldsToEnable.Add(cFields.Substring(1).Trim());
+									else FieldsToDisable.Add(cFields.Trim());
+								}
+							}
+
+							if (crosshairB && GameInfo.ContainsKey("crosshairB") && GameInfo["crosshairB"] != "")
+							{
+								foreach (var cFields in GameInfo["crosshairB"].Split('|'))
+								{
+									if (cFields.Trim() == "") continue;
+									if (cFields.StartsWith("!")) FieldsToDisable.Add(cFields.Substring(1).Trim());
+									else FieldsToEnable.Add(cFields.Trim());
+								}
+							}
+							if (!crosshairB && GameInfo.ContainsKey("crosshairB") && GameInfo["crosshairB"] != "")
+							{
+								foreach (var cFields in GameInfo["crosshairB"].Split('|'))
+								{
+									if (cFields.Trim() == "") continue;
+									if (cFields.StartsWith("!")) FieldsToEnable.Add(cFields.Substring(1).Trim());
+									else FieldsToDisable.Add(cFields.Trim());
+								}
+							}
+							XmlNodeList fieldNodes = xmlDoc.SelectNodes("//FieldInformation");
+							foreach (XmlNode fieldNode in fieldNodes)
+							{
+								XmlNode categoryNameNode = fieldNode.SelectSingleNode("CategoryName");
+								XmlNode fieldNameNode = fieldNode.SelectSingleNode("FieldName");
+
+								if (categoryNameNode != null && categoryNameNode.InnerText == "General" &&
+									fieldNameNode != null && FieldsToEnable.Contains(fieldNameNode.InnerText))
+								{
+									XmlNode fieldValueNodeToEnable = fieldNode.SelectSingleNode("FieldValue");
+									if (fieldValueNodeToEnable != null)
+									{
+										fieldValueNodeToEnable.InnerText = "1";
+									}
+								}
+								if (categoryNameNode != null && categoryNameNode.InnerText == "General" &&
+									fieldNameNode != null && FieldsToDisable.Contains(fieldNameNode.InnerText))
+								{
+									XmlNode fieldValueNodeToDisable = fieldNode.SelectSingleNode("FieldValue");
+									if (fieldValueNodeToDisable != null)
+									{
+										fieldValueNodeToDisable.InnerText = "0";
+									}
+								}
+							}
+
+
 							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
 
 							foreach (XmlNode node in joystickButtonsNodes)
@@ -3074,11 +3215,69 @@ namespace TeknoparrotAutoXinput
 								DemulshooterManager.UseTcp = true;
 								DemulshooterManager.Rom = GameInfo["rom"];
 								DemulshooterManager.Target = GameInfo["target"];
+								DemulshooterManager.HideCrosshair = hideCrosshair;
 								DemulshooterManager.Start();
 
 							}
+						}
 
+						string p1CrosshairToRestore = "";
+						string p2CrosshairToRestore = "";
+						if (GameInfo.ContainsKey("crosshairPNG") && GameInfo["crosshairPNG"] == "True")
+						{
+							string sourcePngDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+							string targetPngDir = executableGameDir;
+							string p1Crosshair = Path.Combine(targetPngDir, "p1.png");
+							string p2Crosshair = Path.Combine(targetPngDir, "p2.png");
+							if (executableGameDir != "" && Directory.Exists(targetPngDir) && File.Exists(p1Crosshair) && File.Exists(p2Crosshair))
+							{
+								string p1CrosshairBackup = Path.Combine(targetPngDir, "p1.png.AutoXinputBackup");
+								string p2CrosshairBackup = Path.Combine(targetPngDir, "p2.png.AutoXinputBackup");
+								string sourcePngA = Path.Combine(sourcePngDir, "p1.png");
+								string sourcePngB = Path.Combine(sourcePngDir, "p2.png");
 
+								if (File.Exists(p1Crosshair))
+								{
+									try
+									{
+										File.Move(p1Crosshair, p1CrosshairBackup, true);
+										p1CrosshairToRestore = p1CrosshairBackup;
+									}
+									catch
+									{ }
+								}
+								if (File.Exists(p2Crosshair))
+								{
+									try
+									{
+										File.Move(p2Crosshair, p2CrosshairBackup, true);
+										p2CrosshairToRestore = p2CrosshairBackup;
+									}
+									catch
+									{ }
+								}
+
+								if (!crosshairA) sourcePngA = Path.Combine(sourcePngDir, "p1-empty.png");
+								if (!crosshairB) sourcePngB = Path.Combine(sourcePngDir, "p2-empty.png");
+								if (File.Exists(sourcePngA))
+								{
+									try
+									{
+										File.Move(sourcePngA, p1Crosshair, true);
+									}
+									catch
+									{ }
+								}
+								if (File.Exists(p2Crosshair))
+								{
+									try
+									{
+										File.Move(p2Crosshair, p2CrosshairBackup, true);
+									}
+									catch
+									{ }
+								}
+							}
 						}
 
 						if(gameOptions.AhkBefore.Trim() != "")
@@ -3184,6 +3383,32 @@ namespace TeknoparrotAutoXinput
 
 						ButtonToKeyManager.buttonToKey.StopMonitor();
 						DemulshooterManager.Stop();
+
+						if(p1CrosshairToRestore != "" || p2CrosshairToRestore != "")
+						{
+							string targetPngDir = executableGameDir;
+							string p1Crosshair = Path.Combine(targetPngDir, "p1.png");
+							string p2Crosshair = Path.Combine(targetPngDir, "p2.png");
+							if(p1CrosshairToRestore != "" && File.Exists(p1CrosshairToRestore))
+							{
+								try
+								{
+									File.Move(p1CrosshairToRestore, p1Crosshair, true);
+								}
+								catch
+								{ }
+							}
+							if (p2CrosshairToRestore != "" && File.Exists(p2CrosshairToRestore))
+							{
+								try
+								{
+									File.Move(p2CrosshairToRestore, p2Crosshair, true);
+								}
+								catch
+								{ }
+							}
+						}
+
 
 						if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{

@@ -804,14 +804,28 @@ namespace TeknoparrotAutoXinput
 							existingConfigClone.Add("lightgun-guncon1", imgFile + "-guncon1.jpg");
 							existingConfigClone.Add("lightgun-guncon2", imgFile + "-guncon2.jpg");
 
+							
+
 							if (_haveLightgun && _dinputLightgunAFound && existingConfigClone.ContainsKey("lightgun-" + _dinputGunAType))
 							{
+								lbl_player1.Text = "";
+								lbl_player2.Text = "";
+								lbl_player3.Text = "";
+								lbl_player4.Text = "";
+								lbl_player1.Text = $"Player 1 : lightgun ({_dinputGunAType})";
+
+
 								string newMainImgFile = existingConfigClone["lightgun-" + _dinputGunAType];
 								if (File.Exists(newMainImgFile))
 								{
 									Image originalImage = System.Drawing.Image.FromFile(newMainImgFile);
 									pictureBox_gameControls.Image = ResizeImageBest(originalImage, pictureBox_gameControls.Size);
 								}
+							}
+
+							if (_haveLightgun && _dinputLightgunBFound && existingConfigClone.ContainsKey("lightgun-" + _dinputGunBType))
+							{
+								lbl_player2.Text = $"Player 2 : lightgun ({_dinputGunBType})";
 							}
 
 						}
