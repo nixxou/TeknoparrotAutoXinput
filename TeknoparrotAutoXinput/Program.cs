@@ -11,6 +11,7 @@ using SDL2;
 using SharpDX;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
+using SharpDX.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing.Printing;
@@ -1087,7 +1088,15 @@ namespace TeknoparrotAutoXinput
 						{
 							if (dinputLightgunAFound)
 							{
-								LightgunConfigAFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + ".lightgun-" + LightgunA_Type + ".json");
+								string variante = "";
+								if (LightgunA_Type == "sinden")
+								{
+									int sindenPump = ConfigurationManager.MainConfig.gunASidenPump;
+									if (gameOptions.gunA_pump > 0) sindenPump = gameOptions.gunA_pump;
+									variante = sindenPump.ToString();
+								}
+
+								LightgunConfigAFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + ".lightgun-" + LightgunA_Type + variante + ".json");
 								Utils.LogMessage($"LightGunConfigA = {LightgunConfigAFile}");
 								if (File.Exists(LightgunConfigAFile))
 								{
@@ -1101,7 +1110,15 @@ namespace TeknoparrotAutoXinput
 							}
 							if (dinputLightgunBFound)
 							{
-								LightgunConfigBFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + ".lightgun-" + LightgunB_Type + ".json");
+								string variante = "";
+								if (LightgunB_Type == "sinden")
+								{
+									int sindenPump = ConfigurationManager.MainConfig.gunBSidenPump;
+									if (gameOptions.gunB_pump > 0) sindenPump = gameOptions.gunB_pump;
+									variante = sindenPump.ToString();
+								}
+
+								LightgunConfigBFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + ".lightgun-" + LightgunB_Type + variante + ".json");
 								Utils.LogMessage($"LightGunConfigB = {LightgunConfigBFile}");
 								if (File.Exists(LightgunConfigBFile))
 								{
@@ -2871,7 +2888,7 @@ namespace TeknoparrotAutoXinput
 						foreach (var ConfigPlayer in ConfigPerPlayer)
 						{
 							playernum++;
-							
+							string variante = "";
 							string upperType = char.ToUpper(ConfigPlayer.Value.Item1[0]) + ConfigPlayer.Value.Item1.Substring(1);
 
 							Startup.playerAttributionDesc += $"P{playernum}={upperType}\n";
@@ -2881,15 +2898,29 @@ namespace TeknoparrotAutoXinput
 							if (configname == "lightgun" && dinputLightgunAFound && playernum == 1)
 							{
 								configname = "lightgun-" + LightgunA_Type;
+
+								if (LightgunA_Type == "sinden")
+								{
+									int sindenPump = ConfigurationManager.MainConfig.gunASidenPump;
+									if (gameOptions.gunA_pump > 0) sindenPump = gameOptions.gunA_pump;
+									variante = sindenPump.ToString();
+								}
+
 							}
 							if (configname == "lightgun" && dinputLightgunBFound && playernum == 2)
 							{
 								configname = "lightgun-" + LightgunB_Type;
+								if (LightgunB_Type == "sinden")
+								{
+									int sindenPump = ConfigurationManager.MainConfig.gunBSidenPump;
+									if (gameOptions.gunB_pump > 0) sindenPump = gameOptions.gunB_pump;
+									variante = sindenPump.ToString();
+								}
 							}
-							
+
+							var imgPath = Path.Combine(basePath, "img", originalConfigFileNameWithoutExt + "." + configname + variante + ".jpg");
 
 
-							var imgPath = Path.Combine(basePath, "img", originalConfigFileNameWithoutExt + "." + configname + ".jpg");
 							Startup.imagePaths.Add(imgPath);
 						}
 						Startup.playerAttributionDesc.TrimEnd('\n');

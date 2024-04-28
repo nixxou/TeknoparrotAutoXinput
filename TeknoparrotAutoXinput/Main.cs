@@ -791,12 +791,18 @@ namespace TeknoparrotAutoXinput
 							}
 
 
+
 							string valueExistingConfig = DataGame.existingConfig["lightgun"].Substring(0, DataGame.existingConfig["lightgun"].Length - 4);
-							existingConfigClone.Add("lightgun-sinden", valueExistingConfig + "-sinden" + sindenPump + ".jpg");
-							existingConfigClone.Add("lightgun-wiimote", valueExistingConfig + "-wiimote.jpg");
-							existingConfigClone.Add("lightgun-gamepad", valueExistingConfig + "-gamepad.jpg");
-							existingConfigClone.Add("lightgun-guncon1", valueExistingConfig + "-guncon1.jpg");
-							existingConfigClone.Add("lightgun-guncon2", valueExistingConfig + "-guncon2.jpg");
+							string fileDirectory = Path.GetDirectoryName(valueExistingConfig);
+							fileDirectory = Path.GetDirectoryName(fileDirectory);
+							string imgFile = Path.Combine(fileDirectory, "img", Path.GetFileName(DataGame.existingConfig["lightgun"].Substring(0, DataGame.existingConfig["lightgun"].Length - 4)));
+
+
+							existingConfigClone.Add("lightgun-sinden", imgFile + "-sinden" + sindenPump + ".jpg");
+							existingConfigClone.Add("lightgun-wiimote", imgFile + "-wiimote.jpg");
+							existingConfigClone.Add("lightgun-gamepad", imgFile + "-gamepad.jpg");
+							existingConfigClone.Add("lightgun-guncon1", imgFile + "-guncon1.jpg");
+							existingConfigClone.Add("lightgun-guncon2", imgFile + "-guncon2.jpg");
 
 							if (_haveLightgun && _dinputLightgunAFound && existingConfigClone.ContainsKey("lightgun-" + _dinputGunAType))
 							{
