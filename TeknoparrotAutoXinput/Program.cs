@@ -69,6 +69,9 @@ namespace TeknoparrotAutoXinput
 
 		public static string GunAGuid = "";
 		public static string GunBGuid = "";
+		public static string GunAType = "";
+		public static string GunBType = "";
+
 		public static string VjoyGuid = "";
 
 		public static Guid? FirstKeyboardGuid = null;
@@ -887,6 +890,7 @@ namespace TeknoparrotAutoXinput
 
 								}
 							}
+							if (GunAGuid != "") GunAType = LightgunA_Type;
 
 							if (LightgunB_Type == "sinden" || LightgunB_Type == "guncon1" || LightgunB_Type == "guncon2" || LightgunB_Type == "wiimote" || LightgunB_Type == "gamepad")
 							{
@@ -917,6 +921,8 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 							}
+							if (GunBGuid != "") GunBType = LightgunB_Type;
+
 							if (!string.IsNullOrEmpty(GunAGuid) || !string.IsNullOrEmpty(GunBGuid))
 							{
 								DirectInput directInput = new DirectInput();
@@ -3150,9 +3156,9 @@ namespace TeknoparrotAutoXinput
 								}
 								if(RumbleType == "sinden-gun1" || RumbleType == "sinden-gun2")
 								{
-									RumbleType = "sinden";
 									if (RumbleType == "sinden-gun1") RumbleParameter = "RecoilSindenGunA";
 									if (RumbleType == "sinden-gun2") RumbleParameter = "RecoilSindenGunB";
+									RumbleType = "sinden";
 								}
 								if (RumbleType == "rumble")
 								{
@@ -3211,9 +3217,10 @@ namespace TeknoparrotAutoXinput
 								}
 								if (RumbleType == "sinden-gun1" || RumbleType == "sinden-gun2")
 								{
-									RumbleType = "sinden";
+									
 									if (RumbleType == "sinden-gun1") RumbleParameter = "RecoilSindenGunA";
 									if (RumbleType == "sinden-gun2") RumbleParameter = "RecoilSindenGunB";
+									RumbleType = "sinden";
 								}
 								if (RumbleType == "rumble")
 								{
@@ -3337,6 +3344,39 @@ namespace TeknoparrotAutoXinput
 							Task.Run(() => ShowFormAsync(cancellationTokenSource.Token));
 						}
 
+						int sinden_process_pid = -1;
+						if(useDinputLightGun && ((GunAGuid != "" && GunAType == "sinden") || (GunBGuid != "" && GunBType == "sinden")) )
+						{
+
+
+							if (File.Exists(ConfigurationManager.MainConfig.sindenExe))
+							{
+
+								ProcessStartInfo psi = new ProcessStartInfo
+								{
+									FileName = "taskkill",
+									Arguments = $"/F /IM Lightgun.exe",
+									CreateNoWindow = true,
+									UseShellExecute = false
+								};
+								Process.Start(psi);
+								Thread.Sleep(1500);
+
+								string argument_sinden = ConfigurationManager.MainConfig.sindenExtraCmd;
+								if (gameOptions.gun_useExtraSinden) argument_sinden = gameOptions.gun_ExtraSinden;
+
+								Process sinden_process = new Process();
+								sinden_process.StartInfo.FileName = ConfigurationManager.MainConfig.sindenExe;
+								sinden_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(ConfigurationManager.MainConfig.sindenExe);
+								sinden_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
+								sinden_process.StartInfo.Arguments = argument_sinden;
+								sinden_process.StartInfo.UseShellExecute = true;
+								sinden_process.Start();
+								sinden_process_pid = sinden_process.Id;
+							}
+
+						}
+
 						if(useDinputLightGun && VjoyGuid != "")
 						{
 							string gunOptions = "";
@@ -3427,6 +3467,11 @@ namespace TeknoparrotAutoXinput
 
 						ButtonToKeyManager.buttonToKey.StopMonitor();
 						DemulshooterManager.Stop();
+
+						if(sinden_process_pid > 0)
+						{
+							Utils.KillProcessById(sinden_process_pid);
+						}
 
 						if(p1CrosshairToRestore != "" || p2CrosshairToRestore != "")
 						{

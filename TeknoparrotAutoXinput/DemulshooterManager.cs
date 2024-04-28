@@ -230,6 +230,39 @@ namespace TeknoparrotAutoXinput
 			}
 			catch { }
 
+
+			if(gunAPipe != null)
+			{
+				try
+				{
+					gunAStream.Close();
+					gunAPipe.Close();
+
+				}
+				catch { }
+
+				gunAPipe.Dispose();
+				gunAPipe = null;
+				gunAStream.Dispose();
+				gunAStream = null;
+			}
+
+			if (gunBPipe != null)
+			{
+				try
+				{
+					gunBStream.Close();
+					gunBPipe.Close();
+
+				}
+				catch { }
+
+				gunBPipe.Dispose();
+				gunBPipe = null;
+				gunBStream.Dispose();
+				gunBStream = null;
+			}
+
 			Console.WriteLine("end Demulshooter");
 
 			if (!ValidPath) return;
@@ -240,6 +273,8 @@ namespace TeknoparrotAutoXinput
 			)
 		{
 
+
+			Utils.LogMessage($"SindenInit {rumbleTypeA} {rumbleParameterA}");
 			GunA4tiers = gunA4tiers;
 			GunAAutoJoy = gunAAutoJoy;
 			GunADamageRumble = gunADamageRumble;
@@ -475,7 +510,118 @@ namespace TeknoparrotAutoXinput
 
 		private static void Gunshot_Sinden(int gunIndex)
 		{
-			throw new NotImplementedException();
+			Utils.LogMessage("SindenGun Gunshot");
+			if(gunIndex == 1)
+			{
+				if (gunAPipe == null)
+				{
+					gunAPipe = new NamedPipeClientStream(".", gunAParameter, PipeDirection.Out);
+				}
+				if (gunAStream == null)
+				{
+					gunAStream = new StreamWriter(gunAPipe, Encoding.UTF8);
+				}
+				if (!gunAPipe.IsConnected)
+				{
+					try
+					{
+						gunAPipe.Connect();
+					}
+					catch (Exception ex)
+					{
+						try
+						{
+							gunAStream.Close();
+							gunAPipe.Close();
+
+						}
+						catch { }
+
+						gunAPipe.Dispose();
+						gunAPipe = null;
+						gunAStream.Dispose();
+						gunAStream = null;
+						return;
+					}
+				}
+				try
+				{
+					gunAStream.Write("1");
+					gunAStream.Flush();
+				}
+				catch (Exception ex)
+				{
+					try
+					{
+						gunAStream.Close();
+						gunAPipe.Close();
+					}
+					catch { }
+
+					gunAPipe.Dispose();
+					gunAPipe = null;
+					gunAStream.Dispose();
+					gunAStream = null;
+					return;
+				}
+			}
+			if(gunIndex == 2)
+			{
+				if (gunBPipe == null)
+				{
+					gunBPipe = new NamedPipeClientStream(".", gunBParameter, PipeDirection.Out);
+				}
+				if (gunBStream == null)
+				{
+					gunBStream = new StreamWriter(gunBPipe, Encoding.UTF8);
+				}
+				if (!gunBPipe.IsConnected)
+				{
+					try
+					{
+						gunBPipe.Connect();
+					}
+					catch (Exception ex)
+					{
+						try
+						{
+							gunBStream.Close();
+							gunBPipe.Close();
+
+						}
+						catch { }
+
+						gunBPipe.Dispose();
+						gunBPipe = null;
+						gunBStream.Dispose();
+						gunBStream = null;
+						return;
+					}
+				}
+				try
+				{
+					gunBStream.Write("1");
+					gunBStream.Flush();
+				}
+				catch (Exception ex)
+				{
+					try
+					{
+						gunBStream.Close();
+						gunBPipe.Close();
+					}
+					catch { }
+
+					gunBPipe.Dispose();
+					gunBPipe = null;
+					gunBStream.Dispose();
+					gunBStream = null;
+					return;
+				}
+
+			}
+
+
 		}
 
 

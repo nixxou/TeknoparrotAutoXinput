@@ -1151,6 +1151,7 @@
 			btn_runSinden.Size = new Size(90, 25);
 			btn_runSinden.TabIndex = 73;
 			btn_runSinden.Values.Text = "Run App";
+			btn_runSinden.Click += btn_runSinden_Click;
 			// 
 			// chk_alwaysrunmamehooker
 			// 

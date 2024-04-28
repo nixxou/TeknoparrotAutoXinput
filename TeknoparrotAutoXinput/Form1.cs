@@ -3,6 +3,7 @@ using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using SDL2;
 using SharpDX.DirectInput;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
@@ -1066,6 +1067,21 @@ namespace TeknoparrotAutoXinput
 				ConfigurationManager.MainConfig.mamehookerExe = Path.GetFullPath(openFileDialog.FileName);
 				ConfigurationManager.SaveConfig();
 			}
+		}
+
+		private void btn_runSinden_Click(object sender, EventArgs e)
+		{
+			if (File.Exists(txt_sindensoft.Text))
+			{
+				Process siden_process = new Process();
+				siden_process.StartInfo.FileName = txt_sindensoft.Text;
+				siden_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(txt_sindensoft.Text);
+				siden_process.StartInfo.Arguments = txt_sindenextra.Text;
+				siden_process.StartInfo.UseShellExecute = true;
+				siden_process.Start();
+
+			}
+
 		}
 	}
 }
