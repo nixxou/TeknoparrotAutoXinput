@@ -3,6 +3,7 @@ using Krypton.Toolkit;
 using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
 using SDL2;
+using SerialPortLib2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
 using System;
@@ -12,7 +13,10 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Pipes;
+using System.IO.Ports;
 using System.Linq;
+using System.Net.Sockets;
 using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -1397,12 +1401,80 @@ namespace TeknoparrotAutoXinput
 
 		private void button4_Click(object sender, EventArgs e)
 		{
+			string msg = "F1x2x2x";
+			var _serialPort = new SerialPortInput(false);
 
+			_serialPort.SetPort(@"COM28", 9600);
+			_serialPort.Connect();
+			byte[] bytes = Encoding.ASCII.GetBytes(msg);
+			_serialPort.SendMessage(bytes);
+			_serialPort.Disconnect();
+			/*
+			if (!_serialPort.IsConnected)
+			{
+				_serialPort.Connect();
+			}
+
+			_serialPort.SendMessage(bytes);
+			*/
 		}
 
 		private void button5_Click(object sender, EventArgs e)
 		{
-			var zzzzx = ButtonToKey.DSharpGuidToSDLGuid("f10a8650-e260-11ed-8001-444553540000");
+			NamedPipeClientStream sindengunA = null;
+			StreamWriter writer = null;
+			if (sindengunA == null)
+			{
+				sindengunA = new NamedPipeClientStream(".", "RecoilSindenGunA", PipeDirection.Out);
+			}
+			if (writer == null)
+			{
+				writer = new StreamWriter(sindengunA, Encoding.UTF8);
+			}
+
+			if (!sindengunA.IsConnected)
+			{
+				try
+				{
+					sindengunA.Connect();
+				}
+				catch (Exception ex)
+				{
+					try
+					{
+						writer.Close();
+						sindengunA.Close();
+
+					}
+					catch { }
+
+					sindengunA.Dispose();
+					sindengunA = null;
+					writer.Dispose();
+					writer = null;
+					return;
+				}
+			}
+			try
+			{
+				writer.Write("1");
+				writer.Flush();
+			}
+			catch (Exception ex)
+			{
+				try
+				{
+					writer.Close();
+					sindengunA.Close();
+				}
+				catch { }
+
+				sindengunA.Dispose();
+				sindengunA = null;
+				writer.Dispose();
+				writer = null;
+				return;
+			}
 		}
 
 		private void button6_Click(object sender, EventArgs e)

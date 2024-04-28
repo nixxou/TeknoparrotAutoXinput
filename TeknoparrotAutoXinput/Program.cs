@@ -3111,8 +3111,20 @@ namespace TeknoparrotAutoXinput
 							string RumbleTypeB = "<none>";
 							string RumbleParameterB = "";
 
+							bool gunAAutoJoy = false;
+							bool gunBAutoJoy = false;
+							bool gunADamageRumble = false;
+							bool gunBDamageRumble = false;
+							bool gunA4tiers = false;
+							bool gunB4tiers = false;
+
+
 							if (GunAGuid != "")
 							{
+								bool AutoJoy = false;
+								bool DamageRumble = false;
+								bool Fourtiers = false;
+
 								string RumbleType = ConfigurationManager.MainConfig.gunARecoil;
 								if (gameOptions.gunA_recoil == 1) RumbleType = "<none>";
 								if (gameOptions.gunA_recoil == 2) RumbleType = "mamehooker";
@@ -3124,6 +3136,15 @@ namespace TeknoparrotAutoXinput
 									if (comPort > 0)
 									{
 										RumbleParameter = "COM" + comPort.ToString();
+										if (ConfigurationManager.MainConfig.gunAAutoJoy) AutoJoy = true;
+										if (ConfigurationManager.MainConfig.gunAdomagerumble) DamageRumble = true;
+										if (ConfigurationManager.MainConfig.gunA4tiers) Fourtiers = true;
+										if(gameOptions.gunA_4tiers > 0)
+										{
+											if(gameOptions.gunA_4tiers == 1) Fourtiers = false;
+											if(gameOptions.gunA_4tiers == 2) Fourtiers = true;
+										}
+										//if (gameOptions.gun > 0) sindenPump = gameOptions.gunA_pump;
 									}
 									else RumbleType = "<none>";
 								}
@@ -3154,9 +3175,18 @@ namespace TeknoparrotAutoXinput
 								}
 								RumbleTypeA = RumbleType;
 								RumbleParameterA = RumbleParameter;
+
+								gunAAutoJoy = AutoJoy;
+								gunADamageRumble = DamageRumble;
+								gunA4tiers = Fourtiers;
+
 							}
 							if (GunBGuid != "")
 							{
+								bool AutoJoy = false;
+								bool DamageRumble = false;
+								bool Fourtiers = false;
+
 								string RumbleType = ConfigurationManager.MainConfig.gunBRecoil;
 								if (gameOptions.gunB_recoil == 1) RumbleType = "<none>";
 								if (gameOptions.gunB_recoil == 2) RumbleType = "mamehooker";
@@ -3168,6 +3198,14 @@ namespace TeknoparrotAutoXinput
 									if (comPort > 0)
 									{
 										RumbleParameter = "COM" + comPort.ToString();
+										if (ConfigurationManager.MainConfig.gunBAutoJoy) AutoJoy = true;
+										if (ConfigurationManager.MainConfig.gunBdomagerumble) DamageRumble = true;
+										if (ConfigurationManager.MainConfig.gunB4tiers) Fourtiers = true;
+										if (gameOptions.gunB_4tiers > 0)
+										{
+											if (gameOptions.gunB_4tiers == 1) Fourtiers = false;
+											if (gameOptions.gunB_4tiers == 2) Fourtiers = true;
+										}
 									}
 									else RumbleType = "<none>";
 								}
@@ -3201,14 +3239,20 @@ namespace TeknoparrotAutoXinput
 								{
 									RumbleType = "<none>";
 									RumbleParameter = "";
+									gunAAutoJoy = false;
+									gunADamageRumble = false;
+									gunA4tiers = false;
 								}
 								RumbleTypeB = RumbleType;
 								RumbleParameterB = RumbleParameter;
+								gunBAutoJoy = AutoJoy;
+								gunBDamageRumble = DamageRumble;
+								gunB4tiers = Fourtiers;
 							}
 
 							if(GameInfo.ContainsKey("target") && GameInfo.ContainsKey("rom"))
 							{
-								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB);
+								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers);
 								if(GameInfo.ContainsKey("64bits") && GameInfo["64bits"].ToLower() == "true") DemulshooterManager.Is64bits = true;
 								else DemulshooterManager.Is64bits = false;
 								DemulshooterManager.UseMamehooker = true;

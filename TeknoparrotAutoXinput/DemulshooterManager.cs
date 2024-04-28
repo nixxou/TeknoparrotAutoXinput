@@ -1,13 +1,17 @@
 ﻿using SDL2;
+using SerialPortLib2;
+using SerialPortLib2.Port;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.IO.Ports;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Interop;
 
 namespace TeknoparrotAutoXinput
 {
@@ -39,20 +43,31 @@ namespace TeknoparrotAutoXinput
 		public static string gunAParameter = "";
 		public static string gunBParameter = "";
 
+
+		public static bool GunA4tiers = false;
+		public static bool GunADamageRumble = false;
+		public static bool GunAAutoJoy = false;
+		public static bool GunB4tiers = false;
+		public static bool GunBDamageRumble = false;
+		public static bool GunBAutoJoy = false;
+
+
 		static object lockGunA = new object();
 		static object lockGunB = new object();
 		static bool isStartedGunA = false;
 		static bool isStartedGunB = false;
 
 
-		static SerialPort gunASerial;
+		//static SerialPort gunASerial;
+		static SerialPortInput gunASerial = null;
 		static NamedPipeClientStream gunAPipe;
 		static StreamWriter gunAStream;
 		static bool gunAjoyAttached = false;
 		static string GunASDLGuid = string.Empty;
 		static int GunASDLIndex = -1;
 
-		static SerialPort gunBSerial;
+		//static SerialPort gunBSerial;
+		static SerialPortInput gunBSerial = null;
 		static NamedPipeClientStream gunBPipe;
 		static StreamWriter gunBStream;
 		static bool gunBjoyAttached = false;
@@ -166,6 +181,9 @@ namespace TeknoparrotAutoXinput
 
 							if (dataReceived.Contains("P1_CtmRecoil = 1")) DoRecoil(1);
 							if (dataReceived.Contains("P2_CtmRecoil = 1")) DoRecoil(2);
+
+							if (dataReceived.Contains("P1_Damaged = 1")) DoRecoil(1,true);
+							if (dataReceived.Contains("P2_Damaged = 1")) DoRecoil(1,true);
 						}
 					}
 				}
@@ -178,11 +196,57 @@ namespace TeknoparrotAutoXinput
 		public static void Stop()
 		{
 			_stopListening = true;
+			Thread.Sleep(1000);
+			try
+			{
+				if (MonitorDemulshooter.IsAlive)
+				{
+					MonitorDemulshooter.Abort();
+				}
+			}
+			catch { }
+
+
+
+			try
+			{
+				if (gunASerial != null)
+				{
+					Release_Gun4ir(1);
+					if (gunASerial.IsConnected) gunASerial.Disconnect();
+					gunASerial = null;
+				}
+			}
+			catch { }
+
+			try
+			{
+				if (gunBSerial != null)
+				{
+					Release_Gun4ir(2);
+					if (gunBSerial.IsConnected) gunBSerial.Disconnect();
+					gunBSerial = null;
+				}
+			}
+			catch { }
+
+			Console.WriteLine("end Demulshooter");
+
 			if (!ValidPath) return;
 		}
 
-		public static void InitGuns(string rumbleTypeA, string rumbleParameterA, string rumbleTypeB, string rumbleParameterB)
+		public static void InitGuns(string rumbleTypeA, string rumbleParameterA, string rumbleTypeB, string rumbleParameterB,
+			bool gunAAutoJoy, bool gunADamageRumble, bool gunA4tiers, bool gunBAutoJoy, bool gunBDamageRumble, bool gunB4tiers
+			)
 		{
+
+			GunA4tiers = gunA4tiers;
+			GunAAutoJoy = gunAAutoJoy;
+			GunADamageRumble = gunADamageRumble;
+			GunB4tiers = gunB4tiers;
+			GunBAutoJoy = gunBAutoJoy;
+			GunBDamageRumble = gunBDamageRumble;
+
 			gunARecoil = false;
 			gunBRecoil = false;
 
@@ -191,6 +255,7 @@ namespace TeknoparrotAutoXinput
 				gunAGun4ir = true;
 				gunARecoil = true;
 				gunAParameter = rumbleParameterA;
+				Init_Gun4ir(1);
 			}
 
 			if (rumbleTypeA == "sinden" && rumbleParameterA != "")
@@ -212,6 +277,7 @@ namespace TeknoparrotAutoXinput
 				gunBGun4ir = true;
 				gunBRecoil = true;
 				gunBParameter = rumbleParameterB;
+				Init_Gun4ir(2);
 			}
 
 			if (rumbleTypeB == "sinden" && rumbleParameterB != "")
@@ -238,12 +304,18 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		public static void DoRecoil(int gunIndex)
+		public static void DoRecoil(int gunIndex, bool rumble = false)
 		{
 			if (gunIndex == 1 && gunARecoil)
 			{
 				Task.Run(() =>
 				{
+					if(rumble && gunARumble==false && (gunAGun4ir && GunADamageRumble)==false ) 
+					{
+						return;
+					}
+
+
 					lock (lockGunA)
 					{
 						if (isStartedGunA)
@@ -251,9 +323,9 @@ namespace TeknoparrotAutoXinput
 						isStartedGunA = true;
 					}
 
-					if (gunAGun4ir) Gunshot_Gun4ir(gunIndex);
+					if (gunAGun4ir) Gunshot_Gun4ir(gunIndex, rumble);
 					if (gunASinden) Gunshot_Sinden(gunIndex);
-					if (gunARumble) Gunshot_Rumble(gunIndex);
+					if (gunARumble) Gunshot_Rumble(gunIndex, rumble);
 
 					lock (lockGunB)
 					{
@@ -263,6 +335,10 @@ namespace TeknoparrotAutoXinput
 			}
 			if (gunIndex == 2 && gunBRecoil)
 			{
+				if (rumble && gunBRumble == false && (gunBGun4ir && GunBDamageRumble) == false)
+				{
+					return;
+				}
 				Task.Run(() =>
 				{
 					lock (lockGunB)
@@ -272,9 +348,9 @@ namespace TeknoparrotAutoXinput
 						isStartedGunB = true;
 					}
 
-					if (gunBGun4ir) Gunshot_Gun4ir(gunIndex);
+					if (gunBGun4ir) Gunshot_Gun4ir(gunIndex, rumble);
 					if (gunBSinden) Gunshot_Sinden(gunIndex);
-					if (gunBRumble) Gunshot_Rumble(gunIndex);
+					if (gunBRumble) Gunshot_Rumble(gunIndex, rumble);
 
 					lock (lockGunB)
 					{
@@ -284,7 +360,7 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		private static void Gunshot_Rumble(int gunIndex)
+		private static void Gunshot_Rumble(int gunIndex, bool rumble = false)
 		{
 			string GunSDLGuid = "";
 			bool joyAttached = false;
@@ -366,7 +442,10 @@ namespace TeknoparrotAutoXinput
 					{
 						IntPtr currentJoy = SDL.SDL_GameControllerOpen(GunASDLIndex);
 						SDL.SDL_JoystickRumble(SDL.SDL_GameControllerGetJoystick(currentJoy), 0xFFFF, 0xFFFF, 100);
-						Thread.Sleep(120);
+						
+						if (rumble) Thread.Sleep(300);
+						else Thread.Sleep(120);
+
 						SDL.SDL_JoystickRumble(SDL.SDL_GameControllerGetJoystick(currentJoy), 0, 0, 0);
 						SDL.SDL_GameControllerClose(currentJoy);
 					}
@@ -381,7 +460,10 @@ namespace TeknoparrotAutoXinput
 					{
 						IntPtr currentJoy = SDL.SDL_GameControllerOpen(GunBSDLIndex);
 						SDL.SDL_JoystickRumble(SDL.SDL_GameControllerGetJoystick(currentJoy), 0xFFFF, 0xFFFF, 100);
-						Thread.Sleep(120);
+
+						if (rumble) Thread.Sleep(300);
+						else Thread.Sleep(120);
+
 						SDL.SDL_JoystickRumble(SDL.SDL_GameControllerGetJoystick(currentJoy), 0, 0, 0);
 						SDL.SDL_GameControllerClose(currentJoy);
 					}
@@ -389,10 +471,6 @@ namespace TeknoparrotAutoXinput
 					
 				}
 			}
-
-
-
-
 		}
 
 		private static void Gunshot_Sinden(int gunIndex)
@@ -400,8 +478,99 @@ namespace TeknoparrotAutoXinput
 			throw new NotImplementedException();
 		}
 
-		private static void Gunshot_Gun4ir(int gunIndex)
+
+		private static void Init_Gun4ir(int gunIndex)
 		{
+			bool autoJoy = false;
+			bool mode4tiers = false;
+			if (gunIndex == 1)
+			{
+				autoJoy = GunAAutoJoy;
+				mode4tiers = GunA4tiers;
+			}
+			if (gunIndex == 2)
+			{
+				autoJoy = GunAAutoJoy;
+				mode4tiers = GunB4tiers;
+			}
+
+
+
+			Gun4Ir_SerialSend(gunIndex, "S6");
+			Thread.Sleep(100);
+			if (autoJoy) Gun4Ir_SerialSend(gunIndex, "M0x1");
+			Thread.Sleep(100);
+			if (mode4tiers) Gun4Ir_SerialSend(gunIndex, "M3x1");
+			else Gun4Ir_SerialSend(gunIndex, "M3x0");
+			Thread.Sleep(100);
+			Gun4Ir_SerialSend(gunIndex, "F1x2x2x");
+		}
+
+		private static void Release_Gun4ir(int gunIndex)
+		{
+			Gun4Ir_SerialSend(gunIndex, "SE");
+		}
+
+		private static void Gun4Ir_SerialSend(int gunIndex, string data)
+		{
+			/*
+			string msg = "F1x2x2x";
+			var _serialPort = new SerialPortInput(false);
+
+			_serialPort.SetPort(@"COM28", 9600);
+			_serialPort.Connect();
+			byte[] bytes = Encoding.ASCII.GetBytes(msg);
+			_serialPort.SendMessage(bytes);
+			_serialPort.Disconnect();
+			*/
+
+			
+
+			Utils.LogMessage($"Send {data} to {gunIndex}");
+			byte[] bytes = Encoding.ASCII.GetBytes(data);
+
+			if (gunIndex == 1)
+			{
+
+				if (gunASerial == null)
+				{
+					gunASerial = new SerialPortInput(false);
+					gunASerial.SetPort(gunAParameter, 9600);
+				}
+				try
+				{
+					if (!gunASerial.IsConnected) gunASerial.Connect();
+					gunASerial.SendMessage(bytes);
+				}
+				catch (Exception ex){}
+
+			}
+			if (gunIndex == 2)
+			{
+				if (gunBSerial == null)
+				{
+					gunBSerial = new SerialPortInput(false);
+					gunBSerial.SetPort(gunBParameter, 9600);
+				}
+				try
+				{
+					if (!gunBSerial.IsConnected) gunBSerial.Connect();
+					gunBSerial.SendMessage(bytes);
+				}
+				catch (Exception ex) { }
+			}
+
+			Utils.LogMessage($"Fin Send");
+			
+
+		}
+
+		private static void Gunshot_Gun4ir(int gunIndex, bool rumble = false)
+		{
+
+			if (rumble) Gun4Ir_SerialSend(gunIndex, "F1x2x2x");
+			else Gun4Ir_SerialSend(gunIndex, "F0x2x0x");
+			/*
 			string parameter = "";
 			SerialPort serialPort = null;
 			if (gunIndex == 1)
@@ -457,6 +626,7 @@ namespace TeknoparrotAutoXinput
 				}
 				catch (Exception ex) { }
 			}
+			*/
 		}
 	}
 }
