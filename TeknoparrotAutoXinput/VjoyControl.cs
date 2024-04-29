@@ -1430,8 +1430,8 @@ namespace TeknoparrotAutoXinput
 			{
 				if (_gameOptions != null)
 				{
-					if(grp_gunA.Enabled) _gameOptions.vjoySettingsGunA = GunA_json;
-					if(grp_gunB.Enabled) _gameOptions.vjoySettingsGunB = GunB_json;
+					if (grp_gunA.Enabled) _gameOptions.vjoySettingsGunA = GunA_json;
+					if (grp_gunB.Enabled) _gameOptions.vjoySettingsGunB = GunB_json;
 
 					string GameOptionsFolder = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions");
 					string optionFile = Path.Combine(GameOptionsFolder, _game + ".json");

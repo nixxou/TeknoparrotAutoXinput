@@ -133,6 +133,10 @@
 			tabControl2 = new TabControl();
 			tabPage1 = new TabPage();
 			tabPage2 = new TabPage();
+			cmb_gunA_OffscreenReload = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel19 = new Krypton.Toolkit.KryptonLabel();
+			cmb_gunB_OffscreenReload = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel20 = new Krypton.Toolkit.KryptonLabel();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -168,6 +172,8 @@
 			tabControl2.SuspendLayout();
 			tabPage1.SuspendLayout();
 			tabPage2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_gunA_OffscreenReload).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_gunB_OffscreenReload).BeginInit();
 			SuspendLayout();
 			// 
 			// btn_editMonitorSwitch
@@ -821,7 +827,7 @@
 			groupBox5.Controls.Add(cmb_vjoy);
 			groupBox5.Location = new Point(3, 3);
 			groupBox5.Name = "groupBox5";
-			groupBox5.Size = new Size(531, 247);
+			groupBox5.Size = new Size(531, 270);
 			groupBox5.TabIndex = 49;
 			groupBox5.TabStop = false;
 			groupBox5.Text = "Lightgun Settings";
@@ -831,7 +837,7 @@
 			// 
 			chk_sindenextra.Checked = true;
 			chk_sindenextra.CheckState = CheckState.Checked;
-			chk_sindenextra.Location = new Point(393, 188);
+			chk_sindenextra.Location = new Point(393, 212);
 			chk_sindenextra.Name = "chk_sindenextra";
 			chk_sindenextra.Size = new Size(130, 20);
 			chk_sindenextra.TabIndex = 72;
@@ -840,6 +846,8 @@
 			// groupBox12
 			// 
 			groupBox12.BackColor = Color.FromArgb(249, 249, 255);
+			groupBox12.Controls.Add(cmb_gunB_OffscreenReload);
+			groupBox12.Controls.Add(kryptonLabel20);
 			groupBox12.Controls.Add(cmb_gunB_4tiers);
 			groupBox12.Controls.Add(kryptonLabel18);
 			groupBox12.Controls.Add(cmb_gunB_UseVjoy);
@@ -852,7 +860,7 @@
 			groupBox12.Controls.Add(kryptonLabel14);
 			groupBox12.Location = new Point(267, 22);
 			groupBox12.Name = "groupBox12";
-			groupBox12.Size = new Size(256, 160);
+			groupBox12.Size = new Size(256, 184);
 			groupBox12.TabIndex = 70;
 			groupBox12.TabStop = false;
 			groupBox12.Text = "Gun B";
@@ -863,7 +871,7 @@
 			cmb_gunB_4tiers.DropDownWidth = 150;
 			cmb_gunB_4tiers.IntegralHeight = false;
 			cmb_gunB_4tiers.Items.AddRange(new object[] { "Use Global Settings", "No use FullScreen AspectRatio", "Yes use 4/3 Aspect Ratio" });
-			cmb_gunB_4tiers.Location = new Point(97, 125);
+			cmb_gunB_4tiers.Location = new Point(97, 151);
 			cmb_gunB_4tiers.Name = "cmb_gunB_4tiers";
 			cmb_gunB_4tiers.Size = new Size(150, 21);
 			cmb_gunB_4tiers.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -871,7 +879,7 @@
 			// 
 			// kryptonLabel18
 			// 
-			kryptonLabel18.Location = new Point(4, 126);
+			kryptonLabel18.Location = new Point(0, 152);
 			kryptonLabel18.Name = "kryptonLabel18";
 			kryptonLabel18.Size = new Size(95, 20);
 			kryptonLabel18.TabIndex = 85;
@@ -883,7 +891,7 @@
 			cmb_gunB_UseVjoy.DropDownWidth = 150;
 			cmb_gunB_UseVjoy.IntegralHeight = false;
 			cmb_gunB_UseVjoy.Items.AddRange(new object[] { "Use Global Settings", "Don't use Vjoy", "Use Vjoy" });
-			cmb_gunB_UseVjoy.Location = new Point(97, 98);
+			cmb_gunB_UseVjoy.Location = new Point(97, 124);
 			cmb_gunB_UseVjoy.Name = "cmb_gunB_UseVjoy";
 			cmb_gunB_UseVjoy.Size = new Size(150, 21);
 			cmb_gunB_UseVjoy.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -891,7 +899,7 @@
 			// 
 			// kryptonLabel16
 			// 
-			kryptonLabel16.Location = new Point(4, 99);
+			kryptonLabel16.Location = new Point(0, 125);
 			kryptonLabel16.Name = "kryptonLabel16";
 			kryptonLabel16.Size = new Size(64, 20);
 			kryptonLabel16.TabIndex = 83;
@@ -903,7 +911,7 @@
 			cmb_gunB_Crosshair.DropDownWidth = 150;
 			cmb_gunB_Crosshair.IntegralHeight = false;
 			cmb_gunB_Crosshair.Items.AddRange(new object[] { "Use Global Settings", "Enable Crosshair", "Disable Crosshair" });
-			cmb_gunB_Crosshair.Location = new Point(98, 69);
+			cmb_gunB_Crosshair.Location = new Point(97, 69);
 			cmb_gunB_Crosshair.Name = "cmb_gunB_Crosshair";
 			cmb_gunB_Crosshair.Size = new Size(150, 21);
 			cmb_gunB_Crosshair.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -935,7 +943,7 @@
 			// 
 			// kryptonLabel11
 			// 
-			kryptonLabel11.Location = new Point(4, 16);
+			kryptonLabel11.Location = new Point(0, 16);
 			kryptonLabel11.Name = "kryptonLabel11";
 			kryptonLabel11.Size = new Size(49, 20);
 			kryptonLabel11.TabIndex = 79;
@@ -943,7 +951,7 @@
 			// 
 			// kryptonLabel13
 			// 
-			kryptonLabel13.Location = new Point(4, 70);
+			kryptonLabel13.Location = new Point(0, 70);
 			kryptonLabel13.Name = "kryptonLabel13";
 			kryptonLabel13.Size = new Size(67, 20);
 			kryptonLabel13.TabIndex = 78;
@@ -951,7 +959,7 @@
 			// 
 			// kryptonLabel14
 			// 
-			kryptonLabel14.Location = new Point(4, 43);
+			kryptonLabel14.Location = new Point(0, 43);
 			kryptonLabel14.Name = "kryptonLabel14";
 			kryptonLabel14.Size = new Size(89, 20);
 			kryptonLabel14.TabIndex = 77;
@@ -959,7 +967,7 @@
 			// 
 			// txt_sindenextra
 			// 
-			txt_sindenextra.Location = new Point(167, 189);
+			txt_sindenextra.Location = new Point(167, 213);
 			txt_sindenextra.Name = "txt_sindenextra";
 			txt_sindenextra.Size = new Size(213, 23);
 			txt_sindenextra.TabIndex = 71;
@@ -967,6 +975,8 @@
 			// groupBox11
 			// 
 			groupBox11.BackColor = Color.FromArgb(255, 244, 244);
+			groupBox11.Controls.Add(cmb_gunA_OffscreenReload);
+			groupBox11.Controls.Add(kryptonLabel19);
 			groupBox11.Controls.Add(cmb_gunA_4tiers);
 			groupBox11.Controls.Add(kryptonLabel17);
 			groupBox11.Controls.Add(cmb_gunA_UseVjoy);
@@ -979,7 +989,7 @@
 			groupBox11.Controls.Add(kryptonLabel29);
 			groupBox11.Location = new Point(6, 22);
 			groupBox11.Name = "groupBox11";
-			groupBox11.Size = new Size(255, 159);
+			groupBox11.Size = new Size(255, 185);
 			groupBox11.TabIndex = 69;
 			groupBox11.TabStop = false;
 			groupBox11.Text = "Gun A";
@@ -990,7 +1000,7 @@
 			cmb_gunA_4tiers.DropDownWidth = 150;
 			cmb_gunA_4tiers.IntegralHeight = false;
 			cmb_gunA_4tiers.Items.AddRange(new object[] { "Use Global Settings", "No use FullScreen AspectRatio", "Yes use 4/3 Aspect Ratio" });
-			cmb_gunA_4tiers.Location = new Point(97, 125);
+			cmb_gunA_4tiers.Location = new Point(97, 151);
 			cmb_gunA_4tiers.Name = "cmb_gunA_4tiers";
 			cmb_gunA_4tiers.Size = new Size(150, 21);
 			cmb_gunA_4tiers.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -998,7 +1008,7 @@
 			// 
 			// kryptonLabel17
 			// 
-			kryptonLabel17.Location = new Point(5, 126);
+			kryptonLabel17.Location = new Point(-1, 152);
 			kryptonLabel17.Name = "kryptonLabel17";
 			kryptonLabel17.Size = new Size(95, 20);
 			kryptonLabel17.TabIndex = 79;
@@ -1010,7 +1020,7 @@
 			cmb_gunA_UseVjoy.DropDownWidth = 150;
 			cmb_gunA_UseVjoy.IntegralHeight = false;
 			cmb_gunA_UseVjoy.Items.AddRange(new object[] { "Use Global Settings", "Don't use Vjoy", "Use Vjoy" });
-			cmb_gunA_UseVjoy.Location = new Point(97, 98);
+			cmb_gunA_UseVjoy.Location = new Point(97, 124);
 			cmb_gunA_UseVjoy.Name = "cmb_gunA_UseVjoy";
 			cmb_gunA_UseVjoy.Size = new Size(150, 21);
 			cmb_gunA_UseVjoy.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1018,7 +1028,7 @@
 			// 
 			// kryptonLabel15
 			// 
-			kryptonLabel15.Location = new Point(5, 99);
+			kryptonLabel15.Location = new Point(0, 125);
 			kryptonLabel15.Name = "kryptonLabel15";
 			kryptonLabel15.Size = new Size(64, 20);
 			kryptonLabel15.TabIndex = 77;
@@ -1030,7 +1040,7 @@
 			cmb_gunA_Crosshair.DropDownWidth = 150;
 			cmb_gunA_Crosshair.IntegralHeight = false;
 			cmb_gunA_Crosshair.Items.AddRange(new object[] { "Use Global Settings", "Enable Crosshair", "Disable Crosshair" });
-			cmb_gunA_Crosshair.Location = new Point(97, 72);
+			cmb_gunA_Crosshair.Location = new Point(97, 69);
 			cmb_gunA_Crosshair.Name = "cmb_gunA_Crosshair";
 			cmb_gunA_Crosshair.Size = new Size(150, 21);
 			cmb_gunA_Crosshair.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1042,7 +1052,7 @@
 			cmb_gunA_recoil.DropDownWidth = 150;
 			cmb_gunA_recoil.IntegralHeight = false;
 			cmb_gunA_recoil.Items.AddRange(new object[] { "Use Global Settings", "Disable Recoil", "Use Mamehooker" });
-			cmb_gunA_recoil.Location = new Point(97, 18);
+			cmb_gunA_recoil.Location = new Point(97, 15);
 			cmb_gunA_recoil.Name = "cmb_gunA_recoil";
 			cmb_gunA_recoil.Size = new Size(150, 21);
 			cmb_gunA_recoil.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1054,7 +1064,7 @@
 			cmb_gunA_sindenPump.DropDownWidth = 150;
 			cmb_gunA_sindenPump.IntegralHeight = false;
 			cmb_gunA_sindenPump.Items.AddRange(new object[] { "Use Global Settings", "Pump = Reload", "Pump = Action", "Pump = Action if Offscreen Reload" });
-			cmb_gunA_sindenPump.Location = new Point(97, 45);
+			cmb_gunA_sindenPump.Location = new Point(97, 42);
 			cmb_gunA_sindenPump.Name = "cmb_gunA_sindenPump";
 			cmb_gunA_sindenPump.Size = new Size(150, 21);
 			cmb_gunA_sindenPump.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1062,7 +1072,7 @@
 			// 
 			// kryptonLabel10
 			// 
-			kryptonLabel10.Location = new Point(5, 19);
+			kryptonLabel10.Location = new Point(0, 16);
 			kryptonLabel10.Name = "kryptonLabel10";
 			kryptonLabel10.Size = new Size(49, 20);
 			kryptonLabel10.TabIndex = 73;
@@ -1071,7 +1081,7 @@
 			// 
 			// kryptonLabel3
 			// 
-			kryptonLabel3.Location = new Point(5, 73);
+			kryptonLabel3.Location = new Point(0, 70);
 			kryptonLabel3.Name = "kryptonLabel3";
 			kryptonLabel3.Size = new Size(67, 20);
 			kryptonLabel3.TabIndex = 71;
@@ -1079,7 +1089,7 @@
 			// 
 			// kryptonLabel29
 			// 
-			kryptonLabel29.Location = new Point(5, 46);
+			kryptonLabel29.Location = new Point(-1, 43);
 			kryptonLabel29.Name = "kryptonLabel29";
 			kryptonLabel29.Size = new Size(89, 20);
 			kryptonLabel29.TabIndex = 63;
@@ -1087,7 +1097,7 @@
 			// 
 			// kryptonLabel33
 			// 
-			kryptonLabel33.Location = new Point(1, 189);
+			kryptonLabel33.Location = new Point(1, 213);
 			kryptonLabel33.Name = "kryptonLabel33";
 			kryptonLabel33.Size = new Size(163, 20);
 			kryptonLabel33.TabIndex = 70;
@@ -1095,7 +1105,7 @@
 			// 
 			// btn_vjoyconfig
 			// 
-			btn_vjoyconfig.Location = new Point(393, 216);
+			btn_vjoyconfig.Location = new Point(393, 240);
 			btn_vjoyconfig.Name = "btn_vjoyconfig";
 			btn_vjoyconfig.Size = new Size(121, 23);
 			btn_vjoyconfig.TabIndex = 57;
@@ -1104,7 +1114,7 @@
 			// 
 			// kryptonLabel28
 			// 
-			kryptonLabel28.Location = new Point(4, 219);
+			kryptonLabel28.Location = new Point(4, 243);
 			kryptonLabel28.Name = "kryptonLabel28";
 			kryptonLabel28.Size = new Size(157, 20);
 			kryptonLabel28.TabIndex = 56;
@@ -1116,7 +1126,7 @@
 			cmb_vjoy.DropDownWidth = 150;
 			cmb_vjoy.IntegralHeight = false;
 			cmb_vjoy.Items.AddRange(new object[] { "Use Global Settings", "No", "Vjoy 1", "Vjoy 2", "Vjoy 3", "Vjoy 4", "Vjoy 5", "Vjoy 6" });
-			cmb_vjoy.Location = new Point(167, 217);
+			cmb_vjoy.Location = new Point(167, 241);
 			cmb_vjoy.Name = "cmb_vjoy";
 			cmb_vjoy.Size = new Size(213, 21);
 			cmb_vjoy.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1140,7 +1150,7 @@
 			tabControl1.Location = new Point(12, 52);
 			tabControl1.Name = "tabControl1";
 			tabControl1.SelectedIndex = 0;
-			tabControl1.Size = new Size(557, 285);
+			tabControl1.Size = new Size(557, 308);
 			tabControl1.TabIndex = 70;
 			// 
 			// tabGamepad
@@ -1180,7 +1190,7 @@
 			tabLightgun.Controls.Add(groupBox5);
 			tabLightgun.Location = new Point(4, 24);
 			tabLightgun.Name = "tabLightgun";
-			tabLightgun.Size = new Size(549, 257);
+			tabLightgun.Size = new Size(549, 280);
 			tabLightgun.TabIndex = 3;
 			tabLightgun.Text = "Lightgun Options";
 			tabLightgun.UseVisualStyleBackColor = true;
@@ -1189,10 +1199,10 @@
 			// 
 			tabControl2.Controls.Add(tabPage1);
 			tabControl2.Controls.Add(tabPage2);
-			tabControl2.Location = new Point(16, 343);
+			tabControl2.Location = new Point(16, 366);
 			tabControl2.Name = "tabControl2";
 			tabControl2.SelectedIndex = 0;
-			tabControl2.Size = new Size(553, 373);
+			tabControl2.Size = new Size(553, 350);
 			tabControl2.TabIndex = 71;
 			// 
 			// tabPage1
@@ -1203,7 +1213,7 @@
 			tabPage1.Location = new Point(4, 24);
 			tabPage1.Name = "tabPage1";
 			tabPage1.Padding = new Padding(3);
-			tabPage1.Size = new Size(545, 345);
+			tabPage1.Size = new Size(545, 322);
 			tabPage1.TabIndex = 0;
 			tabPage1.Text = "AHK Before";
 			tabPage1.UseVisualStyleBackColor = true;
@@ -1219,6 +1229,47 @@
 			tabPage2.TabIndex = 1;
 			tabPage2.Text = "AHK After";
 			tabPage2.UseVisualStyleBackColor = true;
+			// 
+			// cmb_gunA_OffscreenReload
+			// 
+			cmb_gunA_OffscreenReload.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_gunA_OffscreenReload.DropDownWidth = 150;
+			cmb_gunA_OffscreenReload.IntegralHeight = false;
+			cmb_gunA_OffscreenReload.Items.AddRange(new object[] { "Use Global Settings", "Do nothing", "Auto-Reload" });
+			cmb_gunA_OffscreenReload.Location = new Point(97, 97);
+			cmb_gunA_OffscreenReload.Name = "cmb_gunA_OffscreenReload";
+			cmb_gunA_OffscreenReload.Size = new Size(150, 21);
+			cmb_gunA_OffscreenReload.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_gunA_OffscreenReload.TabIndex = 82;
+			cmb_gunA_OffscreenReload.SelectedIndexChanged += kryptonComboBox1_SelectedIndexChanged;
+			// 
+			// kryptonLabel19
+			// 
+			kryptonLabel19.Location = new Point(0, 98);
+			kryptonLabel19.Name = "kryptonLabel19";
+			kryptonLabel19.Size = new Size(104, 20);
+			kryptonLabel19.TabIndex = 81;
+			kryptonLabel19.Values.Text = "Offscreen Reload";
+			// 
+			// cmb_gunB_OffscreenReload
+			// 
+			cmb_gunB_OffscreenReload.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_gunB_OffscreenReload.DropDownWidth = 150;
+			cmb_gunB_OffscreenReload.IntegralHeight = false;
+			cmb_gunB_OffscreenReload.Items.AddRange(new object[] { "Use Global Settings", "Do nothing", "Auto-Reload" });
+			cmb_gunB_OffscreenReload.Location = new Point(97, 97);
+			cmb_gunB_OffscreenReload.Name = "cmb_gunB_OffscreenReload";
+			cmb_gunB_OffscreenReload.Size = new Size(150, 21);
+			cmb_gunB_OffscreenReload.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_gunB_OffscreenReload.TabIndex = 88;
+			// 
+			// kryptonLabel20
+			// 
+			kryptonLabel20.Location = new Point(0, 98);
+			kryptonLabel20.Name = "kryptonLabel20";
+			kryptonLabel20.Size = new Size(104, 20);
+			kryptonLabel20.TabIndex = 87;
+			kryptonLabel20.Values.Text = "Offscreen Reload";
 			// 
 			// GameOptions
 			// 
@@ -1291,6 +1342,8 @@
 			tabPage1.PerformLayout();
 			tabPage2.ResumeLayout(false);
 			tabPage2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_gunA_OffscreenReload).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_gunB_OffscreenReload).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -1402,5 +1455,9 @@
 		private TabControl tabControl2;
 		private TabPage tabPage1;
 		private TabPage tabPage2;
+		private Krypton.Toolkit.KryptonComboBox cmb_gunB_OffscreenReload;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel20;
+		private Krypton.Toolkit.KryptonComboBox cmb_gunA_OffscreenReload;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel19;
 	}
 }

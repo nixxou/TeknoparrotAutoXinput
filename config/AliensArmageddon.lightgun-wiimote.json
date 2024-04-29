@@ -6,12 +6,12 @@
     "Coin": "GunA_LightgunCoin,GunA_LightgunArcadeCoinBis,GunB_LightgunCoin,GunB_LightgunArcadeCoinBis",
     "P1 Start": "GunA_LightgunStart,GunA_LightgunArcadeStartBis",
     "P1 Trigger": "GunA_LightgunTrigger",
-    "P1 Reload": "GunA_LightgunPedalRight,GunA_LightgunFrontLeftBtn,GunA_LightgunBackLeftBtn,GunA_LightgunDown",
+    "P1 Reload": "GunA_LightgunPedalRight,GunA_LightgunFrontLeftBtn,GunA_LightgunBackLeftBtn,GunA_LightgunDown,GunA_LightgunReload",
     "P1 Grenades": "GunA_LightgunPump,GunA_LightgunBackRightBtn,GunA_LightgunLeft,GunA_LightgunArcade1",
     "P2 Gun X": "GunB_LightgunX",
     "P2 Gun Y": "GunB_LightgunY",
     "P2 Start": "GunB_LightgunStart,GunB_LightgunArcadeStartBis",
     "P2 Trigger": "GunB_LightgunTrigger",
-    "P2 Reload": "GunB_LightgunPedalRight,GunB_LightgunFrontLeftBtn,GunB_LightgunBackLeftBtn,GunB_LightgunDown",
+    "P2 Reload": "GunB_LightgunPedalRight,GunB_LightgunFrontLeftBtn,GunB_LightgunBackLeftBtn,GunB_LightgunDown,GunB_LightgunReload",
     "P2 Grenades": "GunB_LightgunPump,GunB_LightgunBackRightBtn,GunB_LightgunLeft,GunB_LightgunArcade1"
 }

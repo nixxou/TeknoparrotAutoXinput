@@ -155,6 +155,8 @@ namespace TeknoparrotAutoXinput
 			chk_reversePedal.Checked = ConfigurationManager.MainConfig.reversePedals;
 			chk_alwaysrunmamehooker.Checked = ConfigurationManager.MainConfig.alwaysRunMamehooker;
 
+			chk_gunA_OffscreenReload.Checked = ConfigurationManager.MainConfig.gunAOffscreenReload;
+			chk_gunB_OffscreenReload.Checked = ConfigurationManager.MainConfig.gunBOffscreenReload;
 
 			updateStooz();
 
@@ -533,6 +535,8 @@ namespace TeknoparrotAutoXinput
 				if (radio_gunB_sindenPump3.Checked) ConfigurationManager.MainConfig.gunBSidenPump = 3;
 			}
 
+			ConfigurationManager.MainConfig.gunAOffscreenReload = chk_gunA_OffscreenReload.Checked;
+			ConfigurationManager.MainConfig.gunBOffscreenReload = chk_gunB_OffscreenReload.Checked;
 
 			ConfigurationManager.SaveConfig();
 		}

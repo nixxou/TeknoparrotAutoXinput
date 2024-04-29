@@ -50,8 +50,15 @@ namespace TeknoparrotAutoXinput
 
 		public string GunA_coinKey = "";
 		public string GunA_startKey = "";
+		public string GunA_reloadKey = "";
 		public string GunB_coinKey = "";
 		public string GunB_startKey = "";
+		public string GunB_reloadKey = "";
+
+		public bool EnableGunAOffscreenReload = false;
+		public bool EnableGunBOffscreenReload = false;
+
+
 
 
 		private int _GunA_X = 15000;
@@ -63,7 +70,8 @@ namespace TeknoparrotAutoXinput
 				if (value != _GunA_X)
 				{
 					_GunA_X = value;
-					if ((_GunA_X < 1000 || GunA_X > 64535) || (_GunA_Y < 1000 || GunA_Y > 64535)) joystick1_offscreen = true;
+					//if ((_GunA_X < 1000 || GunA_X > 64535) || (_GunA_Y < 1000 || GunA_Y > 64535)) joystick1_offscreen = true;
+					if ((_GunA_X < 100 || GunA_X > 65435) || (_GunA_Y < 100 || GunA_Y > 65435)) joystick1_offscreen = true;
 					else joystick1_offscreen = false;
 				}
 			}
@@ -78,7 +86,8 @@ namespace TeknoparrotAutoXinput
 				if (value != _GunA_Y)
 				{
 					_GunA_Y = value;
-					if ((_GunA_X < 1000 || GunA_X > 64535) || (_GunA_Y < 1000 || GunA_Y > 64535)) joystick1_offscreen = true;
+					//if ((_GunA_X < 1000 || GunA_X > 64535) || (_GunA_Y < 1000 || GunA_Y > 64535)) joystick1_offscreen = true;
+					if ((_GunA_X < 100 || GunA_X > 65435) || (_GunA_Y < 100 || GunA_Y > 65435)) joystick1_offscreen = true;
 					else joystick1_offscreen = false;
 				}
 			}
@@ -93,7 +102,8 @@ namespace TeknoparrotAutoXinput
 				if (value != _GunB_X)
 				{
 					_GunB_X = value;
-					if ((_GunB_X < 1000 || GunB_X > 64535) || (_GunB_Y < 1000 || GunB_Y > 64535)) joystick2_offscreen = true;
+					//if ((_GunB_X < 1000 || GunB_X > 64535) || (_GunB_Y < 1000 || GunB_Y > 64535)) joystick2_offscreen = true;
+					if ((_GunB_X < 100 || GunB_X > 65435) || (_GunB_Y < 100 || GunB_Y > 65435)) joystick2_offscreen = true;
 					else joystick2_offscreen = false;
 				}
 			}
@@ -108,14 +118,54 @@ namespace TeknoparrotAutoXinput
 				if (value != _GunB_Y)
 				{
 					_GunB_Y = value;
-					if ((_GunB_X < 1000 || GunB_X > 64535) || (_GunB_Y < 1000 || GunB_Y > 64535)) joystick2_offscreen = true;
+					//if ((_GunB_X < 1000 || GunB_X > 64535) || (_GunB_Y < 1000 || GunB_Y > 64535)) joystick2_offscreen = true;
+					if ((_GunB_X < 100 || GunB_X > 65435) || (_GunB_Y < 100 || GunB_Y > 65435)) joystick2_offscreen = true;
 					else joystick2_offscreen = false;
 				}
 			}
 		}
 
-		private bool joystick1_offscreen = false;
-		private bool joystick2_offscreen = false;
+
+
+		private bool _joystick1_offscreen = false;
+		public bool joystick1_offscreen
+		{
+			get { return (_joystick1_offscreen); }
+			set
+			{
+				if (value != _joystick1_offscreen)
+				{
+					_joystick1_offscreen = value;
+					if (_joystick1_offscreen && EnableGunAOffscreenReload)
+					{
+						if(GunA_reloadKey != "" && keyToAssign.ContainsKey(GunA_reloadKey))
+							keyboardController.Press(keyToAssign[GunA_reloadKey].Item1, new TimeSpan(0, 0, 0, 0, 50));
+					}
+					
+				}
+			}
+		}
+
+
+		private bool _joystick2_offscreen = false;
+		public bool joystick2_offscreen
+		{
+			get { return (_joystick2_offscreen); }
+			set
+			{
+				if (value != _joystick2_offscreen)
+				{
+					_joystick2_offscreen = value;
+					if (_joystick2_offscreen && EnableGunBOffscreenReload)
+					{
+						if (GunB_reloadKey != "" && keyToAssign.ContainsKey(GunB_reloadKey))
+							keyboardController.Press(keyToAssign[GunB_reloadKey].Item1, new TimeSpan(0, 0, 0, 0, 50));
+					}
+				}
+			}
+		}
+
+
 
 
 		KeyboardController keyboardController;
@@ -138,8 +188,11 @@ namespace TeknoparrotAutoXinput
 		{
 			if (coinOrStart == 11) GunA_coinKey = newKey;
 			if (coinOrStart == 12) GunA_startKey = newKey;
+			if (coinOrStart == 13) GunA_reloadKey = newKey;
+
 			if (coinOrStart == 21) GunB_coinKey = newKey;
 			if (coinOrStart == 22) GunB_startKey = newKey;
+			if (coinOrStart == 23) GunB_reloadKey = newKey;
 
 			if (!assignedKeys.ContainsKey(newKey))
 			{

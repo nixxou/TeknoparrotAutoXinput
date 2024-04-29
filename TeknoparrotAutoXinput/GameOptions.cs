@@ -81,7 +81,7 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
-			
+
 
 		}
 
@@ -400,12 +400,14 @@ namespace TeknoparrotAutoXinput
 			cmb_gunA_Crosshair.SelectedIndex = gameSettings.gunA_crosshair;
 			cmb_gunA_4tiers.SelectedIndex = gameSettings.gunA_4tiers;
 			cmb_gunA_UseVjoy.SelectedIndex = gameSettings.gunA_useVjoy;
+			cmb_gunA_OffscreenReload.SelectedIndex = gameSettings.gunA_OffscreenReload;
 
 			cmb_gunB_recoil.SelectedIndex = gameSettings.gunB_recoil;
 			cmb_gunB_sindenPump.SelectedIndex = gameSettings.gunB_pump;
 			cmb_gunB_Crosshair.SelectedIndex = gameSettings.gunB_crosshair;
 			cmb_gunB_4tiers.SelectedIndex = gameSettings.gunB_4tiers;
 			cmb_gunB_UseVjoy.SelectedIndex = gameSettings.gunB_useVjoy;
+			cmb_gunB_OffscreenReload.SelectedIndex = gameSettings.gunB_OffscreenReload;
 
 			chk_sindenextra.Checked = !gameSettings.gun_useExtraSinden;
 			txt_sindenextra.Text = gameSettings.gun_ExtraSinden;
@@ -554,15 +556,19 @@ namespace TeknoparrotAutoXinput
 			gameSettings.gunA_crosshair = cmb_gunA_Crosshair.SelectedIndex;
 			gameSettings.gunA_4tiers = cmb_gunA_4tiers.SelectedIndex;
 			gameSettings.gunA_useVjoy = cmb_gunA_UseVjoy.SelectedIndex;
+			gameSettings.gunA_OffscreenReload = cmb_gunA_OffscreenReload.SelectedIndex;
 
 			gameSettings.gunB_recoil = cmb_gunB_recoil.SelectedIndex;
 			gameSettings.gunB_pump = cmb_gunB_sindenPump.SelectedIndex;
 			gameSettings.gunB_crosshair = cmb_gunB_Crosshair.SelectedIndex;
 			gameSettings.gunB_4tiers = cmb_gunB_4tiers.SelectedIndex;
 			gameSettings.gunB_useVjoy = cmb_gunB_UseVjoy.SelectedIndex;
+			gameSettings.gunB_OffscreenReload = cmb_gunB_OffscreenReload.SelectedIndex;
 
 			gameSettings.gun_useExtraSinden = !chk_sindenextra.Checked;
 			gameSettings.gun_ExtraSinden = txt_sindenextra.Text;
+
+
 
 
 
@@ -902,7 +908,7 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			
+
 			bool vjoy_gunA = ConfigurationManager.MainConfig.gunAvjoy;
 			if (cmb_gunA_UseVjoy.SelectedIndex > 0)
 			{
@@ -938,6 +944,11 @@ namespace TeknoparrotAutoXinput
 		}
 
 		private void kryptonLabel10_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void kryptonComboBox1_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
 		}

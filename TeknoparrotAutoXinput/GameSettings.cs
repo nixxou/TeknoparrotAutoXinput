@@ -58,7 +58,8 @@ namespace TeknoparrotAutoXinput
 
 		public bool runRivaTuner { get; set; } = false;
 
-
+		public int gunA_OffscreenReload { get; set; } = 0;
+		public int gunB_OffscreenReload { get; set; } = 0;
 
 		public GameSettings() 
 		{
@@ -111,6 +112,8 @@ namespace TeknoparrotAutoXinput
 				this.gunA_4tiers = DeserializeData.gunA_4tiers;
 				this.gunB_4tiers = DeserializeData.gunB_4tiers;
 				this.runRivaTuner = DeserializeData.runRivaTuner;
+				this.gunA_OffscreenReload = DeserializeData.gunA_OffscreenReload;
+				this.gunB_OffscreenReload = DeserializeData.gunB_OffscreenReload;
 
 			}
 			catch (Exception ex)

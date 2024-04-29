@@ -124,6 +124,10 @@ namespace TeknoparrotAutoXinput
 
 		public string rivatunerExe { get; set; } = "";
 
+		public bool gunAOffscreenReload { get; set; } = false;
+		public bool gunBOffscreenReload { get; set; } = false;
+
+
 		public Configuration()
 		{
 
@@ -208,6 +212,8 @@ namespace TeknoparrotAutoXinput
 				this.reversePedals = DeserializeData.reversePedals;
 				this.alwaysRunMamehooker = DeserializeData.alwaysRunMamehooker;
 				this.rivatunerExe = DeserializeData.rivatunerExe;
+				this.gunAOffscreenReload = DeserializeData.gunAOffscreenReload;
+				this.gunBOffscreenReload = DeserializeData.gunBOffscreenReload;
 
 			}
 			catch (Exception ex)

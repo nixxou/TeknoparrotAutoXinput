@@ -422,6 +422,24 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
+
+			//Create a fake ReloadButton to force reload on a keyboard
+			if (buttonDataFinal.ContainsKey("LightgunTrigger"))
+			{
+				var reloadButtonData = new JoystickButtonData
+				{
+					Button = buttonDataFinal["LightgunTrigger"].Button + 100000,
+					IsAxis = false,
+					IsAxisMinus = false,
+					JoystickGuid = buttonDataFinal["LightgunTrigger"].JoystickGuid,
+					Title = "FakeReload",
+					XinputTitle = "LightgunReload"
+				};
+				buttonDataFinal.Add("LightgunReload", reloadButtonData);
+			}
+
+
+
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
 
 			bool validConfig = true;

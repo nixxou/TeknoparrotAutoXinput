@@ -973,6 +973,30 @@ namespace TeknoparrotAutoXinput
 						Utils.LogMessage($"gunB_crosshair = {(crosshairB ? "True" : "False")}");
 						Utils.LogMessage($"hideCrosshair = {(hideCrosshair ? "True" : "False")}");
 
+						
+						if (dinputLightgunAFound)
+						{
+							bool gunAoffscreenReload = ConfigurationManager.MainConfig.gunAOffscreenReload;
+							if(gameOptions.gunA_OffscreenReload > 0)
+							{
+								if(gameOptions.gunA_OffscreenReload == 1) gunAoffscreenReload = false;
+								if(gameOptions.gunA_OffscreenReload == 2) gunAoffscreenReload = true;
+							}
+							Utils.LogMessage($"gunA_OffscreenReload = {(gunAoffscreenReload ? "True" : "False")}");
+							ButtonToKeyManager.buttonToKey.EnableGunAOffscreenReload = gunAoffscreenReload;
+						}
+						if (dinputLightgunBFound)
+						{
+							bool gunBoffscreenReload = ConfigurationManager.MainConfig.gunAOffscreenReload;
+							if (gameOptions.gunB_OffscreenReload > 0)
+							{
+								if (gameOptions.gunB_OffscreenReload == 1) gunBoffscreenReload = false;
+								if (gameOptions.gunB_OffscreenReload == 2) gunBoffscreenReload = true;
+							}
+							Utils.LogMessage($"gunB_OffscreenReload = {(gunBoffscreenReload ? "True" : "False")}");
+							ButtonToKeyManager.buttonToKey.EnableGunBOffscreenReload = gunBoffscreenReload;
+						}
+
 
 						if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunStart") && !bindingDinputLightGunA.ContainsKey("LightgunCoin"))
 						{
@@ -2756,6 +2780,21 @@ namespace TeknoparrotAutoXinput
 													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
 													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
 												}
+												else if (bindkey.EndsWith("_LightgunReload"))
+												{
+													int coinOrStart = 0;
+													if (bindkey.StartsWith("GunA_"))
+													{
+														coinOrStart = 13;
+													}
+													if (bindkey.StartsWith("GunB_"))
+													{
+														coinOrStart = 23;
+													}
+													string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
+													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
+												}
 												else if (!bindkey.EndsWith("_LightgunX") && !bindkey.EndsWith("_LightgunY") && bindData.IsAxis)
 												{
 													string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
@@ -2828,12 +2867,14 @@ namespace TeknoparrotAutoXinput
 														coinOrStart = 10;
 														if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
 														if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+														if (bindkey.EndsWith("_LightgunReload")) coinOrStart += 3;
 													}
 													if (GunCoinOverwriteB && bindkey.StartsWith("GunB_"))
 													{
 														coinOrStart = 20;
 														if (bindkey.EndsWith("_LightgunCoin")) coinOrStart += 1;
 														if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
+														if (bindkey.EndsWith("_LightgunReload")) coinOrStart += 3;
 													}
 
 													var bindData = bindingDinputLightGun[bindkey];
