@@ -22,13 +22,19 @@ namespace TeknoparrotAutoXinput
 	{
 
 		public Dictionary<string, (VirtualKeyCode, Key)> keyToAssign = new Dictionary<string, (VirtualKeyCode, Key)> {
+			{"T", (VirtualKeyCode.VK_T,Key.T)},
+			{"Y", (VirtualKeyCode.VK_Y,Key.Y)},
 			{"U", (VirtualKeyCode.VK_U,Key.U)},
 			{"I", (VirtualKeyCode.VK_I,Key.I)},
 			{"O", (VirtualKeyCode.VK_O,Key.O)},
-			{"P", (VirtualKeyCode.VK_P,Key.P)},
+			{"G", (VirtualKeyCode.VK_G,Key.G)},
+			{"H", (VirtualKeyCode.VK_H,Key.H)},
 			{"J", (VirtualKeyCode.VK_J,Key.J)},
 			{"K", (VirtualKeyCode.VK_K,Key.K)},
-			{"L", (VirtualKeyCode.VK_L,Key.L)}
+			{"L", (VirtualKeyCode.VK_L,Key.L)},
+			{"B", (VirtualKeyCode.VK_B,Key.B)},
+			{"N", (VirtualKeyCode.VK_N,Key.N)},
+			{"P", (VirtualKeyCode.VK_P,Key.P)}
 		};
 		public Dictionary<string, List<(string, string)>> assignedKeys = new Dictionary<string, List<(string,string)>>();
 

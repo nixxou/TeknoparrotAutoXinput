@@ -253,6 +253,20 @@ namespace TeknoparrotAutoXinput
 							{
 								if (deviceInstance.Type == DeviceType.Keyboard)
 								{
+									bool reservedKey = false;
+									foreach(var k in ButtonToKeyManager.buttonToKey.keyToAssign)
+									{
+										if(k.Value.Item2 == ((Key)key.Offset - 47))
+										{
+											reservedKey = true;
+										}
+									}
+
+									if(reservedKey)
+									{
+										MessageBox.Show("This keyboard key is reserved, you can't assign it");
+										continue;
+									}
 									inputText = "Button " + ((Key)key.Offset - 47).ToString();
 								}
 								else
