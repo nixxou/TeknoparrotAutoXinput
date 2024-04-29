@@ -140,6 +140,8 @@
 			kryptonLabel28 = new Krypton.Toolkit.KryptonLabel();
 			cmb_vjoy = new Krypton.Toolkit.KryptonComboBox();
 			groupBox12 = new GroupBox();
+			kryptonLabel46 = new Krypton.Toolkit.KryptonLabel();
+			chk_gunB_OffscreenReload = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel35 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel44 = new Krypton.Toolkit.KryptonLabel();
 			chk_gunB_Vjoy = new Krypton.Toolkit.KryptonCheckBox();
@@ -161,6 +163,8 @@
 			cmb_gunB_type = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel27 = new Krypton.Toolkit.KryptonLabel();
 			groupBox11 = new GroupBox();
+			kryptonLabel45 = new Krypton.Toolkit.KryptonLabel();
+			chk_gunA_OffscreenReload = new Krypton.Toolkit.KryptonCheckBox();
 			chk_reversePedal = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel42 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel41 = new Krypton.Toolkit.KryptonLabel();
@@ -184,6 +188,7 @@
 			cmb_gunA_type = new Krypton.Toolkit.KryptonComboBox();
 			chk_reasignGunPedal = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox13 = new GroupBox();
+			cmb_showStartup = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel40 = new Krypton.Toolkit.KryptonLabel();
 			btn_rivatuner = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel39 = new Krypton.Toolkit.KryptonLabel();
@@ -194,10 +199,6 @@
 			tabWheel = new TabPage();
 			tabHotas = new TabPage();
 			tabLightgun = new TabPage();
-			kryptonLabel45 = new Krypton.Toolkit.KryptonLabel();
-			chk_gunA_OffscreenReload = new Krypton.Toolkit.KryptonCheckBox();
-			kryptonLabel46 = new Krypton.Toolkit.KryptonLabel();
-			chk_gunB_OffscreenReload = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -227,6 +228,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).BeginInit();
 			groupBox13.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_showStartup).BeginInit();
 			tabControl1.SuspendLayout();
 			tabGlobal.SuspendLayout();
 			tabGamepad.SuspendLayout();
@@ -1308,6 +1310,22 @@
 			groupBox12.TabStop = false;
 			groupBox12.Text = "Gun B";
 			// 
+			// kryptonLabel46
+			// 
+			kryptonLabel46.Location = new Point(0, 127);
+			kryptonLabel46.Name = "kryptonLabel46";
+			kryptonLabel46.Size = new Size(106, 20);
+			kryptonLabel46.TabIndex = 81;
+			kryptonLabel46.Values.Text = "Offscreen Reload:";
+			// 
+			// chk_gunB_OffscreenReload
+			// 
+			chk_gunB_OffscreenReload.Location = new Point(112, 127);
+			chk_gunB_OffscreenReload.Name = "chk_gunB_OffscreenReload";
+			chk_gunB_OffscreenReload.Size = new Size(222, 20);
+			chk_gunB_OffscreenReload.TabIndex = 80;
+			chk_gunB_OffscreenReload.Values.Text = "Auto-Reload when you go Offscreen";
+			// 
 			// kryptonLabel35
 			// 
 			kryptonLabel35.Location = new Point(0, 102);
@@ -1519,6 +1537,22 @@
 			groupBox11.TabStop = false;
 			groupBox11.Text = "Gun A";
 			// 
+			// kryptonLabel45
+			// 
+			kryptonLabel45.Location = new Point(0, 127);
+			kryptonLabel45.Name = "kryptonLabel45";
+			kryptonLabel45.Size = new Size(106, 20);
+			kryptonLabel45.TabIndex = 78;
+			kryptonLabel45.Values.Text = "Offscreen Reload:";
+			// 
+			// chk_gunA_OffscreenReload
+			// 
+			chk_gunA_OffscreenReload.Location = new Point(110, 127);
+			chk_gunA_OffscreenReload.Name = "chk_gunA_OffscreenReload";
+			chk_gunA_OffscreenReload.Size = new Size(222, 20);
+			chk_gunA_OffscreenReload.TabIndex = 77;
+			chk_gunA_OffscreenReload.Values.Text = "Auto-Reload when you go Offscreen";
+			// 
 			// chk_reversePedal
 			// 
 			chk_reversePedal.Location = new Point(9, 334);
@@ -1727,6 +1761,7 @@
 			// 
 			// groupBox13
 			// 
+			groupBox13.Controls.Add(cmb_showStartup);
 			groupBox13.Controls.Add(kryptonLabel40);
 			groupBox13.Controls.Add(btn_rivatuner);
 			groupBox13.Controls.Add(kryptonLabel39);
@@ -1741,6 +1776,20 @@
 			groupBox13.TabIndex = 46;
 			groupBox13.TabStop = false;
 			groupBox13.Text = "Miscs Options";
+			groupBox13.Enter += groupBox13_Enter;
+			// 
+			// cmb_showStartup
+			// 
+			cmb_showStartup.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_showStartup.DropDownWidth = 242;
+			cmb_showStartup.IntegralHeight = false;
+			cmb_showStartup.Items.AddRange(new object[] { "Grab TP Console Into Startup Screen", "Minimize it", "Hide It", "Do Nothing" });
+			cmb_showStartup.Location = new Point(234, 25);
+			cmb_showStartup.Name = "cmb_showStartup";
+			cmb_showStartup.Size = new Size(242, 21);
+			cmb_showStartup.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_showStartup.TabIndex = 80;
+			cmb_showStartup.SelectedIndexChanged += cmb_showStartup_SelectedIndexChanged;
 			// 
 			// kryptonLabel40
 			// 
@@ -1846,38 +1895,6 @@
 			tabLightgun.Text = "Lightgun settings";
 			tabLightgun.UseVisualStyleBackColor = true;
 			// 
-			// kryptonLabel45
-			// 
-			kryptonLabel45.Location = new Point(0, 127);
-			kryptonLabel45.Name = "kryptonLabel45";
-			kryptonLabel45.Size = new Size(106, 20);
-			kryptonLabel45.TabIndex = 78;
-			kryptonLabel45.Values.Text = "Offscreen Reload:";
-			// 
-			// chk_gunA_OffscreenReload
-			// 
-			chk_gunA_OffscreenReload.Location = new Point(110, 127);
-			chk_gunA_OffscreenReload.Name = "chk_gunA_OffscreenReload";
-			chk_gunA_OffscreenReload.Size = new Size(222, 20);
-			chk_gunA_OffscreenReload.TabIndex = 77;
-			chk_gunA_OffscreenReload.Values.Text = "Auto-Reload when you go Offscreen";
-			// 
-			// kryptonLabel46
-			// 
-			kryptonLabel46.Location = new Point(0, 127);
-			kryptonLabel46.Name = "kryptonLabel46";
-			kryptonLabel46.Size = new Size(106, 20);
-			kryptonLabel46.TabIndex = 81;
-			kryptonLabel46.Values.Text = "Offscreen Reload:";
-			// 
-			// chk_gunB_OffscreenReload
-			// 
-			chk_gunB_OffscreenReload.Location = new Point(112, 127);
-			chk_gunB_OffscreenReload.Name = "chk_gunB_OffscreenReload";
-			chk_gunB_OffscreenReload.Size = new Size(222, 20);
-			chk_gunB_OffscreenReload.TabIndex = 80;
-			chk_gunB_OffscreenReload.Values.Text = "Auto-Reload when you go Offscreen";
-			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1935,6 +1952,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).EndInit();
 			groupBox13.ResumeLayout(false);
 			groupBox13.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_showStartup).EndInit();
 			tabControl1.ResumeLayout(false);
 			tabGlobal.ResumeLayout(false);
 			tabGamepad.ResumeLayout(false);
@@ -2116,5 +2134,6 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_gunB_OffscreenReload;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel45;
 		private Krypton.Toolkit.KryptonCheckBox chk_gunA_OffscreenReload;
+		private Krypton.Toolkit.KryptonComboBox cmb_showStartup;
 	}
 }

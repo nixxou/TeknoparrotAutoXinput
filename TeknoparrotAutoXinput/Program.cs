@@ -3108,6 +3108,7 @@ namespace TeknoparrotAutoXinput
 
 							var imgPath = Path.Combine(basePath, "img", originalConfigFileNameWithoutExt + "." + configname + variante + ".jpg");
 
+							Utils.LogMessage($"AddToImgPath : {imgPath}");
 
 							Startup.imagePaths.Add(imgPath);
 						}

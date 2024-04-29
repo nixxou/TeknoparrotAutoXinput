@@ -127,6 +127,7 @@ namespace TeknoparrotAutoXinput
 		public bool gunAOffscreenReload { get; set; } = false;
 		public bool gunBOffscreenReload { get; set; } = false;
 
+		public int TPConsoleAction { get; set; } = 0;
 
 		public Configuration()
 		{
@@ -214,6 +215,7 @@ namespace TeknoparrotAutoXinput
 				this.rivatunerExe = DeserializeData.rivatunerExe;
 				this.gunAOffscreenReload = DeserializeData.gunAOffscreenReload;
 				this.gunBOffscreenReload = DeserializeData.gunBOffscreenReload;
+				this.TPConsoleAction = DeserializeData.TPConsoleAction;
 
 			}
 			catch (Exception ex)

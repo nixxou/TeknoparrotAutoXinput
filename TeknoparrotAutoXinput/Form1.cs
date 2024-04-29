@@ -33,6 +33,8 @@ namespace TeknoparrotAutoXinput
 			this.KeyPicker = new PickKeyCombo(this);
 			//System.Diagnostics.Debugger.Break();
 
+			cmb_showStartup.SelectedIndex = ConfigurationManager.MainConfig.TPConsoleAction;
+
 			chk_FFB.Checked = ConfigurationManager.MainConfig.FFB;
 			chk_showStartup.Checked = ConfigurationManager.MainConfig.showStartup;
 			chk_enableVirtualKeyboard.Checked = ConfigurationManager.MainConfig.virtualKeyboard;
@@ -1086,6 +1088,17 @@ namespace TeknoparrotAutoXinput
 
 			}
 
+		}
+
+		private void groupBox13_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_showStartup_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.TPConsoleAction = cmb_showStartup.SelectedIndex;
+			ConfigurationManager.SaveConfig();
 		}
 	}
 }

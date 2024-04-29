@@ -132,6 +132,9 @@ namespace TeknoparrotAutoXinput
 
 		private void GrabLoaderTimer_Tick(object sender, EventArgs e)
 		{
+
+			int OptionFenetreTP = ConfigurationManager.MainConfig.TPConsoleAction;
+
 			IntPtr externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "OpenParrotWin32", "OpenParrotLoader.exe"));
 			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "OpenParrotWin32", "OpenParrotKonamiLoader.exe"));
 			if (externalWindowHandle == IntPtr.Zero) externalWindowHandle = FindWindow(null, Path.Combine(tpBasePath, "OpenParrotx64", "OpenParrotLoader64.exe"));
@@ -142,26 +145,38 @@ namespace TeknoparrotAutoXinput
 				//int style = GetWindowLong(externalWindowHandle, GWL_STYLE);
 				//SetWindowLong(externalWindowHandle, GWL_STYLE, style & ~(int)(WS_CAPTION | WS_THICKFRAME));
 
-				// Récupérer la taille du formulaire
-				int formWidth = this.Width;
-				int formHeight = this.Height;
+				if(OptionFenetreTP == 0)
+				{
+					// Récupérer la taille du formulaire
+					int formWidth = this.Width;
+					int formHeight = this.Height;
 
-				// Calculer la nouvelle taille de la fenêtre externe (1/4 du formulaire)
-				int newWidth = formWidth / 2;  // Vous pouvez ajuster ce facteur selon vos besoins
-				int newHeight = formHeight / 2;  // Vous pouvez ajuster ce facteur selon vos besoins
+					// Calculer la nouvelle taille de la fenêtre externe (1/4 du formulaire)
+					int newWidth = formWidth / 2;  // Vous pouvez ajuster ce facteur selon vos besoins
+					int newHeight = formHeight / 2;  // Vous pouvez ajuster ce facteur selon vos besoins
 
-				const short SWP_NOMOVE = 0X2;
-				const short SWP_NOSIZE = 1;
-				const short SWP_NOZORDER = 0X4;
-				const int SWP_SHOWWINDOW = 0x0040;
+					const short SWP_NOMOVE = 0X2;
+					const short SWP_NOSIZE = 1;
+					const short SWP_NOZORDER = 0X4;
+					const int SWP_SHOWWINDOW = 0x0040;
 
-				SetWindowPos(externalWindowHandle, 0, 0, 0, 0, 0, 0x0001 | 0x0040);       // Place the window in the top left of the parent window without resizing it
-				SetWindowPos(externalWindowHandle, 0, 0, 0, newWidth, newHeight, SWP_NOZORDER | SWP_SHOWWINDOW);
-				SetParent(externalWindowHandle, this.Handle);
-				SetWindowPos(externalWindowHandle, 0, 0, formHeight - newHeight, newWidth, newHeight, 0x0001 | 0x0040);
+					SetWindowPos(externalWindowHandle, 0, 0, 0, 0, 0, 0x0001 | 0x0040);       // Place the window in the top left of the parent window without resizing it
+					SetWindowPos(externalWindowHandle, 0, 0, 0, newWidth, newHeight, SWP_NOZORDER | SWP_SHOWWINDOW);
+					SetParent(externalWindowHandle, this.Handle);
+					SetWindowPos(externalWindowHandle, 0, 0, formHeight - newHeight, newWidth, newHeight, 0x0001 | 0x0040);
+
+				}
+				else if(OptionFenetreTP == 1)
+				{
+					ShowWindow(externalWindowHandle, SW_MINIMIZE);
+				}
+				else if(OptionFenetreTP == 2)
+				{
+					ShowWindow(externalWindowHandle, 0);
+				}
+
 
 				checkWindowTimer.Stop();
-
 			}
 		}
 
