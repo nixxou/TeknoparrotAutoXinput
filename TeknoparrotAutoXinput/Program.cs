@@ -119,11 +119,11 @@ namespace TeknoparrotAutoXinput
 			//Demulshooter run as admin
 			if (args.Length == 1 && args.First() == "--demulshooter")
 			{
+				MessageBox.Show("icidemul");
 				DemulshooterManager.SetPath(ConfigurationManager.MainConfig.demulshooterExe);
 				if (DemulshooterManager.ValidPath)
 				{
 					DemulshooterManager.ReadConfig();
-
 					ProcessStartInfo psi = new ProcessStartInfo
 					{
 						FileName = "taskkill",
@@ -1216,9 +1216,11 @@ namespace TeknoparrotAutoXinput
 									dinputLightgunBFound = false;
 								}
 							}
-							if(!dinputLightgunAFound && !dinputLightgunBFound)
+							//if(!dinputLightgunAFound && !dinputLightgunBFound)
+							if (!dinputLightgunAFound)
 							{
 								haveLightgun = false;
+								dinputLightgunBFound = false;
 							}
 							else
 							{
@@ -2648,15 +2650,30 @@ namespace TeknoparrotAutoXinput
 						if (useDinputLightGun)
 						{
 
-							List<string> FieldsToEnable = new List<string>();
-							List<string> FieldsToDisable = new List<string>();
+							Dictionary<string, List<string>> FieldsToEnable = new Dictionary<string, List<string>>();
+							Dictionary<string, List<string>> FieldsToDisable = new Dictionary<string, List<string>>();
 							if(!hideCrosshair && GameInfo.ContainsKey("crosshairON") && GameInfo["crosshairON"] != "")
 							{
 								foreach (var cFields in GameInfo["crosshairON"].Split('|'))
 								{
 									if (cFields.Trim() == "") continue;
-									if (cFields.StartsWith("!")) FieldsToDisable.Add(cFields.Substring(1).Trim());
-									else FieldsToEnable.Add(cFields.Trim());
+									var cTuple = cFields.Split(',');
+									if (cTuple.Count() == 2)
+									{
+										string CategoryName = cTuple[0].Trim();
+										string FieldName = cTuple[1].Trim();
+										if (FieldName.StartsWith("!"))
+										{
+											FieldName = FieldName.Substring(1).Trim();
+											if (!FieldsToDisable.ContainsKey(CategoryName)) FieldsToDisable.Add(CategoryName, new List<string>());
+											FieldsToDisable[CategoryName].Add(FieldName);
+										}
+										else
+										{
+											if (!FieldsToEnable.ContainsKey(CategoryName)) FieldsToEnable.Add(CategoryName, new List<string>());
+											FieldsToEnable[CategoryName].Add(FieldName);
+										}
+									}
 								}
 							}
 							if (hideCrosshair && GameInfo.ContainsKey("crosshairOFF") && GameInfo["crosshairOFF"] != "")
@@ -2664,8 +2681,23 @@ namespace TeknoparrotAutoXinput
 								foreach (var cFields in GameInfo["crosshairOFF"].Split('|'))
 								{
 									if (cFields.Trim() == "") continue;
-									if (cFields.StartsWith("!")) FieldsToDisable.Add(cFields.Substring(1).Trim());
-									else FieldsToEnable.Add(cFields.Trim());
+									var cTuple = cFields.Split(',');
+									if (cTuple.Count() == 2)
+									{
+										string CategoryName = cTuple[0].Trim();
+										string FieldName = cTuple[1].Trim();
+										if (FieldName.StartsWith("!"))
+										{
+											FieldName = FieldName.Substring(1).Trim();
+											if (!FieldsToDisable.ContainsKey(CategoryName)) FieldsToDisable.Add(CategoryName, new List<string>());
+											FieldsToDisable[CategoryName].Add(FieldName);
+										}
+										else
+										{
+											if (!FieldsToEnable.ContainsKey(CategoryName)) FieldsToEnable.Add(CategoryName, new List<string>());
+											FieldsToEnable[CategoryName].Add(FieldName);
+										}
+									}
 								}
 							}
 							if (crosshairA && GameInfo.ContainsKey("crosshairA") && GameInfo["crosshairA"] != "")
@@ -2673,8 +2705,23 @@ namespace TeknoparrotAutoXinput
 								foreach (var cFields in GameInfo["crosshairA"].Split('|'))
 								{
 									if (cFields.Trim() == "") continue;
-									if (cFields.StartsWith("!")) FieldsToDisable.Add(cFields.Substring(1).Trim());
-									else FieldsToEnable.Add(cFields.Trim());
+									var cTuple = cFields.Split(',');
+									if (cTuple.Count() == 2)
+									{
+										string CategoryName = cTuple[0].Trim();
+										string FieldName = cTuple[1].Trim();
+										if (FieldName.StartsWith("!"))
+										{
+											FieldName = FieldName.Substring(1).Trim();
+											if (!FieldsToDisable.ContainsKey(CategoryName)) FieldsToDisable.Add(CategoryName, new List<string>());
+											FieldsToDisable[CategoryName].Add(FieldName);
+										}
+										else
+										{
+											if (!FieldsToEnable.ContainsKey(CategoryName)) FieldsToEnable.Add(CategoryName, new List<string>());
+											FieldsToEnable[CategoryName].Add(FieldName);
+										}
+									}
 								}
 							}
 							if (!crosshairA && GameInfo.ContainsKey("crosshairA") && GameInfo["crosshairA"] != "")
@@ -2682,8 +2729,23 @@ namespace TeknoparrotAutoXinput
 								foreach (var cFields in GameInfo["crosshairA"].Split('|'))
 								{
 									if (cFields.Trim() == "") continue;
-									if (cFields.StartsWith("!")) FieldsToEnable.Add(cFields.Substring(1).Trim());
-									else FieldsToDisable.Add(cFields.Trim());
+									var cTuple = cFields.Split(',');
+									if (cTuple.Count() == 2)
+									{
+										string CategoryName = cTuple[0].Trim();
+										string FieldName = cTuple[1].Trim();
+										if (!FieldName.StartsWith("!"))
+										{
+											FieldName = FieldName.Substring(1).Trim();
+											if (!FieldsToDisable.ContainsKey(CategoryName)) FieldsToDisable.Add(CategoryName, new List<string>());
+											FieldsToDisable[CategoryName].Add(FieldName);
+										}
+										else
+										{
+											if (!FieldsToEnable.ContainsKey(CategoryName)) FieldsToEnable.Add(CategoryName, new List<string>());
+											FieldsToEnable[CategoryName].Add(FieldName);
+										}
+									}
 								}
 							}
 
@@ -2692,8 +2754,23 @@ namespace TeknoparrotAutoXinput
 								foreach (var cFields in GameInfo["crosshairB"].Split('|'))
 								{
 									if (cFields.Trim() == "") continue;
-									if (cFields.StartsWith("!")) FieldsToDisable.Add(cFields.Substring(1).Trim());
-									else FieldsToEnable.Add(cFields.Trim());
+									var cTuple = cFields.Split(',');
+									if (cTuple.Count() == 2)
+									{
+										string CategoryName = cTuple[0].Trim();
+										string FieldName = cTuple[1].Trim();
+										if (FieldName.StartsWith("!"))
+										{
+											FieldName = FieldName.Substring(1).Trim();
+											if (!FieldsToDisable.ContainsKey(CategoryName)) FieldsToDisable.Add(CategoryName, new List<string>());
+											FieldsToDisable[CategoryName].Add(FieldName);
+										}
+										else
+										{
+											if (!FieldsToEnable.ContainsKey(CategoryName)) FieldsToEnable.Add(CategoryName, new List<string>());
+											FieldsToEnable[CategoryName].Add(FieldName);
+										}
+									}
 								}
 							}
 							if (!crosshairB && GameInfo.ContainsKey("crosshairB") && GameInfo["crosshairB"] != "")
@@ -2701,8 +2778,23 @@ namespace TeknoparrotAutoXinput
 								foreach (var cFields in GameInfo["crosshairB"].Split('|'))
 								{
 									if (cFields.Trim() == "") continue;
-									if (cFields.StartsWith("!")) FieldsToEnable.Add(cFields.Substring(1).Trim());
-									else FieldsToDisable.Add(cFields.Trim());
+									var cTuple = cFields.Split(',');
+									if (cTuple.Count() == 2)
+									{
+										string CategoryName = cTuple[0].Trim();
+										string FieldName = cTuple[1].Trim();
+										if (!FieldName.StartsWith("!"))
+										{
+											FieldName = FieldName.Substring(1).Trim();
+											if (!FieldsToDisable.ContainsKey(CategoryName)) FieldsToDisable.Add(CategoryName, new List<string>());
+											FieldsToDisable[CategoryName].Add(FieldName);
+										}
+										else
+										{
+											if (!FieldsToEnable.ContainsKey(CategoryName)) FieldsToEnable.Add(CategoryName, new List<string>());
+											FieldsToEnable[CategoryName].Add(FieldName);
+										}
+									}
 								}
 							}
 							XmlNodeList fieldNodes = xmlDoc.SelectNodes("//FieldInformation");
@@ -2710,24 +2802,30 @@ namespace TeknoparrotAutoXinput
 							{
 								XmlNode categoryNameNode = fieldNode.SelectSingleNode("CategoryName");
 								XmlNode fieldNameNode = fieldNode.SelectSingleNode("FieldName");
+								XmlNode fieldValueToChangeNode = fieldNode.SelectSingleNode("FieldValue");
 
-								if (categoryNameNode != null && categoryNameNode.InnerText == "General" &&
-									fieldNameNode != null && FieldsToEnable.Contains(fieldNameNode.InnerText))
+								if (categoryNameNode != null && fieldNameNode != null && fieldValueNode != null)
 								{
-									XmlNode fieldValueNodeToEnable = fieldNode.SelectSingleNode("FieldValue");
-									if (fieldValueNodeToEnable != null)
+									string categoryNameNodeValue = categoryNameNode.InnerText;
+									string fieldNameNodeValue = fieldNameNode.InnerText;
+
+
+									if (FieldsToEnable.ContainsKey(categoryNameNodeValue))
 									{
-										fieldValueNodeToEnable.InnerText = "1";
+										if (FieldsToEnable[categoryNameNodeValue].Contains(fieldNameNodeValue))
+										{
+											fieldValueToChangeNode.InnerText = "1";
+										}
 									}
-								}
-								if (categoryNameNode != null && categoryNameNode.InnerText == "General" &&
-									fieldNameNode != null && FieldsToDisable.Contains(fieldNameNode.InnerText))
-								{
-									XmlNode fieldValueNodeToDisable = fieldNode.SelectSingleNode("FieldValue");
-									if (fieldValueNodeToDisable != null)
+
+									if (FieldsToDisable.ContainsKey(categoryNameNodeValue))
 									{
-										fieldValueNodeToDisable.InnerText = "0";
+										if (FieldsToDisable[categoryNameNodeValue].Contains(fieldNameNodeValue))
+										{
+											fieldValueToChangeNode.InnerText = "0";
+										}
 									}
+
 								}
 							}
 
@@ -3299,7 +3397,7 @@ namespace TeknoparrotAutoXinput
 								gunB4tiers = Fourtiers;
 							}
 
-							if(GameInfo.ContainsKey("target") && GameInfo.ContainsKey("rom"))
+							if(GameInfo.ContainsKey("target") && GameInfo.ContainsKey("rom") && GameInfo["rom"] != "")
 							{
 								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers);
 								if(GameInfo.ContainsKey("64bits") && GameInfo["64bits"].ToLower() == "true") DemulshooterManager.Is64bits = true;

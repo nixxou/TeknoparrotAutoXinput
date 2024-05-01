@@ -1,0 +1,18 @@
+{
+    "Test": "Test",
+    "Select": "Service1",
+    "Player 1 Gun X": "GunA_LightgunX",
+    "Player 1 Gun Y": "GunA_LightgunY",
+    "Coin Chute 1": "GunA_LightgunCoin,GunA_LightgunArcadeCoinBis",
+    "Player 1 Start": "GunA_LightgunStart,GunA_LightgunArcadeStartBis",
+    "Player 1 Trigger": "GunA_LightgunTrigger",
+    "Player 1 Flame": "GunA_LightgunPedalRight,GunA_LightgunPump,GunA_LightgunBackLeftBtn,GunA_LightgunDown",
+    "Player 1 Special": "GunA_LightgunBackRightBtn,GunA_LightgunFrontLeftBtn,GunA_LightgunLeft,GunA_LightgunArcade1",
+    "Player 2 Gun X": "GunB_LightgunX",
+    "Player 2 Gun Y": "GunB_LightgunY",
+    "Coin Chute 2": "GunB_LightgunCoin,GunB_LightgunArcadeCoinBis",
+    "Player 2 Start": "GunB_LightgunStart,GunB_LightgunArcadeStartBis",
+    "Player 2 Trigger": "GunB_LightgunTrigger",
+    "Player 2 Flame": "GunB_LightgunPedalRight,GunB_LightgunPump,GunB_LightgunBackLeftBtn,GunB_LightgunDown",
+    "Player 2 Special": "GunB_LightgunBackRightBtn,GunB_LightgunFrontLeftBtn,GunB_LightgunLeft,GunB_LightgunArcade1"
+}

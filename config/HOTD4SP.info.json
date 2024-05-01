@@ -1,0 +1,11 @@
+{
+    "rom": "hotd4sp",
+    "target": "lindbergh",
+    "64bits": "False",
+    "crosshairA": "",
+    "crosshairB": "",
+    "crosshairON": "Crosshairs,Enable|Crosshairs,Scaling",
+    "crosshairOFF": "Crosshairs,!Enable",
+    "crosshairPNG": "False",
+    "outputs": ""
+}

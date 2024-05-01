@@ -124,9 +124,9 @@ namespace TeknoparrotAutoXinput
 				var ini = new IniFile(Path.Combine(DemulshooterPath, "config.ini"));
 				Rom = ini.Read("Launch_Rom");
 				Target = ini.Read("Launch_Target");
-				Is64bits = ini.Read("Launch64bits") == "True" ? true : false;
+				Is64bits = ini.Read("Launch_64bits") == "True" ? true : false;
 				ParentProcess = int.Parse(ini.Read("ParentProcess"));
-				HideCrosshair = ini.Read("Launch64bits") == "True" ? true : false;
+				HideCrosshair = ini.Read("HideCrosshair") == "True" ? true : false;
 			}
 
 		}

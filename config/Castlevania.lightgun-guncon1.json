@@ -1,0 +1,14 @@
+{
+    "Test": "Test",
+    "Service": "Service1",
+    "Player 1 Whip X": "GunA_LightgunX",
+    "Player 1 Whip Y": "GunA_LightgunY",
+    "Player 1 Whip Yellow": "GunA_LightgunTrigger",
+    "Player 1 Start": "GunA_LightgunBackRightBtn,GunA_LightgunArcadeStartBis",
+    "Player 2 Whip Red": "GunA_LightgunBackLeftBtn,GunB_LightgunBackLeftBtn",
+    "Coin": "GunA_LightgunArcadeCoinBis,GunB_LightgunArcadeCoinBis",
+    "Player 2 Whip X": "GunB_LightgunX",
+    "Player 2 Whip Y": "GunB_LightgunY",
+    "Player 2 Whip Yellow": "GunB_LightgunTrigger",
+    "Player 2 Start": "GunB_LightgunBackRightBtn,GunB_LightgunArcadeStartBis"
+}
