@@ -269,7 +269,7 @@ namespace TeknoparrotAutoXinput
 		}
 
 		public static void InitGuns(string rumbleTypeA, string rumbleParameterA, string rumbleTypeB, string rumbleParameterB,
-			bool gunAAutoJoy, bool gunADamageRumble, bool gunA4tiers, bool gunBAutoJoy, bool gunBDamageRumble, bool gunB4tiers
+			bool gunAAutoJoy, bool gunADamageRumble, bool gunA4tiers, bool gunBAutoJoy, bool gunBDamageRumble, bool gunB4tiers, bool blockrecoil = true
 			)
 		{
 
@@ -290,7 +290,7 @@ namespace TeknoparrotAutoXinput
 				gunAGun4ir = true;
 				gunARecoil = true;
 				gunAParameter = rumbleParameterA;
-				Init_Gun4ir(1);
+				Init_Gun4ir(1, blockrecoil);
 			}
 
 			if (rumbleTypeA == "sinden" && rumbleParameterA != "")
@@ -312,7 +312,7 @@ namespace TeknoparrotAutoXinput
 				gunBGun4ir = true;
 				gunBRecoil = true;
 				gunBParameter = rumbleParameterB;
-				Init_Gun4ir(2);
+				Init_Gun4ir(2, blockrecoil);
 			}
 
 			if (rumbleTypeB == "sinden" && rumbleParameterB != "")
@@ -625,7 +625,7 @@ namespace TeknoparrotAutoXinput
 		}
 
 
-		private static void Init_Gun4ir(int gunIndex)
+		private static void Init_Gun4ir(int gunIndex, bool blockrecoil = true)
 		{
 			bool autoJoy = false;
 			bool mode4tiers = false;
@@ -642,19 +642,19 @@ namespace TeknoparrotAutoXinput
 
 
 
-			Gun4Ir_SerialSend(gunIndex, "S6");
+			if(blockrecoil) Gun4Ir_SerialSend(gunIndex, "S6");
 			Thread.Sleep(100);
 			if (autoJoy) Gun4Ir_SerialSend(gunIndex, "M0x1");
 			Thread.Sleep(100);
 			if (mode4tiers) Gun4Ir_SerialSend(gunIndex, "M3x1");
 			else Gun4Ir_SerialSend(gunIndex, "M3x0");
 			Thread.Sleep(100);
-			Gun4Ir_SerialSend(gunIndex, "F1x2x2x");
+			//Gun4Ir_SerialSend(gunIndex, "F1x2x2x");
 		}
 
 		private static void Release_Gun4ir(int gunIndex)
 		{
-			Gun4Ir_SerialSend(gunIndex, "SE");
+			Gun4Ir_SerialSend(gunIndex, "E");
 		}
 
 		private static void Gun4Ir_SerialSend(int gunIndex, string data)

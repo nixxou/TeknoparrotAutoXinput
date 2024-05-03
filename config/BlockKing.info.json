@@ -1,0 +1,11 @@
+{
+    "rom": "bkbs",
+    "target": "ttx",
+    "64bits": "False",
+    "crosshairA": "",
+    "crosshairB": "",
+    "crosshairON": "Crosshair,Enable",
+    "crosshairOFF": "Crosshair,!Enable",
+    "crosshairPNG": "True",
+    "outputs": ""
+}

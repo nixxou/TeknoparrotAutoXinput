@@ -204,7 +204,29 @@ namespace TeknoparrotAutoXinput
 				if (IsHardLink(file, originalLinkDir))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
-					File.Delete(file);
+					try
+					{
+						File.Delete(file);
+					}
+					catch(Exception ex)
+					{
+						if (File.Exists(file))
+						{
+							try
+							{
+								FileInfo finfo = new FileInfo(file);
+								if(finfo.IsReadOnly)
+								{
+									finfo.IsReadOnly = false;
+									finfo.Delete();
+								}
+							}
+							catch (Exception ex2) { }
+						}
+
+					}
+					
+
 				}
 			}
 			foreach (var file in filePaths)

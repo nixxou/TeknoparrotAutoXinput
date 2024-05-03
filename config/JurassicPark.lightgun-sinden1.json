@@ -1,0 +1,19 @@
+{
+    "Test": "Test",
+    "Service": "Service1",
+    "P1 Gun X": "GunA_LightgunX",
+    "P1 Gun Y": "GunA_LightgunY",
+    "Coin": "GunA_LightgunCoin,GunA_LightgunArcadeCoinBis,GunB_LightgunCoin,GunB_LightgunArcadeCoinBis",
+    "Start Button P1": "GunA_LightgunStart,GunA_LightgunArcadeStartBis",
+    "Trigger P1": "GunA_LightgunTrigger",
+    "Grenades P1": "GunA_LightgunPump,GunA_LightgunBackRightBtn,GunA_LightgunFrontLeftBtn,GunA_LightgunBackLeftBtn",
+    "TestMenu Up": "GunA_LightgunUp",
+    "TestMenu Down": "GunA_LightgunDown",
+    "TestMenu Back": "GunA_LightgunLeft",
+    "TestMenu OK": "GunA_LightgunRight",
+    "P2 Gun X": "GunB_LightgunX",
+    "P2 Gun Y": "GunB_LightgunY",
+    "Start Button P2": "GunB_LightgunStart,GunB_LightgunArcadeStartBis",
+    "Trigger P2": "GunB_LightgunTrigger",
+    "Grenades P2": "GunB_LightgunPump,GunB_LightgunBackRightBtn,GunB_LightgunFrontLeftBtn,GunB_LightgunBackLeftBtn"
+}

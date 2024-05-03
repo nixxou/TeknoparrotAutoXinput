@@ -1,0 +1,11 @@
+{
+    "rom": "eadp",
+    "target": "ttx",
+    "64bits": "False",
+    "crosshairA": "",
+    "crosshairB": "",
+    "crosshairON": "Crosshairs,Enable",
+    "crosshairOFF": "Crosshairs,!Enable",
+    "crosshairPNG": "True",
+    "outputs": ""
+}

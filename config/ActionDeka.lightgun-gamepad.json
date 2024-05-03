@@ -1,0 +1,21 @@
+{
+    "Test": "Test",
+    "Service": "Service1",
+    "P1 Right Gun X": "GunA_LightgunX",
+    "P1 Right Gun Y": "GunA_LightgunY",
+    "Coin": "GunA_LightgunCoin,GunB_LightgunCoin",
+    "P1 Start": "GunA_LightgunStart",
+    "P1 Right Trigger": "GunA_LightgunTrigger",
+    "P1 Reload\/Guard": "GunA_LightgunPedalRight,GunA_LightgunFrontLeftBtn,GunA_LightgunReload",
+    "P1 Change Control Mode": "GunA_LightgunPump",
+    "P1 Right Hook": "GunA_LightgunBackRightBtn",
+    "P1 Left Hook": "GunA_LightgunBackLeftBtn",
+    "P2 Right Gun X": "GunB_LightgunX",
+    "P2 Right Gun Y": "GunB_LightgunY",
+    "P2 Start": "GunB_LightgunStart",
+    "P2 Right Trigger": "GunB_LightgunTrigger",
+    "P2 Reload\/Guard": "GunB_LightgunPedalRight,GunB_LightgunFrontLeftBtn,GunB_LightgunReload",
+    "P2 Change Control Mode": "GunB_LightgunPump",
+    "P2 Right Hook": "GunB_LightgunBackRightBtn",
+    "P2 Left Hook": "GunB_LightgunBackLeftBtn"
+}

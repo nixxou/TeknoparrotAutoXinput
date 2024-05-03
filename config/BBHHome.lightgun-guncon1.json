@@ -1,0 +1,16 @@
+{
+    "Test": "Test,GunA_LightgunArcade1,GunB_LightgunArcade1",
+    "Service": "Service1",
+    "P1 Gun X": "GunA_LightgunX",
+    "P1 Gun Y": "GunA_LightgunY",
+    "P1 Trigger": "GunA_LightgunTrigger",
+    "P1 Pump Reload": "GunA_LightgunPedalRight,GunA_LightgunBackLeftBtn",
+    "P1 Start": "GunA_LightgunBackRightBtn,GunA_LightgunArcadeStartBis",
+    "Coin": "GunA_LightgunArcadeCoinBis",
+    "P2 Gun X": "GunB_LightgunX",
+    "P2 Gun Y": "GunB_LightgunY",
+    "P2 Trigger": "GunB_LightgunTrigger",
+    "P2 Pump Reload": "GunB_LightgunPedalRight,GunB_LightgunBackLeftBtn",
+    "P2 Start": "GunB_LightgunBackRightBtn,GunB_LightgunArcadeStartBis",
+    "Coin 2": "GunB_LightgunArcadeCoinBis"
+}

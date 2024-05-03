@@ -1,0 +1,11 @@
+{
+    "rom": "eai",
+    "target": "unis",
+    "64bits": "True",
+    "crosshairA": "",
+    "crosshairB": "",
+    "crosshairON": "",
+    "crosshairOFF": "",
+    "crosshairPNG": "False",
+    "outputs": ""
+}

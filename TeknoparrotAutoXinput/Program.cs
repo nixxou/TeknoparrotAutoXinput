@@ -119,7 +119,6 @@ namespace TeknoparrotAutoXinput
 			//Demulshooter run as admin
 			if (args.Length == 1 && args.First() == "--demulshooter")
 			{
-				MessageBox.Show("icidemul");
 				DemulshooterManager.SetPath(ConfigurationManager.MainConfig.demulshooterExe);
 				if (DemulshooterManager.ValidPath)
 				{
@@ -815,7 +814,7 @@ namespace TeknoparrotAutoXinput
 
 
 						//Start LightGunCheck
-						MessageBox.Show("Start LightGunCheck");
+						//MessageBox.Show("Start LightGunCheck");
 						bool checkDinputLightgun = false;
 						string LightgunA_Type = ConfigurationManager.MainConfig.gunAType;
 						string LightgunB_Type = ConfigurationManager.MainConfig.gunBType;
@@ -3410,6 +3409,10 @@ namespace TeknoparrotAutoXinput
 								DemulshooterManager.Start();
 
 							}
+							else
+							{
+								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers, false);
+							}
 						}
 
 						string p1CrosshairToRestore = "";
@@ -3559,7 +3562,6 @@ namespace TeknoparrotAutoXinput
 
 						}
 
-
 						string argumentTpExe = "--profile=\"" + finalConfig + "\"";
 						if (gameOptions.RunAsRoot && gameNeedAdmin)
 						{
@@ -3638,7 +3640,7 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
-
+						
 						if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{
 							Utils.LogMessage($"CleanHardLinksFiles Elf");

@@ -1,0 +1,11 @@
+{
+    "rom": "hmuseum",
+    "target": "ttx",
+    "64bits": "False",
+    "crosshairA": "",
+    "crosshairB": "",
+    "crosshairON": "Custom Crosshairs,Enable",
+    "crosshairOFF": "Custom Crosshairs,!Enable",
+    "crosshairPNG": "True",
+    "outputs": ""
+}

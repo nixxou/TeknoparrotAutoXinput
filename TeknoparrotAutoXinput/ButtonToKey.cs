@@ -192,6 +192,7 @@ namespace TeknoparrotAutoXinput
 
 		public void Assign(string newKey, string OriginalGuid, string OriginalLabel, int coinOrStart=0)
 		{
+			Console.WriteLine($"Assign({newKey}, {OriginalGuid}, {OriginalLabel}, {coinOrStart})");
 			if (coinOrStart == 11) GunA_coinKey = newKey;
 			if (coinOrStart == 12) GunA_startKey = newKey;
 			if (coinOrStart == 13) GunA_reloadKey = newKey;
@@ -478,7 +479,7 @@ namespace TeknoparrotAutoXinput
 						if (!string.IsNullOrEmpty(inputText))
 						{
 							inputText = deviceInstance.Type + " " + inputText;
-							//Utils.LogMessage(inputText + " : " + key.Value + " : " + pressed);
+							if(inputText.StartsWith("Button")) Utils.LogMessage(inputText + " : " + key.Value + " : " + pressed);
 
 							if (inputText.EndsWith(" ="))
 							{

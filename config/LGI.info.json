@@ -1,0 +1,11 @@
+{
+    "rom": "lgi",
+    "target": "ringwide",
+    "64bits": "False",
+    "crosshairA": "",
+    "crosshairB": "",
+    "crosshairON": "",
+    "crosshairOFF": "",
+    "crosshairPNG": "False",
+    "outputs": ""
+}
