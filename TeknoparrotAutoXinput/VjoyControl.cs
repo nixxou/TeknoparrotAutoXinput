@@ -65,6 +65,10 @@ namespace TeknoparrotAutoXinput
 		private string _game = "";
 
 		private bool _GunA_manual = false;
+
+		private Thread receiverThread = null;
+		private bool shouldStopReceiver = false;
+
 		public bool GunA_manual
 		{
 			get { return (_GunA_manual); }
@@ -226,6 +230,10 @@ namespace TeknoparrotAutoXinput
 			}
 			else
 			{
+				receiverThread = new Thread(RunReceiver);
+				receiverThread.IsBackground = true; // This makes the thread a background thread.
+				receiverThread.Start();
+
 				System.Diagnostics.Process p = ParentProcessUtilities.GetParentProcess();
 				if (p != null)
 				{
@@ -474,6 +482,68 @@ namespace TeknoparrotAutoXinput
 
 
 
+		}
+
+		public void RunReceiver()
+		{
+			while (shouldStopReceiver == false)
+			{
+				try
+				{
+					using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("VjoyControlCommand", PipeDirection.In))
+					{
+						pipeServer.WaitForConnection();
+						using (StreamReader reader = new StreamReader(pipeServer, Encoding.UTF8))
+						{
+							char[] buffer = new char[4096];
+							while (true)
+							{
+								if (shouldStopReceiver) return;
+
+								int bytesRead = reader.Read(buffer, 0, buffer.Length);
+
+								if (bytesRead == 0)
+									break; // Fin du flux, sortir de la boucle
+
+								string message = new string(buffer, 0, bytesRead);
+
+								Action safeWrite = delegate { ParseMessage(message); };
+
+								this.Invoke(safeWrite);
+
+							}
+						}
+					}
+				}
+				catch (IOException ex)
+				{
+					Console.WriteLine($"Error: {ex.Message}");
+				}
+				Thread.Sleep(1000); // Sleep for a while before checking for new connections/messages.
+			}
+		}
+
+		public void ParseMessage(string message)
+		{
+			if (message.StartsWith("formula="))
+			{
+				MessageBox.Show(message);
+				string secondPartMessage = message.Substring(8).Trim();
+				var formulaSplit = secondPartMessage.Split(',');
+				if (formulaSplit.Count() == 2)
+				{
+					string formulaX = formulaSplit[0];
+					string formulaY = formulaSplit[1];
+					txt_expAX.Text = formulaX;
+					txt_expAY.Text = formulaY;
+					txt_expBX.Text = formulaX;
+					txt_expBY.Text = formulaY;
+					btn_updateAX_Click(null, null);
+					btn_updateAY_Click(null, null);
+					btn_updateBX_Click(null, null);
+					btn_updateBY_Click(null, null);
+				}
+			}
 		}
 
 		private void LoadSettings()
@@ -1078,6 +1148,16 @@ namespace TeknoparrotAutoXinput
 
 				_stopListening = false;
 			}
+			shouldStopReceiver = true;
+			try
+			{
+				if (receiverThread != null)
+				{
+					receiverThread.Join();
+				}
+			}
+			catch { }
+
 		}
 
 		private void trk_forceA_X_ValueChanged(object sender, EventArgs e)

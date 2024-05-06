@@ -11,6 +11,8 @@ using System.Diagnostics;
 using Microsoft.Win32.TaskScheduler;
 using System.Security.Cryptography;
 using System.Security.Principal;
+using System.Xml.Linq;
+using System.ComponentModel;
 
 
 namespace TeknoparrotAutoXinput
@@ -73,6 +75,32 @@ namespace TeknoparrotAutoXinput
 
 		[DllImport("shlwapi.dll", CharSet = CharSet.Auto)]
 		static extern bool PathAppend([In, Out] StringBuilder pszPath, string pszMore);
+
+		[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+		private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
+		[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+		private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+		[DllImport("user32.dll")]
+		public static extern int GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+		[DllImport("user32.dll")]
+		public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+
+		[DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		private static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct RECT
+		{
+			public int Left;
+			public int Top;
+			public int Right;
+			public int Bottom;
+		}
 
 		public static int GetFileLinkCount(string filepath)
 		{
@@ -678,6 +706,65 @@ namespace TeknoparrotAutoXinput
 			return string.Equals(drive1, drive2, StringComparison.OrdinalIgnoreCase);
 		}
 
+		public static string ProcessExist(string exeName)
+		{
+			foreach (var process in Process.GetProcesses())
+			{
+				if (process.ProcessName.Contains(exeName))
+				{
+					bool is64bit = false;
+					try
+					{
+						IsWow64Process(process.Handle, out is64bit);
+					}
+					catch{}
+					if (is64bit) return "64";
+					return "32";
+				}
+			}
+			return "";
+		}
+
+		public static bool Is64Bit(Process process)
+		{
+			if (!Environment.Is64BitOperatingSystem)
+				return false;
+			// if this method is not available in your version of .NET, use GetNativeSystemInfo via P/Invoke instead
+
+			bool isWow64;
+			if (!IsWow64Process(process.Handle, out isWow64))
+				throw new Win32Exception();
+			return !isWow64;
+		}
+
+		public static IntPtr FindWindowByMultipleCriteria(string windowClass, string exeName, string windowTitle)
+		{
+			foreach (var process in Process.GetProcesses())
+			{
+				if (!string.IsNullOrEmpty(exeName) && !process.ProcessName.Contains(exeName))
+					continue;
+
+				IntPtr windowHandle = process.MainWindowHandle;
+				if (windowHandle == IntPtr.Zero)
+					continue;
+
+				StringBuilder className = new StringBuilder(256);
+				GetClassName(windowHandle, className, className.Capacity);
+
+				if (!string.IsNullOrEmpty(windowClass) && !className.ToString().Contains(windowClass))
+					continue;
+
+				StringBuilder title = new StringBuilder(256);
+				GetWindowText(windowHandle, title, title.Capacity);
+
+				if (!string.IsNullOrEmpty(windowTitle) && !title.ToString().Contains(windowTitle))
+					continue;
+
+				return windowHandle;
+			}
+
+			return IntPtr.Zero;
+		}
 
 	}
 }

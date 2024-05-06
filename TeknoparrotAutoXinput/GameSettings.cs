@@ -61,6 +61,19 @@ namespace TeknoparrotAutoXinput
 		public int gunA_OffscreenReload { get; set; } = 0;
 		public int gunB_OffscreenReload { get; set; } = 0;
 
+		public int useMagpie { get; set; } = 0;
+		public int magpieScaling { get; set; } = 0;
+		public int magpieCapture { get; set; } = 0;
+		public int magpieDelay { get; set; } = 0;
+		public int magpieShowFps { get; set; } = 0;
+		public int magpieTripleBuffering { get; set; } = 0;
+		public int magpieVsync { get; set; } = 0;
+		public int magpieLightgun { get; set; } = 0;
+		public int magpieLightgunCalibration { get; set; } = 0;
+		public bool useInjector { get; set; } = false;
+		public string injectorDllList { get; set; } = "";
+		public int injectorDelay { get; set; } = 0;
+
 		public GameSettings() 
 		{
 			
@@ -114,6 +127,19 @@ namespace TeknoparrotAutoXinput
 				this.runRivaTuner = DeserializeData.runRivaTuner;
 				this.gunA_OffscreenReload = DeserializeData.gunA_OffscreenReload;
 				this.gunB_OffscreenReload = DeserializeData.gunB_OffscreenReload;
+				this.useMagpie = DeserializeData.useMagpie;
+				this.magpieScaling = DeserializeData.magpieScaling;
+				this.magpieCapture = DeserializeData.magpieCapture;
+				this.magpieDelay = DeserializeData.magpieDelay;
+				this.magpieShowFps = DeserializeData.magpieShowFps;
+				this.magpieTripleBuffering = DeserializeData.magpieTripleBuffering;
+				this.magpieVsync = DeserializeData.magpieVsync;
+				this.magpieLightgun = DeserializeData.magpieLightgun;
+				this.magpieLightgunCalibration = DeserializeData.magpieLightgunCalibration;
+				this.useInjector = DeserializeData.useInjector;
+				this.injectorDllList = DeserializeData.injectorDllList;
+				this.injectorDelay = DeserializeData.injectorDelay;
+
 
 			}
 			catch (Exception ex)

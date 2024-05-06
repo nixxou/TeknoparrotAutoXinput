@@ -129,6 +129,22 @@ namespace TeknoparrotAutoXinput
 
 		public int TPConsoleAction { get; set; } = 0;
 
+		public string magpieExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "magpie", "Magpie.exe");
+		public string magpieSindenExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "magpie-sinden", "Magpie.exe");
+		public bool useMagpie { get; set; } = false;
+		public int magpieScaling { get; set; } = 0;
+		public int magpieCapture { get; set; } = 0;
+		public int magpieDelay { get; set; } = 0;
+		public bool magpieShowFps { get; set; } = false;
+		public bool magpieTripleBuffering { get; set; } = false;
+		public bool magpieVsync { get; set; } = false;
+		public int magpieLightgun { get; set; } = 0;
+		public int magpieLightgunCalibration { get; set; } = 0;
+		public double magpieBorderSize { get; set; } = 1.5;
+
+		public bool useXenos { get; set; } = false;
+
+
 		public Configuration()
 		{
 
@@ -216,6 +232,20 @@ namespace TeknoparrotAutoXinput
 				this.gunAOffscreenReload = DeserializeData.gunAOffscreenReload;
 				this.gunBOffscreenReload = DeserializeData.gunBOffscreenReload;
 				this.TPConsoleAction = DeserializeData.TPConsoleAction;
+				this.magpieExe = DeserializeData.magpieExe;
+				this.magpieSindenExe = DeserializeData.magpieSindenExe;
+				this.magpieScaling = DeserializeData.magpieScaling;
+				this.magpieDelay = DeserializeData.magpieDelay;
+				this.magpieCapture = DeserializeData.magpieCapture;
+				this.useMagpie = DeserializeData.useMagpie;
+				this.magpieShowFps = DeserializeData.magpieShowFps;
+				this.magpieTripleBuffering = DeserializeData.magpieTripleBuffering;
+				this.magpieVsync = DeserializeData.magpieVsync;
+				this.magpieLightgun = DeserializeData.magpieLightgun;
+				this.magpieLightgunCalibration = DeserializeData.magpieLightgunCalibration;
+				this.magpieBorderSize = DeserializeData.magpieBorderSize;
+				this.useXenos = DeserializeData.useXenos;
+
 
 			}
 			catch (Exception ex)

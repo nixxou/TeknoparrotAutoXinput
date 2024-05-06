@@ -7,5 +7,7 @@
     "crosshairON": "",
     "crosshairOFF": "",
     "crosshairPNG": "False",
-    "outputs": ""
+    "outputs": "",
+	"windowed":"General,Windowed,1",
+	"magpieClass": "FREEGLUT",
 }

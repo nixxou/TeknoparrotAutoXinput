@@ -28,8 +28,9 @@ namespace TeknoparrotAutoXinput
 		private string _linkTargetFolderExe = "";
 		private string _linkSourceFolderExe = "";
 
-
 		public string PerGameConfigFile = "";
+
+		private List<string> dllPathList = new List<string>();
 
 		GameSettings gameSettings = new GameSettings();
 		public GameOptions(Game gameData)
@@ -203,6 +204,19 @@ namespace TeknoparrotAutoXinput
 
 				}
 
+				if (grp_link.Enabled)
+				{
+					dllPathList.Add(_linkSourceFolder);
+					dllPathList.Add(_linkTargetFolder);
+				}
+				else
+				{
+					dllPathList.Add(_linkSourceFolderExe);
+					dllPathList.Add(_linkTargetFolderExe);
+				}
+
+
+
 				/*
 				if (linkTypeExe && executableGame != "" && Directory.Exists(executableGameDir))
 				{
@@ -349,6 +363,26 @@ namespace TeknoparrotAutoXinput
 
 		private void GameOptions_Load(object sender, EventArgs e)
 		{
+
+			if (!ConfigurationManager.MainConfig.useXenos)
+			{
+				grp_dllInjection.Enabled = false;
+				grp_dllInjection.Text = "Dll Injection (You muse check <<Enable Xenos DLL Injector>> in the global config First";
+			}
+			txt_injectorDllList.Text = gameSettings.injectorDllList;
+			chk_useInjector.Checked = gameSettings.useInjector;
+			num_injectorDelay.Value = gameSettings.injectorDelay;
+
+			cmb_useMagpie.SelectedIndex = gameSettings.useMagpie;
+			cmb_magpieScaling.SelectedIndex = gameSettings.magpieScaling;
+			cmb_magpieCapture.SelectedIndex = gameSettings.magpieCapture;
+			cmb_magpieDelay.SelectedIndex = gameSettings.magpieDelay;
+			cmb_magpieShowFps.SelectedIndex = gameSettings.magpieShowFps;
+			cmb_magpieTripleBuffering.SelectedIndex = gameSettings.magpieTripleBuffering;
+			cmb_magpieVsync.SelectedIndex = gameSettings.magpieVsync;
+			cmb_useMagpieLightgun.SelectedIndex = gameSettings.magpieLightgun;
+			cmb_MagpieLightgunCalibration.SelectedIndex = gameSettings.magpieLightgunCalibration;
+
 			chk_runAsAdmin.Enabled = false;
 			chk_group_StoozZone_Wheel.Location = new Point(chk_group_StoozZone_Wheel.Location.X, chk_group_StoozZone_Wheel.Location.Y + 15);
 			chk_group_StoozZone_Gamepad.Location = new Point(chk_group_StoozZone_Gamepad.Location.X, chk_group_StoozZone_Gamepad.Location.Y + 15);
@@ -524,6 +558,20 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
+			gameSettings.useInjector = chk_useInjector.Checked;
+			gameSettings.injectorDllList = txt_injectorDllList.Text.Trim();
+			gameSettings.injectorDelay = (int)num_injectorDelay.Value;
+
+			gameSettings.useMagpie = cmb_useMagpie.SelectedIndex;
+			gameSettings.magpieScaling = cmb_magpieScaling.SelectedIndex;
+			gameSettings.magpieCapture = cmb_magpieCapture.SelectedIndex;
+			gameSettings.magpieDelay = cmb_magpieDelay.SelectedIndex;
+			gameSettings.magpieShowFps = cmb_magpieShowFps.SelectedIndex;
+			gameSettings.magpieTripleBuffering = cmb_magpieTripleBuffering.SelectedIndex;
+			gameSettings.magpieVsync = cmb_magpieVsync.SelectedIndex;
+
+			gameSettings.magpieLightgun = cmb_useMagpieLightgun.SelectedIndex;
+			gameSettings.magpieLightgunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
 
 			gameSettings.gamepadStooz = radio_useCustomStooz_Gamepad.Checked;
 			gameSettings.wheelStooz = radio_useCustomStooz_Wheel.Checked;
@@ -949,6 +997,43 @@ namespace TeknoparrotAutoXinput
 		}
 
 		private void kryptonComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void groupBox14_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_MagpieLightgunCalibration_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_selectDllInject_Click(object sender, EventArgs e)
+		{
+			List<string> dllList = new List<string>();
+			foreach (var dll in txt_injectorDllList.Text.Split(','))
+			{
+				dllList.Add(dll);
+			}
+
+			DllSelectInjector dllSelectInjector = new DllSelectInjector(dllPathList, dllList);
+			DialogResult result = dllSelectInjector.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				string dllToInject = "";
+				foreach (string dllName in dllSelectInjector.selectedDll)
+				{
+					dllToInject += dllName.ToLower() + ",";
+				}
+				dllToInject = dllToInject.Trim(',');
+				txt_injectorDllList.Text = dllToInject;
+			}
+		}
+
+		private void groupBox3_Enter_1(object sender, EventArgs e)
 		{
 
 		}

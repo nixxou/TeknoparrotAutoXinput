@@ -33,6 +33,21 @@ namespace TeknoparrotAutoXinput
 			this.KeyPicker = new PickKeyCombo(this);
 			//System.Diagnostics.Debugger.Break();
 
+			chk_useXenosInjector.Checked = ConfigurationManager.MainConfig.useXenos;
+
+			txt_magpieExe.Text = ConfigurationManager.MainConfig.magpieExe;
+			txt_magpieSindenExe.Text = ConfigurationManager.MainConfig.magpieSindenExe;
+			num_magpieDelay.Value = ConfigurationManager.MainConfig.magpieDelay;
+			cmb_magpieScaling.SelectedIndex = ConfigurationManager.MainConfig.magpieScaling;
+			cmb_magpieCapture.SelectedIndex = ConfigurationManager.MainConfig.magpieCapture;
+			chk_useMagpie.Checked = ConfigurationManager.MainConfig.useMagpie;
+			chk_magpieShowFps.Checked = ConfigurationManager.MainConfig.magpieShowFps;
+			chk_magpieVsync.Checked = ConfigurationManager.MainConfig.magpieVsync;
+			chk_magpieTripleBuffering.Checked = ConfigurationManager.MainConfig.magpieTripleBuffering;
+			cmb_useMagpieLightgun.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgun;
+			cmb_MagpieLightgunCalibration.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgunCalibration;
+			num_magpieBorderSize.Value = (decimal)ConfigurationManager.MainConfig.magpieBorderSize;
+
 			cmb_showStartup.SelectedIndex = ConfigurationManager.MainConfig.TPConsoleAction;
 
 			chk_FFB.Checked = ConfigurationManager.MainConfig.FFB;
@@ -232,6 +247,7 @@ namespace TeknoparrotAutoXinput
 				}
 				if (cmb_gunA_type.SelectedItem.ToString() == "guncon1" || cmb_gunA_type.SelectedItem.ToString() == "guncon2") cmb_gunA_recoil.Items.Add("gun4ir");
 				if (cmb_gunA_type.SelectedItem.ToString() == "gamepad") cmb_gunA_recoil.Items.Add("rumble");
+				if (cmb_gunA_type.SelectedItem.ToString() == "wiimote") cmb_gunA_recoil.Items.Add("rumble");
 				if (cmb_gunA_type.SelectedItem.ToString() != "<none>") cmb_gunA_recoil.Items.Add("mamehooker");
 			}
 
@@ -245,6 +261,7 @@ namespace TeknoparrotAutoXinput
 				}
 				if (cmb_gunB_type.SelectedItem.ToString() == "guncon1" || cmb_gunB_type.SelectedItem.ToString() == "guncon2") cmb_gunB_recoil.Items.Add("gun4ir");
 				if (cmb_gunB_type.SelectedItem.ToString() == "gamepad") cmb_gunB_recoil.Items.Add("rumble");
+				if (cmb_gunB_type.SelectedItem.ToString() == "wiimote") cmb_gunB_recoil.Items.Add("rumble");
 				if (cmb_gunB_type.SelectedItem.ToString() != "<none>") cmb_gunB_recoil.Items.Add("mamehooker");
 			}
 
@@ -456,6 +473,20 @@ namespace TeknoparrotAutoXinput
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			ConfigurationManager.MainConfig.magpieExe = txt_magpieExe.Text;
+			ConfigurationManager.MainConfig.magpieSindenExe = txt_magpieSindenExe.Text;
+			ConfigurationManager.MainConfig.magpieDelay = (int)num_magpieDelay.Value;
+			ConfigurationManager.MainConfig.magpieScaling = cmb_magpieScaling.SelectedIndex;
+			ConfigurationManager.MainConfig.magpieCapture = cmb_magpieCapture.SelectedIndex;
+			ConfigurationManager.MainConfig.useMagpie = chk_useMagpie.Checked;
+			ConfigurationManager.MainConfig.magpieShowFps = chk_magpieShowFps.Checked;
+			ConfigurationManager.MainConfig.magpieVsync = chk_magpieVsync.Checked;
+			ConfigurationManager.MainConfig.magpieTripleBuffering = chk_magpieTripleBuffering.Checked;
+			ConfigurationManager.MainConfig.magpieLightgun = cmb_useMagpieLightgun.SelectedIndex;
+			ConfigurationManager.MainConfig.magpieLightgunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
+			ConfigurationManager.MainConfig.magpieBorderSize = (double)num_magpieBorderSize.Value;
+
+
 			ConfigurationManager.MainConfig.wheelXinputData = txt_wheelXinputData.Text;
 			ConfigurationManager.MainConfig.arcadeXinputData = txt_arcadeXinputData.Text;
 			ConfigurationManager.MainConfig.gamepadXinputData = txt_gamepadXinputData.Text;
@@ -1099,6 +1130,77 @@ namespace TeknoparrotAutoXinput
 		{
 			ConfigurationManager.MainConfig.TPConsoleAction = cmb_showStartup.SelectedIndex;
 			ConfigurationManager.SaveConfig();
+		}
+
+		private void btn_magpieExe_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "Magpie (Magpie.exe)|Magpie.exe"; // Filtre pour n'afficher que RTSS.exe
+			openFileDialog.Title = "Select Magpie.exe"; // Titre de la boîte de dialogue
+
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				txt_magpieExe.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
+				ConfigurationManager.MainConfig.magpieExe = Path.GetFullPath(openFileDialog.FileName);
+				ConfigurationManager.SaveConfig();
+			}
+		}
+
+		private void btn_magpieSindenExe_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "Magpie (Magpie.exe)|Magpie.exe"; // Filtre pour n'afficher que RTSS.exe
+			openFileDialog.Title = "Select Magpie.exe"; // Titre de la boîte de dialogue
+
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				txt_magpieSindenExe.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
+				ConfigurationManager.MainConfig.magpieSindenExe = Path.GetFullPath(openFileDialog.FileName);
+				ConfigurationManager.SaveConfig();
+			}
+		}
+
+		private void kryptonLabel19_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void chk_useXenosInjector_CheckedChanged(object sender, EventArgs e)
+		{
+			if(chk_useXenosInjector.Checked)
+			{
+				bool valid = true;
+				string Xenos7z = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.7z");
+				string XenosPath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.exe");
+				if (!File.Exists(XenosPath))
+				{
+					valid = false;
+					if (File.Exists(Xenos7z))
+					{
+						AddXenos addXenos = new AddXenos();
+						DialogResult result = addXenos.ShowDialog();
+						if (result == DialogResult.OK)
+						{
+							MessageBox.Show("Xenos Activated, you must configure the injection per game on the game options");
+							valid = true;
+						}
+					}
+				}
+				if(valid)
+				{
+					ConfigurationManager.MainConfig.useXenos = chk_useXenosInjector.Checked;
+					ConfigurationManager.SaveConfig();
+				}
+				else
+				{
+					chk_useXenosInjector.Checked = false;
+				}
+			}
+			else
+			{
+				ConfigurationManager.MainConfig.useXenos = chk_useXenosInjector.Checked;
+				ConfigurationManager.SaveConfig();
+			}
 		}
 	}
 }

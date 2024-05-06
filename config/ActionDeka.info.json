@@ -7,5 +7,9 @@
     "crosshairON": "",
     "crosshairOFF": "",
     "crosshairPNG": "False",
-    "outputs": ""
+    "outputs": "",
+    "windowed": "General,Windowed,1",
+    "magpieClass": "ACTION-DEKA",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False"	
 }

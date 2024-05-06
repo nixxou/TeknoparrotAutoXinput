@@ -36,6 +36,7 @@
 			btn_gameoptions = new Krypton.Toolkit.KryptonButton();
 			chk_showAll = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1 = new GroupBox();
+			button6 = new Button();
 			button5 = new Button();
 			lbl_gunslist = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
@@ -61,7 +62,7 @@
 			lbl_player3 = new Krypton.Toolkit.KryptonLabel();
 			lbl_player4 = new Krypton.Toolkit.KryptonLabel();
 			btn_tpsettings = new Krypton.Toolkit.KryptonButton();
-			button6 = new Button();
+			button7 = new Button();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox_gameControls).BeginInit();
 			flowLayoutPanelThumbs.SuspendLayout();
@@ -127,6 +128,7 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(button7);
 			groupBox1.Controls.Add(button6);
 			groupBox1.Controls.Add(button5);
 			groupBox1.Controls.Add(lbl_gunslist);
@@ -149,6 +151,16 @@
 			groupBox1.TabIndex = 7;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Controller Status";
+			// 
+			// button6
+			// 
+			button6.Location = new Point(800, 104);
+			button6.Name = "button6";
+			button6.Size = new Size(75, 23);
+			button6.TabIndex = 15;
+			button6.Text = "button6";
+			button6.UseVisualStyleBackColor = true;
+			button6.Click += button6_Click;
 			// 
 			// button5
 			// 
@@ -365,15 +377,15 @@
 			btn_tpsettings.Values.Text = "TP Game Settings";
 			btn_tpsettings.Click += btn_tpsettings_Click;
 			// 
-			// button6
+			// button7
 			// 
-			button6.Location = new Point(800, 104);
-			button6.Name = "button6";
-			button6.Size = new Size(75, 23);
-			button6.TabIndex = 15;
-			button6.Text = "button6";
-			button6.UseVisualStyleBackColor = true;
-			button6.Click += button6_Click;
+			button7.Location = new Point(723, 57);
+			button7.Name = "button7";
+			button7.Size = new Size(75, 23);
+			button7.TabIndex = 16;
+			button7.Text = "button7";
+			button7.UseVisualStyleBackColor = true;
+			button7.Click += button7_Click;
 			// 
 			// Main
 			// 
@@ -442,5 +454,6 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel6;
 		private Button button5;
 		private Button button6;
+		private Button button7;
 	}
 }

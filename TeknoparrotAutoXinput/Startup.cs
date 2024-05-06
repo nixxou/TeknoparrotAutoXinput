@@ -144,8 +144,7 @@ namespace TeknoparrotAutoXinput
 			{
 				//int style = GetWindowLong(externalWindowHandle, GWL_STYLE);
 				//SetWindowLong(externalWindowHandle, GWL_STYLE, style & ~(int)(WS_CAPTION | WS_THICKFRAME));
-
-				if(OptionFenetreTP == 0)
+				if (OptionFenetreTP == 0)
 				{
 					// Récupérer la taille du formulaire
 					int formWidth = this.Width;
