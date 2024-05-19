@@ -221,7 +221,7 @@ namespace TeknoparrotAutoXinput
 		}
 
 
-		public static void HardLinkFiles(string directorySource, string directoryDest)
+		public static void HardLinkFiles(string directorySource, string directoryDest, string executableGame = "")
 		{
 			/*
 			MessageBox.Show("HardLink Start");
@@ -300,6 +300,22 @@ namespace TeknoparrotAutoXinput
 				{
 					newfile = newfile.Replace(@"\[!intel!]\", @"\");
 					if (ConfigurationManager.MainConfig.gpuType != 1) continue;
+				}
+				if (Path.GetFileNameWithoutExtension(newfile).StartsWith(@"[!main_executable!") && Path.GetFileNameWithoutExtension(newfile).EndsWith(@"]"))
+				{
+					if(executableGame != "" && File.Exists(executableGame))
+					{
+						string executableGameExt = Path.GetExtension(executableGame).ToLower();
+						string newFileExt = Path.GetExtension(newfile).ToLower();
+						string executableGameDir = Path.GetFullPath(Path.GetDirectoryName(executableGame));
+						string newFileDir = Path.GetFullPath(Path.GetDirectoryName(newfile));
+
+						if (executableGameExt == newFileExt && executableGameDir == newFileDir)
+						{
+							newfile = executableGame;
+						}
+					}
+
 				}
 
 				string newfiledir = Directory.GetParent(newfile).FullName;
@@ -402,7 +418,7 @@ namespace TeknoparrotAutoXinput
 
 		}
 		
-		public static void CleanHardLinksFiles(string directoryToClean, string originalLinkDir)
+		public static void CleanHardLinksFiles(string directoryToClean, string originalLinkDir, string executableGameFile)
 		{
 
 			directoryToClean = Path.GetFullPath(directoryToClean);
@@ -479,6 +495,44 @@ namespace TeknoparrotAutoXinput
 					File.Move(fileToRestore, newFilePath,true);
 				}
 			}
+
+			if (executableGameFile != "" &&  File.Exists(executableGameFile))
+			{
+				string file = executableGameFile;
+				if (IsHardLink(file, originalLinkDir))
+				{
+					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
+					try
+					{
+						File.Delete(file);
+					}
+					catch (Exception ex)
+					{
+						if (File.Exists(file))
+						{
+							try
+							{
+								FileInfo finfo = new FileInfo(file);
+								if (finfo.IsReadOnly)
+								{
+									finfo.IsReadOnly = false;
+									finfo.Delete();
+								}
+							}
+							catch (Exception ex2) { }
+						}
+
+					}
+				}
+				string fileToRestore = file + ".filetorestore";
+				if (File.Exists(fileToRestore))
+				{
+					if (Program.DebugMode) Utils.LogMessage($"{file} must be restored");
+					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(fileToRestore));
+					File.Move(fileToRestore, newFilePath, true);
+				}
+			}
+
 			string tempDirFile = Path.Combine(directoryToClean, "tempDirList.json");
 			if (File.Exists(tempDirFile))
 			{

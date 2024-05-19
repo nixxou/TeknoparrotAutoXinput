@@ -695,6 +695,7 @@ namespace TeknoparrotAutoXinput
 					string linkTargetFolderExe = "";
 
 					string executableGame = "";
+					string executableGameFile = "";
 					string executableGameDir = "";
 					string gameDir = "";
 					bool gameNeedAdmin = false;
@@ -782,6 +783,8 @@ namespace TeknoparrotAutoXinput
 						if (gamePathNode != null)
 						{
 							string gamePathContent = gamePathNode.InnerText;
+							if(gamePathContent != "" && File.Exists(gamePathContent)) executableGameFile = gamePathContent;
+
 							if (gamePathContent.ToLower().EndsWith(".exe")) executableGame = gamePathContent;
 							if(!string.IsNullOrEmpty(gamePathContent) && File.Exists(gamePathContent))
 							{
@@ -883,7 +886,7 @@ namespace TeknoparrotAutoXinput
 						}
 						Utils.LogMessage($"linkSourceFolderExe = {linkSourceFolderExe}");
 						Utils.LogMessage($"linkTargetFolderExe = {linkTargetFolderExe}");
-						Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe);
+						Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
 					}
 
 					ParrotDataOriginal = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml");
@@ -3494,7 +3497,7 @@ namespace TeknoparrotAutoXinput
 							Utils.LogMessage($"HardLinkFiles {linkSourceFolderExe}, {linkTargetFolderExe}");
 							if (Utils.IsEligibleHardLink(linkSourceFolderExe, linkTargetFolderExe))
 							{
-								Utils.HardLinkFiles(linkSourceFolderExe, linkTargetFolderExe);
+								Utils.HardLinkFiles(linkSourceFolderExe, linkTargetFolderExe, executableGameFile);
 							}
 						}
 
@@ -4603,7 +4606,7 @@ namespace TeknoparrotAutoXinput
 							Utils.LogMessage($"CleanHardLinksFiles GameDir");
 							if (Utils.IsEligibleHardLink(linkTargetFolderExe))
 							{
-								Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe);
+								Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
 							}
 						}
 
