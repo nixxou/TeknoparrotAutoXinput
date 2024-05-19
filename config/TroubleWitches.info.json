@@ -1,0 +1,11 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "OpenParrot - Trouble Witches AC",
+	"magpieTitle": "",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"True",
+	"magpieNoLateFocus":"False",	
+}

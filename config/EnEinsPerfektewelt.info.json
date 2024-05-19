@@ -1,0 +1,9 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "ZOUNX_WIN",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False"
+}

@@ -1284,10 +1284,10 @@ namespace TeknoparrotAutoXinput
 				Thread.Sleep(50); // Attendre un court instant entre chaque caractère (facultatif)
 			}
 
-			SendKeys.SendWait("{TAB}");
-			SendKeys.SendWait("{TAB}");
-			SendKeys.SendWait("{TAB}");
-			SendKeys.SendWait("{ENTER}");
+			//SendKeys.SendWait("{TAB}");
+			//SendKeys.SendWait("{TAB}");
+			//SendKeys.SendWait("{TAB}");
+			//SendKeys.SendWait("{ENTER}");
 
 
 		}

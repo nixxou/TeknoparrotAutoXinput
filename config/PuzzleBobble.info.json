@@ -1,0 +1,10 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "_EGNGWIN",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"True",
+	"magpieNoLateFocus":"False",	
+}

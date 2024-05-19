@@ -7,5 +7,10 @@
     "crosshairON": "",
     "crosshairOFF": "",
     "crosshairPNG": "False",
-    "outputs": ""
+    "outputs": "",
+    "windowed": "General,Windowed,1",
+    "magpieClass": "SDL_app",
+	"magpieTitle": "TeknoBudgie - America's Army Arcade",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False"			
 }

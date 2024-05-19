@@ -1,0 +1,10 @@
+{
+    "windowed": "General,DisplayMode,Windowed",
+    "magpieClass": "SkullGirlsClassName",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False",
+	"magpieNoLateFocus":"False",	
+}

@@ -7,5 +7,12 @@
     "crosshairON": "",
     "crosshairOFF": "",
     "crosshairPNG": "False",
-    "outputs": ""
+    "outputs": "",
+    "windowed": "General,DisplayMode,Windowed",
+    "magpieClass": "CLASSNAME",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False"	
 }

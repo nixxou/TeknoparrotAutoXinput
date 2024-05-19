@@ -74,6 +74,10 @@ namespace TeknoparrotAutoXinput
 		public string injectorDllList { get; set; } = "";
 		public int injectorDelay { get; set; } = 0;
 
+		public int magpieFsrSharp { get; set; } = 0;
+		public int magpieExclusiveFullscreen { get; set; } = 0;
+		public int magpieReshade { get; set; } = 0;
+
 		public GameSettings() 
 		{
 			
@@ -139,6 +143,9 @@ namespace TeknoparrotAutoXinput
 				this.useInjector = DeserializeData.useInjector;
 				this.injectorDllList = DeserializeData.injectorDllList;
 				this.injectorDelay = DeserializeData.injectorDelay;
+				this.magpieFsrSharp = DeserializeData.magpieFsrSharp;
+				this.magpieExclusiveFullscreen = DeserializeData.magpieExclusiveFullscreen;
+				this.magpieReshade = DeserializeData.magpieReshade;
 
 
 			}

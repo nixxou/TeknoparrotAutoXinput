@@ -382,6 +382,9 @@ namespace TeknoparrotAutoXinput
 			cmb_magpieVsync.SelectedIndex = gameSettings.magpieVsync;
 			cmb_useMagpieLightgun.SelectedIndex = gameSettings.magpieLightgun;
 			cmb_MagpieLightgunCalibration.SelectedIndex = gameSettings.magpieLightgunCalibration;
+			cmb_magpieExclusiveFullscreen.SelectedIndex = gameSettings.magpieExclusiveFullscreen;
+			cmb_magpieFsrSharp.SelectedIndex = gameSettings.magpieFsrSharp;
+			cmb_magpieReshade.SelectedIndex = gameSettings.magpieReshade;
 
 			chk_runAsAdmin.Enabled = false;
 			chk_group_StoozZone_Wheel.Location = new Point(chk_group_StoozZone_Wheel.Location.X, chk_group_StoozZone_Wheel.Location.Y + 15);
@@ -572,6 +575,11 @@ namespace TeknoparrotAutoXinput
 
 			gameSettings.magpieLightgun = cmb_useMagpieLightgun.SelectedIndex;
 			gameSettings.magpieLightgunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
+
+			gameSettings.magpieReshade = cmb_magpieReshade.SelectedIndex;
+			gameSettings.magpieFsrSharp = cmb_magpieFsrSharp.SelectedIndex;
+			gameSettings.magpieExclusiveFullscreen = cmb_magpieExclusiveFullscreen.SelectedIndex;
+
 
 			gameSettings.gamepadStooz = radio_useCustomStooz_Gamepad.Checked;
 			gameSettings.wheelStooz = radio_useCustomStooz_Wheel.Checked;
@@ -1034,6 +1042,11 @@ namespace TeknoparrotAutoXinput
 		}
 
 		private void groupBox3_Enter_1(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_magpieExclusiveFullscreen_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
 		}

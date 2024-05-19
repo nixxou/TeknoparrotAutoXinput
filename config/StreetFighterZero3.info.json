@@ -1,0 +1,12 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "MT FRAMEWORK",
+	"magpieTitle": "",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"True",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"True",
+	"magpieNoLateFocus":"False",
+	"magpieExecutable":""
+}

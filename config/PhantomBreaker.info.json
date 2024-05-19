@@ -1,0 +1,10 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "TeknoParrot - Phantom Breaker Another Code",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False",
+	"magpieNoLateFocus":"False",	
+}

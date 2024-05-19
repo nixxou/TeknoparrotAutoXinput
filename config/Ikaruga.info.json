@@ -1,0 +1,10 @@
+{
+    "windowed": "General,DisplayMode,Windowed",
+    "magpieClass": "Ikaruga",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False",
+	"magpieNoLateFocus":"False",	
+}

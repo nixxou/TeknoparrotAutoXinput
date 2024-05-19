@@ -1,0 +1,10 @@
+{
+    "windowed": "General,DisplayMode,Windowed",
+    "magpieClass": "NP10 CLASS",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False",
+	"magpieNoLateFocus":"False",	
+}

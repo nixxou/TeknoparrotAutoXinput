@@ -1,0 +1,10 @@
+{
+    "windowed": "General,DisplayMode,Windowed",
+    "magpieClass": "Persona 4 the Ultimax ULTRA SUPLEX HOLD",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False",
+	"magpieNoLateFocus":"False",	
+}

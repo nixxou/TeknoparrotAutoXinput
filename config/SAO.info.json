@@ -1,0 +1,12 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "UnityWndClass",
+	"magpieTitle": "",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False",
+	"magpieNoLateFocus":"False",
+	"magpieExecutable":""
+}

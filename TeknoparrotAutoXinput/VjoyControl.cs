@@ -68,6 +68,7 @@ namespace TeknoparrotAutoXinput
 
 		private Thread receiverThread = null;
 		private bool shouldStopReceiver = false;
+		private bool WaitForConnection = false;
 
 		public bool GunA_manual
 		{
@@ -492,11 +493,13 @@ namespace TeknoparrotAutoXinput
 				{
 					using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("VjoyControlCommand", PipeDirection.In))
 					{
+						WaitForConnection = true;
 						pipeServer.WaitForConnection();
+						WaitForConnection = false;
 						using (StreamReader reader = new StreamReader(pipeServer, Encoding.UTF8))
 						{
 							char[] buffer = new char[4096];
-							while (true)
+							while (shouldStopReceiver == false)
 							{
 								if (shouldStopReceiver) return;
 
@@ -527,7 +530,7 @@ namespace TeknoparrotAutoXinput
 		{
 			if (message.StartsWith("formula="))
 			{
-				MessageBox.Show(message);
+				//MessageBox.Show(message);
 				string secondPartMessage = message.Substring(8).Trim();
 				var formulaSplit = secondPartMessage.Split(',');
 				if (formulaSplit.Count() == 2)
@@ -1151,6 +1154,12 @@ namespace TeknoparrotAutoXinput
 			shouldStopReceiver = true;
 			try
 			{
+				if (WaitForConnection)
+				{
+					NamedPipeClientStream clt = new NamedPipeClientStream(".", "VjoyControlCommand", PipeDirection.Out);
+					clt.Connect();
+					clt.Close();
+				}
 				if (receiverThread != null)
 				{
 					receiverThread.Join();

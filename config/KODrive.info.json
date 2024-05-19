@@ -1,0 +1,10 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "M-Drive(NNDXG20-WIN)",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"True",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"True",
+	"magpieNoLateFocus":"False",	
+}

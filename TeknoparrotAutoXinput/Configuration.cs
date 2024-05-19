@@ -99,7 +99,7 @@ namespace TeknoparrotAutoXinput
 
 		public string demulshooterExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "demulshooter", "DemulShooter.exe");
 
-		public string sindenExe {  get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "sinden", "Lightgun.exe");
+		public string sindenExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "sinden", "Lightgun.exe");
 
 		public string mamehookerExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "mamehooker", "mamehook.exe");
 
@@ -144,6 +144,13 @@ namespace TeknoparrotAutoXinput
 
 		public bool useXenos { get; set; } = false;
 
+		public int gpuType { get; set; } = 0;
+
+		public int magpieFsrSharp { get; set; } = 87;
+		public bool magpieExclusiveFullscreen { get; set; } = false;
+		public bool magpieReshadeAdaptiveSharpen { get; set; } = false;
+		public bool magpieReshadeClarity { get; set; } = false;
+		public bool magpieReshadeColorfullness { get; set; } = false;
 
 		public Configuration()
 		{
@@ -245,6 +252,12 @@ namespace TeknoparrotAutoXinput
 				this.magpieLightgunCalibration = DeserializeData.magpieLightgunCalibration;
 				this.magpieBorderSize = DeserializeData.magpieBorderSize;
 				this.useXenos = DeserializeData.useXenos;
+				this.gpuType = DeserializeData.gpuType;
+				this.magpieFsrSharp = DeserializeData.magpieFsrSharp;
+				this.magpieExclusiveFullscreen = DeserializeData.magpieExclusiveFullscreen;
+				this.magpieReshadeAdaptiveSharpen = DeserializeData.magpieReshadeAdaptiveSharpen;
+				this.magpieReshadeClarity = DeserializeData.magpieReshadeClarity;
+				this.magpieReshadeColorfullness = DeserializeData.magpieReshadeColorfullness;
 
 
 			}

@@ -1,0 +1,10 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "SonicDash | Release_Ring",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False",
+	"magpieNoLateFocus":"False",	
+}

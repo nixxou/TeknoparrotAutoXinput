@@ -142,6 +142,12 @@
 			tabPage1 = new TabPage();
 			tabPage2 = new TabPage();
 			groupBox14 = new GroupBox();
+			cmb_magpieReshade = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel32 = new Krypton.Toolkit.KryptonLabel();
+			cmb_magpieFsrSharp = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel34 = new Krypton.Toolkit.KryptonLabel();
+			cmb_magpieExclusiveFullscreen = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel31 = new Krypton.Toolkit.KryptonLabel();
 			cmb_magpieShowFps = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel25 = new Krypton.Toolkit.KryptonLabel();
 			cmb_magpieTripleBuffering = new Krypton.Toolkit.KryptonComboBox();
@@ -202,6 +208,9 @@
 			tabPage1.SuspendLayout();
 			tabPage2.SuspendLayout();
 			groupBox14.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_magpieReshade).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_magpieFsrSharp).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_magpieExclusiveFullscreen).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieShowFps).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieTripleBuffering).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieVsync).BeginInit();
@@ -492,7 +501,7 @@
 			grp_link.Controls.Add(lbl_LinkTo);
 			grp_link.Controls.Add(lbl_linkFrom);
 			grp_link.Controls.Add(chk_linkfiles);
-			grp_link.Location = new Point(576, 346);
+			grp_link.Location = new Point(576, 409);
 			grp_link.Name = "grp_link";
 			grp_link.Size = new Size(582, 126);
 			grp_link.TabIndex = 54;
@@ -567,7 +576,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(1068, 758);
+			btn_Save.Location = new Point(1068, 821);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 56;
@@ -576,7 +585,7 @@
 			// 
 			// btn_Cancel
 			// 
-			btn_Cancel.Location = new Point(972, 758);
+			btn_Cancel.Location = new Point(972, 821);
 			btn_Cancel.Name = "btn_Cancel";
 			btn_Cancel.Size = new Size(90, 25);
 			btn_Cancel.TabIndex = 55;
@@ -634,7 +643,7 @@
 			groupBox3.Controls.Add(kryptonLabel4);
 			groupBox3.Controls.Add(btn_customTp);
 			groupBox3.Controls.Add(txt_customTp);
-			groupBox3.Location = new Point(576, 601);
+			groupBox3.Location = new Point(576, 664);
 			groupBox3.Name = "groupBox3";
 			groupBox3.Size = new Size(582, 73);
 			groupBox3.TabIndex = 68;
@@ -770,7 +779,7 @@
 			grp_linkExe.Controls.Add(kryptonLabel6);
 			grp_linkExe.Controls.Add(kryptonLabel7);
 			grp_linkExe.Controls.Add(chk_linkfilesExe);
-			grp_linkExe.Location = new Point(575, 475);
+			grp_linkExe.Location = new Point(575, 538);
 			grp_linkExe.Name = "grp_linkExe";
 			grp_linkExe.Size = new Size(583, 123);
 			grp_linkExe.TabIndex = 65;
@@ -1355,6 +1364,12 @@
 			// 
 			// groupBox14
 			// 
+			groupBox14.Controls.Add(cmb_magpieReshade);
+			groupBox14.Controls.Add(kryptonLabel32);
+			groupBox14.Controls.Add(cmb_magpieFsrSharp);
+			groupBox14.Controls.Add(kryptonLabel34);
+			groupBox14.Controls.Add(cmb_magpieExclusiveFullscreen);
+			groupBox14.Controls.Add(kryptonLabel31);
 			groupBox14.Controls.Add(cmb_magpieShowFps);
 			groupBox14.Controls.Add(kryptonLabel25);
 			groupBox14.Controls.Add(cmb_magpieTripleBuffering);
@@ -1371,11 +1386,72 @@
 			groupBox14.Controls.Add(cmb_magpieScaling);
 			groupBox14.Location = new Point(577, 207);
 			groupBox14.Name = "groupBox14";
-			groupBox14.Size = new Size(581, 136);
+			groupBox14.Size = new Size(581, 179);
 			groupBox14.TabIndex = 72;
 			groupBox14.TabStop = false;
 			groupBox14.Text = "Magpie Configuration";
 			groupBox14.Enter += groupBox14_Enter;
+			// 
+			// cmb_magpieReshade
+			// 
+			cmb_magpieReshade.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_magpieReshade.DropDownWidth = 242;
+			cmb_magpieReshade.IntegralHeight = false;
+			cmb_magpieReshade.Items.AddRange(new object[] { "Use Global Settings", "Adaptive Sharpen", "Clarity", "Colorfullness", "Adaptive Sharpen, Clarity", "Adaptive Sharpen, Colorfullness", "Clarity, Colorfullness", "Adaptive Sharpen, Clarity, Colorfullness" });
+			cmb_magpieReshade.Location = new Point(400, 131);
+			cmb_magpieReshade.Name = "cmb_magpieReshade";
+			cmb_magpieReshade.Size = new Size(166, 21);
+			cmb_magpieReshade.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_magpieReshade.TabIndex = 110;
+			// 
+			// kryptonLabel32
+			// 
+			kryptonLabel32.Location = new Point(289, 132);
+			kryptonLabel32.Name = "kryptonLabel32";
+			kryptonLabel32.Size = new Size(63, 20);
+			kryptonLabel32.TabIndex = 109;
+			kryptonLabel32.Values.Text = "Reshade :";
+			// 
+			// cmb_magpieFsrSharp
+			// 
+			cmb_magpieFsrSharp.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_magpieFsrSharp.DropDownWidth = 242;
+			cmb_magpieFsrSharp.IntegralHeight = false;
+			cmb_magpieFsrSharp.Items.AddRange(new object[] { "Use Global Settings", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%" });
+			cmb_magpieFsrSharp.Location = new Point(116, 131);
+			cmb_magpieFsrSharp.Name = "cmb_magpieFsrSharp";
+			cmb_magpieFsrSharp.Size = new Size(166, 21);
+			cmb_magpieFsrSharp.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_magpieFsrSharp.TabIndex = 108;
+			// 
+			// kryptonLabel34
+			// 
+			kryptonLabel34.Location = new Point(6, 132);
+			kryptonLabel34.Name = "kryptonLabel34";
+			kryptonLabel34.Size = new Size(95, 20);
+			kryptonLabel34.TabIndex = 107;
+			kryptonLabel34.Values.Text = "FSR Sharpness :";
+			// 
+			// cmb_magpieExclusiveFullscreen
+			// 
+			cmb_magpieExclusiveFullscreen.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_magpieExclusiveFullscreen.DropDownWidth = 242;
+			cmb_magpieExclusiveFullscreen.IntegralHeight = false;
+			cmb_magpieExclusiveFullscreen.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
+			cmb_magpieExclusiveFullscreen.Location = new Point(400, 22);
+			cmb_magpieExclusiveFullscreen.Name = "cmb_magpieExclusiveFullscreen";
+			cmb_magpieExclusiveFullscreen.Size = new Size(166, 21);
+			cmb_magpieExclusiveFullscreen.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_magpieExclusiveFullscreen.TabIndex = 106;
+			cmb_magpieExclusiveFullscreen.SelectedIndexChanged += cmb_magpieExclusiveFullscreen_SelectedIndexChanged;
+			// 
+			// kryptonLabel31
+			// 
+			kryptonLabel31.Location = new Point(291, 23);
+			kryptonLabel31.Name = "kryptonLabel31";
+			kryptonLabel31.Size = new Size(124, 20);
+			kryptonLabel31.TabIndex = 105;
+			kryptonLabel31.Values.Text = "Exclusive FullScreen :";
 			// 
 			// cmb_magpieShowFps
 			// 
@@ -1470,7 +1546,7 @@
 			cmb_useMagpie.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_useMagpie.DropDownWidth = 242;
 			cmb_useMagpie.IntegralHeight = false;
-			cmb_useMagpie.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
+			cmb_useMagpie.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No", "Yes Force (even if not windowed)", "Yes Force (and add Reshade 4/3)" });
 			cmb_useMagpie.Location = new Point(116, 23);
 			cmb_useMagpie.Name = "cmb_useMagpie";
 			cmb_useMagpie.Size = new Size(166, 21);
@@ -1568,7 +1644,7 @@
 			grp_dllInjection.Controls.Add(chk_useInjector);
 			grp_dllInjection.Controls.Add(num_injectorDelay);
 			grp_dllInjection.Controls.Add(btn_selectDllInject);
-			grp_dllInjection.Location = new Point(574, 679);
+			grp_dllInjection.Location = new Point(574, 742);
 			grp_dllInjection.Name = "grp_dllInjection";
 			grp_dllInjection.Size = new Size(584, 73);
 			grp_dllInjection.TabIndex = 78;
@@ -1579,7 +1655,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1173, 785);
+			ClientSize = new Size(1173, 853);
 			Controls.Add(grp_dllInjection);
 			Controls.Add(groupBox14);
 			Controls.Add(tabControl2);
@@ -1654,6 +1730,9 @@
 			tabPage2.PerformLayout();
 			groupBox14.ResumeLayout(false);
 			groupBox14.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_magpieReshade).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_magpieFsrSharp).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_magpieExclusiveFullscreen).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieShowFps).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieTripleBuffering).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieVsync).EndInit();
@@ -1803,5 +1882,11 @@
 		private Krypton.Toolkit.KryptonNumericUpDown num_injectorDelay;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel30;
 		private GroupBox grp_dllInjection;
+		private Krypton.Toolkit.KryptonComboBox cmb_magpieExclusiveFullscreen;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel31;
+		private Krypton.Toolkit.KryptonComboBox cmb_magpieReshade;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel32;
+		private Krypton.Toolkit.KryptonComboBox cmb_magpieFsrSharp;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel34;
 	}
 }

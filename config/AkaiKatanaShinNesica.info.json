@@ -1,0 +1,6 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "GMLIB",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False"	
+}

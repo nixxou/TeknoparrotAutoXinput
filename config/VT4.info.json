@@ -1,0 +1,11 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "SegaLib Application",
+	"magpieTitle": "",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"True",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"True",
+	"magpieNoLateFocus":"False",	
+}

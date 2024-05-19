@@ -7,5 +7,12 @@
     "crosshairON": "Crosshair,Enable",
     "crosshairOFF": "Crosshair,!Enable",
     "crosshairPNG": "True",
-    "outputs": ""
+    "outputs": "",
+    "windowed": "General,Windowed,1",
+    "magpieClass": "ClassNameOfThePFW@XWinApplication",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"True"
 }

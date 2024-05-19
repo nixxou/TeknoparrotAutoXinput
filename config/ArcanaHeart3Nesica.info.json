@@ -1,0 +1,8 @@
+{
+    "windowed": "General,DisplayMode,Windowed",
+    "magpieClass": "AH3 CLASS",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False"
+}

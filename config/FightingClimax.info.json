@@ -1,0 +1,9 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "TEST ARCADE",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False"
+}

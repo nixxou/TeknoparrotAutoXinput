@@ -33,6 +33,8 @@ namespace TeknoparrotAutoXinput
 			this.KeyPicker = new PickKeyCombo(this);
 			//System.Diagnostics.Debugger.Break();
 
+			cmb_gpu.SelectedIndex = ConfigurationManager.MainConfig.gpuType;
+
 			chk_useXenosInjector.Checked = ConfigurationManager.MainConfig.useXenos;
 
 			txt_magpieExe.Text = ConfigurationManager.MainConfig.magpieExe;
@@ -47,6 +49,13 @@ namespace TeknoparrotAutoXinput
 			cmb_useMagpieLightgun.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgun;
 			cmb_MagpieLightgunCalibration.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgunCalibration;
 			num_magpieBorderSize.Value = (decimal)ConfigurationManager.MainConfig.magpieBorderSize;
+			chk_magpieExclusiveFullscreen.Checked = ConfigurationManager.MainConfig.magpieExclusiveFullscreen;
+			chk_magpieReshadeAdaptiveSharpen.Checked = ConfigurationManager.MainConfig.magpieReshadeAdaptiveSharpen;
+			chk_magpieReshadeClarity.Checked = ConfigurationManager.MainConfig.magpieReshadeClarity;
+			chk_magpieReshadeColorfullness.Checked = ConfigurationManager.MainConfig.magpieReshadeColorfullness;
+			trk_magpieFsrSharp.Value = ConfigurationManager.MainConfig.magpieFsrSharp;
+			lbl_magpieFsrSharp.Text = trk_magpieFsrSharp.Value.ToString() + "%";
+
 
 			cmb_showStartup.SelectedIndex = ConfigurationManager.MainConfig.TPConsoleAction;
 
@@ -486,6 +495,11 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.magpieLightgunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
 			ConfigurationManager.MainConfig.magpieBorderSize = (double)num_magpieBorderSize.Value;
 
+			ConfigurationManager.MainConfig.magpieExclusiveFullscreen = chk_magpieExclusiveFullscreen.Checked;
+			ConfigurationManager.MainConfig.magpieReshadeAdaptiveSharpen = chk_magpieReshadeAdaptiveSharpen.Checked;
+			ConfigurationManager.MainConfig.magpieReshadeClarity = chk_magpieReshadeClarity.Checked;
+			ConfigurationManager.MainConfig.magpieReshadeColorfullness = chk_magpieReshadeColorfullness.Checked;
+			ConfigurationManager.MainConfig.magpieFsrSharp = trk_magpieFsrSharp.Value;
 
 			ConfigurationManager.MainConfig.wheelXinputData = txt_wheelXinputData.Text;
 			ConfigurationManager.MainConfig.arcadeXinputData = txt_arcadeXinputData.Text;
@@ -1167,7 +1181,7 @@ namespace TeknoparrotAutoXinput
 
 		private void chk_useXenosInjector_CheckedChanged(object sender, EventArgs e)
 		{
-			if(chk_useXenosInjector.Checked)
+			if (chk_useXenosInjector.Checked)
 			{
 				bool valid = true;
 				string Xenos7z = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.7z");
@@ -1186,7 +1200,7 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 				}
-				if(valid)
+				if (valid)
 				{
 					ConfigurationManager.MainConfig.useXenos = chk_useXenosInjector.Checked;
 					ConfigurationManager.SaveConfig();
@@ -1201,6 +1215,42 @@ namespace TeknoparrotAutoXinput
 				ConfigurationManager.MainConfig.useXenos = chk_useXenosInjector.Checked;
 				ConfigurationManager.SaveConfig();
 			}
+		}
+
+		private void kryptonComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void groupBox4_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_gpu_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.gpuType = cmb_gpu.SelectedIndex;
+			ConfigurationManager.SaveConfig();
+		}
+
+		private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void trackBar1_Scroll(object sender, EventArgs e)
+		{
+			lbl_magpieFsrSharp.Text = trk_magpieFsrSharp.Value.ToString() + "%";
+		}
+
+		private void tabGlobal_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void chk_magpieReshadeAdaptiveSharpen_CheckedChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

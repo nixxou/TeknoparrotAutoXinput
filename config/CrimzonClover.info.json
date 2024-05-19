@@ -1,0 +1,9 @@
+{
+    "windowed": "General,DisplayMode,Windowed",
+    "magpieClass": "CrimzonClover for NESiCAxLive",
+	"magpie3DGameMode": "False",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False"
+}

@@ -1,0 +1,9 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "Come On Baby!2 Winter Championship",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False"
+}

@@ -81,6 +81,8 @@
 			btn_Save = new Krypton.Toolkit.KryptonButton();
 			txt_tpfolder = new Krypton.Toolkit.KryptonTextBox();
 			groupBox4 = new GroupBox();
+			kryptonLabel53 = new Krypton.Toolkit.KryptonLabel();
+			cmb_gpu = new Krypton.Toolkit.KryptonComboBox();
 			btn_selectTP = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel11 = new Krypton.Toolkit.KryptonLabel();
 			txt_monitorswitch = new Krypton.Toolkit.KryptonTextBox();
@@ -194,6 +196,7 @@
 			cmb_gunA_type = new Krypton.Toolkit.KryptonComboBox();
 			chk_reasignGunPedal = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox13 = new GroupBox();
+			chk_useXenosInjector = new Krypton.Toolkit.KryptonCheckBox();
 			cmb_showStartup = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel40 = new Krypton.Toolkit.KryptonLabel();
 			btn_rivatuner = new Krypton.Toolkit.KryptonButton();
@@ -202,6 +205,13 @@
 			tabControl1 = new TabControl();
 			tabGlobal = new TabPage();
 			groupBox14 = new GroupBox();
+			kryptonLabel59 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel58 = new Krypton.Toolkit.KryptonLabel();
+			trk_magpieFsrSharp = new TrackBar();
+			chk_magpieReshadeColorfullness = new Krypton.Toolkit.KryptonCheckBox();
+			chk_magpieReshadeClarity = new Krypton.Toolkit.KryptonCheckBox();
+			chk_magpieReshadeAdaptiveSharpen = new Krypton.Toolkit.KryptonCheckBox();
+			chk_magpieExclusiveFullscreen = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel55 = new Krypton.Toolkit.KryptonLabel();
 			chk_magpieShowFps = new Krypton.Toolkit.KryptonCheckBox();
 			chk_magpieTripleBuffering = new Krypton.Toolkit.KryptonCheckBox();
@@ -224,7 +234,7 @@
 			tabWheel = new TabPage();
 			tabHotas = new TabPage();
 			tabLightgun = new TabPage();
-			chk_useXenosInjector = new Krypton.Toolkit.KryptonCheckBox();
+			lbl_magpieFsrSharp = new Krypton.Toolkit.KryptonLabel();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -232,6 +242,7 @@
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
 			groupBox3.SuspendLayout();
 			groupBox4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_gpu).BeginInit();
 			groupBox5.SuspendLayout();
 			groupBox6.SuspendLayout();
 			groupBox7.SuspendLayout();
@@ -260,6 +271,7 @@
 			tabControl1.SuspendLayout();
 			tabGlobal.SuspendLayout();
 			groupBox14.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)trk_magpieFsrSharp).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieCapture).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieScaling).BeginInit();
 			tabGamepad.SuspendLayout();
@@ -731,7 +743,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(720, 857);
+			btn_Save.Location = new Point(720, 952);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 37;
@@ -743,11 +755,13 @@
 			txt_tpfolder.Enabled = false;
 			txt_tpfolder.Location = new Point(141, 19);
 			txt_tpfolder.Name = "txt_tpfolder";
-			txt_tpfolder.Size = new Size(526, 23);
+			txt_tpfolder.Size = new Size(405, 23);
 			txt_tpfolder.TabIndex = 38;
 			// 
 			// groupBox4
 			// 
+			groupBox4.Controls.Add(kryptonLabel53);
+			groupBox4.Controls.Add(cmb_gpu);
 			groupBox4.Controls.Add(btn_selectTP);
 			groupBox4.Controls.Add(kryptonLabel11);
 			groupBox4.Controls.Add(txt_tpfolder);
@@ -756,10 +770,32 @@
 			groupBox4.Size = new Size(770, 53);
 			groupBox4.TabIndex = 39;
 			groupBox4.TabStop = false;
+			groupBox4.Enter += groupBox4_Enter;
+			// 
+			// kryptonLabel53
+			// 
+			kryptonLabel53.Location = new Point(635, 20);
+			kryptonLabel53.Name = "kryptonLabel53";
+			kryptonLabel53.Size = new Size(39, 20);
+			kryptonLabel53.TabIndex = 98;
+			kryptonLabel53.Values.Text = "Gpu :";
+			// 
+			// cmb_gpu
+			// 
+			cmb_gpu.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_gpu.DropDownWidth = 242;
+			cmb_gpu.IntegralHeight = false;
+			cmb_gpu.Items.AddRange(new object[] { "Nvidia", "Intel", "AMD", "AMD New" });
+			cmb_gpu.Location = new Point(682, 19);
+			cmb_gpu.Name = "cmb_gpu";
+			cmb_gpu.Size = new Size(80, 21);
+			cmb_gpu.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_gpu.TabIndex = 97;
+			cmb_gpu.SelectedIndexChanged += cmb_gpu_SelectedIndexChanged;
 			// 
 			// btn_selectTP
 			// 
-			btn_selectTP.Location = new Point(682, 19);
+			btn_selectTP.Location = new Point(555, 17);
 			btn_selectTP.Name = "btn_selectTP";
 			btn_selectTP.Size = new Size(70, 23);
 			btn_selectTP.TabIndex = 40;
@@ -1870,13 +1906,22 @@
 			groupBox13.Controls.Add(chk_showStartup);
 			groupBox13.Controls.Add(chk_enableDebug);
 			groupBox13.Controls.Add(btn_checkConfig);
-			groupBox13.Location = new Point(13, 664);
+			groupBox13.Location = new Point(13, 737);
 			groupBox13.Name = "groupBox13";
-			groupBox13.Size = new Size(770, 135);
+			groupBox13.Size = new Size(770, 156);
 			groupBox13.TabIndex = 46;
 			groupBox13.TabStop = false;
 			groupBox13.Text = "Miscs Options";
 			groupBox13.Enter += groupBox13_Enter;
+			// 
+			// chk_useXenosInjector
+			// 
+			chk_useXenosInjector.Location = new Point(6, 128);
+			chk_useXenosInjector.Name = "chk_useXenosInjector";
+			chk_useXenosInjector.Size = new Size(165, 20);
+			chk_useXenosInjector.TabIndex = 81;
+			chk_useXenosInjector.Values.Text = "Enable Xenos DLL Injector";
+			chk_useXenosInjector.CheckedChanged += chk_useXenosInjector_CheckedChanged;
 			// 
 			// cmb_showStartup
 			// 
@@ -1934,7 +1979,7 @@
 			tabControl1.Location = new Point(12, 12);
 			tabControl1.Name = "tabControl1";
 			tabControl1.SelectedIndex = 0;
-			tabControl1.Size = new Size(807, 839);
+			tabControl1.Size = new Size(807, 935);
 			tabControl1.TabIndex = 49;
 			// 
 			// tabGlobal
@@ -1948,13 +1993,22 @@
 			tabGlobal.Controls.Add(groupBox7);
 			tabGlobal.Location = new Point(4, 24);
 			tabGlobal.Name = "tabGlobal";
-			tabGlobal.Size = new Size(799, 811);
+			tabGlobal.Size = new Size(799, 907);
 			tabGlobal.TabIndex = 4;
 			tabGlobal.Text = "Global Settings";
 			tabGlobal.UseVisualStyleBackColor = true;
+			tabGlobal.Click += tabGlobal_Click;
 			// 
 			// groupBox14
 			// 
+			groupBox14.Controls.Add(lbl_magpieFsrSharp);
+			groupBox14.Controls.Add(kryptonLabel59);
+			groupBox14.Controls.Add(kryptonLabel58);
+			groupBox14.Controls.Add(trk_magpieFsrSharp);
+			groupBox14.Controls.Add(chk_magpieReshadeColorfullness);
+			groupBox14.Controls.Add(chk_magpieReshadeClarity);
+			groupBox14.Controls.Add(chk_magpieReshadeAdaptiveSharpen);
+			groupBox14.Controls.Add(chk_magpieExclusiveFullscreen);
 			groupBox14.Controls.Add(kryptonLabel55);
 			groupBox14.Controls.Add(chk_magpieShowFps);
 			groupBox14.Controls.Add(chk_magpieTripleBuffering);
@@ -1975,15 +2029,74 @@
 			groupBox14.Controls.Add(chk_useMagpie);
 			groupBox14.Location = new Point(13, 529);
 			groupBox14.Name = "groupBox14";
-			groupBox14.Size = new Size(770, 131);
+			groupBox14.Size = new Size(770, 202);
 			groupBox14.TabIndex = 47;
 			groupBox14.TabStop = false;
 			groupBox14.Text = "Magpie Configuration";
 			// 
+			// kryptonLabel59
+			// 
+			kryptonLabel59.LabelStyle = Krypton.Toolkit.LabelStyle.BoldPanel;
+			kryptonLabel59.Location = new Point(2, 158);
+			kryptonLabel59.Name = "kryptonLabel59";
+			kryptonLabel59.Size = new Size(461, 20);
+			kryptonLabel59.TabIndex = 101;
+			kryptonLabel59.Values.Text = "To apply Magpie to Fullscreen game, you have to force it in the game options";
+			// 
+			// kryptonLabel58
+			// 
+			kryptonLabel58.Location = new Point(467, 148);
+			kryptonLabel58.Name = "kryptonLabel58";
+			kryptonLabel58.Size = new Size(95, 20);
+			kryptonLabel58.TabIndex = 100;
+			kryptonLabel58.Values.Text = "FSR Sharpness :";
+			// 
+			// trk_magpieFsrSharp
+			// 
+			trk_magpieFsrSharp.Location = new Point(568, 148);
+			trk_magpieFsrSharp.Maximum = 100;
+			trk_magpieFsrSharp.Name = "trk_magpieFsrSharp";
+			trk_magpieFsrSharp.Size = new Size(160, 45);
+			trk_magpieFsrSharp.TabIndex = 99;
+			trk_magpieFsrSharp.Scroll += trackBar1_Scroll;
+			// 
+			// chk_magpieReshadeColorfullness
+			// 
+			chk_magpieReshadeColorfullness.Location = new Point(298, 101);
+			chk_magpieReshadeColorfullness.Name = "chk_magpieReshadeColorfullness";
+			chk_magpieReshadeColorfullness.Size = new Size(143, 20);
+			chk_magpieReshadeColorfullness.TabIndex = 98;
+			chk_magpieReshadeColorfullness.Values.Text = "Reshade Colorfullness";
+			// 
+			// chk_magpieReshadeClarity
+			// 
+			chk_magpieReshadeClarity.Location = new Point(185, 101);
+			chk_magpieReshadeClarity.Name = "chk_magpieReshadeClarity";
+			chk_magpieReshadeClarity.Size = new Size(107, 20);
+			chk_magpieReshadeClarity.TabIndex = 97;
+			chk_magpieReshadeClarity.Values.Text = "Reshade Clarity";
+			// 
+			// chk_magpieReshadeAdaptiveSharpen
+			// 
+			chk_magpieReshadeAdaptiveSharpen.Location = new Point(9, 101);
+			chk_magpieReshadeAdaptiveSharpen.Name = "chk_magpieReshadeAdaptiveSharpen";
+			chk_magpieReshadeAdaptiveSharpen.Size = new Size(170, 20);
+			chk_magpieReshadeAdaptiveSharpen.TabIndex = 96;
+			chk_magpieReshadeAdaptiveSharpen.Values.Text = "Reshade Adaptive Sharpen";
+			chk_magpieReshadeAdaptiveSharpen.CheckedChanged += chk_magpieReshadeAdaptiveSharpen_CheckedChanged;
+			// 
+			// chk_magpieExclusiveFullscreen
+			// 
+			chk_magpieExclusiveFullscreen.Location = new Point(473, 127);
+			chk_magpieExclusiveFullscreen.Name = "chk_magpieExclusiveFullscreen";
+			chk_magpieExclusiveFullscreen.Size = new Size(181, 20);
+			chk_magpieExclusiveFullscreen.TabIndex = 95;
+			chk_magpieExclusiveFullscreen.Values.Text = "Simulate Exclusive FullScreen";
+			// 
 			// kryptonLabel55
 			// 
 			kryptonLabel55.LabelStyle = Krypton.Toolkit.LabelStyle.BoldPanel;
-			kryptonLabel55.Location = new Point(18, 101);
+			kryptonLabel55.Location = new Point(5, 132);
 			kryptonLabel55.Name = "kryptonLabel55";
 			kryptonLabel55.Size = new Size(395, 20);
 			kryptonLabel55.TabIndex = 94;
@@ -1991,7 +2104,7 @@
 			// 
 			// chk_magpieShowFps
 			// 
-			chk_magpieShowFps.Location = new Point(682, 101);
+			chk_magpieShowFps.Location = new Point(664, 101);
 			chk_magpieShowFps.Name = "chk_magpieShowFps";
 			chk_magpieShowFps.Size = new Size(75, 20);
 			chk_magpieShowFps.TabIndex = 93;
@@ -1999,7 +2112,7 @@
 			// 
 			// chk_magpieTripleBuffering
 			// 
-			chk_magpieTripleBuffering.Location = new Point(560, 101);
+			chk_magpieTripleBuffering.Location = new Point(542, 101);
 			chk_magpieTripleBuffering.Name = "chk_magpieTripleBuffering";
 			chk_magpieTripleBuffering.Size = new Size(107, 20);
 			chk_magpieTripleBuffering.TabIndex = 92;
@@ -2007,7 +2120,7 @@
 			// 
 			// chk_magpieVsync
 			// 
-			chk_magpieVsync.Location = new Point(491, 101);
+			chk_magpieVsync.Location = new Point(473, 101);
 			chk_magpieVsync.Name = "chk_magpieVsync";
 			chk_magpieVsync.Size = new Size(55, 20);
 			chk_magpieVsync.TabIndex = 91;
@@ -2145,7 +2258,7 @@
 			tabGamepad.Location = new Point(4, 24);
 			tabGamepad.Name = "tabGamepad";
 			tabGamepad.Padding = new Padding(3);
-			tabGamepad.Size = new Size(799, 811);
+			tabGamepad.Size = new Size(799, 907);
 			tabGamepad.TabIndex = 0;
 			tabGamepad.Text = "Gamepad & Xinputs";
 			tabGamepad.UseVisualStyleBackColor = true;
@@ -2156,7 +2269,7 @@
 			tabWheel.Location = new Point(4, 24);
 			tabWheel.Name = "tabWheel";
 			tabWheel.Padding = new Padding(3);
-			tabWheel.Size = new Size(799, 811);
+			tabWheel.Size = new Size(799, 907);
 			tabWheel.TabIndex = 1;
 			tabWheel.Text = "Wheel settings";
 			tabWheel.UseVisualStyleBackColor = true;
@@ -2166,7 +2279,7 @@
 			tabHotas.Controls.Add(groupBox9);
 			tabHotas.Location = new Point(4, 24);
 			tabHotas.Name = "tabHotas";
-			tabHotas.Size = new Size(799, 811);
+			tabHotas.Size = new Size(799, 907);
 			tabHotas.TabIndex = 2;
 			tabHotas.Text = "Hotas Settings";
 			tabHotas.UseVisualStyleBackColor = true;
@@ -2176,25 +2289,24 @@
 			tabLightgun.Controls.Add(groupBox10);
 			tabLightgun.Location = new Point(4, 24);
 			tabLightgun.Name = "tabLightgun";
-			tabLightgun.Size = new Size(799, 811);
+			tabLightgun.Size = new Size(799, 907);
 			tabLightgun.TabIndex = 3;
 			tabLightgun.Text = "Lightgun settings";
 			tabLightgun.UseVisualStyleBackColor = true;
 			// 
-			// chk_useXenosInjector
+			// lbl_magpieFsrSharp
 			// 
-			chk_useXenosInjector.Location = new Point(587, 82);
-			chk_useXenosInjector.Name = "chk_useXenosInjector";
-			chk_useXenosInjector.Size = new Size(165, 20);
-			chk_useXenosInjector.TabIndex = 81;
-			chk_useXenosInjector.Values.Text = "Enable Xenos DLL Injector";
-			chk_useXenosInjector.CheckedChanged += chk_useXenosInjector_CheckedChanged;
+			lbl_magpieFsrSharp.Location = new Point(729, 158);
+			lbl_magpieFsrSharp.Name = "lbl_magpieFsrSharp";
+			lbl_magpieFsrSharp.Size = new Size(35, 20);
+			lbl_magpieFsrSharp.TabIndex = 102;
+			lbl_magpieFsrSharp.Values.Text = "XX%";
 			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(822, 885);
+			ClientSize = new Size(822, 989);
 			Controls.Add(tabControl1);
 			Controls.Add(btn_Save);
 			Name = "Form1";
@@ -2212,6 +2324,7 @@
 			groupBox3.PerformLayout();
 			groupBox4.ResumeLayout(false);
 			groupBox4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_gpu).EndInit();
 			groupBox5.ResumeLayout(false);
 			groupBox5.PerformLayout();
 			groupBox6.ResumeLayout(false);
@@ -2254,6 +2367,7 @@
 			tabGlobal.ResumeLayout(false);
 			groupBox14.ResumeLayout(false);
 			groupBox14.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)trk_magpieFsrSharp).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieCapture).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieScaling).EndInit();
 			tabGamepad.ResumeLayout(false);
@@ -2462,5 +2576,15 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel57;
 		private Krypton.Toolkit.KryptonComboBox cmb_useMagpieLightgun;
 		private Krypton.Toolkit.KryptonCheckBox chk_useXenosInjector;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel53;
+		private Krypton.Toolkit.KryptonComboBox cmb_gpu;
+		private Krypton.Toolkit.KryptonCheckBox chk_magpieReshadeClarity;
+		private Krypton.Toolkit.KryptonCheckBox chk_magpieReshadeAdaptiveSharpen;
+		private Krypton.Toolkit.KryptonCheckBox chk_magpieExclusiveFullscreen;
+		private TrackBar trk_magpieFsrSharp;
+		private Krypton.Toolkit.KryptonCheckBox chk_magpieReshadeColorfullness;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel58;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel59;
+		private Krypton.Toolkit.KryptonLabel lbl_magpieFsrSharp;
 	}
 }

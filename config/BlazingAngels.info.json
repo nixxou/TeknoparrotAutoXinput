@@ -1,0 +1,8 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "BA_PC_GAME_CLASS_WINDOW",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False"
+}

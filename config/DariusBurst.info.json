@@ -1,0 +1,9 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "Test of the Day",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"True",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"True"
+}

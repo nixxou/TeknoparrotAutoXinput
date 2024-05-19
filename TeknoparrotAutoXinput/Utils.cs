@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Xml.Linq;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 
 namespace TeknoparrotAutoXinput
@@ -86,7 +87,35 @@ namespace TeknoparrotAutoXinput
 		public static extern int GetClientRect(IntPtr hWnd, out RECT lpRect);
 
 		[DllImport("user32.dll")]
+		public static extern int GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+		[DllImport("user32.dll")]
 		public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+
+		[DllImport("user32.dll")]
+		public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+		[DllImport("user32.dll")]
+		static extern bool ClientToScreen(IntPtr hWnd, ref POINTCLICK lpPoint);
+
+
+
+		// Importation des fonctions de la Windows API
+		[DllImport("user32.dll")]
+		static extern bool SetCursorPos(int X, int Y);
+
+		[DllImport("user32.dll")]
+		static extern bool SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+		static int MakeLParam(int LoWord, int HiWord)
+		{
+			return ((HiWord << 16) | (LoWord & 0xFFFF));
+		}
 
 
 		[DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
@@ -101,6 +130,18 @@ namespace TeknoparrotAutoXinput
 			public int Right;
 			public int Bottom;
 		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct POINTCLICK
+		{
+			public int X;
+			public int Y;
+		}
+
+		// Constantes pour les messages de la souris
+		const int WM_RBUTTONDOWN = 0x0204;
+		const int WM_RBUTTONUP = 0x0205;
+
 
 		public static int GetFileLinkCount(string filepath)
 		{
@@ -182,6 +223,8 @@ namespace TeknoparrotAutoXinput
 
 		public static void HardLinkFiles(string directorySource, string directoryDest)
 		{
+			/*
+			MessageBox.Show("HardLink Start");
 			if (!Directory.Exists(directorySource)) return;
 			if (!Directory.Exists(directoryDest)) return;
 			directorySource = Path.GetFullPath(directorySource);
@@ -209,12 +252,87 @@ namespace TeknoparrotAutoXinput
 				}
 				MakeLink(file, newfile);
 			}
+			*/
 
-        }
+			MessageBox.Show("HardLink Start New");
+			List<string> DirectoryList = new List<string>();
 
-		public static void CleanHardLinksFiles(string directoryToClean, string originalLinkDir)
+			if (!Directory.Exists(directorySource)) return;
+			if (!Directory.Exists(directoryDest)) return;
+			directorySource = Path.GetFullPath(directorySource);
+			directoryDest = Path.GetFullPath(directoryDest);
+
+			if (!AreFoldersOnSameDrive(directorySource, directoryDest)) return;
+
+			var filePaths = Directory.EnumerateFiles(directorySource, "*", new EnumerationOptions
+			{
+				IgnoreInaccessible = true,
+				RecurseSubdirectories = true
+			});
+
+			foreach (var file in filePaths)
+			{
+				string newfile = directoryDest + file.Remove(0, directorySource.Length);
+				newfile = newfile.Replace("[..]", "..");
+				newfile = Path.GetFullPath(newfile);
+
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!windowed!]") && newfile.Contains(@"\[!windowed!]\"))
+				{
+					newfile = newfile.Replace(@"\[!windowed!]\", @"\");
+					if (!Program.IsWindowed) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!fullscreen!]") && newfile.Contains(@"\[!fullscreen!]\"))
+				{
+					newfile = newfile.Replace(@"\[!fullscreen!]\", @"\");
+					if (Program.IsWindowed) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!amd!]") && newfile.Contains(@"\[!amd!]\"))
+				{
+					newfile = newfile.Replace(@"\[!amd!]\", @"\");
+					if(ConfigurationManager.MainConfig.gpuType <= 1) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!nvidia!]") && newfile.Contains(@"\[!nvidia!]\"))
+				{
+					newfile = newfile.Replace(@"\[!nvidia!]\", @"\");
+					if (ConfigurationManager.MainConfig.gpuType != 0) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!intel!]") && newfile.Contains(@"\[!intel!]\"))
+				{
+					newfile = newfile.Replace(@"\[!intel!]\", @"\");
+					if (ConfigurationManager.MainConfig.gpuType != 1) continue;
+				}
+
+				string newfiledir = Directory.GetParent(newfile).FullName;
+				if (!Directory.Exists(newfiledir))
+				{
+					List<string> listDir = new List<string>();
+					string subdir = newfiledir;
+					while (!Directory.Exists(subdir))
+					{
+						if (!Directory.Exists(subdir)) listDir.Add(subdir);
+						subdir = Directory.GetParent(subdir).FullName;
+					}
+					listDir.Reverse();
+					foreach (var subdirV in listDir) DirectoryList.Add(subdirV);
+
+					Directory.CreateDirectory(newfiledir);
+				}
+				if (File.Exists(newfile))
+				{
+					File.Move(newfile, newfile + ".filetorestore");
+				}
+				MakeLink(file, newfile);
+			}
+			if (DirectoryList.Count() > 0)
+			{
+				string json = JsonConvert.SerializeObject(DirectoryList, Formatting.Indented);
+				File.WriteAllText(Path.Combine(directoryDest,"tempDirList.json"), json);
+			}
+		}
+
+		
+		public static void CleanHardLinksFilesOriginal(string directoryToClean, string originalLinkDir)
 		{
-			directoryToClean = Path.GetFullPath(directoryToClean);
 			originalLinkDir = Path.GetFullPath(originalLinkDir);
 			if (!Directory.Exists(directoryToClean)) return;
 			if (!Directory.Exists(originalLinkDir)) return;
@@ -253,21 +371,159 @@ namespace TeknoparrotAutoXinput
 						}
 
 					}
-					
-
 				}
 			}
 			foreach (var file in filePaths)
 			{
-				if (file.EndsWith(".filetorestore"))
+				if (file.EndsWith(".filetorestore") && File.Exists(file))
+				{
+					string originalName = file.Substring(0, file.Length - 14);
+					if (!File.Exists(originalName))
+					{
+						File.Move(file, originalName);
+					}
+				}
+			}
+
+			string tempDirFile = Path.Combine(directoryToClean, "tempDirList.json");
+			if (File.Exists(tempDirFile))
+			{
+				try
+				{
+					List<string> DirList = (List<string>)JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(tempDirFile));
+					foreach(var dir in DirList)
+					{
+						CleanTemporaryDirectories(dir);
+					}
+				}
+				catch { }
+				File.Delete(tempDirFile);
+			}
+
+		}
+		
+		public static void CleanHardLinksFiles(string directoryToClean, string originalLinkDir)
+		{
+
+			directoryToClean = Path.GetFullPath(directoryToClean);
+			originalLinkDir = Path.GetFullPath(originalLinkDir);
+			if (!Directory.Exists(directoryToClean)) return;
+			if (!Directory.Exists(originalLinkDir)) return;
+
+			if (!AreFoldersOnSameDrive(directoryToClean, originalLinkDir)) return;
+
+			var filePaths = Directory.EnumerateFiles(originalLinkDir, "*", new EnumerationOptions
+			{
+				IgnoreInaccessible = true,
+				RecurseSubdirectories = true
+			});
+			foreach (var fileInLinkFolder in filePaths)
+			{
+				string file = directoryToClean + fileInLinkFolder.Remove(0, originalLinkDir.Length).TrimStart();
+				file = file.Replace("[..]", "..");
+				file = Path.GetFullPath(file);
+
+				if (Path.GetDirectoryName(file).Contains(@"\[!windowed!]") && file.Contains(@"\[!windowed!]\"))
+				{
+					file = file.Replace(@"\[!windowed!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!fullscreen!]") && file.Contains(@"\[!fullscreen!]\"))
+				{
+					file = file.Replace(@"\[!fullscreen!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!amd!]") && file.Contains(@"\[!amd!]\"))
+				{
+					file = file.Replace(@"\[!amd!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!nvidia!]") && file.Contains(@"\[!nvidia!]\"))
+				{
+					file = file.Replace(@"\[!nvidia!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!intel!]") && file.Contains(@"\[!intel!]\"))
+				{
+					file = file.Replace(@"\[!intel!]\", @"\");
+				}
+
+				if (!File.Exists(file)) continue;
+
+				if (IsHardLink(file, originalLinkDir))
+				{
+					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
+					try
+					{
+						File.Delete(file);
+					}
+					catch (Exception ex)
+					{
+						if (File.Exists(file))
+						{
+							try
+							{
+								FileInfo finfo = new FileInfo(file);
+								if (finfo.IsReadOnly)
+								{
+									finfo.IsReadOnly = false;
+									finfo.Delete();
+								}
+							}
+							catch (Exception ex2) { }
+						}
+
+					}
+				}
+				string fileToRestore = file + ".filetorestore";
+				if (File.Exists(fileToRestore))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} must be restored");
-					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file));
-					File.Move(file, newFilePath);
+					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(fileToRestore));
+					File.Move(fileToRestore, newFilePath,true);
 				}
+			}
+			string tempDirFile = Path.Combine(directoryToClean, "tempDirList.json");
+			if (File.Exists(tempDirFile))
+			{
+				try
+				{
+					List<string> DirList = (List<string>)JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(tempDirFile));
+					//DirList.Reverse();
+					foreach (var dir in DirList)
+					{
+						CleanTemporaryDirectories(dir);
+					}
+				}
+				catch { }
+				File.Delete(tempDirFile);
 			}
 		}
 
+		public static void CleanTemporaryDirectories(string rootDirectory)
+		{
+			try
+			{
+				// Vérifie si le répertoire racine existe
+				if (!Directory.Exists(rootDirectory))
+				{
+					Console.WriteLine($"Le répertoire {rootDirectory} n'existe pas.");
+					return;
+				}
+
+				try
+				{
+					bool isEmpty = Directory.GetFiles(rootDirectory).Length == 0;
+					if (isEmpty)
+					{
+						Directory.Delete(rootDirectory,true);
+					}
+				}
+				catch (Exception ex)
+				{
+				}
+				
+			}
+			catch (Exception ex)
+			{
+			}
+		}
 
 
 		public static bool AHKSyntaxCheck(string ahkCode, out string errorTxt, string[] args = null)
@@ -764,6 +1020,89 @@ namespace TeknoparrotAutoXinput
 			}
 
 			return IntPtr.Zero;
+		}
+
+		public static IntPtr FindWindowByMultipleCriteria(string windowClass, string exeName, string windowTitle, out string trueClassTitle)
+		{
+			foreach (var process in Process.GetProcesses())
+			{
+				if (!string.IsNullOrEmpty(exeName) && !process.ProcessName.Contains(exeName))
+					continue;
+
+				IntPtr windowHandle = process.MainWindowHandle;
+				if (windowHandle == IntPtr.Zero)
+					continue;
+
+				StringBuilder className = new StringBuilder(256);
+				GetClassName(windowHandle, className, className.Capacity);
+
+				if (!string.IsNullOrEmpty(windowClass) && !className.ToString().Contains(windowClass))
+					continue;
+
+				StringBuilder title = new StringBuilder(256);
+				GetWindowText(windowHandle, title, title.Capacity);
+
+				if (!string.IsNullOrEmpty(windowTitle) && !title.ToString().Contains(windowTitle))
+					continue;
+
+				trueClassTitle = className.ToString();
+				return windowHandle;
+			}
+			trueClassTitle = "";
+			return IntPtr.Zero;
+		}
+
+
+		public static void MoveWindowsToZero(IntPtr hWnd)
+		{
+			RECT windowRect;
+			GetWindowRect(hWnd, out windowRect);
+
+			// Récupérer les dimensions du client de la fenêtre
+			RECT clientRect;
+			GetClientRect(hWnd, out clientRect);
+
+			int winWidth = (windowRect.Right - windowRect.Left);
+			int clientWidth = (clientRect.Right - clientRect.Left);
+
+			int winHeight = (windowRect.Bottom - windowRect.Top);
+			int clientHeight = (clientRect.Bottom - clientRect.Top);
+
+			int borderSizeWidth = (int)Math.Floor(((double)winWidth - (double)clientWidth) / 2.0);
+			int diffHeight = (winHeight - clientHeight);
+
+			Screen screen = Screen.FromHandle(hWnd);
+
+			if (winWidth <= screen.Bounds.Width && winHeight <= screen.Bounds.Height)
+			{
+				SetWindowPos(hWnd, IntPtr.Zero, 0, 0, 0, 0, 0x0001 | 0x0004 | 0x0010);
+			}
+			else
+			{
+				SetWindowPos(hWnd, IntPtr.Zero, screen.Bounds.X - (borderSizeWidth), screen.Bounds.Y - (diffHeight - borderSizeWidth), 0, 0, 0x0001 | 0x0004 | 0x0010);
+			}
+
+		}
+
+		public static void ClickWindow(IntPtr windowHandle)
+		{
+			RECT clientRect;
+			// Obtenir les dimensions du client (zone de rendu) de la fenêtre
+			GetClientRect(windowHandle, out clientRect);
+
+			// Convertir les coordonnées client en coordonnées écran
+			POINTCLICK upperRightCorner = new POINTCLICK();
+			upperRightCorner.X = (int)(clientRect.Right * 0.95); // 5% du bord droit
+			upperRightCorner.Y = (int)(clientRect.Top * 0.95);
+
+			ClientToScreen(windowHandle, ref upperRightCorner);
+
+			// Déplacer la souris au coin supérieur droit
+			SetCursorPos(upperRightCorner.X, upperRightCorner.Y);
+
+			// Envoyer un message de clic de souris (clic droit) à la fenêtre cible
+			SendMessage(windowHandle, WM_RBUTTONDOWN, 0, MakeLParam(upperRightCorner.X, upperRightCorner.Y));
+			SendMessage(windowHandle, WM_RBUTTONUP, 0, MakeLParam(upperRightCorner.X, upperRightCorner.Y));
 		}
 
 	}

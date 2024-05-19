@@ -4,5 +4,9 @@
     "64bits": "False",
     "crosshairA": "",
     "crosshairB": "",
-    "outputs": ""
+    "outputs": "",
+    "windowed": "General,Windowed,1",
+    "magpieClass": "SDL_app",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False"		
 }

@@ -1,0 +1,12 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "UnrealWindow",
+	"magpieTitle": "",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"Famse",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False",
+	"magpieNoLateFocus":"False",
+	"magpieExecutable":""
+}

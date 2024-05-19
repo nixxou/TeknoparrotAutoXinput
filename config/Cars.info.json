@@ -1,0 +1,9 @@
+{
+    "windowed": "General,Windowed,1",
+    "magpieClass": "D3DProxyWindow",
+	"magpie3DGameMode": "True",
+	"magpieDisableDirectFlip": "False",
+	"magpieAllowScalingMaximized":"False",
+	"magpieLaunchBefore":"False",
+	"magpieNoMoveWindow":"False"
+}
