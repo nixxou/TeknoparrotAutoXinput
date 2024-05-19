@@ -592,13 +592,7 @@ namespace TeknoparrotAutoXinput
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
 					}
 
-					GameInfo = new Dictionary<string,string>();
-					string gameInfoFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "info" + ".json");
-					if (File.Exists(gameInfoFile))
-					{
-						Utils.LogMessage($"info file found : " + gameInfoFile);
-						GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
-					}
+
 
 					string baseTpDirOriginal = baseTpDir;
 					if (!string.IsNullOrEmpty(gameOptions.CustomTpExe) && File.Exists(gameOptions.CustomTpExe))
@@ -606,6 +600,87 @@ namespace TeknoparrotAutoXinput
 						teknoparrotExe = Path.GetFullPath(gameOptions.CustomTpExe);
 						baseTpDir = Path.GetDirectoryName(teknoparrotExe);
 					}
+
+
+					int tp_version = 100000;
+					try
+					{
+						if (File.Exists(teknoparrotExe))
+						{
+							FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(teknoparrotExe);
+							if (!string.IsNullOrEmpty(fileVersionInfo.FileVersion))
+							{
+								int lastIndex = fileVersionInfo.FileVersion.LastIndexOf('.');
+								if (lastIndex != -1)
+								{
+									if (int.TryParse(fileVersionInfo.FileVersion.Substring(lastIndex + 1), out int lastNumber))
+									{
+										tp_version = lastNumber;
+									}
+								}
+							}
+						}
+					}
+					catch { }
+					Utils.LogMessage($"TP version = {tp_version}");
+
+					string potentialAltConfigDir = "";
+					if (Directory.Exists(Path.Combine(basePath,"config")))
+					{
+						// Obtenez tous les sous-répertoires
+						string[] directories = Directory.GetDirectories(Path.Combine(basePath, "config"));
+
+						// Créez une liste pour les répertoires dont le nom est un chiffre et <= max_productid
+						List<string> numericDirectories = new List<string>();
+
+						foreach (string directory in directories)
+						{
+							DirectoryInfo dirInfo = new DirectoryInfo(directory);
+							// Vérifiez si le nom du répertoire est un chiffre
+							if (dirInfo.Name.All(char.IsDigit))
+							{
+								// Convertissez le nom du répertoire en entier
+								int directoryNumber = int.Parse(dirInfo.Name);
+
+								// Vérifiez si le numéro du répertoire est inférieur ou égal à max_productid
+								if (directoryNumber >= tp_version)
+								{
+									// Ajoutez le chemin du répertoire à la liste
+									numericDirectories.Add(directory);
+								}
+							}
+						}
+
+						// Triez la liste dans l'ordre décroissant
+						numericDirectories.Sort((x, y) => y.CompareTo(x));
+
+						// Affichez les répertoires triés
+						Console.WriteLine("Répertoires dont le nom est un chiffre et <= " + tp_version + ", triés dans l'ordre décroissant:");
+						foreach (var directory in numericDirectories)
+						{
+							if(File.Exists(Path.Combine(directory, originalConfigFileNameWithoutExt + ".gamepad.txt")) || File.Exists(Path.Combine(directory, originalConfigFileNameWithoutExt + ".lightgun.txt")))
+							{
+								potentialAltConfigDir = directory;
+								break;
+							}
+						}
+					}
+					Utils.LogMessage($"Alt Config dir = {potentialAltConfigDir}");
+
+
+					GameInfo = new Dictionary<string, string>();
+					string gameInfoFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "info" + ".json");
+					if (potentialAltConfigDir != "")
+					{
+						var gameInfoFileAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + "info" + ".json");
+						if (File.Exists(gameInfoFileAlt)) gameInfoFile = gameInfoFileAlt;
+					}
+					if (File.Exists(gameInfoFile))
+					{
+						Utils.LogMessage($"info file found : " + gameInfoFile);
+						GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
+					}
+
 
 					string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
 					if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
@@ -889,16 +964,28 @@ namespace TeknoparrotAutoXinput
 					*/
 
 					var shifterPath = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "shifter" + ".json");
+					if (potentialAltConfigDir != "")
+					{
+						var shifterPathAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + "shifter" + ".json");
+						if (File.Exists(shifterPathAlt)) shifterPath = shifterPathAlt;
+					}
 					if (File.Exists(shifterPath))
 					{
 						shifterData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(shifterPath));
 					}
 
+
 					var throttlePath = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "throttle" + ".json");
+					if (potentialAltConfigDir != "")
+					{
+						var throttlePathAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + "throttle" + ".json");
+						if (File.Exists(throttlePathAlt)) throttlePath = throttlePathAlt;
+					}
 					if (File.Exists(throttlePath))
 					{
 						throttleData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(throttlePath));
 					}
+
 
 					string emptyConfigPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "GameProfiles", originalConfigFileName);
 					Utils.LogMessage($"Base TP GameProfile : {emptyConfigPath}");
@@ -912,6 +999,11 @@ namespace TeknoparrotAutoXinput
 					foreach (var type in typeConfig)
 					{
 						var configPath = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + type + ".txt");
+						if (potentialAltConfigDir != "")
+						{
+							var configPathAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + type + ".txt");
+							if (File.Exists(configPathAlt)) configPath = configPathAlt;
+						}
 						if (File.Exists(configPath))
 						{
 							Utils.LogMessage($"Found {configPath}");
@@ -1344,6 +1436,12 @@ namespace TeknoparrotAutoXinput
 								}
 
 								LightgunConfigAFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + ".lightgun-" + LightgunA_Type + variante + ".json");
+								if (potentialAltConfigDir != "")
+								{
+									var LightgunConfigAFileAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + ".lightgun-" + LightgunA_Type + variante + ".json");
+									if (File.Exists(LightgunConfigAFileAlt)) LightgunConfigAFile = LightgunConfigAFileAlt;
+								}
+
 								Utils.LogMessage($"LightGunConfigA = {LightgunConfigAFile}");
 								if (File.Exists(LightgunConfigAFile))
 								{
@@ -1366,6 +1464,12 @@ namespace TeknoparrotAutoXinput
 								}
 
 								LightgunConfigBFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + ".lightgun-" + LightgunB_Type + variante + ".json");
+								if (potentialAltConfigDir != "")
+								{
+									var LightgunConfigBFileAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + ".lightgun-" + LightgunB_Type + variante + ".json");
+									if (File.Exists(LightgunConfigBFileAlt)) LightgunConfigBFile = LightgunConfigBFileAlt;
+								}
+
 								Utils.LogMessage($"LightGunConfigB = {LightgunConfigBFile}");
 								if (File.Exists(LightgunConfigBFile))
 								{
