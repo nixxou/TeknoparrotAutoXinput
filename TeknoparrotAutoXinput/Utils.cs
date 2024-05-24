@@ -14,6 +14,8 @@ using System.Security.Principal;
 using System.Xml.Linq;
 using System.ComponentModel;
 using Newtonsoft.Json;
+using System.Security.AccessControl;
+using System.Text.RegularExpressions;
 
 
 namespace TeknoparrotAutoXinput
@@ -254,7 +256,9 @@ namespace TeknoparrotAutoXinput
 			}
 			*/
 
-			MessageBox.Show("HardLink Start New");
+			string moveToDest = "";
+			bool moveNeedAdmin = false;
+			string moveAhkCode = "";
 			List<string> DirectoryList = new List<string>();
 
 			if (!Directory.Exists(directorySource)) return;
@@ -274,7 +278,7 @@ namespace TeknoparrotAutoXinput
 			{
 				string newfile = directoryDest + file.Remove(0, directorySource.Length);
 				newfile = newfile.Replace("[..]", "..");
-				newfile = Path.GetFullPath(newfile);
+				
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!windowed!]") && newfile.Contains(@"\[!windowed!]\"))
 				{
@@ -301,6 +305,74 @@ namespace TeknoparrotAutoXinput
 					newfile = newfile.Replace(@"\[!intel!]\", @"\");
 					if (ConfigurationManager.MainConfig.gpuType != 1) continue;
 				}
+
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!dwheel!]") && newfile.Contains(@"\[!dwheel!]\"))
+				{
+					newfile = newfile.Replace(@"\[!dwheel!]\", @"\");
+					if (!Program.useDinputWheel) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!dhotas!]") && newfile.Contains(@"\[!dhotas!]\"))
+				{
+					newfile = newfile.Replace(@"\[!dhotas!]\", @"\");
+					if (!Program.useDinputHotas) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!dlightgun!]") && newfile.Contains(@"\[!dlightgun!]\"))
+				{
+					newfile = newfile.Replace(@"\[!dlightgun!]\", @"\");
+					if (!Program.useDinputLightGun) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!xinput!]") && newfile.Contains(@"\[!xinput!]\"))
+				{
+					newfile = newfile.Replace(@"\[!xinput!]\", @"\");
+					if (!Program.useXinput) continue;
+				}
+
+				if (Path.GetDirectoryName(newfile) != null && Regex.IsMatch(Path.GetDirectoryName(newfile), @"\\\[!!([A-Za-z0-9 ]+)!!\]") && Regex.IsMatch(newfile, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\"))
+				{
+					newfile = Regex.Replace(newfile, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\", @"\");
+				}
+
+				newfile = Path.GetFullPath(newfile);
+
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!moveto!]") && newfile.Contains(@"\[!moveto!]\"))
+				{
+					string fileName = Path.GetFileName(file);
+					if(moveToDest == "")
+					{
+						string dir = Path.GetDirectoryName(file);
+						string destFile = Path.Combine(dir, "destination.txt");
+						if (File.Exists(destFile))
+						{
+							string moveToDestContent = File.ReadAllText(destFile);
+							moveToDestContent = moveToDestContent.Trim().TrimEnd('\r').TrimEnd('\n').TrimEnd('\r').Trim();
+							if (Directory.Exists(moveToDestContent))
+							{
+								moveToDest = moveToDestContent;
+								moveNeedAdmin = !Utils.HasWritePermissionOnDir(moveToDest);
+							}
+						}
+					}
+					if(fileName != "destination.txt" && moveToDest != "")
+					{
+						string dest = Path.Combine(moveToDest, fileName);
+						if (moveNeedAdmin)
+						{
+							moveAhkCode += @$"FileCopy, {file}, {dest}, 1" + "\n";
+						}
+						else
+						{
+							try
+							{
+								File.Copy(file, dest, true);
+							}
+							catch { }
+						}
+
+					}
+					
+					continue;
+				}
+
 				if (Path.GetFileNameWithoutExtension(newfile).StartsWith(@"[!main_executable!") && Path.GetFileNameWithoutExtension(newfile).EndsWith(@"]"))
 				{
 					if(executableGame != "" && File.Exists(executableGame))
@@ -343,6 +415,27 @@ namespace TeknoparrotAutoXinput
 			{
 				string json = JsonConvert.SerializeObject(DirectoryList, Formatting.Indented);
 				File.WriteAllText(Path.Combine(directoryDest,"tempDirList.json"), json);
+			}
+
+			if(moveAhkCode != "")
+			{
+				File.WriteAllText(Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "moveadmin.tmp.ahk"), moveAhkCode);
+				string selfExe = Process.GetCurrentProcess().MainModule.FileName;
+				if (!Utils.CheckTaskExist(selfExe, "--moveadmin"))
+				{
+					string exePath = selfExe;
+					string exeDir = Path.GetDirectoryName(exePath);
+					Process process = new Process();
+					process.StartInfo.FileName = selfExe;
+					process.StartInfo.Arguments = "--registerTask " + $"\"{selfExe}\" " + "--moveadmin";
+					process.StartInfo.WorkingDirectory = exeDir;
+					process.StartInfo.UseShellExecute = true;
+					process.StartInfo.Verb = "runas";
+					process.Start();
+					process.WaitForExit();
+				}
+				Utils.ExecuteTask(Utils.ExeToTaskName(selfExe, "--moveadmin"), -1);
+
 			}
 		}
 
@@ -420,6 +513,10 @@ namespace TeknoparrotAutoXinput
 		
 		public static void CleanHardLinksFiles(string directoryToClean, string originalLinkDir, string executableGameFile)
 		{
+			MessageBox.Show("clean");
+			string moveToDest = "";
+			bool moveNeedAdmin = false;
+			string moveAhkCode = "";
 
 			directoryToClean = Path.GetFullPath(directoryToClean);
 			originalLinkDir = Path.GetFullPath(originalLinkDir);
@@ -437,7 +534,7 @@ namespace TeknoparrotAutoXinput
 			{
 				string file = directoryToClean + fileInLinkFolder.Remove(0, originalLinkDir.Length).TrimStart();
 				file = file.Replace("[..]", "..");
-				file = Path.GetFullPath(file);
+				
 
 				if (Path.GetDirectoryName(file).Contains(@"\[!windowed!]") && file.Contains(@"\[!windowed!]\"))
 				{
@@ -459,6 +556,76 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!intel!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!dwheel!]") && file.Contains(@"\[!dwheel!]\"))
+				{
+					file = file.Replace(@"\[!dwheel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!dhotas!]") && file.Contains(@"\[!dhotas!]\"))
+				{
+					file = file.Replace(@"\[!dhotas!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!dlightgun!]") && file.Contains(@"\[!dlightgun!]\"))
+				{
+					file = file.Replace(@"\[!dlightgun!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!xinput!]") && file.Contains(@"\[!xinput!]\"))
+				{
+					file = file.Replace(@"\[!xinput!]\", @"\");
+				}
+
+				if (Path.GetDirectoryName(file) != null && Regex.IsMatch(Path.GetDirectoryName(file), @"\\\[!!([A-Za-z0-9 ]+)!!\]") && Regex.IsMatch(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\"))
+				{
+					file = Regex.Replace(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\", @"\");
+				}
+
+				file = Path.GetFullPath(file);
+				if (Path.GetDirectoryName(file).Contains(@"\[!moveto!]") && file.Contains(@"\[!moveto!]\"))
+				{
+					string fileName = Path.GetFileName(fileInLinkFolder);
+					if (moveToDest == "")
+					{
+						string dir = Path.GetDirectoryName(fileInLinkFolder);
+						string destFile = Path.Combine(dir, "destination.txt");
+						if (File.Exists(destFile))
+						{
+							string moveToDestContent = File.ReadAllText(destFile);
+							moveToDestContent = moveToDestContent.Trim().TrimEnd('\r').TrimEnd('\n').TrimEnd('\r').Trim();
+							if (Directory.Exists(moveToDestContent))
+							{
+								moveToDest = moveToDestContent;
+								moveNeedAdmin = !Utils.HasWritePermissionOnDir(moveToDest);
+							}
+						}
+					}
+					if (fileName != "destination.txt" && moveToDest != "")
+					{
+						string dest = Path.Combine(moveToDest, fileName);
+						if (File.Exists(dest))
+						{
+							try
+							{
+								File.Copy(dest, fileInLinkFolder, true);
+							}
+							catch { }
+							if (moveNeedAdmin)
+							{
+								moveAhkCode += @$"FileDelete, {dest}" + "\n";
+							}
+							else
+							{
+								try
+								{
+									File.Delete(dest);
+								}
+								catch { }
+							}
+
+						}
+					}
+					continue;
+					//file = file.Replace(@"\[!intel!]\", @"\");
+				}
+
 
 				if (!File.Exists(file)) continue;
 
@@ -548,6 +715,28 @@ namespace TeknoparrotAutoXinput
 				catch { }
 				File.Delete(tempDirFile);
 			}
+
+			if (moveAhkCode != "")
+			{
+				File.WriteAllText(Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "moveadmin.tmp.ahk"), moveAhkCode);
+				string selfExe = Process.GetCurrentProcess().MainModule.FileName;
+				if (!Utils.CheckTaskExist(selfExe, "--moveadmin"))
+				{
+					string exePath = selfExe;
+					string exeDir = Path.GetDirectoryName(exePath);
+					Process process = new Process();
+					process.StartInfo.FileName = selfExe;
+					process.StartInfo.Arguments = "--registerTask " + $"\"{selfExe}\" " + "--moveadmin";
+					process.StartInfo.WorkingDirectory = exeDir;
+					process.StartInfo.UseShellExecute = true;
+					process.StartInfo.Verb = "runas";
+					process.Start();
+					process.WaitForExit();
+				}
+				Utils.ExecuteTask(Utils.ExeToTaskName(selfExe, "--moveadmin"), -1);
+
+			}
+
 		}
 
 		public static void CleanTemporaryDirectories(string rootDirectory)
@@ -576,6 +765,55 @@ namespace TeknoparrotAutoXinput
 			}
 			catch (Exception ex)
 			{
+			}
+		}
+
+		public static bool HasWritePermissionOnDir(string path)
+		{
+			try
+			{
+				// Get the current user's identity
+				WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
+				WindowsPrincipal principal = new WindowsPrincipal(currentUser);
+
+				// Get the directory security info
+				DirectoryInfo directoryInfo = new DirectoryInfo(path);
+				DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
+
+				// Get access rules
+				AuthorizationRuleCollection rules = directorySecurity.GetAccessRules(true, true, typeof(SecurityIdentifier));
+
+				foreach (FileSystemAccessRule rule in rules)
+				{
+					// Check if the current user is in the rule identity
+					if (principal.IsInRole(rule.IdentityReference as SecurityIdentifier))
+					{
+						// Check for write permissions
+						if ((rule.FileSystemRights & FileSystemRights.WriteData) == FileSystemRights.WriteData)
+						{
+							if (rule.AccessControlType == AccessControlType.Allow)
+							{
+								return true;
+							}
+							else if (rule.AccessControlType == AccessControlType.Deny)
+							{
+								return false;
+							}
+						}
+					}
+				}
+
+				// If no explicit rules found, assume no write permissions
+				return false;
+			}
+			catch (UnauthorizedAccessException)
+			{
+				return false;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"An error occurred: {ex.Message}");
+				return false;
 			}
 		}
 

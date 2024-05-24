@@ -127,8 +127,38 @@ namespace TeknoparrotAutoXinput
 			//Up there to be load before demulshooter start
 			ConfigurationManager.LoadConfig();
 
+			//moveadmin : Used in patch to copy file to folder that need admin rights
+			if (args.Length >= 1 && args.First() == "--moveadmin")
+			{
+				string tempFilePath = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "moveadmin.tmp.ahk");
+				if (File.Exists(tempFilePath))
+				{
+					try
+					{
+						string currentDir = Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName));
+						string ahkExe = Path.Combine(currentDir, "AutoHotkeyU32.exe");
+						if (File.Exists(tempFilePath))
+						{
+							Process process = new Process();
+							process.StartInfo.FileName = ahkExe;
+							process.StartInfo.Arguments = tempFilePath;
+							process.StartInfo.UseShellExecute = false;
+							process.StartInfo.CreateNoWindow = true;
+							process.Start();
+							process.WaitForExit();
+							Thread.Sleep(100);
+							File.Delete(tempFilePath);
+						}
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+				return;
+			}
 
-			//rivatuner run as admin
+				//rivatuner run as admin
 			if (args.Length >= 1 && args.First() == "--xenos")
 			{
 				string XenosDir = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos");
@@ -3483,7 +3513,7 @@ namespace TeknoparrotAutoXinput
 
 					if (finalConfig != "")
 					{
-
+						MessageBox.Show("lk");
 						if(gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{
 							Utils.LogMessage($"HardLinkFiles {linkSourceFolder}, {linkTargetFolder}");
@@ -3750,7 +3780,7 @@ namespace TeknoparrotAutoXinput
 							Utils.LogMessage($"Execute AHK Before");
 							Utils.ExecuteAHK(gameOptions.AhkBefore,gameOptions.WaitForExitAhkBefore);
 						}
-						MessageBox.Show("startup");
+
 						if (showStartup)
 						{
 							Utils.LogMessage($"showStartup");
@@ -3850,7 +3880,6 @@ namespace TeknoparrotAutoXinput
 
 						if ((IsWindowed || forceMagpie) && useMagpie)
 						{
-							MessageBox.Show("icimagpie");
 							string magpieExe = ConfigurationManager.MainConfig.magpieExe;
 							string magpieConfig = Path.Combine(Path.GetDirectoryName(magpieExe), "config", "config.json");
 
@@ -3974,7 +4003,6 @@ namespace TeknoparrotAutoXinput
 							if (GameInfo.ContainsKey("magpieExecutable") && GameInfo["magpieExecutable"].Trim() != "")
 							{
 								magpieExecutableGame = Path.GetFullPath(Path.Combine(executableGameDir, GameInfo["magpieExecutable"]));
-								MessageBox.Show(magpieExecutableGame);
 							}
 
 							if (forceMagpie)
@@ -4215,7 +4243,6 @@ namespace TeknoparrotAutoXinput
 													string YRatioFactorString = Math.Round(YRatioFactorValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
 													forceSindenCalibration = $"{XOffsetString},{XRatioFactorString},{YOffsetString},{YRatioFactorString}";
 													Utils.LogMessage("Sinden Calibration Config : " + forceSindenCalibration);
-													MessageBox.Show("sinden");
 													string addedArg = @$"-action ""set-offsets {forceSindenCalibration}""";
 													Process[] processes = Process.GetProcessesByName("Lightgun");
 													if (processes.Length > 0)
@@ -4223,7 +4250,6 @@ namespace TeknoparrotAutoXinput
 														// Si le processus est en cours d'exécution, en démarrer un nouveau avec des arguments supplémentaires
 
 														string processPath = processes[0].MainModule.FileName;
-														MessageBox.Show(processPath);
 														Process sinden_process2 = new Process();
 														sinden_process2.StartInfo.FileName = processPath;
 														sinden_process2.StartInfo.WorkingDirectory = Path.GetDirectoryName(processPath);
