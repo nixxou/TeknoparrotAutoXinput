@@ -1,9 +1,13 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TeknoparrotAutoXinput
 {
@@ -32,7 +36,7 @@ namespace TeknoparrotAutoXinput
 		public bool hotasStooz { get; set; } = false;
 		public bool enableStoozZone_Hotas { get; set; } = false;
 		public int valueStooz_Hotas { get; set; } = 10;
-		public bool reverseYAxis_Hotas { get; set; } = false;
+		public int reverseY_Hotas { get; set; } = 0;
 
 		public bool EnableLinkExe { get; set; } = true;
 		public string vjoySettingsGunA { get; set; } = "";
@@ -78,6 +82,34 @@ namespace TeknoparrotAutoXinput
 		public int magpieExclusiveFullscreen { get; set; } = 0;
 		public int magpieReshade { get; set; } = 0;
 
+
+		public int patchGpuFix { get; set; } = 0;
+		public int patchGpuTP { get; set; } = 0;
+
+
+		public int gpuResolution { get; set; } = 0;
+		public int patchResolutionFix { get; set; } = 0;
+		public int patchResolutionTP { get; set; } = 0;
+
+		public int displayMode { get; set; } = 0;
+		public int patchDisplayModeFix { get; set; } = 0;
+		public int patchDisplayModeTP { get; set; } = 0;
+
+
+		public int patchReshade { get; set; } = 0;
+		public int patchGameID { get; set; } = 0;
+		public int patchNetwork { get; set; } = 0;
+		public int patchOtherTPSettings { get; set; } = 0;
+		public int patchOthersGameOptions { get; set; } = 0;
+		public int patchFFB { get; set; } = 0;
+		public string tmpGunXFormula { get; set; } = "";
+		public string tmpGunYFormula { get; set; } = "";
+
+		public string tmpGunAMinMax { get; set; } = "";
+		public string tmpGunBMinMax { get; set; } = "";
+
+
+
 		public GameSettings() 
 		{
 			
@@ -111,7 +143,7 @@ namespace TeknoparrotAutoXinput
 				this.hotasStooz = DeserializeData.hotasStooz;
 				this.enableStoozZone_Hotas = DeserializeData.enableStoozZone_Hotas;
 				this.valueStooz_Hotas = DeserializeData.valueStooz_Hotas;
-				this.reverseYAxis_Hotas = DeserializeData.reverseYAxis_Hotas;
+				this.reverseY_Hotas = DeserializeData.reverseY_Hotas;
 				this.EnableLinkExe = DeserializeData.EnableLinkExe;
 				this.vjoySettingsGunA = DeserializeData.vjoySettingsGunA;
 				this.vjoySettingsGunB = DeserializeData.vjoySettingsGunB;
@@ -147,11 +179,180 @@ namespace TeknoparrotAutoXinput
 				this.magpieExclusiveFullscreen = DeserializeData.magpieExclusiveFullscreen;
 				this.magpieReshade = DeserializeData.magpieReshade;
 
+				this.patchGpuFix = DeserializeData.patchGpuFix;
+				this.patchGpuTP = DeserializeData.patchGpuTP;
+
+				this.gpuResolution = DeserializeData.gpuResolution;
+				this.patchResolutionTP = DeserializeData.patchResolutionTP;
+				this.patchResolutionFix = DeserializeData.patchResolutionFix;
+
+				this.displayMode = DeserializeData.displayMode;
+				this.patchDisplayModeTP = DeserializeData.patchDisplayModeTP;
+				this.patchDisplayModeFix = DeserializeData.patchDisplayModeFix;
+
+				this.patchReshade = DeserializeData.patchReshade;
+				this.patchGameID = DeserializeData.patchGameID;
+				this.patchNetwork = DeserializeData.patchNetwork;
+				this.patchOthersGameOptions = DeserializeData.patchOthersGameOptions;
+				this.patchOtherTPSettings = DeserializeData.patchOtherTPSettings;
+				this.patchFFB = DeserializeData.patchFFB;
+
 
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
+			}
+		}
+
+
+		/*
+		public void Overwrite(string jsonOverwrite)
+		{
+			Dictionary<string,string> settings = new Dictionary<string,string>();
+			try
+			{
+				settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonOverwrite);
+			}
+			catch { }
+			
+
+			foreach (var setting in settings)
+			{
+				var propertyName = setting.Key;
+				var propertyValue = setting.Value;
+
+				PropertyInfo property = typeof(GameSettings).GetProperty(propertyName);
+				if (property != null && property.CanWrite)
+				{
+					try
+					{
+						object convertedValue = null;
+						if (property.PropertyType == typeof(bool))
+						{
+							convertedValue = bool.Parse(propertyValue);
+						}
+						else if (property.PropertyType == typeof(int))
+						{
+							convertedValue = int.Parse(propertyValue);
+						}
+						else if (property.PropertyType == typeof(string))
+						{
+							convertedValue = propertyValue;
+						}
+
+						property.SetValue(this, convertedValue);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine($"Erreur lors de la conversion de la propriété '{propertyName}': {ex.Message}");
+					}
+				}
+			}
+		}
+
+		*/
+
+
+		public void Overwrite(JObject tpSection, List<string> tags)
+		{
+			var tagsTrim = new List<string>();
+			foreach(string tag in tags)
+			{
+				tagsTrim.Add(tag.ToLower().Trim());
+			}
+
+			try
+			{
+				//string jsonContent = File.ReadAllText(jsonFilePath);
+				//var allSettings = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(jsonContent);
+
+				var allSettings = tpSection.ToObject<Dictionary<string, Dictionary<string, string>>>();
+
+
+				if (allSettings == null) return;
+
+				if (allSettings.ContainsKey("default"))
+				{
+					ApplySettings(allSettings["default"]);
+				}
+
+				foreach (var allSettingsKeys in allSettings.Keys)
+				{
+					string allSettingsKeysTrim = allSettingsKeys.Trim().Replace(" ", "").ToLower();
+					if (allSettingsKeys == "default") continue;
+
+					if (allSettingsKeysTrim.Contains("&")) continue;
+
+					if (tags.Contains(allSettingsKeysTrim))
+					{
+						ApplySettings(allSettings[allSettingsKeys]);
+					}
+				}
+
+				foreach (var allSettingsKeys in allSettings.Keys)
+				{
+					string allSettingsKeysTrim = allSettingsKeys.Trim().Replace(" ", "").ToLower();
+					if (allSettingsKeys == "default") continue;
+					if (!allSettingsKeys.Contains("&")) continue;
+
+					bool allTagValid = true;
+					foreach (var tagelem in allSettingsKeysTrim.Split('&'))
+					{
+						if (!tagsTrim.Contains(tagelem))
+						{
+							allTagValid = false;
+							break;
+						}
+					}
+
+					if (allTagValid)
+					{
+						ApplySettings(allSettings[allSettingsKeys]);
+					}
+				}
+
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error during overwrite: " + ex.Message);
+			}
+			
+		}
+
+		private void ApplySettings(Dictionary<string, string> settings)
+		{
+			foreach (var setting in settings)
+			{
+				var propertyName = setting.Key;
+				var propertyValue = setting.Value;
+
+				PropertyInfo property = typeof(GameSettings).GetProperty(propertyName);
+				if (property != null && property.CanWrite)
+				{
+					try
+					{
+						object convertedValue = null;
+						if (property.PropertyType == typeof(bool))
+						{
+							convertedValue = bool.Parse(propertyValue);
+						}
+						else if (property.PropertyType == typeof(int))
+						{
+							convertedValue = int.Parse(propertyValue);
+						}
+						else if (property.PropertyType == typeof(string))
+						{
+							convertedValue = propertyValue;
+						}
+
+						property.SetValue(this, convertedValue);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine($"Erreur lors de la conversion de la propriété '{propertyName}': {ex.Message}");
+					}
+				}
 			}
 		}
 

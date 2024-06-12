@@ -68,7 +68,7 @@ namespace TeknoparrotAutoXinput
 		public string bindingDinputHotas { get; set; } = "";
 		public bool useDinputHotas { get; set; } = false;
 		public string ffbDinputHotas { get; set; } = "";
-		public bool reverseYAxis_Hotas { get; set; } = true;
+		public int reverseY_Hotas { get; set; } = 0;
 		public bool useHotasWithWheel { get; set; } = false;
 
 		public bool reasignPedals { get; set; } = false;
@@ -131,7 +131,7 @@ namespace TeknoparrotAutoXinput
 
 		public string magpieExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "magpie", "Magpie.exe");
 		public string magpieSindenExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "magpie-sinden", "Magpie.exe");
-		public bool useMagpie { get; set; } = false;
+		public bool useMagpie { get; set; } = true;
 		public int magpieScaling { get; set; } = 0;
 		public int magpieCapture { get; set; } = 0;
 		public int magpieDelay { get; set; } = 0;
@@ -144,13 +144,48 @@ namespace TeknoparrotAutoXinput
 
 		public bool useXenos { get; set; } = false;
 
-		public int gpuType { get; set; } = 0;
+		
 
 		public int magpieFsrSharp { get; set; } = 87;
 		public bool magpieExclusiveFullscreen { get; set; } = false;
 		public bool magpieReshadeAdaptiveSharpen { get; set; } = false;
 		public bool magpieReshadeClarity { get; set; } = false;
 		public bool magpieReshadeColorfullness { get; set; } = false;
+
+		public int gpuType { get; set; } = 0;
+		public bool patchGpuFix { get; set; } = true;
+		public bool patchGpuTP { get; set; } = true;
+
+		public int gpuResolution { get; set; } = 1;
+		public bool patchResolutionFix { get; set; } = true;
+		public bool patchResolutionTP { get; set; } = true;
+
+		public int displayMode { get; set; } = 0;
+		public bool patchDisplayModeFix { get; set; } = true;
+		public bool patchDisplayModeTP { get; set; } = true;
+
+		public bool patchMagpie { get; set; } = true;
+		public bool patchReshade { get; set; } = true;
+		public bool patchGameID { get; set; } = true;
+		public bool patchNetwork { get; set; } = true;
+		public bool patchOtherTPSettings { get; set; } = true;
+
+		public bool patchOthersGameOptions { get; set; } = true;
+
+		public string patch_apm3id { get; set; } = "";
+		public string patch_mariokartId { get; set; } = "";
+
+		public string patch_customName { get; set; } = "";
+		public bool patch_networkAuto { get; set; } = true;
+		public string patch_networkIP { get; set; } = "";
+		public string patch_networkMask { get; set; } = "";
+		public string patch_networkGateway { get; set; } = "";
+		public string patch_networkDns1 { get; set; } = "";
+		public string patch_networkDns2 { get; set; } = "";
+		public string patch_BroadcastAddress { get; set; } = "";
+
+		public bool patch_FFB { get; set; } = true;
+
 
 		public Configuration()
 		{
@@ -195,7 +230,7 @@ namespace TeknoparrotAutoXinput
 				this.bindingDinputHotas = DeserializeData.bindingDinputHotas;
 				this.useDinputHotas = DeserializeData.useDinputHotas;
 				this.ffbDinputHotas = DeserializeData.ffbDinputHotas;
-				this.reverseYAxis_Hotas = DeserializeData.reverseYAxis_Hotas;
+				this.reverseY_Hotas = DeserializeData.reverseY_Hotas;
 				this.useHotasWithWheel = DeserializeData.useHotasWithWheel;
 				this.reasignPedals = DeserializeData.reasignPedals;
 				this.gunAType = DeserializeData.gunAType;
@@ -252,12 +287,45 @@ namespace TeknoparrotAutoXinput
 				this.magpieLightgunCalibration = DeserializeData.magpieLightgunCalibration;
 				this.magpieBorderSize = DeserializeData.magpieBorderSize;
 				this.useXenos = DeserializeData.useXenos;
-				this.gpuType = DeserializeData.gpuType;
+				
 				this.magpieFsrSharp = DeserializeData.magpieFsrSharp;
 				this.magpieExclusiveFullscreen = DeserializeData.magpieExclusiveFullscreen;
 				this.magpieReshadeAdaptiveSharpen = DeserializeData.magpieReshadeAdaptiveSharpen;
 				this.magpieReshadeClarity = DeserializeData.magpieReshadeClarity;
 				this.magpieReshadeColorfullness = DeserializeData.magpieReshadeColorfullness;
+
+				this.gpuType = DeserializeData.gpuType;
+				this.patchGpuFix = DeserializeData.patchGpuFix;
+				this.patchGpuTP = DeserializeData.patchGpuTP;
+
+				this.gpuResolution = DeserializeData.gpuResolution;
+				this.patchResolutionTP = DeserializeData.patchResolutionTP;
+				this.patchResolutionFix = DeserializeData.patchResolutionFix;
+
+				this.displayMode = DeserializeData.displayMode;
+				this.patchDisplayModeTP = DeserializeData.patchDisplayModeTP;
+				this.patchDisplayModeFix = DeserializeData.patchDisplayModeFix;
+
+				this.patchMagpie = DeserializeData.patchMagpie;
+				this.patchReshade = DeserializeData.patchReshade;
+				this.patchGameID = DeserializeData.patchGameID;
+				this.patchNetwork = DeserializeData.patchNetwork;
+				this.patchOtherTPSettings = DeserializeData.patchOtherTPSettings;
+				this.patchOthersGameOptions = DeserializeData.patchOthersGameOptions;
+
+				this.patch_apm3id = DeserializeData.patch_apm3id;
+				this.patch_mariokartId = DeserializeData.patch_mariokartId;
+				this.patch_customName = DeserializeData.patch_customName;
+				this.patch_networkAuto = DeserializeData.patch_networkAuto;
+				this.patch_networkIP = DeserializeData.patch_networkIP;
+				this.patch_networkMask = DeserializeData.patch_networkMask;
+				this.patch_networkGateway = DeserializeData.patch_networkGateway;
+				this.patch_networkDns1 = DeserializeData.patch_networkDns1;
+				this.patch_networkDns2 = DeserializeData.patch_networkDns2;
+				this.patch_BroadcastAddress = DeserializeData.patch_BroadcastAddress;
+				this.patch_FFB = DeserializeData.patch_FFB;
+
+
 
 
 			}

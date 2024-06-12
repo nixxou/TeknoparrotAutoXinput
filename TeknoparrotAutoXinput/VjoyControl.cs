@@ -70,6 +70,14 @@ namespace TeknoparrotAutoXinput
 		private bool shouldStopReceiver = false;
 		private bool WaitForConnection = false;
 
+		Crosshair redCrosshair = null;
+		Crosshair blueCrosshair = null;
+		Grid calibrationGrid = null;
+
+		int max_vjoy_x = 1;
+		int max_vjoy_y = 1;
+
+
 		public bool GunA_manual
 		{
 			get { return (_GunA_manual); }
@@ -203,8 +211,9 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true)
+		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true, string formulaX = "", string formulaY = "", string gunAMinMax = "", string gunBMinMax = "")
 		{
+			MessageBox.Show($"icizz {formulaX} {formulaY} {gunAMinMax} {gunBMinMax}");
 			_enableGunA = enableGunA;
 			_enableGunB = enableGunB;
 
@@ -353,6 +362,7 @@ namespace TeknoparrotAutoXinput
 			if (vJoyObj.vJoyEnabled())
 			{
 				VjdStat status = vJoyObj.m_joystick.GetVJDStatus((uint)(_indexVjoy));
+
 				if (status == VjdStat.VJD_STAT_FREE)
 				{
 					_vjoyFound = true;
@@ -364,6 +374,9 @@ namespace TeknoparrotAutoXinput
 					{
 						HidExtents.Add(axis, vJoyObj.GetAxisExtents(axis));
 					}
+
+					max_vjoy_x = (int)HidExtents[HID_USAGES.HID_USAGE_X].Max;
+					max_vjoy_y = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Max;
 					//a revoir
 					trk_forceA_X.Minimum = 0;
 					trk_forceA_X.Maximum = 65535;
@@ -376,8 +389,8 @@ namespace TeknoparrotAutoXinput
 
 					trk_forceA_Y.Minimum = 0;
 					trk_forceA_Y.Maximum = 65535;
-					min_AX.Minimum = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Min;
-					min_AX.Maximum = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Max;
+					min_AY.Minimum = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Min;
+					min_AY.Maximum = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Max;
 					max_AY.Minimum = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Min;
 					max_AY.Maximum = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Max;
 					offset_AY.Minimum = (int)(HidExtents[HID_USAGES.HID_USAGE_Y].Max * -1);
@@ -395,8 +408,8 @@ namespace TeknoparrotAutoXinput
 
 					trk_forceB_Y.Minimum = 0;
 					trk_forceB_Y.Maximum = 65535;
-					min_BX.Minimum = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Min;
-					min_BX.Maximum = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Max;
+					min_BY.Minimum = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Min;
+					min_BY.Maximum = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Max;
 					max_BY.Minimum = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Min;
 					max_BY.Maximum = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Max;
 					offset_BY.Minimum = (int)(HidExtents[HID_USAGES.HID_USAGE_RY].Max * -1);
@@ -438,6 +451,13 @@ namespace TeknoparrotAutoXinput
 				if (!string.IsNullOrEmpty(vjoySettingsJsonGunA))
 				{
 					_settingsGunA = new ConfigurationVjoyControl(vjoySettingsJsonGunA);
+					if (_settingsGunA.min_x == -1)
+					{
+						_settingsGunA.min_x = (int)HidExtents[HID_USAGES.HID_USAGE_X].Min;
+						_settingsGunA.max_x = (int)HidExtents[HID_USAGES.HID_USAGE_X].Max;
+						_settingsGunA.min_y = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Min;
+						_settingsGunA.max_y = (int)HidExtents[HID_USAGES.HID_USAGE_Y].Max;
+					}
 				}
 				else
 				{
@@ -450,6 +470,13 @@ namespace TeknoparrotAutoXinput
 				if (!string.IsNullOrEmpty(vjoySettingsJsonGunB))
 				{
 					_settingsGunB = new ConfigurationVjoyControl(vjoySettingsJsonGunB);
+					if (_settingsGunB.min_x == -1)
+					{
+						_settingsGunB.min_x = (int)HidExtents[HID_USAGES.HID_USAGE_RX].Min;
+						_settingsGunB.max_x = (int)HidExtents[HID_USAGES.HID_USAGE_RX].Max;
+						_settingsGunB.min_y = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Min;
+						_settingsGunB.max_y = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Max;
+					}
 				}
 				else
 				{
@@ -458,6 +485,78 @@ namespace TeknoparrotAutoXinput
 					_settingsGunB.max_x = (int)HidExtents[HID_USAGES.HID_USAGE_RX].Max;
 					_settingsGunB.min_y = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Min;
 					_settingsGunB.max_y = (int)HidExtents[HID_USAGES.HID_USAGE_RY].Max;
+				}
+
+				if (formulaX != "")
+				{
+					_settingsGunA.formula_x = formulaX;
+					_settingsGunB.formula_x = formulaX;
+				}
+				if (formulaY != "")
+				{
+					_settingsGunA.formula_y = formulaY;
+					_settingsGunB.formula_y = formulaY;
+				}
+
+				if (gunAMinMax != "")
+				{
+					var listeMinMax = gunAMinMax.Split(':');
+					int tailleListMinMax = listeMinMax.Length;
+					if (tailleListMinMax > 0)
+					{
+
+						int minx = _settingsGunA.min_x;
+						int maxx = _settingsGunA.max_x;
+						int offsetx = _settingsGunA.offset_x;
+						int miny = _settingsGunA.min_y;
+						int maxy = _settingsGunA.max_y;
+						int offsety = _settingsGunA.offset_y;
+
+						if (tailleListMinMax > 0) int.TryParse(listeMinMax[0], out minx);
+						if (tailleListMinMax > 1) int.TryParse(listeMinMax[1], out maxx);
+						if (tailleListMinMax > 2) int.TryParse(listeMinMax[2], out offsetx);
+						if (tailleListMinMax > 3) int.TryParse(listeMinMax[3], out miny);
+						if (tailleListMinMax > 4) int.TryParse(listeMinMax[4], out maxy);
+						if (tailleListMinMax > 5) int.TryParse(listeMinMax[5], out offsety);
+
+						_settingsGunA.min_x = minx;
+						_settingsGunA.max_x = maxx;
+						_settingsGunA.offset_x = offsetx;
+						_settingsGunA.min_y = miny;
+						_settingsGunA.max_y = maxy;
+						_settingsGunA.offset_y = offsety;
+
+					}
+				}
+
+				if (gunBMinMax != "")
+				{
+					var listeMinMax = gunBMinMax.Split(':');
+					int tailleListMinMax = listeMinMax.Length;
+					if (tailleListMinMax > 0)
+					{
+						int minx = _settingsGunB.min_x;
+						int maxx = _settingsGunB.max_x;
+						int offsetx = _settingsGunB.offset_x;
+						int miny = _settingsGunB.min_y;
+						int maxy = _settingsGunB.max_y;
+						int offsety = _settingsGunB.offset_y;
+
+						if (tailleListMinMax > 0) int.TryParse(listeMinMax[0], out minx);
+						if (tailleListMinMax > 1) int.TryParse(listeMinMax[1], out maxx);
+						if (tailleListMinMax > 2) int.TryParse(listeMinMax[2], out offsetx);
+						if (tailleListMinMax > 3) int.TryParse(listeMinMax[3], out miny);
+						if (tailleListMinMax > 4) int.TryParse(listeMinMax[4], out maxy);
+						if (tailleListMinMax > 5) int.TryParse(listeMinMax[5], out offsety);
+
+						_settingsGunB.min_x = minx;
+						_settingsGunB.max_x = maxx;
+						_settingsGunB.offset_x = offsetx;
+						_settingsGunB.min_y = miny;
+						_settingsGunB.max_y = maxy;
+						_settingsGunB.offset_y = offsety;
+
+					}
 				}
 
 				if (_dinputLightgunAFound)
@@ -1910,6 +2009,96 @@ namespace TeknoparrotAutoXinput
 			if (parentProcess.HasExited)
 			{
 				this.Close();
+			}
+		}
+
+		private void chk_showCrosshair_CheckedChanged(object sender, EventArgs e)
+		{
+			if (chk_showCrosshair.Checked == true)
+			{
+				if (redCrosshair == null) redCrosshair = new Crosshair(0.5f, 0.5f, Color.Red);
+				redCrosshair.Show();
+				TimerRedCrosshair.Enabled = true;
+
+			}
+			else
+			{
+				TimerRedCrosshair.Enabled = false;
+				if (redCrosshair != null)
+				{
+					redCrosshair.Hide();
+				}
+			}
+
+
+		}
+
+		private void timerRed_Tick(object sender, EventArgs e)
+		{
+			float posX = (float)((double)_GunA_X / 65535.0);
+			float posY = (float)((double)_GunA_Y / 65535.0);
+			if (GunA_manual)
+			{
+				posX = (float)((double)trk_forceA_X.Value / 65535.0);
+				posY = (float)((double)trk_forceA_Y.Value / 65535.0);
+			}
+
+			if (redCrosshair != null) redCrosshair.UpdateCrosshair(posX, posY);
+
+
+		}
+
+		private void grp_gunA_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void TimerBlueCrosshair_Tick(object sender, EventArgs e)
+		{
+			float posX = (float)((double)_GunB_X / 65535.0);
+			float posY = (float)((double)_GunB_Y / 65535.0);
+			if (GunB_manual)
+			{
+				posX = (float)((double)trk_forceB_X.Value / 65535.0);
+				posY = (float)((double)trk_forceB_Y.Value / 65535.0);
+			}
+
+			if (blueCrosshair != null) blueCrosshair.UpdateCrosshair(posX, posY);
+		}
+
+		private void chk_showCrosshairB_CheckedChanged(object sender, EventArgs e)
+		{
+			if (chk_showCrosshairB.Checked == true)
+			{
+				if (blueCrosshair == null) blueCrosshair = new Crosshair(0.5f, 0.5f, Color.DarkBlue);
+				blueCrosshair.Show();
+				TimerBlueCrosshair.Enabled = true;
+
+			}
+			else
+			{
+				TimerBlueCrosshair.Enabled = false;
+				if (blueCrosshair != null)
+				{
+					blueCrosshair.Hide();
+				}
+			}
+		}
+
+		private void chk_showGrid_CheckedChanged(object sender, EventArgs e)
+		{
+
+			if (chk_showGrid.Checked == true)
+			{
+				if (calibrationGrid == null) calibrationGrid = new Grid(Color.Orange);
+				calibrationGrid.Show();
+			}
+			else
+			{
+				if (calibrationGrid != null)
+				{
+					calibrationGrid.Hide();
+				}
 			}
 		}
 	}

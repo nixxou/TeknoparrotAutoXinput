@@ -83,6 +83,12 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
+			var infoFile = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + ".info.json");
+			if (File.Exists(infoFile))
+			{
+				txt_info.Text = File.ReadAllText(infoFile);
+			}
+
 
 		}
 
@@ -214,6 +220,62 @@ namespace TeknoparrotAutoXinput
 					dllPathList.Add(_linkSourceFolderExe);
 					dllPathList.Add(_linkTargetFolderExe);
 				}
+
+
+				//Crosshair
+				string crosshairDir = "";
+				if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]");
+				if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]");
+				if (crosshairDir != "")
+				{
+					if (File.Exists(Path.Combine(crosshairDir, "p1.png")))
+					{
+						pic_crosshairp1.Image = LoadImage(Path.Combine(crosshairDir, "p1.png"));
+						lbl_crosshairp1Size.Text = $"{pic_crosshairp1.Image.Width}x{pic_crosshairp1.Image.Height}";
+						int tailleImg = pic_crosshairp1.Image.Width > pic_crosshairp1.Image.Height ? pic_crosshairp1.Image.Width : pic_crosshairp1.Image.Height;
+						if (tailleImg >= 10)
+						{
+							trk_crosshairp1Size.Minimum = 10;
+							trk_crosshairp1Size.Visible = true;
+							btn_crosshairp1Size.Visible = true;
+							trk_crosshairp1Size.Maximum = tailleImg;
+							trk_crosshairp1Size.Value = trk_crosshairp1Size.Maximum;
+							lbl_crosshairp1ReSize.Visible = true;
+							lbl_crosshairp1ReSize.Text = tailleImg.ToString();
+						}
+						else
+						{
+							lbl_crosshairp1ReSize.Visible = trk_crosshairp1Size.Visible = btn_crosshairp1Size.Visible = false;
+						}
+
+
+					}
+					if (File.Exists(Path.Combine(crosshairDir, "p2.png")))
+					{
+						pic_crosshairp2.Image = LoadImage(Path.Combine(crosshairDir, "p2.png"));
+						lbl_crosshairp2Size.Text = $"{pic_crosshairp2.Image.Width}x{pic_crosshairp2.Image.Height}";
+						int tailleImg = pic_crosshairp2.Image.Width > pic_crosshairp2.Image.Height ? pic_crosshairp2.Image.Width : pic_crosshairp2.Image.Height;
+						if (tailleImg >= 10)
+						{
+							trk_crosshairp2Size.Minimum = 10;
+							trk_crosshairp2Size.Visible = true;
+							btn_crosshairp2Size.Visible = true;
+							trk_crosshairp2Size.Maximum = tailleImg;
+							trk_crosshairp2Size.Value = trk_crosshairp2Size.Maximum;
+							lbl_crosshairp2ReSize.Visible = true;
+							lbl_crosshairp2ReSize.Text = tailleImg.ToString();
+						}
+						else
+						{
+							lbl_crosshairp2ReSize.Visible = trk_crosshairp2Size.Visible = btn_crosshairp2Size.Visible = false;
+						}
+					}
+				}
+				else
+				{
+					groupCrosshair.Visible = false;
+				}
+
 
 
 
@@ -364,6 +426,25 @@ namespace TeknoparrotAutoXinput
 		private void GameOptions_Load(object sender, EventArgs e)
 		{
 
+
+			txt_gpu.Text = ConfigurationManager.MainConfig.gpuType.ToString();
+			cmb_patchGpuFix.SelectedIndex = gameSettings.patchGpuFix;
+			cmb_patchGpuTP.SelectedIndex = gameSettings.patchGpuTP;
+			cmb_resolution.SelectedIndex = gameSettings.gpuResolution;
+			cmb_patchResolutionFix.SelectedIndex = gameSettings.patchResolutionFix;
+			cmb_patchResolutionTP.SelectedIndex = gameSettings.patchResolutionTP;
+			cmb_displayMode.SelectedIndex = gameSettings.displayMode;
+			cmb_patchDisplayModeFix.SelectedIndex = gameSettings.patchDisplayModeFix;
+			cmb_patchDisplayModeTP.SelectedIndex = gameSettings.patchDisplayModeTP;
+
+
+			cmb_patchReshade.SelectedIndex = gameSettings.patchReshade;
+			cmb_patchNetwork.SelectedIndex = gameSettings.patchNetwork;
+			cmb_patchGameID.SelectedIndex = gameSettings.patchGameID;
+			cmb_patchOthersTPSettings.SelectedIndex = gameSettings.patchOtherTPSettings;
+			cmb_patchOthersGameOptions.SelectedIndex = gameSettings.patchOthersGameOptions;
+			cmb_patchFFB.SelectedIndex = gameSettings.patchFFB;
+
 			if (!ConfigurationManager.MainConfig.useXenos)
 			{
 				grp_dllInjection.Enabled = false;
@@ -394,6 +475,7 @@ namespace TeknoparrotAutoXinput
 
 			LinkLoad();
 
+			cmb_reverseYAxis_Hotas.SelectedIndex = gameSettings.reverseY_Hotas;
 			radio_useCustomStooz_Gamepad.Checked = gameSettings.gamepadStooz;
 			radio_useCustomStooz_Wheel.Checked = gameSettings.wheelStooz;
 			radio_useCustomStooz_Hotas.Checked = gameSettings.hotasStooz;
@@ -420,7 +502,7 @@ namespace TeknoparrotAutoXinput
 			chk_enableGearChange.Checked = gameSettings.EnableGearChange;
 			txt_monitorswitch.Text = gameSettings.Disposition == "" ? "<none>" : gameSettings.Disposition;
 			txt_customTp.Text = gameSettings.CustomTpExe;
-			chk_reverseYAxis_Hotas.Checked = gameSettings.reverseYAxis_Hotas;
+			cmb_reverseYAxis_Hotas.SelectedIndex = gameSettings.reverseY_Hotas;
 			Reload();
 
 			cmb_vjoy.SelectedIndex = gameSettings.indexvjoy + 1;
@@ -450,7 +532,9 @@ namespace TeknoparrotAutoXinput
 			txt_sindenextra.Text = gameSettings.gun_ExtraSinden;
 
 			chk_runRivaTuner.Checked = gameSettings.runRivaTuner;
+
 		}
+
 
 		private void Reload()
 		{
@@ -561,6 +645,23 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
+			gameSettings.patchGpuFix = cmb_patchGpuFix.SelectedIndex;
+			gameSettings.patchGpuTP = cmb_patchGpuTP.SelectedIndex;
+			gameSettings.gpuResolution = cmb_resolution.SelectedIndex;
+			gameSettings.patchResolutionFix = cmb_patchResolutionFix.SelectedIndex;
+			gameSettings.patchResolutionTP = cmb_patchResolutionTP.SelectedIndex;
+			gameSettings.displayMode = cmb_displayMode.SelectedIndex;
+			gameSettings.patchDisplayModeFix = cmb_patchDisplayModeFix.SelectedIndex;
+			gameSettings.patchDisplayModeTP = cmb_patchDisplayModeTP.SelectedIndex;
+
+
+			gameSettings.patchReshade = cmb_patchReshade.SelectedIndex;
+			gameSettings.patchNetwork = cmb_patchNetwork.SelectedIndex;
+			gameSettings.patchGameID = cmb_patchGameID.SelectedIndex;
+			gameSettings.patchOtherTPSettings = cmb_patchOthersTPSettings.SelectedIndex;
+			gameSettings.patchOthersGameOptions = cmb_patchOthersGameOptions.SelectedIndex;
+			gameSettings.patchFFB = cmb_patchFFB.SelectedIndex;
+
 			gameSettings.useInjector = chk_useInjector.Checked;
 			gameSettings.injectorDllList = txt_injectorDllList.Text.Trim();
 			gameSettings.injectorDelay = (int)num_injectorDelay.Value;
@@ -604,7 +705,7 @@ namespace TeknoparrotAutoXinput
 			gameSettings.EnableGearChange = chk_enableGearChange.Checked;
 			gameSettings.Disposition = txt_monitorswitch.Text.Trim();
 
-			gameSettings.reverseYAxis_Hotas = chk_reverseYAxis_Hotas.Checked;
+			gameSettings.reverseY_Hotas = cmb_reverseYAxis_Hotas.SelectedIndex;
 			//gameSettings.CustomTpExe = txt_customTp.Text.Trim();
 
 			gameSettings.gunA_recoil = cmb_gunA_recoil.SelectedIndex;
@@ -1049,6 +1150,288 @@ namespace TeknoparrotAutoXinput
 		private void cmb_magpieExclusiveFullscreen_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
+		}
+
+		private void grp_StoozZone_Hotas_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void pic_crosshairp1_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_crosshairp1_Click(object sender, EventArgs e)
+		{
+			string crosshairDir = "";
+			if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Directory.GetParent(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")).FullName;
+			if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Directory.GetParent(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")).FullName;
+
+			var frm = new crosshairSelect();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+				if (Directory.Exists(Path.Combine(crosshairDir, "[!crosshair_gun1_and_gun2!]")))
+				{
+					try
+					{
+						File.Copy(frm.selectedImagePath, Path.Combine(crosshairDir, "[!crosshair_gun1_and_gun2!]", "p1.png"), true);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+				if (Directory.Exists(Path.Combine(crosshairDir, "[!crosshair_gun1_only!]")))
+				{
+					try
+					{
+						File.Copy(frm.selectedImagePath, Path.Combine(crosshairDir, "[!crosshair_gun1_only!]", "p1.png"), true);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+				pic_crosshairp1.Image = Image.FromFile(frm.selectedImagePath);
+				lbl_crosshairp1Size.Text = $"{pic_crosshairp1.Image.Width}x{pic_crosshairp1.Image.Height}";
+				int tailleImg = pic_crosshairp1.Image.Width > pic_crosshairp1.Image.Height ? pic_crosshairp1.Image.Width : pic_crosshairp1.Image.Height;
+				if (tailleImg >= 10)
+				{
+					trk_crosshairp1Size.Minimum = 10;
+					trk_crosshairp1Size.Visible = true;
+					btn_crosshairp1Size.Visible = true;
+					trk_crosshairp1Size.Maximum = tailleImg;
+					trk_crosshairp1Size.Value = trk_crosshairp1Size.Maximum;
+					lbl_crosshairp1ReSize.Text = tailleImg.ToString();
+					lbl_crosshairp1ReSize.Visible = true;
+				}
+				else
+				{
+					lbl_crosshairp1ReSize.Visible = trk_crosshairp1Size.Visible = btn_crosshairp1Size.Visible = false;
+				}
+			}
+		}
+
+		private Image LoadImage(string path)
+		{
+			using (var stream = new MemoryStream(File.ReadAllBytes(path)))
+			{
+				return Image.FromStream(stream);
+			}
+		}
+
+		private void pic_crosshairp2_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void groupCrosshair_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void tabPage4_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_crosshairp2_Click(object sender, EventArgs e)
+		{
+			string crosshairDir = "";
+			if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Directory.GetParent(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")).FullName;
+			if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Directory.GetParent(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")).FullName;
+
+			var frm = new crosshairSelect();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+				if (Directory.Exists(Path.Combine(crosshairDir, "[!crosshair_gun1_and_gun2!]")))
+				{
+					try
+					{
+						File.Copy(frm.selectedImagePath, Path.Combine(crosshairDir, "[!crosshair_gun1_and_gun2!]", "p2.png"), true);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+				if (Directory.Exists(Path.Combine(crosshairDir, "[!crosshair_gun2_only!]")))
+				{
+					try
+					{
+						File.Copy(frm.selectedImagePath, Path.Combine(crosshairDir, "[!crosshair_gun2_only!]", "p2.png"), true);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+				pic_crosshairp1.Image = Image.FromFile(frm.selectedImagePath);
+				lbl_crosshairp2Size.Text = $"{pic_crosshairp2.Image.Width}x{pic_crosshairp2.Image.Height}";
+				int tailleImg = pic_crosshairp2.Image.Width > pic_crosshairp2.Image.Height ? pic_crosshairp2.Image.Width : pic_crosshairp2.Image.Height;
+				if (tailleImg >= 10)
+				{
+					trk_crosshairp2Size.Minimum = 10;
+					trk_crosshairp2Size.Visible = true;
+					btn_crosshairp2Size.Visible = true;
+					trk_crosshairp2Size.Maximum = tailleImg;
+					trk_crosshairp2Size.Value = trk_crosshairp2Size.Maximum;
+					lbl_crosshairp2ReSize.Visible = true;
+					lbl_crosshairp2ReSize.Text = tailleImg.ToString();
+				}
+				else
+				{
+					lbl_crosshairp2ReSize.Visible = trk_crosshairp2Size.Visible = btn_crosshairp2Size.Visible = false;
+				}
+			}
+		}
+
+		private void lbl_crosshairAsize_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void trk_crosshairp1Size_Scroll(object sender, EventArgs e)
+		{
+			lbl_crosshairp1ReSize.Text = trk_crosshairp1Size.Value.ToString();
+		}
+
+		private void kryptonLabel37_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_crosshairp1Size_Click(object sender, EventArgs e)
+		{
+			Image image = pic_crosshairp1.Image;
+			int newSize = trk_crosshairp1Size.Value;
+			float aspectRatio = (float)image.Width / image.Height;
+
+			int newWidth;
+			int newHeight;
+
+			// Déterminer les nouvelles dimensions basées sur la taille la plus grande (largeur ou hauteur)
+			if (image.Width > image.Height)
+			{
+				newWidth = newSize;
+				newHeight = (int)(newSize / aspectRatio);
+			}
+			else
+			{
+				newHeight = newSize;
+				newWidth = (int)(newSize * aspectRatio);
+			}
+
+			Bitmap newImage = new Bitmap(newWidth, newHeight);
+			using (Graphics graphics = Graphics.FromImage(newImage))
+			{
+				graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+				graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+				graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+				graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+			}
+			string crosshairDir = "";
+			if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Directory.GetParent(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")).FullName;
+			if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Directory.GetParent(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")).FullName;
+
+			{
+
+				if (Directory.Exists(Path.Combine(crosshairDir, "[!crosshair_gun1_and_gun2!]")))
+				{
+					newImage.Save(Path.Combine(crosshairDir, "[!crosshair_gun1_and_gun2!]", "p1.png"), System.Drawing.Imaging.ImageFormat.Png);
+				}
+				if (Directory.Exists(Path.Combine(crosshairDir, "[!crosshair_gun1_only!]")))
+				{
+					newImage.Save(Path.Combine(crosshairDir, "[!crosshair_gun1_only!]", "p1.png"), System.Drawing.Imaging.ImageFormat.Png);
+				}
+				pic_crosshairp1.Image = newImage;
+				lbl_crosshairp1Size.Text = $"{pic_crosshairp1.Image.Width}x{pic_crosshairp1.Image.Height}";
+				int tailleImg = pic_crosshairp1.Image.Width > pic_crosshairp1.Image.Height ? pic_crosshairp1.Image.Width : pic_crosshairp1.Image.Height;
+				if (tailleImg >= 10)
+				{
+					trk_crosshairp1Size.Minimum = 10;
+					trk_crosshairp1Size.Visible = true;
+					btn_crosshairp1Size.Visible = true;
+					trk_crosshairp1Size.Maximum = tailleImg;
+					trk_crosshairp1Size.Value = trk_crosshairp1Size.Maximum;
+					lbl_crosshairp1ReSize.Text = tailleImg.ToString();
+					lbl_crosshairp1ReSize.Visible = true;
+				}
+				else
+				{
+					lbl_crosshairp1ReSize.Visible = trk_crosshairp1Size.Visible = btn_crosshairp1Size.Visible = false;
+				}
+			}
+		}
+
+		private void btn_crosshairp2Size_Click(object sender, EventArgs e)
+		{
+			Image image = pic_crosshairp2.Image;
+			int newSize = trk_crosshairp2Size.Value;
+			float aspectRatio = (float)image.Width / image.Height;
+
+			int newWidth;
+			int newHeight;
+
+			// Déterminer les nouvelles dimensions basées sur la taille la plus grande (largeur ou hauteur)
+			if (image.Width > image.Height)
+			{
+				newWidth = newSize;
+				newHeight = (int)(newSize / aspectRatio);
+			}
+			else
+			{
+				newHeight = newSize;
+				newWidth = (int)(newSize * aspectRatio);
+			}
+
+			Bitmap newImage = new Bitmap(newWidth, newHeight);
+			using (Graphics graphics = Graphics.FromImage(newImage))
+			{
+				graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+				graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+				graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+				graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+			}
+			string crosshairDir = "";
+			if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Directory.GetParent(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")).FullName;
+			if (Directory.Exists(Path.Combine(_linkSourceFolderExe, "[!crosshair_gun1_and_gun2!]"))) crosshairDir = Directory.GetParent(Path.Combine(_linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")).FullName;
+
+			{
+
+				if (Directory.Exists(Path.Combine(crosshairDir, "[!crosshair_gun1_and_gun2!]")))
+				{
+					newImage.Save(Path.Combine(crosshairDir, "[!crosshair_gun1_and_gun2!]", "p2.png"), System.Drawing.Imaging.ImageFormat.Png);
+				}
+				if (Directory.Exists(Path.Combine(crosshairDir, "[!crosshair_gun2_only!]")))
+				{
+					newImage.Save(Path.Combine(crosshairDir, "[!crosshair_gun2_only!]", "p2.png"), System.Drawing.Imaging.ImageFormat.Png);
+				}
+				pic_crosshairp2.Image = newImage;
+				lbl_crosshairp2Size.Text = $"{pic_crosshairp2.Image.Width}x{pic_crosshairp2.Image.Height}";
+				int tailleImg = pic_crosshairp2.Image.Width > pic_crosshairp2.Image.Height ? pic_crosshairp2.Image.Width : pic_crosshairp2.Image.Height;
+				if (tailleImg >= 10)
+				{
+					trk_crosshairp2Size.Minimum = 10;
+					trk_crosshairp2Size.Visible = true;
+					btn_crosshairp2Size.Visible = true;
+					trk_crosshairp2Size.Maximum = tailleImg;
+					trk_crosshairp2Size.Value = trk_crosshairp2Size.Maximum;
+					lbl_crosshairp2ReSize.Text = tailleImg.ToString();
+					lbl_crosshairp2ReSize.Visible = true;
+				}
+				else
+				{
+					lbl_crosshairp2ReSize.Visible = trk_crosshairp2Size.Visible = btn_crosshairp2Size.Visible = false;
+				}
+			}
 		}
 	}
 }

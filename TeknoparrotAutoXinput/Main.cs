@@ -1392,7 +1392,7 @@ namespace TeknoparrotAutoXinput
 
 		private void button3_Click(object sender, EventArgs e)
 		{
-			var frm = new dinputconverter();
+			var frm = new Wizard();
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
@@ -1544,6 +1544,28 @@ namespace TeknoparrotAutoXinput
 
 		private void button7_Click(object sender, EventArgs e)
 		{
+
+		}
+
+		private void button8_Click(object sender, EventArgs e)
+		{
+			/*
+			GameSettings testgs = new GameSettings();
+
+			string json = @"
+{
+    ""RunAsRoot"": ""true"",
+    ""valueStooz_Wheel"": ""100"",
+	""injectorDllList"": ""zog.dll""
+}
+";
+
+			testgs.Overwrite(@"K:\test.json",new List<string> { "1080p" });
+			*/
+
+
+
+
 
 		}
 	}

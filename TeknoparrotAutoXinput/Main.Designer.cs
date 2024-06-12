@@ -36,6 +36,7 @@
 			btn_gameoptions = new Krypton.Toolkit.KryptonButton();
 			chk_showAll = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1 = new GroupBox();
+			button7 = new Button();
 			button6 = new Button();
 			button5 = new Button();
 			lbl_gunslist = new Krypton.Toolkit.KryptonLabel();
@@ -62,7 +63,7 @@
 			lbl_player3 = new Krypton.Toolkit.KryptonLabel();
 			lbl_player4 = new Krypton.Toolkit.KryptonLabel();
 			btn_tpsettings = new Krypton.Toolkit.KryptonButton();
-			button7 = new Button();
+			button8 = new Button();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox_gameControls).BeginInit();
 			flowLayoutPanelThumbs.SuspendLayout();
@@ -128,6 +129,7 @@
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(button8);
 			groupBox1.Controls.Add(button7);
 			groupBox1.Controls.Add(button6);
 			groupBox1.Controls.Add(button5);
@@ -151,6 +153,16 @@
 			groupBox1.TabIndex = 7;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Controller Status";
+			// 
+			// button7
+			// 
+			button7.Location = new Point(723, 57);
+			button7.Name = "button7";
+			button7.Size = new Size(75, 23);
+			button7.TabIndex = 16;
+			button7.Text = "button7";
+			button7.UseVisualStyleBackColor = true;
+			button7.Click += button7_Click;
 			// 
 			// button6
 			// 
@@ -377,15 +389,15 @@
 			btn_tpsettings.Values.Text = "TP Game Settings";
 			btn_tpsettings.Click += btn_tpsettings_Click;
 			// 
-			// button7
+			// button8
 			// 
-			button7.Location = new Point(723, 57);
-			button7.Name = "button7";
-			button7.Size = new Size(75, 23);
-			button7.TabIndex = 16;
-			button7.Text = "button7";
-			button7.UseVisualStyleBackColor = true;
-			button7.Click += button7_Click;
+			button8.Location = new Point(723, 97);
+			button8.Name = "button8";
+			button8.Size = new Size(75, 23);
+			button8.TabIndex = 17;
+			button8.Text = "button8";
+			button8.UseVisualStyleBackColor = true;
+			button8.Click += button8_Click;
 			// 
 			// Main
 			// 
@@ -455,5 +467,6 @@
 		private Button button5;
 		private Button button6;
 		private Button button7;
+		private Button button8;
 	}
 }

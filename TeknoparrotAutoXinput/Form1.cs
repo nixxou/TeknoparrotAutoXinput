@@ -3,7 +3,9 @@ using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using SDL2;
 using SharpDX.DirectInput;
+using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
@@ -34,6 +36,39 @@ namespace TeknoparrotAutoXinput
 			//System.Diagnostics.Debugger.Break();
 
 			cmb_gpu.SelectedIndex = ConfigurationManager.MainConfig.gpuType;
+			chk_patchGpuFix.Checked = ConfigurationManager.MainConfig.patchGpuFix;
+			chk_patchGpuTP.Checked = ConfigurationManager.MainConfig.patchGpuTP;
+			cmb_resolution.SelectedIndex = ConfigurationManager.MainConfig.gpuResolution;
+			chk_patchResolutionFix.Checked = ConfigurationManager.MainConfig.patchResolutionFix;
+			chk_patchResolutionTP.Checked = ConfigurationManager.MainConfig.patchResolutionTP;
+			cmb_displayMode.SelectedIndex = ConfigurationManager.MainConfig.displayMode;
+			chk_patchDisplayModeFix.Checked = ConfigurationManager.MainConfig.patchDisplayModeFix;
+			chk_patchDisplayModeTP.Checked = ConfigurationManager.MainConfig.patchDisplayModeTP;
+			chk_patchFFB.Checked = ConfigurationManager.MainConfig.patch_FFB;
+			chk_patchReshade.Checked = ConfigurationManager.MainConfig.patchReshade;
+			chk_patchGameID.Checked = ConfigurationManager.MainConfig.patchGameID;
+			chk_patchNetwork.Checked = ConfigurationManager.MainConfig.patchNetwork;
+			chk_patchOthersTPSettings.Checked = ConfigurationManager.MainConfig.patchOtherTPSettings;
+			chk_patchOthersGameOptions.Checked = ConfigurationManager.MainConfig.patchOthersGameOptions;
+
+
+			txt_apm3id.Text = ConfigurationManager.MainConfig.patch_apm3id;
+			txt_mariokartId.Text = ConfigurationManager.MainConfig.patch_mariokartId;
+			txt_customName.Text = ConfigurationManager.MainConfig.patch_customName;
+			radio_networkModeAuto.Checked = ConfigurationManager.MainConfig.patch_networkAuto;
+			if (!ConfigurationManager.MainConfig.patch_networkAuto)
+			{
+				radio_networkModeManual.Checked = true;
+				txt_networkIP.Text = ConfigurationManager.MainConfig.patch_networkIP;
+				txt_networkGateway.Text = ConfigurationManager.MainConfig.patch_networkGateway;
+				txt_BroadcastAddress.Text = ConfigurationManager.MainConfig.patch_BroadcastAddress;
+				txt_networkDns1.Text = ConfigurationManager.MainConfig.patch_networkDns1;
+				txt_networkDns2.Text = ConfigurationManager.MainConfig.patch_networkDns2;
+				txt_networkMask.Text = ConfigurationManager.MainConfig.patch_networkMask;
+			}
+
+
+			
 
 			chk_useXenosInjector.Checked = ConfigurationManager.MainConfig.useXenos;
 
@@ -70,6 +105,7 @@ namespace TeknoparrotAutoXinput
 			txt_arcadeXinputData.Text = ConfigurationManager.MainConfig.arcadeXinputData;
 			txt_gamepadXinputData.Text = ConfigurationManager.MainConfig.gamepadXinputData;
 
+			cmb_reverseYAxis_Hotas.SelectedIndex = ConfigurationManager.MainConfig.reverseY_Hotas;
 
 			radio_useCustomStooz_Gamepad.Checked = ConfigurationManager.MainConfig.gamepadStooz;
 			radio_useCustomStooz_Wheel.Checked = ConfigurationManager.MainConfig.wheelStooz;
@@ -482,6 +518,41 @@ namespace TeknoparrotAutoXinput
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			ConfigurationManager.MainConfig.gpuType = cmb_gpu.SelectedIndex;
+			ConfigurationManager.MainConfig.patchGpuFix = chk_patchGpuFix.Checked;
+			ConfigurationManager.MainConfig.patchGpuTP = chk_patchGpuTP.Checked;
+			ConfigurationManager.MainConfig.gpuResolution = cmb_resolution.SelectedIndex;
+			ConfigurationManager.MainConfig.patchResolutionFix = chk_patchResolutionFix.Checked;
+			ConfigurationManager.MainConfig.patchResolutionTP = chk_patchResolutionTP.Checked;
+			ConfigurationManager.MainConfig.displayMode = cmb_displayMode.SelectedIndex;
+			ConfigurationManager.MainConfig.patchDisplayModeFix = chk_patchDisplayModeFix.Checked;
+			ConfigurationManager.MainConfig.patchDisplayModeTP = chk_patchDisplayModeTP.Checked;
+			ConfigurationManager.MainConfig.patch_FFB = chk_patchFFB.Checked;
+			ConfigurationManager.MainConfig.patchReshade = chk_patchReshade.Checked;
+			ConfigurationManager.MainConfig.patchGameID = chk_patchGameID.Checked;
+			ConfigurationManager.MainConfig.patchNetwork = chk_patchNetwork.Checked;
+			ConfigurationManager.MainConfig.patchOtherTPSettings = chk_patchOthersTPSettings.Checked;
+			ConfigurationManager.MainConfig.patchOthersGameOptions = chk_patchOthersGameOptions.Checked;
+
+			ConfigurationManager.MainConfig.patch_apm3id = txt_apm3id.Text;
+			ConfigurationManager.MainConfig.patch_mariokartId = txt_mariokartId.Text;
+			ConfigurationManager.MainConfig.patch_customName = txt_customName.Text;
+			if (radio_networkModeAuto.Checked)
+			{
+				ConfigurationManager.MainConfig.patch_networkAuto = true;
+			}
+			else
+			{
+				ConfigurationManager.MainConfig.patch_networkAuto = false;
+				ConfigurationManager.MainConfig.patch_networkIP = txt_networkIP.Text;
+				ConfigurationManager.MainConfig.patch_networkGateway = txt_networkGateway.Text;
+				ConfigurationManager.MainConfig.patch_BroadcastAddress = txt_BroadcastAddress.Text;
+				ConfigurationManager.MainConfig.patch_networkDns1 = txt_networkDns1.Text;
+				ConfigurationManager.MainConfig.patch_networkDns2 = txt_networkDns2.Text;
+				ConfigurationManager.MainConfig.patch_networkMask = txt_networkMask.Text;
+			}
+
+
 			ConfigurationManager.MainConfig.magpieExe = txt_magpieExe.Text;
 			ConfigurationManager.MainConfig.magpieSindenExe = txt_magpieSindenExe.Text;
 			ConfigurationManager.MainConfig.magpieDelay = (int)num_magpieDelay.Value;
@@ -885,8 +956,8 @@ namespace TeknoparrotAutoXinput
 
 		private void chk_reverseYAxis_Hotas_CheckedChanged(object sender, EventArgs e)
 		{
-			ConfigurationManager.MainConfig.reverseYAxis_Hotas = chk_reverseYAxis_Hotas.Checked;
-			ConfigurationManager.SaveConfig();
+			//ConfigurationManager.MainConfig.reverseYAxis_Hotas = chk_reverseYAxis_Hotas.Checked;
+			//ConfigurationManager.SaveConfig();
 		}
 
 		private void cmb_ffbguid_SelectedIndexChanged(object sender, EventArgs e)
@@ -1249,6 +1320,141 @@ namespace TeknoparrotAutoXinput
 		}
 
 		private void chk_magpieReshadeAdaptiveSharpen_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void kryptonButton2_Click(object sender, EventArgs e)
+		{
+			/*
+			NetworkInterface[] networks = NetworkInterface.GetAllNetworkInterfaces();
+
+			var activeAdapter = networks.First(x => x.NetworkInterfaceType != NetworkInterfaceType.Loopback
+								&& x.NetworkInterfaceType != NetworkInterfaceType.Tunnel
+								&& x.OperationalStatus == OperationalStatus.Up
+								&& x.Name.StartsWith("vEthernet") == false);
+
+			var xxx = activeAdapter.GetIPProperties();
+
+			if(xxx != null)
+			{
+				txt_networkGateway.Text = xxx.GatewayAddresses.First().Address.ToString();
+
+
+			}
+			*/
+
+			/*
+			NetworkInterface activeAdapter = null;
+			Task.Run(async () =>
+			{
+				NetworkInterface primaryAdapter = await GetPrimaryNetworkAdapterAsync();
+				if (primaryAdapter != null)
+				{
+					activeAdapter = primaryAdapter;
+				}
+				else
+				{
+					Console.WriteLine("No primary network adapter found or it is not connected to the internet.");
+				}
+			}).GetAwaiter().GetResult();
+
+			var ipProperties = activeAdapter.GetIPProperties();
+			var unicastAddress = ipProperties.UnicastAddresses.FirstOrDefault(ip => ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+
+			if (unicastAddress != null)
+			{
+				var ipAddress = unicastAddress.Address;
+				var subnetMask = unicastAddress.IPv4Mask;
+				var gatewayAddress = ipProperties.GatewayAddresses.FirstOrDefault()?.Address;
+				var dnsAddresses = ipProperties.DnsAddresses.Where(dns => dns.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToArray();
+
+				var broadcastAddress = GetBroadcastAddress(ipAddress, subnetMask);
+
+				txt_networkGateway.Text = gatewayAddress?.ToString();
+				txt_networkIP.Text = ipAddress.ToString();
+				txt_networkMask.Text = subnetMask.ToString();
+				txt_BroadcastAddress.Text = broadcastAddress.ToString();
+				if (dnsAddresses.Length > 0)
+				{
+					txt_networkDns1.Text = dnsAddresses[0].ToString();
+				}
+				if (dnsAddresses.Length > 1)
+				{
+					txt_networkDns2.Text = dnsAddresses[1].ToString();
+				}
+			}
+			*/
+
+		}
+
+		private void radio_networkModeAuto_CheckedChanged(object sender, EventArgs e)
+		{
+			txt_networkIP.Enabled = txt_networkMask.Enabled = txt_networkGateway.Enabled = txt_networkDns1.Enabled = txt_networkDns2.Enabled = txt_BroadcastAddress.Enabled = false;
+
+			var ThreadNetWork = new Thread(() => {
+				var networkInfo = Utils.GetFirstNetworkAdapterInfo();
+				txt_networkIP.Text = networkInfo.ContainsKey("networkIP") ? networkInfo["networkIP"] : "0.0.0.0";
+				txt_networkMask.Text = networkInfo.ContainsKey("networkMask") ? networkInfo["networkMask"] : "0.0.0.0";
+				txt_networkGateway.Text = networkInfo.ContainsKey("networkGateway") ? networkInfo["networkGateway"] : "0.0.0.0";
+				txt_networkDns1.Text = networkInfo.ContainsKey("networkDns1") ? networkInfo["networkDns1"] : "0.0.0.0";
+				txt_networkDns2.Text = networkInfo.ContainsKey("networkDns2") ? networkInfo["networkDns2"] : "0.0.0.0";
+				txt_BroadcastAddress.Text = networkInfo.ContainsKey("BroadcastAddress") ? networkInfo["BroadcastAddress"] : "0.0.0.0";
+			});
+			ThreadNetWork.Start();
+
+
+		}
+
+		private void radio_networkModeManual_CheckedChanged(object sender, EventArgs e)
+		{
+			txt_networkIP.Enabled = txt_networkMask.Enabled = txt_networkGateway.Enabled = txt_networkDns1.Enabled = txt_networkDns2.Enabled = txt_BroadcastAddress.Enabled = true;
+			txt_networkIP.Text = ConfigurationManager.MainConfig.patch_networkIP == "" ? txt_networkIP.Text : ConfigurationManager.MainConfig.patch_networkIP;
+			txt_networkGateway.Text = ConfigurationManager.MainConfig.patch_networkGateway == "" ? txt_networkGateway.Text : ConfigurationManager.MainConfig.patch_networkGateway;
+			txt_BroadcastAddress.Text = ConfigurationManager.MainConfig.patch_BroadcastAddress == "" ? txt_BroadcastAddress.Text : ConfigurationManager.MainConfig.patch_BroadcastAddress;
+			txt_networkDns1.Text = ConfigurationManager.MainConfig.patch_networkDns1 == "" ? txt_networkDns1.Text : ConfigurationManager.MainConfig.patch_networkDns1;
+			txt_networkDns2.Text = ConfigurationManager.MainConfig.patch_networkDns2 == "" ? txt_networkDns2.Text : ConfigurationManager.MainConfig.patch_networkDns2;
+			txt_networkMask.Text = ConfigurationManager.MainConfig.patch_networkMask == "" ? txt_networkMask.Text : ConfigurationManager.MainConfig.patch_networkMask;
+
+		}
+
+		private void kryptonLabel60_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void tabPatch_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void txt_networkMask_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_gpu_SelectedIndexChanged_1(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_reverseYAxis_Hotas_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ConfigurationManager.MainConfig.reverseY_Hotas = cmb_reverseYAxis_Hotas.SelectedIndex;
+			ConfigurationManager.SaveConfig();
+		}
+
+		private void cmb_patchGpuTP_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void kryptonCheckBox1_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void chk_patchOthersGameOptions_CheckedChanged(object sender, EventArgs e)
 		{
 
 		}

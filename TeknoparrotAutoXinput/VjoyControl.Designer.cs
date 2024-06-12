@@ -40,6 +40,7 @@ namespace TeknoparrotAutoXinput
 			kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
 			grp_gunA = new GroupBox();
+			chk_showCrosshair = new Krypton.Toolkit.KryptonCheckBox();
 			btn_clearA = new Krypton.Toolkit.KryptonButton();
 			btn_defaultA = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel18 = new Krypton.Toolkit.KryptonLabel();
@@ -85,6 +86,7 @@ namespace TeknoparrotAutoXinput
 			max_AX = new Krypton.Toolkit.KryptonNumericUpDown();
 			min_AX = new Krypton.Toolkit.KryptonNumericUpDown();
 			grp_gunB = new GroupBox();
+			chk_showCrosshairB = new Krypton.Toolkit.KryptonCheckBox();
 			btn_clearB = new Krypton.Toolkit.KryptonButton();
 			btn_defaultB = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel22 = new Krypton.Toolkit.KryptonLabel();
@@ -132,6 +134,9 @@ namespace TeknoparrotAutoXinput
 			btn_Save = new Krypton.Toolkit.KryptonButton();
 			btn_Cancel = new Krypton.Toolkit.KryptonButton();
 			timer1 = new System.Windows.Forms.Timer(components);
+			TimerRedCrosshair = new System.Windows.Forms.Timer(components);
+			TimerBlueCrosshair = new System.Windows.Forms.Timer(components);
+			chk_showGrid = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1.SuspendLayout();
 			grp_gunA.SuspendLayout();
 			grp_manual_A.SuspendLayout();
@@ -222,6 +227,7 @@ namespace TeknoparrotAutoXinput
 			// 
 			// grp_gunA
 			// 
+			grp_gunA.Controls.Add(chk_showCrosshair);
 			grp_gunA.Controls.Add(btn_clearA);
 			grp_gunA.Controls.Add(btn_defaultA);
 			grp_gunA.Controls.Add(kryptonLabel18);
@@ -261,6 +267,16 @@ namespace TeknoparrotAutoXinput
 			grp_gunA.TabIndex = 2;
 			grp_gunA.TabStop = false;
 			grp_gunA.Text = "Gun A";
+			grp_gunA.Enter += grp_gunA_Enter;
+			// 
+			// chk_showCrosshair
+			// 
+			chk_showCrosshair.Location = new Point(18, 429);
+			chk_showCrosshair.Name = "chk_showCrosshair";
+			chk_showCrosshair.Size = new Size(169, 20);
+			chk_showCrosshair.TabIndex = 45;
+			chk_showCrosshair.Values.Text = "Show Calibration Crosshair";
+			chk_showCrosshair.CheckedChanged += chk_showCrosshair_CheckedChanged;
 			// 
 			// btn_clearA
 			// 
@@ -666,6 +682,7 @@ namespace TeknoparrotAutoXinput
 			// 
 			// grp_gunB
 			// 
+			grp_gunB.Controls.Add(chk_showCrosshairB);
 			grp_gunB.Controls.Add(btn_clearB);
 			grp_gunB.Controls.Add(btn_defaultB);
 			grp_gunB.Controls.Add(kryptonLabel22);
@@ -705,6 +722,15 @@ namespace TeknoparrotAutoXinput
 			grp_gunB.TabIndex = 3;
 			grp_gunB.TabStop = false;
 			grp_gunB.Text = "Gun B";
+			// 
+			// chk_showCrosshairB
+			// 
+			chk_showCrosshairB.Location = new Point(18, 429);
+			chk_showCrosshairB.Name = "chk_showCrosshairB";
+			chk_showCrosshairB.Size = new Size(169, 20);
+			chk_showCrosshairB.TabIndex = 46;
+			chk_showCrosshairB.Values.Text = "Show Calibration Crosshair";
+			chk_showCrosshairB.CheckedChanged += chk_showCrosshairB_CheckedChanged;
 			// 
 			// btn_clearB
 			// 
@@ -1132,11 +1158,29 @@ namespace TeknoparrotAutoXinput
 			timer1.Interval = 1000;
 			timer1.Tick += timer1_Tick;
 			// 
+			// TimerRedCrosshair
+			// 
+			TimerRedCrosshair.Tick += timerRed_Tick;
+			// 
+			// TimerBlueCrosshair
+			// 
+			TimerBlueCrosshair.Tick += TimerBlueCrosshair_Tick;
+			// 
+			// chk_showGrid
+			// 
+			chk_showGrid.Location = new Point(923, 241);
+			chk_showGrid.Name = "chk_showGrid";
+			chk_showGrid.Size = new Size(142, 20);
+			chk_showGrid.TabIndex = 46;
+			chk_showGrid.Values.Text = "Show Calibration Grid";
+			chk_showGrid.CheckedChanged += chk_showGrid_CheckedChanged;
+			// 
 			// VjoyControl
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1120, 944);
+			Controls.Add(chk_showGrid);
 			Controls.Add(btn_Save);
 			Controls.Add(btn_Cancel);
 			Controls.Add(grp_gunB);
@@ -1158,6 +1202,7 @@ namespace TeknoparrotAutoXinput
 			grp_manual_B.ResumeLayout(false);
 			grp_manual_B.PerformLayout();
 			ResumeLayout(false);
+			PerformLayout();
 		}
 
 		#endregion
@@ -1264,5 +1309,10 @@ namespace TeknoparrotAutoXinput
 		private Krypton.Toolkit.KryptonLabel lbl_profile;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel8;
 		private System.Windows.Forms.Timer timer1;
+		private Krypton.Toolkit.KryptonCheckBox chk_showCrosshair;
+		private System.Windows.Forms.Timer TimerRedCrosshair;
+		private Krypton.Toolkit.KryptonCheckBox chk_showCrosshairB;
+		private System.Windows.Forms.Timer TimerBlueCrosshair;
+		private Krypton.Toolkit.KryptonCheckBox chk_showGrid;
 	}
 }

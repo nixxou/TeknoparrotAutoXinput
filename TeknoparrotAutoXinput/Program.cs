@@ -1,7 +1,4 @@
-using Antlr4.Runtime.Tree.Xpath;
 using Gma.System.MouseKeyHook;
-using Henooh.DeviceEmulator.Net.Native;
-using Microsoft.VisualBasic.Logging;
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
 using MonitorSwitcherGUI;
@@ -11,32 +8,20 @@ using Nefarius.ViGEm.Client.Targets;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SDL2;
-using SharpDX;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using SharpDX.Win32;
-using System;
-using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Diagnostics;
-using System.Drawing.Printing;
 using System.IO.Pipes;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
-using vJoyInterfaceWrap;
 using WiimoteLib;
 using XInput.Wrapper;
 using XJoy;
-using static SDL2.SDL;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using static XInput.Wrapper.X;
-using static XInput.Wrapper.X.Gamepad;
 
 
 namespace TeknoparrotAutoXinput
@@ -110,14 +95,46 @@ namespace TeknoparrotAutoXinput
 		public static bool vjoy_gunA = false;
 		public static bool vjoy_gunB = false;
 
+		public static bool allSindenWithoutVjoy = true;
+
 		public static bool crosshairA = true;
 		public static bool crosshairB = true;
 		public static bool hideCrosshair = false;
 
-		public static bool IsWindowed = false;
+		//public static bool IsWindowed = false;
 
 		public static bool isExiting = false;
 		public static int magpie_process_pid = -1;
+
+		public static bool patchGpuFix = ConfigurationManager.MainConfig.patchGpuFix;
+		public static bool patchGpuTP = ConfigurationManager.MainConfig.patchGpuTP;
+
+		public static int gpuResolution = ConfigurationManager.MainConfig.gpuResolution;
+		public static bool patchResolutionFix = ConfigurationManager.MainConfig.patchResolutionFix;
+		public static bool patchResolutionTP = ConfigurationManager.MainConfig.patchResolutionTP;
+
+		public static int displayMode = ConfigurationManager.MainConfig.displayMode;
+		public static bool patchDisplayModeFix = ConfigurationManager.MainConfig.patchDisplayModeFix;
+		public static bool patchDisplayModeTP = ConfigurationManager.MainConfig.patchDisplayModeTP;
+
+
+		public static bool patchReshade = ConfigurationManager.MainConfig.patchReshade;
+		public static bool patchGameID = ConfigurationManager.MainConfig.patchGameID;
+		public static bool patchNetwork = ConfigurationManager.MainConfig.patchNetwork;
+		public static bool patchOtherTPSettings = ConfigurationManager.MainConfig.patchOtherTPSettings;
+		public static bool patchOthersGameOptions = ConfigurationManager.MainConfig.patchOthersGameOptions;
+		public static bool patchFFB = ConfigurationManager.MainConfig.patch_FFB;
+
+		public static string patch_networkIP = ConfigurationManager.MainConfig.patch_networkIP;
+		public static string patch_networkMask = ConfigurationManager.MainConfig.patch_networkMask;
+		public static string patch_BroadcastAddress = ConfigurationManager.MainConfig.patch_BroadcastAddress;
+		public static string patch_networkDns1 = ConfigurationManager.MainConfig.patch_networkDns1;
+		public static string patch_networkDns2 = ConfigurationManager.MainConfig.patch_networkDns2;
+		public static string patch_networkGateway = ConfigurationManager.MainConfig.patch_networkGateway;
+
+
+		//public static string xmlFileContent = "";
+
 		/// <summary>
 		///  The main entry point for the application.
 		/// </summary>
@@ -407,6 +424,7 @@ namespace TeknoparrotAutoXinput
 			//Vjoy
 			if (args.Length >= 2 && args.First() == "--runvjoy")
 			{
+				MessageBox.Show("vjoy app");
 				string gunOption = args[1];
 				bool enableGunA = false;
 				bool enableGunB = false;
@@ -417,6 +435,19 @@ namespace TeknoparrotAutoXinput
 				{
 					enableGunA = true;
 					enableGunB = true;
+				}
+
+				string formula_X = "";
+				string formula_Y = "";
+				string gunAMinMax = "";
+				string gunBMinMax = "";
+
+				if (args.Length == 7)
+				{
+					formula_X = args[2];
+					formula_Y = args[3];
+					gunAMinMax = args[4];
+					gunBMinMax = args[5];
 				}
 
 				ConfigurationManager.LoadConfig();
@@ -431,7 +462,7 @@ namespace TeknoparrotAutoXinput
 					if (File.Exists(optionFile))
 					{
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
-						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB);
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB, formula_X, formula_Y,gunAMinMax,gunBMinMax);
 						Application.Run(frm);
 					}
 				}
@@ -509,7 +540,7 @@ namespace TeknoparrotAutoXinput
 				int valueStooz_Wheel = ConfigurationManager.MainConfig.valueStooz_Wheel;
 				bool enableStoozZone_Hotas = ConfigurationManager.MainConfig.enableStoozZone_Hotas;
 				int valueStooz_Hotas = ConfigurationManager.MainConfig.valueStooz_Hotas;
-				bool reverseYAxis_Hotas = ConfigurationManager.MainConfig.reverseYAxis_Hotas;
+				int reverseYAxis_Hotas = ConfigurationManager.MainConfig.reverseY_Hotas;
 
 
 				WheelFFBGuid = ConfigurationManager.MainConfig.ffbDinputWheel;
@@ -597,7 +628,6 @@ namespace TeknoparrotAutoXinput
 					
 
 					string xmlFile = args.Last();
-
 					Utils.LogMessage($"basePath : {basePath}");
 					Utils.LogMessage($"xmlFile : {xmlFile}");
 					
@@ -608,6 +638,9 @@ namespace TeknoparrotAutoXinput
 						MessageBox.Show("Invalid parameters");
 						return;
 					}
+					TpSettingsManager.setOriginalXML(xmlFile);
+
+
 
 					string baseTpDir = Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName;
 					string originalConfigFileName = Path.GetFileName(xmlFile);
@@ -622,7 +655,48 @@ namespace TeknoparrotAutoXinput
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
 					}
 
+					patchGpuFix = gameOptions.patchGpuFix > 0 ? (gameOptions.patchGpuFix == 1 ? true : false) : patchGpuFix;
+					patchGpuTP = gameOptions.patchGpuTP > 0 ? (gameOptions.patchGpuTP == 1 ? true : false) : patchGpuTP;
 
+					gpuResolution = gameOptions.gpuResolution > 0 ? (gameOptions.gpuResolution - 1) : gpuResolution;
+					patchResolutionFix = gameOptions.patchResolutionFix > 0 ? (gameOptions.patchResolutionFix == 1 ? true : false) : patchResolutionFix;
+					patchResolutionTP = gameOptions.patchResolutionTP > 0 ? (gameOptions.patchResolutionTP == 1 ? true : false) : patchResolutionTP;
+
+					displayMode = gameOptions.displayMode > 0 ? (gameOptions.displayMode - 1) : displayMode;
+					patchDisplayModeFix = gameOptions.patchDisplayModeFix > 0 ? (gameOptions.patchDisplayModeFix == 1 ? true : false) : patchDisplayModeFix;
+					patchDisplayModeTP = gameOptions.patchDisplayModeTP > 0 ? (gameOptions.patchDisplayModeTP == 1 ? true : false) : patchDisplayModeTP;
+
+					patchReshade = gameOptions.patchReshade > 0 ? (gameOptions.patchReshade == 1 ? true : false) : patchReshade;
+					patchGameID = gameOptions.patchGameID > 0 ? (gameOptions.patchGameID == 1 ? true : false) : patchGameID;
+					patchFFB = gameOptions.patchFFB > 0 ? (gameOptions.patchFFB == 1 ? true : false) : patchFFB;
+					patchNetwork = gameOptions.patchNetwork > 0 ? (gameOptions.patchNetwork == 1 ? true : false) : patchNetwork;
+					patchOtherTPSettings = gameOptions.patchOtherTPSettings > 0 ? (gameOptions.patchOtherTPSettings == 1 ? true : false) : patchOtherTPSettings;
+					if(gameOptions.patchOthersGameOptions > 0)
+					{
+						if(gameOptions.patchOthersGameOptions == 1)
+						{
+							patchOtherTPSettings = true;
+						}
+						if(gameOptions.patchOthersGameOptions == 2)
+						{
+							patchOtherTPSettings = true;
+						}
+						if(gameOptions.patchOthersGameOptions == 3)
+						{
+							patchOtherTPSettings = false;
+						}
+					}
+
+					if(patchNetwork && ConfigurationManager.MainConfig.patch_networkAuto)
+					{
+						var networkInfo = Utils.GetFirstNetworkAdapterInfo();
+						patch_networkIP = networkInfo.ContainsKey("networkIP") ? networkInfo["networkIP"] : "0.0.0.0";
+						patch_networkMask = networkInfo.ContainsKey("networkMask") ? networkInfo["networkMask"] : "0.0.0.0";
+						patch_networkGateway = networkInfo.ContainsKey("networkGateway") ? networkInfo["networkGateway"] : "0.0.0.0";
+						patch_networkDns1 = networkInfo.ContainsKey("networkDns1") ? networkInfo["networkDns1"] : "0.0.0.0";
+						patch_networkDns2 = networkInfo.ContainsKey("networkDns2") ? networkInfo["networkDns2"] : "0.0.0.0";
+						patch_BroadcastAddress = networkInfo.ContainsKey("BroadcastAddress") ? networkInfo["BroadcastAddress"] : "0.0.0.0";
+					}
 
 					string baseTpDirOriginal = baseTpDir;
 					if (!string.IsNullOrEmpty(gameOptions.CustomTpExe) && File.Exists(gameOptions.CustomTpExe))
@@ -698,6 +772,63 @@ namespace TeknoparrotAutoXinput
 					Utils.LogMessage($"Alt Config dir = {potentialAltConfigDir}");
 
 
+					//Tag Define Part1
+					TpSettingsManager.tags = new List<string>();
+					if (Program.patchGpuTP)
+					{
+						if (ConfigurationManager.MainConfig.gpuType == 0) TpSettingsManager.tags.Add("nvidia");
+						if (ConfigurationManager.MainConfig.gpuType == 1) TpSettingsManager.tags.Add("intel");
+						if (ConfigurationManager.MainConfig.gpuType == 2) TpSettingsManager.tags.Add("amdold");
+						if (ConfigurationManager.MainConfig.gpuType == 3) TpSettingsManager.tags.Add("amdnew");
+						if (ConfigurationManager.MainConfig.gpuType == 4) TpSettingsManager.tags.Add("amdrid");
+						if (ConfigurationManager.MainConfig.gpuType >= 2) TpSettingsManager.tags.Add("amd");
+					}
+					if (Program.patchGpuTP) TpSettingsManager.tags.Add("use_gpu_fix_in_tp_settings"); //Apply gpu amd/intel/nvidia fix in TP
+					else TpSettingsManager.tags.Add("!use_gpu_fix_in_tp_settings");
+
+					if (Program.patchGpuFix) TpSettingsManager.tags.Add("use_gpu_fix_in_patches"); //Apply gpu amd/intel/nvidia fix in TP
+					else TpSettingsManager.tags.Add("!use_gpu_fix_in_patches"); //Apply gpu amd/intel/nvidia fix in TP
+
+
+					if (Program.gpuResolution == 0) TpSettingsManager.tags.Add("720p");
+					if (Program.gpuResolution == 1) TpSettingsManager.tags.Add("1080p");
+					if (Program.gpuResolution == 2) TpSettingsManager.tags.Add("2k");
+					if (Program.gpuResolution == 3) TpSettingsManager.tags.Add("4k");
+
+					if (Program.gpuResolution != 0) TpSettingsManager.tags.Add("!720p");
+					if (Program.gpuResolution != 1) TpSettingsManager.tags.Add("!1080p");
+					if (Program.gpuResolution != 2) TpSettingsManager.tags.Add("!2k");
+					if (Program.gpuResolution != 3) TpSettingsManager.tags.Add("!4k");
+
+					if (Program.patchResolutionTP) TpSettingsManager.tags.Add("set_res_in_tp_settings");
+					if (Program.patchResolutionFix) TpSettingsManager.tags.Add("fix_res_in_patches");
+
+
+					if (Program.displayMode==0) TpSettingsManager.tags.Add("set_displaymode_recommanded"); //Apply Res & Fullscreen in TP
+					if (Program.displayMode==1) TpSettingsManager.tags.Add("set_fullscreen"); //Apply Res & Fullscreen in TP
+					if (Program.displayMode==2) TpSettingsManager.tags.Add("set_windowed"); //Apply Res & Fullscreen in TP
+					if (Program.patchDisplayModeTP) TpSettingsManager.tags.Add("set_displaymode_in_tp_settings");
+					else TpSettingsManager.tags.Add("!set_displaymode_in_tp_settings");
+
+					if (Program.patchDisplayModeFix) TpSettingsManager.tags.Add("fix_displaymode_in_patches");
+					else TpSettingsManager.tags.Add("!fix_displaymode_in_patches");
+
+					if (Program.patchReshade) TpSettingsManager.tags.Add("use_optional_reshade");
+					else TpSettingsManager.tags.Add("!use_optional_reshade");
+
+
+					if (Program.patchGameID) TpSettingsManager.tags.Add("replace_gameid");
+					if (Program.patchNetwork) TpSettingsManager.tags.Add("replace_network");
+					if (Program.patchOtherTPSettings) TpSettingsManager.tags.Add("recommanded_tp_settings");
+					if (Program.patchOthersGameOptions) TpSettingsManager.tags.Add("recommanded_gameoptions");
+					if (Program.patchFFB) TpSettingsManager.tags.Add("ffb");
+
+
+					string gameInfoContent = "";
+					JObject gameInfoParsedJson = null;
+					JObject gameInfoGOSection = null;
+					JObject gameInfoTpSection = null;
+					JObject gameInfoGlobalSection = null;
 					GameInfo = new Dictionary<string, string>();
 					string gameInfoFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "info" + ".json");
 					if (potentialAltConfigDir != "")
@@ -708,8 +839,65 @@ namespace TeknoparrotAutoXinput
 					if (File.Exists(gameInfoFile))
 					{
 						Utils.LogMessage($"info file found : " + gameInfoFile);
-						GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
+						gameInfoContent = File.ReadAllText(gameInfoFile);
+
+						gameInfoParsedJson = JObject.Parse(gameInfoContent);
+
+						gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
+						GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
+
+						gameInfoGOSection = (JObject)gameInfoParsedJson["gameoptions"];
+						gameOptions.Overwrite(gameInfoGOSection, TpSettingsManager.tags);
+
+						gameInfoTpSection = (JObject)gameInfoParsedJson["tpoptions"];
+						TpSettingsManager.SetSettings(gameInfoTpSection);
+						if (GameInfo.ContainsKey("windowed"))
+						{
+							TpSettingsManager.windowed_search = GameInfo["windowed"];
+						}
+
+
+
+
+
+							//GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
 					}
+					TpSettingsManager.UpdateXML();
+					if(TpSettingsManager.IsWindowed) TpSettingsManager.tags.Add("windowed");
+					else TpSettingsManager.tags.Add("fullscreen");
+					if(gameInfoGOSection != null) gameOptions.Overwrite(gameInfoGOSection, TpSettingsManager.tags);
+
+
+
+
+
+
+
+					/*
+
+					string TPAdvisedSettingsFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "tp_patch_settings" + ".json");
+					if (potentialAltConfigDir != "")
+					{
+						var TPAdvisedSettingsFileAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + "tp_patch_settings" + ".json");
+						if (File.Exists(TPAdvisedSettingsFileAlt)) TPAdvisedSettingsFile = TPAdvisedSettingsFileAlt;
+					}
+					if (File.Exists(TPAdvisedSettingsFile))
+					{
+						//TPSettings Manager
+					}
+
+					string gameOptionsAdvisedFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "gameoptions_patch_settings" + ".json");
+					if (potentialAltConfigDir != "")
+					{
+						var gameOptionsAdvisedFileAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + "gameoptions_patch_settings" + ".json");
+						if (File.Exists(gameOptionsAdvisedFileAlt)) gameOptionsAdvisedFile = gameOptionsAdvisedFileAlt;
+					}
+					if (File.Exists(gameOptionsAdvisedFile))
+					{
+						                  
+						//TPSettings Manager
+					}
+					*/
 
 
 					string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
@@ -757,59 +945,11 @@ namespace TeknoparrotAutoXinput
 						Utils.LogMessage($"Not eligible for Hardlink");
 					}
 
-					string windowed_CategoryName = "";
-					string windowed_FieldName = "";
-					string windowed_FieldValue = "";
-					if (GameInfo.ContainsKey("windowed"))
-					{
-						Utils.LogMessage("We will check if game is windowed in TP settings");
-						var windowedData = GameInfo["windowed"].Split(',');
-						if (windowedData.Count() == 3)
-						{
-
-							windowed_CategoryName = windowedData[0].Trim();
-							windowed_FieldName = windowedData[1].Trim();
-							windowed_FieldValue = windowedData[2].Trim();
-						}
-					}
 
 					Utils.LogMessage($"Load XML to get emulatorType and requiresAdmin");
 					try
 					{
-						XmlDocument xmlDoc = new XmlDocument();
-						xmlDoc.Load(xmlFile);
-						if (windowed_CategoryName != "" && windowed_FieldName != "" && windowed_FieldValue != "")
-						{
-							string xpathExpression = $"/GameProfile/ConfigValues/FieldInformation[CategoryName='{windowed_CategoryName}' and FieldName='{windowed_FieldName}' and FieldValue='{windowed_FieldValue}']";
-							XmlNode fieldNode = xmlDoc.SelectSingleNode(xpathExpression);
-							if (fieldNode != null)
-							{
-								IsWindowed = true;
-								Utils.LogMessage("Game Is Windowed");
-							}
-							if (!IsWindowed)
-							{
-								xpathExpression = $"/GameProfile/ConfigValues/FieldInformation[CategoryName='General' and FieldName='DisplayMode' and FieldValue='Windowed']";
-								fieldNode = xmlDoc.SelectSingleNode(xpathExpression);
-								if (fieldNode != null)
-								{
-									IsWindowed = true;
-									Utils.LogMessage("Game Is Windowed");
-								}
-							}
-							if (!IsWindowed)
-							{
-								xpathExpression = $"/GameProfile/ConfigValues/FieldInformation[CategoryName='General' and FieldName='Windowed' and FieldValue='1']";
-								fieldNode = xmlDoc.SelectSingleNode(xpathExpression);
-								if (fieldNode != null)
-								{
-									IsWindowed = true;
-									Utils.LogMessage("Game Is Windowed");
-								}
-							}
-						}
-
-						XmlNode gamePathNode = xmlDoc.SelectSingleNode("/GameProfile/GamePath");
+						XmlNode gamePathNode = TpSettingsManager.xmlDoc.SelectSingleNode("/GameProfile/GamePath");
 						if (gamePathNode != null)
 						{
 							string gamePathContent = gamePathNode.InnerText;
@@ -822,7 +962,7 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
-						XmlNode emulatorTypeNode = xmlDoc.SelectSingleNode("/GameProfile/EmulatorType");
+						XmlNode emulatorTypeNode = TpSettingsManager.xmlDoc.SelectSingleNode("/GameProfile/EmulatorType");
 						if (emulatorTypeNode != null)
 						{
 							string emulatorTypeValue = emulatorTypeNode.InnerText.ToLower().Trim();
@@ -849,7 +989,7 @@ namespace TeknoparrotAutoXinput
 							Utils.LogMessage($"linkTargetFolder = {linkTargetFolder}");
 						}
 
-						XmlNode requiresAdminNode = xmlDoc.SelectSingleNode("/GameProfile/RequiresAdmin");
+						XmlNode requiresAdminNode = TpSettingsManager.xmlDoc.SelectSingleNode("/GameProfile/RequiresAdmin");
 						if (requiresAdminNode != null)
 						{
 							string requiresAdminValue = requiresAdminNode.InnerText.ToLower().Trim();
@@ -888,8 +1028,10 @@ namespace TeknoparrotAutoXinput
 						hotasStooz = gameOptions.hotasStooz;
 						enableStoozZone_Hotas = gameOptions.enableStoozZone_Hotas;
 						valueStooz_Hotas = gameOptions.valueStooz_Hotas;
-						reverseYAxis_Hotas = gameOptions.reverseYAxis_Hotas;
+						//reverseYAxis_Hotas = gameOptions.reverseYAxis_Hotas
 					}
+					if (gameOptions.reverseY_Hotas > 0) reverseYAxis_Hotas = gameOptions.reverseY_Hotas - 1;
+
 					Utils.LogMessage($"gameOptions Values = {gameOptions.Serialize()}");
 
 					if (executableGame != "" && File.Exists(executableGame))
@@ -913,6 +1055,10 @@ namespace TeknoparrotAutoXinput
 						if (File.Exists(Path.Combine(linkSourceFolderExe, "FFBPlugin.ini")))
 						{
 							DirFFBPlugin = linkSourceFolderExe;
+						}
+						else if(File.Exists(Path.Combine(linkSourceFolderExe, "[!ffb!]","FFBPlugin.ini")))
+						{
+							DirFFBPlugin = Path.Combine(linkSourceFolderExe, "[!ffb!]");
 						}
 						Utils.LogMessage($"linkSourceFolderExe = {linkSourceFolderExe}");
 						Utils.LogMessage($"linkTargetFolderExe = {linkTargetFolderExe}");
@@ -1237,6 +1383,10 @@ namespace TeknoparrotAutoXinput
 
 							if (haveLightgun)
 							{
+								hideCrosshair = true;
+								crosshairA = false;
+								crosshairB = false;
+
 								crosshairA = ConfigurationManager.MainConfig.gunACrosshair;
 								if (gameOptions.gunA_crosshair > 0)
 								{
@@ -1251,7 +1401,11 @@ namespace TeknoparrotAutoXinput
 								}
 								if (!dinputLightgunAFound) crosshairA = false;
 								if (!dinputLightgunBFound) crosshairB = false;
-								hideCrosshair = (!crosshairA || !crosshairB);
+								//hideCrosshair = (!crosshairA || !crosshairB);
+
+								if (dinputLightgunAFound && crosshairA) hideCrosshair = false;
+								if (dinputLightgunBFound && crosshairB) hideCrosshair = false;
+
 
 							}
 						}
@@ -1867,7 +2021,7 @@ namespace TeknoparrotAutoXinput
 
 
 
-						Dictionary<string, JoystickButton> finalJoystickButtonDictionary = ParseConfig(xmlFile, false);
+						Dictionary<string, JoystickButton> finalJoystickButtonDictionary = ParseConfig(TpSettingsManager.ModifiedXML, false, true);
 						Dictionary<string, JoystickButton> emptyJoystickButtonDictionary = ParseConfig(emptyConfigPath, false);
 						Dictionary<int, (string, XinputGamepad)> ConfigPerPlayer = new Dictionary<int, (string, XinputGamepad)>();
 						Dictionary<string, JoystickButton> joystickButtonWheel = new Dictionary<string, JoystickButton>();
@@ -1875,6 +2029,59 @@ namespace TeknoparrotAutoXinput
 						Dictionary<string, JoystickButton> joystickButtonGamepad = new Dictionary<string, JoystickButton>();
 						Dictionary<string, JoystickButton> joystickButtonHotas = new Dictionary<string, JoystickButton>();
 						//Dictionary<string, JoystickButton> joystickButtonLightgun = new Dictionary<string, JoystickButton>();
+
+						//Tag Define Part 2
+						if (useXinput) TpSettingsManager.tags.Add("xinput");
+						if (useDinputWheel) TpSettingsManager.tags.Add("dwheel");
+						if (useDinputHotas) TpSettingsManager.tags.Add("dhotas");
+						if (useDinputLightGun) TpSettingsManager.tags.Add("dlightgun");
+						if (shifterGuidFound) TpSettingsManager.tags.Add("shifter");
+						else TpSettingsManager.tags.Add("!shifter");
+
+
+						if (!hideCrosshair) TpSettingsManager.tags.Add("show_crosshair");
+						if (hideCrosshair) TpSettingsManager.tags.Add("hide_crosshair");
+						if (crosshairA && crosshairB) TpSettingsManager.tags.Add("crosshair_gun1_and_gun2");
+						if (crosshairA && !crosshairB) TpSettingsManager.tags.Add("crosshair_gun1_only");
+						if (!crosshairA && crosshairB) TpSettingsManager.tags.Add("crosshair_gun2_only");
+
+						if(useDinputLightGun && (GunAType == "sinden" || GunBType == "sinden"))
+						{
+							TpSettingsManager.tags.Add("at_least_one_sinden");
+						}
+						else
+						{
+							TpSettingsManager.tags.Add("!at_least_one_sinden");
+							if (useDinputLightGun) TpSettingsManager.tags.Add("no_sinden");
+						}
+
+						//We only set sinden soft calibration if all sinden are not using vjoy
+						if(useDinputLightGun && dinputLightgunAFound)
+						{
+							if(GunAType == "sinden" && vjoy_gunA) allSindenWithoutVjoy=false;
+						}
+						if (useDinputLightGun && dinputLightgunBFound)
+						{
+							if (GunBType == "sinden" && vjoy_gunB) allSindenWithoutVjoy=false;
+						}
+						if(allSindenWithoutVjoy) TpSettingsManager.tags.Add("no_sinden_using_vjoy");
+
+
+						//Usefull to set 4/3 mode to gun4ir if vjoy is not enabled on them
+						if (useDinputLightGun)
+						{
+							if (dinputLightgunAFound && ConfigurationManager.MainConfig.gunARecoil == "gun4ir" && vjoy_gunA == false) TpSettingsManager.tags.Add("gun1_is_gun4ir_without_vjoy");
+							if (dinputLightgunBFound && ConfigurationManager.MainConfig.gunBRecoil == "gun4ir" && vjoy_gunB == false) TpSettingsManager.tags.Add("gun2_is_gun4ir_without_vjoy");
+						}
+
+
+
+						if (gameInfoGOSection != null) gameOptions.Overwrite(gameInfoGOSection, TpSettingsManager.tags);
+						TpSettingsManager.UpdateXML();
+
+
+
+
 
 						if (useXinput)
 						{
@@ -2467,7 +2674,7 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
-						string xmlFileContent = File.ReadAllText(xmlFile);
+						/*
 						string debutFichier = xmlFileContent.Split("<JoystickButtons>")[0];
 						string finFichier = xmlFileContent.Split("</JoystickButtons>").Last();
 						string xmlFinalContent = debutFichier + "\n" + "\t<JoystickButtons>";
@@ -2480,6 +2687,9 @@ namespace TeknoparrotAutoXinput
 
 						XmlDocument xmlDoc = new XmlDocument();
 						xmlDoc.LoadXml(xmlFinalContent);
+						*/
+
+						TpSettingsManager.emptyJoystickButtons(emptyJoystickButtonDictionary);
 
 						// Créez les paramètres pour l'indentation
 						XmlWriterSettings settings = new XmlWriterSettings
@@ -2491,7 +2701,7 @@ namespace TeknoparrotAutoXinput
 						};
 
 						string xpathExpression = $"/GameProfile/ConfigValues/FieldInformation[FieldName='Input API']/FieldValue";
-						XmlNode fieldValueNode = xmlDoc.SelectSingleNode(xpathExpression);
+						XmlNode fieldValueNode = TpSettingsManager.xmlDoc.SelectSingleNode(xpathExpression);
 
 						bool use_dinput = false;
 						if (fieldValueNode != null)
@@ -2520,7 +2730,7 @@ namespace TeknoparrotAutoXinput
 
 						if (useDinputWheel)
 						{
-							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+							XmlNodeList joystickButtonsNodes = TpSettingsManager.xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
 
 							foreach (XmlNode node in joystickButtonsNodes)
 							{
@@ -2547,39 +2757,39 @@ namespace TeknoparrotAutoXinput
 									{
 										var bindData = bindingDinputWheel[bindkey];
 
-										XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+										XmlNode newDirectInputButtonNode = TpSettingsManager.xmlDoc.CreateElement("DirectInputButton");
 
-										XmlNode buttonNode = xmlDoc.CreateElement("Button");
+										XmlNode buttonNode = TpSettingsManager.xmlDoc.CreateElement("Button");
 										buttonNode.InnerText = bindData.Button.ToString();
 										newDirectInputButtonNode.AppendChild(buttonNode);
 
-										XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+										XmlNode isAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsAxis");
 										isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
 										newDirectInputButtonNode.AppendChild(isAxisNode);
 
-										XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+										XmlNode IsAxisMinusNode = TpSettingsManager.xmlDoc.CreateElement("IsAxisMinus");
 										IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
 										newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
 
-										XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+										XmlNode IsFullAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsFullAxis");
 										IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
 										newDirectInputButtonNode.AppendChild(IsFullAxisNode);
 
-										XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+										XmlNode PovDirectionNode = TpSettingsManager.xmlDoc.CreateElement("PovDirection");
 										PovDirectionNode.InnerText = bindData.PovDirection.ToString();
 										newDirectInputButtonNode.AppendChild(PovDirectionNode);
 
-										XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+										XmlNode IsReverseAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsReverseAxis");
 										IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
 										newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
 
-										XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+										XmlNode JoystickGuidNode = TpSettingsManager.xmlDoc.CreateElement("JoystickGuid");
 										JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
 										newDirectInputButtonNode.AppendChild(JoystickGuidNode);
 
 										node.AppendChild(newDirectInputButtonNode);
 
-										XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+										XmlNode BindNameDiNode = TpSettingsManager.xmlDoc.CreateElement("BindNameDi");
 										BindNameDiNode.InnerText = bindData.Title;
 										node.AppendChild(BindNameDiNode);
 
@@ -2628,39 +2838,39 @@ namespace TeknoparrotAutoXinput
 													node.RemoveChild(existingDirectInputButtonNode2);
 												}
 
-												XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+												XmlNode newDirectInputButtonNode = TpSettingsManager.xmlDoc.CreateElement("DirectInputButton");
 
-												XmlNode buttonNode = xmlDoc.CreateElement("Button");
+												XmlNode buttonNode = TpSettingsManager.xmlDoc.CreateElement("Button");
 												buttonNode.InnerText = bindData.Button.ToString();
 												newDirectInputButtonNode.AppendChild(buttonNode);
 
-												XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+												XmlNode isAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsAxis");
 												isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
 												newDirectInputButtonNode.AppendChild(isAxisNode);
 
-												XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+												XmlNode IsAxisMinusNode = TpSettingsManager.xmlDoc.CreateElement("IsAxisMinus");
 												IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
 												newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
 
-												XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+												XmlNode IsFullAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsFullAxis");
 												IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
 												newDirectInputButtonNode.AppendChild(IsFullAxisNode);
 
-												XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+												XmlNode PovDirectionNode = TpSettingsManager.xmlDoc.CreateElement("PovDirection");
 												PovDirectionNode.InnerText = bindData.PovDirection.ToString();
 												newDirectInputButtonNode.AppendChild(PovDirectionNode);
 
-												XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+												XmlNode IsReverseAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsReverseAxis");
 												IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
 												newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
 
-												XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+												XmlNode JoystickGuidNode = TpSettingsManager.xmlDoc.CreateElement("JoystickGuid");
 												JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
 												newDirectInputButtonNode.AppendChild(JoystickGuidNode);
 
 												node.AppendChild(newDirectInputButtonNode);
 
-												XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+												XmlNode BindNameDiNode = TpSettingsManager.xmlDoc.CreateElement("BindNameDi");
 												BindNameDiNode.InnerText = bindData.Title;
 												node.AppendChild(BindNameDiNode);
 											}
@@ -2701,39 +2911,39 @@ namespace TeknoparrotAutoXinput
 													node.RemoveChild(existingDirectInputButtonNode2);
 												}
 
-												XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+												XmlNode newDirectInputButtonNode = TpSettingsManager.xmlDoc.CreateElement("DirectInputButton");
 
-												XmlNode buttonNode = xmlDoc.CreateElement("Button");
+												XmlNode buttonNode = TpSettingsManager.xmlDoc.CreateElement("Button");
 												buttonNode.InnerText = bindData.Button.ToString();
 												newDirectInputButtonNode.AppendChild(buttonNode);
 
-												XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+												XmlNode isAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsAxis");
 												isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
 												newDirectInputButtonNode.AppendChild(isAxisNode);
 
-												XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+												XmlNode IsAxisMinusNode = TpSettingsManager.xmlDoc.CreateElement("IsAxisMinus");
 												IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
 												newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
 
-												XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+												XmlNode IsFullAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsFullAxis");
 												IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
 												newDirectInputButtonNode.AppendChild(IsFullAxisNode);
 
-												XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+												XmlNode PovDirectionNode = TpSettingsManager.xmlDoc.CreateElement("PovDirection");
 												PovDirectionNode.InnerText = bindData.PovDirection.ToString();
 												newDirectInputButtonNode.AppendChild(PovDirectionNode);
 
-												XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+												XmlNode IsReverseAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsReverseAxis");
 												IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
 												newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
 
-												XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+												XmlNode JoystickGuidNode = TpSettingsManager.xmlDoc.CreateElement("JoystickGuid");
 												JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
 												newDirectInputButtonNode.AppendChild(JoystickGuidNode);
 
 												node.AppendChild(newDirectInputButtonNode);
 
-												XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+												XmlNode BindNameDiNode = TpSettingsManager.xmlDoc.CreateElement("BindNameDi");
 												BindNameDiNode.InnerText = bindData.Title;
 												node.AppendChild(BindNameDiNode);
 											}
@@ -2772,30 +2982,30 @@ namespace TeknoparrotAutoXinput
 											}
 
 
-											XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
-											XmlNode buttonNode = xmlDoc.CreateElement("Button");
+											XmlNode newDirectInputButtonNode = TpSettingsManager.xmlDoc.CreateElement("DirectInputButton");
+											XmlNode buttonNode = TpSettingsManager.xmlDoc.CreateElement("Button");
 											buttonNode.InnerText = "153";
 											newDirectInputButtonNode.AppendChild(buttonNode);
-											XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+											XmlNode isAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsAxis");
 											isAxisNode.InnerText = "false";
 											newDirectInputButtonNode.AppendChild(isAxisNode);
-											XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+											XmlNode IsAxisMinusNode = TpSettingsManager.xmlDoc.CreateElement("IsAxisMinus");
 											IsAxisMinusNode.InnerText = "false";
 											newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
-											XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+											XmlNode IsFullAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsFullAxis");
 											IsFullAxisNode.InnerText = "false";
 											newDirectInputButtonNode.AppendChild(IsFullAxisNode);
-											XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+											XmlNode PovDirectionNode = TpSettingsManager.xmlDoc.CreateElement("PovDirection");
 											PovDirectionNode.InnerText = "0";
 											newDirectInputButtonNode.AppendChild(PovDirectionNode);
-											XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+											XmlNode IsReverseAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsReverseAxis");
 											IsReverseAxisNode.InnerText = "false";
 											newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
-											XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+											XmlNode JoystickGuidNode = TpSettingsManager.xmlDoc.CreateElement("JoystickGuid");
 											JoystickGuidNode.InnerText = "6f1d2b61-d5a0-11cf-bfc7-444553540000";
 											newDirectInputButtonNode.AppendChild(JoystickGuidNode);
 											node.AppendChild(newDirectInputButtonNode);
-											XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+											XmlNode BindNameDiNode = TpSettingsManager.xmlDoc.CreateElement("BindNameDi");
 											BindNameDiNode.InnerText = "Keyboard Button 106";
 											node.AppendChild(BindNameDiNode);
 
@@ -2819,30 +3029,30 @@ namespace TeknoparrotAutoXinput
 											}
 
 
-											XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
-											XmlNode buttonNode = xmlDoc.CreateElement("Button");
+											XmlNode newDirectInputButtonNode = TpSettingsManager.xmlDoc.CreateElement("DirectInputButton");
+											XmlNode buttonNode = TpSettingsManager.xmlDoc.CreateElement("Button");
 											buttonNode.InnerText = "158";
 											newDirectInputButtonNode.AppendChild(buttonNode);
-											XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+											XmlNode isAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsAxis");
 											isAxisNode.InnerText = "false";
 											newDirectInputButtonNode.AppendChild(isAxisNode);
-											XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+											XmlNode IsAxisMinusNode = TpSettingsManager.xmlDoc.CreateElement("IsAxisMinus");
 											IsAxisMinusNode.InnerText = "false";
 											newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
-											XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+											XmlNode IsFullAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsFullAxis");
 											IsFullAxisNode.InnerText = "false";
 											newDirectInputButtonNode.AppendChild(IsFullAxisNode);
-											XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+											XmlNode PovDirectionNode = TpSettingsManager.xmlDoc.CreateElement("PovDirection");
 											PovDirectionNode.InnerText = "0";
 											newDirectInputButtonNode.AppendChild(PovDirectionNode);
-											XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+											XmlNode IsReverseAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsReverseAxis");
 											IsReverseAxisNode.InnerText = "false";
 											newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
-											XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+											XmlNode JoystickGuidNode = TpSettingsManager.xmlDoc.CreateElement("JoystickGuid");
 											JoystickGuidNode.InnerText = "6f1d2b61-d5a0-11cf-bfc7-444553540000";
 											newDirectInputButtonNode.AppendChild(JoystickGuidNode);
 											node.AppendChild(newDirectInputButtonNode);
-											XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+											XmlNode BindNameDiNode = TpSettingsManager.xmlDoc.CreateElement("BindNameDi");
 											BindNameDiNode.InnerText = "Keyboard Button 111";
 											node.AppendChild(BindNameDiNode);
 
@@ -2860,25 +3070,28 @@ namespace TeknoparrotAutoXinput
 
 						if (useDinputHotas)
 						{
-
-							XmlNodeList fieldNodes = xmlDoc.SelectNodes("//FieldInformation");
-							foreach (XmlNode fieldNode in fieldNodes)
+							if(reverseYAxis_Hotas > 0)
 							{
-								XmlNode categoryNameNode = fieldNode.SelectSingleNode("CategoryName");
-								XmlNode fieldNameNode = fieldNode.SelectSingleNode("FieldName");
-
-								if (categoryNameNode != null && categoryNameNode.InnerText == "General" &&
-									fieldNameNode != null && fieldNameNode.InnerText == "Reverse Y Axis")
+								XmlNodeList fieldNodes = TpSettingsManager.xmlDoc.SelectNodes("//FieldInformation");
+								foreach (XmlNode fieldNode in fieldNodes)
 								{
-									XmlNode fieldValueNodeReverseY = fieldNode.SelectSingleNode("FieldValue");
-									if (fieldValueNodeReverseY != null)
+									XmlNode categoryNameNode = fieldNode.SelectSingleNode("CategoryName");
+									XmlNode fieldNameNode = fieldNode.SelectSingleNode("FieldName");
+
+									if (categoryNameNode != null && categoryNameNode.InnerText == "General" &&
+										fieldNameNode != null && fieldNameNode.InnerText == "Reverse Y Axis")
 									{
-										fieldValueNodeReverseY.InnerText = reverseYAxis_Hotas ? "1" : "0";
+										XmlNode fieldValueNodeReverseY = fieldNode.SelectSingleNode("FieldValue");
+										if (fieldValueNodeReverseY != null)
+										{
+											fieldValueNodeReverseY.InnerText = reverseYAxis_Hotas == 1 ? "1" : "0";
+										}
 									}
 								}
 							}
 
-							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+
+							XmlNodeList joystickButtonsNodes = TpSettingsManager.xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
 
 							foreach (XmlNode node in joystickButtonsNodes)
 							{
@@ -2905,39 +3118,39 @@ namespace TeknoparrotAutoXinput
 									{
 										var bindData = bindingDinputHotas[bindkey];
 
-										XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+										XmlNode newDirectInputButtonNode = TpSettingsManager.xmlDoc.CreateElement("DirectInputButton");
 
-										XmlNode buttonNode = xmlDoc.CreateElement("Button");
+										XmlNode buttonNode = TpSettingsManager.xmlDoc.CreateElement("Button");
 										buttonNode.InnerText = bindData.Button.ToString();
 										newDirectInputButtonNode.AppendChild(buttonNode);
 
-										XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+										XmlNode isAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsAxis");
 										isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
 										newDirectInputButtonNode.AppendChild(isAxisNode);
 
-										XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+										XmlNode IsAxisMinusNode = TpSettingsManager.xmlDoc.CreateElement("IsAxisMinus");
 										IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
 										newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
 
-										XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+										XmlNode IsFullAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsFullAxis");
 										IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
 										newDirectInputButtonNode.AppendChild(IsFullAxisNode);
 
-										XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+										XmlNode PovDirectionNode = TpSettingsManager.xmlDoc.CreateElement("PovDirection");
 										PovDirectionNode.InnerText = bindData.PovDirection.ToString();
 										newDirectInputButtonNode.AppendChild(PovDirectionNode);
 
-										XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+										XmlNode IsReverseAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsReverseAxis");
 										IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
 										newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
 
-										XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+										XmlNode JoystickGuidNode = TpSettingsManager.xmlDoc.CreateElement("JoystickGuid");
 										JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
 										newDirectInputButtonNode.AppendChild(JoystickGuidNode);
 
 										node.AppendChild(newDirectInputButtonNode);
 
-										XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+										XmlNode BindNameDiNode = TpSettingsManager.xmlDoc.CreateElement("BindNameDi");
 										BindNameDiNode.InnerText = bindData.Title;
 										node.AppendChild(BindNameDiNode);
 									}
@@ -2947,7 +3160,7 @@ namespace TeknoparrotAutoXinput
 
 						if (useDinputLightGun)
 						{
-
+							/*
 							Dictionary<string, List<string>> FieldsToEnable = new Dictionary<string, List<string>>();
 							Dictionary<string, List<string>> FieldsToDisable = new Dictionary<string, List<string>>();
 							if(!hideCrosshair && GameInfo.ContainsKey("crosshairON") && GameInfo["crosshairON"] != "")
@@ -3095,7 +3308,7 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 							}
-							XmlNodeList fieldNodes = xmlDoc.SelectNodes("//FieldInformation");
+							XmlNodeList fieldNodes = TpSettingsManager.xmlDoc.SelectNodes("//FieldInformation");
 							foreach (XmlNode fieldNode in fieldNodes)
 							{
 								XmlNode categoryNameNode = fieldNode.SelectSingleNode("CategoryName");
@@ -3126,9 +3339,9 @@ namespace TeknoparrotAutoXinput
 
 								}
 							}
+							*/
 
-
-							XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+							XmlNodeList joystickButtonsNodes = TpSettingsManager.xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
 
 							foreach (XmlNode node in joystickButtonsNodes)
 							{
@@ -3173,7 +3386,7 @@ namespace TeknoparrotAutoXinput
 														if (bindkey.EndsWith("_LightgunStart")) coinOrStart += 2;
 													}
 													string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
-													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, TpSettingsManager.xmlDoc));
 													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
 												}
 												else if (bindkey.EndsWith("_LightgunReload"))
@@ -3188,54 +3401,54 @@ namespace TeknoparrotAutoXinput
 														coinOrStart = 23;
 													}
 													string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
-													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, TpSettingsManager.xmlDoc));
 													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
 												}
 												else if (!bindkey.EndsWith("_LightgunX") && !bindkey.EndsWith("_LightgunY") && bindData.IsAxis)
 												{
 													string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
-													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+													node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, TpSettingsManager.xmlDoc));
 													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title);
 												}
 												else
 												{
-													XmlNode newDirectInputButtonNode = xmlDoc.CreateElement("DirectInputButton");
+													XmlNode newDirectInputButtonNode = TpSettingsManager.xmlDoc.CreateElement("DirectInputButton");
 
-													XmlNode buttonNode = xmlDoc.CreateElement("Button");
+													XmlNode buttonNode = TpSettingsManager.xmlDoc.CreateElement("Button");
 													buttonNode.InnerText = bindData.Button.ToString();
 													newDirectInputButtonNode.AppendChild(buttonNode);
 
-													XmlNode isAxisNode = xmlDoc.CreateElement("IsAxis");
+													XmlNode isAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsAxis");
 													isAxisNode.InnerText = bindData.IsAxis ? "true" : "false";
 													newDirectInputButtonNode.AppendChild(isAxisNode);
 
-													XmlNode IsAxisMinusNode = xmlDoc.CreateElement("IsAxisMinus");
+													XmlNode IsAxisMinusNode = TpSettingsManager.xmlDoc.CreateElement("IsAxisMinus");
 													IsAxisMinusNode.InnerText = bindData.IsAxisMinus ? "true" : "false";
 													newDirectInputButtonNode.AppendChild(IsAxisMinusNode);
 
-													XmlNode IsFullAxisNode = xmlDoc.CreateElement("IsFullAxis");
+													XmlNode IsFullAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsFullAxis");
 													IsFullAxisNode.InnerText = bindData.IsFullAxis ? "true" : "false";
 													newDirectInputButtonNode.AppendChild(IsFullAxisNode);
 
-													XmlNode PovDirectionNode = xmlDoc.CreateElement("PovDirection");
+													XmlNode PovDirectionNode = TpSettingsManager.xmlDoc.CreateElement("PovDirection");
 													PovDirectionNode.InnerText = bindData.PovDirection.ToString();
 													newDirectInputButtonNode.AppendChild(PovDirectionNode);
 
-													XmlNode IsReverseAxisNode = xmlDoc.CreateElement("IsReverseAxis");
+													XmlNode IsReverseAxisNode = TpSettingsManager.xmlDoc.CreateElement("IsReverseAxis");
 													IsReverseAxisNode.InnerText = bindData.IsReverseAxis ? "true" : "false";
 													newDirectInputButtonNode.AppendChild(IsReverseAxisNode);
 
-													XmlNode JoystickGuidNode = xmlDoc.CreateElement("JoystickGuid");
+													XmlNode JoystickGuidNode = TpSettingsManager.xmlDoc.CreateElement("JoystickGuid");
 													JoystickGuidNode.InnerText = bindData.JoystickGuid.ToString();
 													newDirectInputButtonNode.AppendChild(JoystickGuidNode);
 
-													XmlNode JoystickDiNameNode = xmlDoc.CreateElement("DiName");
+													XmlNode JoystickDiNameNode = TpSettingsManager.xmlDoc.CreateElement("DiName");
 													JoystickDiNameNode.InnerText = bindData.Title;
 													newDirectInputButtonNode.AppendChild(JoystickDiNameNode);
 
 													node.AppendChild(newDirectInputButtonNode);
 
-													XmlNode BindNameDiNode = xmlDoc.CreateElement("BindNameDi");
+													XmlNode BindNameDiNode = TpSettingsManager.xmlDoc.CreateElement("BindNameDi");
 													BindNameDiNode.InnerText = bindData.Title;
 													node.AppendChild(BindNameDiNode);
 
@@ -3251,7 +3464,7 @@ namespace TeknoparrotAutoXinput
 										{
 
 											string key = ButtonToKeyManager.buttonToKey.GetFreeKey();
-											node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, xmlDoc));
+											node.AppendChild(NodeFromKey(ButtonToKeyManager.buttonToKey.keyToAssign[key].Item2, TpSettingsManager.xmlDoc));
 
 											foreach (var bindkey in bindkey_list)
 											{
@@ -3459,7 +3672,7 @@ namespace TeknoparrotAutoXinput
 						using (XmlWriter xmlWriter = XmlWriter.Create(xmlFile + ".custom.xml", settings))
 						{
 							// Enregistrez le XmlDocument avec l'indentation dans le XmlWriter
-							xmlDoc.Save(xmlWriter);
+							TpSettingsManager.xmlDoc.Save(xmlWriter);
 							finalConfig = xmlFile + ".custom.xml";
 						}
 
@@ -3513,7 +3726,6 @@ namespace TeknoparrotAutoXinput
 
 					if (finalConfig != "")
 					{
-						MessageBox.Show("lk");
 						if(gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 						{
 							Utils.LogMessage($"HardLinkFiles {linkSourceFolder}, {linkTargetFolder}");
@@ -3835,6 +4047,14 @@ namespace TeknoparrotAutoXinput
 							if (vjoy_gunB) gunOptions = "gunB";
 							if (vjoy_gunA && vjoy_gunB) gunOptions = "all";
 
+							if (gameOptions.tmpGunXFormula != "" || gameOptions.tmpGunYFormula != "" || gameOptions.tmpGunAMinMax != "" || gameOptions.tmpGunBMinMax != "")
+							{
+								gunOptions += $" \"{gameOptions.tmpGunXFormula}\"";
+								gunOptions += $" \"{gameOptions.tmpGunYFormula}\"";
+								gunOptions += $" \"{gameOptions.tmpGunAMinMax}\"";
+								gunOptions += $" \"{gameOptions.tmpGunBMinMax}\"";
+							}
+
 							Process vjoy_process = new Process();
 							vjoy_process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
 							vjoy_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
@@ -3862,7 +4082,7 @@ namespace TeknoparrotAutoXinput
 							{
 								forceMagpie = true;
 								useMagpie = true;
-								if(!IsWindowed) magpieReshade43 = true;
+								if(!TpSettingsManager.IsWindowed) magpieReshade43 = true;
 							}
 						}
 
@@ -3878,7 +4098,7 @@ namespace TeknoparrotAutoXinput
 						string forcevjoyXformula = "";
 						string forcevjoyYformula = "";
 
-						if ((IsWindowed || forceMagpie) && useMagpie)
+						if ((TpSettingsManager.IsWindowed || forceMagpie) && useMagpie)
 						{
 							string magpieExe = ConfigurationManager.MainConfig.magpieExe;
 							string magpieConfig = Path.Combine(Path.GetDirectoryName(magpieExe), "config", "config.json");
@@ -3995,6 +4215,8 @@ namespace TeknoparrotAutoXinput
 							bool magpieNoLateFocus = false;
 							if (GameInfo.ContainsKey("magpieNoLateFocus") && GameInfo["magpieNoLateFocus"].ToLower() == "true") magpieNoLateFocus = true;
 
+							bool magpieNoClick = false;
+							if (GameInfo.ContainsKey("magpieNoClick") && GameInfo["magpieNoClick"].ToLower() == "true") magpieNoClick = true;
 
 
 
@@ -4115,7 +4337,29 @@ namespace TeknoparrotAutoXinput
 													magpie_process.StartInfo.UseShellExecute = true;
 													magpie_process.Start();
 													magpie_process_pid = magpie_process.Id;
+
 												}
+												if (!magpieNoClick)
+												{
+													var ClickOnPrimaryScreen = new Thread(() =>
+													{
+														for (int i = 0; i < 100; i++)
+														{
+															if (isExiting) break;
+															string foregroundClassName = Utils.GetForegroundClassName();
+															Thread.Sleep(100);
+															if (foregroundClassName == "Magpie_Main")
+															{
+																Utils.ClickOnPrimaryScreen(0, 0);
+																break;
+															}
+														}
+													});
+													ClickOnPrimaryScreen.Start();
+
+												}
+
+
 												Thread.Sleep(100);
 												Utils.SetForegroundWindow(windowHandle);
 
@@ -4274,8 +4518,8 @@ namespace TeknoparrotAutoXinput
 
 
 
-													forcevjoyXformula = $"[OX]+(([OX]-(32767/2))*{ratioVjoyFinalWidthString})";
-													forcevjoyYformula = $"[OY]+(([OY]-(32767/2))*{ratioVjoyFinalHeightString})";
+													forcevjoyXformula = $"[X]+(([X]-(32767/2))*{ratioVjoyFinalWidthString})";
+													forcevjoyYformula = $"[Y]+(([Y]-(32767/2))*{ratioVjoyFinalHeightString})";
 													Utils.LogMessage("Vjoy forced formula X : " + forcevjoyXformula);
 													Utils.LogMessage("Vjoy forced formula Y : " + forcevjoyYformula);
 													try
@@ -4380,6 +4624,8 @@ namespace TeknoparrotAutoXinput
 													Thread.Sleep(100);
 													Utils.SetForegroundWindow(windowHandle);
 													Thread.Sleep(100);
+
+													//Utils.ClickWindow(windowHandle);
 												}
 												catch { }
 
@@ -4392,6 +4638,29 @@ namespace TeknoparrotAutoXinput
 												magpie_process.Start();
 												magpie_process_pid = magpie_process.Id;
 
+												if (!magpieNoClick)
+												{
+													var ClickOnPrimaryScreen = new Thread(() =>
+													{
+														for (int i = 0; i < 100; i++)
+														{
+															if (isExiting) break;
+															string foregroundClassName = Utils.GetForegroundClassName();
+															Thread.Sleep(100);
+															if (foregroundClassName == "Magpie_Main")
+															{
+																Utils.ClickOnPrimaryScreen(0, 0);
+																break;
+															}
+														}
+													});
+													ClickOnPrimaryScreen.Start();
+
+												}
+
+
+
+
 											}
 
 
@@ -4403,6 +4672,26 @@ namespace TeknoparrotAutoXinput
 
 								}
 							}
+
+							/*
+							var WaitForMagpie = new Thread(() =>
+							{
+								IntPtr windowHandle = Utils.FindWindowByMultipleCriteria("Magpie_Main", "", "");
+								while (!isExiting)
+								{
+									while (windowHandle == IntPtr.Zero && !isExiting)
+									{
+										windowHandle = Utils.FindWindowByMultipleCriteria("Magpie_Main", "", "");
+										Thread.Sleep(500);
+									}
+									Utils.ClickWindow(windowHandle);
+									
+								}
+							});
+							WaitForMagpie.Start();
+							*/
+
+
 						}
 
 						bool useRivaTuner = gameOptions.runRivaTuner;
@@ -4815,12 +5104,14 @@ namespace TeknoparrotAutoXinput
 		}
 
 
-		public static Dictionary<string, JoystickButton> ParseConfig(string configFilePath, bool skipMissingXinput = true)
+		public static Dictionary<string, JoystickButton> ParseConfig(string configFilePath, bool skipMissingXinput = true, bool loadDirectXml = false)
 		{
 			//string configFilePath = @"E:\TODO\teknoparrot\TeknoparrotXinputSetup\config\Batman.gamepad.txt";
 
 			XmlDocument xmlDoc = new XmlDocument();
-			xmlDoc.Load(configFilePath);
+			if (loadDirectXml) xmlDoc.LoadXml(configFilePath);
+			else xmlDoc.Load(configFilePath);
+
 			Dictionary<string, JoystickButton> joystickButtonDictionary = new Dictionary<string, JoystickButton>();
 			XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("//JoystickButtons/JoystickButtons");
 			foreach (XmlNode joystickButtonNode in joystickButtonsNodes)
