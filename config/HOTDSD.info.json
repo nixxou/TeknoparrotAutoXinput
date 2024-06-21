@@ -1,18 +1,44 @@
 {
-    "rom": "hodsd",
-    "target": "alls",
-    "64bits": "True",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "Crosshairs,!Enable Native|Crosshairs,Enable Custom",
-    "crosshairOFF": "Crosshairs,!Enable Native|Crosshairs,!Enable Custom",
-    "crosshairPNG": "True",
-    "outputs": "",
-    "windowed": "General,Windowed,1",
-    "magpieClass": "UnrealWindow",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"
+	"global": {
+		"_comment": "The patch resolution will change the graphic quality 4K = best, 720p = potato pc",
+		"rom": "hodsd",
+		"target": "alls",
+		"64bits": "True",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "UnrealWindow",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },		
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "hide_crosshair": {
+            "Crosshairs||Enable Custom": "0",
+			"Crosshairs||Enable Native": "0"
+        },
+        "show_crosshair": {
+            "Crosshairs||Enable Custom": "1",
+			"Crosshairs||Enable Native": "0"
+        }		
+	},
+    "gameoptions": {
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+            "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+            "gun_useExtraSinden": "True"
+        },
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+            "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.03093)",
+            "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+        }	
+    }
 }

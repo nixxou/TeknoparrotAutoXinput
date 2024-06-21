@@ -1,9 +1,28 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "Come On Baby!2 Winter Championship",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"
+	"global": {
+		"_comment": "Upscale does artefacts, so i just use windowed",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "Come On Baby!2 Winter Championship",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },		
+       "recommanded_tp_settings": {
+            "General||HideCursor": "1",
+            "General||UseLocaleEmulator": "1"			
+        }
+	},
+	"gameoptions": {}
 }

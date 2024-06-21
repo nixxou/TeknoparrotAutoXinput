@@ -1,18 +1,26 @@
 {
-    "rom": "sgg",
-    "target": "ringwide",
-    "64bits": "False",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "",
-    "crosshairOFF": "",
-    "crosshairPNG": "False",
-    "outputs": "",
-    "windowed": "General,Windowed,1",
-    "magpieClass": "Ring Gun(NNDXG20-WIN)",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"
+	"global": {
+		"rom": "sgg",
+		"target": "ringwide",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "Ring Gun",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        }
+	},
+	"gameoptions": {}
 }

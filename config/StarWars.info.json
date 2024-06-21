@@ -1,12 +1,27 @@
 {
-    "windowed": "",
-    "magpieClass": "",
-	"magpieTitle": "SW",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"True",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",
-	"magpieExecutable":"../Binaries/Win64/SWArcGame-Win64-Shipping.exe"
+	"global": {
+		"_comment": "This game tend to popup on the wrong window, so i disable other monitor using custom disposition feature of this app",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "LaunchUnrealUWindowsClient",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False",
+		"magpieExecutable": "../Binaries/Win64/SWArcGame-Win64-Shipping.exe"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        }
+	},
+	"gameoptions": {}
 }

@@ -68,12 +68,11 @@ namespace TeknoparrotAutoXinput
 			}
 
 
-			
+
 
 			chk_useXenosInjector.Checked = ConfigurationManager.MainConfig.useXenos;
 
 			txt_magpieExe.Text = ConfigurationManager.MainConfig.magpieExe;
-			txt_magpieSindenExe.Text = ConfigurationManager.MainConfig.magpieSindenExe;
 			num_magpieDelay.Value = ConfigurationManager.MainConfig.magpieDelay;
 			cmb_magpieScaling.SelectedIndex = ConfigurationManager.MainConfig.magpieScaling;
 			cmb_magpieCapture.SelectedIndex = ConfigurationManager.MainConfig.magpieCapture;
@@ -81,13 +80,15 @@ namespace TeknoparrotAutoXinput
 			chk_magpieShowFps.Checked = ConfigurationManager.MainConfig.magpieShowFps;
 			chk_magpieVsync.Checked = ConfigurationManager.MainConfig.magpieVsync;
 			chk_magpieTripleBuffering.Checked = ConfigurationManager.MainConfig.magpieTripleBuffering;
-			cmb_useMagpieLightgun.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgun;
-			cmb_MagpieLightgunCalibration.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgunCalibration;
+
+			//cmb_useMagpieLightgun.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgun;
+			//cmb_MagpieLightgunCalibration.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgunCalibration;
+
+			chk_magpieSindenBorder.Checked = ConfigurationManager.MainConfig.magpieSinden;
+			chk_magpieGunCalibration.Checked = ConfigurationManager.MainConfig.magpieGunCalibration;
+
 			num_magpieBorderSize.Value = (decimal)ConfigurationManager.MainConfig.magpieBorderSize;
 			chk_magpieExclusiveFullscreen.Checked = ConfigurationManager.MainConfig.magpieExclusiveFullscreen;
-			chk_magpieReshadeAdaptiveSharpen.Checked = ConfigurationManager.MainConfig.magpieReshadeAdaptiveSharpen;
-			chk_magpieReshadeClarity.Checked = ConfigurationManager.MainConfig.magpieReshadeClarity;
-			chk_magpieReshadeColorfullness.Checked = ConfigurationManager.MainConfig.magpieReshadeColorfullness;
 			trk_magpieFsrSharp.Value = ConfigurationManager.MainConfig.magpieFsrSharp;
 			lbl_magpieFsrSharp.Text = trk_magpieFsrSharp.Value.ToString() + "%";
 
@@ -105,7 +106,6 @@ namespace TeknoparrotAutoXinput
 			txt_arcadeXinputData.Text = ConfigurationManager.MainConfig.arcadeXinputData;
 			txt_gamepadXinputData.Text = ConfigurationManager.MainConfig.gamepadXinputData;
 
-			cmb_reverseYAxis_Hotas.SelectedIndex = ConfigurationManager.MainConfig.reverseY_Hotas;
 
 			radio_useCustomStooz_Gamepad.Checked = ConfigurationManager.MainConfig.gamepadStooz;
 			radio_useCustomStooz_Wheel.Checked = ConfigurationManager.MainConfig.wheelStooz;
@@ -554,7 +554,6 @@ namespace TeknoparrotAutoXinput
 
 
 			ConfigurationManager.MainConfig.magpieExe = txt_magpieExe.Text;
-			ConfigurationManager.MainConfig.magpieSindenExe = txt_magpieSindenExe.Text;
 			ConfigurationManager.MainConfig.magpieDelay = (int)num_magpieDelay.Value;
 			ConfigurationManager.MainConfig.magpieScaling = cmb_magpieScaling.SelectedIndex;
 			ConfigurationManager.MainConfig.magpieCapture = cmb_magpieCapture.SelectedIndex;
@@ -562,14 +561,16 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.magpieShowFps = chk_magpieShowFps.Checked;
 			ConfigurationManager.MainConfig.magpieVsync = chk_magpieVsync.Checked;
 			ConfigurationManager.MainConfig.magpieTripleBuffering = chk_magpieTripleBuffering.Checked;
-			ConfigurationManager.MainConfig.magpieLightgun = cmb_useMagpieLightgun.SelectedIndex;
-			ConfigurationManager.MainConfig.magpieLightgunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
+
+			//ConfigurationManager.MainConfig.magpieLightgun = cmb_useMagpieLightgun.SelectedIndex;
+			//ConfigurationManager.MainConfig.magpieLightgunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
+
+			ConfigurationManager.MainConfig.magpieSinden = chk_magpieSindenBorder.Checked;
+			ConfigurationManager.MainConfig.magpieGunCalibration = chk_magpieGunCalibration.Checked;
+
 			ConfigurationManager.MainConfig.magpieBorderSize = (double)num_magpieBorderSize.Value;
 
 			ConfigurationManager.MainConfig.magpieExclusiveFullscreen = chk_magpieExclusiveFullscreen.Checked;
-			ConfigurationManager.MainConfig.magpieReshadeAdaptiveSharpen = chk_magpieReshadeAdaptiveSharpen.Checked;
-			ConfigurationManager.MainConfig.magpieReshadeClarity = chk_magpieReshadeClarity.Checked;
-			ConfigurationManager.MainConfig.magpieReshadeColorfullness = chk_magpieReshadeColorfullness.Checked;
 			ConfigurationManager.MainConfig.magpieFsrSharp = trk_magpieFsrSharp.Value;
 
 			ConfigurationManager.MainConfig.wheelXinputData = txt_wheelXinputData.Text;
@@ -1233,16 +1234,7 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_magpieSindenExe_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			openFileDialog.Filter = "Magpie (Magpie.exe)|Magpie.exe"; // Filtre pour n'afficher que RTSS.exe
-			openFileDialog.Title = "Select Magpie.exe"; // Titre de la boîte de dialogue
 
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				txt_magpieSindenExe.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
-				ConfigurationManager.MainConfig.magpieSindenExe = Path.GetFullPath(openFileDialog.FileName);
-				ConfigurationManager.SaveConfig();
-			}
 		}
 
 		private void kryptonLabel19_Click(object sender, EventArgs e)
@@ -1392,7 +1384,8 @@ namespace TeknoparrotAutoXinput
 		{
 			txt_networkIP.Enabled = txt_networkMask.Enabled = txt_networkGateway.Enabled = txt_networkDns1.Enabled = txt_networkDns2.Enabled = txt_BroadcastAddress.Enabled = false;
 
-			var ThreadNetWork = new Thread(() => {
+			var ThreadNetWork = new Thread(() =>
+			{
 				var networkInfo = Utils.GetFirstNetworkAdapterInfo();
 				txt_networkIP.Text = networkInfo.ContainsKey("networkIP") ? networkInfo["networkIP"] : "0.0.0.0";
 				txt_networkMask.Text = networkInfo.ContainsKey("networkMask") ? networkInfo["networkMask"] : "0.0.0.0";
@@ -1440,8 +1433,7 @@ namespace TeknoparrotAutoXinput
 
 		private void cmb_reverseYAxis_Hotas_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ConfigurationManager.MainConfig.reverseY_Hotas = cmb_reverseYAxis_Hotas.SelectedIndex;
-			ConfigurationManager.SaveConfig();
+
 		}
 
 		private void cmb_patchGpuTP_SelectedIndexChanged(object sender, EventArgs e)

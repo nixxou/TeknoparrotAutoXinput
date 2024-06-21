@@ -1,10 +1,53 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "mkart3",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"True",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",	
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "mkart3",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "set_res_in_tp_settings & 720p": {
+			"General||Custom Resolution": "1",
+            "General||ResolutionWidth": "1280",
+            "General||ResolutionHeight": "720"
+        },
+        "set_res_in_tp_settings & 1080p": {
+			"General||Custom Resolution": "1",
+            "General||ResolutionWidth": "1920",
+            "General||ResolutionHeight": "1080"
+        },
+        "set_res_in_tp_settings & 2k": {
+			"General||Custom Resolution": "1",
+            "General||ResolutionWidth": "2560",
+            "General||ResolutionHeight": "1440"
+        },
+        "set_res_in_tp_settings & 4k": {
+			"General||CustomResolution": "1",
+            "General||ResolutionWidth": "3840",
+            "General||ResolutionHeight": "2160"
+        },
+		"replace_network": {
+			"Network||Gateway": "{{networkgateway}}"
+		},
+		"replace_gameid": {
+			"General||PlayerId": "{{mariokartid}}"
+		},
+		"ffb": {
+			"General||Enable Outputs": "1"
+		}
+	},
+	"gameoptions": {}
 }

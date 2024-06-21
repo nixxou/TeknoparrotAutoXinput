@@ -1,0 +1,17 @@
+{
+	"global": {
+		"windowed": "",
+		"magpieClass": "AH2 CLASS",
+		"magpieTitle": "",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "True",
+		"magpieNoLateFocus": "False",
+		"magpieExecutable": ""
+	},
+	"tpoptions": {
+	},
+	"gameoptions": {}
+}

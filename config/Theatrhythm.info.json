@@ -1,0 +1,51 @@
+{
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "UnityWndClass",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },			
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "set_res_in_tp_settings & 720p": {
+            "General||ResWidth": "1280",
+            "General||ResHeight": "720"
+        },
+        "set_res_in_tp_settings & 1080p": {
+            "General||ResWidth": "1920",
+            "General||ResHeight": "1080"
+        },
+        "set_res_in_tp_settings & 2k": {
+            "General||ResWidth": "2560",
+            "General||ResHeight": "1440"
+        },
+        "set_res_in_tp_settings & 4k": {
+            "General||ResWidth": "3840",
+            "General||ResHeight": "2160"
+        },
+		"replace_gameid": {
+			"General||PlayerName": "{{customname}}"
+		},
+		"replace_network": {
+			"Network||Dhcp": "0",
+			"Network||Ip": "{{networkip}}",
+			"Network||Mask": "{{networkmask}}",
+			"Network||Gateway": "{{networkgateway}}",
+			"Network||Dns1": "{{networkdns1}}"
+		}
+	},
+	"gameoptions": {}
+}

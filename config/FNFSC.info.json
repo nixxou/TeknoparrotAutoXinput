@@ -1,12 +1,33 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "RawApp",
-	"magpieTitle": "",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"True",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",
-	"magpieExecutable":""
+	"global": {
+		"_comment": "I was not able to attach reshade on the game, so i attach it on magpie instead. I didn't like the look too clean with the low poly once upscaled, so i added crt effect, remove it if you want",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "RawApp",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False",
+		"magpieExecutable": ""
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & use_optional_reshade": {
+            "General||Windowed": "1"
+        },
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & !use_optional_reshade": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+            "General||Framelimiter": "1"
+        }
+	},
+	"gameoptions": {}
 }

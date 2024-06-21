@@ -1,8 +1,40 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "WinGlideClass",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False"
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "WinGlideClass",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False"
+	},
+	"tpoptions": {
+		"set_res_in_tp_settings & fullscreen": {
+			"Glide||Aspect": "Integer rendering"
+		},
+		"set_res_in_tp_settings & windowed": {
+			"Glide||Aspect": "Entire screen (Default)"
+		},
+		"set_res_in_tp_settings & fullscreen & 720p": {
+			"Glide||Resolution": "1280 x 720"
+		},
+		"set_res_in_tp_settings & fullscreen & 1080p": {
+			"Glide||Resolution": "1920 x 1080"
+		},
+		"set_res_in_tp_settings & fullscreen & 2k": {
+			"Glide||Resolution": "2560 x 1440"
+		},
+		"set_res_in_tp_settings & fullscreen & 4k": {
+			"Glide||Resolution": "3840 x 2160"
+		},		
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        }		
+	},
+	"gameoptions": {}
 }

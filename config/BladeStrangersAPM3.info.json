@@ -1,9 +1,27 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "rr::win32::Window",
-	"magpie3DGameMode": "False",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"True",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"True"
+	"global": {
+		"_comment":"Fullscreen don't always scale so i put default as windowed"
+		"windowed": "General,Windowed,1",
+		"magpieClass": "rr::win32::Window",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "True"
+	},
+	"tpoptions": {
+		"replace_gameid": {
+			"General||APM3ID": "{{apm3id}}"
+		},
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        }		
+	},
+	"gameoptions": {}
 }

@@ -1,0 +1,17 @@
+{
+	"global": {
+		"windowed": "",
+		"magpieClass": "SDL_App",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+		"replace_gameid": {
+			"General||APM3ID": "{{apm3id}}"
+		}
+	},
+	"gameoptions": {}
+}

@@ -1,11 +1,15 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "VF5FS_PXD64_CLASS",
-	"magpieTitle": "",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"True",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"True",
-	"magpieNoLateFocus":"False",	
+	"global": {
+		"windowed": "",
+		"magpieClass": "VF5FS_PXD64_CLASS",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "True",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {},
+	"gameoptions": {}
 }

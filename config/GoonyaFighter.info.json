@@ -1,0 +1,19 @@
+{
+	"global": {
+		"windowed": "",
+		"magpieClass": "UnityWndClass",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "True",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"replace_gameid": {
+			"General||APM3ID": "{{apm3id}}"
+		}
+	},
+	"gameoptions": {}
+}

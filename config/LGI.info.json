@@ -1,18 +1,31 @@
 {
-    "rom": "lgi",
-    "target": "ringwide",
-    "64bits": "False",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "",
-    "crosshairOFF": "",
-    "crosshairPNG": "False",
-    "outputs": "",
-    "windowed": "General,Windowed,1",
-    "magpieClass": "TeknoParrot - Let's Go Island",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"
+	"global": {
+		"_comment": "Can't upscale all the way to 2K, so i use a slightly lower res and magpie to make fullscreen, that's why i advise windowed",
+		"rom": "lgi",
+		"target": "ringwide",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "TeknoParrot - Let's Go Island",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+            "General||HideCursor": "1",
+			"General||Enable Outputs": "1"
+        }
+	},
+    "gameoptions": {}
 }

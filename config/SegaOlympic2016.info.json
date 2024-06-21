@@ -1,10 +1,49 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "MSR",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",	
+	"global": {
+		"_comment": "I could use fullscreen and reajust aspect ratio with reshade, but it looks better launching the game in the right resolution and use magpie",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "MSR",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||DisplayMode": "Fullscreen"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||DisplayMode": "Fullscreen"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||DisplayMode": "Windowed"
+        },
+        "set_res_in_tp_settings & 720p": {
+			"General||Custom Resolution (Stretches)": "1",
+            "General||Resolution Width": "405",
+            "General||Resolution Height": "720"
+        },
+        "set_res_in_tp_settings & 1080p": {
+			"General||Custom Resolution (Stretches)": "1",
+            "General||Resolution Width": "603",
+            "General||Resolution Height": "1072"
+        },
+        "set_res_in_tp_settings & 2k": {
+			"General||Custom Resolution (Stretches)": "1",
+            "General||Resolution Width": "810",
+            "General||Resolution Height": "1440"
+        },
+        "set_res_in_tp_settings & 4k": {
+			"General||Custom Resolution (Stretches)": "0",
+            "General||Resolution Width": "1215",
+            "General||Resolution Height": "2160"
+        },
+	},
+	"gameoptions": {
+		"recommanded_gameoptions": {
+			"useMagpie" : "3"
+		}
+	}
 }

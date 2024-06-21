@@ -1,0 +1,21 @@
+{
+	"global": {
+		"_comment": "No windowed option, fix_res_in_patches force magpie for res >= 2k",
+		"windowed": "",
+		"magpieClass": "BlazBlueCrossTagBattle",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {},
+	"gameoptions": {
+		"fix_res_in_patches & 2k":{
+			"useMagpie": "3"
+		},
+		"fix_res_in_patches & 4k":{
+			"useMagpie": "3"
+		}		
+	}
+}

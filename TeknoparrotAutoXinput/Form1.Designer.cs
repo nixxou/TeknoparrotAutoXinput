@@ -95,8 +95,6 @@
 			kryptonLabel23 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel22 = new Krypton.Toolkit.KryptonLabel();
 			groupBox9 = new GroupBox();
-			kryptonLabel69 = new Krypton.Toolkit.KryptonLabel();
-			cmb_reverseYAxis_Hotas = new Krypton.Toolkit.KryptonComboBox();
 			btn_setffbguidHotas = new Krypton.Toolkit.KryptonButton();
 			cmb_ffbguidHotas = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel24 = new Krypton.Toolkit.KryptonLabel();
@@ -110,12 +108,10 @@
 			radio_useCustomStooz_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useDefaultStooze_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			groupBox10 = new GroupBox();
-			kryptonLabel56 = new Krypton.Toolkit.KryptonLabel();
-			cmb_MagpieLightgunCalibration = new Krypton.Toolkit.KryptonComboBox();
-			kryptonLabel57 = new Krypton.Toolkit.KryptonLabel();
-			cmb_useMagpieLightgun = new Krypton.Toolkit.KryptonComboBox();
+			chk_magpieGunCalibration = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel54 = new Krypton.Toolkit.KryptonLabel();
 			num_magpieBorderSize = new Krypton.Toolkit.KryptonNumericUpDown();
+			chk_magpieSindenBorder = new Krypton.Toolkit.KryptonCheckBox();
 			btn_runSinden = new Krypton.Toolkit.KryptonButton();
 			chk_alwaysrunmamehooker = new Krypton.Toolkit.KryptonCheckBox();
 			txt_sindenextra = new Krypton.Toolkit.KryptonTextBox();
@@ -194,18 +190,12 @@
 			kryptonLabel59 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel58 = new Krypton.Toolkit.KryptonLabel();
 			trk_magpieFsrSharp = new TrackBar();
-			chk_magpieReshadeColorfullness = new Krypton.Toolkit.KryptonCheckBox();
-			chk_magpieReshadeClarity = new Krypton.Toolkit.KryptonCheckBox();
-			chk_magpieReshadeAdaptiveSharpen = new Krypton.Toolkit.KryptonCheckBox();
 			chk_magpieExclusiveFullscreen = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel55 = new Krypton.Toolkit.KryptonLabel();
 			chk_magpieShowFps = new Krypton.Toolkit.KryptonCheckBox();
 			chk_magpieTripleBuffering = new Krypton.Toolkit.KryptonCheckBox();
 			chk_magpieVsync = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel52 = new Krypton.Toolkit.KryptonLabel();
-			btn_magpieSindenExe = new Krypton.Toolkit.KryptonButton();
-			txt_magpieSindenExe = new Krypton.Toolkit.KryptonTextBox();
-			kryptonLabel51 = new Krypton.Toolkit.KryptonLabel();
 			btn_magpieExe = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel49 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel50 = new Krypton.Toolkit.KryptonLabel();
@@ -287,12 +277,9 @@
 			groupBox7.SuspendLayout();
 			groupBox8.SuspendLayout();
 			groupBox9.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)cmb_reverseYAxis_Hotas).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_ffbguidHotas).BeginInit();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Hotas).BeginInit();
 			groupBox10.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)cmb_MagpieLightgunCalibration).BeginInit();
-			((System.ComponentModel.ISupportInitialize)cmb_useMagpieLightgun).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_vjoy).BeginInit();
 			groupBox12.SuspendLayout();
 			grp_gunB_gun4irOptions.SuspendLayout();
@@ -950,8 +937,6 @@
 			// 
 			// groupBox9
 			// 
-			groupBox9.Controls.Add(kryptonLabel69);
-			groupBox9.Controls.Add(cmb_reverseYAxis_Hotas);
 			groupBox9.Controls.Add(btn_setffbguidHotas);
 			groupBox9.Controls.Add(cmb_ffbguidHotas);
 			groupBox9.Controls.Add(kryptonLabel24);
@@ -971,27 +956,6 @@
 			groupBox9.TabStop = false;
 			groupBox9.Text = "Hotas Settings";
 			groupBox9.Enter += groupBox9_Enter;
-			// 
-			// kryptonLabel69
-			// 
-			kryptonLabel69.Location = new Point(8, 106);
-			kryptonLabel69.Name = "kryptonLabel69";
-			kryptonLabel69.Size = new Size(94, 20);
-			kryptonLabel69.TabIndex = 102;
-			kryptonLabel69.Values.Text = "Reverse Y Axis :";
-			// 
-			// cmb_reverseYAxis_Hotas
-			// 
-			cmb_reverseYAxis_Hotas.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmb_reverseYAxis_Hotas.DropDownWidth = 242;
-			cmb_reverseYAxis_Hotas.IntegralHeight = false;
-			cmb_reverseYAxis_Hotas.Items.AddRange(new object[] { "Use TP Setting", "Yes", "No" });
-			cmb_reverseYAxis_Hotas.Location = new Point(108, 105);
-			cmb_reverseYAxis_Hotas.Name = "cmb_reverseYAxis_Hotas";
-			cmb_reverseYAxis_Hotas.Size = new Size(130, 21);
-			cmb_reverseYAxis_Hotas.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-			cmb_reverseYAxis_Hotas.TabIndex = 101;
-			cmb_reverseYAxis_Hotas.SelectedIndexChanged += cmb_reverseYAxis_Hotas_SelectedIndexChanged;
 			// 
 			// btn_setffbguidHotas
 			// 
@@ -1099,12 +1063,10 @@
 			// 
 			// groupBox10
 			// 
-			groupBox10.Controls.Add(kryptonLabel56);
-			groupBox10.Controls.Add(cmb_MagpieLightgunCalibration);
-			groupBox10.Controls.Add(kryptonLabel57);
-			groupBox10.Controls.Add(cmb_useMagpieLightgun);
+			groupBox10.Controls.Add(chk_magpieGunCalibration);
 			groupBox10.Controls.Add(kryptonLabel54);
 			groupBox10.Controls.Add(num_magpieBorderSize);
+			groupBox10.Controls.Add(chk_magpieSindenBorder);
 			groupBox10.Controls.Add(btn_runSinden);
 			groupBox10.Controls.Add(chk_alwaysrunmamehooker);
 			groupBox10.Controls.Add(txt_sindenextra);
@@ -1130,66 +1092,42 @@
 			groupBox10.TabStop = false;
 			groupBox10.Text = "Lightgun Settings";
 			// 
-			// kryptonLabel56
+			// chk_magpieGunCalibration
 			// 
-			kryptonLabel56.Location = new Point(7, 626);
-			kryptonLabel56.Name = "kryptonLabel56";
-			kryptonLabel56.Size = new Size(214, 20);
-			kryptonLabel56.TabIndex = 103;
-			kryptonLabel56.Values.Text = "Adjust aiming of maximized window :";
-			// 
-			// cmb_MagpieLightgunCalibration
-			// 
-			cmb_MagpieLightgunCalibration.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmb_MagpieLightgunCalibration.DropDownWidth = 242;
-			cmb_MagpieLightgunCalibration.IntegralHeight = false;
-			cmb_MagpieLightgunCalibration.Items.AddRange(new object[] { "Do nothing", "Adjust calibration in vjoy", "Adjust calibration in Sinden Software" });
-			cmb_MagpieLightgunCalibration.Location = new Point(227, 626);
-			cmb_MagpieLightgunCalibration.Name = "cmb_MagpieLightgunCalibration";
-			cmb_MagpieLightgunCalibration.Size = new Size(232, 21);
-			cmb_MagpieLightgunCalibration.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-			cmb_MagpieLightgunCalibration.TabIndex = 102;
-			// 
-			// kryptonLabel57
-			// 
-			kryptonLabel57.Location = new Point(7, 600);
-			kryptonLabel57.Name = "kryptonLabel57";
-			kryptonLabel57.Size = new Size(208, 20);
-			kryptonLabel57.TabIndex = 101;
-			kryptonLabel57.Values.Text = "Use Magpie when using Lightguns  :";
-			// 
-			// cmb_useMagpieLightgun
-			// 
-			cmb_useMagpieLightgun.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmb_useMagpieLightgun.DropDownWidth = 242;
-			cmb_useMagpieLightgun.IntegralHeight = false;
-			cmb_useMagpieLightgun.Items.AddRange(new object[] { "No", "Yes (without sinden border)", "Yes (with sinden border)" });
-			cmb_useMagpieLightgun.Location = new Point(227, 598);
-			cmb_useMagpieLightgun.Name = "cmb_useMagpieLightgun";
-			cmb_useMagpieLightgun.Size = new Size(232, 21);
-			cmb_useMagpieLightgun.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-			cmb_useMagpieLightgun.TabIndex = 100;
+			chk_magpieGunCalibration.Location = new Point(8, 714);
+			chk_magpieGunCalibration.Name = "chk_magpieGunCalibration";
+			chk_magpieGunCalibration.Size = new Size(388, 20);
+			chk_magpieGunCalibration.TabIndex = 108;
+			chk_magpieGunCalibration.Values.Text = "Magpie : Auto-adjust gun calibration for maximized lightgun game";
 			// 
 			// kryptonLabel54
 			// 
-			kryptonLabel54.Location = new Point(7, 661);
+			kryptonLabel54.Location = new Point(23, 688);
 			kryptonLabel54.Name = "kryptonLabel54";
-			kryptonLabel54.Size = new Size(191, 20);
-			kryptonLabel54.TabIndex = 89;
-			kryptonLabel54.Values.Text = "Sinden Border Size (percentage) :";
+			kryptonLabel54.Size = new Size(236, 20);
+			kryptonLabel54.TabIndex = 106;
+			kryptonLabel54.Values.Text = "Magpie Sinden Border Size (percentage) :";
 			// 
 			// num_magpieBorderSize
 			// 
 			num_magpieBorderSize.AllowDecimals = true;
 			num_magpieBorderSize.DecimalPlaces = 1;
 			num_magpieBorderSize.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-			num_magpieBorderSize.Location = new Point(227, 659);
+			num_magpieBorderSize.Location = new Point(260, 686);
 			num_magpieBorderSize.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
 			num_magpieBorderSize.Minimum = new decimal(new int[] { 0, 0, 0, 0 });
 			num_magpieBorderSize.Name = "num_magpieBorderSize";
 			num_magpieBorderSize.Size = new Size(51, 22);
-			num_magpieBorderSize.TabIndex = 84;
+			num_magpieBorderSize.TabIndex = 105;
 			num_magpieBorderSize.Value = new decimal(new int[] { 15, 0, 0, 65536 });
+			// 
+			// chk_magpieSindenBorder
+			// 
+			chk_magpieSindenBorder.Location = new Point(8, 662);
+			chk_magpieSindenBorder.Name = "chk_magpieSindenBorder";
+			chk_magpieSindenBorder.Size = new Size(460, 20);
+			chk_magpieSindenBorder.TabIndex = 107;
+			chk_magpieSindenBorder.Values.Text = "Magpie : Add Sinden border if Lightgun game (and at least one sinden plugged)";
 			// 
 			// btn_runSinden
 			// 
@@ -1910,18 +1848,12 @@
 			groupBox14.Controls.Add(kryptonLabel59);
 			groupBox14.Controls.Add(kryptonLabel58);
 			groupBox14.Controls.Add(trk_magpieFsrSharp);
-			groupBox14.Controls.Add(chk_magpieReshadeColorfullness);
-			groupBox14.Controls.Add(chk_magpieReshadeClarity);
-			groupBox14.Controls.Add(chk_magpieReshadeAdaptiveSharpen);
 			groupBox14.Controls.Add(chk_magpieExclusiveFullscreen);
 			groupBox14.Controls.Add(kryptonLabel55);
 			groupBox14.Controls.Add(chk_magpieShowFps);
 			groupBox14.Controls.Add(chk_magpieTripleBuffering);
 			groupBox14.Controls.Add(chk_magpieVsync);
 			groupBox14.Controls.Add(kryptonLabel52);
-			groupBox14.Controls.Add(btn_magpieSindenExe);
-			groupBox14.Controls.Add(txt_magpieSindenExe);
-			groupBox14.Controls.Add(kryptonLabel51);
 			groupBox14.Controls.Add(btn_magpieExe);
 			groupBox14.Controls.Add(kryptonLabel49);
 			groupBox14.Controls.Add(kryptonLabel50);
@@ -1973,31 +1905,6 @@
 			trk_magpieFsrSharp.TabIndex = 99;
 			trk_magpieFsrSharp.Scroll += trackBar1_Scroll;
 			// 
-			// chk_magpieReshadeColorfullness
-			// 
-			chk_magpieReshadeColorfullness.Location = new Point(298, 101);
-			chk_magpieReshadeColorfullness.Name = "chk_magpieReshadeColorfullness";
-			chk_magpieReshadeColorfullness.Size = new Size(143, 20);
-			chk_magpieReshadeColorfullness.TabIndex = 98;
-			chk_magpieReshadeColorfullness.Values.Text = "Reshade Colorfullness";
-			// 
-			// chk_magpieReshadeClarity
-			// 
-			chk_magpieReshadeClarity.Location = new Point(185, 101);
-			chk_magpieReshadeClarity.Name = "chk_magpieReshadeClarity";
-			chk_magpieReshadeClarity.Size = new Size(107, 20);
-			chk_magpieReshadeClarity.TabIndex = 97;
-			chk_magpieReshadeClarity.Values.Text = "Reshade Clarity";
-			// 
-			// chk_magpieReshadeAdaptiveSharpen
-			// 
-			chk_magpieReshadeAdaptiveSharpen.Location = new Point(9, 101);
-			chk_magpieReshadeAdaptiveSharpen.Name = "chk_magpieReshadeAdaptiveSharpen";
-			chk_magpieReshadeAdaptiveSharpen.Size = new Size(170, 20);
-			chk_magpieReshadeAdaptiveSharpen.TabIndex = 96;
-			chk_magpieReshadeAdaptiveSharpen.Values.Text = "Reshade Adaptive Sharpen";
-			chk_magpieReshadeAdaptiveSharpen.CheckedChanged += chk_magpieReshadeAdaptiveSharpen_CheckedChanged;
-			// 
 			// chk_magpieExclusiveFullscreen
 			// 
 			chk_magpieExclusiveFullscreen.Location = new Point(473, 127);
@@ -2046,31 +1953,6 @@
 			kryptonLabel52.Size = new Size(55, 20);
 			kryptonLabel52.TabIndex = 90;
 			kryptonLabel52.Values.Text = "seconds";
-			// 
-			// btn_magpieSindenExe
-			// 
-			btn_magpieSindenExe.Location = new Point(419, 67);
-			btn_magpieSindenExe.Name = "btn_magpieSindenExe";
-			btn_magpieSindenExe.Size = new Size(32, 23);
-			btn_magpieSindenExe.TabIndex = 89;
-			btn_magpieSindenExe.Values.Text = "...";
-			btn_magpieSindenExe.Click += btn_magpieSindenExe_Click;
-			// 
-			// txt_magpieSindenExe
-			// 
-			txt_magpieSindenExe.Location = new Point(141, 67);
-			txt_magpieSindenExe.Name = "txt_magpieSindenExe";
-			txt_magpieSindenExe.ReadOnly = true;
-			txt_magpieSindenExe.Size = new Size(272, 23);
-			txt_magpieSindenExe.TabIndex = 88;
-			// 
-			// kryptonLabel51
-			// 
-			kryptonLabel51.Location = new Point(1, 70);
-			kryptonLabel51.Name = "kryptonLabel51";
-			kryptonLabel51.Size = new Size(139, 20);
-			kryptonLabel51.TabIndex = 87;
-			kryptonLabel51.Values.Text = "Magpie Exe for Sinden :";
 			// 
 			// btn_magpieExe
 			// 
@@ -2622,6 +2504,7 @@
 			btn_selectLinkFolder.Size = new Size(70, 23);
 			btn_selectLinkFolder.TabIndex = 40;
 			btn_selectLinkFolder.Values.Text = "...";
+			btn_selectLinkFolder.Click += btn_selectLinkFolder_Click;
 			// 
 			// kryptonLabel13
 			// 
@@ -2676,14 +2559,15 @@
 			btn_selectLinkFolderExe.Size = new Size(70, 23);
 			btn_selectLinkFolderExe.TabIndex = 40;
 			btn_selectLinkFolderExe.Values.Text = "...";
+			btn_selectLinkFolderExe.Click += btn_selectLinkFolderExe_Click;
 			// 
 			// kryptonLabel14
 			// 
 			kryptonLabel14.Location = new Point(6, 22);
 			kryptonLabel14.Name = "kryptonLabel14";
-			kryptonLabel14.Size = new Size(134, 20);
+			kryptonLabel14.Size = new Size(137, 20);
 			kryptonLabel14.TabIndex = 37;
-			kryptonLabel14.Values.Text = "Per-Game Link Folder :";
+			kryptonLabel14.Values.Text = "Per-Game Link Folder ::";
 			// 
 			// txt_linksourcefolderexe
 			// 
@@ -2764,13 +2648,10 @@
 			groupBox8.PerformLayout();
 			groupBox9.ResumeLayout(false);
 			groupBox9.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)cmb_reverseYAxis_Hotas).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_ffbguidHotas).EndInit();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Hotas).EndInit();
 			groupBox10.ResumeLayout(false);
 			groupBox10.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)cmb_MagpieLightgunCalibration).EndInit();
-			((System.ComponentModel.ISupportInitialize)cmb_useMagpieLightgun).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_vjoy).EndInit();
 			groupBox12.ResumeLayout(false);
 			groupBox12.PerformLayout();
@@ -2990,25 +2871,13 @@
 		private Krypton.Toolkit.KryptonTextBox txt_magpieExe;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel47;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel52;
-		private Krypton.Toolkit.KryptonButton btn_magpieSindenExe;
-		private Krypton.Toolkit.KryptonTextBox txt_magpieSindenExe;
-		private Krypton.Toolkit.KryptonLabel kryptonLabel51;
 		private Krypton.Toolkit.KryptonCheckBox chk_magpieTripleBuffering;
 		private Krypton.Toolkit.KryptonCheckBox chk_magpieVsync;
 		private Krypton.Toolkit.KryptonCheckBox chk_magpieShowFps;
-		private Krypton.Toolkit.KryptonLabel kryptonLabel54;
-		private Krypton.Toolkit.KryptonNumericUpDown num_magpieBorderSize;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel55;
-		private Krypton.Toolkit.KryptonLabel kryptonLabel56;
-		private Krypton.Toolkit.KryptonComboBox cmb_MagpieLightgunCalibration;
-		private Krypton.Toolkit.KryptonLabel kryptonLabel57;
-		private Krypton.Toolkit.KryptonComboBox cmb_useMagpieLightgun;
 		private Krypton.Toolkit.KryptonCheckBox chk_useXenosInjector;
-		private Krypton.Toolkit.KryptonCheckBox chk_magpieReshadeClarity;
-		private Krypton.Toolkit.KryptonCheckBox chk_magpieReshadeAdaptiveSharpen;
 		private Krypton.Toolkit.KryptonCheckBox chk_magpieExclusiveFullscreen;
 		private TrackBar trk_magpieFsrSharp;
-		private Krypton.Toolkit.KryptonCheckBox chk_magpieReshadeColorfullness;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel58;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel59;
 		private Krypton.Toolkit.KryptonLabel lbl_magpieFsrSharp;
@@ -3060,8 +2929,6 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_patchGameID;
 		private Krypton.Toolkit.KryptonCheckBox chk_patchOthersTPSettings;
 		private Krypton.Toolkit.KryptonCheckBox chk_patchOthersGameOptions;
-		private Krypton.Toolkit.KryptonLabel kryptonLabel69;
-		private Krypton.Toolkit.KryptonComboBox cmb_reverseYAxis_Hotas;
 		private Krypton.Toolkit.KryptonCheckBox chk_patchFFB;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel70;
 		private Krypton.Toolkit.KryptonComboBox cmb_displayMode;
@@ -3072,5 +2939,9 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel72;
 		private Krypton.Toolkit.KryptonCheckBox chk_patchResolutionTP;
 		private Krypton.Toolkit.KryptonCheckBox chk_patchResolutionFix;
+		private Krypton.Toolkit.KryptonCheckBox chk_magpieGunCalibration;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel54;
+		private Krypton.Toolkit.KryptonNumericUpDown num_magpieBorderSize;
+		private Krypton.Toolkit.KryptonCheckBox chk_magpieSindenBorder;
 	}
 }

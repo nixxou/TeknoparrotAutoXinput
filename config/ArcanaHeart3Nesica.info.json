@@ -1,8 +1,26 @@
 {
-    "windowed": "General,DisplayMode,Windowed",
-    "magpieClass": "AH3 CLASS",
-	"magpie3DGameMode": "False",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False"
+	"global": {
+		"windowed": "General,DisplayMode,Windowed",
+		"magpieClass": "AH3 CLASS",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||DisplayMode": "Windowed"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||DisplayMode": "Fullscreen"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||DisplayMode": "Windowed"
+        }		
+	},
+	"gameoptions": {
+		"recommanded_gameoptions": {
+			"magpieScaling" : "6"
+		}
+	}
 }

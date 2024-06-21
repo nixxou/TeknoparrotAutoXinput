@@ -1,0 +1,19 @@
+{
+	"global": {
+		"_comment": "You need to use your mouse to click on the button",
+		"windowed": "",
+		"magpieClass": "Pengo! Online",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"replace_gameid": {
+			"General||APM3ID": "{{apm3id}}"
+		}
+	},
+	"gameoptions": {}
+}

@@ -23,7 +23,6 @@ namespace TeknoparrotAutoXinput
 
 		public static void setOriginalXML(string xmlFile)
 		{
-			
 			OriginalXML = File.ReadAllText(xmlFile);
 			xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(OriginalXML);

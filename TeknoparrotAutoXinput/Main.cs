@@ -10,6 +10,7 @@ using SharpDX.Multimedia;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -18,6 +19,7 @@ using System.IO.Pipes;
 using System.IO.Ports;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,6 +29,7 @@ using System.Windows.Forms;
 using System.Windows.Media.Effects;
 using System.Xml;
 using System.Xml.Linq;
+using TeknoparrotAutoXinput.Properties;
 using TeknoParrotUi.Common;
 using WiimoteLib;
 using XInput.Wrapper;
@@ -478,7 +481,9 @@ namespace TeknoparrotAutoXinput
 
 		private void Main_Load(object sender, EventArgs e)
 		{
-
+			cmb_displayMode.SelectedIndex = 0;
+			cmb_patchReshade.SelectedIndex = 0;
+			cmb_resolution.SelectedIndex = 0;
 		}
 
 		private void btn_globalconfig_Click(object sender, EventArgs e)
@@ -572,6 +577,41 @@ namespace TeknoparrotAutoXinput
 				{
 					var DataGame = _gameList[GameSelected];
 					lbl_GameTitle.Text = DataGame.Name;
+
+
+
+
+
+					int gpuResolution = ConfigurationManager.MainConfig.gpuResolution;
+					int displayMode = ConfigurationManager.MainConfig.displayMode;
+					bool patchReshade = ConfigurationManager.MainConfig.patchReshade;
+
+					string gpuResolutionSource = "Global";
+					string displayModeSource = "Global";
+					string patchReshadeSource = "Global";
+					GameSettings gameOptions = null;
+					string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
+					if (File.Exists(optionFile))
+					{
+						gameOptions = new GameSettings(File.ReadAllText(optionFile));
+						gpuResolution = gameOptions.gpuResolution > 0 ? (gameOptions.gpuResolution - 1) : gpuResolution;
+						displayMode = gameOptions.displayMode > 0 ? (gameOptions.displayMode - 1) : displayMode;
+						patchReshade = gameOptions.patchReshade > 0 ? (gameOptions.patchReshade == 1 ? true : false) : patchReshade;
+						if (gameOptions.gpuResolution > 0) gpuResolutionSource = "GameOption";
+						if (gameOptions.displayMode > 0) displayModeSource = "GameOption";
+						if (gameOptions.patchReshade > 0) patchReshadeSource = "GameOption";
+					}
+
+					if (displayMode == 0) cmb_displayMode.Items[0] = "Recommanded" + $" ({displayModeSource})";
+					if (displayMode == 1) cmb_displayMode.Items[0] = "Fullscreen" + $" ({displayModeSource})";
+					if (displayMode == 2) cmb_displayMode.Items[0] = "Windowed" + $" ({displayModeSource})";
+
+					if (gpuResolution == 0) cmb_resolution.Items[0] = "720p" + $" ({gpuResolutionSource})";
+					if (gpuResolution == 1) cmb_resolution.Items[0] = "1080p" + $" ({gpuResolutionSource})";
+					if (gpuResolution == 2) cmb_resolution.Items[0] = "2k" + $" ({gpuResolutionSource})";
+					if (gpuResolution == 3) cmb_resolution.Items[0] = "4k" + $" ({gpuResolutionSource})";
+
+					cmb_patchReshade.Items[0] = (patchReshade ? "Yes" : "No") + $" ({patchReshadeSource})";
 
 					bool uselightgun = false;
 
@@ -788,12 +828,12 @@ namespace TeknoparrotAutoXinput
 						if (DataGame.existingConfig.ContainsKey("lightgun"))
 						{
 							int sindenPump = ConfigurationManager.MainConfig.gunASidenPump;
-							string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
-							if (File.Exists(optionFile))
+							if (gameOptions != null)
 							{
-								var gameOptions = new GameSettings(File.ReadAllText(optionFile));
 								if (gameOptions.gunA_pump > 0) sindenPump = gameOptions.gunA_pump;
 							}
+
+
 
 
 
@@ -1037,6 +1077,9 @@ namespace TeknoparrotAutoXinput
 
 		private async void btn_playgame_Click(object sender, EventArgs e)
 		{
+			
+
+
 			string teknoparrotExe = Path.Combine(_tpFolder, "TeknoParrotUi.exe");
 			if (!File.Exists(teknoparrotExe)) MessageBox.Show($"Can't find {teknoparrotExe}");
 			Process[] existingProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(teknoparrotExe));
@@ -1064,6 +1107,12 @@ namespace TeknoparrotAutoXinput
 			if (string.IsNullOrEmpty(finalConfig)) return;
 
 
+			string arguments = "";
+			if (cmb_displayMode.SelectedIndex > 0) arguments += $" --displayMode={cmb_displayMode.SelectedIndex}";
+			if (cmb_resolution.SelectedIndex > 0) arguments += $" --resolution={cmb_resolution.SelectedIndex}";
+			if (cmb_patchReshade.SelectedIndex > 0) arguments += $" --reshade={cmb_patchReshade.SelectedIndex}";
+			arguments += $" \"{finalConfig}\"";
+			arguments = arguments.Trim();
 			isPlaying = true;
 
 			await Task.Run(() =>
@@ -1071,7 +1120,7 @@ namespace TeknoparrotAutoXinput
 				ProcessStartInfo startInfo = new ProcessStartInfo
 				{
 					FileName = Process.GetCurrentProcess().MainModule.FileName,
-					Arguments = $"\"{finalConfig}\"",
+					Arguments = arguments,
 					WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
 					UseShellExecute = true
 				};
@@ -1121,6 +1170,12 @@ namespace TeknoparrotAutoXinput
 			}
 			if (string.IsNullOrEmpty(finalConfig)) return;
 
+			string arguments = $"--passthrough ";
+			if (cmb_displayMode.SelectedIndex > 0) arguments += $" --displayMode={cmb_displayMode.SelectedIndex}";
+			if (cmb_resolution.SelectedIndex > 0) arguments += $" --resolution={cmb_resolution.SelectedIndex}";
+			if (cmb_patchReshade.SelectedIndex > 0) arguments += $" --reshade={cmb_patchReshade.SelectedIndex}";
+			arguments += $" \"{finalConfig}\"";
+			arguments = arguments.Trim();
 
 			isPlaying = true;
 
@@ -1129,7 +1184,7 @@ namespace TeknoparrotAutoXinput
 				ProcessStartInfo startInfo = new ProcessStartInfo
 				{
 					FileName = Process.GetCurrentProcess().MainModule.FileName,
-					Arguments = $"--passthrough \"{finalConfig}\"",
+					Arguments = arguments,
 					WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
 					UseShellExecute = true
 				};
@@ -1566,6 +1621,199 @@ namespace TeknoparrotAutoXinput
 
 
 
+
+		}
+
+		private void kryptonRadioButton1_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void kryptonLabel4_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void button9_Click(object sender, EventArgs e)
+		{
+			/*
+			string baseTpDir = Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName;
+			string originalConfigFileName = Path.GetFileName(xmlFile);
+			string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
+			string teknoparrotExe = Path.Combine(baseTpDir, "TeknoParrotUi.exe");
+
+			GameSettings gameOptions = new GameSettings();
+			string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
+			if (File.Exists(optionFile))
+			{
+				Utils.LogMessage($"gameoveride file found : " + optionFile);
+				gameOptions = new GameSettings(File.ReadAllText(optionFile));
+			}
+
+			bool patchGpuFix = ConfigurationManager.MainConfig.patchGpuFix;
+			bool patchGpuTP = ConfigurationManager.MainConfig.patchGpuTP;
+
+			int gpuResolution = ConfigurationManager.MainConfig.gpuResolution;
+			bool patchResolutionFix = ConfigurationManager.MainConfig.patchResolutionFix;
+			bool patchResolutionTP = ConfigurationManager.MainConfig.patchResolutionTP;
+
+			int displayMode = ConfigurationManager.MainConfig.displayMode;
+			bool patchDisplayModeFix = ConfigurationManager.MainConfig.patchDisplayModeFix;
+			bool patchDisplayModeTP = ConfigurationManager.MainConfig.patchDisplayModeTP;
+
+
+			bool patchReshade = ConfigurationManager.MainConfig.patchReshade;
+			bool patchGameID = ConfigurationManager.MainConfig.patchGameID;
+			bool patchNetwork = ConfigurationManager.MainConfig.patchNetwork;
+			bool patchOtherTPSettings = ConfigurationManager.MainConfig.patchOtherTPSettings;
+			bool patchOthersGameOptions = ConfigurationManager.MainConfig.patchOthersGameOptions;
+			bool patchFFB = ConfigurationManager.MainConfig.patch_FFB;
+
+			patchGpuFix = gameOptions.patchGpuFix > 0 ? (gameOptions.patchGpuFix == 1 ? true : false) : patchGpuFix;
+			patchGpuTP = gameOptions.patchGpuTP > 0 ? (gameOptions.patchGpuTP == 1 ? true : false) : patchGpuTP;
+
+			gpuResolution = gameOptions.gpuResolution > 0 ? (gameOptions.gpuResolution - 1) : gpuResolution;
+			patchResolutionFix = gameOptions.patchResolutionFix > 0 ? (gameOptions.patchResolutionFix == 1 ? true : false) : patchResolutionFix;
+			patchResolutionTP = gameOptions.patchResolutionTP > 0 ? (gameOptions.patchResolutionTP == 1 ? true : false) : patchResolutionTP;
+
+			displayMode = gameOptions.displayMode > 0 ? (gameOptions.displayMode - 1) : displayMode;
+			patchDisplayModeFix = gameOptions.patchDisplayModeFix > 0 ? (gameOptions.patchDisplayModeFix == 1 ? true : false) : patchDisplayModeFix;
+			patchDisplayModeTP = gameOptions.patchDisplayModeTP > 0 ? (gameOptions.patchDisplayModeTP == 1 ? true : false) : patchDisplayModeTP;
+
+			patchReshade = gameOptions.patchReshade > 0 ? (gameOptions.patchReshade == 1 ? true : false) : patchReshade;
+			patchGameID = gameOptions.patchGameID > 0 ? (gameOptions.patchGameID == 1 ? true : false) : patchGameID;
+			patchFFB = gameOptions.patchFFB > 0 ? (gameOptions.patchFFB == 1 ? true : false) : patchFFB;
+			patchNetwork = gameOptions.patchNetwork > 0 ? (gameOptions.patchNetwork == 1 ? true : false) : patchNetwork;
+			patchOtherTPSettings = gameOptions.patchOtherTPSettings > 0 ? (gameOptions.patchOtherTPSettings == 1 ? true : false) : patchOtherTPSettings;
+			if (gameOptions.patchOthersGameOptions > 0)
+			{
+				if (gameOptions.patchOthersGameOptions == 1)
+				{
+					patchOtherTPSettings = true;
+				}
+				if (gameOptions.patchOthersGameOptions == 2)
+				{
+					patchOtherTPSettings = true;
+				}
+				if (gameOptions.patchOthersGameOptions == 3)
+				{
+					patchOtherTPSettings = false;
+				}
+			}
+
+
+			TpSettingsManager.tags = new List<string>();
+			if (patchGpuTP)
+			{
+				if (ConfigurationManager.MainConfig.gpuType == 0) TpSettingsManager.tags.Add("nvidia");
+				if (ConfigurationManager.MainConfig.gpuType == 1) TpSettingsManager.tags.Add("intel");
+				if (ConfigurationManager.MainConfig.gpuType == 2) TpSettingsManager.tags.Add("amdold");
+				if (ConfigurationManager.MainConfig.gpuType == 3) TpSettingsManager.tags.Add("amdnew");
+				if (ConfigurationManager.MainConfig.gpuType == 4) TpSettingsManager.tags.Add("amdrid");
+				if (ConfigurationManager.MainConfig.gpuType >= 2) TpSettingsManager.tags.Add("amd");
+
+				if (ConfigurationManager.MainConfig.gpuType != 0)
+				{
+					TpSettingsManager.tags.Add("!intel");
+					TpSettingsManager.tags.Add("!amd");
+				}
+				if (ConfigurationManager.MainConfig.gpuType != 1)
+				{
+					TpSettingsManager.tags.Add("!nvidia");
+					TpSettingsManager.tags.Add("!amd");
+				}
+				if (ConfigurationManager.MainConfig.gpuType < 2)
+				{
+					TpSettingsManager.tags.Add("!nvidia");
+					TpSettingsManager.tags.Add("!intel");
+				}
+
+			}
+
+			if (patchGpuTP) TpSettingsManager.tags.Add("use_gpu_fix_in_tp_settings"); //Apply gpu amd/intel/nvidia fix in TP
+			else TpSettingsManager.tags.Add("!use_gpu_fix_in_tp_settings");
+
+			if (patchGpuFix) TpSettingsManager.tags.Add("use_gpu_fix_in_patches"); //Apply gpu amd/intel/nvidia fix in TP
+			else TpSettingsManager.tags.Add("!use_gpu_fix_in_patches"); //Apply gpu amd/intel/nvidia fix in TP
+
+
+			if (gpuResolution == 0) TpSettingsManager.tags.Add("720p");
+			if (gpuResolution == 1) TpSettingsManager.tags.Add("1080p");
+			if (gpuResolution == 2) TpSettingsManager.tags.Add("2k");
+			if (gpuResolution == 3) TpSettingsManager.tags.Add("4k");
+
+			if (gpuResolution != 0) TpSettingsManager.tags.Add("!720p");
+			if (gpuResolution != 1) TpSettingsManager.tags.Add("!1080p");
+			if (gpuResolution != 2) TpSettingsManager.tags.Add("!2k");
+			if (gpuResolution != 3) TpSettingsManager.tags.Add("!4k");
+
+			if (patchResolutionTP) TpSettingsManager.tags.Add("set_res_in_tp_settings");
+			if (patchResolutionFix) TpSettingsManager.tags.Add("fix_res_in_patches");
+
+
+			if (displayMode == 0) TpSettingsManager.tags.Add("set_displaymode_recommanded"); //Apply Res & Fullscreen in TP
+			if (displayMode == 1) TpSettingsManager.tags.Add("set_fullscreen"); //Apply Res & Fullscreen in TP
+			if (displayMode == 2) TpSettingsManager.tags.Add("set_windowed"); //Apply Res & Fullscreen in TP
+			if (patchDisplayModeTP) TpSettingsManager.tags.Add("set_displaymode_in_tp_settings");
+			else TpSettingsManager.tags.Add("!set_displaymode_in_tp_settings");
+
+			if (patchDisplayModeFix) TpSettingsManager.tags.Add("fix_displaymode_in_patches");
+			else TpSettingsManager.tags.Add("!fix_displaymode_in_patches");
+
+			if (patchReshade) TpSettingsManager.tags.Add("use_optional_reshade");
+			else TpSettingsManager.tags.Add("!use_optional_reshade");
+
+
+			if (patchGameID) TpSettingsManager.tags.Add("replace_gameid");
+			if (patchNetwork) TpSettingsManager.tags.Add("replace_network");
+			if (patchOtherTPSettings) TpSettingsManager.tags.Add("recommanded_tp_settings");
+			if (patchOthersGameOptions) TpSettingsManager.tags.Add("recommanded_gameoptions");
+			if (patchFFB) TpSettingsManager.tags.Add("ffb");
+
+
+			//Tag Define Part 2
+			if (useXinput) TpSettingsManager.tags.Add("xinput");
+			if (_useDinputWheel) TpSettingsManager.tags.Add("dwheel");
+			if (useDinputHotas) TpSettingsManager.tags.Add("dhotas");
+			if (useDinputLightGun) TpSettingsManager.tags.Add("dlightgun");
+			if (shifterGuidFound) TpSettingsManager.tags.Add("shifter");
+			else TpSettingsManager.tags.Add("!shifter");
+
+
+			if (!hideCrosshair) TpSettingsManager.tags.Add("show_crosshair");
+			if (hideCrosshair) TpSettingsManager.tags.Add("hide_crosshair");
+			if (crosshairA && crosshairB) TpSettingsManager.tags.Add("crosshair_gun1_and_gun2");
+			if (crosshairA && !crosshairB) TpSettingsManager.tags.Add("crosshair_gun1_only");
+			if (!crosshairA && crosshairB) TpSettingsManager.tags.Add("crosshair_gun2_only");
+
+			if (useDinputLightGun && (GunAType == "sinden" || GunBType == "sinden"))
+			{
+				TpSettingsManager.tags.Add("at_least_one_sinden");
+				atLeastOneSinden = true;
+			}
+			else
+			{
+				atLeastOneSinden = false;
+				TpSettingsManager.tags.Add("!at_least_one_sinden");
+				if (useDinputLightGun) TpSettingsManager.tags.Add("no_sinden");
+			}
+
+			//We only set sinden soft calibration if all sinden are not using vjoy
+			if (useDinputLightGun && dinputLightgunAFound)
+			{
+				if (GunAType == "sinden" && vjoy_gunA) allSindenWithoutVjoy = false;
+			}
+			if (useDinputLightGun && dinputLightgunBFound)
+			{
+				if (GunBType == "sinden" && vjoy_gunB) allSindenWithoutVjoy = false;
+			}
+			if (allSindenWithoutVjoy) TpSettingsManager.tags.Add("no_sinden_using_vjoy");
+
+			*/
+		}
+
+		private void cmb_resolution_SelectedIndexChanged(object sender, EventArgs e)
+		{
 
 		}
 	}

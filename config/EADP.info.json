@@ -1,18 +1,52 @@
 {
-    "rom": "eadp",
-    "target": "ttx",
-    "64bits": "False",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "Crosshairs,Enable",
-    "crosshairOFF": "Crosshairs,!Enable",
-    "crosshairPNG": "True",
-    "outputs": "",
-    "windowed": "General,Windowed,1",
-    "magpieClass": "Eva",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"	
+	"global": {
+		"_comment" : "Under 2k, some part of the screen are croped, small aim correction",
+		"rom": "eadp",
+		"target": "ttx",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "Eva",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },		
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },		
+		"recommanded_tp_settings": {
+            "General||Hide Shoot the display msg": "1",
+            "Bezel||Enable": "1",
+			"Border||Enable": "1",
+            "Attraction Doors||Enable": "1"			
+        },
+        "hide_crosshair": {
+            "Crosshairs||Enable": "0"
+        },
+        "show_crosshair": {
+            "Crosshairs||Enable": "1"
+        }
+	},
+	"gameoptions": {
+		"recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+			"gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+			"gun_useExtraSinden": "True"
+		},
+		"recommanded_gameoptions & fullscreen":{
+			"tmpGunAMinMax" : "100",
+			"tmpGunBMinMax" : "100"
+		},
+		"recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+			"tmpGunXFormula":"[X]+(([X]-(32767/2))*0.03093)",
+			"tmpGunYFormula":"[Y]+(([Y]-(32767/2))*0.03093)",			
+		}
+	}
 }

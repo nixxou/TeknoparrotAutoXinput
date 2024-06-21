@@ -1,10 +1,31 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "tx_gouketu",
-	"magpie3DGameMode": "False",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",	
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "tx_gouketu",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },	
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+		"replace_network": {
+			"Network||Dhcp": "1",
+			"Network||Ip": "{{networkip}}",
+			"Network||Mask": "{{networkmask}}",
+			"Network||Gateway": "{{networkgateway}}",
+			"Network||Dns1": "{{networkdns1}}"
+		},
+	},
+	"gameoptions": {}
 }

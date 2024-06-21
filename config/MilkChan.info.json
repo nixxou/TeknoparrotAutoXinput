@@ -1,0 +1,18 @@
+{
+	"global": {
+		"windowed": "",
+		"magpieClass": "rr::win32::Window",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "True",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"replace_gameid": {
+			"General||APM3ID": "{{apm3id}}"
+		}
+	},
+	"gameoptions": {}
+}

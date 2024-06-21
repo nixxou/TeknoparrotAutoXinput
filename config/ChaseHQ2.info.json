@@ -1,9 +1,30 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "RwAppClass",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"
+	"global": {
+		"_comment": "Install wmv9VCMsetup.exe for videos codecs",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "RwAppClass",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },		
+       "recommanded_tp_settings": {
+            "General||Disable Cel Shaded": "1"
+        },
+		"ffb": {
+            "General||Enable Outputs": "1"			
+		}
+	},
+	"gameoptions": {}
 }

@@ -1,6 +1,10 @@
 {
-    "windowed": "",
-    "magpieClass": "AH2 CLASS",
-	"magpie3DGameMode": "False",
-	"magpieDisableDirectFlip": "False"
+	"global": {
+		"windowed": "",
+		"magpieClass": "AH2 CLASS",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False"
+	},
+	"tpoptions": {},
+	"gameoptions": {}
 }

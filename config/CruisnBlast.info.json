@@ -1,9 +1,47 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "SDL_app",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "SDL_app",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "set_res_in_tp_settings & 720p": {
+            "General||Enable Custom Resolution": "1",			
+            "General||Custom Resolution": "1280x720"
+        },
+        "set_res_in_tp_settings & 1080p": {
+            "General||Enable Custom Resolution": "1",					
+            "General||Custom Resolution": "1920x1080"
+        },
+        "set_res_in_tp_settings & 2k": {
+            "General||Enable Custom Resolution": "1",					
+            "General||Custom Resolution": "2560x1440"
+        },
+        "set_res_in_tp_settings & 4k": {
+            "General||Enable Custom Resolution": "1",			
+            "General||Custom Resolution": "3840x2160"
+        },
+        "ffb": {
+            "General||Enable Outputs": "1",
+			"General||Allow FFB Plugin": "1"
+        },
+		"recommanded_tp_settings": {
+			"General||Enable Longer Timers": "1",
+			"General||Enable Higher Res Shadows": "1"
+		}
+	},
+	"gameoptions": {}
 }

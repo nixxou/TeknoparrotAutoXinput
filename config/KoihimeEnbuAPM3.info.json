@@ -1,0 +1,18 @@
+{
+	"global": {
+		"windowed": "",
+		"magpieClass": "KOIHIMEENBU",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"replace_gameid": {
+			"General||APM3ID": "{{apm3id}}"
+		}		
+	},
+	"gameoptions": {}
+}

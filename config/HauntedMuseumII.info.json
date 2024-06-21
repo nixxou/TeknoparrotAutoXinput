@@ -1,18 +1,58 @@
 {
-    "rom": "hmuseum2",
-    "target": "ttx",
-    "64bits": "False",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "Custom Crosshairs,Enable",
-    "crosshairOFF": "Custom Crosshairs,!Enable",
-    "crosshairPNG": "True",
-    "outputs": "",
-    "windowed": "General,Windowed,1",
-    "magpieClass": "haunted2win",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"
+	"global": {
+		"_comment": "Demulshooter problem with recoil",
+		"rom": "hmuseum2",
+		"target": "ttx",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "haunted2win",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },		
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "hide_crosshair": {
+            "Custom Crosshairs||Enable": "0"
+        },
+        "show_crosshair": {
+            "Custom Crosshairs||Enable": "1"
+        },
+        "set_res_in_tp_settings & 720p": {
+            "General||ResolutionWidth": "1280",
+            "General||ResolutionHeight": "720"
+        },
+        "set_res_in_tp_settings & 1080p": {
+            "General||ResolutionWidth": "1920",
+            "General||ResolutionHeight": "1080"
+        },
+        "set_res_in_tp_settings & 2k": {
+            "General||ResolutionWidth": "2560",
+            "General||ResolutionHeight": "1440"
+        },
+        "set_res_in_tp_settings & 4k": {
+            "General||ResolutionWidth": "3840",
+            "General||ResolutionHeight": "2160"
+        }		
+	},
+    "gameoptions": {
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+            "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+            "gun_useExtraSinden": "True"
+        },
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+            "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
+            "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+        }
+    }
 }

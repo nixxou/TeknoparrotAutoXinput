@@ -461,11 +461,10 @@ namespace TeknoparrotAutoXinput
 			cmb_magpieShowFps.SelectedIndex = gameSettings.magpieShowFps;
 			cmb_magpieTripleBuffering.SelectedIndex = gameSettings.magpieTripleBuffering;
 			cmb_magpieVsync.SelectedIndex = gameSettings.magpieVsync;
-			cmb_useMagpieLightgun.SelectedIndex = gameSettings.magpieLightgun;
-			cmb_MagpieLightgunCalibration.SelectedIndex = gameSettings.magpieLightgunCalibration;
+			cmb_useMagpieLightgun.SelectedIndex = gameSettings.magpieSinden;
+			cmb_MagpieLightgunCalibration.SelectedIndex = gameSettings.magpieGunCalibration;
 			cmb_magpieExclusiveFullscreen.SelectedIndex = gameSettings.magpieExclusiveFullscreen;
 			cmb_magpieFsrSharp.SelectedIndex = gameSettings.magpieFsrSharp;
-			cmb_magpieReshade.SelectedIndex = gameSettings.magpieReshade;
 
 			chk_runAsAdmin.Enabled = false;
 			chk_group_StoozZone_Wheel.Location = new Point(chk_group_StoozZone_Wheel.Location.X, chk_group_StoozZone_Wheel.Location.Y + 15);
@@ -475,7 +474,6 @@ namespace TeknoparrotAutoXinput
 
 			LinkLoad();
 
-			cmb_reverseYAxis_Hotas.SelectedIndex = gameSettings.reverseY_Hotas;
 			radio_useCustomStooz_Gamepad.Checked = gameSettings.gamepadStooz;
 			radio_useCustomStooz_Wheel.Checked = gameSettings.wheelStooz;
 			radio_useCustomStooz_Hotas.Checked = gameSettings.hotasStooz;
@@ -502,7 +500,6 @@ namespace TeknoparrotAutoXinput
 			chk_enableGearChange.Checked = gameSettings.EnableGearChange;
 			txt_monitorswitch.Text = gameSettings.Disposition == "" ? "<none>" : gameSettings.Disposition;
 			txt_customTp.Text = gameSettings.CustomTpExe;
-			cmb_reverseYAxis_Hotas.SelectedIndex = gameSettings.reverseY_Hotas;
 			Reload();
 
 			cmb_vjoy.SelectedIndex = gameSettings.indexvjoy + 1;
@@ -674,10 +671,9 @@ namespace TeknoparrotAutoXinput
 			gameSettings.magpieTripleBuffering = cmb_magpieTripleBuffering.SelectedIndex;
 			gameSettings.magpieVsync = cmb_magpieVsync.SelectedIndex;
 
-			gameSettings.magpieLightgun = cmb_useMagpieLightgun.SelectedIndex;
-			gameSettings.magpieLightgunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
+			gameSettings.magpieSinden = cmb_useMagpieLightgun.SelectedIndex;
+			gameSettings.magpieGunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
 
-			gameSettings.magpieReshade = cmb_magpieReshade.SelectedIndex;
 			gameSettings.magpieFsrSharp = cmb_magpieFsrSharp.SelectedIndex;
 			gameSettings.magpieExclusiveFullscreen = cmb_magpieExclusiveFullscreen.SelectedIndex;
 
@@ -705,7 +701,6 @@ namespace TeknoparrotAutoXinput
 			gameSettings.EnableGearChange = chk_enableGearChange.Checked;
 			gameSettings.Disposition = txt_monitorswitch.Text.Trim();
 
-			gameSettings.reverseY_Hotas = cmb_reverseYAxis_Hotas.SelectedIndex;
 			//gameSettings.CustomTpExe = txt_customTp.Text.Trim();
 
 			gameSettings.gunA_recoil = cmb_gunA_recoil.SelectedIndex;

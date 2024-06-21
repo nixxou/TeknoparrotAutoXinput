@@ -1,18 +1,49 @@
 {
-    "rom": "",
-    "target": "",
-    "64bits": "False",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "Custom Crosshairs,Enable",
-    "crosshairOFF": "Custom Crosshairs,!Enable",
-    "crosshairPNG": "True",
-    "outputs": "",
-    "windowed": "General,Windowed,1",
-    "magpieClass": "CD3D9Window",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"	
+	"global": {
+		"_comment": "Does not work as intended with Demulshooter recoil",
+		"rom": "",
+		"target": "",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "CD3D9Window",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },		
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "set_res_in_tp_settings & 720p": {		
+            "Resolution||Width": "1280",
+            "Resolution||Height": "720"
+        },
+        "set_res_in_tp_settings & 1080p": {					
+            "Resolution||Width": "1920",
+            "Resolution||Height": "1080"
+        },
+        "set_res_in_tp_settings & 2k": {				
+            "Resolution||Width": "2560",
+            "Resolution||Height": "1440"
+        },
+        "set_res_in_tp_settings & 4k": {	
+            "Resolution||Width": "3840",
+            "Resolution||Height": "2160"
+        },		
+		"hide_crosshair": {
+            "Custom Crosshairs||Enable": "0"
+        },
+        "show_crosshair": {
+            "Custom Crosshairs||Enable": "1"
+        }
+	},
+    "gameoptions": {}
 }

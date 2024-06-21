@@ -1,0 +1,16 @@
+{
+	"global": {
+		"windowed": "",
+		"magpieClass": "UNI ARCADE",
+		"magpieTitle": "",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+	},
+	"gameoptions": {}
+}

@@ -462,6 +462,12 @@ namespace TeknoparrotAutoXinput
 					newfile = newfile.Replace(@"\[!at_least_one_sinden!]\", @"\");
 					if (!Program.useDinputLightGun || (ConfigurationManager.MainConfig.gunAType != "sinden" && ConfigurationManager.MainConfig.gunBType != "sinden")) continue;
 				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!magpie_sinden_bezel!]") && newfile.Contains(@"\[!magpie_sinden_bezel!]\"))
+				{
+					newfile = newfile.Replace(@"\[!magpie_sinden_bezel!]\", @"\");
+					if (!Program.useDinputLightGun || (ConfigurationManager.MainConfig.gunAType != "sinden" && ConfigurationManager.MainConfig.gunBType != "sinden")) continue;
+					if (ConfigurationManager.MainConfig.magpieBorderSize != 1.5) continue;
+				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_sinden!]") && newfile.Contains(@"\[!no_sinden!]\"))
 				{
 					newfile = newfile.Replace(@"\[!no_sinden!]\", @"\");
@@ -526,7 +532,7 @@ namespace TeknoparrotAutoXinput
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!moveto!]") && newfile.Contains(@"\[!moveto!]\"))
 				{
-					MessageBox.Show("move");
+					//MessageBox.Show("move");
 					string fileName = Path.GetFileName(file);
 					if(moveToDest == "")
 					{
@@ -536,6 +542,10 @@ namespace TeknoparrotAutoXinput
 						{
 							string pathWithEnvVar = File.ReadAllText(destFile);
 							string expandedPath = Environment.ExpandEnvironmentVariables(pathWithEnvVar);
+							if (!Path.IsPathRooted(expandedPath))
+							{
+								expandedPath = Path.Combine(directoryDest, expandedPath);
+							}
 							string moveToDestContent = Path.GetFullPath(expandedPath);
 							moveToDestContent = moveToDestContent.Trim().TrimEnd('\r').TrimEnd('\n').TrimEnd('\r').Trim();
 							if (Directory.Exists(moveToDestContent))
@@ -563,6 +573,60 @@ namespace TeknoparrotAutoXinput
 
 					}
 					
+					continue;
+				}
+
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!moveto_nocopyback!]") && newfile.Contains(@"\[!moveto_nocopyback!]\"))
+				{
+					//MessageBox.Show("moveto_nocopyback");
+					string fileName = Path.GetFileName(file);
+					if (moveToDest == "")
+					{
+						string dir = Path.GetDirectoryName(file);
+						string destFile = Path.Combine(dir, "destination.txt");
+						if (File.Exists(destFile))
+						{
+							string pathWithEnvVar = File.ReadAllText(destFile);
+							string expandedPath = Environment.ExpandEnvironmentVariables(pathWithEnvVar);
+
+							if (!Path.IsPathRooted(expandedPath))
+							{
+								expandedPath = Path.Combine(directoryDest, expandedPath);
+							}
+
+							string moveToDestContent = Path.GetFullPath(expandedPath);
+							moveToDestContent = moveToDestContent.Trim().TrimEnd('\r').TrimEnd('\n').TrimEnd('\r').Trim();
+							if (Directory.Exists(moveToDestContent))
+							{
+								moveToDest = moveToDestContent;
+								moveNeedAdmin = !Utils.HasWritePermissionOnDir(moveToDest);
+							}
+						}
+					}
+					if (fileName != "destination.txt" && moveToDest != "")
+					{
+						string dest = Path.Combine(moveToDest, fileName);
+						if (moveNeedAdmin)
+						{
+							moveAhkCode += @$"FileCopy, {file}, {dest}, 1" + "\n";
+						}
+						else
+						{
+							try
+							{
+								File.Copy(file, dest, true);
+							}
+							catch { }
+						}
+
+					}
+
+					continue;
+				}
+
+				if (Path.GetFileName(newfile).ToLower() == "[!magpiereshade!].ini")
+				{
+					Program.magpieIni = file;
 					continue;
 				}
 
@@ -866,6 +930,10 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!at_least_one_sinden!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!magpie_sinden_bezel!]") && file.Contains(@"\[!magpie_sinden_bezel!]\"))
+				{
+					file = file.Replace(@"\[!magpie_sinden_bezel!]\", @"\");
+				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!no_sinden!]") && file.Contains(@"\[!no_sinden!]\"))
 				{
 					file = file.Replace(@"\[!no_sinden!]\", @"\");
@@ -911,6 +979,7 @@ namespace TeknoparrotAutoXinput
 						{
 							string moveToDestContent = File.ReadAllText(destFile);
 							moveToDestContent = moveToDestContent.Trim().TrimEnd('\r').TrimEnd('\n').TrimEnd('\r').Trim();
+
 							if (Directory.Exists(moveToDestContent))
 							{
 								moveToDest = moveToDestContent;
@@ -1197,7 +1266,7 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		public static void ExecuteAHK(string ahkCode, bool waitForExit)
+		public static void ExecuteAHK(string ahkCode, bool waitForExit, string workingdir = "")
 		{
 			try
 			{
@@ -1213,6 +1282,7 @@ namespace TeknoparrotAutoXinput
 					process.StartInfo.Arguments = tempFilePath;
 					process.StartInfo.UseShellExecute = false;
 					process.StartInfo.CreateNoWindow = true;
+					if(workingdir != "") process.StartInfo.WorkingDirectory = workingdir;
 
 					// Démarrer le processus
 					process.Start();

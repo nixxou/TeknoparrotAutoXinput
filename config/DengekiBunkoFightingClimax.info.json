@@ -1,0 +1,13 @@
+{
+	"global": {
+		"windowed": "",
+		"magpieClass": "TEST ARCADE",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {},
+	"gameoptions": {}
+}

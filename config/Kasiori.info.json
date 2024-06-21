@@ -1,10 +1,22 @@
 {
-    "windowed": "",
-    "magpieClass": "UnityWndClass",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"True",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"True",
-	"magpieNoLateFocus":"False",	
+	"global": {
+		"windowed": "",
+		"magpieClass": "UnityWndClass",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "True",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"replace_gameid": {
+			"General||APM3ID": "{{apm3id}}"
+		}		
+	},
+	"gameoptions": {
+		"recommanded_gameoptions & !1080p": {
+			"useMagpie" : "3"
+		}
+	}
 }

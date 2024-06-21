@@ -1,12 +1,29 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "Street Fighter 4",
-	"magpieTitle": "",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"Famse",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",
-	"magpieExecutable":""
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "Street Fighter 4",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "Famse",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False",
+		"magpieExecutable": ""
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+            "General||Framelimiter": "1"
+        }
+	},
+	"gameoptions": {}
 }

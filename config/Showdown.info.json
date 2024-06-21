@@ -1,0 +1,44 @@
+{
+	"global": {
+		"windowed": "General,Borderless Fullscreen,!",
+		"magpieClass": "GLUT",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Borderless Fullscreen": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Borderless Fullscreen": "1"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Borderless Fullscreen": "0"
+        },
+        "set_res_in_tp_settings & 720p": {
+			"Custom Resolution||Enable": "1",
+            "Custom Resolution||Width": "1280",
+            "Custom Resolution||Height": "720"
+        },
+        "set_res_in_tp_settings & 1080p": {
+			"Custom Resolution||Enable": "1",
+            "Custom Resolution||Width": "1920",
+            "Custom Resolution||Height": "1080"
+        },
+        "set_res_in_tp_settings & 2k": {														
+			"Custom Resolution||Enable": "1",
+            "Custom Resolution||Width": "2560",
+            "Custom Resolution||Height": "1440"
+        },
+        "set_res_in_tp_settings & 4k": {
+			"Custom Resolution||Enable": "1",
+            "Custom Resolution||Width": "3840",
+            "Custom Resolution||Height": "2160"
+        }
+	},
+	"gameoptions": {}
+}

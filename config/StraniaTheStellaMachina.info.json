@@ -1,12 +1,33 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "Strania - The Stella Machina",
-	"magpieTitle": "",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",
-	"magpieExecutable":""
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "Strania - The Stella Machina",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False",
+		"magpieExecutable": ""
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+		"replace_network": {
+			"Network||Dhcp": "0",
+			"Network||Ip": "{{networkip}}",
+			"Network||Mask": "{{networkmask}}",
+			"Network||Gateway": "{{networkgateway}}",
+			"Network||Dns1": "{{networkdns1}}",
+		}
+	},
+	"gameoptions": {}
 }

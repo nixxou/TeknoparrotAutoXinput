@@ -1,10 +1,48 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "SNK Heroines AC window",
-	"magpie3DGameMode": "False",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",	
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "SNK Heroines AC window",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & !set_res_in_tp_settings": {
+            "General||Windowed": "1"
+        },
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & set_res_in_tp_settings & 720p": {
+            "General||Windowed": "0"
+        },
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & set_res_in_tp_settings & 1080p": {
+            "General||Windowed": "0"
+        },
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & set_res_in_tp_settings & 2k": {
+            "General||Windowed": "1"
+        },
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & set_res_in_tp_settings & 4k": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "set_res_in_tp_settings & 720p": {
+            "General||Resolution": "720p"
+        },
+        "set_res_in_tp_settings & 1080p": {
+            "General||Resolution": "1080p"
+        },
+        "set_res_in_tp_settings & 2k": {
+            "General||Resolution": "1080p"
+        },
+        "set_res_in_tp_settings & 4k": {
+            "General||Resolution": "1080p"
+        }
+	},
+	"gameoptions": {}
 }

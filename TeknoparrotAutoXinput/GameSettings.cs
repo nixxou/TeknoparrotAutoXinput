@@ -28,16 +28,13 @@ namespace TeknoparrotAutoXinput
 		public string AhkBefore { get; set; } = string.Empty;
 		public string AhkAfter { get; set; } = string.Empty;
 		public bool WaitForExitAhkBefore { get; set; } = true;
-		public bool EnableGearChange { get; set; } = false;
+		public bool EnableGearChange { get; set; } = true;
 		public string CustomPerGameLinkFolder { get; set; } = "";
 		public string CustomTpExe { get; set; } = "";
-
 		public bool UseGlobalStoozZoneHotas { get; set; } = true;
 		public bool hotasStooz { get; set; } = false;
 		public bool enableStoozZone_Hotas { get; set; } = false;
 		public int valueStooz_Hotas { get; set; } = 10;
-		public int reverseY_Hotas { get; set; } = 0;
-
 		public bool EnableLinkExe { get; set; } = true;
 		public string vjoySettingsGunA { get; set; } = "";
 		public string vjoySettingsGunB { get; set; } = "";
@@ -72,30 +69,21 @@ namespace TeknoparrotAutoXinput
 		public int magpieShowFps { get; set; } = 0;
 		public int magpieTripleBuffering { get; set; } = 0;
 		public int magpieVsync { get; set; } = 0;
-		public int magpieLightgun { get; set; } = 0;
-		public int magpieLightgunCalibration { get; set; } = 0;
+		public int magpieSinden { get; set; } = 0;
+		public int magpieGunCalibration { get; set; } = 0;
 		public bool useInjector { get; set; } = false;
 		public string injectorDllList { get; set; } = "";
 		public int injectorDelay { get; set; } = 0;
-
 		public int magpieFsrSharp { get; set; } = 0;
 		public int magpieExclusiveFullscreen { get; set; } = 0;
-		public int magpieReshade { get; set; } = 0;
-
-
 		public int patchGpuFix { get; set; } = 0;
 		public int patchGpuTP { get; set; } = 0;
-
-
 		public int gpuResolution { get; set; } = 0;
 		public int patchResolutionFix { get; set; } = 0;
 		public int patchResolutionTP { get; set; } = 0;
-
 		public int displayMode { get; set; } = 0;
 		public int patchDisplayModeFix { get; set; } = 0;
 		public int patchDisplayModeTP { get; set; } = 0;
-
-
 		public int patchReshade { get; set; } = 0;
 		public int patchGameID { get; set; } = 0;
 		public int patchNetwork { get; set; } = 0;
@@ -143,7 +131,6 @@ namespace TeknoparrotAutoXinput
 				this.hotasStooz = DeserializeData.hotasStooz;
 				this.enableStoozZone_Hotas = DeserializeData.enableStoozZone_Hotas;
 				this.valueStooz_Hotas = DeserializeData.valueStooz_Hotas;
-				this.reverseY_Hotas = DeserializeData.reverseY_Hotas;
 				this.EnableLinkExe = DeserializeData.EnableLinkExe;
 				this.vjoySettingsGunA = DeserializeData.vjoySettingsGunA;
 				this.vjoySettingsGunB = DeserializeData.vjoySettingsGunB;
@@ -170,14 +157,13 @@ namespace TeknoparrotAutoXinput
 				this.magpieShowFps = DeserializeData.magpieShowFps;
 				this.magpieTripleBuffering = DeserializeData.magpieTripleBuffering;
 				this.magpieVsync = DeserializeData.magpieVsync;
-				this.magpieLightgun = DeserializeData.magpieLightgun;
-				this.magpieLightgunCalibration = DeserializeData.magpieLightgunCalibration;
+				this.magpieSinden = DeserializeData.magpieSinden;
+				this.magpieGunCalibration = DeserializeData.magpieGunCalibration;
 				this.useInjector = DeserializeData.useInjector;
 				this.injectorDllList = DeserializeData.injectorDllList;
 				this.injectorDelay = DeserializeData.injectorDelay;
 				this.magpieFsrSharp = DeserializeData.magpieFsrSharp;
 				this.magpieExclusiveFullscreen = DeserializeData.magpieExclusiveFullscreen;
-				this.magpieReshade = DeserializeData.magpieReshade;
 
 				this.patchGpuFix = DeserializeData.patchGpuFix;
 				this.patchGpuTP = DeserializeData.patchGpuTP;

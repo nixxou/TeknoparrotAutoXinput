@@ -1,18 +1,52 @@
 {
-    "rom": "hcv",
-    "target": "konami",
-    "64bits": "False",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "",
-    "crosshairOFF": "",
-    "crosshairPNG": "False",
-    "outputs": "",
-    "windowed": "General,DisplayMode,Windowed",
-    "magpieClass": "CLASSNAME",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False"	
+	"global": {
+		"_comment": "On amd, reshade seems to make graphical glitch, so i avoid it and priorize windowed mode if sinden",
+		"rom": "hcv",
+		"target": "konami",
+		"64bits": "False",
+		"windowed": "General,DisplayMode,Windowed",
+		"magpieClass": "CLASSNAME",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded & at_least_one_sinden": {
+            "General||DisplayMode": "Windowed"
+        },
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded & !at_least_one_sinden": {
+            "General||DisplayMode": "Fullscreen"
+        },		
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||DisplayMode": "Fullscreen"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||DisplayMode": "Windowed"
+        },
+        "set_res_in_tp_settings & 720p": {
+            "General||ResolutionWidth": "1280",
+            "General||ResolutionHeight": "720"
+        },
+        "set_res_in_tp_settings & 1080p": {
+            "General||ResolutionWidth": "1920",
+            "General||ResolutionHeight": "1080"
+        },
+        "set_res_in_tp_settings & 2k": {
+            "General||ResolutionWidth": "2560",
+            "General||ResolutionHeight": "1440"
+        },
+        "set_res_in_tp_settings & 4k": {
+            "General||ResolutionWidth": "3840",
+            "General||ResolutionHeight": "2160"
+        },
+        "recommanded_tp_settings": {
+            "General||HideCursor": "1",
+            "General||UnlockSecretCharacter": "1",
+			"General||EnableStageSelect": "1",
+			"General||Language": "English"
+        }			
+	},
+	"gameoptions": {}
 }

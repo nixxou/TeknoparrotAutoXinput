@@ -1,15 +1,37 @@
 {
-    "rom": "",
-    "target": "",
-    "64bits": "False",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "",
-    "crosshairOFF": "",
-    "crosshairPNG": "False",
-    "outputs": "",
-    "windowed": "General,Windowed,1",
-    "magpieClass": "ACTION-DEKA",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False"	
+	"global": {
+		"_comment": "Aiming is weird for this one, i tried to adjust it, but it's not top notch",
+		"rom": "",
+		"target": "",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "ACTION-DEKA",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+			"General||Windowed" : "0"
+		},
+		"set_displaymode_in_tp_settings & set_fullscreen": {
+			"General||Windowed" : "0"
+		},
+		"set_displaymode_in_tp_settings & set_windowed": {
+			"General||Windowed" : "1"
+		}		
+	},
+	"gameoptions": {
+		"recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+			"gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+			"gun_useExtraSinden": "True"
+		},
+		"recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+			"tmpGunXFormula":"[OX]+(([OX]-(32767/2))*0.03093)",
+			"tmpGunYFormula":"[OY]+(([OY]-(32767/2))*0.03093)",			
+		},
+		"recommanded_gameoptions": {
+			"tmpGunAMinMax":"0:32767:-1000:0:32767:4000",
+			"tmpGunBMinMax":"0:32767:-1000:0:32767:4000"			
+		}
+	}
 }

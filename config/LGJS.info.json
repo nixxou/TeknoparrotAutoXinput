@@ -1,13 +1,28 @@
 {
-    "rom": "lgjsp",
-    "target": "lindbergh",
-    "64bits": "False",
-    "crosshairA": "",
-    "crosshairB": "",
-    "crosshairON": "",
-    "crosshairOFF": "",
-    "crosshairPNG": "False",
-    "outputs": "",
-	"windowed":"General,Windowed,1",
-	"magpieClass": "FREEGLUT",
+	"global": {
+		"rom": "lgjsp",
+		"target": "lindbergh",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "FREEGLUT"
+	},
+	"tpoptions": {
+		"use_gpu_fix_in_tp_settings & amd": {
+			"General||EnableAmdFix": "1"
+		},
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+            "General||HideCursor": "1",
+			"General||OriginalDualScreen": "0"
+        }
+	},
+    "gameoptions": {}
 }

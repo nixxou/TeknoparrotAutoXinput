@@ -36,15 +36,8 @@
 			btn_gameoptions = new Krypton.Toolkit.KryptonButton();
 			chk_showAll = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1 = new GroupBox();
-			button7 = new Button();
-			button6 = new Button();
-			button5 = new Button();
 			lbl_gunslist = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
-			button4 = new Button();
-			button3 = new Button();
-			button2 = new Button();
-			button1 = new Button();
 			lbl_hotaslist = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel5 = new Krypton.Toolkit.KryptonLabel();
 			lbl_wheellist = new Krypton.Toolkit.KryptonLabel();
@@ -53,6 +46,14 @@
 			kryptonLabel3 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
+			button8 = new Button();
+			button7 = new Button();
+			button6 = new Button();
+			button5 = new Button();
+			button4 = new Button();
+			button3 = new Button();
+			button2 = new Button();
+			button1 = new Button();
 			timer_controllerUpdate = new System.Windows.Forms.Timer(components);
 			pictureBox_gameControls = new PictureBox();
 			lbl_GameTitle = new Krypton.Toolkit.KryptonLabel();
@@ -63,11 +64,20 @@
 			lbl_player3 = new Krypton.Toolkit.KryptonLabel();
 			lbl_player4 = new Krypton.Toolkit.KryptonLabel();
 			btn_tpsettings = new Krypton.Toolkit.KryptonButton();
-			button8 = new Button();
+			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
+			button9 = new Button();
+			kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
+			cmb_patchReshade = new Krypton.Toolkit.KryptonComboBox();
+			cmb_displayMode = new Krypton.Toolkit.KryptonComboBox();
+			cmb_resolution = new Krypton.Toolkit.KryptonComboBox();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox_gameControls).BeginInit();
 			flowLayoutPanelThumbs.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)kryptonPictureBox1).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_patchReshade).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_displayMode).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_resolution).BeginInit();
 			SuspendLayout();
 			// 
 			// list_games
@@ -129,16 +139,8 @@
 			// 
 			// groupBox1
 			// 
-			groupBox1.Controls.Add(button8);
-			groupBox1.Controls.Add(button7);
-			groupBox1.Controls.Add(button6);
-			groupBox1.Controls.Add(button5);
 			groupBox1.Controls.Add(lbl_gunslist);
 			groupBox1.Controls.Add(kryptonLabel6);
-			groupBox1.Controls.Add(button4);
-			groupBox1.Controls.Add(button3);
-			groupBox1.Controls.Add(button2);
-			groupBox1.Controls.Add(button1);
 			groupBox1.Controls.Add(lbl_hotaslist);
 			groupBox1.Controls.Add(kryptonLabel5);
 			groupBox1.Controls.Add(lbl_wheellist);
@@ -149,40 +151,10 @@
 			groupBox1.Controls.Add(kryptonLabel1);
 			groupBox1.Location = new Point(12, 710);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(975, 145);
+			groupBox1.Size = new Size(734, 145);
 			groupBox1.TabIndex = 7;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Controller Status";
-			// 
-			// button7
-			// 
-			button7.Location = new Point(723, 57);
-			button7.Name = "button7";
-			button7.Size = new Size(75, 23);
-			button7.TabIndex = 16;
-			button7.Text = "button7";
-			button7.UseVisualStyleBackColor = true;
-			button7.Click += button7_Click;
-			// 
-			// button6
-			// 
-			button6.Location = new Point(800, 104);
-			button6.Name = "button6";
-			button6.Size = new Size(75, 23);
-			button6.TabIndex = 15;
-			button6.Text = "button6";
-			button6.UseVisualStyleBackColor = true;
-			button6.Click += button6_Click;
-			// 
-			// button5
-			// 
-			button5.Location = new Point(804, 57);
-			button5.Name = "button5";
-			button5.Size = new Size(75, 23);
-			button5.TabIndex = 14;
-			button5.Text = "button5";
-			button5.UseVisualStyleBackColor = true;
-			button5.Click += button5_Click;
 			// 
 			// lbl_gunslist
 			// 
@@ -199,46 +171,6 @@
 			kryptonLabel6.Size = new Size(61, 20);
 			kryptonLabel6.TabIndex = 12;
 			kryptonLabel6.Values.Text = "Gun List :";
-			// 
-			// button4
-			// 
-			button4.Location = new Point(804, 19);
-			button4.Name = "button4";
-			button4.Size = new Size(75, 23);
-			button4.TabIndex = 11;
-			button4.Text = "button4";
-			button4.UseVisualStyleBackColor = true;
-			button4.Click += button4_Click;
-			// 
-			// button3
-			// 
-			button3.Location = new Point(894, 100);
-			button3.Name = "button3";
-			button3.Size = new Size(75, 23);
-			button3.TabIndex = 10;
-			button3.Text = "button3";
-			button3.UseVisualStyleBackColor = true;
-			button3.Click += button3_Click;
-			// 
-			// button2
-			// 
-			button2.Location = new Point(894, 71);
-			button2.Name = "button2";
-			button2.Size = new Size(75, 23);
-			button2.TabIndex = 9;
-			button2.Text = "button2";
-			button2.UseVisualStyleBackColor = true;
-			button2.Click += button2_Click;
-			// 
-			// button1
-			// 
-			button1.Location = new Point(894, 19);
-			button1.Name = "button1";
-			button1.Size = new Size(75, 23);
-			button1.TabIndex = 8;
-			button1.Text = "button1";
-			button1.UseVisualStyleBackColor = true;
-			button1.Click += button1_Click_1;
 			// 
 			// lbl_hotaslist
 			// 
@@ -304,6 +236,86 @@
 			kryptonLabel1.Size = new Size(91, 20);
 			kryptonLabel1.TabIndex = 0;
 			kryptonLabel1.Values.Text = "GamePad List :";
+			// 
+			// button8
+			// 
+			button8.Location = new Point(752, 855);
+			button8.Name = "button8";
+			button8.Size = new Size(75, 23);
+			button8.TabIndex = 17;
+			button8.Text = "button8";
+			button8.UseVisualStyleBackColor = true;
+			button8.Click += button8_Click;
+			// 
+			// button7
+			// 
+			button7.Location = new Point(752, 826);
+			button7.Name = "button7";
+			button7.Size = new Size(75, 23);
+			button7.TabIndex = 16;
+			button7.Text = "button7";
+			button7.UseVisualStyleBackColor = true;
+			button7.Click += button7_Click;
+			// 
+			// button6
+			// 
+			button6.Location = new Point(833, 855);
+			button6.Name = "button6";
+			button6.Size = new Size(75, 23);
+			button6.TabIndex = 15;
+			button6.Text = "button6";
+			button6.UseVisualStyleBackColor = true;
+			button6.Click += button6_Click;
+			// 
+			// button5
+			// 
+			button5.Location = new Point(833, 826);
+			button5.Name = "button5";
+			button5.Size = new Size(75, 23);
+			button5.TabIndex = 14;
+			button5.Text = "button5";
+			button5.UseVisualStyleBackColor = true;
+			button5.Click += button5_Click;
+			// 
+			// button4
+			// 
+			button4.Location = new Point(833, 798);
+			button4.Name = "button4";
+			button4.Size = new Size(75, 23);
+			button4.TabIndex = 11;
+			button4.Text = "button4";
+			button4.UseVisualStyleBackColor = true;
+			button4.Click += button4_Click;
+			// 
+			// button3
+			// 
+			button3.Location = new Point(912, 855);
+			button3.Name = "button3";
+			button3.Size = new Size(75, 23);
+			button3.TabIndex = 10;
+			button3.Text = "button3";
+			button3.UseVisualStyleBackColor = true;
+			button3.Click += button3_Click;
+			// 
+			// button2
+			// 
+			button2.Location = new Point(912, 826);
+			button2.Name = "button2";
+			button2.Size = new Size(75, 23);
+			button2.TabIndex = 9;
+			button2.Text = "button2";
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
+			// 
+			// button1
+			// 
+			button1.Location = new Point(912, 798);
+			button1.Name = "button1";
+			button1.Size = new Size(75, 23);
+			button1.TabIndex = 8;
+			button1.Text = "button1";
+			button1.UseVisualStyleBackColor = true;
+			button1.Click += button1_Click_1;
 			// 
 			// timer_controllerUpdate
 			// 
@@ -389,21 +401,98 @@
 			btn_tpsettings.Values.Text = "TP Game Settings";
 			btn_tpsettings.Click += btn_tpsettings_Click;
 			// 
-			// button8
+			// kryptonLabel4
 			// 
-			button8.Location = new Point(723, 97);
-			button8.Name = "button8";
-			button8.Size = new Size(75, 23);
-			button8.TabIndex = 17;
-			button8.Text = "button8";
-			button8.UseVisualStyleBackColor = true;
-			button8.Click += button8_Click;
+			kryptonLabel4.Location = new Point(752, 716);
+			kryptonLabel4.Name = "kryptonLabel4";
+			kryptonLabel4.Size = new Size(91, 20);
+			kryptonLabel4.TabIndex = 17;
+			kryptonLabel4.Values.Text = "Display Mode :";
+			kryptonLabel4.Click += kryptonLabel4_Click;
+			// 
+			// kryptonLabel7
+			// 
+			kryptonLabel7.Location = new Point(752, 742);
+			kryptonLabel7.Name = "kryptonLabel7";
+			kryptonLabel7.Size = new Size(74, 20);
+			kryptonLabel7.TabIndex = 18;
+			kryptonLabel7.Values.Text = "Resolution :";
+			// 
+			// button9
+			// 
+			button9.Location = new Point(752, 798);
+			button9.Name = "button9";
+			button9.Size = new Size(75, 23);
+			button9.TabIndex = 18;
+			button9.Text = "button9";
+			button9.UseVisualStyleBackColor = true;
+			button9.Click += button9_Click;
+			// 
+			// kryptonLabel8
+			// 
+			kryptonLabel8.Location = new Point(752, 768);
+			kryptonLabel8.Name = "kryptonLabel8";
+			kryptonLabel8.Size = new Size(63, 20);
+			kryptonLabel8.TabIndex = 19;
+			kryptonLabel8.Values.Text = "Reshade :";
+			// 
+			// cmb_patchReshade
+			// 
+			cmb_patchReshade.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_patchReshade.DropDownWidth = 242;
+			cmb_patchReshade.IntegralHeight = false;
+			cmb_patchReshade.Items.AddRange(new object[] { "Global Settings", "Yes", "No" });
+			cmb_patchReshade.Location = new Point(838, 768);
+			cmb_patchReshade.Name = "cmb_patchReshade";
+			cmb_patchReshade.Size = new Size(149, 21);
+			cmb_patchReshade.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_patchReshade.TabIndex = 200;
+			// 
+			// cmb_displayMode
+			// 
+			cmb_displayMode.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_displayMode.DropDownWidth = 242;
+			cmb_displayMode.IntegralHeight = false;
+			cmb_displayMode.Items.AddRange(new object[] { "Global Settings", "Recommanded Settings", "Fullscreen", "Windowed" });
+			cmb_displayMode.Location = new Point(838, 716);
+			cmb_displayMode.Name = "cmb_displayMode";
+			cmb_displayMode.Size = new Size(150, 21);
+			cmb_displayMode.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_displayMode.TabIndex = 201;
+			// 
+			// cmb_resolution
+			// 
+			cmb_resolution.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_resolution.DropDownWidth = 242;
+			cmb_resolution.IntegralHeight = false;
+			cmb_resolution.Items.AddRange(new object[] { "Global Settings", "720p", "1080p", "1440p (2K)", "2160p (4K)" });
+			cmb_resolution.Location = new Point(838, 741);
+			cmb_resolution.Name = "cmb_resolution";
+			cmb_resolution.Size = new Size(150, 21);
+			cmb_resolution.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_resolution.TabIndex = 202;
+			cmb_resolution.SelectedIndexChanged += cmb_resolution_SelectedIndexChanged;
 			// 
 			// Main
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1011, 867);
+			ClientSize = new Size(999, 881);
+			Controls.Add(button8);
+			Controls.Add(cmb_patchReshade);
+			Controls.Add(button7);
+			Controls.Add(cmb_displayMode);
+			Controls.Add(button6);
+			Controls.Add(cmb_resolution);
+			Controls.Add(button5);
+			Controls.Add(kryptonLabel8);
+			Controls.Add(button9);
+			Controls.Add(kryptonLabel7);
+			Controls.Add(button4);
+			Controls.Add(kryptonLabel4);
+			Controls.Add(button3);
+			Controls.Add(button2);
+			Controls.Add(button1);
 			Controls.Add(btn_tpsettings);
 			Controls.Add(lbl_player4);
 			Controls.Add(lbl_player3);
@@ -427,6 +516,9 @@
 			((System.ComponentModel.ISupportInitialize)pictureBox_gameControls).EndInit();
 			flowLayoutPanelThumbs.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)kryptonPictureBox1).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_patchReshade).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_displayMode).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_resolution).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -468,5 +560,12 @@
 		private Button button6;
 		private Button button7;
 		private Button button8;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel4;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel7;
+		private Button button9;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel8;
+		private Krypton.Toolkit.KryptonComboBox cmb_patchReshade;
+		private Krypton.Toolkit.KryptonComboBox cmb_displayMode;
+		private Krypton.Toolkit.KryptonComboBox cmb_resolution;
 	}
 }

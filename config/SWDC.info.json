@@ -1,10 +1,54 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "UnrealWindow",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"True",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"True",
-	"magpieNoLateFocus":"False",	
+	"global": {
+		"windowed": "General,DisplayMode,Windowed",
+		"magpieClass": "UnrealWindow",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "True",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||DisplayMode": "Windowed"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||DisplayMode": "Fullscreen"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||DisplayMode": "Windowed"
+        },
+        "set_res_in_tp_settings & 720p": {
+			"Graphics||Use Custom Resolution": "1",
+            "Graphics||Resolution Width": "1280",
+            "Graphics||Resolution Height": "720"
+        },
+        "set_res_in_tp_settings & 1080p": {
+			"Graphics||Use Custom Resolution": "1",
+            "Graphics||Resolution Width": "1920",
+            "Graphics||Resolution Height": "1080"
+        },
+        "set_res_in_tp_settings & 2k": {														
+			"Graphics||Use Custom Resolution": "1",
+            "Graphics||Resolution Width": "2560",
+            "Graphics||Resolution Height": "1440",
+			"Graphics||Resize UI on high res displays": "1"
+        },
+        "set_res_in_tp_settings & 4k": {
+			"Graphics||Use Custom Resolution": "1",
+            "Graphics||Resolution Width": "3840",
+            "Graphics||Resolution Height": "2160",
+			"Graphics||Resize UI on high res displays": "1"
+        },
+		"replace_gameid": {
+			"General||OnlineID": "{{apm3id}}"
+		},
+        "recommanded_tp_settings": {},
+		"replace_network": {
+			"Network||Force Specific Network Adapter": "1",
+			"Network||Network Adapter IP": "{{networkip}}"
+		}
+	},
+	"gameoptions": {}
 }

@@ -1,12 +1,34 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "XWindow_",
-	"magpieTitle": "",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",
-	"magpieExecutable":""
+	"global": {
+		"_comment": "At some point, this game works on my amd gpu computer, but now it wont, no idea how to fix",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "XWindow_",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False",
+		"magpieExecutable": ""
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+		"use_gpu_fix_in_tp_settings & amd": {
+			"General||EnableAmdFix": "1"
+		}
+	},
+	"gameoptions": {
+		"recommanded_gameoptions": {
+			"runRivaTuner" : "True"
+		}
+	}
 }

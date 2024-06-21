@@ -1,12 +1,31 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "RawApp",
-	"magpieTitle": "",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"True",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",
-	"magpieExecutable":""
+	"global": {
+		"_comment": "To make this game works, i had to move the game folder to the root of my harddrive",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "RawApp",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False",
+		"magpieExecutable": "",
+		"moveToRoot": "True"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+            "General||Framelimiter": "1"
+        }
+	},
+	"gameoptions": {}
 }

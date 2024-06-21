@@ -1,10 +1,54 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "SEGA RACING CLASSIC",
-	"magpie3DGameMode": "True",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False",
-	"magpieNoMoveWindow":"False",
-	"magpieNoLateFocus":"False",	
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "SEGA RACING CLASSIC",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "set_res_in_tp_settings & 720p": {
+            "General||Resolution": "1280 x 720",
+        },
+        "set_res_in_tp_settings & 1080p": {
+            "General||Resolution": "1920 x 1080",
+        },
+        "set_res_in_tp_settings & 2k": {
+            "General||Resolution": "2560 x 1440",
+        },
+        "set_res_in_tp_settings & 4k": {
+            "General||Resolution": "3840 x 2160",
+        },
+        "recommanded_tp_settings": {},
+        "ffb": {
+            "General||Enable Outputs": "1"
+        },
+		"replace_network": {
+			"Network||Dhcp": "0",
+			"Network||Ip": "{{networkip}}",
+			"Network||Cab1IP": "{{networkip}}",
+			"Network||Mask": "{{networkmask}}",
+			"Network||Gateway": "{{networkgateway}}",
+			"Network||Dns1": "{{networkdns1}}",
+			"Network||Dns2": "{{networkdns2}}",
+			"Network||BroadcastIP": "{{broadcastaddress}}"
+		}	
+	},
+	"gameoptions": {
+		"recommanded_gameoptions": {
+			"runRivaTuner" : "True"
+		}
+	}
 }

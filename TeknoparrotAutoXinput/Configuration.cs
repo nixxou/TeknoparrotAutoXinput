@@ -68,7 +68,6 @@ namespace TeknoparrotAutoXinput
 		public string bindingDinputHotas { get; set; } = "";
 		public bool useDinputHotas { get; set; } = false;
 		public string ffbDinputHotas { get; set; } = "";
-		public int reverseY_Hotas { get; set; } = 0;
 		public bool useHotasWithWheel { get; set; } = false;
 
 		public bool reasignPedals { get; set; } = false;
@@ -130,7 +129,6 @@ namespace TeknoparrotAutoXinput
 		public int TPConsoleAction { get; set; } = 0;
 
 		public string magpieExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "magpie", "Magpie.exe");
-		public string magpieSindenExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "magpie-sinden", "Magpie.exe");
 		public bool useMagpie { get; set; } = true;
 		public int magpieScaling { get; set; } = 0;
 		public int magpieCapture { get; set; } = 0;
@@ -138,19 +136,18 @@ namespace TeknoparrotAutoXinput
 		public bool magpieShowFps { get; set; } = false;
 		public bool magpieTripleBuffering { get; set; } = false;
 		public bool magpieVsync { get; set; } = false;
-		public int magpieLightgun { get; set; } = 0;
-		public int magpieLightgunCalibration { get; set; } = 0;
+		//public int magpieLightgun { get; set; } = 0; //Unused
+		//public int magpieLightgunCalibration { get; set; } = 0; //Unused
+
+		public bool magpieSinden { get; set; } = true;
+		public bool magpieGunCalibration { get; set; } = true;
+
+
 		public double magpieBorderSize { get; set; } = 1.5;
 
 		public bool useXenos { get; set; } = false;
-
-		
-
 		public int magpieFsrSharp { get; set; } = 87;
 		public bool magpieExclusiveFullscreen { get; set; } = false;
-		public bool magpieReshadeAdaptiveSharpen { get; set; } = false;
-		public bool magpieReshadeClarity { get; set; } = false;
-		public bool magpieReshadeColorfullness { get; set; } = false;
 
 		public int gpuType { get; set; } = 0;
 		public bool patchGpuFix { get; set; } = true;
@@ -230,7 +227,6 @@ namespace TeknoparrotAutoXinput
 				this.bindingDinputHotas = DeserializeData.bindingDinputHotas;
 				this.useDinputHotas = DeserializeData.useDinputHotas;
 				this.ffbDinputHotas = DeserializeData.ffbDinputHotas;
-				this.reverseY_Hotas = DeserializeData.reverseY_Hotas;
 				this.useHotasWithWheel = DeserializeData.useHotasWithWheel;
 				this.reasignPedals = DeserializeData.reasignPedals;
 				this.gunAType = DeserializeData.gunAType;
@@ -275,7 +271,6 @@ namespace TeknoparrotAutoXinput
 				this.gunBOffscreenReload = DeserializeData.gunBOffscreenReload;
 				this.TPConsoleAction = DeserializeData.TPConsoleAction;
 				this.magpieExe = DeserializeData.magpieExe;
-				this.magpieSindenExe = DeserializeData.magpieSindenExe;
 				this.magpieScaling = DeserializeData.magpieScaling;
 				this.magpieDelay = DeserializeData.magpieDelay;
 				this.magpieCapture = DeserializeData.magpieCapture;
@@ -283,16 +278,13 @@ namespace TeknoparrotAutoXinput
 				this.magpieShowFps = DeserializeData.magpieShowFps;
 				this.magpieTripleBuffering = DeserializeData.magpieTripleBuffering;
 				this.magpieVsync = DeserializeData.magpieVsync;
-				this.magpieLightgun = DeserializeData.magpieLightgun;
-				this.magpieLightgunCalibration = DeserializeData.magpieLightgunCalibration;
+				this.magpieSinden = DeserializeData.magpieSinden;
+				this.magpieGunCalibration = DeserializeData.magpieGunCalibration;
 				this.magpieBorderSize = DeserializeData.magpieBorderSize;
 				this.useXenos = DeserializeData.useXenos;
 				
 				this.magpieFsrSharp = DeserializeData.magpieFsrSharp;
 				this.magpieExclusiveFullscreen = DeserializeData.magpieExclusiveFullscreen;
-				this.magpieReshadeAdaptiveSharpen = DeserializeData.magpieReshadeAdaptiveSharpen;
-				this.magpieReshadeClarity = DeserializeData.magpieReshadeClarity;
-				this.magpieReshadeColorfullness = DeserializeData.magpieReshadeColorfullness;
 
 				this.gpuType = DeserializeData.gpuType;
 				this.patchGpuFix = DeserializeData.patchGpuFix;

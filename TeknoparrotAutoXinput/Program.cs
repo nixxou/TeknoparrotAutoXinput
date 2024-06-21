@@ -96,6 +96,7 @@ namespace TeknoparrotAutoXinput
 		public static bool vjoy_gunB = false;
 
 		public static bool allSindenWithoutVjoy = true;
+		public static bool atLeastOneSinden = false;
 
 		public static bool crosshairA = true;
 		public static bool crosshairB = true;
@@ -105,6 +106,7 @@ namespace TeknoparrotAutoXinput
 
 		public static bool isExiting = false;
 		public static int magpie_process_pid = -1;
+		public static string magpieIni = "";
 
 		public static bool patchGpuFix = ConfigurationManager.MainConfig.patchGpuFix;
 		public static bool patchGpuTP = ConfigurationManager.MainConfig.patchGpuTP;
@@ -132,6 +134,7 @@ namespace TeknoparrotAutoXinput
 		public static string patch_networkDns2 = ConfigurationManager.MainConfig.patch_networkDns2;
 		public static string patch_networkGateway = ConfigurationManager.MainConfig.patch_networkGateway;
 
+		
 
 		//public static string xmlFileContent = "";
 
@@ -424,7 +427,7 @@ namespace TeknoparrotAutoXinput
 			//Vjoy
 			if (args.Length >= 2 && args.First() == "--runvjoy")
 			{
-				MessageBox.Show("vjoy app");
+				//MessageBox.Show("vjoy app");
 				string gunOption = args[1];
 				bool enableGunA = false;
 				bool enableGunB = false;
@@ -540,7 +543,7 @@ namespace TeknoparrotAutoXinput
 				int valueStooz_Wheel = ConfigurationManager.MainConfig.valueStooz_Wheel;
 				bool enableStoozZone_Hotas = ConfigurationManager.MainConfig.enableStoozZone_Hotas;
 				int valueStooz_Hotas = ConfigurationManager.MainConfig.valueStooz_Hotas;
-				int reverseYAxis_Hotas = ConfigurationManager.MainConfig.reverseY_Hotas;
+
 
 
 				WheelFFBGuid = ConfigurationManager.MainConfig.ffbDinputWheel;
@@ -567,7 +570,6 @@ namespace TeknoparrotAutoXinput
 				Utils.LogMessage($"valueStooz_Wheel = {valueStooz_Wheel}");
 				Utils.LogMessage($"enableStoozZone_Hotas = {enableStoozZone_Hotas}");
 				Utils.LogMessage($"valueStooz_Hotas = {valueStooz_Hotas}");
-				Utils.LogMessage($"reverseYAxis_Hotas = {reverseYAxis_Hotas}");
 				Utils.LogMessage($"WheelFFBGuid = {WheelFFBGuid}");
 				Utils.LogMessage($"WheelFFBGuid = {HotasFFBGuid}");
 
@@ -579,6 +581,11 @@ namespace TeknoparrotAutoXinput
 				typeConfig.Add("wheel");
 				typeConfig.Add("hotas");
 				typeConfig.Add("lightgun");
+
+				int forced_displayMode = 0;
+				int forced_resolution = 0;
+				int forced_reshade = 0;
+				//MessageBox.Show("start");
 
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
@@ -617,6 +624,26 @@ namespace TeknoparrotAutoXinput
 								Utils.LogMessage($"CMDLINE Option : Disposition folder invalid");
 							}
 						}
+
+						match = Regex.Match(arg, @"--displayMode=([0-9]+)");
+						if (match.Success)
+						{
+							forced_displayMode = int.Parse(match.Groups[1].Value);
+						}
+
+						match = Regex.Match(arg, @"--resolution=([0-9]+)");
+						if (match.Success)
+						{
+							forced_resolution = int.Parse(match.Groups[1].Value);
+						}
+
+						match = Regex.Match(arg, @"--reshade=([0-9]+)");
+						if (match.Success)
+						{
+							forced_reshade = int.Parse(match.Groups[1].Value);
+						}
+
+
 					}
 
 
@@ -638,7 +665,7 @@ namespace TeknoparrotAutoXinput
 						MessageBox.Show("Invalid parameters");
 						return;
 					}
-					TpSettingsManager.setOriginalXML(xmlFile);
+					
 
 
 
@@ -698,13 +725,26 @@ namespace TeknoparrotAutoXinput
 						patch_BroadcastAddress = networkInfo.ContainsKey("BroadcastAddress") ? networkInfo["BroadcastAddress"] : "0.0.0.0";
 					}
 
+					displayMode = forced_displayMode > 0 ? (forced_displayMode - 1) : displayMode;
+					gpuResolution = forced_resolution > 0 ? (forced_resolution - 1) : gpuResolution;
+					patchReshade = forced_reshade > 0 ? (forced_reshade == 1 ? true : false) : patchReshade;
+
 					string baseTpDirOriginal = baseTpDir;
+
+					bool tpDirChange = false;
 					if (!string.IsNullOrEmpty(gameOptions.CustomTpExe) && File.Exists(gameOptions.CustomTpExe))
 					{
+						tpDirChange = true;
 						teknoparrotExe = Path.GetFullPath(gameOptions.CustomTpExe);
 						baseTpDir = Path.GetDirectoryName(teknoparrotExe);
 					}
 
+					if (tpDirChange)
+					{
+						string newXmlFile = Path.Combine(baseTpDir, "UserProfiles",  originalConfigFileName);
+					}
+
+					TpSettingsManager.setOriginalXML(xmlFile);
 
 					int tp_version = 100000;
 					try
@@ -782,7 +822,27 @@ namespace TeknoparrotAutoXinput
 						if (ConfigurationManager.MainConfig.gpuType == 3) TpSettingsManager.tags.Add("amdnew");
 						if (ConfigurationManager.MainConfig.gpuType == 4) TpSettingsManager.tags.Add("amdrid");
 						if (ConfigurationManager.MainConfig.gpuType >= 2) TpSettingsManager.tags.Add("amd");
+
+						if (ConfigurationManager.MainConfig.gpuType != 0)
+						{
+							TpSettingsManager.tags.Add("!intel");
+							TpSettingsManager.tags.Add("!amd");
+						}
+						if (ConfigurationManager.MainConfig.gpuType != 1)
+						{
+							TpSettingsManager.tags.Add("!nvidia");
+							TpSettingsManager.tags.Add("!amd");
+						}
+						if (ConfigurationManager.MainConfig.gpuType < 2)
+						{
+							TpSettingsManager.tags.Add("!nvidia");
+							TpSettingsManager.tags.Add("!intel");
+						}
+
 					}
+
+
+
 					if (Program.patchGpuTP) TpSettingsManager.tags.Add("use_gpu_fix_in_tp_settings"); //Apply gpu amd/intel/nvidia fix in TP
 					else TpSettingsManager.tags.Add("!use_gpu_fix_in_tp_settings");
 
@@ -840,7 +900,7 @@ namespace TeknoparrotAutoXinput
 					{
 						Utils.LogMessage($"info file found : " + gameInfoFile);
 						gameInfoContent = File.ReadAllText(gameInfoFile);
-
+						
 						gameInfoParsedJson = JObject.Parse(gameInfoContent);
 
 						gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
@@ -855,11 +915,6 @@ namespace TeknoparrotAutoXinput
 						{
 							TpSettingsManager.windowed_search = GameInfo["windowed"];
 						}
-
-
-
-
-
 							//GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
 					}
 					TpSettingsManager.UpdateXML();
@@ -1028,9 +1083,7 @@ namespace TeknoparrotAutoXinput
 						hotasStooz = gameOptions.hotasStooz;
 						enableStoozZone_Hotas = gameOptions.enableStoozZone_Hotas;
 						valueStooz_Hotas = gameOptions.valueStooz_Hotas;
-						//reverseYAxis_Hotas = gameOptions.reverseYAxis_Hotas
 					}
-					if (gameOptions.reverseY_Hotas > 0) reverseYAxis_Hotas = gameOptions.reverseY_Hotas - 1;
 
 					Utils.LogMessage($"gameOptions Values = {gameOptions.Serialize()}");
 
@@ -1110,6 +1163,7 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 					}
+
 
 					/*
 					if (!string.IsNullOrEmpty(executableGame))
@@ -2048,9 +2102,11 @@ namespace TeknoparrotAutoXinput
 						if(useDinputLightGun && (GunAType == "sinden" || GunBType == "sinden"))
 						{
 							TpSettingsManager.tags.Add("at_least_one_sinden");
+							atLeastOneSinden = true;
 						}
 						else
 						{
+							atLeastOneSinden = false;
 							TpSettingsManager.tags.Add("!at_least_one_sinden");
 							if (useDinputLightGun) TpSettingsManager.tags.Add("no_sinden");
 						}
@@ -3070,27 +3126,6 @@ namespace TeknoparrotAutoXinput
 
 						if (useDinputHotas)
 						{
-							if(reverseYAxis_Hotas > 0)
-							{
-								XmlNodeList fieldNodes = TpSettingsManager.xmlDoc.SelectNodes("//FieldInformation");
-								foreach (XmlNode fieldNode in fieldNodes)
-								{
-									XmlNode categoryNameNode = fieldNode.SelectSingleNode("CategoryName");
-									XmlNode fieldNameNode = fieldNode.SelectSingleNode("FieldName");
-
-									if (categoryNameNode != null && categoryNameNode.InnerText == "General" &&
-										fieldNameNode != null && fieldNameNode.InnerText == "Reverse Y Axis")
-									{
-										XmlNode fieldValueNodeReverseY = fieldNode.SelectSingleNode("FieldValue");
-										if (fieldValueNodeReverseY != null)
-										{
-											fieldValueNodeReverseY.InnerText = reverseYAxis_Hotas == 1 ? "1" : "0";
-										}
-									}
-								}
-							}
-
-
 							XmlNodeList joystickButtonsNodes = TpSettingsManager.xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
 
 							foreach (XmlNode node in joystickButtonsNodes)
@@ -3990,7 +4025,7 @@ namespace TeknoparrotAutoXinput
 						if(gameOptions.AhkBefore.Trim() != "")
 						{
 							Utils.LogMessage($"Execute AHK Before");
-							Utils.ExecuteAHK(gameOptions.AhkBefore,gameOptions.WaitForExitAhkBefore);
+							Utils.ExecuteAHK(gameOptions.AhkBefore,gameOptions.WaitForExitAhkBefore,gameDir);
 						}
 
 						if (showStartup)
@@ -4067,7 +4102,6 @@ namespace TeknoparrotAutoXinput
 
 						Thread WaitForWindowed = null;
 						bool forceMagpie = false;
-						bool magpieReshade43 = false;
 						bool useMagpie = ConfigurationManager.MainConfig.useMagpie;
 						if (gameOptions.useMagpie > 0)
 						{
@@ -4078,12 +4112,6 @@ namespace TeknoparrotAutoXinput
 								forceMagpie = true;
 								useMagpie = true;
 							}
-							if (gameOptions.useMagpie == 4)
-							{
-								forceMagpie = true;
-								useMagpie = true;
-								if(!TpSettingsManager.IsWindowed) magpieReshade43 = true;
-							}
 						}
 
 						string magpieClass = "";
@@ -4092,7 +4120,7 @@ namespace TeknoparrotAutoXinput
 						string magpieTitle = "";
 						if (GameInfo.ContainsKey("magpieTitle") && GameInfo["magpieTitle"].Trim() != "") magpieTitle = GameInfo["magpieTitle"].Trim();
 
-						MessageBox.Show("t=" + magpieTitle + "," + magpieClass);
+						//MessageBox.Show("t=" + magpieTitle + "," + magpieClass);
 
 						string forceSindenCalibration = "";
 						string forcevjoyXformula = "";
@@ -4138,65 +4166,6 @@ namespace TeknoparrotAutoXinput
 							bool magpieExclusiveFullscreen = ConfigurationManager.MainConfig.magpieExclusiveFullscreen;
 							if (gameOptions.magpieExclusiveFullscreen > 0) magpieExclusiveFullscreen = gameOptions.magpieExclusiveFullscreen == 1 ? true : false;
 
-							bool magpieReshadeAdaptiveSharpen = ConfigurationManager.MainConfig.magpieReshadeAdaptiveSharpen;
-							bool magpieReshadeClarity = ConfigurationManager.MainConfig.magpieReshadeClarity;
-							bool magpieReshadeColorfullness = ConfigurationManager.MainConfig.magpieReshadeColorfullness;
-							if(gameOptions.magpieReshade > 0)
-							{
-								switch(gameOptions.magpieReshade)
-								{
-									case 1:
-										magpieReshadeAdaptiveSharpen = true;
-										magpieReshadeClarity = false;
-										magpieReshadeColorfullness = false;
-										break;
-									case 2:
-										magpieReshadeAdaptiveSharpen = false;
-										magpieReshadeClarity = true;
-										magpieReshadeColorfullness = false;
-										break;
-									case 3:
-										magpieReshadeAdaptiveSharpen = false;
-										magpieReshadeClarity = false;
-										magpieReshadeColorfullness = true;
-										break;
-									case 4:
-										magpieReshadeAdaptiveSharpen = true;
-										magpieReshadeClarity = true;
-										magpieReshadeColorfullness = false;
-										break;
-									case 5:
-										magpieReshadeAdaptiveSharpen = true;
-										magpieReshadeClarity = false;
-										magpieReshadeColorfullness = true;
-										break;
-									case 6:
-										magpieReshadeAdaptiveSharpen = false;
-										magpieReshadeClarity = true;
-										magpieReshadeColorfullness = true;
-										break;
-									case 7:
-										magpieReshadeAdaptiveSharpen = true;
-										magpieReshadeClarity = true;
-										magpieReshadeColorfullness = true;
-										break;
-									default:
-										// Gérer le cas par défaut si nécessaire
-										break;
-
-								}
-							}
-
-							string reshadeString = "";
-							if (magpieReshadeAdaptiveSharpen) reshadeString += "AdaptiveSharpen@AdaptiveSharpen.fx,";
-							if (magpieReshadeClarity) reshadeString += "Clarity@Clarity.fx,";
-							if (magpieReshadeAdaptiveSharpen) reshadeString += "Colourfulness@Colourfulness.fx,";
-							if (magpieReshade43) reshadeString += "AspectRatioPS@AspectRatio.fx,";
-							reshadeString = reshadeString.Trim(',');
-
-
-
-
 							bool magpieDisableDirectFlip = false;
 							if (GameInfo.ContainsKey("magpieDisableDirectFlip") && GameInfo["magpieDisableDirectFlip"].ToLower() == "true") magpieDisableDirectFlip = true;
 
@@ -4217,9 +4186,6 @@ namespace TeknoparrotAutoXinput
 
 							bool magpieNoClick = false;
 							if (GameInfo.ContainsKey("magpieNoClick") && GameInfo["magpieNoClick"].ToLower() == "true") magpieNoClick = true;
-
-
-
 
 							string magpieExecutableGame = executableGame;
 							if (GameInfo.ContainsKey("magpieExecutable") && GameInfo["magpieExecutable"].Trim() != "")
@@ -4263,7 +4229,7 @@ namespace TeknoparrotAutoXinput
 											}
 
 											string magpieReshadeDll = Path.Combine(Path.GetDirectoryName(magpieExe), "d2d1.dll");
-											if (string.IsNullOrEmpty(reshadeString))
+											if (string.IsNullOrEmpty(Program.magpieIni))
 											{
 												if (File.Exists(magpieReshadeDll))
 												{
@@ -4276,11 +4242,38 @@ namespace TeknoparrotAutoXinput
 												{
 													File.Move(magpieReshadeDll + ".disabled", magpieReshadeDll);
 												}
-												string magpieReshadeIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
-												if (File.Exists(magpieReshadeIni))
-												{
-													File.WriteAllText(magpieReshadeIni, Regex.Replace(File.ReadAllText(magpieReshadeIni), @"^Techniques=.*", "Techniques=" + reshadeString, RegexOptions.Multiline));
 
+												string magpieReshadeIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
+												File.Copy(Program.magpieIni,magpieReshadeIni, true);
+
+												string cacheShaderDirMagpie = Path.Combine(Path.GetDirectoryName(magpieExe), "reshade-shaders" ,"Cache");
+												if(Directory.Exists(cacheShaderDirMagpie))
+												{
+													try
+													{
+														string[] files = Directory.GetFiles(cacheShaderDirMagpie, "reshade-BezelMagpie*");
+														foreach (string file in files) File.Delete(file);
+														string[] files2 = Directory.GetFiles(cacheShaderDirMagpie, "reshade-UIMask*");
+														foreach (string file2 in files) File.Delete(file2);
+													}
+													catch (Exception ex) {}
+												}
+												else
+												{
+													try
+													{
+														Directory.CreateDirectory(cacheShaderDirMagpie);
+													}
+													catch { }
+												}
+
+
+												
+												string magpieReshadeMainIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
+												if (File.Exists(magpieReshadeMainIni))
+												{
+													IniFile reshadeIniFile = new IniFile(magpieReshadeMainIni);
+													reshadeIniFile.Write("IntermediateCachePath", Path.GetFullPath(cacheShaderDirMagpie), "GENERAL");
 												}
 											}
 
@@ -4388,6 +4381,9 @@ namespace TeknoparrotAutoXinput
 							else
 							{
 
+								bool magpieContentWritten = false;
+
+								/*
 								//0=No, 1=Yes, 2=Yes-Sinden
 								int magpieLightgun = ConfigurationManager.MainConfig.magpieLightgun;
 								if (gameOptions.magpieLightgun > 0) magpieLightgun = gameOptions.magpieLightgun - 1;
@@ -4396,281 +4392,399 @@ namespace TeknoparrotAutoXinput
 								int magpieLightgunCalibration = ConfigurationManager.MainConfig.magpieLightgunCalibration;
 								if (gameOptions.magpieLightgunCalibration > 0) magpieLightgunCalibration = gameOptions.magpieLightgunCalibration - 1;
 
+								*/
+
+								bool magpieSindenBorder = ConfigurationManager.MainConfig.magpieSinden;
+								if (gameOptions.magpieSinden == 1) magpieSindenBorder = true;
+								if (gameOptions.magpieSinden == 2) magpieSindenBorder = false;
+								if(!atLeastOneSinden) magpieSindenBorder = false;
+
+
 								double magpieBorderSize = ConfigurationManager.MainConfig.magpieBorderSize;
 
-								if (magpieLightgun > 0)
+								bool magpieGunCalibration = ConfigurationManager.MainConfig.magpieGunCalibration;
+								if (gameOptions.magpieGunCalibration == 1) magpieGunCalibration = true;
+								if (gameOptions.magpieGunCalibration == 2) magpieGunCalibration = false;
+
+								bool magpieCalibrateSindenSoft = false;
+								bool magpieCalibrateVjoy = false;
+								if (magpieGunCalibration)
 								{
-									WaitForWindowed = new Thread(() =>
+									if (atLeastOneSinden && allSindenWithoutVjoy)
 									{
-										string trueClassName = "";
-										IntPtr windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
-										while (!isExiting)
+										magpieCalibrateSindenSoft = true;
+									}
+									magpieCalibrateVjoy = true;
+								}
+
+								WaitForWindowed = new Thread(() =>
+								{
+									string trueClassName = "";
+									IntPtr windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
+									while (!isExiting)
+									{
+										while (windowHandle == IntPtr.Zero && !isExiting)
 										{
-											while (windowHandle == IntPtr.Zero && !isExiting)
+											windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
+											Thread.Sleep(500);
+										}
+
+
+
+										Thread.Sleep(500 + (magpieDelay * 1000));
+
+										int screenWidth = 1920;
+										int screenHeight = 1080;
+										Screen[] screens = Screen.AllScreens;
+										for (int i = 0; i < screens.Length; i++)
+										{
+											Screen screen = screens[i];
+											string DeviceName = screen.DeviceName.Trim('\\').Trim('.').Trim('\\');
+											if (screen.Primary)
 											{
-												windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
-												Thread.Sleep(500);
+												screenWidth = screen.Bounds.Width;
+												screenHeight = screen.Bounds.Height;
 											}
+										}
 
+										Utils.RECT clientRect;
+										Utils.GetClientRect(windowHandle, out clientRect);
+										int clientWidth = clientRect.Right - clientRect.Left;
+										int clientHeight = clientRect.Bottom - clientRect.Top;
+										double originalRatio = (double)clientWidth / clientHeight;
+										int maxWindowWidth = Math.Min(screenWidth, (int)(screenHeight * originalRatio));
+										int maxWindowHeight = (int)(maxWindowWidth / originalRatio);
 
+										Utils.LogMessage("Informations sur la fenêtre :");
+										Utils.LogMessage("Taille actuelle de la fenêtre : " + clientWidth + "x" + clientHeight);
+										Utils.LogMessage("Taille maximisée de la fenêtre sur l'écran : " + maxWindowWidth + "x" + maxWindowHeight);
 
-											Thread.Sleep(500 + (magpieDelay * 1000));
+										double borderSize = 0;
+										if (magpieSindenBorder) borderSize = magpieBorderSize;
 
-											int screenWidth = 1920;
-											int screenHeight = 1080;
-											Screen[] screens = Screen.AllScreens;
-											for (int i = 0; i < screens.Length; i++)
+										double widthWindowWithoutBorder = (maxWindowWidth / 100.0) * (100.0 - (borderSize * 2));
+										double heightWindowWithoutBorder = (maxWindowHeight / 100.0) * (100.0 - (borderSize * 2));
+
+										Utils.LogMessage("Taille ajusté sans bordure : " + widthWindowWithoutBorder + "x" + heightWindowWithoutBorder);
+										double ratioReshadeBorderWidth = maxWindowWidth / widthWindowWithoutBorder;
+										double ratioReshadeBorderHeight = maxWindowHeight / heightWindowWithoutBorder;
+
+										Utils.LogMessage("Ratio Reshade : " + ratioReshadeBorderWidth + "x" + ratioReshadeBorderHeight);
+
+										double ratioVjoyWidth = screenWidth / widthWindowWithoutBorder;
+										double ratioVjoyHeight = screenHeight / heightWindowWithoutBorder;
+
+										Utils.LogMessage("Ratio vjoy : " + ratioVjoyWidth + "x" + ratioVjoyHeight);
+
+										double pourcentageWidth = (((screenWidth - widthWindowWithoutBorder) / 2.0) / screenWidth) * 100;
+										double pourcentageHeight = (((screenHeight - heightWindowWithoutBorder) / 2.0) / screenHeight) * 100;
+										Utils.LogMessage("Start Percent : " + pourcentageWidth + "x" + pourcentageHeight);
+
+										Utils.LogMessage("Sinden Config :");
+										Utils.LogMessage("X Offset = " + pourcentageWidth * -1);
+										Utils.LogMessage("X RatioFactor = " + (1 + (pourcentageWidth / 50.0)));
+										Utils.LogMessage("Y Offset = " + pourcentageHeight * -1);
+										Utils.LogMessage("Y RatioFactor = " + (1 + (pourcentageHeight / 50.0)));
+
+										if (magpieCalibrateSindenSoft)
+										{
+											double XOffsetValue = pourcentageWidth * -1;
+											double XRatioFactorValue = (1 + (pourcentageWidth / 50.0));
+											double YOffsetValue = pourcentageHeight * -1;
+											double YRatioFactorValue = (1 + (pourcentageHeight / 50.0));
+
+											if (XOffsetValue <= 0.0 && XOffsetValue > -50.0
+											&& XRatioFactorValue >= 1.0 && XRatioFactorValue <= 2.0
+											&& YRatioFactorValue >= 1.0 && YRatioFactorValue <= 2.0
+											&& YOffsetValue <= 0.0 && YOffsetValue > -50.0)
 											{
-												Screen screen = screens[i];
-												string DeviceName = screen.DeviceName.Trim('\\').Trim('.').Trim('\\');
-												if (screen.Primary)
+												string XOffsetString = Math.Round(XOffsetValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
+												string XRatioFactorString = Math.Round(XRatioFactorValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
+												string YOffsetString = Math.Round(YOffsetValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
+												string YRatioFactorString = Math.Round(YRatioFactorValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
+												forceSindenCalibration = $"{XOffsetString},{XRatioFactorString},{YOffsetString},{YRatioFactorString}";
+												Utils.LogMessage("Sinden Calibration Config : " + forceSindenCalibration);
+												string addedArg = @$"-action ""set-offsets {forceSindenCalibration}""";
+												Process[] processes = Process.GetProcessesByName("Lightgun");
+												if (processes.Length > 0)
 												{
-													screenWidth = screen.Bounds.Width;
-													screenHeight = screen.Bounds.Height;
+													// Si le processus est en cours d'exécution, en démarrer un nouveau avec des arguments supplémentaires
+
+													string processPath = processes[0].MainModule.FileName;
+													Process sinden_process2 = new Process();
+													sinden_process2.StartInfo.FileName = processPath;
+													sinden_process2.StartInfo.WorkingDirectory = Path.GetDirectoryName(processPath);
+													sinden_process2.StartInfo.Arguments = addedArg;
+													sinden_process2.StartInfo.UseShellExecute = true;
+													sinden_process2.Start();
 												}
+
 											}
+										}
+										if (magpieCalibrateVjoy)
+										{
+											double ratioVjoyFinalWidth = ratioVjoyWidth - 1;
+											double ratioVjoyFinalHeight = ratioVjoyHeight - 1;
 
-											Utils.RECT clientRect;
-											Utils.GetClientRect(windowHandle, out clientRect);
-											int clientWidth = clientRect.Right - clientRect.Left;
-											int clientHeight = clientRect.Bottom - clientRect.Top;
-											double originalRatio = (double)clientWidth / clientHeight;
-											int maxWindowWidth = Math.Min(screenWidth, (int)(screenHeight * originalRatio));
-											int maxWindowHeight = (int)(maxWindowWidth / originalRatio);
-
-											Utils.LogMessage("Informations sur la fenêtre :");
-											Utils.LogMessage("Taille actuelle de la fenêtre : " + clientWidth + "x" + clientHeight);
-											Utils.LogMessage("Taille maximisée de la fenêtre sur l'écran : " + maxWindowWidth + "x" + maxWindowHeight);
-
-											double borderSize = 0;
-											if (magpieLightgun == 2) borderSize = magpieBorderSize;
-
-											double widthWindowWithoutBorder = (maxWindowWidth / 100.0) * (100.0 - (borderSize * 2));
-											double heightWindowWithoutBorder = (maxWindowHeight / 100.0) * (100.0 - (borderSize * 2));
-
-											Utils.LogMessage("Taille ajusté sans bordure : " + widthWindowWithoutBorder + "x" + heightWindowWithoutBorder);
-											double ratioReshadeBorderWidth = maxWindowWidth / widthWindowWithoutBorder;
-											double ratioReshadeBorderHeight = maxWindowHeight / heightWindowWithoutBorder;
-
-											Utils.LogMessage("Ratio Reshade : " + ratioReshadeBorderWidth + "x" + ratioReshadeBorderHeight);
-
-											double ratioVjoyWidth = screenWidth / widthWindowWithoutBorder;
-											double ratioVjoyHeight = screenHeight / heightWindowWithoutBorder;
-
-											Utils.LogMessage("Ratio vjoy : " + ratioVjoyWidth + "x" + ratioVjoyHeight);
-
-											double pourcentageWidth = (((screenWidth - widthWindowWithoutBorder) / 2.0) / screenWidth) * 100;
-											double pourcentageHeight = (((screenHeight - heightWindowWithoutBorder) / 2.0) / screenHeight) * 100;
-											Utils.LogMessage("Start Percent : " + pourcentageWidth + "x" + pourcentageHeight);
-
-											Utils.LogMessage("Sinden Config :");
-											Utils.LogMessage("X Offset = " + pourcentageWidth * -1);
-											Utils.LogMessage("X RatioFactor = " + (1 + (pourcentageWidth / 50.0)));
-											Utils.LogMessage("Y Offset = " + pourcentageHeight * -1);
-											Utils.LogMessage("Y RatioFactor = " + (1 + (pourcentageHeight / 50.0)));
-
-											if (magpieLightgunCalibration == 2)
+											if (ratioVjoyFinalWidth >= 0 && ratioVjoyFinalWidth < 3 && ratioVjoyFinalHeight >= 0 && ratioVjoyFinalHeight < 3)
 											{
-												double XOffsetValue = pourcentageWidth * -1;
-												double XRatioFactorValue = (1 + (pourcentageWidth / 50.0));
-												double YOffsetValue = pourcentageHeight * -1;
-												double YRatioFactorValue = (1 + (pourcentageHeight / 50.0));
+												string ratioVjoyFinalWidthString = Math.Round(ratioVjoyFinalWidth, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
+												string ratioVjoyFinalHeightString = Math.Round(ratioVjoyFinalHeight, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
+												if (ratioVjoyFinalWidthString == "") ratioVjoyFinalWidthString = "0";
+												if (ratioVjoyFinalHeightString == "") ratioVjoyFinalHeightString = "0";
 
-												if (XOffsetValue <= 0.0 && XOffsetValue > -50.0
-												&& XRatioFactorValue >= 1.0 && XRatioFactorValue <= 2.0
-												&& YRatioFactorValue >= 1.0 && YRatioFactorValue <= 2.0
-												&& YOffsetValue <= 0.0 && YOffsetValue > -50.0)
+
+
+												forcevjoyXformula = $"[X]+(([X]-(32767/2))*{ratioVjoyFinalWidthString})";
+												forcevjoyYformula = $"[Y]+(([Y]-(32767/2))*{ratioVjoyFinalHeightString})";
+
+												if(gameOptions.tmpGunXFormula != "") forcevjoyXformula = gameOptions.tmpGunXFormula;
+												if(gameOptions.tmpGunYFormula != "") forcevjoyYformula = gameOptions.tmpGunYFormula;
+
+												Utils.LogMessage("Vjoy forced formula X : " + forcevjoyXformula);
+												Utils.LogMessage("Vjoy forced formula Y : " + forcevjoyYformula);
+												try
 												{
-													string XOffsetString = Math.Round(XOffsetValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
-													string XRatioFactorString = Math.Round(XRatioFactorValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
-													string YOffsetString = Math.Round(YOffsetValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
-													string YRatioFactorString = Math.Round(YRatioFactorValue, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
-													forceSindenCalibration = $"{XOffsetString},{XRatioFactorString},{YOffsetString},{YRatioFactorString}";
-													Utils.LogMessage("Sinden Calibration Config : " + forceSindenCalibration);
-													string addedArg = @$"-action ""set-offsets {forceSindenCalibration}""";
-													Process[] processes = Process.GetProcessesByName("Lightgun");
-													if (processes.Length > 0)
+													NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "VjoyControlCommand", PipeDirection.Out);
+													if (!pipeClient.IsConnected)
 													{
-														// Si le processus est en cours d'exécution, en démarrer un nouveau avec des arguments supplémentaires
 
-														string processPath = processes[0].MainModule.FileName;
-														Process sinden_process2 = new Process();
-														sinden_process2.StartInfo.FileName = processPath;
-														sinden_process2.StartInfo.WorkingDirectory = Path.GetDirectoryName(processPath);
-														sinden_process2.StartInfo.Arguments = addedArg;
-														sinden_process2.StartInfo.UseShellExecute = true;
-														sinden_process2.Start();
+														pipeClient.Connect();
+														using (StreamWriter writer = new StreamWriter(pipeClient, Encoding.UTF8))
+														{
+															writer.Write(@$"formula={forcevjoyXformula},{forcevjoyYformula}");
+															writer.Flush();
+														}
+														pipeClient.Close();
 													}
+												}
+												catch (Exception ex) { }
+											}
+										}
+										//string reshadeString = "";
+										if (magpieSindenBorder)
+										{
 
+											string magpieIniContent = "";
+											if (Program.magpieIni != "")
+											{
+												magpieIniContent = File.ReadAllText(Program.magpieIni);
+											}
+
+											if (magpieIniContent != "")
+											{
+												string existingTechniques = Regex.Match(magpieIniContent, @"^Techniques=(.*)", RegexOptions.Multiline).Groups[1].Value.Trim('\n').Trim('\r').Trim('\n');
+												string newTechniques = "";
+												bool addGridLast = false;
+												bool addBezelAfterTransform = false;
+												foreach(var technique in existingTechniques.Split(','))
+												{
+													if (technique.ToLower().Trim() == "CShade_TransformSinden@cTransformSinden.fx".ToLower()) continue;
+													if (technique.ToLower().Trim() == "BorderSinden@BorderSinden.fx".ToLower()) continue;
+													if (technique.ToLower().Trim() == "GridLast@GridLast.fx".ToLower())
+													{
+														addGridLast = true;
+														continue;
+													}
+													if (technique.ToLower().Trim() == "BezelMagpie@BezelMagpie.fx".ToLower())
+													{
+														addBezelAfterTransform = true;
+														continue;
+													}
+													newTechniques += technique + ",";
+												}
+												if(addBezelAfterTransform) newTechniques += "CShade_TransformSinden@cTransformSinden.fx,BezelMagpie@BezelMagpie.fx,BorderSinden@BorderSinden.fx";
+												else newTechniques += "CShade_TransformSinden@cTransformSinden.fx,BorderSinden@BorderSinden.fx";
+												if (addGridLast) newTechniques += ",GridLast@GridLast.fx";
+												magpieIniContent = Regex.Replace(magpieIniContent, @"^Techniques=.*", "Techniques=" + newTechniques, RegexOptions.Multiline);
+											}
+											else
+											{
+												magpieIniContent = @"
+Techniques=CShade_TransformSinden@cTransformSinden.fx,BorderSinden@BorderSinden.fx
+TechniqueSorting=CShade_TransformSinden@cTransformSinden.fx,BorderSinden@BorderSinden.fx
+
+[BorderSinden.fx]
+border_color=1.000000,1.000000,1.000000
+border_width=1.5,1.5
+outerblack=0
+use4tiers=0
+
+[cTransformSinden.fx]
+_Angle=0.000000
+_Scale=1.030928,1.030928
+_Translate=0.000000,0.000000
+
+";
+											}
+
+
+											//magpieExe = ConfigurationManager.MainConfig.magpieSindenExe;
+											//magpieConfig = Path.Combine(Path.GetDirectoryName(magpieExe), "config", "config.json");
+											/*
+											reshadeString = "";
+											if (magpieReshadeAdaptiveSharpen) reshadeString += "AdaptiveSharpen@AdaptiveSharpen.fx,";
+											if (magpieReshadeClarity) reshadeString += "Clarity@Clarity.fx,";
+											if (magpieReshadeAdaptiveSharpen) reshadeString += "Colourfulness@Colourfulness.fx,";
+											//if (magpieReshade43) reshadeString += "AspectRatioPS@AspectRatio.fx,";
+											*/
+											//reshadeString = "CShade_Transform@cTransform.fx,BorderSinden@BorderSinden.fx";
+
+												
+
+											string magpieReshadeIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
+											File.WriteAllText(magpieReshadeIni, magpieIniContent);
+											magpieContentWritten = true;
+											if (File.Exists(magpieReshadeIni))
+											{
+												string ratioReshadeBorderWidthString = Math.Round(ratioReshadeBorderWidth, 6).ToString("0.######", System.Globalization.CultureInfo.InvariantCulture);
+												string ratioReshadeBorderHeightString = Math.Round(ratioReshadeBorderHeight, 6).ToString("0.######", System.Globalization.CultureInfo.InvariantCulture);
+												string bordersizeString = Math.Round(borderSize, 6).ToString("0.######", System.Globalization.CultureInfo.InvariantCulture);
+												IniFile reshadeIni = new IniFile(magpieReshadeIni);
+												reshadeIni.Write("border_width", $"{bordersizeString},{bordersizeString}", "BorderSinden.fx");
+												reshadeIni.Write("border_color", $"1.000000,1.000000,1.000000", "BorderSinden.fx");
+
+												//_Scale=1.030928,1.03093
+												reshadeIni.Write("_Scale", $"{ratioReshadeBorderWidthString},{ratioReshadeBorderHeightString}", "cTransformSinden.fx");
+
+											}
+										}
+
+										if (File.Exists(magpieExe) && File.Exists(magpieConfig))
+										{
+
+											string magpieReshadeDll = Path.Combine(Path.GetDirectoryName(magpieExe), "d2d1.dll");
+											if (string.IsNullOrEmpty(Program.magpieIni) && magpieContentWritten == false)
+											{
+												if (File.Exists(magpieReshadeDll))
+												{
+													File.Move(magpieReshadeDll, magpieReshadeDll + ".disabled");
 												}
 											}
-											if (magpieLightgunCalibration == 1)
+											else
 											{
-												double ratioVjoyFinalWidth = ratioVjoyWidth - 1;
-												double ratioVjoyFinalHeight = ratioVjoyHeight - 1;
-
-												if (ratioVjoyFinalWidth >= 0 && ratioVjoyFinalWidth < 3 && ratioVjoyFinalHeight >= 0 && ratioVjoyFinalHeight < 3)
+												if (File.Exists(magpieReshadeDll + ".disabled"))
 												{
-													string ratioVjoyFinalWidthString = Math.Round(ratioVjoyFinalWidth, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
-													string ratioVjoyFinalHeightString = Math.Round(ratioVjoyFinalHeight, 5).ToString("0.#####", System.Globalization.CultureInfo.InvariantCulture).TrimEnd('0').TrimEnd('.');
-													if (ratioVjoyFinalWidthString == "") ratioVjoyFinalWidthString = "0";
-													if (ratioVjoyFinalHeightString == "") ratioVjoyFinalHeightString = "0";
+													File.Move(magpieReshadeDll + ".disabled", magpieReshadeDll);
+												}
 
+												string magpieReshadeIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
+												if (!magpieContentWritten)
+												{
+													File.Copy(Program.magpieIni, magpieReshadeIni, true);
+												}
 
-
-													forcevjoyXformula = $"[X]+(([X]-(32767/2))*{ratioVjoyFinalWidthString})";
-													forcevjoyYformula = $"[Y]+(([Y]-(32767/2))*{ratioVjoyFinalHeightString})";
-													Utils.LogMessage("Vjoy forced formula X : " + forcevjoyXformula);
-													Utils.LogMessage("Vjoy forced formula Y : " + forcevjoyYformula);
+												string cacheShaderDirMagpie = Path.Combine(Path.GetDirectoryName(magpieExe), "reshade-shaders", "Cache");
+												if (Directory.Exists(cacheShaderDirMagpie))
+												{
 													try
 													{
-														NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "VjoyControlCommand", PipeDirection.Out);
-														if (!pipeClient.IsConnected)
-														{
+														string[] files = Directory.GetFiles(cacheShaderDirMagpie, "reshade-BezelMagpie*");
+														foreach (string file in files) File.Delete(file);
+														string[] files2 = Directory.GetFiles(cacheShaderDirMagpie, "reshade-UIMask*");
+														foreach (string file2 in files) File.Delete(file2);
 
-															pipeClient.Connect();
-															using (StreamWriter writer = new StreamWriter(pipeClient, Encoding.UTF8))
-															{
-																writer.Write(@$"formula={forcevjoyXformula},{forcevjoyYformula}");
-																writer.Flush();
-															}
-															pipeClient.Close();
-														}
 													}
 													catch (Exception ex) { }
 												}
-											}
-
-											if (magpieLightgun == 2)
-											{
-												//magpieExe = ConfigurationManager.MainConfig.magpieSindenExe;
-												//magpieConfig = Path.Combine(Path.GetDirectoryName(magpieExe), "config", "config.json");
-
-												reshadeString = "";
-												if (magpieReshadeAdaptiveSharpen) reshadeString += "AdaptiveSharpen@AdaptiveSharpen.fx,";
-												if (magpieReshadeClarity) reshadeString += "Clarity@Clarity.fx,";
-												if (magpieReshadeAdaptiveSharpen) reshadeString += "Colourfulness@Colourfulness.fx,";
-												//if (magpieReshade43) reshadeString += "AspectRatioPS@AspectRatio.fx,";
-												reshadeString += "CShade_Transform@cTransform.fx,BorderSinden@BorderSinden.fx";
-
-												string magpieReshadeIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
-												if (File.Exists(magpieReshadeIni))
-												{
-													string ratioReshadeBorderWidthString = Math.Round(ratioReshadeBorderWidth, 6).ToString("0.######", System.Globalization.CultureInfo.InvariantCulture);
-													string ratioReshadeBorderHeightString = Math.Round(ratioReshadeBorderHeight, 6).ToString("0.######", System.Globalization.CultureInfo.InvariantCulture);
-													string bordersizeString = Math.Round(borderSize, 6).ToString("0.######", System.Globalization.CultureInfo.InvariantCulture);
-													IniFile reshadeIni = new IniFile(magpieReshadeIni);
-													reshadeIni.Write("border_width", $"{bordersizeString},{bordersizeString}", "BorderSinden.fx");
-													//_Scale=1.030928,1.03093
-													reshadeIni.Write("_Scale", $"{ratioReshadeBorderWidthString},{ratioReshadeBorderHeightString}", "cTransform.fx");
-												}
-											}
-
-											if (File.Exists(magpieExe) && File.Exists(magpieConfig))
-											{
-
-												string magpieReshadeDll = Path.Combine(Path.GetDirectoryName(magpieExe), "d2d1.dll");
-												if (string.IsNullOrEmpty(reshadeString))
-												{
-													if (File.Exists(magpieReshadeDll))
-													{
-														File.Move(magpieReshadeDll, magpieReshadeDll + ".disabled");
-													}
-												}
 												else
 												{
-													if (File.Exists(magpieReshadeDll + ".disabled"))
+													try
 													{
-														File.Move(magpieReshadeDll + ".disabled", magpieReshadeDll);
+														Directory.CreateDirectory(cacheShaderDirMagpie);
 													}
-													string magpieReshadeIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
-													if (File.Exists(magpieReshadeIni))
+													catch { }
+												}
+
+												string magpieReshadeMainIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
+												if (File.Exists(magpieReshadeMainIni))
+												{
+													IniFile reshadeIniFile = new IniFile(magpieReshadeMainIni);
+													reshadeIniFile.Write("IntermediateCachePath", Path.GetFullPath(cacheShaderDirMagpie), "GENERAL");
+												}
+
+											}
+
+											string jsonText = File.ReadAllText(magpieConfig);
+											JObject jsonObject = JObject.Parse(jsonText);
+											jsonObject["allowScalingMaximized"] = magpieAllowScalingMaximized;
+											jsonObject["simulateExclusiveFullscreen"] = magpieExclusiveFullscreen;
+											try
+											{
+												double sharpnessValue = (double)magpieFsrSharp / 100.0;
+												jsonObject["scalingModes"][1]["effects"][1]["parameters"]["sharpness"] = sharpnessValue;
+											}
+											catch { }
+											JArray profilesArray = (JArray)jsonObject["profiles"];
+											foreach (JObject profile in profilesArray)
+											{
+												if (profile["name"] != null && profile["name"].ToString() == "Teknoparrot")
+												{
+													profile["pathRule"] = magpieExecutableGame;
+													profile["classNameRule"] = trueClassName;
+													profile["scalingMode"] = magpieScaling;
+													profile["captureMethod"] = magpieCapture;
+													profile["VSync"] = magpieVsync;
+													profile["tripleBuffering"] = magpieTripleBuffering;
+													profile["showFPS"] = magpieShowFps;
+												}
+											}
+											string modifiedJsonText = JsonConvert.SerializeObject(jsonObject, Newtonsoft.Json.Formatting.Indented);
+											File.WriteAllText(magpieConfig, modifiedJsonText);
+
+											try
+											{
+												if (!magpieNoMoveWindow) Utils.MoveWindowsToZero(windowHandle);
+												Thread.Sleep(100);
+												Utils.SetForegroundWindow(windowHandle);
+												Thread.Sleep(100);
+
+												//Utils.ClickWindow(windowHandle);
+											}
+											catch { }
+
+
+											Process magpie_process = new Process();
+											magpie_process.StartInfo.FileName = magpieExe;
+											magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
+											magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
+											magpie_process.StartInfo.UseShellExecute = true;
+											magpie_process.Start();
+											magpie_process_pid = magpie_process.Id;
+
+											if (!magpieNoClick)
+											{
+												var ClickOnPrimaryScreen = new Thread(() =>
+												{
+													for (int i = 0; i < 100; i++)
 													{
-														File.WriteAllText(magpieReshadeIni, Regex.Replace(File.ReadAllText(magpieReshadeIni), @"^Techniques=.*", "Techniques=" + reshadeString, RegexOptions.Multiline));
-
-													}
-												}
-
-												string jsonText = File.ReadAllText(magpieConfig);
-												JObject jsonObject = JObject.Parse(jsonText);
-												jsonObject["allowScalingMaximized"] = magpieAllowScalingMaximized;
-												jsonObject["simulateExclusiveFullscreen"] = magpieExclusiveFullscreen;
-												try
-												{
-													double sharpnessValue = (double)magpieFsrSharp / 100.0;
-													jsonObject["scalingModes"][1]["effects"][1]["parameters"]["sharpness"] = sharpnessValue;
-												}
-												catch { }
-												JArray profilesArray = (JArray)jsonObject["profiles"];
-												foreach (JObject profile in profilesArray)
-												{
-													if (profile["name"] != null && profile["name"].ToString() == "Teknoparrot")
-													{
-														profile["pathRule"] = magpieExecutableGame;
-														profile["classNameRule"] = trueClassName;
-														profile["scalingMode"] = magpieScaling;
-														profile["captureMethod"] = magpieCapture;
-														profile["VSync"] = magpieVsync;
-														profile["tripleBuffering"] = magpieTripleBuffering;
-														profile["showFPS"] = magpieShowFps;
-													}
-												}
-												string modifiedJsonText = JsonConvert.SerializeObject(jsonObject, Newtonsoft.Json.Formatting.Indented);
-												File.WriteAllText(magpieConfig, modifiedJsonText);
-
-												try
-												{
-													if (!magpieNoMoveWindow) Utils.MoveWindowsToZero(windowHandle);
-													Thread.Sleep(100);
-													Utils.SetForegroundWindow(windowHandle);
-													Thread.Sleep(100);
-
-													//Utils.ClickWindow(windowHandle);
-												}
-												catch { }
-
-
-												Process magpie_process = new Process();
-												magpie_process.StartInfo.FileName = magpieExe;
-												magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
-												magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
-												magpie_process.StartInfo.UseShellExecute = true;
-												magpie_process.Start();
-												magpie_process_pid = magpie_process.Id;
-
-												if (!magpieNoClick)
-												{
-													var ClickOnPrimaryScreen = new Thread(() =>
-													{
-														for (int i = 0; i < 100; i++)
+														if (isExiting) break;
+														string foregroundClassName = Utils.GetForegroundClassName();
+														Thread.Sleep(100);
+														if (foregroundClassName == "Magpie_Main")
 														{
-															if (isExiting) break;
-															string foregroundClassName = Utils.GetForegroundClassName();
-															Thread.Sleep(100);
-															if (foregroundClassName == "Magpie_Main")
-															{
-																Utils.ClickOnPrimaryScreen(0, 0);
-																break;
-															}
+															Utils.ClickOnPrimaryScreen(0, 0);
+															break;
 														}
-													});
-													ClickOnPrimaryScreen.Start();
-
-												}
-
-
-
+													}
+												});
+												ClickOnPrimaryScreen.Start();
 
 											}
 
 
-											return;
+
 
 										}
-									});
-									WaitForWindowed.Start();
 
-								}
+
+										return;
+
+									}
+								});
+								WaitForWindowed.Start();
+
+								
 							}
 
 							/*
@@ -4928,7 +5042,7 @@ namespace TeknoparrotAutoXinput
 						if (gameOptions.AhkAfter.Trim() != "")
 						{
 							Utils.LogMessage($"Execute AhkAfter");
-							Utils.ExecuteAHK(gameOptions.AhkAfter,true);
+							Utils.ExecuteAHK(gameOptions.AhkAfter,true,gameDir);
 						}
 
 						Utils.LogMessage($"CleanAndKillAhk");

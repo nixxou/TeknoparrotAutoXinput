@@ -1,8 +1,22 @@
 {
-    "windowed": "General,Windowed,1",
-    "magpieClass": "AQ15 CLASS",
-	"magpie3DGameMode": "False",
-	"magpieDisableDirectFlip": "False",
-	"magpieAllowScalingMaximized":"False",
-	"magpieLaunchBefore":"False"
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "AQ15 CLASS",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False"
+	},
+    "tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        }
+    },
+	"gameoptions": {}
 }
