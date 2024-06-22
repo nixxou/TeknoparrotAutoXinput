@@ -786,7 +786,6 @@ namespace TeknoparrotAutoXinput
 
 					if (nearTarget.Count == 1)
 					{
-						//MessageBox.Show("found !");
 						joystick.Unacquire();
 						foreach (var g in gameControllers)
 						{

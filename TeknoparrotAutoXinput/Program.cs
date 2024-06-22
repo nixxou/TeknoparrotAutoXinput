@@ -427,7 +427,6 @@ namespace TeknoparrotAutoXinput
 			//Vjoy
 			if (args.Length >= 2 && args.First() == "--runvjoy")
 			{
-				//MessageBox.Show("vjoy app");
 				string gunOption = args[1];
 				bool enableGunA = false;
 				bool enableGunB = false;
@@ -550,6 +549,7 @@ namespace TeknoparrotAutoXinput
 				HotasFFBGuid = ConfigurationManager.MainConfig.ffbDinputHotas;
 
 				bool passthrough = false;
+				bool fullpassthrough = false;
 
 
 				Utils.LogMessage("Initial values : ");
@@ -585,7 +585,7 @@ namespace TeknoparrotAutoXinput
 				int forced_displayMode = 0;
 				int forced_resolution = 0;
 				int forced_reshade = 0;
-				//MessageBox.Show("start");
+				bool nolink = false;
 
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
@@ -606,6 +606,13 @@ namespace TeknoparrotAutoXinput
 						{
 							passthrough = true;
 							Utils.LogMessage($"CMDLINE Option : passthrough = {passthrough}");
+						}
+
+						if (arg.ToLower().Trim() == "--fullpassthrough")
+						{
+							passthrough = true;
+							fullpassthrough = true;
+							Utils.LogMessage($"CMDLINE Option : fullpassthrough = {fullpassthrough}");
 						}
 
 						match = Regex.Match(arg, @"--disposition=[0-9a-zA-Z_]");
@@ -641,6 +648,12 @@ namespace TeknoparrotAutoXinput
 						if (match.Success)
 						{
 							forced_reshade = int.Parse(match.Groups[1].Value);
+						}
+
+						if (arg.ToLower().Trim() == "--nolink")
+						{
+							nolink = true;
+							Utils.LogMessage($"CMDLINE Option : nolink = {nolink}");
 						}
 
 
@@ -1301,7 +1314,6 @@ namespace TeknoparrotAutoXinput
 
 
 						//Start LightGunCheck
-						//MessageBox.Show("Start LightGunCheck");
 						bool checkDinputLightgun = false;
 						string LightgunA_Type = ConfigurationManager.MainConfig.gunAType;
 						string LightgunB_Type = ConfigurationManager.MainConfig.gunBType;
@@ -3758,25 +3770,52 @@ namespace TeknoparrotAutoXinput
 						}
 						Startup.playerAttributionDesc.TrimEnd('\n');
 					}
+					else
+					{
+						if (!fullpassthrough)
+						{
+							// Créez les paramètres pour l'indentation
+							XmlWriterSettings settings = new XmlWriterSettings
+							{
+								Indent = true,
+								IndentChars = "    ", // Utilisez la chaîne que vous préférez pour l'indentation (par exemple, des espaces ou des tabulations)
+								NewLineChars = "\n",
+								NewLineHandling = NewLineHandling.Replace
+							};
+
+							using (XmlWriter xmlWriter = XmlWriter.Create(xmlFile + ".custom.xml", settings))
+							{
+								// Enregistrez le XmlDocument avec l'indentation dans le XmlWriter
+								TpSettingsManager.xmlDoc.Save(xmlWriter);
+								finalConfig = xmlFile + ".custom.xml";
+							}
+						}
+
+					}
+					//Fin if(FinalConfig=="")
 
 					if (finalConfig != "")
 					{
-						if(gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
+						if (!nolink)
 						{
-							Utils.LogMessage($"HardLinkFiles {linkSourceFolder}, {linkTargetFolder}");
-							if (Utils.IsEligibleHardLink(linkSourceFolder,linkTargetFolder))
+							if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 							{
-								Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder);
+								Utils.LogMessage($"HardLinkFiles {linkSourceFolder}, {linkTargetFolder}");
+								if (Utils.IsEligibleHardLink(linkSourceFolder, linkTargetFolder))
+								{
+									Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder);
+								}
+							}
+							if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe))
+							{
+								Utils.LogMessage($"HardLinkFiles {linkSourceFolderExe}, {linkTargetFolderExe}");
+								if (Utils.IsEligibleHardLink(linkSourceFolderExe, linkTargetFolderExe))
+								{
+									Utils.HardLinkFiles(linkSourceFolderExe, linkTargetFolderExe, executableGameFile);
+								}
 							}
 						}
-						if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe))
-						{
-							Utils.LogMessage($"HardLinkFiles {linkSourceFolderExe}, {linkTargetFolderExe}");
-							if (Utils.IsEligibleHardLink(linkSourceFolderExe, linkTargetFolderExe))
-							{
-								Utils.HardLinkFiles(linkSourceFolderExe, linkTargetFolderExe, executableGameFile);
-							}
-						}
+
 
 						if (!string.IsNullOrEmpty(_dispositionToSwitch) && _dispositionToSwitch != "<none>")
 						{
@@ -4120,8 +4159,6 @@ namespace TeknoparrotAutoXinput
 						string magpieTitle = "";
 						if (GameInfo.ContainsKey("magpieTitle") && GameInfo["magpieTitle"].Trim() != "") magpieTitle = GameInfo["magpieTitle"].Trim();
 
-						//MessageBox.Show("t=" + magpieTitle + "," + magpieClass);
-
 						string forceSindenCalibration = "";
 						string forcevjoyXformula = "";
 						string forcevjoyYformula = "";
@@ -4343,6 +4380,7 @@ namespace TeknoparrotAutoXinput
 															Thread.Sleep(100);
 															if (foregroundClassName == "Magpie_Main")
 															{
+																Thread.Sleep(2000);
 																Utils.ClickOnPrimaryScreen(0, 0);
 																break;
 															}
@@ -4763,6 +4801,7 @@ _Translate=0.000000,0.000000
 														Thread.Sleep(100);
 														if (foregroundClassName == "Magpie_Main")
 														{
+															Thread.Sleep(2000);
 															Utils.ClickOnPrimaryScreen(0, 0);
 															break;
 														}
@@ -4889,6 +4928,8 @@ _Translate=0.000000,0.000000
 									}
 									int xenosDelay = (gameOptions.injectorDelay * 1000);
 
+									Thread.Sleep(xenosDelay);
+
 									XmlDocument xmlDocumentXenos = new XmlDocument();
 									xmlDocumentXenos.Load(xenosEmptyConf);
 
@@ -4896,7 +4937,8 @@ _Translate=0.000000,0.000000
 									procNameNode.InnerText = Path.GetFileName(executableGame);
 
 									XmlNode delayNode = xmlDocumentXenos.SelectSingleNode("//delay");
-									delayNode.InnerText = xenosDelay.ToString();
+									//delayNode.InnerText = xenosDelay.ToString();
+									delayNode.InnerText = "500";
 
 									// Ajouter un nœud <imagePath> pour chaque élément dans la liste
 									foreach (string imagePath in dllCheckedList)
@@ -4931,7 +4973,7 @@ _Translate=0.000000,0.000000
 						}
 
 						string argumentTpExe = "--profile=\"" + finalConfig + "\"";
-						if (gameOptions.RunAsRoot && gameNeedAdmin)
+						if (gameOptions.RunAsRoot)
 						{
 							Utils.LogMessage($"Force RunAsRoot");
 							if (!Utils.CheckTaskExist(teknoparrotExe, argumentTpExe))
@@ -5021,23 +5063,28 @@ _Translate=0.000000,0.000000
 						}
 						*/
 
-						if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
+						if (!nolink)
 						{
-							Utils.LogMessage($"CleanHardLinksFiles Elf");
-							if (Utils.IsEligibleHardLink(linkTargetFolder))
+							if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 							{
-								Utils.CleanHardLinksFilesOriginal(linkTargetFolder, linkSourceFolder);
+								Utils.LogMessage($"CleanHardLinksFiles Elf");
+								if (Utils.IsEligibleHardLink(linkTargetFolder))
+								{
+									Utils.CleanHardLinksFilesOriginal(linkTargetFolder, linkSourceFolder);
+								}
 							}
+
+							if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe))
+							{
+								Utils.LogMessage($"CleanHardLinksFiles GameDir");
+								if (Utils.IsEligibleHardLink(linkTargetFolderExe))
+								{
+									Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
+								}
+							}
+
 						}
 
-						if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe))
-						{
-							Utils.LogMessage($"CleanHardLinksFiles GameDir");
-							if (Utils.IsEligibleHardLink(linkTargetFolderExe))
-							{
-								Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
-							}
-						}
 
 						if (gameOptions.AhkAfter.Trim() != "")
 						{

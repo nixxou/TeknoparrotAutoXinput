@@ -243,7 +243,6 @@ namespace TeknoparrotAutoXinput
 		public static void HardLinkFiles(string directorySource, string directoryDest, string executableGame = "")
 		{
 			/*
-			MessageBox.Show("HardLink Start");
 			if (!Directory.Exists(directorySource)) return;
 			if (!Directory.Exists(directoryDest)) return;
 			directorySource = Path.GetFullPath(directorySource);
@@ -532,7 +531,6 @@ namespace TeknoparrotAutoXinput
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!moveto!]") && newfile.Contains(@"\[!moveto!]\"))
 				{
-					//MessageBox.Show("move");
 					string fileName = Path.GetFileName(file);
 					if(moveToDest == "")
 					{
@@ -578,7 +576,6 @@ namespace TeknoparrotAutoXinput
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!moveto_nocopyback!]") && newfile.Contains(@"\[!moveto_nocopyback!]\"))
 				{
-					//MessageBox.Show("moveto_nocopyback");
 					string fileName = Path.GetFileName(file);
 					if (moveToDest == "")
 					{

@@ -357,7 +357,6 @@ namespace TeknoparrotAutoXinput
 				threadGame = new Thread(() => MonitorGame(executableGame));
 				threadGame.Start();
 			}
-			//MessageBox.Show("rdy");
 		}
 
 		public void Stop()

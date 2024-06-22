@@ -213,7 +213,7 @@ namespace TeknoparrotAutoXinput
 
 		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true, string formulaX = "", string formulaY = "", string gunAMinMax = "", string gunBMinMax = "")
 		{
-			MessageBox.Show($"icizz {formulaX} {formulaY} {gunAMinMax} {gunBMinMax}");
+			//MessageBox.Show($"icizz {formulaX} {formulaY} {gunAMinMax} {gunBMinMax}");
 			_enableGunA = enableGunA;
 			_enableGunB = enableGunB;
 
@@ -608,6 +608,7 @@ namespace TeknoparrotAutoXinput
 									break; // Fin du flux, sortir de la boucle
 
 								string message = new string(buffer, 0, bytesRead);
+								//MessageBox.Show(message);
 
 								Action safeWrite = delegate { ParseMessage(message); };
 
@@ -683,7 +684,7 @@ namespace TeknoparrotAutoXinput
 			if (_settingsGunA.formula_x.Trim() != "") expAX = new Expression(_settingsGunA.formula_x);
 			if (_settingsGunA.formula_y.Trim() != "") expAY = new Expression(_settingsGunA.formula_y);
 			if (_settingsGunB.formula_x.Trim() != "") expBX = new Expression(_settingsGunB.formula_x);
-			if (_settingsGunB.formula_x.Trim() != "") expBY = new Expression(_settingsGunB.formula_y);
+			if (_settingsGunB.formula_y.Trim() != "") expBY = new Expression(_settingsGunB.formula_y);
 		}
 
 		private int RemapValueToVJoy(int Value, int XMin, int XMax, vJoyManager.AxisExtents vJoyLimit)
@@ -1008,7 +1009,6 @@ namespace TeknoparrotAutoXinput
 			joystick = new Joystick(directInput, device_guid);
 			joystick.Properties.BufferSize = 512;
 			joystick.Acquire();
-			//MessageBox.Show("gun " + gunIndex.ToString());
 			while (!_stopListening)
 			{
 				try

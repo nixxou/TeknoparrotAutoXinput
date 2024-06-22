@@ -80,11 +80,13 @@ namespace TeknoparrotAutoXinput
 				{
 					btn_playgame.Enabled = false;
 					btn_playgamedirect.Enabled = false;
+					btn_playgamedirect2.Enabled = false;
 				}
 				else
 				{
 					if (_playAutoEnabled) btn_playgame.Enabled = true;
 					if (_playDirectEnabled) btn_playgamedirect.Enabled = true;
+					if (_playDirectEnabled) btn_playgamedirect2.Enabled = true;
 				}
 
 			}
@@ -484,6 +486,7 @@ namespace TeknoparrotAutoXinput
 			cmb_displayMode.SelectedIndex = 0;
 			cmb_patchReshade.SelectedIndex = 0;
 			cmb_resolution.SelectedIndex = 0;
+			cmb_patchlink.SelectedIndex = 0;
 		}
 
 		private void btn_globalconfig_Click(object sender, EventArgs e)
@@ -555,6 +558,7 @@ namespace TeknoparrotAutoXinput
 		{
 			btn_playgame.Enabled = false;
 			btn_playgamedirect.Enabled = false;
+			btn_playgamedirect2.Enabled = false;
 			btn_gameoptions.Enabled = false;
 			btn_tpsettings.Enabled = false;
 
@@ -571,6 +575,7 @@ namespace TeknoparrotAutoXinput
 			if (list_games.SelectedItems.Count > 0)
 			{
 				btn_playgamedirect.Enabled = true;
+				btn_playgamedirect2.Enabled = true;
 				string GameSelected = list_games.SelectedItems[0].ToString();
 				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
 				if (_gameList.ContainsKey(GameSelected))
@@ -1077,7 +1082,7 @@ namespace TeknoparrotAutoXinput
 
 		private async void btn_playgame_Click(object sender, EventArgs e)
 		{
-			
+
 
 
 			string teknoparrotExe = Path.Combine(_tpFolder, "TeknoParrotUi.exe");
@@ -1097,6 +1102,7 @@ namespace TeknoparrotAutoXinput
 			if (list_games.SelectedItems.Count > 0)
 			{
 				btn_playgamedirect.Enabled = true;
+				btn_playgamedirect2.Enabled = true;
 				string GameSelected = list_games.SelectedItems[0].ToString();
 				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
 				if (_gameList.ContainsKey(GameSelected))
@@ -1111,6 +1117,8 @@ namespace TeknoparrotAutoXinput
 			if (cmb_displayMode.SelectedIndex > 0) arguments += $" --displayMode={cmb_displayMode.SelectedIndex}";
 			if (cmb_resolution.SelectedIndex > 0) arguments += $" --resolution={cmb_resolution.SelectedIndex}";
 			if (cmb_patchReshade.SelectedIndex > 0) arguments += $" --reshade={cmb_patchReshade.SelectedIndex}";
+			if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
+
 			arguments += $" \"{finalConfig}\"";
 			arguments = arguments.Trim();
 			isPlaying = true;
@@ -1161,6 +1169,7 @@ namespace TeknoparrotAutoXinput
 			if (list_games.SelectedItems.Count > 0)
 			{
 				btn_playgamedirect.Enabled = true;
+				btn_playgamedirect2.Enabled = true;
 				string GameSelected = list_games.SelectedItems[0].ToString();
 				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
 				if (_gameList.ContainsKey(GameSelected))
@@ -1174,6 +1183,7 @@ namespace TeknoparrotAutoXinput
 			if (cmb_displayMode.SelectedIndex > 0) arguments += $" --displayMode={cmb_displayMode.SelectedIndex}";
 			if (cmb_resolution.SelectedIndex > 0) arguments += $" --resolution={cmb_resolution.SelectedIndex}";
 			if (cmb_patchReshade.SelectedIndex > 0) arguments += $" --reshade={cmb_patchReshade.SelectedIndex}";
+			if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
 			arguments += $" \"{finalConfig}\"";
 			arguments = arguments.Trim();
 
@@ -1815,6 +1825,82 @@ namespace TeknoparrotAutoXinput
 		private void cmb_resolution_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
+		}
+
+		private void kryptonLabel8_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void kryptonComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private async void btn_playgamedirect2_Click(object sender, EventArgs e)
+		{
+			string teknoparrotExe = Path.Combine(_tpFolder, "TeknoParrotUi.exe");
+			if (!File.Exists(teknoparrotExe)) MessageBox.Show($"Can't find {teknoparrotExe}");
+			Process[] existingProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(teknoparrotExe));
+			if (existingProcesses.Length > 0)
+			{
+				foreach (var existingProcess in existingProcesses)
+				{
+					existingProcess.Kill();
+					Thread.Sleep(1000);
+				}
+			}
+
+
+			string finalConfig = "";
+			if (list_games.SelectedItems.Count > 0)
+			{
+				btn_playgamedirect.Enabled = true;
+				btn_playgamedirect2.Enabled = true;
+				string GameSelected = list_games.SelectedItems[0].ToString();
+				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
+				if (_gameList.ContainsKey(GameSelected))
+				{
+					finalConfig = _gameList[GameSelected].UserConfigFile;
+				}
+			}
+			if (string.IsNullOrEmpty(finalConfig)) return;
+
+			string arguments = $"--fullpassthrough ";
+			if (cmb_displayMode.SelectedIndex > 0) arguments += $" --displayMode={cmb_displayMode.SelectedIndex}";
+			if (cmb_resolution.SelectedIndex > 0) arguments += $" --resolution={cmb_resolution.SelectedIndex}";
+			if (cmb_patchReshade.SelectedIndex > 0) arguments += $" --reshade={cmb_patchReshade.SelectedIndex}";
+			if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
+			arguments += $" \"{finalConfig}\"";
+			arguments = arguments.Trim();
+
+			isPlaying = true;
+
+			await Task.Run(() =>
+			{
+				ProcessStartInfo startInfo = new ProcessStartInfo
+				{
+					FileName = Process.GetCurrentProcess().MainModule.FileName,
+					Arguments = arguments,
+					WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
+					UseShellExecute = true
+				};
+
+				using (Process process = new Process { StartInfo = startInfo })
+				{
+					try
+					{
+						process.Start();
+						process.WaitForExit();
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show("Erreur lors du lancement du programme : " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			});
+
+			isPlaying = false;
 		}
 	}
 
