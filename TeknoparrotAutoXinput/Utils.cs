@@ -1751,7 +1751,8 @@ namespace TeknoparrotAutoXinput
 			int borderSizeWidth = (int)Math.Floor(((double)winWidth - (double)clientWidth) / 2.0);
 			int diffHeight = (winHeight - clientHeight);
 
-			Screen screen = Screen.FromHandle(hWnd);
+			//Screen screen = Screen.FromHandle(hWnd);
+			Screen screen = Screen.PrimaryScreen;
 
 			if (winWidth <= screen.Bounds.Width && winHeight <= screen.Bounds.Height)
 			{

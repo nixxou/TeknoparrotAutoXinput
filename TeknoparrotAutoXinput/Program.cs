@@ -452,7 +452,7 @@ namespace TeknoparrotAutoXinput
 					gunBMinMax = args[5];
 				}
 
-				ConfigurationManager.LoadConfig();
+				ConfigurationManager.LoadConfig();			
 				string xmlFile = args.Last();
 				if (xmlFile.ToLower().EndsWith(".xml") && File.Exists(xmlFile))
 				{
@@ -465,6 +465,11 @@ namespace TeknoparrotAutoXinput
 					{
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
 						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB, formula_X, formula_Y,gunAMinMax,gunBMinMax);
+						Application.Run(frm);
+					}
+					else
+					{
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, null, enableGunA, enableGunB, formula_X, formula_Y, gunAMinMax, gunBMinMax);
 						Application.Run(frm);
 					}
 				}
@@ -543,7 +548,7 @@ namespace TeknoparrotAutoXinput
 				bool enableStoozZone_Hotas = ConfigurationManager.MainConfig.enableStoozZone_Hotas;
 				int valueStooz_Hotas = ConfigurationManager.MainConfig.valueStooz_Hotas;
 
-
+				bool useXenos = ConfigurationManager.MainConfig.useXenos;
 
 				WheelFFBGuid = ConfigurationManager.MainConfig.ffbDinputWheel;
 				HotasFFBGuid = ConfigurationManager.MainConfig.ffbDinputHotas;
@@ -693,6 +698,13 @@ namespace TeknoparrotAutoXinput
 					{
 						Utils.LogMessage($"gameoveride file found : " + optionFile);
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
+					}
+
+					if (fullpassthrough)
+					{
+						gameOptions.useMagpie = 2;
+						gameOptions.runRivaTuner = false;
+						useXenos = false;
 					}
 
 					patchGpuFix = gameOptions.patchGpuFix > 0 ? (gameOptions.patchGpuFix == 1 ? true : false) : patchGpuFix;
@@ -909,7 +921,7 @@ namespace TeknoparrotAutoXinput
 						var gameInfoFileAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + "info" + ".json");
 						if (File.Exists(gameInfoFileAlt)) gameInfoFile = gameInfoFileAlt;
 					}
-					if (File.Exists(gameInfoFile))
+					if (File.Exists(gameInfoFile) && !fullpassthrough)
 					{
 						Utils.LogMessage($"info file found : " + gameInfoFile);
 						gameInfoContent = File.ReadAllText(gameInfoFile);
@@ -1503,7 +1515,6 @@ namespace TeknoparrotAutoXinput
 							ButtonToKeyManager.buttonToKey.EnableGunBOffscreenReload = gunBoffscreenReload;
 						}
 
-
 						if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunStart") && !bindingDinputLightGunA.ContainsKey("LightgunCoin"))
 						{
 							if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunX") && bindingDinputLightGunA.ContainsKey("LightgunY"))
@@ -1522,6 +1533,23 @@ namespace TeknoparrotAutoXinput
 								GunCoinOverwrite = true;
 							}
 						}
+
+
+						if (dinputLightgunAFound && ButtonToKeyManager.buttonToKey.EnableGunAOffscreenReload)
+						{
+							if (dinputLightgunAFound && bindingDinputLightGunA.ContainsKey("LightgunX") && bindingDinputLightGunA.ContainsKey("LightgunY"))
+							{
+								originalJoystickPerGun[1] = (bindingDinputLightGunA["LightgunX"], bindingDinputLightGunA["LightgunY"]);
+							}
+						}
+						if (dinputLightgunBFound && ButtonToKeyManager.buttonToKey.EnableGunBOffscreenReload)
+						{
+							if (dinputLightgunBFound && bindingDinputLightGunB.ContainsKey("LightgunX") && bindingDinputLightGunB.ContainsKey("LightgunY"))
+							{
+								originalJoystickPerGun[2] = (bindingDinputLightGunB["LightgunX"], bindingDinputLightGunB["LightgunY"]);
+							}
+						}
+
 						ButtonToKeyManager.buttonToKey.originalJoystickPerGun = originalJoystickPerGun;
 
 						Utils.LogMessage($"dinputLightgunAFound = {dinputLightgunAFound}");
@@ -3533,6 +3561,15 @@ namespace TeknoparrotAutoXinput
 														if (bindkey.EndsWith("_LightgunReload")) coinOrStart += 3;
 													}
 
+													if (bindkey.StartsWith("GunA_") && bindkey.EndsWith("_LightgunReload"))
+													{
+														coinOrStart = 13;
+													}
+													if (bindkey.StartsWith("GunB_") && bindkey.EndsWith("_LightgunReload"))
+													{
+														coinOrStart = 23;
+													}
+
 													var bindData = bindingDinputLightGun[bindkey];
 													ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
 												}
@@ -4138,7 +4175,6 @@ namespace TeknoparrotAutoXinput
 							Thread.Sleep(1000);
 						}
 
-
 						Thread WaitForWindowed = null;
 						bool forceMagpie = false;
 						bool useMagpie = ConfigurationManager.MainConfig.useMagpie;
@@ -4457,6 +4493,7 @@ namespace TeknoparrotAutoXinput
 
 								WaitForWindowed = new Thread(() =>
 								{
+									Utils.LogMessage("Start Magpie Thread");
 									string trueClassName = "";
 									IntPtr windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
 									while (!isExiting)
@@ -4465,9 +4502,10 @@ namespace TeknoparrotAutoXinput
 										{
 											windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
 											Thread.Sleep(500);
+											Utils.LogMessage("Search Window ...");
 										}
 
-
+										Utils.LogMessage("Window Found");
 
 										Thread.Sleep(500 + (magpieDelay * 1000));
 
@@ -4584,10 +4622,11 @@ namespace TeknoparrotAutoXinput
 												try
 												{
 													NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "VjoyControlCommand", PipeDirection.Out);
-													if (!pipeClient.IsConnected)
-													{
+													pipeClient.Connect(5000);
 
-														pipeClient.Connect();
+													if (pipeClient.IsConnected)
+													{
+														
 														using (StreamWriter writer = new StreamWriter(pipeClient, Encoding.UTF8))
 														{
 															writer.Write(@$"formula={forcevjoyXformula},{forcevjoyYformula}");
@@ -4596,7 +4635,9 @@ namespace TeknoparrotAutoXinput
 														pipeClient.Close();
 													}
 												}
-												catch (Exception ex) { }
+												catch (Exception ex) {
+													Utils.LogMessage("Exception :  " + ex.Message);
+												}
 											}
 										}
 										//string reshadeString = "";
@@ -4875,7 +4916,7 @@ _Translate=0.000000,0.000000
 						}
 
 						Thread XenosThread = null;
-						bool useXenos = ConfigurationManager.MainConfig.useXenos;
+						
 						if(useXenos && (!gameOptions.useInjector || gameOptions.injectorDllList == "")) useXenos=false;
 						if (useXenos)
 						{

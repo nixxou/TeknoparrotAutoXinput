@@ -1,0 +1,31 @@
+{
+	"global": {
+		"_comment": "Dont work on recent intel cpu",
+		"rom": "bugbust",
+		"target": "windows",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "BBUSTER",
+		"magpieTitle": "",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },			
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+       "recommanded_tp_settings": {  
+        },
+	},
+	"gameoptions": {}
+}

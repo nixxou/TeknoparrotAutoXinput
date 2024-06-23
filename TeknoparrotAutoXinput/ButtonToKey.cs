@@ -145,9 +145,11 @@ namespace TeknoparrotAutoXinput
 					if (_joystick1_offscreen && EnableGunAOffscreenReload)
 					{
 						if(GunA_reloadKey != "" && keyToAssign.ContainsKey(GunA_reloadKey))
+						{
 							keyboardController.Press(keyToAssign[GunA_reloadKey].Item1, new TimeSpan(0, 0, 0, 0, 50));
+						}
+							
 					}
-					
 				}
 			}
 		}
@@ -404,7 +406,7 @@ namespace TeknoparrotAutoXinput
 								key.Offset == JoystickOffset.AccelerationY ||
 								key.Offset == JoystickOffset.AccelerationZ)
 						{
-							
+
 							if(joyGuid == joystick1X.Item1 && (int)key.Offset == joystick1X.Item2)
 							{
 								//Utils.LogMessage("JOY1 X=" + key.Value);

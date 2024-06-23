@@ -681,10 +681,38 @@ namespace TeknoparrotAutoXinput
 			chk_alterManual_B.Checked = _settingsGunB.alterManual;
 			chk_enableNumpadB.Checked = _settingsGunB.enableNumpad;
 
-			if (_settingsGunA.formula_x.Trim() != "") expAX = new Expression(_settingsGunA.formula_x);
-			if (_settingsGunA.formula_y.Trim() != "") expAY = new Expression(_settingsGunA.formula_y);
-			if (_settingsGunB.formula_x.Trim() != "") expBX = new Expression(_settingsGunB.formula_x);
-			if (_settingsGunB.formula_y.Trim() != "") expBY = new Expression(_settingsGunB.formula_y);
+			if (_settingsGunA.formula_x.Trim() != "")
+			{
+				expAX = new Expression(_settingsGunA.formula_x);
+				if (expAX.HasErrors())
+				{
+					expAX = null;
+				}
+			}
+			if (_settingsGunA.formula_y.Trim() != "")
+			{
+				expAY = new Expression(_settingsGunA.formula_y);
+				if (expAY.HasErrors())
+				{
+					expAY = null;
+				}
+			}
+			if (_settingsGunB.formula_x.Trim() != "")
+			{
+				expBX = new Expression(_settingsGunB.formula_x);
+				if (expBX.HasErrors())
+				{
+					expBX = null;
+				}
+			}
+			if (_settingsGunB.formula_y.Trim() != "")
+			{
+				expBY = new Expression(_settingsGunB.formula_y);
+				if (expBY.HasErrors())
+				{
+					expBY = null;
+				}
+			}
 		}
 
 		private int RemapValueToVJoy(int Value, int XMin, int XMax, vJoyManager.AxisExtents vJoyLimit)
@@ -1670,8 +1698,24 @@ namespace TeknoparrotAutoXinput
 
 			expAX = null;
 			expAY = null;
-			if (_settingsGunA.formula_x.Trim() != "") expAX = new Expression(_settingsGunA.formula_x);
-			if (_settingsGunA.formula_y.Trim() != "") expAY = new Expression(_settingsGunA.formula_y);
+			if (_settingsGunA.formula_x.Trim() != "")
+			{
+				expAX = new Expression(_settingsGunA.formula_x);
+				if (expAX.HasErrors())
+				{
+					expAX = null;
+				}
+			}
+
+
+			if (_settingsGunA.formula_y.Trim() != "")
+			{
+				expAY = new Expression(_settingsGunA.formula_y);
+				if (expAY.HasErrors())
+				{
+					expAY = null;
+				}
+			}
 
 		}
 
@@ -1723,8 +1767,22 @@ namespace TeknoparrotAutoXinput
 
 			expBX = null;
 			expBY = null;
-			if (_settingsGunB.formula_x.Trim() != "") expBX = new Expression(_settingsGunB.formula_x);
-			if (_settingsGunB.formula_x.Trim() != "") expBY = new Expression(_settingsGunB.formula_y);
+			if (_settingsGunB.formula_x.Trim() != "")
+			{
+				expBX = new Expression(_settingsGunB.formula_x);
+				if (expBX.HasErrors())
+				{
+					expBX = null;
+				}
+			}
+			if (_settingsGunB.formula_x.Trim() != "")
+			{
+				expBY = new Expression(_settingsGunB.formula_y);
+				if (expBY.HasErrors())
+				{
+					expBY = null;
+				}
+			}
 		}
 
 		private void btn_clearB_Click(object sender, EventArgs e)
