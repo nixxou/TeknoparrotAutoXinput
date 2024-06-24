@@ -192,18 +192,22 @@ namespace TeknoparrotAutoXinput
 		public static void emptyJoystickButtons(Dictionary<string, JoystickButton> emptyJoystickButtonDictionary)
 		{
 			string xmlFileContent = ModifiedXML;
-			string debutFichier = xmlFileContent.Split("<JoystickButtons>")[0];
-			string finFichier = xmlFileContent.Split("</JoystickButtons>").Last();
-			string xmlFinalContent = debutFichier + "\n" + "\t<JoystickButtons>";
-			foreach (var button in emptyJoystickButtonDictionary)
-			{
-				xmlFinalContent += button.Value.Xml + "\n";
-			}
 
-			xmlFinalContent += "\t</JoystickButtons>" + "\n" + finFichier;
-			xmlDoc = new XmlDocument();
-			xmlDoc.LoadXml(xmlFinalContent);
-			UpdateXML();
+			if (xmlFileContent.Contains("<JoystickButtons>") && xmlFileContent.Contains("</JoystickButtons>"))
+			{
+				string debutFichier = xmlFileContent.Split("<JoystickButtons>")[0];
+				string finFichier = xmlFileContent.Split("</JoystickButtons>").Last();
+				string xmlFinalContent = debutFichier + "\n" + "\t<JoystickButtons>";
+				foreach (var button in emptyJoystickButtonDictionary)
+				{
+					xmlFinalContent += button.Value.Xml + "\n";
+				}
+
+				xmlFinalContent += "\t</JoystickButtons>" + "\n" + finFichier;
+				xmlDoc = new XmlDocument();
+				xmlDoc.LoadXml(xmlFinalContent);
+				UpdateXML();
+			}
 		}
 
 

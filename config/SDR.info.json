@@ -1,0 +1,36 @@
+{
+	"global": {
+		"rom": "sdr",
+		"target": "ringwide",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "gamewin",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+    "tpoptions": {
+		"recommanded_tp_settings":{
+			"General||HideCursor": "1"
+		},	
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        }
+    },
+	"gameoptions": {
+        "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy": {
+            "gunA_4tiers": "2"
+        },
+        "recommanded_gameoptions & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy": {
+            "gunB_4tiers": "2"
+        }
+	}
+}

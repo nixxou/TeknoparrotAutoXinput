@@ -239,6 +239,7 @@ namespace TeknoparrotAutoXinput
 
 		public void StartMonitor()
 		{
+			if (assignedKeys.Count == 0) return;
 
 			//Add joystick GUID
 			foreach(var originalJoystick in originalJoystickPerGun)
