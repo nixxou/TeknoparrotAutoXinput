@@ -1,0 +1,14 @@
+{
+    "Test": "Test",
+    "Service": "Service1",
+    "Other SW": "Service2",
+    "Player 1 Gun X": "GunA_LightgunX",
+    "Player 1 Gun Y": "GunA_LightgunY",
+    "Player 1 Throw": "GunA_LightgunTrigger",
+    "Player 1 Start": "GunA_LightgunBackRightBtn,GunA_LightgunArcadeStartBis",
+    "Coins": "GunA_LightgunBackLeftBtn,GunA_LightgunArcadeCoinBis,GunB_LightgunBackLeftBtn,GunB_LightgunArcadeCoinBis",
+    "Player 2 Gun X": "GunB_LightgunX",
+    "Player 2 Gun Y": "GunB_LightgunY",
+    "Player 2 Throw": "GunB_LightgunTrigger",
+    "Player 2 Start": "GunB_LightgunBackRightBtn,GunB_LightgunArcadeStartBis"
+}
