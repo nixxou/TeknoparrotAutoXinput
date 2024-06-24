@@ -183,6 +183,10 @@ namespace TeknoparrotAutoXinput
 
 		public bool patch_FFB { get; set; } = true;
 
+		public string tpLicence { get; set; } = "";
+		public bool tpLicenceRegOnLaunch { get; set; } = false;
+		public bool tpLicenceUnRegAfterStart { get; set; } = false;
+
 
 		public Configuration()
 		{
@@ -316,6 +320,10 @@ namespace TeknoparrotAutoXinput
 				this.patch_networkDns2 = DeserializeData.patch_networkDns2;
 				this.patch_BroadcastAddress = DeserializeData.patch_BroadcastAddress;
 				this.patch_FFB = DeserializeData.patch_FFB;
+
+				this.tpLicence = DeserializeData.tpLicence;
+				this.tpLicenceRegOnLaunch = DeserializeData.tpLicenceRegOnLaunch;
+				this.tpLicenceUnRegAfterStart = DeserializeData.tpLicenceUnRegAfterStart;
 
 
 

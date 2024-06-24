@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace TeknoparrotAutoXinput
 {
@@ -19,6 +21,8 @@ namespace TeknoparrotAutoXinput
 		public static List<string> tags = new List<string>();
 		private static Dictionary<string, Dictionary<string,string>> allSettings = new Dictionary<string, Dictionary<string,string>>();
 		public static bool IsWindowed = false;
+		public static bool IsPatreon = false;
+
 
 
 		public static void setOriginalXML(string xmlFile)
@@ -26,7 +30,15 @@ namespace TeknoparrotAutoXinput
 			OriginalXML = File.ReadAllText(xmlFile);
 			xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(OriginalXML);
+			XmlNode patreonNode = xmlDoc.SelectSingleNode("//GameProfile/Patreon");
+			if (patreonNode != null && patreonNode.InnerText == "true")
+			{
+				IsPatreon = true;
+			}
+
 		}
+
+
 
 		public static void SetWindowedStatus()
 		{

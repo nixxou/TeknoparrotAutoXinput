@@ -1934,5 +1934,42 @@ namespace TeknoparrotAutoXinput
 
 		}
 
+		public static string Encrypt(string plainText)
+		{
+			string base64Encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+			return ApplyRot13(base64Encoded);
+		}
+
+		public static string Decrypt(string encryptedText)
+		{
+			string rot13Decoded = ApplyRot13(encryptedText);
+			return Encoding.UTF8.GetString(Convert.FromBase64String(rot13Decoded));
+		}
+
+		public static string ApplyRot13(string input)
+		{
+			char[] array = input.ToCharArray();
+			for (int i = 0; i < array.Length; i++)
+			{
+				int number = (int)array[i];
+				if (number >= 'a' && number <= 'z')
+				{
+					if (number > 'm')
+						number -= 13;
+					else
+						number += 13;
+				}
+				else if (number >= 'A' && number <= 'Z')
+				{
+					if (number > 'M')
+						number -= 13;
+					else
+						number += 13;
+				}
+				array[i] = (char)number;
+			}
+			return new string(array);
+		}
+
 	}
 }

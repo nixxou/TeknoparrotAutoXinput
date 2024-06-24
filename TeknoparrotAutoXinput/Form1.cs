@@ -3,6 +3,7 @@ using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using SDL2;
 using SharpDX.DirectInput;
+using System.Buffers.Text;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
@@ -34,6 +35,11 @@ namespace TeknoparrotAutoXinput
 		{
 			this.KeyPicker = new PickKeyCombo(this);
 			//System.Diagnostics.Debugger.Break();
+
+			txt_tplicence.Text = Utils.Decrypt(ConfigurationManager.MainConfig.tpLicence);
+			chk_tplicence_onstart.Checked = ConfigurationManager.MainConfig.tpLicenceRegOnLaunch;
+			chk_tplicence_unreg_onlaunch.Checked = ConfigurationManager.MainConfig.tpLicenceUnRegAfterStart;
+			chk_tplicence_unreg_onexit.Checked = !chk_tplicence_unreg_onlaunch.Checked;
 
 			cmb_gpu.SelectedIndex = ConfigurationManager.MainConfig.gpuType;
 			chk_patchGpuFix.Checked = ConfigurationManager.MainConfig.patchGpuFix;
@@ -513,11 +519,16 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.arcadeXinputData = txt_arcadeXinputData.Text;
 			ConfigurationManager.MainConfig.gamepadXinputData = txt_gamepadXinputData.Text;
 
-
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
+
+			ConfigurationManager.MainConfig.tpLicence = Utils.Encrypt(txt_tplicence.Text);
+			ConfigurationManager.MainConfig.tpLicenceRegOnLaunch = chk_tplicence_onstart.Checked;
+			ConfigurationManager.MainConfig.tpLicenceUnRegAfterStart = chk_tplicence_unreg_onlaunch.Checked;
+
+
 			ConfigurationManager.MainConfig.gpuType = cmb_gpu.SelectedIndex;
 			ConfigurationManager.MainConfig.patchGpuFix = chk_patchGpuFix.Checked;
 			ConfigurationManager.MainConfig.patchGpuTP = chk_patchGpuTP.Checked;
@@ -1449,6 +1460,44 @@ namespace TeknoparrotAutoXinput
 		private void chk_patchOthersGameOptions_CheckedChanged(object sender, EventArgs e)
 		{
 
+		}
+
+		private void btn_apm3id_show_Click(object sender, EventArgs e)
+		{
+			if (txt_apm3id.PasswordChar == '*') txt_apm3id.PasswordChar = '\0';
+			else txt_apm3id.PasswordChar = '*';
+		}
+
+		private void btn_mariokartId_show_Click(object sender, EventArgs e)
+		{
+			if (txt_mariokartId.PasswordChar == '*') txt_mariokartId.PasswordChar = '\0';
+			else txt_mariokartId.PasswordChar = '*';
+		}
+
+		private void btn_tplicence_show_Click(object sender, EventArgs e)
+		{
+			if (txt_tplicence.PasswordChar == '*') txt_tplicence.PasswordChar = '\0';
+			else txt_tplicence.PasswordChar = '*';
+		}
+
+		private void kryptonCheckBox1_CheckedChanged_1(object sender, EventArgs e)
+		{
+
+		}
+
+		private void groupBox17_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void chk_tplicence_unreg_onexit_CheckedChanged(object sender, EventArgs e)
+		{
+			chk_tplicence_unreg_onlaunch.Checked = !chk_tplicence_unreg_onexit.Checked;
+		}
+
+		private void chk_tplicence_unreg_onlaunch_CheckedChanged(object sender, EventArgs e)
+		{
+			chk_tplicence_unreg_onexit.Checked = !chk_tplicence_unreg_onlaunch.Checked;
 		}
 	}
 }

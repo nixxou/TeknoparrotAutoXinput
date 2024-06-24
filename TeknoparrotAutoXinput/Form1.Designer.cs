@@ -207,6 +207,13 @@
 			cmb_magpieScaling = new Krypton.Toolkit.KryptonComboBox();
 			chk_useMagpie = new Krypton.Toolkit.KryptonCheckBox();
 			tabPatch = new TabPage();
+			groupBox17 = new GroupBox();
+			chk_tplicence_unreg_onlaunch = new Krypton.Toolkit.KryptonCheckBox();
+			chk_tplicence_unreg_onexit = new Krypton.Toolkit.KryptonCheckBox();
+			kryptonLabel51 = new Krypton.Toolkit.KryptonLabel();
+			txt_tplicence = new Krypton.Toolkit.KryptonTextBox();
+			btn_tplicence_show = new Krypton.Toolkit.KryptonButton();
+			chk_tplicence_onstart = new Krypton.Toolkit.KryptonCheckBox();
 			chk_patchDisplayModeTP = new Krypton.Toolkit.KryptonCheckBox();
 			chk_patchDisplayModeFix = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel72 = new Krypton.Toolkit.KryptonLabel();
@@ -222,6 +229,8 @@
 			chk_patchReshade = new Krypton.Toolkit.KryptonCheckBox();
 			chk_patchGpuFix = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox16 = new GroupBox();
+			btn_mariokartId_show = new Krypton.Toolkit.KryptonButton();
+			btn_apm3id_show = new Krypton.Toolkit.KryptonButton();
 			txt_customName = new Krypton.Toolkit.KryptonTextBox();
 			lbl_apm3id = new Krypton.Toolkit.KryptonLabel();
 			txt_apm3id = new Krypton.Toolkit.KryptonTextBox();
@@ -302,6 +311,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_magpieCapture).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_magpieScaling).BeginInit();
 			tabPatch.SuspendLayout();
+			groupBox17.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_displayMode).BeginInit();
 			groupBox16.SuspendLayout();
 			groupBox15.SuspendLayout();
@@ -2048,6 +2058,7 @@
 			// 
 			// tabPatch
 			// 
+			tabPatch.Controls.Add(groupBox17);
 			tabPatch.Controls.Add(chk_patchDisplayModeTP);
 			tabPatch.Controls.Add(chk_patchDisplayModeFix);
 			tabPatch.Controls.Add(kryptonLabel72);
@@ -2078,6 +2089,73 @@
 			tabPatch.Text = "AutoSetup & Patchs";
 			tabPatch.UseVisualStyleBackColor = true;
 			tabPatch.Click += tabPatch_Click;
+			// 
+			// groupBox17
+			// 
+			groupBox17.Controls.Add(chk_tplicence_unreg_onlaunch);
+			groupBox17.Controls.Add(chk_tplicence_unreg_onexit);
+			groupBox17.Controls.Add(kryptonLabel51);
+			groupBox17.Controls.Add(txt_tplicence);
+			groupBox17.Controls.Add(btn_tplicence_show);
+			groupBox17.Controls.Add(chk_tplicence_onstart);
+			groupBox17.Location = new Point(6, 705);
+			groupBox17.Name = "groupBox17";
+			groupBox17.Size = new Size(776, 126);
+			groupBox17.TabIndex = 170;
+			groupBox17.TabStop = false;
+			groupBox17.Text = "groupBox17";
+			groupBox17.Enter += groupBox17_Enter;
+			// 
+			// chk_tplicence_unreg_onlaunch
+			// 
+			chk_tplicence_unreg_onlaunch.Location = new Point(351, 48);
+			chk_tplicence_unreg_onlaunch.Name = "chk_tplicence_unreg_onlaunch";
+			chk_tplicence_unreg_onlaunch.Size = new Size(211, 20);
+			chk_tplicence_unreg_onlaunch.TabIndex = 171;
+			chk_tplicence_unreg_onlaunch.Values.Text = "UnRegister just after game Launch";
+			chk_tplicence_unreg_onlaunch.CheckedChanged += chk_tplicence_unreg_onlaunch_CheckedChanged;
+			// 
+			// chk_tplicence_unreg_onexit
+			// 
+			chk_tplicence_unreg_onexit.Location = new Point(573, 48);
+			chk_tplicence_unreg_onexit.Name = "chk_tplicence_unreg_onexit";
+			chk_tplicence_unreg_onexit.Size = new Size(157, 20);
+			chk_tplicence_unreg_onexit.TabIndex = 170;
+			chk_tplicence_unreg_onexit.Values.Text = "UnRegister on game Exit";
+			chk_tplicence_unreg_onexit.CheckedChanged += chk_tplicence_unreg_onexit_CheckedChanged;
+			// 
+			// kryptonLabel51
+			// 
+			kryptonLabel51.Location = new Point(20, 22);
+			kryptonLabel51.Name = "kryptonLabel51";
+			kryptonLabel51.Size = new Size(67, 20);
+			kryptonLabel51.TabIndex = 163;
+			kryptonLabel51.Values.Text = "TP Licence";
+			// 
+			// txt_tplicence
+			// 
+			txt_tplicence.Location = new Point(144, 19);
+			txt_tplicence.Name = "txt_tplicence";
+			txt_tplicence.PasswordChar = '*';
+			txt_tplicence.Size = new Size(510, 23);
+			txt_tplicence.TabIndex = 164;
+			// 
+			// btn_tplicence_show
+			// 
+			btn_tplicence_show.Location = new Point(660, 19);
+			btn_tplicence_show.Name = "btn_tplicence_show";
+			btn_tplicence_show.Size = new Size(70, 23);
+			btn_tplicence_show.TabIndex = 165;
+			btn_tplicence_show.Values.Text = "Show";
+			btn_tplicence_show.Click += btn_tplicence_show_Click;
+			// 
+			// chk_tplicence_onstart
+			// 
+			chk_tplicence_onstart.Location = new Point(144, 48);
+			chk_tplicence_onstart.Name = "chk_tplicence_onstart";
+			chk_tplicence_onstart.Size = new Size(159, 20);
+			chk_tplicence_onstart.TabIndex = 166;
+			chk_tplicence_onstart.Values.Text = "Register on game launch";
 			// 
 			// chk_patchDisplayModeTP
 			// 
@@ -2201,6 +2279,8 @@
 			// 
 			// groupBox16
 			// 
+			groupBox16.Controls.Add(btn_mariokartId_show);
+			groupBox16.Controls.Add(btn_apm3id_show);
 			groupBox16.Controls.Add(txt_customName);
 			groupBox16.Controls.Add(lbl_apm3id);
 			groupBox16.Controls.Add(txt_apm3id);
@@ -2210,9 +2290,27 @@
 			groupBox16.Controls.Add(kryptonLabel67);
 			groupBox16.Location = new Point(18, 419);
 			groupBox16.Name = "groupBox16";
-			groupBox16.Size = new Size(662, 115);
+			groupBox16.Size = new Size(740, 115);
 			groupBox16.TabIndex = 142;
 			groupBox16.TabStop = false;
+			// 
+			// btn_mariokartId_show
+			// 
+			btn_mariokartId_show.Location = new Point(648, 56);
+			btn_mariokartId_show.Name = "btn_mariokartId_show";
+			btn_mariokartId_show.Size = new Size(70, 23);
+			btn_mariokartId_show.TabIndex = 150;
+			btn_mariokartId_show.Values.Text = "Show";
+			btn_mariokartId_show.Click += btn_mariokartId_show_Click;
+			// 
+			// btn_apm3id_show
+			// 
+			btn_apm3id_show.Location = new Point(648, 24);
+			btn_apm3id_show.Name = "btn_apm3id_show";
+			btn_apm3id_show.Size = new Size(70, 23);
+			btn_apm3id_show.TabIndex = 149;
+			btn_apm3id_show.Values.Text = "Show";
+			btn_apm3id_show.Click += btn_apm3id_show_Click;
 			// 
 			// txt_customName
 			// 
@@ -2233,6 +2331,7 @@
 			// 
 			txt_apm3id.Location = new Point(132, 24);
 			txt_apm3id.Name = "txt_apm3id";
+			txt_apm3id.PasswordChar = '*';
 			txt_apm3id.Size = new Size(510, 23);
 			txt_apm3id.TabIndex = 104;
 			// 
@@ -2240,6 +2339,7 @@
 			// 
 			txt_mariokartId.Location = new Point(132, 53);
 			txt_mariokartId.Name = "txt_mariokartId";
+			txt_mariokartId.PasswordChar = '*';
 			txt_mariokartId.Size = new Size(510, 23);
 			txt_mariokartId.TabIndex = 118;
 			// 
@@ -2683,6 +2783,8 @@
 			((System.ComponentModel.ISupportInitialize)cmb_magpieScaling).EndInit();
 			tabPatch.ResumeLayout(false);
 			tabPatch.PerformLayout();
+			groupBox17.ResumeLayout(false);
+			groupBox17.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_displayMode).EndInit();
 			groupBox16.ResumeLayout(false);
 			groupBox16.PerformLayout();
@@ -2943,5 +3045,14 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel54;
 		private Krypton.Toolkit.KryptonNumericUpDown num_magpieBorderSize;
 		private Krypton.Toolkit.KryptonCheckBox chk_magpieSindenBorder;
+		private Krypton.Toolkit.KryptonButton btn_mariokartId_show;
+		private Krypton.Toolkit.KryptonButton btn_apm3id_show;
+		private Krypton.Toolkit.KryptonButton btn_tplicence_show;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel51;
+		private Krypton.Toolkit.KryptonTextBox txt_tplicence;
+		private GroupBox groupBox17;
+		private Krypton.Toolkit.KryptonCheckBox chk_tplicence_onstart;
+		private Krypton.Toolkit.KryptonCheckBox chk_tplicence_unreg_onlaunch;
+		private Krypton.Toolkit.KryptonCheckBox chk_tplicence_unreg_onexit;
 	}
 }

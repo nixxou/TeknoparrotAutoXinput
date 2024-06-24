@@ -134,7 +134,7 @@ namespace TeknoparrotAutoXinput
 		public static string patch_networkDns2 = ConfigurationManager.MainConfig.patch_networkDns2;
 		public static string patch_networkGateway = ConfigurationManager.MainConfig.patch_networkGateway;
 
-		
+		public static bool isPatreon = false;
 
 		//public static string xmlFileContent = "";
 
@@ -4098,7 +4098,51 @@ namespace TeknoparrotAutoXinput
 						}
 						*/
 
-						if(gameOptions.AhkBefore.Trim() != "")
+						if (TpSettingsManager.IsPatreon && ConfigurationManager.MainConfig.tpLicenceRegOnLaunch)
+						{
+							bool unregister = false;
+							using (var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\TeknoGods\TeknoParrot"))
+							{
+								var isPatronRegistery = key != null && key.GetValue("PatreonSerialKey") != null;
+
+								if (isPatronRegistery)
+								{
+									ProcessStartInfo tpUnRegStartInfo = new ProcessStartInfo();
+									Process TpUnRegProcess = new Process();
+									tpUnRegStartInfo.FileName = Path.Combine(baseTpDir, "TeknoParrot", "BudgieLoader.exe");
+									tpUnRegStartInfo.UseShellExecute = false;
+									//tpUnRegStartInfo.CreateNoWindow = true;
+									tpUnRegStartInfo.Arguments = "-deactivate";
+									TpUnRegProcess.StartInfo = tpUnRegStartInfo;
+									TpUnRegProcess.Start();
+									TpUnRegProcess.WaitForExit();
+								}
+								unregister = true;
+							}
+							if (unregister)
+							{
+								using (var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\TeknoGods\TeknoParrot", true))
+								{
+									if (key != null)
+									{
+										Registry.CurrentUser.DeleteSubKey(@"SOFTWARE\TeknoGods\TeknoParrot");
+										Console.WriteLine("La clé de registre a été supprimée avec succès.");
+									}
+								}
+							}
+
+							ProcessStartInfo tpRegStartInfo = new ProcessStartInfo();
+							Process TpRegProcess = new Process();
+							tpRegStartInfo.FileName = Path.Combine(baseTpDir, "TeknoParrot", "BudgieLoader.exe");
+							tpRegStartInfo.UseShellExecute = false;
+							//tpRegStartInfo.CreateNoWindow = true;
+							tpRegStartInfo.Arguments = "-register " + Utils.Decrypt(ConfigurationManager.MainConfig.tpLicence);
+							TpRegProcess.StartInfo = tpRegStartInfo;
+							TpRegProcess.Start();
+							TpRegProcess.WaitForExit();
+						}
+
+						if (gameOptions.AhkBefore.Trim() != "")
 						{
 							Utils.LogMessage($"Execute AHK Before");
 							Utils.ExecuteAHK(gameOptions.AhkBefore,gameOptions.WaitForExitAhkBefore,gameDir);
@@ -5136,7 +5180,40 @@ _Translate=0.000000,0.000000
 						Utils.LogMessage($"CleanAndKillAhk");
 						Utils.CleanAndKillAhk();
 
-						
+						if (TpSettingsManager.IsPatreon && ConfigurationManager.MainConfig.tpLicenceRegOnLaunch && !ConfigurationManager.MainConfig.tpLicenceUnRegAfterStart)
+						{
+							using (var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\TeknoGods\TeknoParrot"))
+							{
+								var isPatronRegistery = key != null && key.GetValue("PatreonSerialKey") != null;
+
+								if (isPatronRegistery)
+								{
+									ProcessStartInfo tpUnRegStartInfo = new ProcessStartInfo();
+									Process TpUnRegProcess = new Process();
+									tpUnRegStartInfo.FileName = Path.Combine(baseTpDir, "TeknoParrot","BudgieLoader.exe");
+									tpUnRegStartInfo.UseShellExecute = false;
+									//tpUnRegStartInfo.CreateNoWindow = true;
+									tpUnRegStartInfo.Arguments = "-deactivate";
+									TpUnRegProcess.StartInfo = tpUnRegStartInfo;
+									TpUnRegProcess.Start();
+									TpUnRegProcess.WaitForExit();
+								}
+							}
+							using (var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\TeknoGods\TeknoParrot", true))
+							{
+								if (key != null)
+								{
+									Registry.CurrentUser.DeleteSubKey(@"SOFTWARE\TeknoGods\TeknoParrot");
+									Console.WriteLine("La clé de registre a été supprimée avec succès.");
+								}
+							}
+
+
+						}
+
+
+
+
 						if (!String.IsNullOrEmpty(ParrotDataOriginal) && !String.IsNullOrEmpty(ParrotDataBackup))
 						{
 							if (File.Exists(ParrotDataBackup))
