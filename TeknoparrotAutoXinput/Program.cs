@@ -2126,12 +2126,27 @@ namespace TeknoparrotAutoXinput
 
 						//Tag Define Part 2
 						if (useXinput) TpSettingsManager.tags.Add("xinput");
+						else TpSettingsManager.tags.Add("!xinput");
+						
 						if (useDinputWheel) TpSettingsManager.tags.Add("dwheel");
+						else TpSettingsManager.tags.Add("!dwheel");
+
 						if (useDinputHotas) TpSettingsManager.tags.Add("dhotas");
+						else TpSettingsManager.tags.Add("!dhotas");
+
 						if (useDinputLightGun) TpSettingsManager.tags.Add("dlightgun");
+						else TpSettingsManager.tags.Add("!dlightgun");
+
 						if (shifterGuidFound) TpSettingsManager.tags.Add("shifter");
 						else TpSettingsManager.tags.Add("!shifter");
 
+						if(dinputLightgunAFound) TpSettingsManager.tags.Add("dguna");
+						else TpSettingsManager.tags.Add("!dguna");
+
+						if (dinputLightgunBFound) TpSettingsManager.tags.Add("dgunb");
+						else TpSettingsManager.tags.Add("!dgunb");
+
+						MessageBox.Show("ici");
 
 						if (!hideCrosshair) TpSettingsManager.tags.Add("show_crosshair");
 						if (hideCrosshair) TpSettingsManager.tags.Add("hide_crosshair");
@@ -4461,7 +4476,7 @@ namespace TeknoparrotAutoXinput
 															if (foregroundClassName == "Magpie_Main")
 															{
 																Thread.Sleep(2000);
-																Utils.ClickOnPrimaryScreen(0, 0);
+																Utils.ClickOnPrimaryScreen(30, 30);
 																break;
 															}
 														}
@@ -4887,7 +4902,7 @@ _Translate=0.000000,0.000000
 														if (foregroundClassName == "Magpie_Main")
 														{
 															Thread.Sleep(2000);
-															Utils.ClickOnPrimaryScreen(0, 0);
+															Utils.ClickOnPrimaryScreen(30, 30);
 															break;
 														}
 													}

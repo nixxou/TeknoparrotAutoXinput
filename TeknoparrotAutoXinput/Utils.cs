@@ -499,6 +499,27 @@ namespace TeknoparrotAutoXinput
 					if (Program.hideCrosshair) continue;
 				}
 
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!guna_found!]") && newfile.Contains(@"\[!guna_found!]\"))
+				{
+					newfile = newfile.Replace(@"\[!guna_found!]\", @"\");
+					if (Program.GunAGuid == "") continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!gunb_found!]") && newfile.Contains(@"\[!gunb_found!]\"))
+				{
+					newfile = newfile.Replace(@"\[!gunb_found!]\", @"\");
+					if (Program.GunBGuid == "") continue;
+				}
+
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_guna_found!]") && newfile.Contains(@"\[!no_guna_found!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_guna_found!]\", @"\");
+					if (Program.GunAGuid != "") continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_gunb_found!]") && newfile.Contains(@"\[!no_gunb_found!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_gunb_found!]\", @"\");
+					if (Program.GunBGuid != "") continue;
+				}
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!cachereshade!]") && newfile.Contains(@"\[!cachereshade!]\"))
 				{
@@ -956,6 +977,26 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!show_crosshair!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!guna_found!]") && file.Contains(@"\[!guna_found!]\"))
+				{
+					file = file.Replace(@"\[!guna_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!gunb_found!]") && file.Contains(@"\[!gunb_found!]\"))
+				{
+					file = file.Replace(@"\[!gunb_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_guna_found!]") && file.Contains(@"\[!no_guna_found!]\"))
+				{
+					file = file.Replace(@"\[!no_guna_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_gunb_found!]") && file.Contains(@"\[!no_gunb_found!]\"))
+				{
+					file = file.Replace(@"\[!no_gunb_found!]\", @"\");
+				}
+
+
+
+
 
 				if (Path.GetDirectoryName(file) != null && Regex.IsMatch(Path.GetDirectoryName(file), @"\\\[!!([A-Za-z0-9 ]+)!!\]") && Regex.IsMatch(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\"))
 				{

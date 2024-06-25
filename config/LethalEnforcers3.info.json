@@ -1,0 +1,46 @@
+{
+	"global": {
+		"_comment": "Demulshooter won't work for me, if you want to try rom=le3, target=konami",
+		"rom": "",
+		"target": "",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "GAME",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False",
+		"magpieNoClick": "True"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+            "General||HideCursor": "1",
+			"Bezel||Enable": "1"
+        },
+        "hide_crosshair": {
+            "Crosshair||Enable": "0"
+        },
+        "show_crosshair": {
+            "Crosshair||Enable": "1"
+        },
+        "recommanded_tp_settings & !dgunb": {
+			"General||GameMode": "PLAYER 1 ONLY"
+        },
+        "recommanded_tp_settings & dgunb": {
+			"General||GameMode": "2 PLAYERS"
+        }		
+	},
+	"gameoptions": {
+	}
+}
