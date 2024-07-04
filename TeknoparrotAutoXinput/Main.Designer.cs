@@ -195,6 +195,7 @@
 			button8.TabIndex = 17;
 			button8.Text = "button8";
 			button8.UseVisualStyleBackColor = true;
+			button8.Visible = false;
 			button8.Click += button8_Click;
 			// 
 			// button7
@@ -205,6 +206,7 @@
 			button7.TabIndex = 16;
 			button7.Text = "button7";
 			button7.UseVisualStyleBackColor = true;
+			button7.Visible = false;
 			button7.Click += button7_Click;
 			// 
 			// lbl_hotaslist
@@ -231,6 +233,7 @@
 			button5.TabIndex = 14;
 			button5.Text = "button5";
 			button5.UseVisualStyleBackColor = true;
+			button5.Visible = false;
 			button5.Click += button5_Click;
 			// 
 			// lbl_wheellist
@@ -250,6 +253,7 @@
 			button6.TabIndex = 15;
 			button6.Text = "button6";
 			button6.UseVisualStyleBackColor = true;
+			button6.Visible = false;
 			button6.Click += button6_Click;
 			// 
 			// button9
@@ -260,6 +264,7 @@
 			button9.TabIndex = 18;
 			button9.Text = "button9";
 			button9.UseVisualStyleBackColor = true;
+			button9.Visible = false;
 			button9.Click += button9_Click;
 			// 
 			// lbl_arcadelist
@@ -286,6 +291,7 @@
 			button4.TabIndex = 11;
 			button4.Text = "button4";
 			button4.UseVisualStyleBackColor = true;
+			button4.Visible = false;
 			button4.Click += button4_Click;
 			// 
 			// kryptonLabel3
@@ -312,6 +318,7 @@
 			button2.TabIndex = 9;
 			button2.Text = "button2";
 			button2.UseVisualStyleBackColor = true;
+			button2.Visible = false;
 			button2.Click += button2_Click;
 			// 
 			// kryptonLabel1
@@ -330,6 +337,7 @@
 			button1.TabIndex = 8;
 			button1.Text = "button1";
 			button1.UseVisualStyleBackColor = true;
+			button1.Visible = false;
 			button1.Click += button1_Click_1;
 			// 
 			// button3
@@ -340,6 +348,7 @@
 			button3.TabIndex = 10;
 			button3.Text = "button3";
 			button3.UseVisualStyleBackColor = true;
+			button3.Visible = false;
 			button3.Click += button3_Click;
 			// 
 			// timer_controllerUpdate

@@ -1,8 +1,8 @@
 {
 	"global": {
 		"_comment": "Demulshooter won't work for me, if you want to try rom=le3, target=konami",
-		"rom": "",
-		"target": "",
+		"rom": "le3",
+		"target": "konami",
 		"64bits": "False",
 		"windowed": "General,Windowed,1",
 		"magpieClass": "GAME",

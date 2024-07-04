@@ -1,8 +1,8 @@
 {
 	"global": {
 		"_comment": "Demulshooter problem with recoil",
-		"rom": "hmuseum2",
-		"target": "ttx",
+		"rom": "fearland",
+		"target": "globalvr",
 		"64bits": "False",
 		"windowed": "General,Windowed,1",
 		"magpieClass": "haunted2win",

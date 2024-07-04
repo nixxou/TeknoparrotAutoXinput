@@ -2104,6 +2104,7 @@
 			groupBox17.TabIndex = 170;
 			groupBox17.TabStop = false;
 			groupBox17.Text = "groupBox17";
+			groupBox17.Visible = false;
 			groupBox17.Enter += groupBox17_Enter;
 			// 
 			// chk_tplicence_unreg_onlaunch

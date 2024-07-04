@@ -1133,6 +1133,10 @@ namespace TeknoparrotAutoXinput
 								_GunB_Y_change = false;
 							}
 						}
+						if(new_Ax >= 0)
+						{
+
+						}
 						if (new_Ax >= 0 && expAX != null)
 						{
 							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_X];

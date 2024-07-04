@@ -144,6 +144,13 @@ namespace TeknoparrotAutoXinput
 		[STAThread]
 		static void Main(string[] args)
 		{
+
+#if DEBUG
+			List<string> fakeArgs = new List<string>();
+			fakeArgs.Add("--runvjoy");
+			fakeArgs.Add("all");
+			//args = fakeArgs.ToArray();
+#endif
 			//Up there to be load before demulshooter start
 			ConfigurationManager.LoadConfig();
 
@@ -331,7 +338,8 @@ namespace TeknoparrotAutoXinput
 					string exeDir = Path.GetDirectoryName(exePath);
 					Process process = new Process();
 					process.StartInfo.FileName = exePath;
-					process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
+					if(DemulshooterManager.TargetProcess != "") process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -tprocess={DemulshooterManager.TargetProcess} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
+					else process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 					process.StartInfo.WorkingDirectory = exeDir;
 					process.StartInfo.UseShellExecute = true;
 					process.StartInfo.Verb = "runas";
@@ -492,11 +500,7 @@ namespace TeknoparrotAutoXinput
 
 
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
-#if DEBUG
-			//List<string> fakeArgs = new List<string>();
-			//fakeArgs.Add(@"C:\teknoparrot\UserProfiles\Daytona3.xml");
-			//args = fakeArgs.ToArray();
-#endif
+
 
 			
 
@@ -2145,8 +2149,6 @@ namespace TeknoparrotAutoXinput
 
 						if (dinputLightgunBFound) TpSettingsManager.tags.Add("dgunb");
 						else TpSettingsManager.tags.Add("!dgunb");
-
-						MessageBox.Show("ici");
 
 						if (!hideCrosshair) TpSettingsManager.tags.Add("show_crosshair");
 						if (hideCrosshair) TpSettingsManager.tags.Add("hide_crosshair");
@@ -4035,6 +4037,18 @@ namespace TeknoparrotAutoXinput
 
 							if(GameInfo.ContainsKey("target") && GameInfo.ContainsKey("rom") && GameInfo["rom"] != "")
 							{
+								string processtarget = "";
+								if (GameInfo.ContainsKey("usedemulprocesstarget") && GameInfo["usedemulprocesstarget"].ToLower() == "false") processtarget = "";
+								else {
+									string targetExecutableGame = executableGame;
+									if (GameInfo.ContainsKey("magpieExecutable") && GameInfo["magpieExecutable"].Trim() != "")
+									{
+										targetExecutableGame = Path.GetFullPath(Path.Combine(executableGameDir, GameInfo["magpieExecutable"]));
+									}
+									processtarget = Path.GetFileNameWithoutExtension(targetExecutableGame);
+									if (!processtarget.ToLower().EndsWith(".exe")) processtarget = "";
+								}
+
 								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers);
 								if(GameInfo.ContainsKey("64bits") && GameInfo["64bits"].ToLower() == "true") DemulshooterManager.Is64bits = true;
 								else DemulshooterManager.Is64bits = false;
@@ -4043,7 +4057,7 @@ namespace TeknoparrotAutoXinput
 								DemulshooterManager.Rom = GameInfo["rom"];
 								DemulshooterManager.Target = GameInfo["target"];
 								DemulshooterManager.HideCrosshair = hideCrosshair;
-								DemulshooterManager.Start();
+								DemulshooterManager.Start(processtarget);
 
 							}
 							else
