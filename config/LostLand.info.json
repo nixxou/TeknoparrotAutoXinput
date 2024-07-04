@@ -1,0 +1,43 @@
+{
+	"global": {
+		"comment":"Home made aim fix for this game, you will need vjoy, and it won't work for the jungle stage",
+		"rom": "",
+		"target": "",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "LaunchUnrealUWindowsClient",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieNoLateFocus": "False",
+		"magpieNoClick": "True",
+		"magpieExecutable": "LLA/Binaries/Win64/DomeShooterGame-Win64-Shipping.exe"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+            "Arguments||Enable": "1",
+			"Arguments||Voice Language": "English"
+        }
+	},
+	"gameoptions": {
+        "recommanded_gameoptions & at_least_one_sinden": {
+            "tmpGunXFormula": "if([X]<16384,(0.0000224452*(([X]+(([X]-(32767/2))*0.03093))*([X]+(([X]-(32767/2))*0.03093))))+(0.124047*([X]+(([X]-(32767/2))*0.03093)))+9977,(-0.0000233982*(([X]+(([X]-(32767/2))*0.03093))*([X]+(([X]-(32767/2))*0.03093))))+(1.64449*([X]+(([X]-(32767/2))*0.03093)))-2616)",
+            "tmpGunYFormula": "((1.0141*([Y]+(([Y]-(32767/2))*0.03093)))+1425)-(if([OX]<16384,1.00999-0.0000640869*([OX]+(([OX]-(32767/2))*0.03093)),0.0000640873*([OX]+(([OX]-(32767/2))*0.03093))-1.089980)*(0.531006*([Y]+(([Y]-(32767/2))*0.03093))-8700))"
+        },
+        "recommanded_gameoptions & !at_least_one_sinden": {
+            "tmpGunXFormula": "if([X]<16384,(0.0000224452*([X]*[X]))+(0.124047*[X])+9977,(-0.0000233982*([X]*[X]))+(1.64449*[X])-2616)",
+            "tmpGunYFormula": "((1.0141*[Y])+1425)-(if([OX]<16384,1.00999-0.0000640869*[OX],0.0000640873*[OX]-1.089980)*(0.531006*[Y]-8700))"
+        }
+	}
+}
