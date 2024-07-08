@@ -1,13 +1,28 @@
 {
 	"global": {
+		"_comment": "This one is tricky, i force the window to be recognized as 640x480 because i will apply reshade over magpie to transform the rendering area",
+		"rom": "policetr2",
+		"target": "ppmarket",
+		"64bits": "False",
 		"windowed": "General,Windowed,1",
 		"magpieClass": "FREEGLUT",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "False",
 		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
+		"magpieNoMoveWindow": "False",
+		"magpieRegisterAsSize": "640x480"
 	},
-	"tpoptions": {},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+			"General||Windowed" : "1"
+		},
+		"set_displaymode_in_tp_settings & set_fullscreen": {
+			"General||Windowed" : "0"
+		},
+		"set_displaymode_in_tp_settings & set_windowed": {
+			"General||Windowed" : "1"
+		}		
+	},
 	"gameoptions": {}
 }
