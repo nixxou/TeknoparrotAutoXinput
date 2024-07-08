@@ -1,0 +1,13 @@
+{
+    "Test": "Test",
+    "P1 Gun X": "GunA_LightgunX",
+    "P1 Gun Y": "GunA_LightgunY",
+    "P1 Trigger": "GunA_LightgunTrigger",
+    "P1 Start": "GunA_LightgunBackRightBtn,GunA_LightgunArcadeStartBis",
+    "Coin 1": "GunA_LightgunBackLeftBtn,GunA_LightgunArcadeCoinBis",
+    "P2 Gun X": "GunB_LightgunX",
+    "P2 Gun Y": "GunB_LightgunY",
+    "P2 Trigger": "GunB_LightgunTrigger",
+    "P2 Start": "GunB_LightgunBackRightBtn,GunB_LightgunArcadeStartBis",
+    "Coin 2": "GunB_LightgunBackLeftBtn,GunB_LightgunArcadeCoinBis"
+}

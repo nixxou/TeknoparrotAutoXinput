@@ -1,0 +1,46 @@
+{
+	"global": {
+		"_comment": "I dont use custom res because that cause issue with the rendering scale",
+		"rom": "rambo",
+		"target": "lindbergh",
+		"64bits": "False",
+		"windowed": "General,DisplayMode,Windowed",
+		"magpieClass": "FREEGLUT",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||DisplayMode": "Windowed"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||DisplayMode": "Fullscreen"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||DisplayMode": "Windowed"
+        },
+		"use_gpu_fix_in_tp_settings & amdold": {
+			"Graphics||EnableAmdFix": "1"
+		},
+        "hide_crosshair": {
+            "General||HideCrosshair": "1"
+        },
+        "show_crosshair": {
+            "General||HideCrosshair": "0"
+        },
+		"recommanded_tp_settings": {
+			"General||CustomResolution": "0"   
+        }	
+	},
+	"gameoptions": {
+		"recommanded_gameoptions": {
+			"runRivaTuner" : "True"
+		},
+		"recommanded_gameoptions": {
+			"tmpGunBMinMax":"0:32767:1600:0:32767:-800"			
+		}
+	}
+}

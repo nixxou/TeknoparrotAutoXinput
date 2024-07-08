@@ -4046,7 +4046,7 @@ namespace TeknoparrotAutoXinput
 										targetExecutableGame = Path.GetFullPath(Path.Combine(executableGameDir, GameInfo["magpieExecutable"]));
 									}
 									processtarget = Path.GetFileNameWithoutExtension(targetExecutableGame);
-									if (!processtarget.ToLower().EndsWith(".exe")) processtarget = "";
+									if (!targetExecutableGame.ToLower().EndsWith(".exe")) processtarget = "";
 								}
 
 								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers);
@@ -4600,6 +4600,19 @@ namespace TeknoparrotAutoXinput
 										Utils.GetClientRect(windowHandle, out clientRect);
 										int clientWidth = clientRect.Right - clientRect.Left;
 										int clientHeight = clientRect.Bottom - clientRect.Top;
+
+										if (GameInfo.ContainsKey("magpieRegisterAsSize") && GameInfo["magpieRegisterAsSize"].ToLower().Contains("x"))
+										{
+											string tailleReg = GameInfo["magpieRegisterAsSize"];
+											try
+											{
+												clientWidth = int.Parse(tailleReg.Split("x")[0]);
+												clientHeight = int.Parse(tailleReg.Split("x")[1]);
+											}
+											catch { }
+										}
+
+
 										double originalRatio = (double)clientWidth / clientHeight;
 										int maxWindowWidth = Math.Min(screenWidth, (int)(screenHeight * originalRatio));
 										int maxWindowHeight = (int)(maxWindowWidth / originalRatio);

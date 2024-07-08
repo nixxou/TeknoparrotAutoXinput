@@ -1,0 +1,33 @@
+{
+	"global": {
+		"_comment": "",
+		"rom": "mgungun2",
+		"target": "ttx",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "Mug Ver",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+			"General||Windowed" : "0"
+		},
+		"set_displaymode_in_tp_settings & set_fullscreen": {
+			"General||Windowed" : "0"
+		},
+		"set_displaymode_in_tp_settings & set_windowed": {
+			"General||Windowed" : "1"
+		}		
+	},
+	"gameoptions": {
+		"recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+			"gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+			"gun_useExtraSinden": "True"
+		},
+		"recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+			"tmpGunXFormula":"[OX]+(([OX]-(32767/2))*0.03093)",
+			"tmpGunYFormula":"[OY]+(([OY]-(32767/2))*0.03093)",			
+		}
+	}
+}
