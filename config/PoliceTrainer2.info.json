@@ -22,7 +22,21 @@
 		},
 		"set_displaymode_in_tp_settings & set_windowed": {
 			"General||Windowed" : "1"
-		}		
+		},
+		"recommanded_tp_settings":{
+			"General||Disable Cursor": "1",
+			"General||FpsLimitEnable": "1"
+		},
+        "hide_crosshair": {
+			"Hide Native Crosshairs||Enable": "1",
+            "Custom Crosshairs||Enable": "0",
+			"Custom Crosshairs||Scaling": "1"
+        },
+        "show_crosshair": {
+			"Hide Native Crosshairs||Enable": "1",
+            "Custom Crosshairs||Enable": "1",
+			"Custom Crosshairs||Scaling": "1"
+        }
 	},
 	"gameoptions": {}
 }

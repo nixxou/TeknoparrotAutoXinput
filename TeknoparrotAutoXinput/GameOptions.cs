@@ -1266,7 +1266,7 @@ namespace TeknoparrotAutoXinput
 						MessageBox.Show(ex.Message);
 					}
 				}
-				pic_crosshairp1.Image = Image.FromFile(frm.selectedImagePath);
+				pic_crosshairp2.Image = Image.FromFile(frm.selectedImagePath);
 				lbl_crosshairp2Size.Text = $"{pic_crosshairp2.Image.Width}x{pic_crosshairp2.Image.Height}";
 				int tailleImg = pic_crosshairp2.Image.Width > pic_crosshairp2.Image.Height ? pic_crosshairp2.Image.Width : pic_crosshairp2.Image.Height;
 				if (tailleImg >= 10)
@@ -1427,6 +1427,11 @@ namespace TeknoparrotAutoXinput
 					lbl_crosshairp2ReSize.Visible = trk_crosshairp2Size.Visible = btn_crosshairp2Size.Visible = false;
 				}
 			}
+		}
+
+		private void trk_crosshairp2Size_Scroll(object sender, EventArgs e)
+		{
+			lbl_crosshairp2ReSize.Text = trk_crosshairp2Size.Value.ToString();
 		}
 	}
 }

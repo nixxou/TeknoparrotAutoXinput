@@ -1,0 +1,12 @@
+{
+    "Player 1 Gun X": "GunA_LightgunX",
+    "Player 1 Gun Y": "GunA_LightgunY",
+    "Coin Chute 1": "GunA_LightgunCoin,GunA_LightgunArcadeCoinBis",
+    "Player 1 Start\/Reload": "GunA_LightgunStart,GunA_LightgunPedalRight,GunA_LightgunPump,GunA_LightgunBackLeftBtn,GunA_LightgunDown,GunA_LightgunArcadeStartBis,GunA_LightgunReload",
+    "Player 1 Shoot": "GunA_LightgunTrigger",
+    "Player 2 Gun X": "GunB_LightgunX",
+    "Player 2 Gun Y": "GunB_LightgunY",
+    "Coin Chute 2": "GunB_LightgunCoin,GunB_LightgunArcadeCoinBis",
+    "Player 2 Start\/Reload": "GunB_LightgunStart,GunB_LightgunPedalRight,GunB_LightgunPump,GunB_LightgunBackLeftBtn,GunB_LightgunDown,GunB_LightgunArcadeStartBis,GunB_LightgunReload",
+    "Player 2 Shoot": "GunB_LightgunTrigger"
+}

@@ -1,0 +1,90 @@
+{
+	"global": {
+		"rom": "",
+		"target": "",
+		"64bits": "False",
+		"windowed": "General,DisplayMode,Windowed",
+		"magpieClass": "FREEGLUT",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False"
+	},
+	"tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||DisplayMode": "Windowed"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||DisplayMode": "Fullscreen"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||DisplayMode": "Windowed"
+        },
+        "hide_crosshair": {
+            "Crosshairs||Enable": "0",
+			"Crosshairs||Scaling": "0"
+        },
+        "show_crosshair": {
+            "Crosshairs||Enable": "1",
+			"Crosshairs||Scaling": "1"
+        },
+		"recommanded_tp_settings":{
+			"General||LineFix": "1",
+			"General||Limit30FPS": "1",
+			"General||LinearFiltering": "1",
+			"General||HideCursor": "1"
+		},
+        "set_res_in_tp_settings & 720p & fullscreen": {
+            "General||ResolutionWidth": "1280",
+            "General||ResolutionHeight": "720"
+        },
+        "set_res_in_tp_settings & 1080p & fullscreen": {
+            "General||ResolutionWidth": "1920",
+            "General||ResolutionHeight": "1080"
+        },
+        "set_res_in_tp_settings & 2k & fullscreen": {
+            "General||ResolutionWidth": "2560",
+            "General||ResolutionHeight": "1440"
+        },
+        "set_res_in_tp_settings & 4k & fullscreen": {
+            "General||ResolutionWidth": "3840",
+            "General||ResolutionHeight": "2160"
+        },
+        "set_res_in_tp_settings & 720p & windowed": {	
+            "General||ResolutionWidth": "960",
+            "General||ResolutionHeight": "720"
+        },
+        "set_res_in_tp_settings & 1080p & windowed": {				
+            "General||ResolutionWidth": "1440",
+            "General||ResolutionHeight": "1080"
+        },
+        "set_res_in_tp_settings & 2k & windowed": {					
+            "General||ResolutionWidth": "1920",
+            "General||ResolutionHeight": "1440"
+        },
+        "set_res_in_tp_settings & 4k & windowed": {	
+            "General||ResolutionWidth": "2880",
+            "General||ResolutionHeight": "2160"
+        }
+	},
+	"gameoptions": {
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+            "gun_ExtraSinden": "-action \"set-offsets -13.625,1.2725,-1.5,1.03\"",
+            "gun_useExtraSinden": "True"
+        },
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+            "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.37457)",
+            "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+        },
+        "recommanded_gameoptions & fullscreen & !at_least_one_sinden": {
+            "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.33333)",
+            "tmpGunYFormula": ""
+        },
+        "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy": {
+            "gunA_4tiers": "2"
+        },
+        "recommanded_gameoptions & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy": {
+            "gunB_4tiers": "2"
+        }
+	}
+}

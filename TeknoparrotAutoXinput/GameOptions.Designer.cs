@@ -2159,6 +2159,7 @@
 			trk_crosshairp2Size.SmallChange = 10;
 			trk_crosshairp2Size.TabIndex = 105;
 			trk_crosshairp2Size.Visible = false;
+			trk_crosshairp2Size.Scroll += trk_crosshairp2Size_Scroll;
 			// 
 			// lbl_crosshairp1ReSize
 			// 
