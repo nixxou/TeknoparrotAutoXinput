@@ -1,0 +1,16 @@
+{
+    "Test": "Test",
+    "Player 1 Gun X": "GunA_LightgunX",
+    "Player 1 Gun Y": "GunA_LightgunY",
+    "Coin 1": "GunA_LightgunCoin,GunA_LightgunArcadeCoinBis",
+    "Player 1 Start": "GunA_LightgunStart,GunA_LightgunArcadeStartBis",
+    "Player 1 Trigger": "GunA_LightgunTrigger",
+    "Player 1 Reload": "GunA_LightgunPedalRight,GunA_LightgunPump,GunA_LightgunBackLeftBtn,GunA_LightgunDown,GunA_LightgunReload",
+    "Cutscenes Skip (also skips game)": "GunA_LightgunBackRightBtn,GunB_LightgunBackRightBtn",
+    "Player 2 Gun X": "GunB_LightgunX",
+    "Player 2 Gun Y": "GunB_LightgunY",
+    "Coin 2": "GunB_LightgunCoin,GunB_LightgunArcadeCoinBis",
+    "Player 2 Start": "GunB_LightgunStart,GunB_LightgunArcadeStartBis",
+    "Player 2 Trigger": "GunB_LightgunTrigger",
+    "Player 2 Reload": "GunB_LightgunPedalRight,GunB_LightgunPump,GunB_LightgunBackLeftBtn,GunB_LightgunDown,GunB_LightgunReload"
+}

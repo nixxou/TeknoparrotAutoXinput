@@ -1,0 +1,14 @@
+{
+    "Test": "Test",
+    "Service Sw": "Service1",
+    "Player 1 Gun X": "GunA_LightgunX",
+    "Player 1 Gun Y": "GunA_LightgunY",
+    "Coin": "GunA_LightgunCoin,GunA_LightgunArcadeCoinBis",
+    "Gun Trigger": "GunA_LightgunTrigger",
+    "Right Pedal": "GunA_LightgunPedalRight,GunA_LightgunBackRightBtn,GunA_LightgunRight,GunA_LightgunArcade4",
+    "Left Pedal": "GunA_LightgunPedalLeft,GunA_LightgunBackLeftBtn,GunA_LightgunLeft,GunA_LightgunArcade3",
+    "Gun Button": "GunA_LightgunPump,GunA_LightgunFrontLeftBtn,GunA_LightgunDown,GunA_LightgunArcade1",
+    "Enter Sw": "GunA_LightgunArcade2",
+    "Up Select Sw": "GunA_LightgunArcade5",
+    "Down Select Sw": "GunA_LightgunArcade6"
+}

@@ -1,0 +1,12 @@
+{
+    "Test": "Test",
+    "Service 1": "Service1",
+    "Player 1 Gun X": "GunA_LightgunX",
+    "Player 1 Gun Y": "GunA_LightgunY",
+    "Coin 1": "GunA_LightgunCoin,GunA_LightgunArcadeCoinBis",
+    "Player 1 Start": "GunA_LightgunStart,GunA_LightgunArcadeStartBis",
+    "Pedal Right": "GunA_LightgunTrigger,GunA_LightgunPedalRight",
+    "Pedal Left": "GunA_LightgunPedalLeft,GunA_LightgunFrontLeftBtn",
+    "Player 1 Gun Trigger": "GunA_LightgunPump",
+    "Reload": "GunA_LightgunBackRightBtn,GunA_LightgunBackLeftBtn,GunA_LightgunReload"
+}
