@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using SDL2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
+using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO.Pipes;
@@ -135,6 +136,10 @@ namespace TeknoparrotAutoXinput
 		public static string patch_networkGateway = ConfigurationManager.MainConfig.patch_networkGateway;
 
 		public static bool isPatreon = false;
+
+
+		public static JoystickButtonData dinputTriggerGunA = null;
+		public static JoystickButtonData dinputTriggerGunB = null;
 
 		//public static string xmlFileContent = "";
 
@@ -338,8 +343,14 @@ namespace TeknoparrotAutoXinput
 					string exeDir = Path.GetDirectoryName(exePath);
 					Process process = new Process();
 					process.StartInfo.FileName = exePath;
-					if(DemulshooterManager.TargetProcess != "") process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -tprocess={DemulshooterManager.TargetProcess} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
+					if(DemulshooterManager.TargetProcess != "") process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -pname={DemulshooterManager.TargetProcess} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 					else process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
+
+					if(DemulshooterManager.ForceMD5 != "")
+					{
+						process.StartInfo.Arguments += $" -forcemd5={DemulshooterManager.ForceMD5}";
+					}
+
 					process.StartInfo.WorkingDirectory = exeDir;
 					process.StartInfo.UseShellExecute = true;
 					process.StartInfo.Verb = "runas";
@@ -1880,6 +1891,11 @@ namespace TeknoparrotAutoXinput
 											string assignedButton = bind.Value.JoystickGuid.ToString() + "===" + bind.Value.Button.ToString() + "===" + bind.Value.PovDirection + "===" + (bind.Value.IsAxis ? "true" : "false") + "===" + (bind.Value.IsAxisMinus ? "true" : "false");
 											AssignedButtons.Add(assignedButton);
 										}
+
+										if (bind.Key.StartsWith("LightgunTrigger"))
+										{
+											dinputTriggerGunA = bind.Value;
+										}
 									}
 									//gunindex++;
 									if (GunCoinOverwriteA && bindingDinputLightGunA.ContainsKey("LightgunStart") && !bindingDinputLightGunA.ContainsKey("LightgunCoin"))
@@ -1910,6 +1926,10 @@ namespace TeknoparrotAutoXinput
 										{
 											string assignedButton = bind.Value.JoystickGuid.ToString() + "===" + bind.Value.Button.ToString() + "===" + bind.Value.PovDirection + "===" + (bind.Value.IsAxis ? "true" : "false") + "===" + (bind.Value.IsAxisMinus ? "true" : "false");
 											if(!AssignedButtons.Contains(assignedButton)) bindingDinputLightGun.Add(gunprefix + bind.Key, bind.Value);
+										}
+										if (bind.Key.StartsWith("LightgunTrigger"))
+										{
+											dinputTriggerGunB = bind.Value;
 										}
 									}
 									//gunindex++;
@@ -4049,6 +4069,30 @@ namespace TeknoparrotAutoXinput
 									if (!targetExecutableGame.ToLower().EndsWith(".exe")) processtarget = "";
 								}
 
+								string forcemd5 = "";
+								if (GameInfo.ContainsKey("usedemulforcemd5") && GameInfo["usedemulforcemd5"].ToLower() == "false") forcemd5 = "";
+								else
+								{
+									string targetExecutableGame = executableGame;
+									if (GameInfo.ContainsKey("magpieExecutable") && GameInfo["magpieExecutable"].Trim() != "")
+									{
+										targetExecutableGame = Path.GetFullPath(Path.Combine(executableGameDir, GameInfo["magpieExecutable"]));
+									}
+									if(!string.IsNullOrEmpty(targetExecutableGame) && File.Exists(targetExecutableGame))
+									{
+										if (File.Exists(targetExecutableGame + ".filetorestore")) targetExecutableGame = targetExecutableGame + ".filetorestore";
+										using (var md5 = MD5.Create())
+										{
+											using (var stream = File.OpenRead(targetExecutableGame))
+											{
+												var hash = md5.ComputeHash(stream);
+												forcemd5 = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+											}
+										}
+									}
+								}
+								if (forcemd5 == "715fe71de740e248b428b2b1d35af3d9") forcemd5 = "7e11f7e78ed566a277edba1a8aab0749"; //Transformers Human Alliance
+
 								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers);
 								if(GameInfo.ContainsKey("64bits") && GameInfo["64bits"].ToLower() == "true") DemulshooterManager.Is64bits = true;
 								else DemulshooterManager.Is64bits = false;
@@ -4057,12 +4101,18 @@ namespace TeknoparrotAutoXinput
 								DemulshooterManager.Rom = GameInfo["rom"];
 								DemulshooterManager.Target = GameInfo["target"];
 								DemulshooterManager.HideCrosshair = hideCrosshair;
-								DemulshooterManager.Start(processtarget);
+								DemulshooterManager.Start(processtarget, forcemd5);
 
 							}
 							else
 							{
 								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers, false);
+								if (GameInfo.ContainsKey("recoil") && GameInfo["recoil"].Trim() != "")
+								{
+									DemulshooterManager.StartSelfManaged(GameInfo["recoil"].Trim().ToLower());
+								}
+
+								
 							}
 						}
 
@@ -4357,6 +4407,7 @@ namespace TeknoparrotAutoXinput
 
 											Process magpie_process = new Process();
 											magpie_process.StartInfo.FileName = magpieExe;
+											magpie_process.StartInfo.Arguments = "-t";
 											magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
 											magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
 											magpie_process.StartInfo.UseShellExecute = true;
@@ -4471,6 +4522,7 @@ namespace TeknoparrotAutoXinput
 
 													Process magpie_process = new Process();
 													magpie_process.StartInfo.FileName = magpieExe;
+													magpie_process.StartInfo.Arguments = "-t";
 													magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
 													magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
 													magpie_process.StartInfo.UseShellExecute = true;
@@ -4911,6 +4963,7 @@ _Translate=0.000000,0.000000
 
 											Process magpie_process = new Process();
 											magpie_process.StartInfo.FileName = magpieExe;
+											magpie_process.StartInfo.Arguments = "-t";
 											magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
 											magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
 											magpie_process.StartInfo.UseShellExecute = true;

@@ -1,7 +1,7 @@
 {
 	"global": {
-		"rom": "",
-		"target": "",
+		"rom": "ttg",
+		"target": "rawthrill",
 		"64bits": "False",
 		"windowed": "General,Windowed,1",
 		"magpieClass": "FREEGLUT",

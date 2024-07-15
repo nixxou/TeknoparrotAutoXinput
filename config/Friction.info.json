@@ -1,8 +1,8 @@
 {
 	"global": {
-		"_comment": "Does not work as intended with Demulshooter recoil",
-		"rom": "",
-		"target": "",
+		"_comment": "",
+		"rom": "friction",
+		"target": "windows",
 		"64bits": "False",
 		"windowed": "General,Windowed,1",
 		"magpieClass": "CD3D9Window",

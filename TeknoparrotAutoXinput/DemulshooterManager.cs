@@ -1,6 +1,9 @@
-﻿using SDL2;
+﻿using Henooh.DeviceEmulator.Net;
+using SDL2;
 using SerialPortLib2;
 using SerialPortLib2.Port;
+using SharpDX.DirectInput;
+using SharpDX.Multimedia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,6 +27,7 @@ namespace TeknoparrotAutoXinput
 		public static bool ValidPath = false;
 		public static bool Is64bits = false;
 		public static string TargetProcess = "";
+		public static string ForceMD5 = "";
 		public static string Target = "";
 		public static string Rom = "";
 		public static bool UseMamehooker = false;
@@ -75,6 +79,15 @@ namespace TeknoparrotAutoXinput
 		static string GunBSDLGuid = string.Empty;
 		static int GunBSDLIndex = -1;
 
+		public static string selfRecoilMode = "";
+		public static Thread threadSelfManagedGunA;
+		public static Thread threadSelfManagedGunB;
+		public static bool triggerGunA = false;
+		public static bool triggerGunB = false;
+		public static long lastRecoilGunA = 0;
+		public static long lastRecoilGunB = 0;
+
+
 		public static bool SetPath(string demulshooterExe)
 		{
 			DemulshooterPath = "";
@@ -99,7 +112,7 @@ namespace TeknoparrotAutoXinput
 			return false;
 		}
 
-		public static void WriteConfig(string targetExecutable)
+		public static void WriteConfig(string targetExecutable, string forcemd5="")
 		{
 			if (!ValidPath) return;
 			var ini = new IniFile(Path.Combine(DemulshooterPath, "config.ini"));
@@ -107,6 +120,7 @@ namespace TeknoparrotAutoXinput
 			ini.Write("Launch_Rom", Rom);
 			ini.Write("Launch_64bits", Is64bits ? "True" : "False");
 			ini.Write("Launch_tprocess", targetExecutable);
+			ini.Write("Launch_md5", forcemd5);
 			ini.Write("OutputEnabled", "True");
 			ini.Write("ParentProcess", Process.GetCurrentProcess().Id.ToString());
 			ini.Write("HideCrosshair", HideCrosshair ? "True" : "False");
@@ -127,6 +141,7 @@ namespace TeknoparrotAutoXinput
 				Rom = ini.Read("Launch_Rom");
 				Target = ini.Read("Launch_Target");
 				TargetProcess = ini.Read("Launch_tprocess");
+				ForceMD5 = ini.Read("Launch_md5");
 				Is64bits = ini.Read("Launch_64bits") == "True" ? true : false;
 				ParentProcess = int.Parse(ini.Read("ParentProcess"));
 				HideCrosshair = ini.Read("HideCrosshair") == "True" ? true : false;
@@ -134,10 +149,10 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		public static void Start(string targetExecutable)
+		public static void Start(string targetExecutable, string md5)
 		{
 			if (!ValidPath) return;
-			WriteConfig(targetExecutable);
+			WriteConfig(targetExecutable, md5);
 			string selfExe = Process.GetCurrentProcess().MainModule.FileName;
 			if (!Utils.CheckTaskExist(selfExe, "--demulshooter"))
 			{
@@ -156,6 +171,195 @@ namespace TeknoparrotAutoXinput
 			Utils.ExecuteTask(Utils.ExeToTaskName(selfExe, "--demulshooter"),-1);
 			MonitorDemulshooter = new Thread(() => ClientDemulshooter());
 			MonitorDemulshooter.Start();
+
+		}
+
+		public static void StartSelfManaged(string recoilMode)
+		{
+			selfRecoilMode = recoilMode;
+			Thread.Sleep(2000);
+			threadSelfManagedGunA = new Thread(() => SpawnDirectInputListener(1));
+			threadSelfManagedGunA.Start();
+
+			Thread.Sleep(2000);
+			threadSelfManagedGunB = new Thread(() => SpawnDirectInputListener(2));
+			threadSelfManagedGunB.Start();
+			Thread.Sleep(100);
+
+			bool autoMode = false;
+			int delayAuto = 0;
+			if(int.TryParse(selfRecoilMode, out delayAuto))
+			{
+				autoMode = true;
+			}
+			if (recoilMode == "auto")
+			{
+				delayAuto = 200;
+				autoMode = true;
+			}
+			if (autoMode)
+			{
+				selfRecoilMode = "auto";
+				MonitorDemulshooter = new Thread(() => SelfManagedAutoFire(delayAuto));
+				MonitorDemulshooter.Start();
+
+			}
+
+		}
+
+		public static void SelfManagedAutoFire(int delayAuto)
+		{
+			while (!_stopListening)
+			{
+				long timestamp = DateTime.UtcNow.Ticks / TimeSpan.TicksPerMillisecond;
+				if (triggerGunA)
+				{
+					long diff = timestamp - lastRecoilGunA;
+					if(diff> delayAuto)
+					{
+						DoRecoil(1);
+					}
+				}
+
+				if (triggerGunB)
+				{
+					long diff = timestamp - lastRecoilGunB;
+					if (diff > delayAuto)
+					{
+						DoRecoil(2);
+					}
+				}
+
+				Thread.Sleep(30);
+			}
+		}
+
+		private static void SpawnDirectInputListener(int gunNumber)
+		{
+			JoystickButtonData gunBind = null;
+			if (gunNumber == 1)
+			{
+				gunBind = Program.dinputTriggerGunA;
+			}
+			if (gunNumber == 2)
+			{
+				gunBind = Program.dinputTriggerGunB;
+			}
+			if(gunBind == null) { return; }
+
+
+
+			Utils.LogMessage($"Demul Spawn JoyListener for gun {gunNumber.ToString()} : {gunBind.JoystickGuid.ToString()} !");
+			var directInput = new DirectInput();
+
+			Joystick joystick = null;
+			var devicesInstance = new List<DeviceInstance>();
+			devicesInstance.AddRange(directInput.GetDevices().Where(x => x.Type != DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+			DeviceInstance deviceInstance = null;
+			bool found_device = false;
+			Guid device_guid = Guid.Empty;
+			foreach (var device in devicesInstance)
+			{
+				if (device.InstanceGuid.ToString() == gunBind.JoystickGuid.ToString())
+				{
+					found_device = true;
+					deviceInstance = device;
+					device_guid = device.InstanceGuid;
+					break;
+				}
+			}
+			if (!found_device)
+			{
+				return;
+			}
+			while (!directInput.IsDeviceAttached(device_guid))
+			{
+				Thread.Sleep(100);
+			}
+			joystick = new Joystick(directInput, device_guid);
+			joystick.Properties.BufferSize = 512;
+			joystick.Acquire();
+
+			while (!_stopListening)
+			{
+				try
+				{
+					joystick.Poll();
+					var datas = joystick.GetBufferedData();
+					foreach (var key in datas)
+					{
+
+						string inputText = "";
+						if (deviceInstance.Type == DeviceType.Keyboard)
+							inputText = "Button " + ((Key)key.Offset - 47).ToString();
+						else
+							inputText = key.Offset.ToString();
+
+						if (!inputText.StartsWith("Button")) continue;
+
+						inputText = deviceInstance.Type + " " + inputText;
+
+						bool pressed = (key.Value == 128);
+
+						if (inputText == "") continue;
+
+						//Utils.LogMessage(inputText);
+						if(inputText == gunBind.Title && deviceInstance.InstanceGuid.ToString() == gunBind.JoystickGuid.ToString())
+						{
+							if(gunNumber == 1)
+							{
+								if (triggerGunA != pressed)
+								{
+									
+									if(pressed && (selfRecoilMode == "gunshot" || selfRecoilMode == "auto"))
+									{
+										DoRecoil(gunNumber);
+									}
+									triggerGunA = pressed;
+									//Utils.LogMessage($"triggerGunA  {inputText} : {pressed}");
+								}
+							}
+							if (gunNumber == 2)
+							{
+								if (triggerGunB != pressed)
+								{
+									
+									if (pressed && (selfRecoilMode == "gunshot" || selfRecoilMode == "auto"))
+									{
+										DoRecoil(gunNumber);
+									}
+									triggerGunB = pressed;
+									//Utils.LogMessage($"triggerGunB  {inputText} : {pressed}");
+								}
+							}
+
+						}
+
+					}
+
+					Thread.Sleep(20);
+				}
+				catch (Exception)
+				{
+					try
+					{
+						joystick.Dispose();
+					}
+					catch
+					{
+
+					}
+					while (!directInput.IsDeviceAttached(device_guid))
+					{
+						Thread.Sleep(100);
+					}
+					joystick = new Joystick(new DirectInput(), device_guid);
+					joystick.Properties.BufferSize = 512;
+					joystick.Acquire();
+				}
+			}
+
+			joystick.Unacquire();
 
 		}
 
@@ -344,6 +548,8 @@ namespace TeknoparrotAutoXinput
 
 		public static void DoRecoil(int gunIndex, bool rumble = false)
 		{
+			long timestamp = DateTime.UtcNow.Ticks / TimeSpan.TicksPerMillisecond;
+
 			if (gunIndex == 1 && gunARecoil)
 			{
 				Task.Run(() =>
@@ -360,6 +566,8 @@ namespace TeknoparrotAutoXinput
 							return;
 						isStartedGunA = true;
 					}
+
+					if(!rumble) lastRecoilGunA = timestamp;
 
 					if (gunAGun4ir) Gunshot_Gun4ir(gunIndex, rumble);
 					if (gunASinden) Gunshot_Sinden(gunIndex);
@@ -385,6 +593,8 @@ namespace TeknoparrotAutoXinput
 							return;
 						isStartedGunB = true;
 					}
+
+					if (!rumble) lastRecoilGunB = timestamp;
 
 					if (gunBGun4ir) Gunshot_Gun4ir(gunIndex, rumble);
 					if (gunBSinden) Gunshot_Sinden(gunIndex);
