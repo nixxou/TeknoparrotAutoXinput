@@ -1,0 +1,35 @@
+{
+	"global": {
+		"_comment": "",
+		"rom": "pblankx",
+		"target": "es4",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "UnityWndClass",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False"
+	},
+    "tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+		"hide_crosshair": {
+            "Crosshair||Enable": "0",
+			"Crosshair||Enable Alpha Blend": "0"
+        },
+        "show_crosshair": {
+            "Crosshair||Enable": "1",
+			"Crosshair||Enable Alpha Blend": "1"
+        }
+    },
+    "gameoptions": {
+    }
+}
