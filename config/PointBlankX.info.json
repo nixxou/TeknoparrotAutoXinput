@@ -1,15 +1,16 @@
 {
 	"global": {
 		"_comment": "",
-		"rom": "pblankx",
-		"target": "es4",
+		"rom": "",
+		"target": "",
 		"64bits": "False",
 		"windowed": "General,Windowed,1",
 		"magpieClass": "UnityWndClass",
 		"magpie3DGameMode": "False",
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False"
+		"magpieLaunchBefore": "False",
+		"recoil": "gunshot"
 	},
     "tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {

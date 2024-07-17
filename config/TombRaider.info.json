@@ -10,13 +10,14 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
 		"magpieLaunchBefore": "False",
+		"recoil": "gunshot"
 	},
     "tpoptions": {
 		"use_gpu_fix_in_tp_settings & amd": {
 			"General||EnableAmdFix": "1"
 		},
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
+            "General||Windowed": "0"
         },
         "set_displaymode_in_tp_settings & set_fullscreen": {
             "General||Windowed": "0"
@@ -29,5 +30,8 @@
         }
     },
     "gameoptions": {
+		"fullscreen & recommanded_gameoptions & at_least_one_sinden": {
+			"useMagpie" : "3"
+		}
     }
 }

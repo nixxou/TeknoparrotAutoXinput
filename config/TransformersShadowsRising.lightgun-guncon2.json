@@ -1,0 +1,13 @@
+{
+    "Player 1 Gun X": "GunA_LightgunX",
+    "Player 1 Gun Y": "GunA_LightgunY",
+    "Credit": "GunA_LightgunCoin,GunA_LightgunArcadeCoinBis,GunB_LightgunCoin,GunB_LightgunArcadeCoinBis",
+    "Player 1 Start": "GunA_LightgunStart,GunA_LightgunArcadeStartBis",
+    "Player 1 Trigger": "GunA_LightgunTrigger",
+    "Hyperenergy Tech Lever Forward (Attack)": "GunA_LightgunPedalRight,GunA_LightgunPump,GunA_LightgunBackLeftBtn,GunA_LightgunUp,GunA_LightgunArcade1,GunB_LightgunPedalRight,GunB_LightgunPump,GunB_LightgunBackLeftBtn,GunB_LightgunUp,GunB_LightgunArcade1",
+    "Hyperenergy Tech Lever Backwards (Defense)": "GunA_LightgunPedalLeft,GunA_LightgunBackRightBtn,GunA_LightgunFrontLeftBtn,GunA_LightgunDown,GunA_LightgunArcade5,GunB_LightgunPedalLeft,GunB_LightgunBackRightBtn,GunB_LightgunFrontLeftBtn,GunB_LightgunDown,GunB_LightgunArcade5",
+    "Player 2 Gun X": "GunB_LightgunX",
+    "Player 2 Gun Y": "GunB_LightgunY",
+    "Player 2 Start": "GunB_LightgunStart,GunB_LightgunArcadeStartBis",
+    "Player 2 Trigger": "GunB_LightgunTrigger"
+}

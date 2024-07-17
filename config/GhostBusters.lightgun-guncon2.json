@@ -1,0 +1,14 @@
+{
+    "Test": "Test",
+    "Service": "Service1",
+    "P1 Proton Pack X": "GunA_LightgunX",
+    "P1 Proton Pack Y": "GunA_LightgunY",
+    "Coin2": "GunA_LightgunCoin,GunA_LightgunBackRightBtn,GunA_LightgunArcadeCoinBis",
+    "Trigger P1": "GunA_LightgunTrigger",
+    "Reload P1": "GunA_LightgunPump,GunA_LightgunBackLeftBtn",
+    "P2 Proton Pack X": "GunB_LightgunX",
+    "P2 Proton Pack Y": "GunB_LightgunY",
+    "Coin": "GunB_LightgunCoin,GunB_LightgunBackRightBtn,GunB_LightgunArcadeCoinBis",
+    "Trigger P2": "GunB_LightgunTrigger",
+    "Reload P2": "GunB_LightgunPump,GunB_LightgunBackLeftBtn"
+}

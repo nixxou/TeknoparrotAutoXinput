@@ -4504,7 +4504,6 @@ namespace TeknoparrotAutoXinput
 
 
 											Thread.Sleep(500 + (magpieDelay * 1000));
-
 											if (File.Exists(magpieExe) && File.Exists(magpieConfig))
 											{
 
@@ -4948,7 +4947,6 @@ _Translate=0.000000,0.000000
 											}
 											string modifiedJsonText = JsonConvert.SerializeObject(jsonObject, Newtonsoft.Json.Formatting.Indented);
 											File.WriteAllText(magpieConfig, modifiedJsonText);
-
 											try
 											{
 												if (!magpieNoMoveWindow) Utils.MoveWindowsToZero(windowHandle);

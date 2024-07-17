@@ -1,0 +1,28 @@
+{
+	"global": {
+		"_comment": "",
+		"rom": "tsr",
+		"target": "ringedge2",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "TF2_Gun | Release",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"magpieExecutable": "../Transformers2/Transformers2.exe"
+	},
+    "tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        }
+    },
+    "gameoptions": {
+    }
+}

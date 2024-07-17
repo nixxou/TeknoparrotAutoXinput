@@ -1,0 +1,33 @@
+{
+	"global": {
+		"_comment": "",
+		"rom": "",
+		"target": "",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "SDL_app",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "True",
+		"magpieLaunchBefore": "False",
+		"recoil": "auto"
+	},
+    "tpoptions": {
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+			"General||HideCursor": "1",
+			"General||Automatic Mode": "1"
+        }		
+		
+    },
+    "gameoptions": {
+    }
+}

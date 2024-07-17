@@ -160,7 +160,15 @@ namespace TeknoparrotAutoXinput
 		[DllImport("user32.dll")]
 		private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
 
+		[DllImport("user32.dll", SetLastError = true)]
+		private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
+		[DllImport("user32.dll", SetLastError = true)]
+		private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+		const int GWL_STYLE = -16;
+		const int WS_CAPTION = 0x00C00000;
+		const int WS_SYSMENU = 0x00080000;
 
 		public static int GetFileLinkCount(string filepath)
 		{
@@ -1776,6 +1784,7 @@ namespace TeknoparrotAutoXinput
 
 		public static void MoveWindowsToZero(IntPtr hWnd)
 		{
+
 			RECT windowRect;
 			GetWindowRect(hWnd, out windowRect);
 
@@ -1794,6 +1803,10 @@ namespace TeknoparrotAutoXinput
 
 			//Screen screen = Screen.FromHandle(hWnd);
 			Screen screen = Screen.PrimaryScreen;
+
+			//int style = GetWindowLong(hWnd, GWL_STYLE);
+			//SetWindowLong(hWnd, GWL_STYLE, style & ~WS_CAPTION & ~WS_SYSMENU);
+			
 
 			if (winWidth <= screen.Bounds.Width && winHeight <= screen.Bounds.Height)
 			{

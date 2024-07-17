@@ -56,6 +56,7 @@ namespace TeknoparrotAutoXinput
 		const int GWL_STYLE = -16;
 		const uint WS_CAPTION = 0x00C00000;
 		const uint WS_THICKFRAME = 0x00040000;
+		const int WS_SYSMENU = 0x00080000;
 
 		static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
 		const UInt32 SWP_NOSIZE = 0x0001;

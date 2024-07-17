@@ -9,7 +9,8 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
 		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "True"
+		"magpieNoMoveWindow": "True",
+		"recoil": "auto"
 	},
     "tpoptions": {
 		"recommanded_tp_settings":{
@@ -26,6 +27,9 @@
         }
     },
 	"gameoptions": {
+		"fullscreen & recommanded_gameoptions & at_least_one_sinden": {
+			"useMagpie" : "3"
+		},
 		"recommanded_gameoptions": {
 		  "AhkBefore": "FileDelete, ForceReboot"
 		}
