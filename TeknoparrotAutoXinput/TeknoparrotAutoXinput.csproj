@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="AryMem" Version="1.0.4" />
+    <PackageReference Include="BsDiff" Version="1.1.0" />
     <PackageReference Include="Henooh.DeviceEmulator.Net" Version="1.2.0" />
     <PackageReference Include="Krypton.Toolkit" Version="80.23.11.321" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />

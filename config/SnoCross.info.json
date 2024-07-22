@@ -1,16 +1,16 @@
 {
 	"global": {
+		"_comment": "Game random crash if i try to upscale it",
 		"windowed": "General,Windowed,1",
-		"magpieClass": "TeknoParrot - Melty Blood Actress Again RINGWIDE",
+		"magpieClass": "RawApp",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "True",
+		"magpieAllowScalingMaximized": "False",
 		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
+		"magpieNoMoveWindow": "False"
 	},
 	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
             "General||Windowed": "1"
         },
         "set_displaymode_in_tp_settings & set_fullscreen": {
@@ -20,9 +20,5 @@
             "General||Windowed": "1"
         }
 	},
-	"gameoptions": {
-		"recommanded_gameoptions": {
-			"runRivaTuner" : "True"
-		}
-	}
+	"gameoptions": {}
 }

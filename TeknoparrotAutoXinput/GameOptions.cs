@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using TeknoParrotUi.Common;
+using vJoyInterfaceWrap;
 using XJoy;
 
 namespace TeknoparrotAutoXinput
@@ -503,9 +504,26 @@ namespace TeknoparrotAutoXinput
 			Reload();
 
 			cmb_vjoy.SelectedIndex = gameSettings.indexvjoy + 1;
-			vJoyManager vJoyObj;
-			vJoyObj = new vJoyManager();
-			if (!vJoyObj.vJoyEnabled())
+			/*
+			bool vjoyEnabled = false;
+			try
+			{
+				var m_joystick = new vJoy();
+				try
+				{
+					vjoyEnabled = (m_joystick != null && m_joystick.vJoyEnabled());
+				}
+				catch (DllNotFoundException)
+				{
+					vjoyEnabled = false;
+				}
+			}
+			catch { }
+			*/
+			bool vjoyEnabled = false;
+			string vjoyPath = Utils.checkInstalled("vJoy");
+			if (!string.IsNullOrEmpty(vjoyPath)) vjoyEnabled = true;
+			if (!vjoyEnabled)
 			{
 				btn_vjoyconfig.Enabled = false;
 				cmb_vjoy.Enabled = false;

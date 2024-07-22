@@ -72,5 +72,10 @@ namespace TeknoparrotAutoXinput
 			this.DialogResult = DialogResult.Cancel;
 			this.Close();
 		}
+
+		private void AddXenos_Load(object sender, EventArgs e)
+		{
+			label6.Text = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos");
+		}
 	}
 }

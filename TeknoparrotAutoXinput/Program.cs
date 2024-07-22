@@ -420,6 +420,25 @@ namespace TeknoparrotAutoXinput
 
 					string exePath = rivaTunerExe;
 					string exeDir = Path.GetDirectoryName(exePath);
+
+					string profileDir = Path.Combine(exeDir, "Profiles");
+					string profileDirBack = Path.Combine(exeDir, "ProfilesBak");
+					//Restore first if anything went wrong
+					if (Directory.Exists(profileDirBack) && Directory.Exists(profileDir))
+					{
+						Directory.Delete(profileDir, true);
+						Thread.Sleep(100);
+						Directory.Move(profileDirBack, profileDir);
+						Thread.Sleep(100);
+					}
+
+					if(Directory.Exists(profileDir)) Directory.Move(profileDir, profileDirBack);
+					Directory.CreateDirectory(profileDir);
+					File.Copy(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "thirdparty", "rivaconfig", "Config"), Path.Combine(profileDir, "Config"));
+					File.Copy(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "thirdparty", "rivaconfig", "Global"), Path.Combine(profileDir, "Global"));
+
+
+
 					Process process = new Process();
 					process.StartInfo.FileName = exePath;
 					//process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput -nocrosshair";
@@ -429,6 +448,16 @@ namespace TeknoparrotAutoXinput
 					process.StartInfo.Verb = "runas";
 					process.Start();
 					process.WaitForExit();
+
+					Thread.Sleep(500);
+					if (Directory.Exists(profileDirBack) && Directory.Exists(profileDir))
+					{
+						Directory.Delete(profileDir, true);
+						Thread.Sleep(100);
+						Directory.Move(profileDirBack, profileDir);
+						Thread.Sleep(100);
+					}
+
 				}
 				return;
 			}
@@ -3877,7 +3906,7 @@ namespace TeknoparrotAutoXinput
 								Utils.LogMessage($"HardLinkFiles {linkSourceFolder}, {linkTargetFolder}");
 								if (Utils.IsEligibleHardLink(linkSourceFolder, linkTargetFolder))
 								{
-									Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder);
+									Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder, executableGameFile);
 								}
 							}
 							if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe))
@@ -4383,6 +4412,9 @@ namespace TeknoparrotAutoXinput
 							bool magpieNoClick = false;
 							if (GameInfo.ContainsKey("magpieNoClick") && GameInfo["magpieNoClick"].ToLower() == "true") magpieNoClick = true;
 
+							bool magpieShowCursor = false;
+							if (GameInfo.ContainsKey("magpieShowCursor") && GameInfo["magpieShowCursor"].ToLower() == "true") magpieShowCursor = true;
+
 							string magpieExecutableGame = executableGame;
 							if (GameInfo.ContainsKey("magpieExecutable") && GameInfo["magpieExecutable"].Trim() != "")
 							{
@@ -4477,6 +4509,8 @@ namespace TeknoparrotAutoXinput
 
 											string jsonText = File.ReadAllText(magpieConfig);
 											JObject jsonObject = JObject.Parse(jsonText);
+
+
 											jsonObject["allowScalingMaximized"] = magpieAllowScalingMaximized;
 											jsonObject["simulateExclusiveFullscreen"] = magpieExclusiveFullscreen;
 											try
@@ -4497,6 +4531,7 @@ namespace TeknoparrotAutoXinput
 													profile["VSync"] = magpieVsync;
 													profile["tripleBuffering"] = magpieTripleBuffering;
 													profile["showFPS"] = magpieShowFps;
+													profile["drawCursor"] = magpieShowCursor;
 												}
 											}
 											string modifiedJsonText = JsonConvert.SerializeObject(jsonObject, Newtonsoft.Json.Formatting.Indented);
@@ -4943,6 +4978,7 @@ _Translate=0.000000,0.000000
 													profile["VSync"] = magpieVsync;
 													profile["tripleBuffering"] = magpieTripleBuffering;
 													profile["showFPS"] = magpieShowFps;
+													profile["drawCursor"] = magpieShowCursor;
 												}
 											}
 											string modifiedJsonText = JsonConvert.SerializeObject(jsonObject, Newtonsoft.Json.Formatting.Indented);
@@ -5182,8 +5218,29 @@ _Translate=0.000000,0.000000
 							Process process = new Process();
 							process.StartInfo.FileName = teknoparrotExe;
 							process.StartInfo.Arguments = argumentTpExe;
+
+							bool UseShellExecute = true;
+							if (GameInfo.ContainsKey("environmentVariables") && GameInfo["environmentVariables"].Trim() != "")
+							{
+								var listEnvVariable = GameInfo["environmentVariables"].Split("||");
+								foreach(var envVariable in listEnvVariable)
+								{
+									var envVariableData = envVariable.Split("==");
+									if (envVariableData.Count() == 2)
+									{
+										process.StartInfo.EnvironmentVariables[envVariableData[0]] = envVariableData[1];
+										UseShellExecute = false;
+									}
+								}
+							}
+							/*
+							process.StartInfo.EnvironmentVariables["NGLIDE_RESOLUTION"] = "1";
+							process.StartInfo.EnvironmentVariables["NGLIDE_ASPECT"] = "2";
+							process.StartInfo.EnvironmentVariables["NGLIDE_SPLASH"] = "1";
+							*/
+
 							process.StartInfo.WorkingDirectory = Path.GetDirectoryName(teknoparrotExe);
-							process.StartInfo.UseShellExecute = true;
+							process.StartInfo.UseShellExecute = UseShellExecute;
 							process.Start();
 							process.WaitForExit();
 

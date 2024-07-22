@@ -7,7 +7,8 @@
 		"magpieClass": "SDL_app",
 		"magpieTitle": "TeknoBudgie - America's Army Arcade",
 		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False"
+		"magpieDisableDirectFlip": "False",
+		"recoil": "gunshot"
 	},
     "tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {

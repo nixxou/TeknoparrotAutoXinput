@@ -348,7 +348,6 @@
 			button3.TabIndex = 10;
 			button3.Text = "button3";
 			button3.UseVisualStyleBackColor = true;
-			button3.Visible = false;
 			button3.Click += button3_Click;
 			// 
 			// timer_controllerUpdate

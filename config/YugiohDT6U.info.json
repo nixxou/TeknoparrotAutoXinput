@@ -1,0 +1,31 @@
+{
+	"global": {
+		"_comment": "Would be better if we could bind right click to action but i m too lazy to code something just for this game",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "KIDS CARD",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieShowCursor": "True"
+	},
+	"tpoptions": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+			"General||UseMouseAsTouchPanel": "1",
+			"General||UseJoyAxisAsMouse": "0",
+			"Cursor||HideCursor": "1",
+			"Cursor||UseCustomCursor": "0"
+        }
+	},
+	"gameoptions": {}
+}

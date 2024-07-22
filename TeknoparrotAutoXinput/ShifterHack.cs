@@ -152,20 +152,11 @@ namespace TeknoparrotAutoXinput
 				if (_game == "SR3")
 				{
 					ulong baseaddress = _ary.GetModule(Path.GetFileName(_executableGame)).BaseAddress;
-					//Utils.LogMessage($"base = {baseaddress}");
-					
-					//Utils.LogMessage($"base = {baseaddress:x8}");
-
 					int p1 = _ary.ReadMemory<int>(baseaddress + 0x006E03A4);
-					//Utils.LogMessage($"p1 = {p1:x8}");
 					int p2 = _ary.ReadMemory<int>((ulong)p1 + 0x4);
-					//Utils.LogMessage($"p2 = {p2:x8}");
 					int p3 = _ary.ReadMemory<int>((ulong)p2 + 0x4);
-					//Utils.LogMessage($"p3 = {p3:x8}");
 					int p4 = _ary.ReadMemory<int>((ulong)p3 + 0x10);
-					//Utils.LogMessage($"p4 = {p4:x8}");
 					int p5 = _ary.ReadMemory<int>((ulong)p4 + 0x30);
-					//Utils.LogMessage($"p5 = {p5:x8}");
 					int current_gear = _ary.ReadMemory<int>((ulong)p5 + 0x814);
 
 					if (current_gear < 0 || current_gear > 7) return -1;
@@ -177,54 +168,29 @@ namespace TeknoparrotAutoXinput
 				if (_game == "SWDC")
 				{
 					ulong baseaddress = _ary.GetModule(Path.GetFileName(_executableGame)).BaseAddress;
-					//Utils.LogMessage($"base = {baseaddress}");
-
-					//Utils.LogMessage($"base = {baseaddress:x16}");
-
 					long p1 = _ary.ReadMemory<long>(baseaddress + 0x09E2BEF8);
-					//Utils.LogMessage($"p1 = {p1:x16}");
 					long p2 = _ary.ReadMemory<long>((ulong)p1 + 0x30);
-					//Utils.LogMessage($"p2 = {p2:x16}");
 					long p3 = _ary.ReadMemory<long>((ulong)p2 + 0xA0);
-					//Utils.LogMessage($"p3 = {p3:x16}");
 					long p4 = _ary.ReadMemory<long>((ulong)p3 + 0x220);
-					//Utils.LogMessage($"p4 = {p4:x16}");
 					long p5 = _ary.ReadMemory<long>((ulong)p4 + 0x388);
-					//Utils.LogMessage($"p5 = {p5:x16}");
 					long p6 = _ary.ReadMemory<long>((ulong)p5 + 0xB0);
-					//Utils.LogMessage($"p6 = {p5:x16}");
 					long p7 = _ary.ReadMemory<long>((ulong)p6 + 0x1D0);
-					//Utils.LogMessage($"p7 = {p5:x16}");
 					long current_gear = _ary.ReadMemory<long>((ulong)p7 + 0x10);
-					//Utils.LogMessage($"p8 = {current_gear:x16}");
 
-					
 					if (current_gear <= 0 || current_gear > 6) return -1;
 					return (int)current_gear;
 				}
 				if (_game == "segartv")
 				{
 					ulong baseaddress = _ary.GetModule(Path.GetFileName(_executableGame)).BaseAddress;
-					//Utils.LogMessage($"base = {baseaddress}");
-
-					//Utils.LogMessage($"base = {baseaddress:x16}");
-
 					int p1 = _ary.ReadMemory<int>(baseaddress + 0x00016080);
-					//Utils.LogMessage($"p1b = {p1:x8}");
 					int p2 = _ary.ReadMemory<int>((ulong)p1 + 0x50);
-					//Utils.LogMessage($"p2b = {p2:x8}");
 					int p3 = _ary.ReadMemory<int>((ulong)p2 + 0x8);
-					//Utils.LogMessage($"p3b = {p3:x8}");
 					int p4 = _ary.ReadMemory<int>((ulong)p3 + 0xC);
-					//Utils.LogMessage($"p4b = {p4:x8}");
 					int p5 = _ary.ReadMemory<int>((ulong)p4 + 0x8);
-					//Utils.LogMessage($"p5b = {p5:x8}");
 					int p6 = _ary.ReadMemory<int>((ulong)p5 + 0x24);
-					//Utils.LogMessage($"p6b = {p5:x8}");
 					int p7 = _ary.ReadMemory<int>((ulong)p6 + 0x54);
-					//Utils.LogMessage($"p7b = {p5:x8}");
 					int current_gear = _ary.ReadMemory<int>((ulong)p7 + 0x28);
-					//Utils.LogMessage($"p8b = {current_gear:x8}");
 
 
 					if (current_gear < 0 || current_gear > 5) return -1;
@@ -233,13 +199,9 @@ namespace TeknoparrotAutoXinput
 				}
 				if (_game == "FNFSC")
 				{
-					//Utils.LogMessage($"base = {baseaddress:x16}");
-
 					int p1 = _ary.ReadMemory<int>(0x702804);
 					Utils.LogMessage($"p1b = {p1:x8}");
 					int current_gear = _ary.ReadMemory<int>((ulong)p1 + 0x7F0);
-					//Utils.LogMessage($"p8b = {current_gear:x8}");
-
 
 					if (current_gear < 0 || current_gear > 6) return -1;
 					current_gear++;
@@ -247,13 +209,9 @@ namespace TeknoparrotAutoXinput
 				}
 				if (_game == "GtiClub3")
 				{
-					//Utils.LogMessage($"base = {baseaddress:x16}");
-
 					int p1 = _ary.ReadMemory<int>(0x00A7FCC8);
 					Utils.LogMessage($"p1b = {p1:x8}");
 					int current_gear = _ary.ReadMemory<int>((ulong)p1 + 0x644);
-					//Utils.LogMessage($"p8b = {current_gear:x8}");
-
 
 					if (current_gear <= 0 || current_gear > 6) return -1;
 					return (int)current_gear;

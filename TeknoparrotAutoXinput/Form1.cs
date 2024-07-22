@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using TestVgme;
+using vJoyInterfaceWrap;
 using XJoy;
 
 namespace TeknoparrotAutoXinput
@@ -168,13 +169,36 @@ namespace TeknoparrotAutoXinput
 			if (cmb_gunB_type.SelectedIndex <= 0) btn_gunB_configure.Enabled = false;
 
 			cmb_vjoy.SelectedIndex = ConfigurationManager.MainConfig.indexvjoy;
-			vJoyManager vJoyObj;
-			vJoyObj = new vJoyManager();
-			if (!vJoyObj.vJoyEnabled())
+
+			bool vjoyEnabled = false;
+			string vjoyPath = Utils.checkInstalled("vJoy");
+			if (!string.IsNullOrEmpty(vjoyPath)) vjoyEnabled = true;
+			if (!vjoyEnabled)
 			{
 				btn_vjoyconfig.Enabled = false;
 				cmb_vjoy.Enabled = false;
 			}
+			/*
+			bool vjoyEnabled = false;
+			try
+			{
+				var m_joystick = new vJoy();
+				try
+				{
+					vjoyEnabled = (m_joystick != null && m_joystick.vJoyEnabled());
+				}
+				catch (DllNotFoundException)
+				{
+					vjoyEnabled = false;
+				}
+			}
+			catch { }
+			if (!vjoyEnabled)
+			{
+				btn_vjoyconfig.Enabled = false;
+				cmb_vjoy.Enabled = false;
+			}
+			*/
 
 			previous_gunARecoil = ConfigurationManager.MainConfig.gunARecoil;
 			previous_gunBRecoil = ConfigurationManager.MainConfig.gunBRecoil;

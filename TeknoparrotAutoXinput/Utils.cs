@@ -17,6 +17,8 @@ using Newtonsoft.Json;
 using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
+using BsDiff;
+using Microsoft.Win32;
 
 
 namespace TeknoparrotAutoXinput
@@ -24,6 +26,8 @@ namespace TeknoparrotAutoXinput
 
 	public static class Utils
 	{
+		public static Dictionary<string,string> md5Cache = new Dictionary<string,string>();
+
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct BY_HANDLE_FILE_INFORMATION
@@ -299,6 +303,154 @@ namespace TeknoparrotAutoXinput
 				RecurseSubdirectories = true
 			});
 
+
+			//Generate Patch
+			bool need_reload = false;
+			string patchJsonFile = Path.Combine(directorySource, "[!patch_generation!]", "patchdata.json");
+			string patchDir = Path.Combine(directorySource, "[!patch_generation!]");
+			if (File.Exists(patchJsonFile))
+			{
+				Utils.LogMessage("Checking patches");
+				bool missing_patch = false;
+				string jsonData = File.ReadAllText(patchJsonFile);
+				List<PatchInfoJsonElement> patchInfoJson = JsonConvert.DeserializeObject<List<PatchInfoJsonElement>>(jsonData);
+				foreach (var patch in patchInfoJson)
+				{
+					string expectedPatchFile = Path.Combine(directorySource, patch.destination);
+					if (!File.Exists(expectedPatchFile))
+					{
+						Utils.LogMessage($"Missing patch : {expectedPatchFile}");
+						missing_patch = true;
+					}
+				}
+				if (!missing_patch) Utils.LogMessage("All patch are OK !");
+
+
+				if (missing_patch && executableGame != "" && File.Exists(executableGame))
+				{
+					string dirGameExec = Path.GetDirectoryName(executableGame);
+					Dictionary<string, (string, bool)> mainExecutableDict = new Dictionary<string, (string, bool)>();
+					foreach (var patch in patchInfoJson)
+					{
+						string expectedPatchFile = Path.Combine(directorySource, patch.destination);
+						string originalFile = "";
+						string bdfPatchFile = "";
+						if (File.Exists(expectedPatchFile)) continue;
+						if (patch.source_path == "mainexecutable")
+						{
+
+							long executableSize = new FileInfo(executableGame).Length;
+							foreach (var sourceData in patch.source_data)
+							{
+								if (patch.bdf)
+								{
+									bdfPatchFile = Path.Combine(patchDir, sourceData.patch_name);
+									if (!File.Exists(bdfPatchFile)) continue;
+								}
+								//Start looking at the current game executable
+								if (sourceData.source_size == executableSize && sourceData.source_md5 == GetMd5HashAsString(executableGame))
+								{
+									originalFile = executableGame;
+								}
+
+								if(originalFile == "") //Uf the game executable dont match
+								{
+									//Verify all files in the game dir until we found a match
+										
+									var potentialFiles = Directory.GetFiles(dirGameExec, "*");
+									foreach (var potentialFile in potentialFiles)
+									{
+										long potentialFileSize = new FileInfo(potentialFile).Length;
+										if (sourceData.source_size == potentialFileSize && sourceData.source_md5 == GetMd5HashAsString(potentialFile))
+										{
+											originalFile = potentialFile;
+											bdfPatchFile = Path.Combine(patchDir, sourceData.patch_name);
+											break;
+										}
+									}
+								}
+
+								if (originalFile != "") break;
+								
+							}
+						}
+						if(patch.source_path == "secondaryexecutable")
+						{
+
+						}
+						if(patch.source_path != "mainexecutable" &&  patch.source_path != "secondaryexecutable" && patch.source_path != "")
+						{
+							string mainPotentialFile = Path.Combine(dirGameExec, patch.source_path);
+							string mainPotentialFileDir = Path.GetDirectoryName(mainPotentialFile);
+
+							long mainPotentialFileSize = -1;
+							if(File.Exists(mainPotentialFile)) mainPotentialFileSize = new FileInfo(mainPotentialFile).Length;
+							foreach (var sourceData in patch.source_data)
+							{
+								if (patch.bdf)
+								{
+									bdfPatchFile = Path.Combine(patchDir, sourceData.patch_name);
+									if (!File.Exists(bdfPatchFile)) continue;
+								}
+								//Start looking at the current game executable
+								if (sourceData.source_size == mainPotentialFileSize && sourceData.source_md5 == GetMd5HashAsString(mainPotentialFile))
+								{
+									originalFile = mainPotentialFile;
+								}
+
+								if (originalFile == "") //Uf the game executable dont match
+								{
+									//Verify all files in the game dir until we found a match
+									var potentialFiles = Directory.GetFiles(mainPotentialFileDir, "*");
+									foreach (var potentialFile in potentialFiles)
+									{
+										long potentialFileSize = new FileInfo(potentialFile).Length;
+										if (sourceData.source_size == potentialFileSize && sourceData.source_md5 == GetMd5HashAsString(potentialFile))
+										{
+											originalFile = potentialFile;
+											bdfPatchFile = Path.Combine(patchDir, sourceData.patch_name);
+											break;
+										}
+									}
+								}
+
+								if (originalFile != "") break;
+							}
+							
+
+
+						}
+
+						//Now we apply patch
+						if(originalFile != "" && expectedPatchFile != "" && File.Exists(originalFile) && !File.Exists(expectedPatchFile))
+						{
+							Utils.LogMessage($"{originalFile} => {expectedPatchFile} ({bdfPatchFile})");
+
+							string expectedPatchFileDir = Path.GetDirectoryName(expectedPatchFile);
+							if(!Directory.Exists(expectedPatchFileDir)) Directory.CreateDirectory(expectedPatchFileDir);
+
+							if (patch.bdf && bdfPatchFile != "" && File.Exists(bdfPatchFile))
+							{
+								var oldFile = originalFile;
+								var newFile = expectedPatchFile;
+								try
+								{
+									using (var input = new FileStream(oldFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+									using (var output = new FileStream(newFile, FileMode.Create))
+										BinaryPatch.Apply(input, () => new FileStream(bdfPatchFile, FileMode.Open, FileAccess.Read, FileShare.Read), output);
+								}
+								catch(Exception ex) { }
+							}
+							if (!patch.bdf)
+							{
+								File.Copy(originalFile,expectedPatchFile, true);
+							}
+						}
+					}
+				}
+			}
+			//End Apply Patch
+
 			foreach (var file in filePaths)
 			{
 				string newfile = directoryDest + file.Remove(0, directorySource.Length);
@@ -530,6 +682,11 @@ namespace TeknoparrotAutoXinput
 				}
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!cachereshade!]") && newfile.Contains(@"\[!cachereshade!]\"))
+				{
+					continue;
+				}
+
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!patch_generation!]") && newfile.Contains(@"\[!patch_generation!]\"))
 				{
 					continue;
 				}
@@ -2025,5 +2182,130 @@ namespace TeknoparrotAutoXinput
 			return new string(array);
 		}
 
+		public static string GetMd5HashAsString(string FileName)
+		{
+			FileName = Path.GetFullPath(FileName);
+			if (md5Cache.ContainsKey(FileName)) return md5Cache[FileName];
+
+			if (File.Exists(FileName))
+			{
+				using (var md5 = MD5.Create())
+				{
+					using (var stream = File.OpenRead(FileName))
+					{
+						var hash = md5.ComputeHash(stream);
+						string md5val = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant().ToUpper();
+						md5Cache[FileName] = md5val;
+						return md5val;
+					}
+				}
+			}
+			return "";
+		}
+
+		public static string checkInstalled(string findByName)
+		{
+			string displayName = "";
+			string InstallPath = "";
+			string registryKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+
+			//64 bits computer
+			RegistryKey key64 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+			RegistryKey key = key64.OpenSubKey(registryKey);
+
+			if (key != null)
+			{
+				foreach (RegistryKey subkey in key.GetSubKeyNames().Select(keyName => key.OpenSubKey(keyName)))
+				{
+					displayName = subkey.GetValue("DisplayName") as string;
+					if (displayName != null && displayName.Contains(findByName))
+					{
+						try
+						{
+							InstallPath = subkey.GetValue("InstallLocation", ".").ToString();
+
+							return InstallPath; //or displayName
+						}
+						catch { }
+
+					}
+				}
+				key.Close();
+			}
+			RegistryKey key32 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
+			key = key32.OpenSubKey(registryKey);
+			if (key != null)
+			{
+				foreach (RegistryKey subkey in key.GetSubKeyNames().Select(keyName => key.OpenSubKey(keyName)))
+				{
+					displayName = subkey.GetValue("DisplayName") as string;
+					if (displayName != null && displayName.Contains(findByName))
+					{
+
+						try
+						{
+							InstallPath = subkey.GetValue("InstallLocation").ToString();
+
+							return InstallPath; //or displayName
+
+						}
+						catch { }
+
+					}
+				}
+				key.Close();
+			}
+
+			if (string.IsNullOrEmpty(InstallPath))
+			{
+				//Ordinateur\HKEY_LOCAL_MACHINE\
+
+				registryKey = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
+
+				//64 bits computer
+				key64 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+				key = key64.OpenSubKey(registryKey);
+
+				if (key != null)
+				{
+					foreach (RegistryKey subkey in key.GetSubKeyNames().Select(keyName => key.OpenSubKey(keyName)))
+					{
+						displayName = subkey.GetValue("DisplayName") as string;
+						if (displayName != null && displayName.Contains(findByName))
+						{
+							try
+							{
+								InstallPath = subkey.GetValue("UninstallString", ".").ToString();
+								InstallPath = InstallPath.Trim('"');
+								if(!string.IsNullOrEmpty(InstallPath) && File.Exists(InstallPath)) return InstallPath; //or displayName
+							}
+							catch { }
+
+						}
+					}
+					key.Close();
+				}
+
+			}
+			return null;
+		}
+
 	}
 }
+
+public class PatchInfoJsonElement
+{
+	public string destination = "";
+	public bool bdf = false;
+	public List<string> alt_destination = new List<string>();
+	public string source_path = "";
+	public List<PatchInfoJsonSourceData> source_data = new List<PatchInfoJsonSourceData>();
+}
+
+public class PatchInfoJsonSourceData
+{
+	public long source_size;
+	public string source_md5 = "";
+	public string patch_name = "";
+}
+
