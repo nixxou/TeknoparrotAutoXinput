@@ -24,8 +24,10 @@ namespace TeknoparrotAutoXinput
 		private Thread threadJoystick;
 		private Dictionary<string, JoystickButtonData> buttonData = new Dictionary<string, JoystickButtonData>();
 
-		public dinputshifter()
+		public string Dialogconfig = null;
+		public dinputshifter(string dialogconfig = null)
 		{
+			Dialogconfig = dialogconfig;
 			InitializeComponent();
 			_joystickCollection.Clear();
 			devices = new List<DeviceInstance>();
@@ -226,8 +228,10 @@ namespace TeknoparrotAutoXinput
 					txtControl.ReadOnly = true;
 				}
 			}
+			string json = "";
+			if (Dialogconfig != null) json = Dialogconfig;
+			else json = ConfigurationManager.MainConfig.bindingDinputShifter;
 
-			string json = ConfigurationManager.MainConfig.bindingDinputShifter;
 			if (!string.IsNullOrEmpty(json))
 			{
 				buttonData = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(json);
@@ -270,7 +274,11 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
-			//MessageBox.Show(json);
+			if (Dialogconfig != null)
+			{
+				Dialogconfig = json;
+				return;
+			}
 			ConfigurationManager.MainConfig.bindingDinputShifter = json;
 			ConfigurationManager.SaveConfig();
 

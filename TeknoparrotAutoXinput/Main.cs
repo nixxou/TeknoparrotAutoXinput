@@ -18,6 +18,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.IO.Ports;
 using System.Linq;
+using System.Management;
 using System.Net.Sockets;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Policy;
@@ -102,6 +103,12 @@ namespace TeknoparrotAutoXinput
 
 		public Main()
 		{
+			/*
+			string[] portNames = SerialPortLib2.SerialPortInput.GetPorts();
+			if (portNames.Length != 0)
+				Array.Sort<string>(portNames);
+			ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher("Select * from WIN32_SerialPort");
+			*/
 			//this.AutoScaleMode = AutoScaleMode.None;
 			//Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
 			//Font = new Font(Font.Name, Font.Size * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);

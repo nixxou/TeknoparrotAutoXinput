@@ -23,9 +23,10 @@ namespace TeknoparrotAutoXinput
 		private List<DeviceInstance> devices = new List<DeviceInstance>();
 		private Thread threadJoystick;
 		private Dictionary<string, JoystickButtonData> buttonData = new Dictionary<string, JoystickButtonData>();
-
-		public dinputhotas()
+		public string Dialogconfig = null;
+		public dinputhotas(string dialogconfig = null)
 		{
+			Dialogconfig = dialogconfig;
 			InitializeComponent();
 			_joystickCollection.Clear();
 			devices = new List<DeviceInstance>();
@@ -243,8 +244,10 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
+			string json = "";
+			if (Dialogconfig != null) json = Dialogconfig;
+			else json = ConfigurationManager.MainConfig.bindingDinputHotas;
 
-			string json = ConfigurationManager.MainConfig.bindingDinputHotas;
 			if (!string.IsNullOrEmpty(json))
 			{
 				buttonData = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(json);
@@ -285,7 +288,7 @@ namespace TeknoparrotAutoXinput
 					{
 						buttonDataFinal.Add(XinputTitle, buttonData[XinputTitle]);
 					}
-					if (control.Name == "txt_InputDevice0RightThumbInputDevice0Yplus" && buttonDataFinal[XinputTitle].IsAxis && (buttonData[XinputTitle].Title.EndsWith("+") || buttonData[XinputTitle].Title.EndsWith("-")))
+					if (control.Name == "txt_InputDevice0RightThumbInputDevice0Yplus" && buttonDataFinal.ContainsKey(XinputTitle) && buttonDataFinal[XinputTitle].IsAxis && buttonData.ContainsKey(XinputTitle) && (buttonData[XinputTitle].Title.EndsWith("+") || buttonData[XinputTitle].Title.EndsWith("-")))
 					{
 						string reverseKey = "InputDevice0RightThumbInputDevice0YReverse";
 						string reversedTitle = buttonData[XinputTitle].Title;
@@ -307,7 +310,11 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
-			//MessageBox.Show(json);
+			if (Dialogconfig != null)
+			{
+				Dialogconfig = json;
+				return;
+			}
 			ConfigurationManager.MainConfig.bindingDinputHotas = json;
 			ConfigurationManager.SaveConfig();
 

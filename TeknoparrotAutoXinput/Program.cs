@@ -14,6 +14,7 @@ using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO.Pipes;
+using System.Management;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -535,7 +536,9 @@ namespace TeknoparrotAutoXinput
 			string runtimedir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "runtimes");
 			if (Directory.Exists(runtimedir))
 			{
-				Directory.Delete(runtimedir, true);
+				var oldsdl2 = Directory.GetFiles(runtimedir,"*sdl2*",SearchOption.AllDirectories);
+				foreach(var oldsdl in oldsdl2) { File.Delete(oldsdl); }
+				//Directory.Delete(runtimedir, true);
 			}
 
 
@@ -5894,7 +5897,7 @@ _Translate=0.000000,0.000000
 			Gamepad = null;
 		}
 
-		public XinputGamepad(X.Gamepad gamepad, int xinputSlot, bool useForceType=true)
+		public XinputGamepad(X.Gamepad gamepad, int xinputSlot, bool useForceType=true, string MatchListWheel = null, string MatchListArcade = null, string MatchListGamepad = null)
 		{
 			Gamepad = gamepad;
 			XinputSlot = xinputSlot;
@@ -5925,7 +5928,8 @@ _Translate=0.000000,0.000000
 			
 			if(Type == "")
 			{
-				var MatchList = Program.wheelXinputData.ToLower().Trim().Split(',');
+				string MatchListWheelTxt = MatchListWheel == null ? Program.wheelXinputData : MatchListWheel;
+				var MatchList = MatchListWheelTxt.ToLower().Trim().Split(',');
 				foreach (var m in MatchList)
 				{
 					if (m.Trim() != "" && dataTxt.ToLower().Trim().Contains(m.Trim()))
@@ -5937,7 +5941,8 @@ _Translate=0.000000,0.000000
 			}
 			if (Type == "")
 			{
-				var MatchList = Program.arcadeXinputData.ToLower().Trim().Split(',');
+				string MatchListArcadeTxt = MatchListArcade == null ? Program.arcadeXinputData : MatchListArcade;
+				var MatchList = MatchListArcadeTxt.ToLower().Trim().Split(',');
 				foreach (var m in MatchList)
 				{
 					if (m.Trim() != "" && dataTxt.ToLower().Trim().Contains(m.Trim()))
@@ -5949,7 +5954,8 @@ _Translate=0.000000,0.000000
 			}
 			if (Type == "")
 			{
-				var MatchList = Program.gamepadXinputData.ToLower().Trim().Split(',');
+				string MatchListGamepadTxt = MatchListGamepad == null ? Program.gamepadXinputData : MatchListGamepad;
+				var MatchList = MatchListGamepadTxt.ToLower().Trim().Split(',');
 				foreach (var m in MatchList)
 				{
 					if (m.Trim() != "" && dataTxt.ToLower().Trim().Contains(m.Trim()))
@@ -5959,25 +5965,6 @@ _Translate=0.000000,0.000000
 					}
 				}
 			}
-
-			/*
-			Type = "gamepad";
-			if (Type == "gamepad")
-			{
-				if (Gamepad.Capabilities.SubType == X.Gamepad.DeviceSubType.ArcadePad || Gamepad.Capabilities.SubType == X.Gamepad.DeviceSubType.ArcadeStick)
-				{
-					Type = "arcade";
-				}
-			}
-			if (Type == "gamepad")
-			{
-				if (Gamepad.Capabilities.SubType == X.Gamepad.DeviceSubType.Wheel)
-				{
-					Type = "wheel";
-				}
-			}
-			*/
-
 
 		}
 

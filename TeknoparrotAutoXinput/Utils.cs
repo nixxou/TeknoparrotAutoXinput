@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
 using BsDiff;
 using Microsoft.Win32;
+using System.Reflection;
 
 
 namespace TeknoparrotAutoXinput
@@ -2291,6 +2292,8 @@ namespace TeknoparrotAutoXinput
 		}
 
 	}
+
+
 }
 
 public class PatchInfoJsonElement

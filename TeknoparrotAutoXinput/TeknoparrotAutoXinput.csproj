@@ -29,10 +29,21 @@
     <None Remove="config\**" />
     <None Remove="img\**" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <None Remove="Resources\gunpreset_0.json" />
+    <None Remove="Resources\gunpreset_1.json" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\gunpreset_0.json" />
+    <EmbeddedResource Include="Resources\gunpreset_1.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AryMem" Version="1.0.4" />
     <PackageReference Include="BsDiff" Version="1.1.0" />
+    <PackageReference Include="CliWrap" Version="3.6.6" />
     <PackageReference Include="Henooh.DeviceEmulator.Net" Version="1.2.0" />
     <PackageReference Include="Krypton.Toolkit" Version="80.23.11.321" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
@@ -41,6 +52,8 @@
     <PackageReference Include="ppy.SDL2-CS" Version="1.0.82" />
     <PackageReference Include="SerialPortLib2" Version="1.0.10" />
     <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
+    <PackageReference Include="Squid-Box.SevenZipSharp" Version="1.6.2.24" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
     <PackageReference Include="WiimoteLib" Version="1.7.0" />
   </ItemGroup>

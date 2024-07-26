@@ -28,10 +28,11 @@ namespace TeknoparrotAutoXinput
 		private Dictionary<string, JoystickButtonData> buttonData = new Dictionary<string, JoystickButtonData>();
 
 		public string FocusedTextBoxName = "";
+		public string Dialogconfig = null;
 
-
-		public dinputgun(int gunIndex, string gunType)
+		public dinputgun(int gunIndex, string gunType, string dialogconfig = null)
 		{
+			Dialogconfig = dialogconfig;
 			InitializeComponent();
 			if (gunIndex != 1 && gunIndex != 2) { return; }
 			switch (gunType)
@@ -345,54 +346,62 @@ namespace TeknoparrotAutoXinput
 			}
 
 			string json = "";
-			if (GunIndex == 1)
+			if (Dialogconfig != null) json = Dialogconfig;
+			else
 			{
-				switch (GunType)
+				if (GunIndex == 1)
 				{
-					case "sinden":
-						json = ConfigurationManager.MainConfig.bindingDinputGunASinden;
-						break;
-					case "gamepad":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
-						break;
-					case "guncon1":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon1;
-						break;
-					case "guncon2":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2;
-						break;
-					case "wiimote":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
-						break;
-					default:
-						json = "";
-						break;
+					switch (GunType)
+					{
+						case "sinden":
+							json = ConfigurationManager.MainConfig.bindingDinputGunASinden;
+							break;
+						case "gamepad":
+							json = ConfigurationManager.MainConfig.bindingDinputGunAXbox;
+							break;
+						case "guncon1":
+							json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon1;
+							break;
+						case "guncon2":
+							json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2;
+							break;
+						case "wiimote":
+							json = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
+							break;
+						default:
+							json = "";
+							break;
+					}
 				}
-			}
-			if (GunIndex == 2)
-			{
-				switch (GunType)
+				if (GunIndex == 2)
 				{
-					case "sinden":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
-						break;
-					case "gamepad":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBXbox;
-						break;
-					case "guncon1":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1;
-						break;
-					case "guncon2":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2;
-						break;
-					case "wiimote":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
-						break;
-					default:
-						json = "";
-						break;
+					switch (GunType)
+					{
+						case "sinden":
+							json = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
+							break;
+						case "gamepad":
+							json = ConfigurationManager.MainConfig.bindingDinputGunBXbox;
+							break;
+						case "guncon1":
+							json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1;
+							break;
+						case "guncon2":
+							json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2;
+							break;
+						case "wiimote":
+							json = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
+							break;
+						default:
+							json = "";
+							break;
+					}
 				}
+
+
 			}
+
+
 
 
 			if (!string.IsNullOrEmpty(json))
@@ -497,7 +506,11 @@ namespace TeknoparrotAutoXinput
 				return false;
 			}
 
-
+			if (Dialogconfig != null)
+			{
+				Dialogconfig = json;
+				return true;
+			}
 
 			if (GunIndex == 1)
 			{
