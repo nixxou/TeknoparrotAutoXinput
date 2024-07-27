@@ -102,6 +102,22 @@
 			kryptonLabel3 = new Krypton.Toolkit.KryptonLabel();
 			btn_selectTP = new Krypton.Toolkit.KryptonButton();
 			tabPage1 = new TabPage();
+			groupBox5 = new GroupBox();
+			kryptonLabel30 = new Krypton.Toolkit.KryptonLabel();
+			txt_patchArchive = new Krypton.Toolkit.KryptonTextBox();
+			kryptonLabel28 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel29 = new Krypton.Toolkit.KryptonLabel();
+			btn_selectPatchArchive = new Krypton.Toolkit.KryptonButton();
+			grp_fixes = new GroupBox();
+			lbl_fixes_status = new Label();
+			btn_verifyfix = new Krypton.Toolkit.KryptonButton();
+			btn_openTPfixes = new Krypton.Toolkit.KryptonButton();
+			lbl_foldernameTPfixes = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel27 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel26 = new Krypton.Toolkit.KryptonLabel();
+			btn_tpDiscord = new Krypton.Toolkit.KryptonButton();
+			label3 = new Label();
+			kryptonLabel25 = new Krypton.Toolkit.KryptonLabel();
 			groupBox4 = new GroupBox();
 			label13 = new Label();
 			btn_install_xenos = new Krypton.Toolkit.KryptonButton();
@@ -128,6 +144,19 @@
 			kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
 			tabControl1 = new TabControl();
 			timer_controllerUpdate = new System.Windows.Forms.Timer(components);
+			tabPage4 = new TabPage();
+			btn_mariokartId_show = new Krypton.Toolkit.KryptonButton();
+			btn_apm3id_show = new Krypton.Toolkit.KryptonButton();
+			txt_customName = new Krypton.Toolkit.KryptonTextBox();
+			lbl_apm3id = new Krypton.Toolkit.KryptonLabel();
+			txt_apm3id = new Krypton.Toolkit.KryptonTextBox();
+			txt_mariokartId = new Krypton.Toolkit.KryptonTextBox();
+			kryptonLabel66 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel67 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel60 = new Krypton.Toolkit.KryptonLabel();
+			cmb_resolution = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel53 = new Krypton.Toolkit.KryptonLabel();
+			cmb_gpu = new Krypton.Toolkit.KryptonComboBox();
 			tabPage3.SuspendLayout();
 			groupBox_xinputarcade.SuspendLayout();
 			groupBox3.SuspendLayout();
@@ -142,8 +171,13 @@
 			grp_scangame.SuspendLayout();
 			groupBox1.SuspendLayout();
 			tabPage1.SuspendLayout();
+			groupBox5.SuspendLayout();
+			grp_fixes.SuspendLayout();
 			groupBox4.SuspendLayout();
 			tabControl1.SuspendLayout();
+			tabPage4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_resolution).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_gpu).BeginInit();
 			SuspendLayout();
 			// 
 			// btn_previous
@@ -319,16 +353,17 @@
 			// 
 			btn_configure_gunB.Location = new Point(544, 313);
 			btn_configure_gunB.Name = "btn_configure_gunB";
-			btn_configure_gunB.Size = new Size(142, 25);
+			btn_configure_gunB.Size = new Size(208, 25);
 			btn_configure_gunB.TabIndex = 66;
 			btn_configure_gunB.Values.Text = "Configure Gun B";
 			btn_configure_gunB.Visible = false;
+			btn_configure_gunB.Click += btn_configure_gunB_Click;
 			// 
 			// btn_configure_gunA
 			// 
 			btn_configure_gunA.Location = new Point(221, 313);
 			btn_configure_gunA.Name = "btn_configure_gunA";
-			btn_configure_gunA.Size = new Size(142, 25);
+			btn_configure_gunA.Size = new Size(208, 25);
 			btn_configure_gunA.TabIndex = 65;
 			btn_configure_gunA.Values.Text = "Configure Gun A";
 			btn_configure_gunA.Visible = false;
@@ -339,10 +374,10 @@
 			cmb_gunB_type.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_gunB_type.DropDownWidth = 121;
 			cmb_gunB_type.IntegralHeight = false;
-			cmb_gunB_type.Items.AddRange(new object[] { "Gun4IR : GunCon2", "Gun4IR : GunCon1", "Sinden Lightgun", "Wiimote (Lichtknarre)" });
+			cmb_gunB_type.Items.AddRange(new object[] { "Gun4IR : GunCon2", "Gun4IR : GunCon1", "Sinden Lightgun", "Wiimote (Lichtknarre)", "Other Firmware : GunCon1", "Other Firmware : GunCon2", "Other Firmware : Wiimote" });
 			cmb_gunB_type.Location = new Point(544, 286);
 			cmb_gunB_type.Name = "cmb_gunB_type";
-			cmb_gunB_type.Size = new Size(142, 21);
+			cmb_gunB_type.Size = new Size(208, 21);
 			cmb_gunB_type.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_gunB_type.TabIndex = 63;
 			cmb_gunB_type.Visible = false;
@@ -371,10 +406,10 @@
 			cmb_gunA_type.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_gunA_type.DropDownWidth = 121;
 			cmb_gunA_type.IntegralHeight = false;
-			cmb_gunA_type.Items.AddRange(new object[] { "Gun4IR : GunCon2", "Gun4IR : GunCon1", "Sinden Lightgun", "Wiimote (Lichtknarre)" });
+			cmb_gunA_type.Items.AddRange(new object[] { "Gun4IR : GunCon2", "Gun4IR : GunCon1", "Sinden Lightgun", "Wiimote (Lichtknarre)", "Other Firmware : GunCon1", "Other Firmware : GunCon2", "Other Firmware : Wiimote" });
 			cmb_gunA_type.Location = new Point(221, 286);
 			cmb_gunA_type.Name = "cmb_gunA_type";
-			cmb_gunA_type.Size = new Size(142, 21);
+			cmb_gunA_type.Size = new Size(208, 21);
 			cmb_gunA_type.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_gunA_type.TabIndex = 59;
 			cmb_gunA_type.Visible = false;
@@ -868,6 +903,8 @@
 			// 
 			// tabPage1
 			// 
+			tabPage1.Controls.Add(groupBox5);
+			tabPage1.Controls.Add(grp_fixes);
 			tabPage1.Controls.Add(groupBox4);
 			tabPage1.Controls.Add(kryptonLabel1);
 			tabPage1.Location = new Point(4, 24);
@@ -877,6 +914,167 @@
 			tabPage1.TabIndex = 0;
 			tabPage1.Text = "tabPage1";
 			tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// groupBox5
+			// 
+			groupBox5.Controls.Add(kryptonLabel30);
+			groupBox5.Controls.Add(txt_patchArchive);
+			groupBox5.Controls.Add(kryptonLabel28);
+			groupBox5.Controls.Add(kryptonLabel29);
+			groupBox5.Controls.Add(btn_selectPatchArchive);
+			groupBox5.Location = new Point(15, 395);
+			groupBox5.Name = "groupBox5";
+			groupBox5.Size = new Size(863, 101);
+			groupBox5.TabIndex = 3;
+			groupBox5.TabStop = false;
+			// 
+			// kryptonLabel30
+			// 
+			kryptonLabel30.Location = new Point(238, 28);
+			kryptonLabel30.Name = "kryptonLabel30";
+			kryptonLabel30.Size = new Size(313, 20);
+			kryptonLabel30.TabIndex = 50;
+			kryptonLabel30.Values.Text = "(A TAXPatches 7z archive distributed with this program)";
+			// 
+			// txt_patchArchive
+			// 
+			txt_patchArchive.Enabled = false;
+			txt_patchArchive.Location = new Point(108, 54);
+			txt_patchArchive.Name = "txt_patchArchive";
+			txt_patchArchive.Size = new Size(667, 23);
+			txt_patchArchive.TabIndex = 49;
+			txt_patchArchive.TextChanged += txt_patchArchive_TextChanged;
+			// 
+			// kryptonLabel28
+			// 
+			kryptonLabel28.Location = new Point(12, 57);
+			kryptonLabel28.Name = "kryptonLabel28";
+			kryptonLabel28.Size = new Size(90, 20);
+			kryptonLabel28.TabIndex = 46;
+			kryptonLabel28.Values.Text = "Patch Archive :";
+			// 
+			// kryptonLabel29
+			// 
+			kryptonLabel29.LabelStyle = Krypton.Toolkit.LabelStyle.TitlePanel;
+			kryptonLabel29.Location = new Point(12, 22);
+			kryptonLabel29.Name = "kryptonLabel29";
+			kryptonLabel29.Size = new Size(220, 29);
+			kryptonLabel29.TabIndex = 48;
+			kryptonLabel29.Values.Text = "Select the patch archive";
+			// 
+			// btn_selectPatchArchive
+			// 
+			btn_selectPatchArchive.Location = new Point(781, 54);
+			btn_selectPatchArchive.Name = "btn_selectPatchArchive";
+			btn_selectPatchArchive.Size = new Size(70, 23);
+			btn_selectPatchArchive.TabIndex = 47;
+			btn_selectPatchArchive.Values.Text = "...";
+			btn_selectPatchArchive.Click += btn_selectPatchArchive_Click;
+			// 
+			// grp_fixes
+			// 
+			grp_fixes.Controls.Add(lbl_fixes_status);
+			grp_fixes.Controls.Add(btn_verifyfix);
+			grp_fixes.Controls.Add(btn_openTPfixes);
+			grp_fixes.Controls.Add(lbl_foldernameTPfixes);
+			grp_fixes.Controls.Add(kryptonLabel27);
+			grp_fixes.Controls.Add(kryptonLabel26);
+			grp_fixes.Controls.Add(btn_tpDiscord);
+			grp_fixes.Controls.Add(label3);
+			grp_fixes.Controls.Add(kryptonLabel25);
+			grp_fixes.Enabled = false;
+			grp_fixes.Location = new Point(15, 502);
+			grp_fixes.Name = "grp_fixes";
+			grp_fixes.Size = new Size(863, 175);
+			grp_fixes.TabIndex = 2;
+			grp_fixes.TabStop = false;
+			grp_fixes.EnabledChanged += grp_fixes_EnabledChanged;
+			grp_fixes.Enter += groupBox5_Enter;
+			// 
+			// lbl_fixes_status
+			// 
+			lbl_fixes_status.AutoSize = true;
+			lbl_fixes_status.Font = new Font("Verdana", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+			lbl_fixes_status.ForeColor = Color.Red;
+			lbl_fixes_status.Location = new Point(699, 15);
+			lbl_fixes_status.Name = "lbl_fixes_status";
+			lbl_fixes_status.Size = new Size(150, 23);
+			lbl_fixes_status.TabIndex = 27;
+			lbl_fixes_status.Text = "Files missing";
+			// 
+			// btn_verifyfix
+			// 
+			btn_verifyfix.Location = new Point(12, 130);
+			btn_verifyfix.Name = "btn_verifyfix";
+			btn_verifyfix.Size = new Size(839, 37);
+			btn_verifyfix.TabIndex = 26;
+			btn_verifyfix.Values.Text = "Check if all required fixes are downloaded";
+			btn_verifyfix.Click += btn_verifyfix_Click;
+			// 
+			// btn_openTPfixes
+			// 
+			btn_openTPfixes.Location = new Point(666, 99);
+			btn_openTPfixes.Name = "btn_openTPfixes";
+			btn_openTPfixes.Size = new Size(185, 25);
+			btn_openTPfixes.TabIndex = 25;
+			btn_openTPfixes.Values.Text = "Open folder in Explorer";
+			btn_openTPfixes.Click += btn_openTPfixes_Click;
+			// 
+			// lbl_foldernameTPfixes
+			// 
+			lbl_foldernameTPfixes.LabelStyle = Krypton.Toolkit.LabelStyle.BoldControl;
+			lbl_foldernameTPfixes.Location = new Point(145, 99);
+			lbl_foldernameTPfixes.Name = "lbl_foldernameTPfixes";
+			lbl_foldernameTPfixes.Size = new Size(95, 20);
+			lbl_foldernameTPfixes.TabIndex = 24;
+			lbl_foldernameTPfixes.Values.Text = "<foldername>";
+			// 
+			// kryptonLabel27
+			// 
+			kryptonLabel27.LabelStyle = Krypton.Toolkit.LabelStyle.TitlePanel;
+			kryptonLabel27.Location = new Point(6, 95);
+			kryptonLabel27.Name = "kryptonLabel27";
+			kryptonLabel27.Size = new Size(143, 29);
+			kryptonLabel27.TabIndex = 23;
+			kryptonLabel27.Values.Text = "Put them into : ";
+			// 
+			// kryptonLabel26
+			// 
+			kryptonLabel26.LabelStyle = Krypton.Toolkit.LabelStyle.TitlePanel;
+			kryptonLabel26.Location = new Point(6, 64);
+			kryptonLabel26.Name = "kryptonLabel26";
+			kryptonLabel26.Size = new Size(578, 29);
+			kryptonLabel26.TabIndex = 22;
+			kryptonLabel26.Values.Text = "Go to TP discord, under the #fixes channel and download all files";
+			// 
+			// btn_tpDiscord
+			// 
+			btn_tpDiscord.Location = new Point(666, 68);
+			btn_tpDiscord.Name = "btn_tpDiscord";
+			btn_tpDiscord.Size = new Size(185, 25);
+			btn_tpDiscord.TabIndex = 21;
+			btn_tpDiscord.Values.Text = "Go To Teknoparrot Discord";
+			btn_tpDiscord.Click += btn_tpDiscord_Click;
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Font = new Font("Verdana", 12F, FontStyle.Bold, GraphicsUnit.Point);
+			label3.ForeColor = Color.Red;
+			label3.Location = new Point(6, 47);
+			label3.Name = "label3";
+			label3.Size = new Size(770, 18);
+			label3.TabIndex = 20;
+			label3.Text = "I'm not allowed to package them with this app, so you have to download them yourself";
+			// 
+			// kryptonLabel25
+			// 
+			kryptonLabel25.LabelStyle = Krypton.Toolkit.LabelStyle.TitlePanel;
+			kryptonLabel25.Location = new Point(6, 15);
+			kryptonLabel25.Name = "kryptonLabel25";
+			kryptonLabel25.Size = new Size(203, 29);
+			kryptonLabel25.TabIndex = 3;
+			kryptonLabel25.Values.Text = "Required Game fixes :";
 			// 
 			// groupBox4
 			// 
@@ -1135,6 +1333,7 @@
 			tabControl1.Controls.Add(tabPage1);
 			tabControl1.Controls.Add(tabPage2);
 			tabControl1.Controls.Add(tabPage3);
+			tabControl1.Controls.Add(tabPage4);
 			tabControl1.Location = new Point(12, -14);
 			tabControl1.Name = "tabControl1";
 			tabControl1.SelectedIndex = 0;
@@ -1146,11 +1345,136 @@
 			// 
 			timer_controllerUpdate.Tick += timer_controllerUpdate_Tick;
 			// 
+			// tabPage4
+			// 
+			tabPage4.Controls.Add(btn_mariokartId_show);
+			tabPage4.Controls.Add(btn_apm3id_show);
+			tabPage4.Controls.Add(kryptonLabel60);
+			tabPage4.Controls.Add(txt_customName);
+			tabPage4.Controls.Add(cmb_resolution);
+			tabPage4.Controls.Add(lbl_apm3id);
+			tabPage4.Controls.Add(txt_apm3id);
+			tabPage4.Controls.Add(kryptonLabel53);
+			tabPage4.Controls.Add(txt_mariokartId);
+			tabPage4.Controls.Add(cmb_gpu);
+			tabPage4.Controls.Add(kryptonLabel66);
+			tabPage4.Controls.Add(kryptonLabel67);
+			tabPage4.Location = new Point(4, 24);
+			tabPage4.Name = "tabPage4";
+			tabPage4.Padding = new Padding(3);
+			tabPage4.Size = new Size(884, 683);
+			tabPage4.TabIndex = 3;
+			tabPage4.Text = "tabPage4";
+			tabPage4.UseVisualStyleBackColor = true;
+			// 
+			// btn_mariokartId_show
+			// 
+			btn_mariokartId_show.Location = new Point(677, 116);
+			btn_mariokartId_show.Name = "btn_mariokartId_show";
+			btn_mariokartId_show.Size = new Size(70, 23);
+			btn_mariokartId_show.TabIndex = 150;
+			btn_mariokartId_show.Values.Text = "Show";
+			// 
+			// btn_apm3id_show
+			// 
+			btn_apm3id_show.Location = new Point(677, 84);
+			btn_apm3id_show.Name = "btn_apm3id_show";
+			btn_apm3id_show.Size = new Size(70, 23);
+			btn_apm3id_show.TabIndex = 149;
+			btn_apm3id_show.Values.Text = "Show";
+			// 
+			// txt_customName
+			// 
+			txt_customName.Location = new Point(161, 142);
+			txt_customName.Name = "txt_customName";
+			txt_customName.Size = new Size(510, 23);
+			txt_customName.TabIndex = 116;
+			// 
+			// lbl_apm3id
+			// 
+			lbl_apm3id.Location = new Point(37, 87);
+			lbl_apm3id.Name = "lbl_apm3id";
+			lbl_apm3id.Size = new Size(55, 20);
+			lbl_apm3id.TabIndex = 103;
+			lbl_apm3id.Values.Text = "APM3ID";
+			// 
+			// txt_apm3id
+			// 
+			txt_apm3id.Location = new Point(161, 84);
+			txt_apm3id.Name = "txt_apm3id";
+			txt_apm3id.PasswordChar = '*';
+			txt_apm3id.Size = new Size(510, 23);
+			txt_apm3id.TabIndex = 104;
+			// 
+			// txt_mariokartId
+			// 
+			txt_mariokartId.Location = new Point(161, 113);
+			txt_mariokartId.Name = "txt_mariokartId";
+			txt_mariokartId.PasswordChar = '*';
+			txt_mariokartId.Size = new Size(510, 23);
+			txt_mariokartId.TabIndex = 118;
+			// 
+			// kryptonLabel66
+			// 
+			kryptonLabel66.Location = new Point(37, 145);
+			kryptonLabel66.Name = "kryptonLabel66";
+			kryptonLabel66.Size = new Size(95, 20);
+			kryptonLabel66.TabIndex = 115;
+			kryptonLabel66.Values.Text = "Custom Name :";
+			// 
+			// kryptonLabel67
+			// 
+			kryptonLabel67.Location = new Point(37, 116);
+			kryptonLabel67.Name = "kryptonLabel67";
+			kryptonLabel67.Size = new Size(118, 20);
+			kryptonLabel67.TabIndex = 117;
+			kryptonLabel67.Values.Text = "Mario Kart ProfileID";
+			// 
+			// kryptonLabel60
+			// 
+			kryptonLabel60.Location = new Point(39, 46);
+			kryptonLabel60.Name = "kryptonLabel60";
+			kryptonLabel60.Size = new Size(74, 20);
+			kryptonLabel60.TabIndex = 166;
+			kryptonLabel60.Values.Text = "Resolution :";
+			// 
+			// cmb_resolution
+			// 
+			cmb_resolution.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_resolution.DropDownWidth = 242;
+			cmb_resolution.IntegralHeight = false;
+			cmb_resolution.Items.AddRange(new object[] { "720p", "1080p", "1440p (2K)", "2160p (4K)" });
+			cmb_resolution.Location = new Point(160, 47);
+			cmb_resolution.Name = "cmb_resolution";
+			cmb_resolution.Size = new Size(219, 21);
+			cmb_resolution.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_resolution.TabIndex = 165;
+			// 
+			// kryptonLabel53
+			// 
+			kryptonLabel53.Location = new Point(39, 20);
+			kryptonLabel53.Name = "kryptonLabel53";
+			kryptonLabel53.Size = new Size(39, 20);
+			kryptonLabel53.TabIndex = 164;
+			kryptonLabel53.Values.Text = "Gpu :";
+			// 
+			// cmb_gpu
+			// 
+			cmb_gpu.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_gpu.DropDownWidth = 242;
+			cmb_gpu.IntegralHeight = false;
+			cmb_gpu.Items.AddRange(new object[] { "Nvidia", "Intel", "AMD Old", "AMD New", "AMD R.ID" });
+			cmb_gpu.Location = new Point(160, 19);
+			cmb_gpu.Name = "cmb_gpu";
+			cmb_gpu.Size = new Size(219, 21);
+			cmb_gpu.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_gpu.TabIndex = 163;
+			// 
 			// Wizard
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1153, 835);
+			ClientSize = new Size(907, 732);
 			Controls.Add(btn_next);
 			Controls.Add(btn_previous);
 			Controls.Add(tabControl1);
@@ -1181,9 +1505,17 @@
 			groupBox1.PerformLayout();
 			tabPage1.ResumeLayout(false);
 			tabPage1.PerformLayout();
+			groupBox5.ResumeLayout(false);
+			groupBox5.PerformLayout();
+			grp_fixes.ResumeLayout(false);
+			grp_fixes.PerformLayout();
 			groupBox4.ResumeLayout(false);
 			groupBox4.PerformLayout();
 			tabControl1.ResumeLayout(false);
+			tabPage4.ResumeLayout(false);
+			tabPage4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_resolution).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_gpu).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -1287,5 +1619,34 @@
 		private Krypton.Toolkit.KryptonComboBox cmb_gunB_type;
 		private Krypton.Toolkit.KryptonButton btn_configure_gunA;
 		private Krypton.Toolkit.KryptonButton btn_configure_gunB;
+		private GroupBox grp_fixes;
+		private Krypton.Toolkit.KryptonButton btn_tpDiscord;
+		private Label label3;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel25;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel26;
+		private Krypton.Toolkit.KryptonLabel lbl_foldernameTPfixes;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel27;
+		private Krypton.Toolkit.KryptonButton btn_openTPfixes;
+		private Label lbl_fixes_status;
+		private Krypton.Toolkit.KryptonButton btn_verifyfix;
+		private GroupBox groupBox5;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel30;
+		private Krypton.Toolkit.KryptonTextBox txt_patchArchive;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel28;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel29;
+		private Krypton.Toolkit.KryptonButton btn_selectPatchArchive;
+		private TabPage tabPage4;
+		private Krypton.Toolkit.KryptonButton btn_mariokartId_show;
+		private Krypton.Toolkit.KryptonButton btn_apm3id_show;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel60;
+		private Krypton.Toolkit.KryptonTextBox txt_customName;
+		private Krypton.Toolkit.KryptonComboBox cmb_resolution;
+		private Krypton.Toolkit.KryptonLabel lbl_apm3id;
+		private Krypton.Toolkit.KryptonTextBox txt_apm3id;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel53;
+		private Krypton.Toolkit.KryptonTextBox txt_mariokartId;
+		private Krypton.Toolkit.KryptonComboBox cmb_gpu;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel66;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel67;
 	}
 }

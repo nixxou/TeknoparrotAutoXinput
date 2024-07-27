@@ -113,7 +113,7 @@ namespace TeknoparrotAutoXinput
 			//Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
 			//Font = new Font(Font.Name, Font.Size * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
 
-
+			//this.AutoScaleMode = AutoScaleMode.Dpi;
 			InitializeComponent();
 			this.Activated += VotreForm_Activated;
 			this.Deactivate += VotreForm_Deactivate;

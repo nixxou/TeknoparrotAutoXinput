@@ -37,12 +37,16 @@ namespace TeknoparrotAutoXinput
 		string currentDir = Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName));
 		string SevenZipExe = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "7zip", "7z.exe");
 		string wizardSettingsJson = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)), "wizard.json");
+		string fixesDir = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)), "fixes");
 		WizardSettings SavedWizardSettings;
 
 		private Action<string> handleStdOut;
 		private int progress = 0; // Variable pour stocker la progression
 		private int totalCount = 0; // Total des éléments à traiter
 		private bool isProcessing = false; // Indicateur de traitement
+		private Dictionary<string, CacheMetadata> cacheCheckFix = new Dictionary<string, CacheMetadata>();
+		Dictionary<string, string> ExpectedArchivesFix = new Dictionary<string, string>();
+
 
 		//Tab 2
 		List<string> gameExecutableList = new List<string>();
@@ -61,19 +65,14 @@ namespace TeknoparrotAutoXinput
 		string dshifter_config = "";
 		string dhotas_config = "";
 
+		int gunA_comport = 0;
 		int gunA_type = -1;
 		string gunA_json = "";
-		string gunA_guid = "";
-		string gunA_deviceName = "";
-		bool gunA_sindenRumble = false;
-		int gunA_comport = 0;
+
 
 		int gunB_comport = 0;
 		int gunB_type = -1;
 		string gunB_json = "";
-		string gunB_guid = "";
-		string gunB_deviceName = "";
-		bool gunB_sindenRumble = false;
 
 
 		public Wizard()
@@ -127,15 +126,25 @@ namespace TeknoparrotAutoXinput
 		{
 			SavedWizardSettings = new WizardSettings(wizardSettingsJson);
 			SavedWizardSettings.disableSave = true;
+			txt_patchArchive.Text = SavedWizardSettings.patchArchive;
 
 			tabOriginalRegion = tabControl1.Region;
 			tabControl1.Region = new Region(tabControl1.DisplayRectangle);
 
 			//Tab 1 Load
-			btn_next.Enabled = false;
+			btn_next.Enabled = true;
 			btn_previous.Enabled = false;
+
+
+
+
 			bool haveRequiredSoftware = CheckInstalledSoftware();
+			CheckRequiredFixes();
+
+
+
 			tabPage1_Load();
+
 
 			if (haveRequiredSoftware)
 			{
@@ -166,17 +175,11 @@ namespace TeknoparrotAutoXinput
 
 				this.gunA_type = SavedWizardSettings.gunA_type;
 				this.gunA_json = SavedWizardSettings.gunA_json;
-				this.gunA_guid = SavedWizardSettings.gunA_guid;
-				this.gunA_deviceName = SavedWizardSettings.gunA_deviceName;
-				this.gunA_sindenRumble = SavedWizardSettings.gunA_sindenRumble;
 				this.gunA_comport = SavedWizardSettings.gunA_comport;
 
 				this.gunB_comport = SavedWizardSettings.gunB_comport;
 				this.gunB_type = SavedWizardSettings.gunB_type;
 				this.gunB_json = SavedWizardSettings.gunB_json;
-				this.gunB_guid = SavedWizardSettings.gunB_guid;
-				this.gunB_deviceName = SavedWizardSettings.gunB_deviceName;
-				this.gunB_sindenRumble = SavedWizardSettings.gunB_sindenRumble;
 
 
 			}
@@ -237,7 +240,7 @@ namespace TeknoparrotAutoXinput
 			SavedWizardSettings.Save(wizardSettingsJson);
 
 			string currentTabName = tabControl1.SelectedTab.Text;
-			MessageBox.Show(currentTabName);
+			//MessageBox.Show(currentTabName);
 			if (currentTabName == "tabPage1")
 			{
 				btn_previous.Enabled = false;
@@ -249,6 +252,11 @@ namespace TeknoparrotAutoXinput
 				if (txt_linksourcefolderexe.Text != "" && txt_tpfolder.Text != "") btn_next.Enabled = true;
 			}
 			else if (currentTabName == "tabPage3")
+			{
+				btn_previous.Enabled = true;
+				btn_next.Enabled = true;
+			}
+			else if (currentTabName == "tabPage4")
 			{
 				btn_previous.Enabled = true;
 				btn_next.Enabled = false;
@@ -519,6 +527,35 @@ namespace TeknoparrotAutoXinput
 				grp_scangame.Enabled = true;
 
 			}
+		}
+
+		private void btn_tpDiscord_Click(object sender, EventArgs e)
+		{
+			string discordServerUrl = "https://discord.gg/bntkyXZ";
+
+			// Ouvrir l'URL dans le navigateur par défaut, ce qui devrait lancer Discord si configuré
+			Process.Start(new ProcessStartInfo
+			{
+				FileName = discordServerUrl,
+				UseShellExecute = true
+			});
+
+		}
+		private void btn_openTPfixes_Click(object sender, EventArgs e)
+		{
+			ProcessStartInfo startInfo = new ProcessStartInfo
+			{
+				Arguments = fixesDir,
+				FileName = "explorer.exe"
+			};
+			Process.Start(startInfo);
+		}
+
+		private bool CheckRequiredFixes()
+		{
+			if (!Directory.Exists(fixesDir)) Directory.CreateDirectory(fixesDir);
+			lbl_foldernameTPfixes.Text = fixesDir;
+			return true;
 		}
 
 		private bool CheckInstalledSoftware()
@@ -1918,15 +1955,9 @@ namespace TeknoparrotAutoXinput
 			if (!SavedWizardSettings.disableSave)
 			{
 				gunA_json = "";
-				gunA_guid = "";
-				gunA_sindenRumble = false;
 				gunA_comport = -1;
-				gunA_deviceName = "";
 				SavedWizardSettings.gunA_json = "";
-				SavedWizardSettings.gunA_guid = "";
-				SavedWizardSettings.gunA_sindenRumble = false;
 				SavedWizardSettings.gunA_comport = -1;
-				SavedWizardSettings.gunA_deviceName = "";
 			}
 			SavedWizardSettings.selectController_guntypeA = cmb_gunA_type.SelectedIndex;
 			SavedWizardSettings.Save(wizardSettingsJson);
@@ -1939,15 +1970,9 @@ namespace TeknoparrotAutoXinput
 			if (!SavedWizardSettings.disableSave)
 			{
 				gunB_json = "";
-				gunB_guid = "";
-				gunB_sindenRumble = false;
 				gunB_comport = -1;
-				gunB_deviceName = "";
 				SavedWizardSettings.gunB_json = "";
-				SavedWizardSettings.gunB_guid = "";
-				SavedWizardSettings.gunB_sindenRumble = false;
 				SavedWizardSettings.gunB_comport = -1;
-				SavedWizardSettings.gunB_deviceName = "";
 			}
 			SavedWizardSettings.selectController_guntypeB = cmb_gunB_type.SelectedIndex;
 			SavedWizardSettings.Save(wizardSettingsJson);
@@ -1957,28 +1982,237 @@ namespace TeknoparrotAutoXinput
 		}
 
 
-
-		private void cmb_gunA_subtype_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			MessageBox.Show("zog");
-		}
-
-
-
 		private void btn_configure_gunA_Click(object sender, EventArgs e)
 		{
 			string config = gunA_json;
-			string OtherGuid = gunB_guid;
-			var frm = new gun_preconfig(cmb_gunA_type.SelectedIndex, 1, config, OtherGuid);
-			var result = frm.ShowDialog();
-			if (result == DialogResult.OK)
+			int selected_index = cmb_gunA_type.SelectedIndex;
+			if (selected_index <= 3)
 			{
-
+				var frm = new gun_preconfig(selected_index, 1, config);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunA_json = frm.Dialogconfig;
+				}
 			}
-			
+			else
+			{
+				string typeGunTxt = "guncon1";
+				if (selected_index == 4) { typeGunTxt = "guncon1"; }
+				if (selected_index == 5) { typeGunTxt = "guncon2"; }
+				if (selected_index == 6) { typeGunTxt = "wiimote"; }
+
+				var frm = new dinputgun(1, typeGunTxt, config);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					var json = frm.Dialogconfig;
+					gunA_json = json;
+					this.DialogResult = DialogResult.OK;
+					this.Close();
+				}
+			}
 		}
 
 
+		private void btn_configure_gunB_Click(object sender, EventArgs e)
+		{
+			string config = gunB_json;
+			int selected_index = cmb_gunB_type.SelectedIndex;
+			if (selected_index <= 3)
+			{
+				var frm = new gun_preconfig(selected_index, 2, config);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunB_json = frm.Dialogconfig;
+				}
+			}
+			else
+			{
+				string typeGunTxt = "guncon1";
+				if (selected_index == 4) { typeGunTxt = "guncon1"; }
+				if (selected_index == 5) { typeGunTxt = "guncon2"; }
+				if (selected_index == 6) { typeGunTxt = "wiimote"; }
+
+				var frm = new dinputgun(2, typeGunTxt, config);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					var json = frm.Dialogconfig;
+					gunB_json = json;
+					this.DialogResult = DialogResult.OK;
+					this.Close();
+				}
+			}
+
+		}
+
+
+
+		private void groupBox5_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_selectPatchArchive_Click(object sender, EventArgs e)
+		{
+			using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog())
+			{
+				openFileDialog.Filter = "Fichiers 7z (TAXPatches.*.7z)|TAXPatches.*.7z|Tous les fichiers (*.*)|*.*";
+				openFileDialog.Title = "Select TAXPatches.*.7z";
+
+				if (openFileDialog.ShowDialog() == DialogResult.OK)
+				{
+					txt_patchArchive.Text = openFileDialog.FileName;
+				}
+			}
+		}
+
+		private void txt_patchArchive_TextChanged(object sender, EventArgs e)
+		{
+			cacheCheckFix.Clear();
+			grp_fixes.Enabled = false;
+			if (txt_patchArchive.Text != "" && File.Exists(txt_patchArchive.Text) && txt_patchArchive.Text.ToLower().EndsWith(".7z"))
+			{
+				string fileContent = "";
+				try
+				{
+					using (SevenZipExtractor extractor = new SevenZipExtractor(txt_patchArchive.Text))
+					{
+						string fileToExtract = "patch.json";
+
+						using (MemoryStream ms = new MemoryStream())
+						{
+							extractor.ExtractFile(fileToExtract, ms);
+							ms.Seek(0, SeekOrigin.Begin);
+							using (StreamReader reader = new StreamReader(ms))
+							{
+								fileContent = reader.ReadToEnd();
+							}
+						}
+					}
+				}
+				catch
+				{
+					fileContent = "";
+				}
+				if (fileContent == "")
+				{
+					txt_patchArchive.Text = "";
+					SavedWizardSettings.patchArchive = "";
+					SavedWizardSettings.Save(wizardSettingsJson);
+					MessageBox.Show("Invalid Patch File");
+
+					return;
+				}
+
+				SavedWizardSettings.patchArchive = txt_patchArchive.Text;
+				SavedWizardSettings.Save(wizardSettingsJson);
+
+				PatchArchive patchInfoJson = JsonConvert.DeserializeObject<PatchArchive>(fileContent);
+				if (patchInfoJson.FixesArchive.Count() > 0)
+				{
+					grp_fixes.Enabled = true;
+
+					foreach (var fix in patchInfoJson.FixesArchive)
+					{
+						ExpectedArchivesFix.Add(fix.Key, fix.Value.source_md5);
+					}
+				}
+
+				//MessageBox.Show(fileContent);
+
+
+			}
+			else
+			{
+				txt_patchArchive.Text = "";
+				SavedWizardSettings.patchArchive = "";
+				SavedWizardSettings.Save(wizardSettingsJson);
+				return;
+			}
+		}
+
+		private List<string> VerifyFiles(string directoryPath, Dictionary<string, string> expectedFiles)
+		{
+			var missingFiles = new List<string>();
+			var currentFiles = Directory.GetFiles(directoryPath);
+			var currentFilesSet = new HashSet<string>(currentFiles);
+
+			foreach (var filePath in currentFiles)
+			{
+				var fileInfo = new FileInfo(filePath);
+				var fileName = Path.GetFileName(filePath);
+
+				if (expectedFiles.ContainsKey(fileName))
+				{
+					if (!cacheCheckFix.TryGetValue(fileName, out var metadata) || metadata.LastModified != fileInfo.LastWriteTime || metadata.Size != fileInfo.Length)
+					{
+						metadata = new CacheMetadata
+						{
+							LastModified = fileInfo.LastWriteTime,
+							Size = fileInfo.Length,
+							Md5 = GetMd5HashAsString(filePath)
+						};
+						cacheCheckFix[fileName] = metadata;
+					}
+
+					var isOk = metadata.Md5 == expectedFiles[fileName];
+					if (!isOk)
+					{
+						missingFiles.Add($"{fileName} (Mismatch)");
+					}
+				}
+			}
+
+			foreach (var expectedFile in expectedFiles.Keys)
+			{
+				if (!currentFilesSet.Contains(Path.Combine(directoryPath, expectedFile)))
+				{
+					missingFiles.Add($"{expectedFile} (Missing)");
+				}
+			}
+
+			return missingFiles;
+		}
+
+		private void btn_verifyfix_Click(object sender, EventArgs e)
+		{
+			var missingFiles = VerifyFiles(fixesDir, ExpectedArchivesFix);
+
+			if (missingFiles.Count > 0)
+			{
+				MessageBox.Show("Missing files:\n" + string.Join("\n", missingFiles), "File verification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				lbl_fixes_status.Text = missingFiles.Count() + " Files Missing";
+				lbl_fixes_status.ForeColor = Color.Red;
+			}
+			else
+			{
+				MessageBox.Show("All needed files are here !", "File verification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				lbl_fixes_status.Text = "All OK !";
+				lbl_fixes_status.ForeColor = Color.DarkGreen;
+			}
+		}
+
+		private void grp_fixes_EnabledChanged(object sender, EventArgs e)
+		{
+			lbl_fixes_status.Visible = grp_fixes.Enabled;
+			if (grp_fixes.Enabled)
+			{
+				var missingFiles = VerifyFiles(fixesDir, ExpectedArchivesFix);
+				if(missingFiles.Count() == 0)
+				{
+					lbl_fixes_status.Text = "All OK !";
+					lbl_fixes_status.ForeColor = Color.DarkGreen;
+				}
+				else
+				{
+					lbl_fixes_status.Text = missingFiles.Count() + " Files Missing";
+					lbl_fixes_status.ForeColor = Color.Red;
+				}
+			}
+		}
 	}
 }
 
@@ -1998,6 +2232,12 @@ class GameInstall
 	}
 }
 
+public class CacheMetadata
+{
+	public DateTime LastModified { get; set; }
+	public long Size { get; set; }
+	public string Md5 { get; set; }
+}
 public class WizardSettings
 {
 	public bool disableSave = false;
@@ -2018,17 +2258,13 @@ public class WizardSettings
 
 	public int gunA_type = -1;
 	public string gunA_json = "";
-	public string gunA_guid = "";
-	public string gunA_deviceName = "";
-	public bool gunA_sindenRumble = false;
 	public int gunA_comport = 0;
 
 	public int gunB_comport = 0;
 	public int gunB_type = -1;
 	public string gunB_json = "";
-	public string gunB_guid = "";
-	public string gunB_deviceName = "";
-	public bool gunB_sindenRumble = false;
+
+	public string patchArchive = "";
 
 	public WizardSettings()
 	{
@@ -2058,17 +2294,15 @@ public class WizardSettings
 
 				this.gunA_type = DeserializeData.gunA_type;
 				this.gunA_json = DeserializeData.gunA_json;
-				this.gunA_guid = DeserializeData.gunA_guid;
-				this.gunA_deviceName = DeserializeData.gunA_deviceName;
-				this.gunA_sindenRumble = DeserializeData.gunA_sindenRumble;
 				this.gunA_comport = DeserializeData.gunA_comport;
 
-				this.gunB_comport = DeserializeData.gunB_comport;
+
 				this.gunB_type = DeserializeData.gunB_type;
 				this.gunB_json = DeserializeData.gunB_json;
-				this.gunB_guid = DeserializeData.gunB_guid;
-				this.gunB_deviceName = DeserializeData.gunB_deviceName;
-				this.gunB_sindenRumble = DeserializeData.gunB_sindenRumble;
+				this.gunB_comport = DeserializeData.gunB_comport;
+
+				this.patchArchive = DeserializeData.patchArchive;
+
 			}
 			catch (Exception ex)
 			{

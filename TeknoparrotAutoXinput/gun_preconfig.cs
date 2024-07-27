@@ -40,7 +40,6 @@ namespace TeknoparrotAutoXinput
 		private int _gunType;
 		private int _gunIndex;
 		private string _gunConfig;
-		private string _otherGunGuid;
 
 		public static string[,] gun4irBoards = new string[8, 2]
 		{
@@ -78,12 +77,11 @@ namespace TeknoparrotAutoXinput
 			  }
 		};
 
-		public gun_preconfig(int gunType, int gunIndex, string gunConfig, string otherGunGuid)
+		public gun_preconfig(int gunType, int gunIndex, string gunConfig)
 		{
 			_gunType = gunType;
 			_gunIndex = gunIndex;
 			_gunConfig = gunConfig;
-			_otherGunGuid = otherGunGuid;
 
 			InitializeComponent();
 			this.Size = new Size(858, 371);
@@ -192,6 +190,13 @@ namespace TeknoparrotAutoXinput
 
 
 			}
+			if (gunType == 3)
+			{
+				grp_wiimote.Location = new Point(12, 64);
+				grp_wiimote.Visible = true;
+				InitializeFormAsync();
+			}
+
 
 		}
 
@@ -296,6 +301,19 @@ namespace TeknoparrotAutoXinput
 
 		}
 
+		public void wiimoteFound()
+		{
+			//StopMonitor();
+			this.Invoke(new Action(() =>
+			{
+				lbl_presstrigger_wiimote.Visible = false;
+				lbl_gunguidwiimote.Text = gunGuid;
+			}));
+			_stopListening = true;
+
+
+		}
+
 		public void StopMonitor()
 		{
 			if (_stopListening == false && threadJoystick != null)
@@ -393,6 +411,12 @@ namespace TeknoparrotAutoXinput
 									gunName = deviceName;
 									gun4irFound();
 								}
+								if (_gunType == 3 && inputText.StartsWith("Buttons"))
+								{
+									gunGuid = device_guid.ToString();
+									gunName = deviceName;
+									wiimoteFound();
+								}
 							}
 						}
 
@@ -465,7 +489,7 @@ namespace TeknoparrotAutoXinput
 
 		private void kryptonButton1_Click(object sender, EventArgs e)
 		{
-			var frm = new dinputgun(_gunIndex, "guncon1", "");
+			var frm = new dinputgun(_gunIndex, "wiimote", "");
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
@@ -491,7 +515,7 @@ namespace TeknoparrotAutoXinput
 				string pidvid = listSinden[cmb_selectSinden.SelectedIndex].Item3;
 
 				string guid = "";
-				string Name = ""; 
+				string Name = "";
 				var directInput = _directInput;
 				var ddevices = directInput.GetDevices();
 				foreach (var deviceInstance in ddevices)
@@ -505,7 +529,7 @@ namespace TeknoparrotAutoXinput
 
 						guid = deviceInstance.InstanceGuid.ToString();
 						Name = deviceInstance.InstanceName;
-						
+
 
 					}
 				}
@@ -758,6 +782,125 @@ namespace TeknoparrotAutoXinput
 					}
 
 				}
+			}
+		}
+
+		private void btn_sinden_configurekeys_Click(object sender, EventArgs e)
+		{
+			//StopMonitor();
+			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
+			base_content = base_content.Replace("[gunguid]", gunGuid);
+			base_content = base_content.Replace("[gunname]", gunName);
+			string typeGunTxt = "sinden";
+
+
+
+			var frm = new dinputgun(_gunIndex, typeGunTxt, base_content);
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				var json = frm.Dialogconfig;
+				Dialogconfig = json;
+				this.DialogResult = DialogResult.OK;
+				this.Close();
+
+			}
+		}
+
+		private void btn_sinden_done_Click(object sender, EventArgs e)
+		{
+			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
+			base_content = base_content.Replace("[gunguid]", gunGuid);
+			base_content = base_content.Replace("[gunname]", gunName);
+			string typeGunTxt = "sinden";
+
+
+			Dialogconfig = base_content;
+			this.DialogResult = DialogResult.OK;
+			this.Close();
+		}
+
+		private async void InitializeFormAsync()
+		{
+			// Appelez votre méthode asynchrone
+			await StartListeningAsync();
+		}
+		private async Task StartListeningAsync()
+		{
+			_stopListening = false;
+			var directInput = _directInput;
+			var devicesInstance = new List<DeviceInstance>();
+
+			devicesInstance.AddRange(directInput.GetDevices()
+				.Where(x => x.Type != DeviceType.Mouse &&
+							x.UsagePage != UsagePage.VendorDefinedBegin &&
+							x.Usage != UsageId.AlphanumericBitmapSizeX &&
+							x.Usage != UsageId.AlphanumericAlphanumericDisplay &&
+							x.UsagePage != unchecked((UsagePage)0xffffff43) &&
+							x.UsagePage != UsagePage.Vr)
+				.ToList());
+
+			List<string> guids = new List<string>();
+
+			foreach (var device in devicesInstance)
+			{
+				if (device.InstanceName.ToLower().Contains("vjoy"))
+				{
+					guids.Add(device.InstanceGuid.ToString());
+				}
+			}
+
+			if (guids.Count > 0)
+			{
+				var taskJoystick = new List<Task>();
+
+				foreach (var guid in guids)
+				{
+					taskJoystick.Add(Task.Run(() => SpawnDirectInputListener(guid)));
+					await Task.Delay(1000); // Attendre 1 seconde entre les démarrages
+				}
+
+				lbl_presstrigger_wiimote.Visible = true;
+
+				await Task.WhenAll(taskJoystick);
+				taskJoystick.Clear();
+			}
+			btn_wiimote_configurekeys.Enabled = true;
+			btn_wiimote_done.Enabled = true;
+		}
+
+		private void btn_wiimote_done_Click(object sender, EventArgs e)
+		{
+			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
+			base_content = base_content.Replace("[gunguid]", gunGuid);
+			base_content = base_content.Replace("[gunname]", gunName);
+			string typeGunTxt = "wiimote";
+
+
+
+			Dialogconfig = base_content;
+			this.DialogResult = DialogResult.OK;
+			this.Close();
+		}
+
+		private void btn_wiimote_configurekeys_Click(object sender, EventArgs e)
+		{
+			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
+			base_content = base_content.Replace("[gunguid]", gunGuid);
+			base_content = base_content.Replace("[gunname]", gunName);
+			string typeGunTxt = "wiimote";
+
+
+
+			var frm = new dinputgun(_gunIndex, typeGunTxt, base_content);
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				var json = frm.Dialogconfig;
+				Dialogconfig = json;
+				this.DialogResult = DialogResult.OK;
+				this.Close();
+
 			}
 		}
 	}

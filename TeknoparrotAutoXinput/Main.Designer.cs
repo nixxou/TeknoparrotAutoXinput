@@ -89,17 +89,17 @@
 			// list_games
 			// 
 			list_games.Enabled = false;
-			list_games.Location = new Point(12, 91);
+			list_games.Location = new Point(12, 42);
 			list_games.Name = "list_games";
-			list_games.Size = new Size(482, 583);
+			list_games.Size = new Size(482, 534);
 			list_games.TabIndex = 0;
 			list_games.SelectedIndexChanged += list_games_SelectedIndexChanged;
 			// 
 			// btn_globalconfig
 			// 
-			btn_globalconfig.Location = new Point(12, 12);
+			btn_globalconfig.Location = new Point(12, 6);
 			btn_globalconfig.Name = "btn_globalconfig";
-			btn_globalconfig.Size = new Size(482, 47);
+			btn_globalconfig.Size = new Size(482, 29);
 			btn_globalconfig.TabIndex = 1;
 			btn_globalconfig.Values.Text = "Edit TeknoparrotAutoXinput Global Configuration";
 			btn_globalconfig.Click += btn_globalconfig_Click;
@@ -107,9 +107,9 @@
 			// btn_playgame
 			// 
 			btn_playgame.Enabled = false;
-			btn_playgame.Location = new Point(511, 551);
+			btn_playgame.Location = new Point(511, 492);
 			btn_playgame.Name = "btn_playgame";
-			btn_playgame.Size = new Size(476, 53);
+			btn_playgame.Size = new Size(476, 36);
 			btn_playgame.TabIndex = 2;
 			btn_playgame.Values.Text = "PLAY GAME ! (With Auto-set Bindings)";
 			btn_playgame.Click += btn_playgame_Click;
@@ -117,7 +117,7 @@
 			// btn_playgamedirect
 			// 
 			btn_playgamedirect.Enabled = false;
-			btn_playgamedirect.Location = new Point(752, 610);
+			btn_playgamedirect.Location = new Point(752, 534);
 			btn_playgamedirect.Name = "btn_playgamedirect";
 			btn_playgamedirect.Size = new Size(235, 29);
 			btn_playgamedirect.TabIndex = 3;
@@ -127,7 +127,7 @@
 			// btn_gameoptions
 			// 
 			btn_gameoptions.Enabled = false;
-			btn_gameoptions.Location = new Point(511, 645);
+			btn_gameoptions.Location = new Point(511, 569);
 			btn_gameoptions.Name = "btn_gameoptions";
 			btn_gameoptions.Size = new Size(235, 29);
 			btn_gameoptions.TabIndex = 4;
@@ -136,7 +136,7 @@
 			// 
 			// chk_showAll
 			// 
-			chk_showAll.Location = new Point(12, 65);
+			chk_showAll.Location = new Point(12, 582);
 			chk_showAll.Name = "chk_showAll";
 			chk_showAll.Size = new Size(326, 20);
 			chk_showAll.TabIndex = 6;
@@ -164,16 +164,16 @@
 			groupBox1.Controls.Add(kryptonLabel1);
 			groupBox1.Controls.Add(button1);
 			groupBox1.Controls.Add(button3);
-			groupBox1.Location = new Point(12, 675);
+			groupBox1.Location = new Point(12, 608);
 			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(715, 145);
+			groupBox1.Size = new Size(715, 132);
 			groupBox1.TabIndex = 7;
 			groupBox1.TabStop = false;
 			groupBox1.Text = "Controller Status";
 			// 
 			// lbl_gunslist
 			// 
-			lbl_gunslist.Location = new Point(129, 119);
+			lbl_gunslist.Location = new Point(129, 108);
 			lbl_gunslist.Name = "lbl_gunslist";
 			lbl_gunslist.Size = new Size(19, 20);
 			lbl_gunslist.TabIndex = 13;
@@ -181,7 +181,7 @@
 			// 
 			// kryptonLabel6
 			// 
-			kryptonLabel6.Location = new Point(6, 119);
+			kryptonLabel6.Location = new Point(6, 108);
 			kryptonLabel6.Name = "kryptonLabel6";
 			kryptonLabel6.Size = new Size(61, 20);
 			kryptonLabel6.TabIndex = 12;
@@ -211,7 +211,7 @@
 			// 
 			// lbl_hotaslist
 			// 
-			lbl_hotaslist.Location = new Point(129, 97);
+			lbl_hotaslist.Location = new Point(129, 86);
 			lbl_hotaslist.Name = "lbl_hotaslist";
 			lbl_hotaslist.Size = new Size(19, 20);
 			lbl_hotaslist.TabIndex = 7;
@@ -219,7 +219,7 @@
 			// 
 			// kryptonLabel5
 			// 
-			kryptonLabel5.Location = new Point(6, 97);
+			kryptonLabel5.Location = new Point(6, 86);
 			kryptonLabel5.Name = "kryptonLabel5";
 			kryptonLabel5.Size = new Size(70, 20);
 			kryptonLabel5.TabIndex = 6;
@@ -238,7 +238,7 @@
 			// 
 			// lbl_wheellist
 			// 
-			lbl_wheellist.Location = new Point(129, 74);
+			lbl_wheellist.Location = new Point(129, 65);
 			lbl_wheellist.Name = "lbl_wheellist";
 			lbl_wheellist.Size = new Size(19, 20);
 			lbl_wheellist.TabIndex = 5;
@@ -269,7 +269,7 @@
 			// 
 			// lbl_arcadelist
 			// 
-			lbl_arcadelist.Location = new Point(129, 48);
+			lbl_arcadelist.Location = new Point(129, 45);
 			lbl_arcadelist.Name = "lbl_arcadelist";
 			lbl_arcadelist.Size = new Size(19, 20);
 			lbl_arcadelist.TabIndex = 4;
@@ -296,7 +296,7 @@
 			// 
 			// kryptonLabel3
 			// 
-			kryptonLabel3.Location = new Point(6, 74);
+			kryptonLabel3.Location = new Point(6, 65);
 			kryptonLabel3.Name = "kryptonLabel3";
 			kryptonLabel3.Size = new Size(73, 20);
 			kryptonLabel3.TabIndex = 2;
@@ -304,7 +304,7 @@
 			// 
 			// kryptonLabel2
 			// 
-			kryptonLabel2.Location = new Point(6, 48);
+			kryptonLabel2.Location = new Point(6, 45);
 			kryptonLabel2.Name = "kryptonLabel2";
 			kryptonLabel2.Size = new Size(105, 20);
 			kryptonLabel2.TabIndex = 1;
@@ -357,9 +357,10 @@
 			// 
 			// pictureBox_gameControls
 			// 
-			pictureBox_gameControls.Location = new Point(521, 91);
+			pictureBox_gameControls.Location = new Point(521, 42);
 			pictureBox_gameControls.Name = "pictureBox_gameControls";
 			pictureBox_gameControls.Size = new Size(466, 295);
+			pictureBox_gameControls.SizeMode = PictureBoxSizeMode.Zoom;
 			pictureBox_gameControls.TabIndex = 8;
 			pictureBox_gameControls.TabStop = false;
 			pictureBox_gameControls.Click += pictureBox1_Click;
@@ -367,7 +368,7 @@
 			// lbl_GameTitle
 			// 
 			lbl_GameTitle.LabelStyle = Krypton.Toolkit.LabelStyle.TitleControl;
-			lbl_GameTitle.Location = new Point(521, 12);
+			lbl_GameTitle.Location = new Point(521, 4);
 			lbl_GameTitle.Name = "lbl_GameTitle";
 			lbl_GameTitle.Size = new Size(53, 29);
 			lbl_GameTitle.TabIndex = 9;
@@ -376,7 +377,7 @@
 			// flowLayoutPanelThumbs
 			// 
 			flowLayoutPanelThumbs.Controls.Add(kryptonPictureBox1);
-			flowLayoutPanelThumbs.Location = new Point(521, 387);
+			flowLayoutPanelThumbs.Location = new Point(521, 338);
 			flowLayoutPanelThumbs.Name = "flowLayoutPanelThumbs";
 			flowLayoutPanelThumbs.Size = new Size(466, 60);
 			flowLayoutPanelThumbs.TabIndex = 10;
@@ -393,7 +394,7 @@
 			// 
 			// lbl_player1
 			// 
-			lbl_player1.Location = new Point(524, 453);
+			lbl_player1.Location = new Point(524, 404);
 			lbl_player1.Name = "lbl_player1";
 			lbl_player1.Size = new Size(88, 20);
 			lbl_player1.TabIndex = 11;
@@ -401,7 +402,7 @@
 			// 
 			// lbl_player2
 			// 
-			lbl_player2.Location = new Point(524, 477);
+			lbl_player2.Location = new Point(524, 425);
 			lbl_player2.Name = "lbl_player2";
 			lbl_player2.Size = new Size(88, 20);
 			lbl_player2.TabIndex = 12;
@@ -409,7 +410,7 @@
 			// 
 			// lbl_player3
 			// 
-			lbl_player3.Location = new Point(524, 499);
+			lbl_player3.Location = new Point(524, 446);
 			lbl_player3.Name = "lbl_player3";
 			lbl_player3.Size = new Size(88, 20);
 			lbl_player3.TabIndex = 13;
@@ -418,7 +419,7 @@
 			// 
 			// lbl_player4
 			// 
-			lbl_player4.Location = new Point(524, 525);
+			lbl_player4.Location = new Point(524, 466);
 			lbl_player4.Name = "lbl_player4";
 			lbl_player4.Size = new Size(88, 20);
 			lbl_player4.TabIndex = 14;
@@ -427,7 +428,7 @@
 			// btn_tpsettings
 			// 
 			btn_tpsettings.Enabled = false;
-			btn_tpsettings.Location = new Point(752, 645);
+			btn_tpsettings.Location = new Point(752, 569);
 			btn_tpsettings.Name = "btn_tpsettings";
 			btn_tpsettings.Size = new Size(235, 29);
 			btn_tpsettings.TabIndex = 15;
@@ -506,9 +507,9 @@
 			groupBox2.Controls.Add(cmb_patchReshade);
 			groupBox2.Controls.Add(kryptonLabel8);
 			groupBox2.Controls.Add(kryptonLabel7);
-			groupBox2.Location = new Point(733, 678);
+			groupBox2.Location = new Point(733, 608);
 			groupBox2.Name = "groupBox2";
-			groupBox2.Size = new Size(254, 142);
+			groupBox2.Size = new Size(254, 132);
 			groupBox2.TabIndex = 205;
 			groupBox2.TabStop = false;
 			groupBox2.Text = "Quick Options (Not saved)";
@@ -537,7 +538,7 @@
 			// btn_playgamedirect2
 			// 
 			btn_playgamedirect2.Enabled = false;
-			btn_playgamedirect2.Location = new Point(511, 610);
+			btn_playgamedirect2.Location = new Point(511, 534);
 			btn_playgamedirect2.Name = "btn_playgamedirect2";
 			btn_playgamedirect2.Size = new Size(235, 29);
 			btn_playgamedirect2.TabIndex = 206;
@@ -548,7 +549,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(999, 827);
+			ClientSize = new Size(999, 744);
 			Controls.Add(btn_playgamedirect2);
 			Controls.Add(groupBox2);
 			Controls.Add(btn_tpsettings);

@@ -2296,6 +2296,19 @@ namespace TeknoparrotAutoXinput
 
 }
 
+public class PatchArchive
+{
+	public string version = "";
+	public bool needExtra = false;
+
+	public Dictionary<string, PatchInfoJsonSourceData> FixesArchive = new Dictionary<string, PatchInfoJsonSourceData>();
+	public Dictionary<string, List<string>> FixesFiles = new Dictionary<string, List<string>>();
+
+	public Dictionary<string, List<string>> allFiles = new Dictionary<string, List<string>>();
+	public Dictionary<string, List<string>> autoXinputLinksFiles = new Dictionary<string, List<string>>();
+	public Dictionary<string, List<string>> teknoparrotPatchs = new Dictionary<string, List<string>>();
+}
+
 public class PatchInfoJsonElement
 {
 	public string destination = "";

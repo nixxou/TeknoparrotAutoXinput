@@ -3,6 +3,7 @@ using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Exceptions;
 using SDL2;
 using SharpDX.DirectInput;
+using System;
 using System.Buffers.Text;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -409,6 +410,14 @@ namespace TeknoparrotAutoXinput
 		{
 			if (chk_enableVirtualKeyboard.Checked)
 			{
+				string vigemPath = Utils.checkInstalled("ViGEm");
+				if (string.IsNullOrEmpty(vigemPath))
+				{
+					chk_enableVirtualKeyboard.Checked = false;
+					MessageBox.Show("ViGEm bus not found, please make sure ViGEm is correctly installed.");
+
+				}
+				/*
 				try
 				{
 					var client = new ViGEmClient();
@@ -419,6 +428,8 @@ namespace TeknoparrotAutoXinput
 					chk_enableVirtualKeyboard.Checked = false;
 					MessageBox.Show("ViGEm bus not found, please make sure ViGEm is correctly installed.");
 				}
+				*/
+
 			}
 
 
@@ -1422,12 +1433,19 @@ namespace TeknoparrotAutoXinput
 			var ThreadNetWork = new Thread(() =>
 			{
 				var networkInfo = Utils.GetFirstNetworkAdapterInfo();
-				txt_networkIP.Text = networkInfo.ContainsKey("networkIP") ? networkInfo["networkIP"] : "0.0.0.0";
-				txt_networkMask.Text = networkInfo.ContainsKey("networkMask") ? networkInfo["networkMask"] : "0.0.0.0";
-				txt_networkGateway.Text = networkInfo.ContainsKey("networkGateway") ? networkInfo["networkGateway"] : "0.0.0.0";
-				txt_networkDns1.Text = networkInfo.ContainsKey("networkDns1") ? networkInfo["networkDns1"] : "0.0.0.0";
-				txt_networkDns2.Text = networkInfo.ContainsKey("networkDns2") ? networkInfo["networkDns2"] : "0.0.0.0";
-				txt_BroadcastAddress.Text = networkInfo.ContainsKey("BroadcastAddress") ? networkInfo["BroadcastAddress"] : "0.0.0.0";
+				this.Invoke(new MethodInvoker(delegate
+				{
+
+					txt_networkIP.Text = networkInfo.ContainsKey("networkIP") ? networkInfo["networkIP"] : "0.0.0.0";
+					txt_networkMask.Text = networkInfo.ContainsKey("networkMask") ? networkInfo["networkMask"] : "0.0.0.0";
+					txt_networkGateway.Text = networkInfo.ContainsKey("networkGateway") ? networkInfo["networkGateway"] : "0.0.0.0";
+					txt_networkDns1.Text = networkInfo.ContainsKey("networkDns1") ? networkInfo["networkDns1"] : "0.0.0.0";
+					txt_networkDns2.Text = networkInfo.ContainsKey("networkDns2") ? networkInfo["networkDns2"] : "0.0.0.0";
+					txt_BroadcastAddress.Text = networkInfo.ContainsKey("BroadcastAddress") ? networkInfo["BroadcastAddress"] : "0.0.0.0";
+
+				}));
+
+
 			});
 			ThreadNetWork.Start();
 

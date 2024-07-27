@@ -44,6 +44,7 @@
 			lbl_presstrigger_gun4ir = new Krypton.Toolkit.KryptonLabel();
 			kryptonButton1 = new Krypton.Toolkit.KryptonButton();
 			grp_sinden = new GroupBox();
+			label1 = new Label();
 			btn_siden_enable_joystick = new Krypton.Toolkit.KryptonButton();
 			btn_sinden_done = new Krypton.Toolkit.KryptonButton();
 			btn_sinden_configurekeys = new Krypton.Toolkit.KryptonButton();
@@ -54,11 +55,18 @@
 			kryptonLabel5 = new Krypton.Toolkit.KryptonLabel();
 			cmb_selectSinden = new Krypton.Toolkit.KryptonComboBox();
 			backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			label1 = new Label();
+			grp_wiimote = new GroupBox();
+			label3 = new Label();
+			btn_wiimote_done = new Krypton.Toolkit.KryptonButton();
+			btn_wiimote_configurekeys = new Krypton.Toolkit.KryptonButton();
+			lbl_gunguidwiimote = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
+			lbl_presstrigger_wiimote = new Krypton.Toolkit.KryptonLabel();
 			grp_gun4ir.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_comport).BeginInit();
 			grp_sinden.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_selectSinden).BeginInit();
+			grp_wiimote.SuspendLayout();
 			SuspendLayout();
 			// 
 			// kryptonLabel1
@@ -209,6 +217,7 @@
 			kryptonButton1.Size = new Size(90, 25);
 			kryptonButton1.TabIndex = 5;
 			kryptonButton1.Values.Text = "kryptonButton1";
+			kryptonButton1.Visible = false;
 			kryptonButton1.Click += kryptonButton1_Click;
 			// 
 			// grp_sinden
@@ -225,16 +234,28 @@
 			grp_sinden.Controls.Add(cmb_selectSinden);
 			grp_sinden.Location = new Point(12, 64);
 			grp_sinden.Name = "grp_sinden";
-			grp_sinden.Size = new Size(770, 256);
+			grp_sinden.Size = new Size(776, 261);
 			grp_sinden.TabIndex = 6;
 			grp_sinden.TabStop = false;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+			label1.ForeColor = Color.Brown;
+			label1.Location = new Point(357, 22);
+			label1.Name = "label1";
+			label1.Size = new Size(330, 40);
+			label1.TabIndex = 69;
+			label1.Text = "The wizard will close the sinden Lightgun app.\r\nThat's normal and not a bug";
+			label1.Visible = false;
 			// 
 			// btn_siden_enable_joystick
 			// 
 			btn_siden_enable_joystick.Enabled = false;
 			btn_siden_enable_joystick.Location = new Point(11, 162);
 			btn_siden_enable_joystick.Name = "btn_siden_enable_joystick";
-			btn_siden_enable_joystick.Size = new Size(742, 27);
+			btn_siden_enable_joystick.Size = new Size(753, 27);
 			btn_siden_enable_joystick.TabIndex = 68;
 			btn_siden_enable_joystick.Values.Text = "Enable Joystick Mode";
 			btn_siden_enable_joystick.Visible = false;
@@ -248,15 +269,17 @@
 			btn_sinden_done.Size = new Size(368, 49);
 			btn_sinden_done.TabIndex = 67;
 			btn_sinden_done.Values.Text = "Done";
+			btn_sinden_done.Click += btn_sinden_done_Click;
 			// 
 			// btn_sinden_configurekeys
 			// 
 			btn_sinden_configurekeys.Enabled = false;
-			btn_sinden_configurekeys.Location = new Point(0, 201);
+			btn_sinden_configurekeys.Location = new Point(11, 201);
 			btn_sinden_configurekeys.Name = "btn_sinden_configurekeys";
 			btn_sinden_configurekeys.Size = new Size(368, 49);
 			btn_sinden_configurekeys.TabIndex = 66;
 			btn_sinden_configurekeys.Values.Text = "Configure Pedals and Extra Keys";
+			btn_sinden_configurekeys.Click += btn_sinden_configurekeys_Click;
 			// 
 			// lbl_sinden_nojoystick
 			// 
@@ -320,23 +343,85 @@
 			cmb_selectSinden.TabIndex = 57;
 			cmb_selectSinden.SelectedIndexChanged += cmb_selectSinden_SelectedIndexChanged;
 			// 
-			// label1
+			// grp_wiimote
 			// 
-			label1.AutoSize = true;
-			label1.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-			label1.ForeColor = Color.Brown;
-			label1.Location = new Point(357, 22);
-			label1.Name = "label1";
-			label1.Size = new Size(330, 40);
-			label1.TabIndex = 69;
-			label1.Text = "The wizard will close the sinden Lightgun app.\r\nThat's normal and not a bug";
-			label1.Visible = false;
+			grp_wiimote.Controls.Add(label3);
+			grp_wiimote.Controls.Add(btn_wiimote_done);
+			grp_wiimote.Controls.Add(btn_wiimote_configurekeys);
+			grp_wiimote.Controls.Add(lbl_gunguidwiimote);
+			grp_wiimote.Controls.Add(kryptonLabel8);
+			grp_wiimote.Controls.Add(lbl_presstrigger_wiimote);
+			grp_wiimote.Location = new Point(12, 342);
+			grp_wiimote.Name = "grp_wiimote";
+			grp_wiimote.Size = new Size(776, 261);
+			grp_wiimote.TabIndex = 64;
+			grp_wiimote.TabStop = false;
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+			label3.ForeColor = Color.Brown;
+			label3.Location = new Point(271, 19);
+			label3.Name = "label3";
+			label3.Size = new Size(493, 20);
+			label3.TabIndex = 70;
+			label3.Text = "Lichtknarre app must be up and running and your wiimote connected";
+			label3.Visible = false;
+			// 
+			// btn_wiimote_done
+			// 
+			btn_wiimote_done.Enabled = false;
+			btn_wiimote_done.Location = new Point(402, 206);
+			btn_wiimote_done.Name = "btn_wiimote_done";
+			btn_wiimote_done.Size = new Size(368, 49);
+			btn_wiimote_done.TabIndex = 62;
+			btn_wiimote_done.Values.Text = "Done";
+			btn_wiimote_done.Click += btn_wiimote_done_Click;
+			// 
+			// btn_wiimote_configurekeys
+			// 
+			btn_wiimote_configurekeys.Enabled = false;
+			btn_wiimote_configurekeys.Location = new Point(6, 206);
+			btn_wiimote_configurekeys.Name = "btn_wiimote_configurekeys";
+			btn_wiimote_configurekeys.Size = new Size(368, 49);
+			btn_wiimote_configurekeys.TabIndex = 61;
+			btn_wiimote_configurekeys.Values.Text = "Configure Pedals and Extra Keys";
+			btn_wiimote_configurekeys.Click += btn_wiimote_configurekeys_Click;
+			// 
+			// lbl_gunguidwiimote
+			// 
+			lbl_gunguidwiimote.Location = new Point(94, 22);
+			lbl_gunguidwiimote.Name = "lbl_gunguidwiimote";
+			lbl_gunguidwiimote.Size = new Size(55, 20);
+			lbl_gunguidwiimote.TabIndex = 60;
+			lbl_gunguidwiimote.Values.Text = "<none>";
+			// 
+			// kryptonLabel8
+			// 
+			kryptonLabel8.LabelStyle = Krypton.Toolkit.LabelStyle.BoldControl;
+			kryptonLabel8.Location = new Point(16, 21);
+			kryptonLabel8.Name = "kryptonLabel8";
+			kryptonLabel8.Size = new Size(72, 20);
+			kryptonLabel8.TabIndex = 59;
+			kryptonLabel8.Values.Text = "Gun Guid :";
+			// 
+			// lbl_presstrigger_wiimote
+			// 
+			lbl_presstrigger_wiimote.LabelStyle = Krypton.Toolkit.LabelStyle.TitlePanel;
+			lbl_presstrigger_wiimote.Location = new Point(210, 91);
+			lbl_presstrigger_wiimote.Name = "lbl_presstrigger_wiimote";
+			lbl_presstrigger_wiimote.Size = new Size(294, 29);
+			lbl_presstrigger_wiimote.TabIndex = 55;
+			lbl_presstrigger_wiimote.Values.Text = "Press Trigger to detect Lightgun";
+			lbl_presstrigger_wiimote.Visible = false;
 			// 
 			// gun_preconfig
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(1631, 332);
+			ClientSize = new Size(1631, 704);
+			Controls.Add(grp_wiimote);
 			Controls.Add(grp_sinden);
 			Controls.Add(grp_gun4ir);
 			Controls.Add(kryptonButton1);
@@ -354,6 +439,8 @@
 			grp_sinden.ResumeLayout(false);
 			grp_sinden.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_selectSinden).EndInit();
+			grp_wiimote.ResumeLayout(false);
+			grp_wiimote.PerformLayout();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -387,5 +474,12 @@
 		private Krypton.Toolkit.KryptonButton btn_sinden_configurekeys;
 		private Krypton.Toolkit.KryptonButton btn_siden_enable_joystick;
 		private Label label1;
+		private GroupBox grp_wiimote;
+		private Label label3;
+		private Krypton.Toolkit.KryptonButton btn_wiimote_done;
+		private Krypton.Toolkit.KryptonButton btn_wiimote_configurekeys;
+		private Krypton.Toolkit.KryptonLabel lbl_gunguidwiimote;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel8;
+		private Krypton.Toolkit.KryptonLabel lbl_presstrigger_wiimote;
 	}
 }

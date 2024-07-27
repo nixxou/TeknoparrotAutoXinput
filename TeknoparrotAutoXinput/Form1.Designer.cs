@@ -788,7 +788,7 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(725, 921);
+			btn_Save.Location = new Point(722, 742);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 37;
@@ -1097,14 +1097,14 @@
 			groupBox10.Controls.Add(groupBox11);
 			groupBox10.Location = new Point(15, 7);
 			groupBox10.Name = "groupBox10";
-			groupBox10.Size = new Size(775, 865);
+			groupBox10.Size = new Size(775, 705);
 			groupBox10.TabIndex = 45;
 			groupBox10.TabStop = false;
 			groupBox10.Text = "Lightgun Settings";
 			// 
 			// chk_magpieGunCalibration
 			// 
-			chk_magpieGunCalibration.Location = new Point(8, 714);
+			chk_magpieGunCalibration.Location = new Point(12, 649);
 			chk_magpieGunCalibration.Name = "chk_magpieGunCalibration";
 			chk_magpieGunCalibration.Size = new Size(388, 20);
 			chk_magpieGunCalibration.TabIndex = 108;
@@ -1112,7 +1112,7 @@
 			// 
 			// kryptonLabel54
 			// 
-			kryptonLabel54.Location = new Point(23, 688);
+			kryptonLabel54.Location = new Point(24, 649);
 			kryptonLabel54.Name = "kryptonLabel54";
 			kryptonLabel54.Size = new Size(236, 20);
 			kryptonLabel54.TabIndex = 106;
@@ -1123,7 +1123,7 @@
 			num_magpieBorderSize.AllowDecimals = true;
 			num_magpieBorderSize.DecimalPlaces = 1;
 			num_magpieBorderSize.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-			num_magpieBorderSize.Location = new Point(260, 686);
+			num_magpieBorderSize.Location = new Point(264, 621);
 			num_magpieBorderSize.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
 			num_magpieBorderSize.Minimum = new decimal(new int[] { 0, 0, 0, 0 });
 			num_magpieBorderSize.Name = "num_magpieBorderSize";
@@ -1133,7 +1133,7 @@
 			// 
 			// chk_magpieSindenBorder
 			// 
-			chk_magpieSindenBorder.Location = new Point(8, 662);
+			chk_magpieSindenBorder.Location = new Point(12, 597);
 			chk_magpieSindenBorder.Name = "chk_magpieSindenBorder";
 			chk_magpieSindenBorder.Size = new Size(460, 20);
 			chk_magpieSindenBorder.TabIndex = 107;
@@ -1834,7 +1834,7 @@
 			tabControl1.Location = new Point(12, 12);
 			tabControl1.Name = "tabControl1";
 			tabControl1.SelectedIndex = 0;
-			tabControl1.Size = new Size(807, 892);
+			tabControl1.Size = new Size(807, 728);
 			tabControl1.TabIndex = 49;
 			// 
 			// tabGlobal
@@ -1846,7 +1846,7 @@
 			tabGlobal.Controls.Add(groupBox7);
 			tabGlobal.Location = new Point(4, 24);
 			tabGlobal.Name = "tabGlobal";
-			tabGlobal.Size = new Size(799, 864);
+			tabGlobal.Size = new Size(799, 700);
 			tabGlobal.TabIndex = 4;
 			tabGlobal.Text = "Global Settings";
 			tabGlobal.UseVisualStyleBackColor = true;
@@ -2084,7 +2084,7 @@
 			tabPatch.Location = new Point(4, 24);
 			tabPatch.Name = "tabPatch";
 			tabPatch.Padding = new Padding(3);
-			tabPatch.Size = new Size(799, 864);
+			tabPatch.Size = new Size(799, 700);
 			tabPatch.TabIndex = 5;
 			tabPatch.Text = "AutoSetup & Patchs";
 			tabPatch.UseVisualStyleBackColor = true;
@@ -2098,9 +2098,9 @@
 			groupBox17.Controls.Add(txt_tplicence);
 			groupBox17.Controls.Add(btn_tplicence_show);
 			groupBox17.Controls.Add(chk_tplicence_onstart);
-			groupBox17.Location = new Point(6, 705);
+			groupBox17.Location = new Point(18, 617);
 			groupBox17.Name = "groupBox17";
-			groupBox17.Size = new Size(776, 126);
+			groupBox17.Size = new Size(770, 72);
 			groupBox17.TabIndex = 170;
 			groupBox17.TabStop = false;
 			groupBox17.Text = "groupBox17";
@@ -2160,7 +2160,7 @@
 			// 
 			// chk_patchDisplayModeTP
 			// 
-			chk_patchDisplayModeTP.Location = new Point(568, 307);
+			chk_patchDisplayModeTP.Location = new Point(568, 286);
 			chk_patchDisplayModeTP.Name = "chk_patchDisplayModeTP";
 			chk_patchDisplayModeTP.Size = new Size(163, 20);
 			chk_patchDisplayModeTP.TabIndex = 162;
@@ -2168,7 +2168,7 @@
 			// 
 			// chk_patchDisplayModeFix
 			// 
-			chk_patchDisplayModeFix.Location = new Point(373, 308);
+			chk_patchDisplayModeFix.Location = new Point(373, 287);
 			chk_patchDisplayModeFix.Name = "chk_patchDisplayModeFix";
 			chk_patchDisplayModeFix.Size = new Size(158, 20);
 			chk_patchDisplayModeFix.TabIndex = 161;
@@ -2176,7 +2176,7 @@
 			// 
 			// kryptonLabel72
 			// 
-			kryptonLabel72.Location = new Point(15, 307);
+			kryptonLabel72.Location = new Point(15, 286);
 			kryptonLabel72.Name = "kryptonLabel72";
 			kryptonLabel72.Size = new Size(91, 20);
 			kryptonLabel72.TabIndex = 160;
@@ -2184,7 +2184,7 @@
 			// 
 			// chk_patchResolutionTP
 			// 
-			chk_patchResolutionTP.Location = new Point(568, 278);
+			chk_patchResolutionTP.Location = new Point(568, 257);
 			chk_patchResolutionTP.Name = "chk_patchResolutionTP";
 			chk_patchResolutionTP.Size = new Size(163, 20);
 			chk_patchResolutionTP.TabIndex = 159;
@@ -2192,7 +2192,7 @@
 			// 
 			// chk_patchResolutionFix
 			// 
-			chk_patchResolutionFix.Location = new Point(373, 279);
+			chk_patchResolutionFix.Location = new Point(373, 258);
 			chk_patchResolutionFix.Name = "chk_patchResolutionFix";
 			chk_patchResolutionFix.Size = new Size(158, 20);
 			chk_patchResolutionFix.TabIndex = 158;
@@ -2200,7 +2200,7 @@
 			// 
 			// kryptonLabel71
 			// 
-			kryptonLabel71.Location = new Point(12, 358);
+			kryptonLabel71.Location = new Point(12, 337);
 			kryptonLabel71.Name = "kryptonLabel71";
 			kryptonLabel71.Size = new Size(107, 20);
 			kryptonLabel71.TabIndex = 157;
@@ -2208,7 +2208,7 @@
 			// 
 			// chk_patchGpuTP
 			// 
-			chk_patchGpuTP.Location = new Point(568, 252);
+			chk_patchGpuTP.Location = new Point(568, 231);
 			chk_patchGpuTP.Name = "chk_patchGpuTP";
 			chk_patchGpuTP.Size = new Size(163, 20);
 			chk_patchGpuTP.TabIndex = 156;
@@ -2222,7 +2222,7 @@
 			cmb_displayMode.DropDownWidth = 242;
 			cmb_displayMode.IntegralHeight = false;
 			cmb_displayMode.Items.AddRange(new object[] { "Use Recommanded Settings", "Force Fullscreen & Res (if possible)", "Force Windowed & Res (if possible)" });
-			cmb_displayMode.Location = new Point(139, 306);
+			cmb_displayMode.Location = new Point(139, 285);
 			cmb_displayMode.Name = "cmb_displayMode";
 			cmb_displayMode.Size = new Size(219, 21);
 			cmb_displayMode.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -2231,7 +2231,7 @@
 			// 
 			// chk_patchFFB
 			// 
-			chk_patchFFB.Location = new Point(136, 384);
+			chk_patchFFB.Location = new Point(136, 363);
 			chk_patchFFB.Name = "chk_patchFFB";
 			chk_patchFFB.Size = new Size(82, 20);
 			chk_patchFFB.TabIndex = 154;
@@ -2239,7 +2239,7 @@
 			// 
 			// kryptonLabel70
 			// 
-			kryptonLabel70.Location = new Point(15, 384);
+			kryptonLabel70.Location = new Point(15, 363);
 			kryptonLabel70.Name = "kryptonLabel70";
 			kryptonLabel70.Size = new Size(36, 20);
 			kryptonLabel70.TabIndex = 153;
@@ -2247,7 +2247,7 @@
 			// 
 			// chk_patchOthersGameOptions
 			// 
-			chk_patchOthersGameOptions.Location = new Point(138, 355);
+			chk_patchOthersGameOptions.Location = new Point(138, 334);
 			chk_patchOthersGameOptions.Name = "chk_patchOthersGameOptions";
 			chk_patchOthersGameOptions.Size = new Size(291, 20);
 			chk_patchOthersGameOptions.TabIndex = 152;
@@ -2256,7 +2256,7 @@
 			// 
 			// chk_patchOthersTPSettings
 			// 
-			chk_patchOthersTPSettings.Location = new Point(467, 355);
+			chk_patchOthersTPSettings.Location = new Point(467, 334);
 			chk_patchOthersTPSettings.Name = "chk_patchOthersTPSettings";
 			chk_patchOthersTPSettings.Size = new Size(235, 20);
 			chk_patchOthersTPSettings.TabIndex = 151;
@@ -2264,7 +2264,7 @@
 			// 
 			// chk_patchReshade
 			// 
-			chk_patchReshade.Location = new Point(139, 333);
+			chk_patchReshade.Location = new Point(139, 312);
 			chk_patchReshade.Name = "chk_patchReshade";
 			chk_patchReshade.Size = new Size(184, 20);
 			chk_patchReshade.TabIndex = 147;
@@ -2272,7 +2272,7 @@
 			// 
 			// chk_patchGpuFix
 			// 
-			chk_patchGpuFix.Location = new Point(373, 253);
+			chk_patchGpuFix.Location = new Point(373, 232);
 			chk_patchGpuFix.Name = "chk_patchGpuFix";
 			chk_patchGpuFix.Size = new Size(158, 20);
 			chk_patchGpuFix.TabIndex = 143;
@@ -2289,7 +2289,7 @@
 			groupBox16.Controls.Add(kryptonLabel66);
 			groupBox16.Controls.Add(chk_patchGameID);
 			groupBox16.Controls.Add(kryptonLabel67);
-			groupBox16.Location = new Point(18, 419);
+			groupBox16.Location = new Point(18, 396);
 			groupBox16.Name = "groupBox16";
 			groupBox16.Size = new Size(740, 115);
 			groupBox16.TabIndex = 142;
@@ -2385,17 +2385,17 @@
 			groupBox15.Controls.Add(kryptonLabel68);
 			groupBox15.Controls.Add(txt_networkMask);
 			groupBox15.Controls.Add(txt_networkIP);
-			groupBox15.Location = new Point(21, 546);
+			groupBox15.Location = new Point(21, 514);
 			groupBox15.Name = "groupBox15";
-			groupBox15.Size = new Size(659, 134);
+			groupBox15.Size = new Size(767, 101);
 			groupBox15.TabIndex = 141;
 			groupBox15.TabStop = false;
 			// 
 			// txt_networkGateway
 			// 
-			txt_networkGateway.Location = new Point(124, 94);
+			txt_networkGateway.Location = new Point(643, 35);
 			txt_networkGateway.Name = "txt_networkGateway";
-			txt_networkGateway.Size = new Size(131, 23);
+			txt_networkGateway.Size = new Size(118, 23);
 			txt_networkGateway.TabIndex = 135;
 			// 
 			// radio_networkModeManual
@@ -2442,14 +2442,14 @@
 			// 
 			// txt_BroadcastAddress
 			// 
-			txt_BroadcastAddress.Location = new Point(382, 94);
+			txt_BroadcastAddress.Location = new Point(643, 64);
 			txt_BroadcastAddress.Name = "txt_BroadcastAddress";
-			txt_BroadcastAddress.Size = new Size(131, 23);
+			txt_BroadcastAddress.Size = new Size(118, 23);
 			txt_BroadcastAddress.TabIndex = 138;
 			// 
 			// kryptonLabel63
 			// 
-			kryptonLabel63.Location = new Point(0, 96);
+			kryptonLabel63.Location = new Point(519, 37);
 			kryptonLabel63.Name = "kryptonLabel63";
 			kryptonLabel63.Size = new Size(57, 20);
 			kryptonLabel63.TabIndex = 109;
@@ -2459,7 +2459,7 @@
 			// 
 			txt_networkDns2.Location = new Point(382, 65);
 			txt_networkDns2.Name = "txt_networkDns2";
-			txt_networkDns2.Size = new Size(131, 23);
+			txt_networkDns2.Size = new Size(118, 23);
 			txt_networkDns2.TabIndex = 137;
 			// 
 			// kryptonLabel64
@@ -2474,12 +2474,12 @@
 			// 
 			txt_networkDns1.Location = new Point(382, 36);
 			txt_networkDns1.Name = "txt_networkDns1";
-			txt_networkDns1.Size = new Size(131, 23);
+			txt_networkDns1.Size = new Size(118, 23);
 			txt_networkDns1.TabIndex = 136;
 			// 
 			// kryptonLabel65
 			// 
-			kryptonLabel65.Location = new Point(261, 93);
+			kryptonLabel65.Location = new Point(522, 63);
 			kryptonLabel65.Name = "kryptonLabel65";
 			kryptonLabel65.Size = new Size(114, 20);
 			kryptonLabel65.TabIndex = 113;
@@ -2497,20 +2497,20 @@
 			// 
 			txt_networkMask.Location = new Point(124, 65);
 			txt_networkMask.Name = "txt_networkMask";
-			txt_networkMask.Size = new Size(131, 23);
+			txt_networkMask.Size = new Size(118, 23);
 			txt_networkMask.TabIndex = 134;
 			txt_networkMask.TextChanged += txt_networkMask_TextChanged;
 			// 
 			// txt_networkIP
 			// 
-			txt_networkIP.Location = new Point(124, 36);
+			txt_networkIP.Location = new Point(124, 35);
 			txt_networkIP.Name = "txt_networkIP";
-			txt_networkIP.Size = new Size(131, 23);
+			txt_networkIP.Size = new Size(118, 23);
 			txt_networkIP.TabIndex = 133;
 			// 
 			// kryptonLabel60
 			// 
-			kryptonLabel60.Location = new Point(18, 278);
+			kryptonLabel60.Location = new Point(18, 257);
 			kryptonLabel60.Name = "kryptonLabel60";
 			kryptonLabel60.Size = new Size(74, 20);
 			kryptonLabel60.TabIndex = 102;
@@ -2523,7 +2523,7 @@
 			cmb_resolution.DropDownWidth = 242;
 			cmb_resolution.IntegralHeight = false;
 			cmb_resolution.Items.AddRange(new object[] { "720p", "1080p", "1440p (2K)", "2160p (4K)" });
-			cmb_resolution.Location = new Point(139, 279);
+			cmb_resolution.Location = new Point(139, 258);
 			cmb_resolution.Name = "cmb_resolution";
 			cmb_resolution.Size = new Size(219, 21);
 			cmb_resolution.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -2531,7 +2531,7 @@
 			// 
 			// kryptonLabel53
 			// 
-			kryptonLabel53.Location = new Point(18, 252);
+			kryptonLabel53.Location = new Point(18, 231);
 			kryptonLabel53.Name = "kryptonLabel53";
 			kryptonLabel53.Size = new Size(39, 20);
 			kryptonLabel53.TabIndex = 100;
@@ -2543,7 +2543,7 @@
 			cmb_gpu.DropDownWidth = 242;
 			cmb_gpu.IntegralHeight = false;
 			cmb_gpu.Items.AddRange(new object[] { "Nvidia", "Intel", "AMD Old", "AMD New", "AMD R.ID" });
-			cmb_gpu.Location = new Point(139, 251);
+			cmb_gpu.Location = new Point(139, 230);
 			cmb_gpu.Name = "cmb_gpu";
 			cmb_gpu.Size = new Size(219, 21);
 			cmb_gpu.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -2673,7 +2673,7 @@
 			// txt_linksourcefolderexe
 			// 
 			txt_linksourcefolderexe.Enabled = false;
-			txt_linksourcefolderexe.Location = new Point(141, 19);
+			txt_linksourcefolderexe.Location = new Point(141, 18);
 			txt_linksourcefolderexe.Name = "txt_linksourcefolderexe";
 			txt_linksourcefolderexe.Size = new Size(405, 23);
 			txt_linksourcefolderexe.TabIndex = 38;
@@ -2685,7 +2685,7 @@
 			tabGamepad.Location = new Point(4, 24);
 			tabGamepad.Name = "tabGamepad";
 			tabGamepad.Padding = new Padding(3);
-			tabGamepad.Size = new Size(799, 864);
+			tabGamepad.Size = new Size(799, 700);
 			tabGamepad.TabIndex = 0;
 			tabGamepad.Text = "Gamepad & Xinputs";
 			tabGamepad.UseVisualStyleBackColor = true;
@@ -2696,7 +2696,7 @@
 			tabWheel.Location = new Point(4, 24);
 			tabWheel.Name = "tabWheel";
 			tabWheel.Padding = new Padding(3);
-			tabWheel.Size = new Size(799, 864);
+			tabWheel.Size = new Size(799, 700);
 			tabWheel.TabIndex = 1;
 			tabWheel.Text = "Wheel settings";
 			tabWheel.UseVisualStyleBackColor = true;
@@ -2706,7 +2706,7 @@
 			tabHotas.Controls.Add(groupBox9);
 			tabHotas.Location = new Point(4, 24);
 			tabHotas.Name = "tabHotas";
-			tabHotas.Size = new Size(799, 864);
+			tabHotas.Size = new Size(799, 700);
 			tabHotas.TabIndex = 2;
 			tabHotas.Text = "Hotas Settings";
 			tabHotas.UseVisualStyleBackColor = true;
@@ -2716,7 +2716,7 @@
 			tabLightgun.Controls.Add(groupBox10);
 			tabLightgun.Location = new Point(4, 24);
 			tabLightgun.Name = "tabLightgun";
-			tabLightgun.Size = new Size(799, 864);
+			tabLightgun.Size = new Size(799, 700);
 			tabLightgun.TabIndex = 3;
 			tabLightgun.Text = "Lightgun settings";
 			tabLightgun.UseVisualStyleBackColor = true;
@@ -2725,7 +2725,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(822, 958);
+			ClientSize = new Size(822, 770);
 			Controls.Add(tabControl1);
 			Controls.Add(btn_Save);
 			Name = "Form1";
