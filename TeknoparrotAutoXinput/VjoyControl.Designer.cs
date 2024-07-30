@@ -285,6 +285,7 @@ namespace TeknoparrotAutoXinput
 			btn_clearA.Size = new Size(162, 25);
 			btn_clearA.TabIndex = 44;
 			btn_clearA.Values.Text = "Clear Settings";
+			btn_clearA.Visible = false;
 			btn_clearA.Click += btn_clearA_Click;
 			// 
 			// btn_defaultA
@@ -294,6 +295,7 @@ namespace TeknoparrotAutoXinput
 			btn_defaultA.Size = new Size(162, 25);
 			btn_defaultA.TabIndex = 43;
 			btn_defaultA.Values.Text = "Restore to Default Settings";
+			btn_defaultA.Visible = false;
 			btn_defaultA.Click += btn_defaultA_Click;
 			// 
 			// kryptonLabel18
@@ -739,6 +741,7 @@ namespace TeknoparrotAutoXinput
 			btn_clearB.Size = new Size(162, 25);
 			btn_clearB.TabIndex = 44;
 			btn_clearB.Values.Text = "Clear Settings";
+			btn_clearB.Visible = false;
 			btn_clearB.Click += btn_clearB_Click;
 			// 
 			// btn_defaultB
@@ -748,6 +751,7 @@ namespace TeknoparrotAutoXinput
 			btn_defaultB.Size = new Size(162, 25);
 			btn_defaultB.TabIndex = 43;
 			btn_defaultB.Values.Text = "Restore to Default Settings";
+			btn_defaultB.Visible = false;
 			btn_defaultB.Click += btn_defaultB_Click;
 			// 
 			// kryptonLabel22
@@ -1142,6 +1146,7 @@ namespace TeknoparrotAutoXinput
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 38;
 			btn_Save.Values.Text = "Save";
+			btn_Save.Visible = false;
 			btn_Save.Click += btn_Save_Click;
 			// 
 			// btn_Cancel
@@ -1151,6 +1156,7 @@ namespace TeknoparrotAutoXinput
 			btn_Cancel.Size = new Size(90, 25);
 			btn_Cancel.TabIndex = 37;
 			btn_Cancel.Values.Text = "Cancel";
+			btn_Cancel.Visible = false;
 			btn_Cancel.Click += btn_Cancel_Click;
 			// 
 			// timer1

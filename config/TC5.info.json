@@ -9,8 +9,9 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
 		"magpieLaunchBefore": "False",
-		"magpieExecutable": "TC5/Binaries/Win64/TimeCrisisGame-Win64-Shipping.exe"
-
+		"magpieExecutable": "TC5/Binaries/Win64/TimeCrisisGame-Win64-Shipping.exe",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},
     "tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {

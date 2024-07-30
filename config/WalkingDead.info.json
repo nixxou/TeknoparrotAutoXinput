@@ -9,7 +9,9 @@
 		"magpie3DGameMode": "False",
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False"
+		"magpieLaunchBefore": "False",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},
     "tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
@@ -31,17 +33,25 @@
         },
         "set_res_in_tp_settings & 1080p": {
 			"General||Enable Custom Resolution": "1",
-            "General||ResolutionWidth": "1920x1080",
+            "General||Custom Resolution": "1920x1080",
         },
         "set_res_in_tp_settings & 2k": {
 			"General||Enable Custom Resolution": "1",
-            "General||ResolutionWidth": "2560x1440",
+            "General||Custom Resolution": "2560x1440",
         },
         "set_res_in_tp_settings & 4k": {
 			"General||Enable Custom Resolution": "1",
-            "General||ResolutionWidth": "3840x2160",
+            "General||Custom Resolution": "3840x2160",
         }
     },
     "gameoptions": {
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+            "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+            "gun_useExtraSinden": "True"
+        },
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+            "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.03093)",
+            "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+        }
     }
 }

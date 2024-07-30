@@ -1268,7 +1268,7 @@
 			cmb_vjoy.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_vjoy.DropDownWidth = 150;
 			cmb_vjoy.IntegralHeight = false;
-			cmb_vjoy.Items.AddRange(new object[] { "No", "Vjoy 1", "Vjoy 2", "Vjoy 3", "Vjoy 4", "Vjoy 5", "Vjoy 6", "", "" });
+			cmb_vjoy.Items.AddRange(new object[] { "Auto (Last availiable)", "Vjoy 1", "Vjoy 2", "Vjoy 3", "Vjoy 4", "Vjoy 5", "Vjoy 6", "" });
 			cmb_vjoy.Location = new Point(161, 562);
 			cmb_vjoy.Name = "cmb_vjoy";
 			cmb_vjoy.Size = new Size(150, 21);

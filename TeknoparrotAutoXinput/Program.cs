@@ -142,6 +142,8 @@ namespace TeknoparrotAutoXinput
 		public static JoystickButtonData dinputTriggerGunA = null;
 		public static JoystickButtonData dinputTriggerGunB = null;
 
+		public static int vjoyIndex;
+
 		//public static string xmlFileContent = "";
 
 		/// <summary>
@@ -476,7 +478,7 @@ namespace TeknoparrotAutoXinput
 			//Vjoy
 			if (args.Length >= 2 && args.First() == "--runvjoy")
 			{
-				string gunOption = args[1];
+				string gunOption = args[2];
 				bool enableGunA = false;
 				bool enableGunB = false;
 
@@ -493,12 +495,19 @@ namespace TeknoparrotAutoXinput
 				string gunAMinMax = "";
 				string gunBMinMax = "";
 
-				if (args.Length == 7)
+				int vjoyindexvalue = 0;
+				try
 				{
-					formula_X = args[2];
-					formula_Y = args[3];
-					gunAMinMax = args[4];
-					gunBMinMax = args[5];
+					int.TryParse(args[1], out vjoyindexvalue);
+				}
+				catch { vjoyindexvalue = 0; }
+
+				if (args.Length == 8)
+				{
+					formula_X = args[3];
+					formula_Y = args[4];
+					gunAMinMax = args[5];
+					gunBMinMax = args[6];
 				}
 
 				ConfigurationManager.LoadConfig();			
@@ -513,12 +522,12 @@ namespace TeknoparrotAutoXinput
 					if (File.Exists(optionFile))
 					{
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
-						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB, formula_X, formula_Y,gunAMinMax,gunBMinMax);
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB, formula_X, formula_Y,gunAMinMax,gunBMinMax, vjoyindexvalue);
 						Application.Run(frm);
 					}
 					else
 					{
-						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, null, enableGunA, enableGunB, formula_X, formula_Y, gunAMinMax, gunBMinMax);
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, null, enableGunA, enableGunB, formula_X, formula_Y, gunAMinMax, gunBMinMax, vjoyindexvalue);
 						Application.Run(frm);
 					}
 				}
@@ -1505,6 +1514,9 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 							}
+							if (!dinputLightgunAFound) GunAGuid = "";
+							if (!dinputLightgunBFound) GunBGuid = "";
+
 
 							if (haveLightgun)
 							{
@@ -1603,89 +1615,201 @@ namespace TeknoparrotAutoXinput
 						Utils.LogMessage($"dinputLightgunBFound = {dinputLightgunBFound}");
 
 						bool replaceLightgunWithVjoy = ConfigurationManager.MainConfig.indexvjoy > 0 ? true : false;
-						int vjoyIndex = ConfigurationManager.MainConfig.indexvjoy;
+						vjoyIndex = ConfigurationManager.MainConfig.indexvjoy;
 						bool useVjoy = false;
-						//string vjoyGuid = "";
-						if(gameOptions.indexvjoy != -1) vjoyIndex = gameOptions.indexvjoy;
 
-						if(vjoyIndex > 0)
+						string LightgunConfigAFile = "";
+						string LightgunConfigBFile = "";
+						Dictionary<string, string> LightgunConfigA = new Dictionary<string, string>();
+						Dictionary<string, string> LightgunConfigB = new Dictionary<string, string>();
+						Dictionary<string, string> LightgunConfigFinal = new Dictionary<string, string>();
+						
+
+						if (haveLightgun)
 						{
+
+							bool vjoy_recommanded_gunA = ConfigurationManager.MainConfig.gunAvjoy;
+							bool vjoy_recommanded_gunB = ConfigurationManager.MainConfig.gunBvjoy;
+							vjoy_gunA = false;
+							vjoy_gunB = false;
+							bool sinden_and_notsinden = false;
+							if (dinputLightgunAFound && dinputLightgunBFound)
+							{
+								if (GunAType == "sinden" && GunBType != "sinden")
+								{
+									sinden_and_notsinden = true;
+								}
+								if (GunBType == "sinden" && GunAType != "sinden")
+								{
+									sinden_and_notsinden = true;
+								}
+							}
+
+							string key_vjoy_info = "recommanded_vjoy_fullscreen";
+							if (TpSettingsManager.IsWindowed) key_vjoy_info = "recommanded_vjoy_windowed";
+							if (GameInfo.ContainsKey(key_vjoy_info) && GameInfo[key_vjoy_info].Trim() != "")
+							{
+								if (dinputLightgunAFound)
+								{
+									if (vjoy_recommanded_gunA)
+									{
+										foreach (var vtag in GameInfo[key_vjoy_info].Trim().Split(','))
+										{
+											if (vtag == "all")
+											{
+												vjoy_gunA = true;
+												break;
+											}
+											if(vtag == GunAType) 
+											{
+												vjoy_gunA = true;
+												break;
+											}
+											if(vtag == "sinden_and_notsinden" && sinden_and_notsinden)
+											{
+												vjoy_gunA = true;
+												break;
+											}
+										}
+									}
+								}
+								if (dinputLightgunBFound)
+								{
+									if (vjoy_recommanded_gunB)
+									{
+										foreach (var vtag in GameInfo[key_vjoy_info].Trim().Split(','))
+										{
+											if (vtag == "all")
+											{
+												vjoy_gunB = true;
+												break;
+											}
+											if (vtag == GunBType)
+											{
+												vjoy_gunB = true;
+												break;
+											}
+											if (vtag == "sinden_and_notsinden" && sinden_and_notsinden)
+											{
+												vjoy_gunB = true;
+												break;
+											}
+										}
+									}
+								}
+							}
+							if(vjoy_gunA && ConfigurationManager.MainConfig.gunBvjoy == true)
+							{
+								vjoy_gunB = true;
+							}
+							if (vjoy_gunB && ConfigurationManager.MainConfig.gunAvjoy == true)
+							{
+								vjoy_gunA = true;
+							}
+
 							useVjoy = true;
-							vjoy_gunA = ConfigurationManager.MainConfig.gunAvjoy;
-							if(gameOptions.gunA_useVjoy > 0)
+							if (gameOptions.gunA_useVjoy > 0)
 							{
 								if (gameOptions.gunA_useVjoy == 1) vjoy_gunA = false;
 								if (gameOptions.gunA_useVjoy == 2) vjoy_gunA = true;
 							}
-							vjoy_gunB = ConfigurationManager.MainConfig.gunBvjoy;
 							if (gameOptions.gunB_useVjoy > 0)
 							{
 								if (gameOptions.gunB_useVjoy == 1) vjoy_gunB = false;
 								if (gameOptions.gunB_useVjoy == 2) vjoy_gunB = true;
 							}
-							if (!vjoy_gunA && !vjoy_gunB) useVjoy = false; 
-						}
+							if (!vjoy_gunA && !vjoy_gunB) useVjoy = false;
 
-						Utils.LogMessage($"vjoy Index = {vjoyIndex}");
-						Utils.LogMessage($"vjoy gunA = {vjoy_gunA}");
-						Utils.LogMessage($"vjoy gunB = {vjoy_gunB}");
-						Utils.LogMessage($"vjoy use = {useVjoy}");
+							bool vjoy_installed = false;
+							string vjoyPath = Utils.checkInstalled("vJoy");
+							if (!string.IsNullOrEmpty(vjoyPath)) vjoy_installed = true;
 
 
-						if (haveLightgun && useVjoy)
-						{
-							try
+							//string vjoyGuid = "";
+							if (gameOptions.indexvjoy != -1) vjoyIndex = gameOptions.indexvjoy;
+
+							int true_vjoy_index = -1;
+							bool vjoy_enabled = false;
+							if (haveLightgun && useVjoy && vjoy_installed)
 							{
-								var vJoyObj = new vJoyManager();
-								if (vJoyObj.vJoyEnabled())
+								try
 								{
-									VjdStat status = vJoyObj.m_joystick.GetVJDStatus((uint)(vjoyIndex));
-									if (status == VjdStat.VJD_STAT_FREE)
+									var vJoyObj = new vJoyManager();
+									if (vJoyObj.vJoyEnabled())
 									{
-										DirectInput directInput = new DirectInput();
-										List<DeviceInstance> devices = new List<DeviceInstance>();
-										devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
-										Dictionary<string, Joystick> joyList = new Dictionary<string, Joystick>();
-										var joystickState = new JoystickState();
-										foreach (var device in devices)
+										if (vjoyIndex == 0)
 										{
-											if (device.ProductName.ToLower().Contains("vjoy"))
+											for (uint i = 16; i >= 0; i--)
 											{
-												Joystick joystick = new Joystick(directInput, device.InstanceGuid);
-												joystick.Properties.BufferSize = 512;
-												joystick.Acquire();
-												joyList.Add(device.InstanceGuid.ToString(), joystick);
+												VjdStat status = vJoyObj.m_joystick.GetVJDStatus(i);
+												if (status == VjdStat.VJD_STAT_FREE)
+												{
+													true_vjoy_index = (int)i;
+													break;
+												}
 											}
 										}
-
-
-										vJoyObj.InitDevice((uint)(vjoyIndex));
-										vJoyObj.SetButton(1, true);
-										vJoyObj.SetButton(2, false);
-										vJoyObj.SetButton(3, true);
-										Thread.Sleep(100);
-
-										foreach (var joy in joyList)
+										else if (vjoyIndex > 0)
 										{
-											var joystick = joy.Value;
-											joystick.GetCurrentState(ref joystickState);
-											if (joystickState != null && joystickState.Buttons.Count() >= 3 && joystickState.Buttons[0] && !joystickState.Buttons[1] && joystickState.Buttons[2])
+											VjdStat status = vJoyObj.m_joystick.GetVJDStatus((uint)vjoyIndex);
+											if (status == VjdStat.VJD_STAT_FREE)
 											{
-												VjoyGuid = joy.Key;
+												true_vjoy_index = vjoyIndex;
 											}
-											joystick.Dispose();
 										}
+										if (true_vjoy_index > 0)
+										{
+											DirectInput directInput = new DirectInput();
+											List<DeviceInstance> devices = new List<DeviceInstance>();
+											devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+											Dictionary<string, Joystick> joyList = new Dictionary<string, Joystick>();
+											var joystickState = new JoystickState();
+											foreach (var device in devices)
+											{
+												if (device.ProductName.ToLower().Contains("vjoy"))
+												{
+													Joystick joystick = new Joystick(directInput, device.InstanceGuid);
+													joystick.Properties.BufferSize = 512;
+													joystick.Acquire();
+													joyList.Add(device.InstanceGuid.ToString(), joystick);
+												}
+											}
 
-										vJoyObj.SetButton(1, false);
-										vJoyObj.SetButton(2, false);
-										vJoyObj.SetButton(3, false);
-										vJoyObj.ReleaseDevice();
+
+											vJoyObj.InitDevice((uint)(true_vjoy_index));
+											vJoyObj.SetButton(1, true);
+											vJoyObj.SetButton(2, false);
+											vJoyObj.SetButton(3, true);
+											Thread.Sleep(100);
+
+											foreach (var joy in joyList)
+											{
+												var joystick = joy.Value;
+												joystick.GetCurrentState(ref joystickState);
+												if (joystickState != null && joystickState.Buttons.Count() >= 3 && joystickState.Buttons[0] && !joystickState.Buttons[1] && joystickState.Buttons[2])
+												{
+													VjoyGuid = joy.Key;
+												}
+												joystick.Dispose();
+											}
+
+											vJoyObj.SetButton(1, false);
+											vJoyObj.SetButton(2, false);
+											vJoyObj.SetButton(3, false);
+											vJoyObj.ReleaseDevice();
+										}
 									}
 								}
+								catch (Exception ex) { }
 							}
-							catch (Exception ex) { }
+							vjoyIndex = true_vjoy_index;
 
-							if(VjoyGuid != "")
+							Utils.LogMessage($"vjoy Index = {vjoyIndex}");
+							Utils.LogMessage($"vjoy gunA = {vjoy_gunA}");
+							Utils.LogMessage($"vjoy gunB = {vjoy_gunB}");
+							Utils.LogMessage($"vjoy use = {useVjoy}");
+
+							if (VjoyGuid != "")
 							{
 								Utils.LogMessage($"vjoy found ! = {VjoyGuid}");
 								if (dinputLightgunAFound && vjoy_gunA)
@@ -1740,19 +1864,7 @@ namespace TeknoparrotAutoXinput
 							{
 								Utils.LogMessage($"vjoy not found !");
 							}
-						}
 
-						
-
-						string LightgunConfigAFile = "";
-						string LightgunConfigBFile = "";
-						Dictionary<string, string> LightgunConfigA = new Dictionary<string, string>();
-						Dictionary<string, string> LightgunConfigB = new Dictionary<string, string>();
-						Dictionary<string, string> LightgunConfigFinal = new Dictionary<string, string>();
-						
-
-						if (haveLightgun)
-						{
 							if (dinputLightgunAFound)
 							{
 								string variante = "";
@@ -2208,7 +2320,7 @@ namespace TeknoparrotAutoXinput
 						if (crosshairA && !crosshairB) TpSettingsManager.tags.Add("crosshair_gun1_only");
 						if (!crosshairA && crosshairB) TpSettingsManager.tags.Add("crosshair_gun2_only");
 
-						if(useDinputLightGun && (GunAType == "sinden" || GunBType == "sinden"))
+						if(useDinputLightGun && ((GunAGuid != "" && GunAType == "sinden") || (GunBGuid != "" && GunBType == "sinden")))
 						{
 							TpSettingsManager.tags.Add("at_least_one_sinden");
 							atLeastOneSinden = true;
@@ -4324,7 +4436,7 @@ namespace TeknoparrotAutoXinput
 							Process vjoy_process = new Process();
 							vjoy_process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
 							vjoy_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-							vjoy_process.StartInfo.Arguments = $"--runvjoy " + gunOptions + $" \"{xmlFile}\"";
+							vjoy_process.StartInfo.Arguments = $"--runvjoy {vjoyIndex} " + gunOptions + $" \"{xmlFile}\"";
 							vjoy_process.StartInfo.UseShellExecute = true;
 							vjoy_process.Start();
 							Thread.Sleep(1000);

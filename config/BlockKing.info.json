@@ -1,5 +1,6 @@
 {
 	"global": {
+		"_comment": "4/3 in windowed, wide in fullscreen",
 		"rom": "",
 		"target": "",
 		"64bits": "False",
@@ -10,7 +11,9 @@
 		"magpieAllowScalingMaximized": "False",
 		"magpieLaunchBefore": "False",
 		"magpieNoMoveWindow": "True",
-		"recoil": "500"
+		"recoil": "500",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
 	},
     "tpoptions": {
 		"recommanded_tp_settings":{
@@ -37,10 +40,18 @@
         }
     },
 	"gameoptions": {
-        "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy": {
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+            "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+            "gun_useExtraSinden": "True"
+        },
+        "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+            "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
+            "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+        },
+        "recommanded_gameoptions & windowed & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy": {
             "gunA_4tiers": "2"
         },
-        "recommanded_gameoptions & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy": {
+        "recommanded_gameoptions & windowed & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy": {
             "gunB_4tiers": "2"
         }
 	}

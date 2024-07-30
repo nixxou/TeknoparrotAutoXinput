@@ -211,7 +211,7 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true, string formulaX = "", string formulaY = "", string gunAMinMax = "", string gunBMinMax = "")
+		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true, string formulaX = "", string formulaY = "", string gunAMinMax = "", string gunBMinMax = "", int vjoyIndex=0)
 		{
 			//MessageBox.Show($"icizz {formulaX} {formulaY} {gunAMinMax} {gunBMinMax}");
 			_enableGunA = enableGunA;
@@ -221,9 +221,41 @@ namespace TeknoparrotAutoXinput
 			_gameOptions = gameOptions;
 			_game = game;
 			_indexVjoy = ConfigurationManager.MainConfig.indexvjoy;
+			
+			
+
 			if (_gameOptions != null && _gameOptions.indexvjoy != -1) _indexVjoy = _gameOptions.indexvjoy;
+			if (vjoyIndex > 0) _indexVjoy = vjoyIndex;
 
+			if (_indexVjoy == 0)
+			{
 
+				int true_vjoy_index = -1;
+				bool vjoy_enabled = false;
+
+				try
+				{
+					var vJoyObj = new vJoyManager();
+					if (vJoyObj.vJoyEnabled())
+					{
+						if (vjoyIndex == 0)
+						{
+							for (uint i = 16; i >= 0; i--)
+							{
+								VjdStat status = vJoyObj.m_joystick.GetVJDStatus(i);
+								if (status == VjdStat.VJD_STAT_FREE)
+								{
+									_indexVjoy = (int)i;
+									break;
+								}
+							}
+						}
+					}
+				}
+				catch (Exception ex) { }
+			}
+
+			
 
 
 			InitializeComponent();

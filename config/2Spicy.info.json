@@ -9,6 +9,8 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "False",
 		"magpieLaunchBefore": "False",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden,guncon1,guncon2,wiimote,gamepad",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden,guncon1,guncon2,wiimote,gamepad"
 	},
     "tpoptions": {
 		"use_gpu_fix_in_tp_settings & amd": {

@@ -12,7 +12,9 @@
 		"magpieLaunchBefore": "False",
 		"magpieNoMoveWindow": "False",
 		"magpieNoLateFocus": "False",
-		"magpieNoClick": "True"
+		"magpieNoClick": "True",
+		"recommanded_vjoy_fullscreen": "all",
+		"recommanded_vjoy_windowed": "all"
 	},
 	"tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {

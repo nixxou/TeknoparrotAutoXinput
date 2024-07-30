@@ -13,7 +13,9 @@
 		"magpieNoMoveWindow": "False",
 		"magpieNoLateFocus": "False",
 		"magpieNoClick": "True",
-		"magpieExecutable": "LLA/Binaries/Win64/DomeShooterGame-Win64-Shipping.exe"
+		"magpieExecutable": "LLA/Binaries/Win64/DomeShooterGame-Win64-Shipping.exe",
+		"recommanded_vjoy_fullscreen": "all",
+		"recommanded_vjoy_windowed": "all"
 	},
 	"tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {

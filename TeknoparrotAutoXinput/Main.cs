@@ -652,7 +652,7 @@ namespace TeknoparrotAutoXinput
 						if (_haveWheel && DataGame.existingConfig.ContainsKey("wheel"))
 						{
 							var joystickButtonWheel = Program.ParseConfig(DataGame.existingConfig["wheel"]);
-							var PlayerList = Program.GetPlayersList(joystickButtonWheel);
+							var PlayerList = Program.        GetPlayersList(joystickButtonWheel);
 							int nb_wheel = _connectedGamePad.Values.Where(c => c.Type == "wheel").Count();
 							int currentlyAttributed = 0;
 							List<XinputGamepad> gamepadList = new List<XinputGamepad>();

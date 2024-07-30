@@ -3,19 +3,15 @@
 		"rom": "hotd4sp",
 		"target": "lindbergh",
 		"64bits": "False",
-		"crosshairA": "",
-		"crosshairB": "",
-		"crosshairON": "Crosshairs,Enable|Crosshairs,Scaling",
-		"crosshairOFF": "Crosshairs,!Enable",
-		"crosshairPNG": "False",
-		"outputs": "",
 		"windowed": "General,DisplayMode,Windowed",
 		"magpieClass": "XWindow_",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "False",
 		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
+		"magpieNoMoveWindow": "False",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden,wiimote,gamepad",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
 	},
 	"tpoptions": {
 		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {

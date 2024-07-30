@@ -9,7 +9,9 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "False",
 		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
+		"magpieNoMoveWindow": "False",
+		"recommanded_vjoy_fullscreen": "all",
+		"recommanded_vjoy_windowed": "all"
 	},
 	"tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {

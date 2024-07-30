@@ -4,7 +4,9 @@
 		"target": "lindbergh",
 		"64bits": "False",
 		"windowed": "General,Windowed,1",
-		"magpieClass": "FREEGLUT"
+		"magpieClass": "FREEGLUT",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "all"
 	},
 	"tpoptions": {
 		"use_gpu_fix_in_tp_settings & amd": {

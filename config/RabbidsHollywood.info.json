@@ -10,7 +10,9 @@
 		"magpieAllowScalingMaximized": "True",
 		"magpieLaunchBefore": "False",
 		"magpieNoMoveWindow": "True",
-		"recoil": "auto"
+		"recoil": "auto",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},
     "tpoptions": {
 		"recommanded_tp_settings":{

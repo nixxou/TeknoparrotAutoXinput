@@ -10,7 +10,9 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
 		"magpieLaunchBefore": "False",
-		"recoil": "gunshot"
+		"recoil": "gunshot",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},
     "tpoptions": {
 		"use_gpu_fix_in_tp_settings & amd": {

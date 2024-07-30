@@ -8,7 +8,9 @@
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False"
+		"magpieLaunchBefore": "False",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden,wiimote,gamepad",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
 	},
 	"tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {

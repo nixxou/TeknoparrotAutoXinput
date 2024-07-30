@@ -13,3 +13,5 @@ The patch archive must include cfg
 Need to support UpdateArchive
 Launchbox playlist ?
 Clean reshade files
+Manage if com port incorrect
+Problem pm folder for auto add archive Walking dead, maybe others ?

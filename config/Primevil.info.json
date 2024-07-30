@@ -9,7 +9,9 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "False",
 		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
+		"magpieNoMoveWindow": "False",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden,wiimote,gamepad",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
 	},
     "tpoptions": {
 		"recommanded_tp_settings":{

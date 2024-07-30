@@ -10,7 +10,9 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
 		"magpieLaunchBefore": "False",
-		"recoil": "auto"
+		"recoil": "auto",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},
     "tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {

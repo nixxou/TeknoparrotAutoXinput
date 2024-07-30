@@ -1105,9 +1105,9 @@ namespace TeknoparrotAutoXinput
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				if (!string.IsNullOrEmpty(frm.GunA_json)) ConfigurationManager.MainConfig.vjoySettingsGunA = frm.GunA_json;
-				if (!string.IsNullOrEmpty(frm.GunB_json)) ConfigurationManager.MainConfig.vjoySettingsGunB = frm.GunB_json;
-				ConfigurationManager.SaveConfig();
+				//if (!string.IsNullOrEmpty(frm.GunA_json)) ConfigurationManager.MainConfig.vjoySettingsGunA = frm.GunA_json;
+				//if (!string.IsNullOrEmpty(frm.GunB_json)) ConfigurationManager.MainConfig.vjoySettingsGunB = frm.GunB_json;
+				//ConfigurationManager.SaveConfig();
 			}
 
 		}

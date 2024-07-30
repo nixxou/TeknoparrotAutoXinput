@@ -10,7 +10,9 @@
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
 		"magpieLaunchBefore": "False",
-		"magpieExecutable": "../Transformers2/Transformers2.exe"
+		"magpieExecutable": "../Transformers2/Transformers2.exe",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},
     "tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
