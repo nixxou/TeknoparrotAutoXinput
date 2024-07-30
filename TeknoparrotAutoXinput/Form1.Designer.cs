@@ -1335,9 +1335,9 @@
 			// 
 			chk_gunB_Vjoy.Location = new Point(112, 75);
 			chk_gunB_Vjoy.Name = "chk_gunB_Vjoy";
-			chk_gunB_Vjoy.Size = new Size(71, 20);
+			chk_gunB_Vjoy.Size = new Size(164, 20);
 			chk_gunB_Vjoy.TabIndex = 77;
-			chk_gunB_Vjoy.Values.Text = "Use Vjoy";
+			chk_gunB_Vjoy.Values.Text = "Use Vjoy if recommanded";
 			// 
 			// grp_gunB_gun4irOptions
 			// 
@@ -1571,9 +1571,9 @@
 			// 
 			chk_gunA_Vjoy.Location = new Point(110, 75);
 			chk_gunA_Vjoy.Name = "chk_gunA_Vjoy";
-			chk_gunA_Vjoy.Size = new Size(71, 20);
+			chk_gunA_Vjoy.Size = new Size(164, 20);
 			chk_gunA_Vjoy.TabIndex = 74;
-			chk_gunA_Vjoy.Values.Text = "Use Vjoy";
+			chk_gunA_Vjoy.Values.Text = "Use Vjoy if recommanded";
 			// 
 			// grp_gunA_sindenOptions
 			// 
