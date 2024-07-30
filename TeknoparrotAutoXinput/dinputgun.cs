@@ -29,6 +29,7 @@ namespace TeknoparrotAutoXinput
 
 		public string FocusedTextBoxName = "";
 		public string Dialogconfig = null;
+		public bool IsConfigured = false;
 
 		public dinputgun(int gunIndex, string gunType, string dialogconfig = null)
 		{
@@ -505,6 +506,12 @@ namespace TeknoparrotAutoXinput
 				MessageBox.Show(errorConfig);
 				return false;
 			}
+
+			IsConfigured = true;
+			if (txt_LightgunTrigger.Text == "") IsConfigured = false;
+			if (txt_LightgunX.Text == "") IsConfigured = false;
+			if (txt_LightgunY.Text == "") IsConfigured = false;
+			if (txt_LightgunStart.Text == "" && txt_LightgunArcadeStartBis.Text == "") IsConfigured = false;
 
 			if (Dialogconfig != null)
 			{

@@ -25,6 +25,7 @@ namespace TeknoparrotAutoXinput
 		private Dictionary<string, JoystickButtonData> buttonData = new Dictionary<string, JoystickButtonData>();
 
 		public string Dialogconfig = null;
+		public bool IsConfigured = false;
 		public dinputshifter(string dialogconfig = null)
 		{
 			Dialogconfig = dialogconfig;
@@ -273,6 +274,13 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
+
+			IsConfigured = true;
+			if (txt_InputDeviceGear1.Text == "") IsConfigured = false;
+			if (txt_InputDeviceGear2.Text == "") IsConfigured = false;
+			if (txt_InputDeviceGear3.Text == "") IsConfigured = false;
+			if (txt_InputDeviceGear4.Text == "") IsConfigured = false;
+			
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
 			if (Dialogconfig != null)
 			{

@@ -253,7 +253,6 @@
 			button6.TabIndex = 15;
 			button6.Text = "button6";
 			button6.UseVisualStyleBackColor = true;
-			button6.Visible = false;
 			button6.Click += button6_Click;
 			// 
 			// button9

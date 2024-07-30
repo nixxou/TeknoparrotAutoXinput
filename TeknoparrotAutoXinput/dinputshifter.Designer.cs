@@ -56,6 +56,7 @@
 			txt_InputDeviceHandbrake = new Krypton.Toolkit.KryptonTextBox();
 			label11 = new Label();
 			txt_InputDeviceClutchPedal = new Krypton.Toolkit.KryptonTextBox();
+			kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
 			((System.ComponentModel.ISupportInitialize)cmb_devicelist).BeginInit();
 			((System.ComponentModel.ISupportInitialize)kryptonPictureBox1).BeginInit();
 			((System.ComponentModel.ISupportInitialize)kryptonPictureBox2).BeginInit();
@@ -297,12 +298,21 @@
 			txt_InputDeviceClutchPedal.Size = new Size(196, 23);
 			txt_InputDeviceClutchPedal.TabIndex = 46;
 			// 
+			// kryptonLabel1
+			// 
+			kryptonLabel1.Location = new Point(56, 403);
+			kryptonLabel1.Name = "kryptonLabel1";
+			kryptonLabel1.Size = new Size(400, 20);
+			kryptonLabel1.TabIndex = 48;
+			kryptonLabel1.Values.Text = "Note : For gear Low/High, you can use keys already used for gear 1 to 6";
+			// 
 			// dinputshifter
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackgroundImageLayout = ImageLayout.None;
 			ClientSize = new Size(800, 450);
+			Controls.Add(kryptonLabel1);
 			Controls.Add(label11);
 			Controls.Add(txt_InputDeviceClutchPedal);
 			Controls.Add(label10);
@@ -372,5 +382,6 @@
 		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceHandbrake;
 		private Label label11;
 		private Krypton.Toolkit.KryptonTextBox txt_InputDeviceClutchPedal;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel1;
 	}
 }

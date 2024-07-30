@@ -24,6 +24,7 @@ namespace TeknoparrotAutoXinput
 		private Thread threadJoystick;
 		private Dictionary<string, JoystickButtonData> buttonData = new Dictionary<string, JoystickButtonData>();
 		public string Dialogconfig = null;
+		public bool IsConfigured = false;
 		public dinputhotas(string dialogconfig = null)
 		{
 			Dialogconfig = dialogconfig;
@@ -309,6 +310,13 @@ namespace TeknoparrotAutoXinput
 
 				}
 			}
+			IsConfigured = true;
+			if (txt_InputDevice0Back.Text == "") IsConfigured = false;
+			if (txt_InputDevice0Start.Text == "") IsConfigured = false;
+			if (txt_InputDevice0LeftThumbInputDevice0Xplus.Text == "") IsConfigured = false;
+			if (txt_InputDevice0LeftThumbInputDevice0Yplus.Text == "") IsConfigured = false;
+			if (txt_InputDevice0A.Text == "") IsConfigured = false;
+
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
 			if (Dialogconfig != null)
 			{

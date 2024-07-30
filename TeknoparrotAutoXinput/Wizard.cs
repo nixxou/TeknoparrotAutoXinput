@@ -28,6 +28,7 @@ using XInput.Wrapper;
 using System.Reflection;
 using Microsoft.Win32;
 using SerialPortLib2;
+using SDL2;
 
 namespace TeknoparrotAutoXinput
 {
@@ -38,8 +39,10 @@ namespace TeknoparrotAutoXinput
 		string SevenZipExe = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "7zip", "7z.exe");
 		string wizardSettingsJson = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)), "wizard.json");
 		string fixesDir = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)), "fixes");
+
 		WizardSettings SavedWizardSettings;
 
+		private bool haveRequiredSoftware = false;
 		private Action<string> handleStdOut;
 		private int progress = 0; // Variable pour stocker la progression
 		private int totalCount = 0; // Total des éléments à traiter
@@ -74,6 +77,21 @@ namespace TeknoparrotAutoXinput
 		int gunB_type = -1;
 		string gunB_json = "";
 
+		int selectController_xinput = 0;
+		int selectController_wheel = 0;
+		int selectController_hotas = 0;
+		int selectController_lightgun = 0;
+		int selectController_guntypeA = -1;
+		int selectController_guntypeB = -1;
+
+		public bool IsWheelConfigured = false;
+		public bool IsShifterConfigured = false;
+		public bool IsHotasConfigured = false;
+		public bool IsGunAConfigured = false;
+		public bool IsGunBConfigured = false;
+
+		FFBDevice ffbWheel = new FFBDevice { Name = "<none", Guid = "" };
+		FFBDevice ffbHotas = new FFBDevice { Name = "<none", Guid = "" };
 
 		public Wizard()
 		{
@@ -84,43 +102,71 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		private void InitializeHandleStdOut()
+		public bool checkControllerStatus()
 		{
-			handleStdOut = delegate (string msg)
+			bool wheel = false;
+			if (selectController_wheel == 0) wheel = true;
+			else if (selectController_wheel == 1 && IsWheelConfigured) wheel = true;
+			else if (selectController_wheel == 2 && IsWheelConfigured && IsShifterConfigured) wheel = true;
+
+			bool hotas = false;
+			if (selectController_hotas == 0) hotas = true;
+			else if (selectController_wheel == 1 && IsHotasConfigured) hotas = true;
+
+			bool gun = false;
+			if (selectController_lightgun == 0) gun = true;
+			if (selectController_lightgun == 1 && IsGunAConfigured) gun = true;
+			if (selectController_lightgun == 2 && IsGunAConfigured && IsGunBConfigured) gun = true;
+
+			lbl_wheel_status.Text = (wheel) ? "Ok" : "Not Ok";
+			lbl_wheel_status.ForeColor = (wheel) ? Color.DarkGreen : Color.Red;
+			lbl_hotas_status.Text = (hotas) ? "Ok" : "Not Ok";
+			lbl_hotas_status.ForeColor = (hotas) ? Color.DarkGreen : Color.Red;
+			lbl_gun_status.Text = (gun) ? "Ok" : "Not Ok";
+			lbl_gun_status.ForeColor = (gun) ? Color.DarkGreen : Color.Red;
+
+			if (tabControl1.SelectedIndex == 2)
 			{
-				string pattern = @"([0-9]*)%";
-				string input = msg;
+				if (wheel && hotas && gun) btn_next.Enabled = true;
+				else btn_next.Enabled = false;
+			}
 
-				Match match = Regex.Match(input, pattern);
+			if (wheel && hotas && gun) return true;
+			return false;
 
-				if (match.Success)
-				{
-					string percentage = match.Groups[1].Value;
-
-					int progress = 0;
-					if (int.TryParse(percentage, out progress))
-					{
-						progress_extract.Invoke(new MethodInvoker(delegate
-						{
-
-							progress_extract.Value = progress;
-							progress_extract.Update();
-
-						}));
-					}
-				}
-				if (msg.Contains("Everything is Ok"))
-				{
-					int progress = 100;
-					progress_extract.Invoke(new MethodInvoker(delegate
-					{
-
-						progress_extract.Visible = false;
-
-					}));
-				}
-			};
 		}
+
+		public void UpdateFFBGuidList()
+		{
+			SDL2.SDL.SDL_Quit();
+			SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
+			SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
+			SDL2.SDL.SDL_JoystickUpdate();
+			for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
+			{
+				var currentJoy = SDL.SDL_JoystickOpen(i);
+				string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
+				{
+
+					const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
+					byte[] guidBuffer = new byte[bufferSize];
+					SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
+					string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
+
+					if (!string.IsNullOrEmpty(guidString))
+					{
+						FFBDevice fFBDevice = new FFBDevice { Name = nameController, Guid = guidString };
+						if (!cmb_ffbguid_hotas.Items.Contains(fFBDevice)) cmb_ffbguid_hotas.Items.Add(fFBDevice);
+						if (!cmb_ffbguid_wheel.Items.Contains(fFBDevice)) cmb_ffbguid_wheel.Items.Add(fFBDevice);
+					}
+					SDL.SDL_JoystickClose(currentJoy);
+				}
+			}
+			SDL2.SDL.SDL_Quit();
+
+		}
+
+		#region GlobalLoadAndTabManagement
 
 		private void Wizard_Load(object sender, EventArgs e)
 		{
@@ -131,75 +177,123 @@ namespace TeknoparrotAutoXinput
 			tabOriginalRegion = tabControl1.Region;
 			tabControl1.Region = new Region(tabControl1.DisplayRectangle);
 
-			//Tab 1 Load
-			btn_next.Enabled = true;
-			btn_previous.Enabled = false;
-
-
-
-
-			bool haveRequiredSoftware = CheckInstalledSoftware();
+			haveRequiredSoftware = CheckInstalledSoftware();
 			CheckRequiredFixes();
 
+			cmb_ffbguid_hotas.Items.Add(new FFBDevice { Name = "<none>", Guid = "" });
+			cmb_ffbguid_wheel.Items.Add(new FFBDevice { Name = "<none>", Guid = "" });
+			UpdateFFBGuidList();
 
 
 			tabPage1_Load();
 
-
-			if (haveRequiredSoftware)
+			if (SavedWizardSettings.tpfolder != "" && Directory.Exists(SavedWizardSettings.tpfolder) && File.Exists(Path.Combine(SavedWizardSettings.tpfolder, "TeknoParrotUi.exe")))
 			{
-				tabControl1.SelectedIndex = SavedWizardSettings.start_tab;
-				if (SavedWizardSettings.tpfolder != "" && Directory.Exists(SavedWizardSettings.tpfolder) && File.Exists(Path.Combine(SavedWizardSettings.tpfolder, "TeknoParrotUi.exe")))
-				{
-					txt_tpfolder.Text = SavedWizardSettings.tpfolder;
-				}
-				if (SavedWizardSettings.linksourcefolderexe != "")
-				{
-					txt_linksourcefolderexe.Text = SavedWizardSettings.linksourcefolderexe;
-				}
+				txt_tpfolder.Text = SavedWizardSettings.tpfolder;
+			}
+			if (SavedWizardSettings.linksourcefolderexe != "")
+			{
+				txt_linksourcefolderexe.Text = SavedWizardSettings.linksourcefolderexe;
+			}
 
-				if (SavedWizardSettings.arcadeXinputData != "") txt_arcadeXinputData.Text = SavedWizardSettings.arcadeXinputData;
-				dwheel_config = SavedWizardSettings.dwheel_config;
-				dhotas_config = SavedWizardSettings.dhotas_config;
-				dshifter_config = SavedWizardSettings.dhotas_config;
-				radio_selectcontroller_arcadestick_yes.Checked = (SavedWizardSettings.selectController_xinput == 1);
-				radio_selectcontroller_dwheel_shifter.Checked = (SavedWizardSettings.selectController_wheel == 2);
-				radio_selectcontroller_dwheel_yes.Checked = (SavedWizardSettings.selectController_wheel == 1);
-				radio_selectcontroller_dhotas_yes.Checked = (SavedWizardSettings.selectController_hotas == 1);
-				radio_selectcontroller_gun_1.Checked = (SavedWizardSettings.selectController_lightgun == 1);
-				radio_selectcontroller_gun_2.Checked = (SavedWizardSettings.selectController_lightgun == 2);
+			if (SavedWizardSettings.arcadeXinputData != "") txt_arcadeXinputData.Text = SavedWizardSettings.arcadeXinputData;
+			dwheel_config = SavedWizardSettings.dwheel_config;
+			dhotas_config = SavedWizardSettings.dhotas_config;
+			dshifter_config = SavedWizardSettings.dhotas_config;
+			radio_selectcontroller_arcadestick_yes.Checked = (SavedWizardSettings.selectController_xinput == 1);
+			radio_selectcontroller_dwheel_shifter.Checked = (SavedWizardSettings.selectController_wheel == 2);
+			radio_selectcontroller_dwheel_yes.Checked = (SavedWizardSettings.selectController_wheel == 1);
+			radio_selectcontroller_dhotas_yes.Checked = (SavedWizardSettings.selectController_hotas == 1);
+			radio_selectcontroller_gun_1.Checked = (SavedWizardSettings.selectController_lightgun == 1);
+			radio_selectcontroller_gun_2.Checked = (SavedWizardSettings.selectController_lightgun == 2);
 
-				if (SavedWizardSettings.selectController_guntypeA >= 0) cmb_gunA_type.SelectedIndex = SavedWizardSettings.selectController_guntypeA;
-				if (SavedWizardSettings.selectController_guntypeB >= 0) cmb_gunB_type.SelectedIndex = SavedWizardSettings.selectController_guntypeB;
+			if (SavedWizardSettings.selectController_guntypeA >= 0) cmb_gunA_type.SelectedIndex = SavedWizardSettings.selectController_guntypeA;
+			if (SavedWizardSettings.selectController_guntypeB >= 0) cmb_gunB_type.SelectedIndex = SavedWizardSettings.selectController_guntypeB;
 
 
-				this.gunA_type = SavedWizardSettings.gunA_type;
-				this.gunA_json = SavedWizardSettings.gunA_json;
-				this.gunA_comport = SavedWizardSettings.gunA_comport;
+			this.gunA_type = SavedWizardSettings.gunA_type;
+			this.gunA_json = SavedWizardSettings.gunA_json;
+			this.gunA_comport = SavedWizardSettings.gunA_comport;
 
-				this.gunB_comport = SavedWizardSettings.gunB_comport;
-				this.gunB_type = SavedWizardSettings.gunB_type;
-				this.gunB_json = SavedWizardSettings.gunB_json;
+			this.gunB_comport = SavedWizardSettings.gunB_comport;
+			this.gunB_type = SavedWizardSettings.gunB_type;
+			this.gunB_json = SavedWizardSettings.gunB_json;
 
+			this.IsGunAConfigured = SavedWizardSettings.IsGunAConfigured;
+			this.IsGunBConfigured = SavedWizardSettings.IsGunBConfigured;
+			this.IsHotasConfigured = SavedWizardSettings.IsHotasConfigured;
+			this.IsWheelConfigured = SavedWizardSettings.IsWheelConfigured;
 
+			var savedFFBWheel = new FFBDevice { Name = SavedWizardSettings.ffbWheel_name, Guid = SavedWizardSettings.ffbWheel_guid };
+			var savedFFBHotas = new FFBDevice { Name = SavedWizardSettings.ffbHotas_name, Guid = SavedWizardSettings.ffbHotas_guid };
+
+			if (!cmb_ffbguid_wheel.Items.Contains(savedFFBWheel)) cmb_ffbguid_wheel.Items.Add(savedFFBWheel);
+			if (!cmb_ffbguid_hotas.Items.Contains(savedFFBHotas)) cmb_ffbguid_hotas.Items.Add(savedFFBHotas);
+			foreach (FFBDevice fFBDevice in cmb_ffbguid_hotas.Items)
+			{
+				if (fFBDevice.Guid == SavedWizardSettings.ffbHotas_guid) ffbHotas = fFBDevice;
+			}
+			foreach (FFBDevice fFBDevice in cmb_ffbguid_wheel.Items)
+			{
+				if (fFBDevice.Guid == SavedWizardSettings.ffbWheel_guid) ffbWheel = fFBDevice;
 			}
 
 
+			cmb_ffbguid_hotas.SelectedIndex = 0;
+			if (cmb_ffbguid_hotas.Items.Contains(ffbHotas)) cmb_ffbguid_hotas.SelectedIndex = cmb_ffbguid_hotas.Items.IndexOf(ffbHotas);
+			cmb_ffbguid_wheel.SelectedIndex = 0;
+			if (cmb_ffbguid_wheel.Items.Contains(ffbWheel)) cmb_ffbguid_wheel.SelectedIndex = cmb_ffbguid_hotas.Items.IndexOf((ffbWheel));
+			timer_ffb_update.Enabled = true;
 
+			checkControllerStatus();
 
+			cmb_gpu.SelectedIndex = SavedWizardSettings.gpu;
+			cmb_resolution.SelectedIndex = SavedWizardSettings.resolution;
+			txt_mariokartId.Text = SavedWizardSettings.mariokartId;
+			txt_apm3id.Text = SavedWizardSettings.apm3id;
+			txt_customName.Text = SavedWizardSettings.customName;
 
-
-
-
-
+			int max_tab = 0;
+			for (int i = 0; i < 4; i++)
+			{
+				max_tab = i;
+				if (i == 0 && !verifDataTab1()) break;
+				if (i == 1 && !verifDataTab2()) break;
+				if (i == 2 && !verifDataTab3()) break;
+			}
+			int start_tab = SavedWizardSettings.start_tab;
+			if (start_tab > max_tab) start_tab = max_tab;
+			tabControl1.SelectedIndex = start_tab;
+			if (start_tab == 0)
+			{
+				btn_next.Enabled = verifDataTab1();
+				btn_previous.Enabled = false;
+			}
 			SavedWizardSettings.disableSave = false;
-
-
 		}
 
 		private void btn_next_Click(object sender, EventArgs e)
 		{
 			bool canMoveNext = true;
+
+			if (tabControl1.SelectedIndex == 0 && haveRequiredSoftware == false)
+			{
+				DialogResult result = MessageBox.Show(
+					"All required software are not installed, are you sure to continue?",
+					"Warning",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Warning
+				);
+
+				// Obtenir la réponse dans une variable booléenne
+				bool userWantsToContinue = result == DialogResult.Yes;
+				if (!userWantsToContinue)
+				{
+					canMoveNext = false;
+				}
+			}
+
+
 			/*
 			bool canMoveNext = false;
 			switch (tabControl1.SelectedIndex)
@@ -243,23 +337,27 @@ namespace TeknoparrotAutoXinput
 			//MessageBox.Show(currentTabName);
 			if (currentTabName == "tabPage1")
 			{
+				haveRequiredSoftware = CheckInstalledSoftware();
 				btn_previous.Enabled = false;
-				btn_next.Enabled = true;
+				btn_next.Enabled = verifDataTab1();
 			}
 			else if (currentTabName == "tabPage2")
 			{
 				btn_previous.Enabled = true;
-				if (txt_linksourcefolderexe.Text != "" && txt_tpfolder.Text != "") btn_next.Enabled = true;
+				btn_next.Enabled = verifDataTab2();
+
 			}
 			else if (currentTabName == "tabPage3")
 			{
 				btn_previous.Enabled = true;
-				btn_next.Enabled = true;
+				btn_next.Enabled = verifDataTab3();
 			}
 			else if (currentTabName == "tabPage4")
 			{
 				btn_previous.Enabled = true;
 				btn_next.Enabled = false;
+				chk_installpatch.Text = $"Install and overwrite patches in {Path.Combine(txt_tpfolder.Text, "pathAutoXinputLinks")}\n and {txt_linksourcefolderexe.Text}";
+
 			}
 			else
 			{
@@ -268,21 +366,55 @@ namespace TeknoparrotAutoXinput
 			//MessageBox.Show(currentTabName);
 		}
 
-		/*
+
 		private bool verifDataTab1()
 		{
-			if (txt_linksourcefolderexe.Text != "" && txt_tpfolder.Text != "") return true;
-			return false;
+			bool valid = true;
+			if (String.IsNullOrEmpty(txt_patchArchive.Text) || !File.Exists(txt_patchArchive.Text))
+			{
+				valid = false;
+			}
+			if (grp_fixes.Enabled && lbl_fixes_status.ForeColor == Color.Red)
+			{
+				valid = false;
+			}
+			return valid;
 		}
 
 		private bool verifDataTab2()
 		{
-			return false;
+			bool valid = true;
+			if (String.IsNullOrEmpty(txt_tpfolder.Text) || !File.Exists(Path.Combine(Path.Combine(txt_tpfolder.Text, "TeknoParrotUi.exe"))))
+			{
+				valid = false;
+			}
+			if (String.IsNullOrEmpty(txt_linksourcefolderexe.Text) || !Directory.Exists(Directory.GetParent(txt_linksourcefolderexe.Text).FullName))
+			{
+				valid = false;
+			}
+			return valid;
 		}
-		*/
+
+		private bool verifDataTab3()
+		{
+			return checkControllerStatus();
+		}
+
+		private bool verifDataTab4()
+		{
+			if (cmb_gpu.SelectedIndex < 0) return false;
+			if (cmb_resolution.SelectedIndex < 0) return false;
+			if (txt_apm3id.Text == "") return false;
+			if (txt_mariokartId.Text == "") return false;
+			if (txt_customName.Text == "") return false;
+			return true;
+		}
+
+		#endregion
 
 		//Tab 1
 
+		#region Tab1
 		private void tabPage1_Load()
 		{
 			string parentDir = Path.GetDirectoryName(currentDir);
@@ -292,6 +424,8 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
+
+
 		private void btn_selectTP_Click(object sender, EventArgs e)
 		{
 			using (var fbd = new FolderBrowserDialog())
@@ -300,16 +434,25 @@ namespace TeknoparrotAutoXinput
 
 				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
 				{
-					string tpui = Path.Combine(fbd.SelectedPath, "TeknoParrotUi.exe");
-					if (File.Exists(tpui))
+					
+					if (!Utils.IsEligibleHardLink(fbd.SelectedPath))
 					{
-						txt_tpfolder.Text = fbd.SelectedPath;
+						MessageBox.Show("The drive does not seems eligible for hardlink (Must be NTFS and Windows 10 or newer)");
 					}
 					else
 					{
-						MessageBox.Show($"Can't find {tpui}");
+						string tpui = Path.Combine(fbd.SelectedPath, "TeknoParrotUi.exe");
+						if (File.Exists(tpui))
+						{
+							string previous = txt_tpfolder.Text;
+							txt_tpfolder.Text = fbd.SelectedPath;
+							if (txt_tpfolder.Text == previous) txt_tpfolder_TextChanged(null, null);
+						}
+						else
+						{
+							MessageBox.Show($"Can't find {tpui}");
+						}
 					}
-
 				}
 			}
 		}
@@ -319,11 +462,22 @@ namespace TeknoparrotAutoXinput
 			UpdateTPData();
 			if (txt_tpfolder.Text != "")
 			{
+				if (!File.Exists(Path.Combine(txt_tpfolder.Text, "TeknoParrotUi.exe")))
+				{
+					txt_tpfolder.Text = "";
+					lbl_tpfolder_status.ForeColor = Color.Red;
+					lbl_tpfolder_status.Text = "Not Ok";
+				}
+				else
+				{
+					lbl_tpfolder_status.ForeColor = Color.DarkGreen;
+					lbl_tpfolder_status.Text = "Ok";
+				}
 				groupBox2.Enabled = true;
 				SavedWizardSettings.tpfolder = txt_tpfolder.Text;
 				SavedWizardSettings.Save(wizardSettingsJson);
 			}
-
+			btn_next.Enabled = verifDataTab2();
 		}
 
 		private void UpdateTPData()
@@ -551,94 +705,67 @@ namespace TeknoparrotAutoXinput
 			Process.Start(startInfo);
 		}
 
-		private bool CheckRequiredFixes()
-		{
-			if (!Directory.Exists(fixesDir)) Directory.CreateDirectory(fixesDir);
-			lbl_foldernameTPfixes.Text = fixesDir;
-			return true;
-		}
-
-		private bool CheckInstalledSoftware()
-		{
-			bool vigem = false;
-			string vigemPath = Utils.checkInstalled("ViGEm");
-			if (!string.IsNullOrEmpty(vigemPath)) vigem = true;
-
-			bool vjoy = false;
-			string vjoyPath = Utils.checkInstalled("vJoy");
-			if (!string.IsNullOrEmpty(vjoyPath)) vjoy = true;
-
-			bool riva = false;
-			string rivaPath = Utils.checkInstalled("RivaTuner Statistics");
-			if (!string.IsNullOrEmpty(rivaPath))
-			{
-				riva = true;
-			}
-
-			bool xenos = false;
-			string XenosPath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.exe");
-			if (File.Exists(XenosPath)) xenos = true;
-
-			if (vigem)
-			{
-				lbl_installed_vigem.Text = "Installed";
-				lbl_installed_vigem.ForeColor = Color.DarkGreen;
-			}
-			if (vjoy)
-			{
-				lbl_installed_vjoy.Text = "Installed";
-				lbl_installed_vjoy.ForeColor = Color.DarkGreen;
-			}
-			if (riva)
-			{
-				lbl_installed_rivatuner.Text = "Installed";
-				lbl_installed_rivatuner.ForeColor = Color.DarkGreen;
-			}
-			if (xenos)
-			{
-				lbl_installed_xenos.Text = "Installed";
-				lbl_installed_xenos.ForeColor = Color.DarkGreen;
-			}
-			if (vigem && vjoy && riva && xenos)
-			{
-
-				if (tabControl1.SelectedTab.Text == "tabPage0") btn_next.Enabled = true;
-				return true;
-			}
-			return false;
-
-		}
-
 		private void btn_install_riva_Click(object sender, EventArgs e)
 		{
-			string exePath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "RTSSSetup736.exe");
-			string exeDir = Path.GetDirectoryName(exePath);
-			Process process = new Process();
-			process.StartInfo.FileName = exePath;
-			process.StartInfo.WorkingDirectory = exeDir;
-			process.StartInfo.UseShellExecute = true;
-			process.StartInfo.Verb = "runas";
-			process.Start();
-			process.WaitForExit();
+			try
+			{
+				string exePath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "RTSSSetup736.exe");
+				string exeDir = Path.GetDirectoryName(exePath);
+				Process process = new Process();
+				process.StartInfo.FileName = exePath;
+				process.StartInfo.WorkingDirectory = exeDir;
+				process.StartInfo.UseShellExecute = true;
+				process.StartInfo.Verb = "runas";
+				process.Start();
+				process.WaitForExit();
+			}
+			catch (Exception ex) { }
 
 			Thread.Sleep(1000);
-			CheckInstalledSoftware();
+			haveRequiredSoftware = CheckInstalledSoftware();
 		}
 
 		private void btn_install_vjoy_Click(object sender, EventArgs e)
 		{
-			string exePath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "vJoySetup.exe");
-			string exeDir = Path.GetDirectoryName(exePath);
-			Process process = new Process();
-			process.StartInfo.FileName = exePath;
-			process.StartInfo.WorkingDirectory = exeDir;
-			process.StartInfo.UseShellExecute = true;
-			process.StartInfo.Verb = "runas";
-			process.Start();
-			process.WaitForExit();
+			try
+			{
+				string exePath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "vJoySetup.exe");
+				string exeDir = Path.GetDirectoryName(exePath);
+				Process process = new Process();
+				process.StartInfo.FileName = exePath;
+				process.StartInfo.WorkingDirectory = exeDir;
+				process.StartInfo.UseShellExecute = true;
+				process.StartInfo.Verb = "runas";
+				process.Start();
+				process.WaitForExit();
+			}
+			catch (Exception ex) { }
+
 
 			Thread.Sleep(1000);
-			CheckInstalledSoftware();
+			haveRequiredSoftware = CheckInstalledSoftware();
+		}
+
+		private void btn_install_vigem_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				string exePath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "ViGEmBusSetup_x64.msi");
+				string exeDir = Path.GetDirectoryName(exePath);
+
+				Process process = new Process();
+				process.StartInfo.FileName = "msiexec";
+				process.StartInfo.Arguments = $"/i \"{exePath}\""; // /i for install
+				process.StartInfo.WorkingDirectory = exeDir;
+				process.StartInfo.UseShellExecute = true;
+				process.StartInfo.Verb = "runas";
+				process.Start();
+				process.WaitForExit();
+			}
+			catch (Exception ex) { }
+
+			Thread.Sleep(1000);
+			haveRequiredSoftware = CheckInstalledSoftware();
 		}
 
 		private void btn_install_xenos_Click(object sender, EventArgs e)
@@ -659,9 +786,137 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
-			CheckInstalledSoftware();
+			else MessageBox.Show("Already installed");
+			haveRequiredSoftware = CheckInstalledSoftware();
 		}
 
+		private void groupBox5_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_selectPatchArchive_Click(object sender, EventArgs e)
+		{
+			using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog())
+			{
+				openFileDialog.Filter = "Fichiers 7z (TAXPatches.*.7z)|TAXPatches.*.7z|Tous les fichiers (*.*)|*.*";
+				openFileDialog.Title = "Select TAXPatches.*.7z";
+
+				if (openFileDialog.ShowDialog() == DialogResult.OK)
+				{
+					txt_patchArchive.Text = openFileDialog.FileName;
+				}
+			}
+			btn_next.Enabled = verifDataTab1();
+		}
+
+		private void txt_patchArchive_TextChanged(object sender, EventArgs e)
+		{
+			cacheCheckFix.Clear();
+			grp_fixes.Enabled = false;
+			if (txt_patchArchive.Text != "" && File.Exists(txt_patchArchive.Text) && txt_patchArchive.Text.ToLower().EndsWith(".7z"))
+			{
+				string fileContent = "";
+				try
+				{
+					using (SevenZipExtractor extractor = new SevenZipExtractor(txt_patchArchive.Text))
+					{
+						string fileToExtract = "patch.json";
+
+						using (MemoryStream ms = new MemoryStream())
+						{
+							extractor.ExtractFile(fileToExtract, ms);
+							ms.Seek(0, SeekOrigin.Begin);
+							using (StreamReader reader = new StreamReader(ms))
+							{
+								fileContent = reader.ReadToEnd();
+							}
+						}
+					}
+				}
+				catch
+				{
+					fileContent = "";
+				}
+				if (fileContent == "")
+				{
+					txt_patchArchive.Text = "";
+					SavedWizardSettings.patchArchive = "";
+					SavedWizardSettings.Save(wizardSettingsJson);
+					MessageBox.Show("Invalid Patch File");
+
+					return;
+				}
+
+				SavedWizardSettings.patchArchive = txt_patchArchive.Text;
+				SavedWizardSettings.Save(wizardSettingsJson);
+
+				PatchArchive patchInfoJson = JsonConvert.DeserializeObject<PatchArchive>(fileContent);
+				if (patchInfoJson.FixesArchive.Count() > 0)
+				{
+					grp_fixes.Enabled = true;
+
+					foreach (var fix in patchInfoJson.FixesArchive)
+					{
+						ExpectedArchivesFix.Add(fix.Key, fix.Value.source_md5);
+					}
+				}
+
+				//MessageBox.Show(fileContent);
+
+
+			}
+			else
+			{
+				txt_patchArchive.Text = "";
+				SavedWizardSettings.patchArchive = "";
+				SavedWizardSettings.Save(wizardSettingsJson);
+				return;
+			}
+		}
+
+
+
+		private void btn_verifyfix_Click(object sender, EventArgs e)
+		{
+			var missingFiles = VerifyFiles(fixesDir, ExpectedArchivesFix);
+
+			if (missingFiles.Count > 0)
+			{
+				MessageBox.Show("Missing files:\n" + string.Join("\n", missingFiles), "File verification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				lbl_fixes_status.Text = missingFiles.Count() + " Files Missing";
+				lbl_fixes_status.ForeColor = Color.Red;
+			}
+			else
+			{
+				MessageBox.Show("All needed files are here !", "File verification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				lbl_fixes_status.Text = "All OK !";
+				lbl_fixes_status.ForeColor = Color.DarkGreen;
+			}
+			btn_next.Enabled = verifDataTab1();
+		}
+
+		private void grp_fixes_EnabledChanged(object sender, EventArgs e)
+		{
+			lbl_fixes_status.Visible = grp_fixes.Enabled;
+			if (grp_fixes.Enabled)
+			{
+				var missingFiles = VerifyFiles(fixesDir, ExpectedArchivesFix);
+				if (missingFiles.Count() == 0)
+				{
+					lbl_fixes_status.Text = "All OK !";
+					lbl_fixes_status.ForeColor = Color.DarkGreen;
+				}
+				else
+				{
+					lbl_fixes_status.Text = missingFiles.Count() + " Files Missing";
+					lbl_fixes_status.ForeColor = Color.Red;
+				}
+			}
+		}
+		#endregion
+
+		#region Tab2
 
 
 		private void btn_scangame_Click(object sender, EventArgs e)
@@ -683,7 +938,6 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			//Dictionary<string, long> GameCrcList = new Dictionary<string, long>();
 			List<long> gameSizeList = new List<long>();
 			List<long> gameSecondarySizeList = new List<long>();
 
@@ -698,27 +952,6 @@ namespace TeknoparrotAutoXinput
 					if (!gameSecondarySizeList.Contains(secondExec.size)) gameSecondarySizeList.Add(secondExec.size);
 				}
 			}
-
-			/*
-			foreach (var gameExecutableData in gameExecutableDatas)
-			{
-				foreach (var mainExec in gameExecutableData.Value.mainExecutable.Values)
-				{
-					if (GameCrcList.ContainsKey(mainExec.crc))
-					{
-						if (GameCrcList[mainExec.crc] != mainExec.size)
-						{
-							Console.WriteLine($"Error for {gameExecutableData.Key} : {mainExec.crc}");
-						}
-					}
-					else
-					{
-						GameCrcList.Add(mainExec.crc, mainExec.size);
-					}
-					if(!gameSizeList.Contains(mainExec.size)) gameSizeList.Add(mainExec.size);
-				}
-			}
-			*/
 
 			Dictionary<string, List<string>> suspectedGameFile = new Dictionary<string, List<string>>();
 			Dictionary<string, List<string>> suspectedSecondaryGameFile = new Dictionary<string, List<string>>();
@@ -1516,7 +1749,541 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
+		private void txt_linksourcefolderexe_TextChanged_1(object sender, EventArgs e)
+		{
+			if (txt_linksourcefolderexe.Text != "")
+			{
+				if (!Directory.Exists(Directory.GetParent(txt_linksourcefolderexe.Text).FullName))
+				{
+					txt_linksourcefolderexe.Text = "";
+					lbl_linksourcefolderexe_status.ForeColor = Color.Red;
+					lbl_linksourcefolderexe_status.Text = "Not Ok";
+				}
+				else
+				{
+					lbl_linksourcefolderexe_status.ForeColor = Color.DarkGreen;
+					lbl_linksourcefolderexe_status.Text = "Ok";
+				}
+				if (tabControl1.SelectedTab.Text == "tabPage1") btn_next.Enabled = true;
+				SavedWizardSettings.linksourcefolderexe = txt_linksourcefolderexe.Text;
+				SavedWizardSettings.Save(wizardSettingsJson);
+			}
+			btn_next.Enabled = verifDataTab2();
+		}
+
+		#endregion
+
+		#region Tab3
+
+
+
+		private void timer_controllerUpdate_Tick(object sender, EventArgs e)
+		{
+			if (this == Form.ActiveForm && tabControl1.SelectedIndex == 2)
+			{
+				if (radio_selectcontroller_arcadestick_yes.Checked)
+				{
+
+					groupBox_xinputarcade.Enabled = true;
+
+					lbl_gamepadlist.Text = "";
+					lbl_arcadelist.Text = "";
+					lbl_wheellist.Text = "";
+					UpdateGamePadList();
+					foreach (var gp in _connectedGamePad)
+					{
+						string displayControllerName = "XINPUT" + (gp.Value.XinputSlot + 1).ToString() + " " + gp.Value.ControllerName;
+
+						if (gp.Value.Type == "gamepad") lbl_gamepadlist.Text += $"{displayControllerName}, ";
+						if (gp.Value.Type == "arcade") lbl_arcadelist.Text += $"{displayControllerName}, ";
+						if (gp.Value.Type == "wheel") lbl_wheellist.Text += $"{displayControllerName}, ";
+					}
+					lbl_arcadelist.Text = lbl_arcadelist.Text.TrimEnd().TrimEnd(',');
+					lbl_gamepadlist.Text = lbl_gamepadlist.Text.TrimEnd().TrimEnd(',');
+					lbl_wheellist.Text = lbl_wheellist.Text.TrimEnd().TrimEnd(',');
+				}
+			}
+			else
+			{
+				groupBox_xinputarcade.Enabled = false;
+			}
+
+		}
+
+
+
+		private void radio_selectcontroller_arcadestick_yes_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radio_selectcontroller_arcadestick_yes.Checked)
+			{
+				groupBox_xinputarcade.Enabled = true;
+				timer_controllerUpdate.Enabled = true;
+				SavedWizardSettings.selectController_xinput = 1;
+				SavedWizardSettings.Save(wizardSettingsJson);
+			}
+		}
+
+		private void groupBox_xinputarcade_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void radio_selectcontroller_dwheel_yes_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radio_selectcontroller_dwheel_yes.Checked)
+			{
+				selectController_wheel = 1;
+				btn_configure_wheel.Visible = true;
+				btn_configure_shifter.Visible = false;
+				SavedWizardSettings.selectController_wheel = 1;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+				lbl_ffb_wheel.Visible = true;
+				cmb_ffbguid_wheel.Visible = true;
+			}
+		}
+
+		private void radio_selectcontroller_dwheel_shifter_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radio_selectcontroller_dwheel_shifter.Checked)
+			{
+				selectController_wheel = 2;
+				btn_configure_wheel.Visible = true;
+				btn_configure_shifter.Visible = true;
+				SavedWizardSettings.selectController_wheel = 2;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+				lbl_ffb_wheel.Visible = true;
+				cmb_ffbguid_wheel.Visible = true;
+			}
+		}
+
+		private void radio_selectcontroller_dwheel_no_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radio_selectcontroller_dwheel_no.Checked)
+			{
+				selectController_wheel = 0;
+				btn_configure_wheel.Visible = false;
+				btn_configure_shifter.Visible = false;
+				SavedWizardSettings.selectController_wheel = 0;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+				lbl_ffb_wheel.Visible = false;
+				cmb_ffbguid_wheel.Visible = false;
+			}
+		}
+
+		private void radio_selectcontroller_dhotas_yes_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radio_selectcontroller_dhotas_yes.Checked)
+			{
+				selectController_hotas = 1;
+				btn_configure_hotas.Visible = true;
+				SavedWizardSettings.selectController_hotas = 1;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+				lbl_ffb_hotas.Visible = true;
+				cmb_ffbguid_hotas.Visible = true;
+			}
+		}
+
+		private void radio_selectcontroller_dhotas_no_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radio_selectcontroller_dhotas_no.Checked)
+			{
+				selectController_hotas = 0;
+				btn_configure_hotas.Visible = false;
+				SavedWizardSettings.selectController_hotas = 0;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+				lbl_ffb_hotas.Visible = false;
+				cmb_ffbguid_hotas.Visible = false;
+			}
+		}
+
+		private void radio_selectcontroller_gun_no_CheckedChanged(object sender, EventArgs e)
+		{
+			btn_configure_gunA.Visible = btn_configure_gunB.Visible = false;
+			if (cmb_gunA_type.SelectedIndex >= 0 && !radio_selectcontroller_gun_no.Checked) btn_configure_gunA.Visible = true;
+			if (cmb_gunB_type.SelectedIndex >= 0 && radio_selectcontroller_gun_2.Checked) btn_configure_gunB.Visible = true;
+
+			if (radio_selectcontroller_gun_no.Checked)
+			{
+				selectController_lightgun = 0;
+				kryptonLabel23.Visible = cmb_gunA_type.Visible = false;
+				kryptonLabel24.Visible = cmb_gunB_type.Visible = false;
+				btn_configure_gunA.Visible = false;
+				btn_configure_gunB.Visible = false;
+				SavedWizardSettings.selectController_lightgun = 0;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+			}
+		}
+
+		private void radio_selectcontroller_gun_1_CheckedChanged(object sender, EventArgs e)
+		{
+			btn_configure_gunA.Visible = btn_configure_gunB.Visible = false;
+			if (cmb_gunA_type.SelectedIndex >= 0 && !radio_selectcontroller_gun_no.Checked) btn_configure_gunA.Visible = true;
+			if (cmb_gunB_type.SelectedIndex >= 0 && radio_selectcontroller_gun_2.Checked) btn_configure_gunB.Visible = true;
+
+			if (radio_selectcontroller_gun_1.Checked)
+			{
+				selectController_lightgun = 1;
+				kryptonLabel23.Visible = cmb_gunA_type.Visible = true;
+				kryptonLabel24.Visible = cmb_gunB_type.Visible = false;
+				SavedWizardSettings.selectController_lightgun = 1;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+			}
+		}
+
+		private void radio_selectcontroller_gun_2_CheckedChanged(object sender, EventArgs e)
+		{
+			btn_configure_gunA.Visible = btn_configure_gunB.Visible = false;
+			if (cmb_gunA_type.SelectedIndex >= 0 && !radio_selectcontroller_gun_no.Checked) btn_configure_gunA.Visible = true;
+			if (cmb_gunB_type.SelectedIndex >= 0 && radio_selectcontroller_gun_2.Checked) btn_configure_gunB.Visible = true;
+
+			if (radio_selectcontroller_gun_2.Checked)
+			{
+				selectController_lightgun = 2;
+				kryptonLabel23.Visible = cmb_gunA_type.Visible = true;
+				kryptonLabel24.Visible = cmb_gunB_type.Visible = true;
+				SavedWizardSettings.selectController_lightgun = 2;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+			}
+		}
+
+		private void radio_selectcontroller_arcadestick_no_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radio_selectcontroller_arcadestick_no.Checked)
+			{
+				groupBox_xinputarcade.Enabled = false;
+				timer_controllerUpdate.Enabled = false;
+				SavedWizardSettings.selectController_xinput = 0;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+			}
+		}
+
+		private void btn_configure_wheel_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputwheel(dwheel_config);
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				dwheel_config = frm.Dialogconfig;
+				IsWheelConfigured = frm.IsConfigured;
+				SavedWizardSettings.IsWheelConfigured = IsWheelConfigured;
+				SavedWizardSettings.dwheel_config = dwheel_config;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+			}
+		}
+
+		private void txt_arcadeXinputData_TextChanged(object sender, EventArgs e)
+		{
+			SavedWizardSettings.arcadeXinputData = txt_arcadeXinputData.Text;
+			SavedWizardSettings.Save(wizardSettingsJson);
+		}
+
+		private void btn_configure_shifter_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputshifter(dshifter_config);
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				dshifter_config = frm.Dialogconfig;
+				IsShifterConfigured = frm.IsConfigured;
+				SavedWizardSettings.IsShifterConfigured = IsShifterConfigured;
+				SavedWizardSettings.dshifter_config = dshifter_config;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+			}
+		}
+
+		private void btn_configure_hotas_Click(object sender, EventArgs e)
+		{
+			var frm = new dinputhotas(dhotas_config);
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				dhotas_config = frm.Dialogconfig;
+				IsHotasConfigured = frm.IsConfigured;
+				SavedWizardSettings.IsHotasConfigured = IsHotasConfigured;
+				SavedWizardSettings.dhotas_config = dhotas_config;
+				SavedWizardSettings.Save(wizardSettingsJson);
+				checkControllerStatus();
+			}
+		}
+
+
+		private void cmb_gunA_type_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!SavedWizardSettings.disableSave)
+			{
+				gunA_json = "";
+				gunA_comport = -1;
+				IsGunAConfigured = false;
+				SavedWizardSettings.IsGunAConfigured = false;
+				SavedWizardSettings.gunA_json = "";
+				SavedWizardSettings.gunA_comport = -1;
+				checkControllerStatus();
+			}
+			SavedWizardSettings.selectController_guntypeA = cmb_gunA_type.SelectedIndex;
+			SavedWizardSettings.Save(wizardSettingsJson);
+			if (cmb_gunA_type.SelectedIndex >= 0 && !radio_selectcontroller_gun_no.Checked) btn_configure_gunA.Visible = true;
+			else btn_configure_gunA.Visible = false;
+		}
+
+		private void cmb_gunB_type_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!SavedWizardSettings.disableSave)
+			{
+				gunB_json = "";
+				gunB_comport = -1;
+				IsGunBConfigured = false;
+				SavedWizardSettings.IsGunBConfigured = false;
+				SavedWizardSettings.gunB_json = "";
+				SavedWizardSettings.gunB_comport = -1;
+				checkControllerStatus();
+			}
+			SavedWizardSettings.selectController_guntypeB = cmb_gunB_type.SelectedIndex;
+			SavedWizardSettings.Save(wizardSettingsJson);
+			if (cmb_gunB_type.SelectedIndex >= 0 && radio_selectcontroller_gun_2.Checked) btn_configure_gunB.Visible = true;
+			else btn_configure_gunB.Visible = false;
+
+		}
+
+
+		private void btn_configure_gunA_Click(object sender, EventArgs e)
+		{
+			string config = gunA_json;
+			int selected_index = cmb_gunA_type.SelectedIndex;
+			if (selected_index <= 3)
+			{
+				var frm = new gun_preconfig(selected_index, 1, config);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunA_json = frm.Dialogconfig;
+					IsGunAConfigured = true;
+
+					SavedWizardSettings.gunA_json = gunA_json;
+					SavedWizardSettings.IsGunAConfigured = IsGunAConfigured;
+					SavedWizardSettings.Save(wizardSettingsJson);
+					checkControllerStatus();
+				}
+			}
+			else
+			{
+				string typeGunTxt = "guncon1";
+				if (selected_index == 4) { typeGunTxt = "guncon1"; }
+				if (selected_index == 5) { typeGunTxt = "guncon2"; }
+				if (selected_index == 6) { typeGunTxt = "wiimote"; }
+
+				var frm = new dinputgun(1, typeGunTxt, config);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					var json = frm.Dialogconfig;
+					gunA_json = json;
+					IsGunAConfigured = frm.IsConfigured;
+					SavedWizardSettings.gunA_json = gunA_json;
+					SavedWizardSettings.IsGunAConfigured = IsGunAConfigured;
+					SavedWizardSettings.Save(wizardSettingsJson);
+					checkControllerStatus();
+				}
+			}
+		}
+
+
+		private void btn_configure_gunB_Click(object sender, EventArgs e)
+		{
+			string config = gunB_json;
+			int selected_index = cmb_gunB_type.SelectedIndex;
+			if (selected_index <= 3)
+			{
+				var frm = new gun_preconfig(selected_index, 2, config);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunB_json = frm.Dialogconfig;
+					IsGunBConfigured = true;
+
+					SavedWizardSettings.gunB_json = gunB_json;
+					SavedWizardSettings.IsGunBConfigured = IsGunBConfigured;
+					SavedWizardSettings.Save(wizardSettingsJson);
+					checkControllerStatus();
+				}
+			}
+			else
+			{
+				string typeGunTxt = "guncon1";
+				if (selected_index == 4) { typeGunTxt = "guncon1"; }
+				if (selected_index == 5) { typeGunTxt = "guncon2"; }
+				if (selected_index == 6) { typeGunTxt = "wiimote"; }
+
+				var frm = new dinputgun(2, typeGunTxt, config);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					var json = frm.Dialogconfig;
+					gunB_json = json;
+					IsGunBConfigured = frm.IsConfigured;
+					SavedWizardSettings.gunB_json = gunB_json;
+					SavedWizardSettings.IsGunBConfigured = IsGunBConfigured;
+					SavedWizardSettings.Save(wizardSettingsJson);
+					checkControllerStatus();
+				}
+			}
+
+		}
+		#endregion
+
+
+
+
+		#region Utils
+
 		//Utils
+
+		private List<string> VerifyFiles(string directoryPath, Dictionary<string, string> expectedFiles)
+		{
+			var missingFiles = new List<string>();
+			var currentFiles = Directory.GetFiles(directoryPath);
+			var currentFilesSet = new HashSet<string>(currentFiles);
+
+			foreach (var filePath in currentFiles)
+			{
+				var fileInfo = new FileInfo(filePath);
+				var fileName = Path.GetFileName(filePath);
+
+				if (expectedFiles.ContainsKey(fileName))
+				{
+					if (!cacheCheckFix.TryGetValue(fileName, out var metadata) || metadata.LastModified != fileInfo.LastWriteTime || metadata.Size != fileInfo.Length)
+					{
+						metadata = new CacheMetadata
+						{
+							LastModified = fileInfo.LastWriteTime,
+							Size = fileInfo.Length,
+							Md5 = GetMd5HashAsString(filePath)
+						};
+						cacheCheckFix[fileName] = metadata;
+					}
+
+					var isOk = metadata.Md5 == expectedFiles[fileName];
+					if (!isOk)
+					{
+						missingFiles.Add($"{fileName} (Mismatch)");
+					}
+				}
+			}
+
+			foreach (var expectedFile in expectedFiles.Keys)
+			{
+				if (!currentFilesSet.Contains(Path.Combine(directoryPath, expectedFile)))
+				{
+					missingFiles.Add($"{expectedFile} (Missing)");
+				}
+			}
+
+			return missingFiles;
+		}
+
+		private void UpdateGamePadList()
+		{
+
+
+			_connectedGamePad.Clear();
+			var gamepad = X.Gamepad_1;
+			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(0, new XinputGamepad(gamepad, 0, false, "Type=Wheel", txt_arcadeXinputData.Text, "Type=Gamepad"));
+			gamepad = X.Gamepad_2;
+			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(1, new XinputGamepad(gamepad, 1, false, "Type=Wheel", txt_arcadeXinputData.Text, "Type=Gamepad"));
+			gamepad = X.Gamepad_3;
+			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(2, new XinputGamepad(gamepad, 2, false, "Type=Wheel", txt_arcadeXinputData.Text, "Type=Gamepad"));
+			gamepad = X.Gamepad_4;
+			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(3, new XinputGamepad(gamepad, 3, false, "Type=Wheel", txt_arcadeXinputData.Text, "Type=Gamepad"));
+
+			X.StartPolling(X.Gamepad_1, X.Gamepad_2, X.Gamepad_3, X.Gamepad_4);
+			bool isPolling = true;
+			if (isPolling && X.Gamepad_1.Start_down)
+			{
+				int slot = 0;
+				isPolling = false;
+				X.StopPolling();
+				if (_connectedGamePad.ContainsKey(slot))
+				{
+					var pad = _connectedGamePad[slot];
+					if (pad.Type != "arcade")
+					{
+						string ControllerName = pad.ControllerName;
+						if (!ControllerName.StartsWith("Microsoft X-Box 360"))
+						{
+							txt_arcadeXinputData.Text += $",VendorID=0x{pad.VendorId:X04}<>ProductID=0x{pad.ProductId:X04}";
+						}
+					}
+				}
+			}
+			if (isPolling && X.Gamepad_2.Start_down)
+			{
+				int slot = 1;
+				isPolling = false;
+				X.StopPolling();
+				if (_connectedGamePad.ContainsKey(slot))
+				{
+					var pad = _connectedGamePad[slot];
+					if (pad.Type != "arcade")
+					{
+						string ControllerName = pad.ControllerName;
+						if (!ControllerName.StartsWith("Microsoft X-Box 360"))
+						{
+							txt_arcadeXinputData.Text += $",VendorID=0x{pad.VendorId:X04}<>ProductID=0x{pad.ProductId:X04}";
+						}
+					}
+				}
+			}
+			if (isPolling && X.Gamepad_3.Start_down)
+			{
+				int slot = 2;
+				isPolling = false;
+				X.StopPolling();
+				if (_connectedGamePad.ContainsKey(slot))
+				{
+					var pad = _connectedGamePad[slot];
+					if (pad.Type != "arcade")
+					{
+						string ControllerName = pad.ControllerName;
+						if (!ControllerName.StartsWith("Microsoft X-Box 360"))
+						{
+							txt_arcadeXinputData.Text += $",VendorID=0x{pad.VendorId:X04}<>ProductID=0x{pad.ProductId:X04}";
+						}
+					}
+				}
+			}
+			if (isPolling && X.Gamepad_4.Start_down)
+			{
+				int slot = 3;
+				isPolling = false;
+				X.StopPolling();
+				if (_connectedGamePad.ContainsKey(slot))
+				{
+					var pad = _connectedGamePad[slot];
+					if (pad.Type != "arcade")
+					{
+						string ControllerName = pad.ControllerName;
+						if (!ControllerName.StartsWith("Microsoft X-Box 360"))
+						{
+							txt_arcadeXinputData.Text += $",VendorID=0x{pad.VendorId:X04}<>ProductID=0x{pad.ProductId:X04}";
+						}
+					}
+				}
+			}
+
+			if (isPolling) X.StopPolling();
+
+		}
+
 		public static string GetRelativeDirectoryPath(string fromPath, string toPath)
 		{
 			Uri fromUri = new Uri(fromPath);
@@ -1643,576 +2410,464 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		private void txt_linksourcefolderexe_TextChanged_1(object sender, EventArgs e)
+		private bool CheckRequiredFixes()
 		{
-			if (txt_linksourcefolderexe.Text != "")
-			{
-				if (tabControl1.SelectedTab.Text == "tabPage1") btn_next.Enabled = true;
-				SavedWizardSettings.linksourcefolderexe = txt_linksourcefolderexe.Text;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
+			if (!Directory.Exists(fixesDir)) Directory.CreateDirectory(fixesDir);
+			lbl_foldernameTPfixes.Text = fixesDir;
+			return true;
 		}
 
-		private void timer_controllerUpdate_Tick(object sender, EventArgs e)
+		private bool CheckInstalledSoftware()
+		{
+
+			btn_next.Enabled = verifDataTab1();
+
+			bool vigem = false;
+			string vigemPath = Utils.checkInstalled("ViGEm");
+			if (!string.IsNullOrEmpty(vigemPath)) vigem = true;
+
+			bool vjoy = false;
+			string vjoyPath = Utils.checkInstalled("vJoy");
+			if (!string.IsNullOrEmpty(vjoyPath)) vjoy = true;
+
+			bool riva = false;
+			string rivaPath = Utils.checkInstalled("RivaTuner Statistics");
+			if (!string.IsNullOrEmpty(rivaPath))
+			{
+				riva = true;
+			}
+
+			bool xenos = false;
+			string XenosPath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.exe");
+			if (File.Exists(XenosPath)) xenos = true;
+
+			if (vigem)
+			{
+				lbl_installed_vigem.Text = "Installed";
+				lbl_installed_vigem.ForeColor = Color.DarkGreen;
+			}
+			if (vjoy)
+			{
+				lbl_installed_vjoy.Text = "Installed";
+				lbl_installed_vjoy.ForeColor = Color.DarkGreen;
+			}
+			if (riva)
+			{
+				lbl_installed_rivatuner.Text = "Installed";
+				lbl_installed_rivatuner.ForeColor = Color.DarkGreen;
+			}
+			if (xenos)
+			{
+				lbl_installed_xenos.Text = "Installed";
+				lbl_installed_xenos.ForeColor = Color.DarkGreen;
+			}
+			if (vigem && vjoy && riva && xenos)
+			{
+
+				if (tabControl1.SelectedTab.Text == "tabPage0") btn_next.Enabled = true;
+				return true;
+			}
+			return false;
+
+
+		}
+
+
+		private void InitializeHandleStdOut()
+		{
+			handleStdOut = delegate (string msg)
+			{
+				string pattern = @"([0-9]*)%";
+				string input = msg;
+
+				Match match = Regex.Match(input, pattern);
+
+				if (match.Success)
+				{
+					string percentage = match.Groups[1].Value;
+
+					int progress = 0;
+					if (int.TryParse(percentage, out progress))
+					{
+						progress_extract.Invoke(new MethodInvoker(delegate
+						{
+
+							progress_extract.Value = progress;
+							progress_extract.Update();
+
+						}));
+					}
+				}
+				if (msg.Contains("Everything is Ok"))
+				{
+					int progress = 100;
+					progress_extract.Invoke(new MethodInvoker(delegate
+					{
+
+						progress_extract.Visible = false;
+
+					}));
+				}
+			};
+		}
+		#endregion
+
+		private void btn_configure_wheel_VisibleChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_configure_shifter_VisibleChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_configure_hotas_VisibleChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_configure_gunA_VisibleChanged(object sender, EventArgs e)
+		{
+		}
+
+		private void btn_configure_gunB_VisibleChanged(object sender, EventArgs e)
+		{
+		}
+
+		private void kryptonLabel31_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void timer_ffb_update_Tick(object sender, EventArgs e)
 		{
 			if (this == Form.ActiveForm && tabControl1.SelectedIndex == 2)
 			{
-				if (radio_selectcontroller_arcadestick_yes.Checked)
-				{
-
-					groupBox_xinputarcade.Enabled = true;
-
-					lbl_gamepadlist.Text = "";
-					lbl_arcadelist.Text = "";
-					lbl_wheellist.Text = "";
-					UpdateGamePadList();
-					foreach (var gp in _connectedGamePad)
-					{
-						string displayControllerName = "XINPUT" + (gp.Value.XinputSlot + 1).ToString() + " " + gp.Value.ControllerName;
-
-						if (gp.Value.Type == "gamepad") lbl_gamepadlist.Text += $"{displayControllerName}, ";
-						if (gp.Value.Type == "arcade") lbl_arcadelist.Text += $"{displayControllerName}, ";
-						if (gp.Value.Type == "wheel") lbl_wheellist.Text += $"{displayControllerName}, ";
-					}
-					lbl_arcadelist.Text = lbl_arcadelist.Text.TrimEnd().TrimEnd(',');
-					lbl_gamepadlist.Text = lbl_gamepadlist.Text.TrimEnd().TrimEnd(',');
-					lbl_wheellist.Text = lbl_wheellist.Text.TrimEnd().TrimEnd(',');
-				}
-			}
-			else
-			{
-				groupBox_xinputarcade.Enabled = false;
-			}
-
-		}
-
-		private void UpdateGamePadList()
-		{
-
-
-			_connectedGamePad.Clear();
-			var gamepad = X.Gamepad_1;
-			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(0, new XinputGamepad(gamepad, 0, false, "Type=Wheel", txt_arcadeXinputData.Text, "Type=Gamepad"));
-			gamepad = X.Gamepad_2;
-			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(1, new XinputGamepad(gamepad, 1, false, "Type=Wheel", txt_arcadeXinputData.Text, "Type=Gamepad"));
-			gamepad = X.Gamepad_3;
-			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(2, new XinputGamepad(gamepad, 2, false, "Type=Wheel", txt_arcadeXinputData.Text, "Type=Gamepad"));
-			gamepad = X.Gamepad_4;
-			if (gamepad.Capabilities.Type != 0) _connectedGamePad.Add(3, new XinputGamepad(gamepad, 3, false, "Type=Wheel", txt_arcadeXinputData.Text, "Type=Gamepad"));
-
-			X.StartPolling(X.Gamepad_1, X.Gamepad_2, X.Gamepad_3, X.Gamepad_4);
-			bool isPolling = true;
-			if (isPolling && X.Gamepad_1.Start_down)
-			{
-				int slot = 0;
-				isPolling = false;
-				X.StopPolling();
-				if (_connectedGamePad.ContainsKey(slot))
-				{
-					var pad = _connectedGamePad[slot];
-					if (pad.Type != "arcade")
-					{
-						string ControllerName = pad.ControllerName;
-						if (!ControllerName.StartsWith("Microsoft X-Box 360"))
-						{
-							txt_arcadeXinputData.Text += $",VendorID=0x{pad.VendorId:X04}<>ProductID=0x{pad.ProductId:X04}";
-						}
-					}
-				}
-			}
-			if (isPolling && X.Gamepad_2.Start_down)
-			{
-				int slot = 1;
-				isPolling = false;
-				X.StopPolling();
-				if (_connectedGamePad.ContainsKey(slot))
-				{
-					var pad = _connectedGamePad[slot];
-					if (pad.Type != "arcade")
-					{
-						string ControllerName = pad.ControllerName;
-						if (!ControllerName.StartsWith("Microsoft X-Box 360"))
-						{
-							txt_arcadeXinputData.Text += $",VendorID=0x{pad.VendorId:X04}<>ProductID=0x{pad.ProductId:X04}";
-						}
-					}
-				}
-			}
-			if (isPolling && X.Gamepad_3.Start_down)
-			{
-				int slot = 2;
-				isPolling = false;
-				X.StopPolling();
-				if (_connectedGamePad.ContainsKey(slot))
-				{
-					var pad = _connectedGamePad[slot];
-					if (pad.Type != "arcade")
-					{
-						string ControllerName = pad.ControllerName;
-						if (!ControllerName.StartsWith("Microsoft X-Box 360"))
-						{
-							txt_arcadeXinputData.Text += $",VendorID=0x{pad.VendorId:X04}<>ProductID=0x{pad.ProductId:X04}";
-						}
-					}
-				}
-			}
-			if (isPolling && X.Gamepad_4.Start_down)
-			{
-				int slot = 3;
-				isPolling = false;
-				X.StopPolling();
-				if (_connectedGamePad.ContainsKey(slot))
-				{
-					var pad = _connectedGamePad[slot];
-					if (pad.Type != "arcade")
-					{
-						string ControllerName = pad.ControllerName;
-						if (!ControllerName.StartsWith("Microsoft X-Box 360"))
-						{
-							txt_arcadeXinputData.Text += $",VendorID=0x{pad.VendorId:X04}<>ProductID=0x{pad.ProductId:X04}";
-						}
-					}
-				}
-			}
-
-			if (isPolling) X.StopPolling();
-
-		}
-
-		private void radio_selectcontroller_arcadestick_yes_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radio_selectcontroller_arcadestick_yes.Checked)
-			{
-				groupBox_xinputarcade.Enabled = true;
-				timer_controllerUpdate.Enabled = true;
-				SavedWizardSettings.selectController_xinput = 1;
-				SavedWizardSettings.Save(wizardSettingsJson);
+				UpdateFFBGuidList();
 			}
 		}
 
-		private void groupBox_xinputarcade_Enter(object sender, EventArgs e)
-		{
-
-		}
-
-		private void radio_selectcontroller_dwheel_yes_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radio_selectcontroller_dwheel_yes.Checked)
-			{
-				btn_configure_wheel.Visible = true;
-				btn_configure_shifter.Visible = false;
-				SavedWizardSettings.selectController_wheel = 1;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void radio_selectcontroller_dwheel_shifter_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radio_selectcontroller_dwheel_shifter.Checked)
-			{
-				btn_configure_wheel.Visible = true;
-				btn_configure_shifter.Visible = true;
-				SavedWizardSettings.selectController_wheel = 2;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void radio_selectcontroller_dwheel_no_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radio_selectcontroller_dwheel_no.Checked)
-			{
-				btn_configure_wheel.Visible = false;
-				btn_configure_shifter.Visible = false;
-				SavedWizardSettings.selectController_wheel = 0;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void radio_selectcontroller_dhotas_yes_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radio_selectcontroller_dhotas_yes.Checked)
-			{
-				btn_configure_hotas.Visible = true;
-				SavedWizardSettings.selectController_hotas = 1;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void radio_selectcontroller_dhotas_no_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radio_selectcontroller_dhotas_no.Checked)
-			{
-				btn_configure_hotas.Visible = false;
-				SavedWizardSettings.selectController_hotas = 0;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void radio_selectcontroller_gun_no_CheckedChanged(object sender, EventArgs e)
-		{
-			btn_configure_gunA.Visible = btn_configure_gunB.Visible = false;
-			if (cmb_gunA_type.SelectedIndex >= 0 && !radio_selectcontroller_gun_no.Checked) btn_configure_gunA.Visible = true;
-			if (cmb_gunB_type.SelectedIndex >= 0 && radio_selectcontroller_gun_2.Checked) btn_configure_gunB.Visible = true;
-
-			if (radio_selectcontroller_gun_no.Checked)
-			{
-				kryptonLabel23.Visible = cmb_gunA_type.Visible = false;
-				kryptonLabel24.Visible = cmb_gunB_type.Visible = false;
-				btn_configure_gunA.Visible = false;
-				btn_configure_gunB.Visible = false;
-				SavedWizardSettings.selectController_lightgun = 0;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void radio_selectcontroller_gun_1_CheckedChanged(object sender, EventArgs e)
-		{
-			btn_configure_gunA.Visible = btn_configure_gunB.Visible = false;
-			if (cmb_gunA_type.SelectedIndex >= 0 && !radio_selectcontroller_gun_no.Checked) btn_configure_gunA.Visible = true;
-			if (cmb_gunB_type.SelectedIndex >= 0 && radio_selectcontroller_gun_2.Checked) btn_configure_gunB.Visible = true;
-
-			if (radio_selectcontroller_gun_1.Checked)
-			{
-				kryptonLabel23.Visible = cmb_gunA_type.Visible = true;
-				kryptonLabel24.Visible = cmb_gunB_type.Visible = false;
-				SavedWizardSettings.selectController_lightgun = 1;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void radio_selectcontroller_gun_2_CheckedChanged(object sender, EventArgs e)
-		{
-			btn_configure_gunA.Visible = btn_configure_gunB.Visible = false;
-			if (cmb_gunA_type.SelectedIndex >= 0 && !radio_selectcontroller_gun_no.Checked) btn_configure_gunA.Visible = true;
-			if (cmb_gunB_type.SelectedIndex >= 0 && radio_selectcontroller_gun_2.Checked) btn_configure_gunB.Visible = true;
-
-			if (radio_selectcontroller_gun_2.Checked)
-			{
-				kryptonLabel23.Visible = cmb_gunA_type.Visible = true;
-				kryptonLabel24.Visible = cmb_gunB_type.Visible = true;
-				SavedWizardSettings.selectController_lightgun = 2;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void radio_selectcontroller_arcadestick_no_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radio_selectcontroller_arcadestick_no.Checked)
-			{
-				groupBox_xinputarcade.Enabled = false;
-				timer_controllerUpdate.Enabled = false;
-				SavedWizardSettings.selectController_xinput = 0;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void btn_configure_wheel_Click(object sender, EventArgs e)
-		{
-			var frm = new dinputwheel(dwheel_config);
-			var result = frm.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				dwheel_config = frm.Dialogconfig;
-				MessageBox.Show(dwheel_config);
-				SavedWizardSettings.dwheel_config = dwheel_config;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void txt_arcadeXinputData_TextChanged(object sender, EventArgs e)
-		{
-			SavedWizardSettings.arcadeXinputData = txt_arcadeXinputData.Text;
-			SavedWizardSettings.Save(wizardSettingsJson);
-		}
-
-		private void btn_configure_shifter_Click(object sender, EventArgs e)
-		{
-			var frm = new dinputshifter(dshifter_config);
-			var result = frm.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				dshifter_config = frm.Dialogconfig;
-				SavedWizardSettings.dshifter_config = dshifter_config;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-		private void btn_configure_hotas_Click(object sender, EventArgs e)
-		{
-			var frm = new dinputhotas(dhotas_config);
-			var result = frm.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				dhotas_config = frm.Dialogconfig;
-				SavedWizardSettings.dhotas_config = dhotas_config;
-				SavedWizardSettings.Save(wizardSettingsJson);
-			}
-		}
-
-
-		private void cmb_gunA_type_SelectedIndexChanged(object sender, EventArgs e)
+		private void cmb_ffbguid_wheel_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!SavedWizardSettings.disableSave)
 			{
-				gunA_json = "";
-				gunA_comport = -1;
-				SavedWizardSettings.gunA_json = "";
-				SavedWizardSettings.gunA_comport = -1;
+				ffbWheel = (FFBDevice)cmb_ffbguid_wheel.SelectedItem;
+				SavedWizardSettings.ffbWheel_guid = ffbWheel.Guid;
+				SavedWizardSettings.ffbWheel_name = ffbWheel.Name;
+				SavedWizardSettings.Save(wizardSettingsJson);
 			}
-			SavedWizardSettings.selectController_guntypeA = cmb_gunA_type.SelectedIndex;
-			SavedWizardSettings.Save(wizardSettingsJson);
-			if (cmb_gunA_type.SelectedIndex >= 0 && !radio_selectcontroller_gun_no.Checked) btn_configure_gunA.Visible = true;
-			else btn_configure_gunA.Visible = false;
 		}
 
-		private void cmb_gunB_type_SelectedIndexChanged(object sender, EventArgs e)
+		private void cmb_ffbguid_hotas_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!SavedWizardSettings.disableSave)
 			{
-				gunB_json = "";
-				gunB_comport = -1;
-				SavedWizardSettings.gunB_json = "";
-				SavedWizardSettings.gunB_comport = -1;
+				ffbHotas = (FFBDevice)cmb_ffbguid_hotas.SelectedItem;
+				SavedWizardSettings.ffbHotas_guid = ffbHotas.Guid;
+				SavedWizardSettings.ffbHotas_name = ffbHotas.Name;
+				SavedWizardSettings.Save(wizardSettingsJson);
 			}
-			SavedWizardSettings.selectController_guntypeB = cmb_gunB_type.SelectedIndex;
+		}
+
+		private void Wizard_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			SavedWizardSettings.mariokartId = txt_mariokartId.Text;
+			SavedWizardSettings.apm3id = txt_apm3id.Text;
+			SavedWizardSettings.customName = txt_customName.Text;
 			SavedWizardSettings.Save(wizardSettingsJson);
-			if (cmb_gunB_type.SelectedIndex >= 0 && radio_selectcontroller_gun_2.Checked) btn_configure_gunB.Visible = true;
-			else btn_configure_gunB.Visible = false;
 
-		}
+			DialogResult result = MessageBox.Show("Save the Wizard settings to resume later ?",
+				"Warning",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Warning
+			);
 
-
-		private void btn_configure_gunA_Click(object sender, EventArgs e)
-		{
-			string config = gunA_json;
-			int selected_index = cmb_gunA_type.SelectedIndex;
-			if (selected_index <= 3)
+			if (result == DialogResult.No)
 			{
-				var frm = new gun_preconfig(selected_index, 1, config);
-				var result = frm.ShowDialog();
-				if (result == DialogResult.OK)
+				if (File.Exists(wizardSettingsJson))
 				{
-					gunA_json = frm.Dialogconfig;
+					File.Delete(wizardSettingsJson);
 				}
-			}
-			else
-			{
-				string typeGunTxt = "guncon1";
-				if (selected_index == 4) { typeGunTxt = "guncon1"; }
-				if (selected_index == 5) { typeGunTxt = "guncon2"; }
-				if (selected_index == 6) { typeGunTxt = "wiimote"; }
 
-				var frm = new dinputgun(1, typeGunTxt, config);
-				var result = frm.ShowDialog();
-				if (result == DialogResult.OK)
-				{
-					var json = frm.Dialogconfig;
-					gunA_json = json;
-					this.DialogResult = DialogResult.OK;
-					this.Close();
-				}
 			}
 		}
 
-
-		private void btn_configure_gunB_Click(object sender, EventArgs e)
+		private void cmb_gpu_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			string config = gunB_json;
-			int selected_index = cmb_gunB_type.SelectedIndex;
-			if (selected_index <= 3)
+			kryptonLinkLabel1.Visible = false;
+			lbl_note_gpu.Text = "";
+			if (cmb_gpu.SelectedIndex == 2) lbl_note_gpu.Text = "Version < 22.7.1";
+			if (cmb_gpu.SelectedIndex == 3) lbl_note_gpu.Text = "Version > 22.7.1, due to change in amd opengl, some games wont work";
+			if (cmb_gpu.SelectedIndex == 4)
 			{
-				var frm = new gun_preconfig(selected_index, 2, config);
-				var result = frm.ShowDialog();
-				if (result == DialogResult.OK)
-				{
-					gunB_json = frm.Dialogconfig;
-				}
+				kryptonLinkLabel1.Visible = true;
+				lbl_note_gpu.Text = "Custom version of AMD drivers for Polaris/Vega/Navi based on 23.12.1.\nThose driver made possible to sideload the old opengl version.";
 			}
-			else
+			if (cmb_gpu.SelectedIndex >= 0)
 			{
-				string typeGunTxt = "guncon1";
-				if (selected_index == 4) { typeGunTxt = "guncon1"; }
-				if (selected_index == 5) { typeGunTxt = "guncon2"; }
-				if (selected_index == 6) { typeGunTxt = "wiimote"; }
-
-				var frm = new dinputgun(2, typeGunTxt, config);
-				var result = frm.ShowDialog();
-				if (result == DialogResult.OK)
-				{
-					var json = frm.Dialogconfig;
-					gunB_json = json;
-					this.DialogResult = DialogResult.OK;
-					this.Close();
-				}
+				lbl_gpu_status.ForeColor = Color.DarkGreen;
+				lbl_gpu_status.Text = "Ok";
 			}
-
-		}
-
-
-
-		private void groupBox5_Enter(object sender, EventArgs e)
-		{
-
-		}
-
-		private void btn_selectPatchArchive_Click(object sender, EventArgs e)
-		{
-			using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog())
+			if (!SavedWizardSettings.disableSave)
 			{
-				openFileDialog.Filter = "Fichiers 7z (TAXPatches.*.7z)|TAXPatches.*.7z|Tous les fichiers (*.*)|*.*";
-				openFileDialog.Title = "Select TAXPatches.*.7z";
-
-				if (openFileDialog.ShowDialog() == DialogResult.OK)
-				{
-					txt_patchArchive.Text = openFileDialog.FileName;
-				}
-			}
-		}
-
-		private void txt_patchArchive_TextChanged(object sender, EventArgs e)
-		{
-			cacheCheckFix.Clear();
-			grp_fixes.Enabled = false;
-			if (txt_patchArchive.Text != "" && File.Exists(txt_patchArchive.Text) && txt_patchArchive.Text.ToLower().EndsWith(".7z"))
-			{
-				string fileContent = "";
-				try
-				{
-					using (SevenZipExtractor extractor = new SevenZipExtractor(txt_patchArchive.Text))
-					{
-						string fileToExtract = "patch.json";
-
-						using (MemoryStream ms = new MemoryStream())
-						{
-							extractor.ExtractFile(fileToExtract, ms);
-							ms.Seek(0, SeekOrigin.Begin);
-							using (StreamReader reader = new StreamReader(ms))
-							{
-								fileContent = reader.ReadToEnd();
-							}
-						}
-					}
-				}
-				catch
-				{
-					fileContent = "";
-				}
-				if (fileContent == "")
-				{
-					txt_patchArchive.Text = "";
-					SavedWizardSettings.patchArchive = "";
-					SavedWizardSettings.Save(wizardSettingsJson);
-					MessageBox.Show("Invalid Patch File");
-
-					return;
-				}
-
-				SavedWizardSettings.patchArchive = txt_patchArchive.Text;
+				SavedWizardSettings.gpu = cmb_gpu.SelectedIndex;
 				SavedWizardSettings.Save(wizardSettingsJson);
-
-				PatchArchive patchInfoJson = JsonConvert.DeserializeObject<PatchArchive>(fileContent);
-				if (patchInfoJson.FixesArchive.Count() > 0)
-				{
-					grp_fixes.Enabled = true;
-
-					foreach (var fix in patchInfoJson.FixesArchive)
-					{
-						ExpectedArchivesFix.Add(fix.Key, fix.Value.source_md5);
-					}
-				}
-
-				//MessageBox.Show(fileContent);
-
-
 			}
-			else
+			grp_finalize.Enabled = verifDataTab4();
+
+		}
+
+		private void cmb_resolution_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cmb_resolution.SelectedIndex >= 0)
 			{
-				txt_patchArchive.Text = "";
-				SavedWizardSettings.patchArchive = "";
+				lbl_resolution_status.ForeColor = Color.DarkGreen;
+				lbl_resolution_status.Text = "Ok";
+			}
+			if (!SavedWizardSettings.disableSave)
+			{
+				SavedWizardSettings.resolution = cmb_resolution.SelectedIndex;
 				SavedWizardSettings.Save(wizardSettingsJson);
-				return;
 			}
+			grp_finalize.Enabled = verifDataTab4();
 		}
 
-		private List<string> VerifyFiles(string directoryPath, Dictionary<string, string> expectedFiles)
+		private void btn_apm3id_show_Click(object sender, EventArgs e)
 		{
-			var missingFiles = new List<string>();
-			var currentFiles = Directory.GetFiles(directoryPath);
-			var currentFilesSet = new HashSet<string>(currentFiles);
-
-			foreach (var filePath in currentFiles)
-			{
-				var fileInfo = new FileInfo(filePath);
-				var fileName = Path.GetFileName(filePath);
-
-				if (expectedFiles.ContainsKey(fileName))
-				{
-					if (!cacheCheckFix.TryGetValue(fileName, out var metadata) || metadata.LastModified != fileInfo.LastWriteTime || metadata.Size != fileInfo.Length)
-					{
-						metadata = new CacheMetadata
-						{
-							LastModified = fileInfo.LastWriteTime,
-							Size = fileInfo.Length,
-							Md5 = GetMd5HashAsString(filePath)
-						};
-						cacheCheckFix[fileName] = metadata;
-					}
-
-					var isOk = metadata.Md5 == expectedFiles[fileName];
-					if (!isOk)
-					{
-						missingFiles.Add($"{fileName} (Mismatch)");
-					}
-				}
-			}
-
-			foreach (var expectedFile in expectedFiles.Keys)
-			{
-				if (!currentFilesSet.Contains(Path.Combine(directoryPath, expectedFile)))
-				{
-					missingFiles.Add($"{expectedFile} (Missing)");
-				}
-			}
-
-			return missingFiles;
+			if (txt_apm3id.PasswordChar == '*') txt_apm3id.PasswordChar = '\0';
+			else txt_apm3id.PasswordChar = '*';
 		}
 
-		private void btn_verifyfix_Click(object sender, EventArgs e)
+		private void btn_mariokartId_show_Click(object sender, EventArgs e)
 		{
-			var missingFiles = VerifyFiles(fixesDir, ExpectedArchivesFix);
+			if (txt_mariokartId.PasswordChar == '*') txt_mariokartId.PasswordChar = '\0';
+			else txt_mariokartId.PasswordChar = '*';
+		}
 
-			if (missingFiles.Count > 0)
+		private void kryptonButton1_Click(object sender, EventArgs e)
+		{
+			// Ouvrir l'URL dans le navigateur par défaut, ce qui devrait lancer Discord si configuré
+			Process.Start(new ProcessStartInfo
 			{
-				MessageBox.Show("Missing files:\n" + string.Join("\n", missingFiles), "File verification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				lbl_fixes_status.Text = missingFiles.Count() + " Files Missing";
-				lbl_fixes_status.ForeColor = Color.Red;
+				FileName = "https://teknoparrot.com/OnlineProfile/MKDX",
+				UseShellExecute = true
+			});
+		}
+
+		private void kryptonButton2_Click(object sender, EventArgs e)
+		{
+			Process.Start(new ProcessStartInfo
+			{
+				FileName = "https://teknoparrot.com/OnlineProfile/APM3",
+				UseShellExecute = true
+			});
+
+		}
+
+		private void txt_apm3id_TextChanged(object sender, EventArgs e)
+		{
+			if (txt_apm3id.Text != "" && txt_mariokartId.Text != "" && txt_customName.Text != "")
+			{
+				lbl_onlineprofil_status.ForeColor = Color.DarkGreen;
+				lbl_onlineprofil_status.Text = "Ok";
 			}
 			else
 			{
-				MessageBox.Show("All needed files are here !", "File verification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				lbl_fixes_status.Text = "All OK !";
-				lbl_fixes_status.ForeColor = Color.DarkGreen;
+				lbl_onlineprofil_status.ForeColor = Color.Red;
+				lbl_onlineprofil_status.Text = "Not Ok";
 			}
+			grp_finalize.Enabled = verifDataTab4();
 		}
 
-		private void grp_fixes_EnabledChanged(object sender, EventArgs e)
+		private void txt_mariokartId_TextChanged(object sender, EventArgs e)
 		{
-			lbl_fixes_status.Visible = grp_fixes.Enabled;
-			if (grp_fixes.Enabled)
+			if (txt_apm3id.Text != "" && txt_mariokartId.Text != "" && txt_customName.Text != "")
 			{
-				var missingFiles = VerifyFiles(fixesDir, ExpectedArchivesFix);
-				if(missingFiles.Count() == 0)
+				lbl_onlineprofil_status.ForeColor = Color.DarkGreen;
+				lbl_onlineprofil_status.Text = "Ok";
+			}
+			else
+			{
+				lbl_onlineprofil_status.ForeColor = Color.Red;
+				lbl_onlineprofil_status.Text = "Not Ok";
+			}
+			grp_finalize.Enabled = verifDataTab4();
+		}
+
+		private void txt_customName_TextChanged(object sender, EventArgs e)
+		{
+			if (txt_apm3id.Text != "" && txt_mariokartId.Text != "" && txt_customName.Text != "")
+			{
+				lbl_onlineprofil_status.ForeColor = Color.DarkGreen;
+				lbl_onlineprofil_status.Text = "Ok";
+			}
+			else
+			{
+				lbl_onlineprofil_status.ForeColor = Color.Red;
+				lbl_onlineprofil_status.Text = "Not Ok";
+			}
+			grp_finalize.Enabled = verifDataTab4();
+		}
+
+		private void btn_finalize_Click(object sender, EventArgs e)
+		{
+			if(chk_installpatch.Checked)
+			{
+				var frm = new PatchInstall(txt_patchArchive.Text, fixesDir, Path.Combine(txt_tpfolder.Text, "AutoXinputLinks"), txt_linksourcefolderexe.Text);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
 				{
-					lbl_fixes_status.Text = "All OK !";
-					lbl_fixes_status.ForeColor = Color.DarkGreen;
+					MessageBox.Show("Ok !");
 				}
 				else
 				{
-					lbl_fixes_status.Text = missingFiles.Count() + " Files Missing";
-					lbl_fixes_status.ForeColor = Color.Red;
+					MessageBox.Show("Exaction Not Ok, Abording");
+					return;
 				}
 			}
+
+			var NewConfig = new Configuration();
+			NewConfig.TpFolder = txt_tpfolder.Text;
+			NewConfig.perGameLinkFolderExe = txt_linksourcefolderexe.Text;
+			NewConfig.perGameLinkFolder = Path.Combine(txt_tpfolder.Text, "AutoXinputLinks");
+			NewConfig.virtualKeyboard = true;
+			NewConfig.keyTest = "F1";
+			NewConfig.keyService1 = "F2";
+			NewConfig.keyService2 = "F3";
+			NewConfig.ShowAllGames = true;
+			NewConfig.FFB = true;
+			NewConfig.arcadeXinputData = txt_arcadeXinputData.Text;
+			if (selectController_wheel > 0)
+			{
+				NewConfig.bindingDinputWheel = dwheel_config;
+				NewConfig.useDinputWheel = true;
+				NewConfig.ffbDinputWheel = ffbWheel.Guid;
+			}
+			if(selectController_wheel == 2)
+			{
+				NewConfig.bindingDinputShifter = dshifter_config;
+				NewConfig.useDinputShifter= true;
+			}
+			if(selectController_hotas == 1)
+			{
+				NewConfig.useDinputHotas = true;
+				NewConfig.bindingDinputHotas = dhotas_config;
+				NewConfig.ffbDinputHotas = ffbHotas.Guid;
+				if(selectController_wheel > 0)
+				{
+					NewConfig.useHotasWithWheel = true;
+				}
+			}
+			if(selectController_lightgun > 0)
+			{
+				string typeGunTxt = "";
+				int gunType = cmb_gunA_type.SelectedIndex;
+
+				if (gunType == 0) { typeGunTxt = "guncon2"; }
+				if (gunType == 1) { typeGunTxt = "guncon1"; }
+				if (gunType == 2) { typeGunTxt = "sinden"; }
+				if (gunType == 3) { typeGunTxt = "wiimote"; }
+				if (gunType == 4) { typeGunTxt = "guncon1"; }
+				if (gunType == 5) { typeGunTxt = "guncon2"; }
+				if (gunType == 6) { typeGunTxt = "wiimote"; }
+				NewConfig.gunAType = typeGunTxt;
+
+				if (typeGunTxt == "guncon1") NewConfig.bindingDinputGunAGuncon1 = gunA_json;
+				if (typeGunTxt == "guncon2") NewConfig.bindingDinputGunAGuncon2 = gunA_json;
+				if (typeGunTxt == "sinden") NewConfig.bindingDinputGunASinden = gunA_json;
+				if (typeGunTxt == "wiimote") NewConfig.bindingDinputGunAWiimote = gunA_json;
+
+				if(gunType == 0 || gunType == 1)
+				{
+					NewConfig.gunARecoil = "gun4ir";
+					NewConfig.gunAComPort = gunA_comport;
+					NewConfig.gunAdomagerumble = true;
+					NewConfig.gunAAutoJoy = true;
+				}
+				if(gunType == 2)
+				{
+					NewConfig.gunARecoil = "sinden-gun1";
+				}
+			}
+			if (selectController_lightgun == 2)
+			{
+				string typeGunTxt = "";
+				int gunType = cmb_gunB_type.SelectedIndex;
+
+				if (gunType == 0) { typeGunTxt = "guncon2"; }
+				if (gunType == 1) { typeGunTxt = "guncon1"; }
+				if (gunType == 2) { typeGunTxt = "sinden"; }
+				if (gunType == 3) { typeGunTxt = "wiimote"; }
+				if (gunType == 4) { typeGunTxt = "guncon1"; }
+				if (gunType == 5) { typeGunTxt = "guncon2"; }
+				if (gunType == 6) { typeGunTxt = "wiimote"; }
+				NewConfig.gunBType = typeGunTxt;
+
+				if (typeGunTxt == "guncon1") NewConfig.bindingDinputGunAGuncon1 = gunB_json;
+				if (typeGunTxt == "guncon2") NewConfig.bindingDinputGunAGuncon2 = gunB_json;
+				if (typeGunTxt == "sinden") NewConfig.bindingDinputGunASinden = gunB_json;
+				if (typeGunTxt == "wiimote") NewConfig.bindingDinputGunAWiimote = gunB_json;
+
+				if (gunType == 0 || gunType == 1)
+				{
+					NewConfig.gunBRecoil = "gun4ir";
+					NewConfig.gunBComPort = gunB_comport;
+					NewConfig.gunBdomagerumble = true;
+					NewConfig.gunBAutoJoy = true;
+				}
+				if (gunType == 2)
+				{
+					NewConfig.gunBRecoil = "sinden-gun2";
+				}
+			}
+			string rivaPath = Utils.checkInstalled("RivaTuner Statistics");
+			if (string.IsNullOrEmpty(rivaPath))
+			{
+				NewConfig.rivatunerExe = Path.Combine(Path.GetDirectoryName(rivaPath), "RTTS.exe");
+			}
+
+			string XenosPath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.exe");
+			if (File.Exists(XenosPath))
+			{
+				NewConfig.useXenos = true;
+			}
+
+			NewConfig.gpuType = cmb_gpu.SelectedIndex;
+			NewConfig.gpuResolution = cmb_resolution.SelectedIndex;
+			NewConfig.patch_apm3id = txt_apm3id.Text;
+			NewConfig.patch_mariokartId = txt_mariokartId.Text;
+			NewConfig.patch_customName = txt_customName.Text;
+			ConfigurationManager.MainConfig = NewConfig;
+			ConfigurationManager.SaveConfig();
+
+
+
 		}
+	}
+}
+
+public class FFBDevice
+{
+	public string Name = "";
+	public string Guid = "";
+	public override string ToString()
+	{
+		return Name;
+	}
+
+	public override bool Equals(object obj)
+	{
+		if (obj == null || GetType() != obj.GetType())
+			return false;
+
+		FFBDevice other = (FFBDevice)obj;
+		return Guid == other.Guid;
+	}
+
+	public override int GetHashCode()
+	{
+		return HashCode.Combine(Guid);
 	}
 }
 
@@ -2266,6 +2921,26 @@ public class WizardSettings
 
 	public string patchArchive = "";
 
+	public bool IsWheelConfigured = false;
+	public bool IsShifterConfigured = false;
+	public bool IsHotasConfigured = false;
+	public bool IsGunAConfigured = false;
+	public bool IsGunBConfigured = false;
+
+	public string ffbWheel_guid = "";
+	public string ffbWheel_name = "<none>";
+
+	public string ffbHotas_guid = "";
+	public string ffbHotas_name = "<none>";
+
+	public int gpu = -1;
+	public int resolution = -1;
+
+	public string apm3id = "";
+	public string mariokartId = "";
+	public string customName = "";
+
+
 	public WizardSettings()
 	{
 
@@ -2302,6 +2977,23 @@ public class WizardSettings
 				this.gunB_comport = DeserializeData.gunB_comport;
 
 				this.patchArchive = DeserializeData.patchArchive;
+				this.IsWheelConfigured = DeserializeData.IsWheelConfigured;
+				this.IsShifterConfigured = DeserializeData.IsShifterConfigured;
+				this.IsHotasConfigured = DeserializeData.IsHotasConfigured;
+				this.IsGunAConfigured = DeserializeData.IsGunAConfigured;
+				this.IsGunBConfigured = DeserializeData.IsGunBConfigured;
+
+				this.ffbWheel_guid = DeserializeData.ffbWheel_guid;
+				this.ffbWheel_name = DeserializeData.ffbWheel_name;
+				this.ffbHotas_guid = DeserializeData.ffbHotas_guid;
+				this.ffbHotas_name = DeserializeData.ffbHotas_name;
+
+				this.gpu = DeserializeData.gpu;
+				this.resolution = DeserializeData.resolution;
+				this.apm3id = DeserializeData.apm3id;
+				this.mariokartId = DeserializeData.mariokartId;
+				this.customName = DeserializeData.customName;
+			
 
 			}
 			catch (Exception ex)

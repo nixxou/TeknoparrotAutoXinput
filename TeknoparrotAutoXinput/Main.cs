@@ -1552,64 +1552,16 @@ namespace TeknoparrotAutoXinput
 
 		private void button6_Click(object sender, EventArgs e)
 		{
-			string target_Guid = ButtonToKey.DSharpGuidToSDLGuid("753c3020-37ae-11ee-8001-444553540000");
-			//0300fa675e0400008e02000000007801
-			int found_guid = -1;
-
-			SDL2.SDL.SDL_Quit();
-			SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
-			SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
-
-
-			SDL2.SDL.SDL_JoystickUpdate();
-			for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
+			string rivaPath = Utils.checkInstalled("RivaTuner Statistics");
+			MessageBox.Show(rivaPath);
+			/*
+			var frm = new PatchInstall();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
 			{
-				if (SDL.SDL_IsGameController(i) == SDL.SDL_bool.SDL_FALSE) continue;
-				var currentJoy = SDL.SDL_JoystickOpen(i);
-				string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
-				{
-					const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
-					byte[] guidBuffer = new byte[bufferSize];
-					SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
-					string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
-					if (guidString == target_Guid)
-					{
-						found_guid = i;
-						SDL.SDL_JoystickClose(currentJoy);
-						//break;
-					}
-					SDL.SDL_JoystickClose(currentJoy);
-				}
-			}
-
-			if (found_guid >= 0)
-			{
-				if (SDL.SDL_IsGameController(found_guid) == SDL.SDL_bool.SDL_FALSE)
-				{
-					//var currentJoy = SDL.SDL_JoystickOpen(found_guid);
-					var gGameController = SDL.SDL_GameControllerOpen(found_guid);
-					//currentJoy = SDL.SDL_GameControllerGetJoystick(gGameController);
-
-					//string nameController = SDL2.SDL.SDL_JoystickName(currentJoy).Trim('\0');
-
-					SDL.SDL_JoystickRumble(SDL.SDL_GameControllerGetJoystick(gGameController), 0xFFFF, 0xFFFF, 100);
-
-					//SDL.SDL_JoystickRumble(currentJoy, 0xAAAA, 0xAAAA, 1000);
-					Thread.Sleep(120);
-					SDL.SDL_JoystickRumble(SDL.SDL_GameControllerGetJoystick(gGameController), 0, 0, 0);
-
-				}
-
 
 			}
-
-
-
-
-
-
-			SDL2.SDL.SDL_Quit();
-
+			*/
 
 
 		}
