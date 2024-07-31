@@ -36,6 +36,7 @@ namespace TeknoparrotAutoXinput
 		public string gunConfig = "";
 		public string gunGuid = "";
 		public string gunName = "";
+		public int gunCom = 0;
 
 		private int _gunType;
 		private int _gunIndex;
@@ -252,6 +253,17 @@ namespace TeknoparrotAutoXinput
 
 		private async void btn_savecomport_Click(object sender, EventArgs e)
 		{
+			int com_port = 0;
+			try
+			{
+				int.TryParse(cmb_comport.SelectedItem.ToString().Replace("COM", "").Trim(), out com_port);
+			}
+			catch { }
+			gunCom = com_port;
+
+
+
+
 			btn_savecomport.Enabled = false;
 			_stopListening = false;
 			var directInput = _directInput;

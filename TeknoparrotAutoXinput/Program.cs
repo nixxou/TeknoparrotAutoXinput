@@ -349,10 +349,12 @@ namespace TeknoparrotAutoXinput
 					if(DemulshooterManager.TargetProcess != "") process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -pname={DemulshooterManager.TargetProcess} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 					else process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 
+					/*
 					if(DemulshooterManager.ForceMD5 != "")
 					{
 						process.StartInfo.Arguments += $" -forcemd5={DemulshooterManager.ForceMD5}";
 					}
+					*/
 
 					process.StartInfo.WorkingDirectory = exeDir;
 					process.StartInfo.UseShellExecute = true;
@@ -4212,7 +4214,7 @@ namespace TeknoparrotAutoXinput
 									processtarget = Path.GetFileNameWithoutExtension(targetExecutableGame);
 									if (!targetExecutableGame.ToLower().EndsWith(".exe")) processtarget = "";
 								}
-
+								/*
 								string forcemd5 = "";
 								if (GameInfo.ContainsKey("usedemulforcemd5") && GameInfo["usedemulforcemd5"].ToLower() == "false") forcemd5 = "";
 								else
@@ -4236,6 +4238,7 @@ namespace TeknoparrotAutoXinput
 									}
 								}
 								if (forcemd5 == "715fe71de740e248b428b2b1d35af3d9") forcemd5 = "7e11f7e78ed566a277edba1a8aab0749"; //Transformers Human Alliance
+								*/
 
 								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers);
 								if(GameInfo.ContainsKey("64bits") && GameInfo["64bits"].ToLower() == "true") DemulshooterManager.Is64bits = true;
@@ -4245,8 +4248,8 @@ namespace TeknoparrotAutoXinput
 								DemulshooterManager.Rom = GameInfo["rom"];
 								DemulshooterManager.Target = GameInfo["target"];
 								DemulshooterManager.HideCrosshair = hideCrosshair;
-								DemulshooterManager.Start(processtarget, forcemd5);
-
+								//DemulshooterManager.Start(processtarget, forcemd5);
+								DemulshooterManager.Start(processtarget);
 							}
 							else
 							{

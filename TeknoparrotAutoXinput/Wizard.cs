@@ -813,6 +813,9 @@ namespace TeknoparrotAutoXinput
 		private void txt_patchArchive_TextChanged(object sender, EventArgs e)
 		{
 			cacheCheckFix.Clear();
+			ExpectedArchivesFix.Clear();
+
+
 			grp_fixes.Enabled = false;
 			if (txt_patchArchive.Text != "" && File.Exists(txt_patchArchive.Text) && txt_patchArchive.Text.ToLower().EndsWith(".7z"))
 			{
@@ -913,6 +916,7 @@ namespace TeknoparrotAutoXinput
 					lbl_fixes_status.ForeColor = Color.Red;
 				}
 			}
+			grp_fixes.Visible = grp_fixes.Enabled;
 		}
 		#endregion
 
@@ -1231,7 +1235,7 @@ namespace TeknoparrotAutoXinput
 				{
 					foreach (var s in sevenZipExtractor.ArchiveFileData)
 					{
-						if (!s.IsDirectory)
+						if (!s.IsDirectory || Path.GetFileName(s.FileName) == "pm")
 						{
 							if (minimalDir == null)
 							{
@@ -2023,11 +2027,11 @@ namespace TeknoparrotAutoXinput
 			if (!SavedWizardSettings.disableSave)
 			{
 				gunA_json = "";
-				gunA_comport = -1;
+				gunA_comport = 0;
 				IsGunAConfigured = false;
 				SavedWizardSettings.IsGunAConfigured = false;
 				SavedWizardSettings.gunA_json = "";
-				SavedWizardSettings.gunA_comport = -1;
+				SavedWizardSettings.gunA_comport = 0;
 				checkControllerStatus();
 			}
 			SavedWizardSettings.selectController_guntypeA = cmb_gunA_type.SelectedIndex;
@@ -2041,11 +2045,11 @@ namespace TeknoparrotAutoXinput
 			if (!SavedWizardSettings.disableSave)
 			{
 				gunB_json = "";
-				gunB_comport = -1;
+				gunB_comport = 0;
 				IsGunBConfigured = false;
 				SavedWizardSettings.IsGunBConfigured = false;
 				SavedWizardSettings.gunB_json = "";
-				SavedWizardSettings.gunB_comport = -1;
+				SavedWizardSettings.gunB_comport = 0;
 				checkControllerStatus();
 			}
 			SavedWizardSettings.selectController_guntypeB = cmb_gunB_type.SelectedIndex;
@@ -2068,7 +2072,8 @@ namespace TeknoparrotAutoXinput
 				{
 					gunA_json = frm.Dialogconfig;
 					IsGunAConfigured = true;
-
+					gunA_comport = frm.gunCom;
+					SavedWizardSettings.gunA_comport = gunA_comport;
 					SavedWizardSettings.gunA_json = gunA_json;
 					SavedWizardSettings.IsGunAConfigured = IsGunAConfigured;
 					SavedWizardSettings.Save(wizardSettingsJson);
@@ -2110,7 +2115,8 @@ namespace TeknoparrotAutoXinput
 				{
 					gunB_json = frm.Dialogconfig;
 					IsGunBConfigured = true;
-
+					gunB_comport = frm.gunCom;
+					SavedWizardSettings.gunB_comport = gunB_comport;
 					SavedWizardSettings.gunB_json = gunB_json;
 					SavedWizardSettings.IsGunBConfigured = IsGunBConfigured;
 					SavedWizardSettings.Save(wizardSettingsJson);
@@ -2714,6 +2720,31 @@ namespace TeknoparrotAutoXinput
 		{
 			if(chk_installpatch.Checked)
 			{
+				string autoXinputPatchDir = Path.Combine(txt_tpfolder.Text, "AutoXinputLinks");
+				string gamePatchDir = txt_linksourcefolderexe.Text;
+				if(string.IsNullOrEmpty(autoXinputPatchDir) || !Directory.Exists(autoXinputPatchDir))
+				{
+					MessageBox.Show("Invalid dir : " + autoXinputPatchDir);
+					return;
+				}
+				if (string.IsNullOrEmpty(gamePatchDir) || !Directory.Exists(gamePatchDir))
+				{
+					MessageBox.Show("Invalid dir : " + gamePatchDir);
+					return;
+				}
+
+				DialogResult resultCpnfirm = MessageBox.Show(
+					$"This will erase this folder : \n{autoXinputPatchDir}\n{gamePatchDir}\nAre you sure to continue?",
+					"Warning",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Warning
+				);
+				if (resultCpnfirm == DialogResult.No)
+				{
+					return;
+				}
+
+
 				var frm = new PatchInstall(txt_patchArchive.Text, fixesDir, Path.Combine(txt_tpfolder.Text, "AutoXinputLinks"), txt_linksourcefolderexe.Text);
 				var result = frm.ShowDialog();
 				if (result == DialogResult.OK)
@@ -2726,6 +2757,10 @@ namespace TeknoparrotAutoXinput
 					return;
 				}
 			}
+
+			bool vjoy_installed = false;
+			string vjoyPath = Utils.checkInstalled("vJoy");
+			if (!string.IsNullOrEmpty(vjoyPath)) vjoy_installed = true;
 
 			var NewConfig = new Configuration();
 			NewConfig.TpFolder = txt_tpfolder.Text;
@@ -2789,6 +2824,7 @@ namespace TeknoparrotAutoXinput
 				{
 					NewConfig.gunARecoil = "sinden-gun1";
 				}
+				if (vjoy_installed) NewConfig.gunAvjoy = true;
 			}
 			if (selectController_lightgun == 2)
 			{
@@ -2820,9 +2856,10 @@ namespace TeknoparrotAutoXinput
 				{
 					NewConfig.gunBRecoil = "sinden-gun2";
 				}
+				if (vjoy_installed) NewConfig.gunBvjoy = true;
 			}
 			string rivaPath = Utils.checkInstalled("RivaTuner Statistics");
-			if (string.IsNullOrEmpty(rivaPath))
+			if (!string.IsNullOrEmpty(rivaPath))
 			{
 				NewConfig.rivatunerExe = Path.Combine(Path.GetDirectoryName(rivaPath), "RTTS.exe");
 			}
@@ -2832,6 +2869,8 @@ namespace TeknoparrotAutoXinput
 			{
 				NewConfig.useXenos = true;
 			}
+
+			NewConfig.showStartup = true;
 
 			NewConfig.gpuType = cmb_gpu.SelectedIndex;
 			NewConfig.gpuResolution = cmb_resolution.SelectedIndex;

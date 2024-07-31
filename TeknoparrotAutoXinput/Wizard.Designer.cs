@@ -1151,6 +1151,7 @@ namespace TeknoparrotAutoXinput
 			grp_fixes.Size = new Size(863, 175);
 			grp_fixes.TabIndex = 2;
 			grp_fixes.TabStop = false;
+			grp_fixes.Visible = false;
 			grp_fixes.EnabledChanged += grp_fixes_EnabledChanged;
 			grp_fixes.Enter += groupBox5_Enter;
 			// 

@@ -166,7 +166,7 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 					}
-					MessageBox.Show($"{sizeRequiredAutoXinput} and {sizeRequiredPatchLinkExe}");
+					//MessageBox.Show($"{sizeRequiredAutoXinput} and {sizeRequiredPatchLinkExe}");
 					if (isBothPathDirInSameDrive)
 					{
 						long needed_space_AutoXinputLinks = sizeRequiredAutoXinput + sizeRequiredPatchLinkExe + (fixArchiveSize*3);

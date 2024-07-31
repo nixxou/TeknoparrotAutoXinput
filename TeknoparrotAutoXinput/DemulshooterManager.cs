@@ -27,7 +27,7 @@ namespace TeknoparrotAutoXinput
 		public static bool ValidPath = false;
 		public static bool Is64bits = false;
 		public static string TargetProcess = "";
-		public static string ForceMD5 = "";
+		//public static string ForceMD5 = "";
 		public static string Target = "";
 		public static string Rom = "";
 		public static bool UseMamehooker = false;
@@ -112,7 +112,7 @@ namespace TeknoparrotAutoXinput
 			return false;
 		}
 
-		public static void WriteConfig(string targetExecutable, string forcemd5="")
+		public static void WriteConfig(string targetExecutable)
 		{
 			if (!ValidPath) return;
 			var ini = new IniFile(Path.Combine(DemulshooterPath, "config.ini"));
@@ -120,7 +120,7 @@ namespace TeknoparrotAutoXinput
 			ini.Write("Launch_Rom", Rom);
 			ini.Write("Launch_64bits", Is64bits ? "True" : "False");
 			ini.Write("Launch_tprocess", targetExecutable);
-			ini.Write("Launch_md5", forcemd5);
+			//ini.Write("Launch_md5", forcemd5);
 			ini.Write("OutputEnabled", "True");
 			ini.Write("ParentProcess", Process.GetCurrentProcess().Id.ToString());
 			ini.Write("HideCrosshair", HideCrosshair ? "True" : "False");
@@ -141,7 +141,7 @@ namespace TeknoparrotAutoXinput
 				Rom = ini.Read("Launch_Rom");
 				Target = ini.Read("Launch_Target");
 				TargetProcess = ini.Read("Launch_tprocess");
-				ForceMD5 = ini.Read("Launch_md5");
+				//ForceMD5 = ini.Read("Launch_md5");
 				Is64bits = ini.Read("Launch_64bits") == "True" ? true : false;
 				ParentProcess = int.Parse(ini.Read("ParentProcess"));
 				HideCrosshair = ini.Read("HideCrosshair") == "True" ? true : false;
@@ -149,10 +149,10 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		public static void Start(string targetExecutable, string md5)
+		public static void Start(string targetExecutable)
 		{
 			if (!ValidPath) return;
-			WriteConfig(targetExecutable, md5);
+			WriteConfig(targetExecutable);
 			string selfExe = Process.GetCurrentProcess().MainModule.FileName;
 			if (!Utils.CheckTaskExist(selfExe, "--demulshooter"))
 			{

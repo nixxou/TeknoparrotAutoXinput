@@ -1,17 +1,24 @@
 Volume control : Global, per game and hotkeys
 Pause menu
 html rewrite launchscreen
+Clean reshade files -> Ok ?
+Vjoy button instead of keyboard for multikey binding on gun
+Option to restrict keys for gun binding
+Remove some options
+Rework on Litchknarre
+
 Mamehooker
-TP Backup System
+TP Backup System 
 Thread to Task
-Auto Config for gamepad/lightgun
-Option for Vjoy : Only when needed
-Option for Vjoy : Auto Select Vjoy number
+
 Extra TP Options for wheel
-Clean Unneeded Shaders, add a show diff, press key for grid
+
 The patch archive must include cfg
 Need to support UpdateArchive
 Launchbox playlist ?
-Clean reshade files
+
 Manage if com port incorrect
-Problem pm folder for auto add archive Walking dead, maybe others ?
+Problem pm folder for auto add archive Walking dead, maybe others ? -> Just done with pm
+
+
+Build Generator
