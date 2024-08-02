@@ -1850,6 +1850,8 @@ namespace TeknoparrotAutoXinput
 			Controls.Add(btn_next);
 			Controls.Add(btn_previous);
 			Controls.Add(tabControl1);
+			MaximizeBox = false;
+			MinimizeBox = false;
 			Name = "Wizard";
 			Text = "Wizard";
 			FormClosing += Wizard_FormClosing;

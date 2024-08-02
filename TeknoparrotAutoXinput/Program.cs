@@ -323,6 +323,20 @@ namespace TeknoparrotAutoXinput
 					};
 					Process.Start(psi2);
 
+					ProcessStartInfo psi3 = new ProcessStartInfo
+					{
+						FileName = "taskkill",
+						Arguments = $"/F /IM " + Path.GetFileName(ConfigurationManager.MainConfig.mamehookerExe),
+						CreateNoWindow = true,
+						UseShellExecute = false
+					};
+
+					if (DemulshooterManager.UseMamehooker && ConfigurationManager.MainConfig.mamehookerExe != "" && File.Exists(ConfigurationManager.MainConfig.mamehookerExe))
+					{
+
+						Process.Start(psi3);
+					}
+
 					int pid = DemulshooterManager.ParentProcess;
 					if (pid == -1) return;
 					Process processParent = Process.GetProcessById(pid);
@@ -335,6 +349,7 @@ namespace TeknoparrotAutoXinput
 
 							Process.Start(psi);
 							Process.Start(psi2);
+							Process.Start(psi3);
 							Thread.Sleep(100);
 							Utils.KillProcessById(Process.GetCurrentProcess().Id);
 
@@ -343,14 +358,26 @@ namespace TeknoparrotAutoXinput
 					}
 
 					Thread.Sleep(1000);
+					//MessageBox.Show($"mamehooker debug1 {DemulshooterManager.UseMamehooker} {ConfigurationManager.MainConfig.mamehookerExe}");
+					if (DemulshooterManager.UseMamehooker && ConfigurationManager.MainConfig.mamehookerExe != "" && File.Exists(ConfigurationManager.MainConfig.mamehookerExe))
+					{
+
+						Process processMamehooker = new Process();
+						processMamehooker.StartInfo.FileName = ConfigurationManager.MainConfig.mamehookerExe;
+						processMamehooker.StartInfo.WorkingDirectory = Path.GetDirectoryName(ConfigurationManager.MainConfig.mamehookerExe);
+						processMamehooker.StartInfo.UseShellExecute = true;
+						processMamehooker.StartInfo.Verb = "runas";
+						processMamehooker.Start();
+						Thread.Sleep(1000);
+
+					}
 
 
-					
 					string exePath = DemulshooterManager.Is64bits ? DemulshooterManager.Demulshooter64 : DemulshooterManager.Demulshooter32;
 					string exeDir = Path.GetDirectoryName(exePath);
 					Process process = new Process();
 					process.StartInfo.FileName = exePath;
-					if(DemulshooterManager.TargetProcess != "") process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -pname={DemulshooterManager.TargetProcess} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
+					if(DemulshooterManager.TargetProcess != "") process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -pname=\"{DemulshooterManager.TargetProcess}\" -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 					else process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 
 					/*
@@ -571,7 +598,10 @@ namespace TeknoparrotAutoXinput
 			if (args.Length == 0)
 			{
 				ApplicationConfiguration.Initialize();
-				Application.Run(new Main());
+
+				string TeknoparrotAutoXinputConfigFile = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "TeknoparrotAutoXinput.json");
+				if (!File.Exists(TeknoparrotAutoXinputConfigFile)) Application.Run(new Wizard());
+				else Application.Run(new Main());
 			}
 			if (args.Length > 0)
 			{
@@ -4164,6 +4194,11 @@ namespace TeknoparrotAutoXinput
 								gunADamageRumble = DamageRumble;
 								gunA4tiers = Fourtiers;
 
+								if(RumbleTypeA.ToLower()=="mamehooker" || RumbleTypeB.ToLower() == "mamehooker")
+								{
+									DemulshooterManager.UseMamehooker = true;
+								}
+
 							}
 							if (GunBGuid != "")
 							{
@@ -4281,7 +4316,8 @@ namespace TeknoparrotAutoXinput
 								DemulshooterManager.InitGuns(RumbleTypeA, RumbleParameterA, RumbleTypeB, RumbleParameterB, gunAAutoJoy, gunADamageRumble, gunA4tiers, gunBAutoJoy, gunBDamageRumble, gunB4tiers);
 								if(GameInfo.ContainsKey("64bits") && GameInfo["64bits"].ToLower() == "true") DemulshooterManager.Is64bits = true;
 								else DemulshooterManager.Is64bits = false;
-								DemulshooterManager.UseMamehooker = true;
+
+								if(ConfigurationManager.MainConfig.alwaysRunMamehooker) DemulshooterManager.UseMamehooker = true;
 								DemulshooterManager.UseTcp = true;
 								DemulshooterManager.Rom = GameInfo["rom"];
 								DemulshooterManager.Target = GameInfo["target"];
@@ -5690,6 +5726,7 @@ _Translate=0.000000,0.000000
 						}
 						if(shifterHack != null) shifterHack.Stop();
 
+						Utils.KillProcessById(Process.GetCurrentProcess().Id);
 					}
 
 

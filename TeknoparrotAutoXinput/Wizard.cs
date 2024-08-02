@@ -754,12 +754,10 @@ namespace TeknoparrotAutoXinput
 		{
 			try
 			{
-				string exePath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "ViGEmBusSetup_x64.msi");
+				string exePath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "ViGEmBus_1.22.0_x64_x86_arm64.exe");
 				string exeDir = Path.GetDirectoryName(exePath);
-
 				Process process = new Process();
-				process.StartInfo.FileName = "msiexec";
-				process.StartInfo.Arguments = $"/i \"{exePath}\""; // /i for install
+				process.StartInfo.FileName = exePath;
 				process.StartInfo.WorkingDirectory = exeDir;
 				process.StartInfo.UseShellExecute = true;
 				process.StartInfo.Verb = "runas";
@@ -2734,12 +2732,12 @@ namespace TeknoparrotAutoXinput
 			{
 				string autoXinputPatchDir = Path.Combine(txt_tpfolder.Text, "AutoXinputLinks");
 				string gamePatchDir = txt_linksourcefolderexe.Text;
-				if(string.IsNullOrEmpty(autoXinputPatchDir) || !Directory.Exists(autoXinputPatchDir))
+				if(string.IsNullOrEmpty(autoXinputPatchDir) || !Directory.Exists(Directory.GetParent(autoXinputPatchDir).FullName))
 				{
 					MessageBox.Show("Invalid dir : " + autoXinputPatchDir);
 					return;
 				}
-				if (string.IsNullOrEmpty(gamePatchDir) || !Directory.Exists(gamePatchDir))
+				if (string.IsNullOrEmpty(gamePatchDir) || !Directory.Exists(Directory.GetParent(gamePatchDir).FullName))
 				{
 					MessageBox.Show("Invalid dir : " + gamePatchDir);
 					return;
@@ -2942,6 +2940,17 @@ namespace TeknoparrotAutoXinput
 				File.WriteAllText(File.ReadAllText(Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "sinden", "Lightgun.exe.Config")),sindenConfigContent);
 			}
 			*/
+
+			if (chk_erasepergame.Checked)
+			{
+				try
+				{
+					Directory.Delete(Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "gameoptions"), true);
+					Thread.Sleep(1000);
+					Directory.CreateDirectory(Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "gameoptions"));
+				}
+				catch { }
+			}
 
 			MessageBox.Show("Install Done, please restart your app");
 			Application.Exit();

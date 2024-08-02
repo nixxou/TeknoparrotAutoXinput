@@ -129,7 +129,6 @@ namespace TeknoparrotAutoXinput
 			ini.Write("Net_OutputsEnabled", UseTcp ? "True" : "False");
 
 
-
 		}
 
 		public static void ReadConfig()
@@ -145,6 +144,7 @@ namespace TeknoparrotAutoXinput
 				Is64bits = ini.Read("Launch_64bits") == "True" ? true : false;
 				ParentProcess = int.Parse(ini.Read("ParentProcess"));
 				HideCrosshair = ini.Read("HideCrosshair") == "True" ? true : false;
+				UseMamehooker = ini.Read("WM_OutputsEnabled") == "True" ? true : false;
 			}
 
 		}

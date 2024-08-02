@@ -652,7 +652,7 @@ namespace TeknoparrotAutoXinput
 						if (_haveWheel && DataGame.existingConfig.ContainsKey("wheel"))
 						{
 							var joystickButtonWheel = Program.ParseConfig(DataGame.existingConfig["wheel"]);
-							var PlayerList = Program.        GetPlayersList(joystickButtonWheel);
+							var PlayerList = Program.GetPlayersList(joystickButtonWheel);
 							int nb_wheel = _connectedGamePad.Values.Where(c => c.Type == "wheel").Count();
 							int currentlyAttributed = 0;
 							List<XinputGamepad> gamepadList = new List<XinputGamepad>();
@@ -1860,6 +1860,16 @@ namespace TeknoparrotAutoXinput
 			});
 
 			isPlaying = false;
+		}
+
+		private void kryptonButton1_Click(object sender, EventArgs e)
+		{
+			var frm = new Wizard();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+			}
 		}
 	}
 

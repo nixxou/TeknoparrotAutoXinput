@@ -75,6 +75,7 @@
 			cmb_patchlink = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel9 = new Krypton.Toolkit.KryptonLabel();
 			btn_playgamedirect2 = new Krypton.Toolkit.KryptonButton();
+			kryptonButton1 = new Krypton.Toolkit.KryptonButton();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox_gameControls).BeginInit();
 			flowLayoutPanelThumbs.SuspendLayout();
@@ -99,7 +100,7 @@
 			// 
 			btn_globalconfig.Location = new Point(12, 6);
 			btn_globalconfig.Name = "btn_globalconfig";
-			btn_globalconfig.Size = new Size(482, 29);
+			btn_globalconfig.Size = new Size(284, 29);
 			btn_globalconfig.TabIndex = 1;
 			btn_globalconfig.Values.Text = "Edit TeknoparrotAutoXinput Global Configuration";
 			btn_globalconfig.Click += btn_globalconfig_Click;
@@ -253,6 +254,7 @@
 			button6.TabIndex = 15;
 			button6.Text = "button6";
 			button6.UseVisualStyleBackColor = true;
+			button6.Visible = false;
 			button6.Click += button6_Click;
 			// 
 			// button9
@@ -347,6 +349,7 @@
 			button3.TabIndex = 10;
 			button3.Text = "button3";
 			button3.UseVisualStyleBackColor = true;
+			button3.Visible = false;
 			button3.Click += button3_Click;
 			// 
 			// timer_controllerUpdate
@@ -544,11 +547,21 @@
 			btn_playgamedirect2.Values.Text = "Play without controller bind and options";
 			btn_playgamedirect2.Click += btn_playgamedirect2_Click;
 			// 
+			// kryptonButton1
+			// 
+			kryptonButton1.Location = new Point(302, 6);
+			kryptonButton1.Name = "kryptonButton1";
+			kryptonButton1.Size = new Size(192, 29);
+			kryptonButton1.TabIndex = 207;
+			kryptonButton1.Values.Text = "Setup Wizard";
+			kryptonButton1.Click += kryptonButton1_Click;
+			// 
 			// Main
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(999, 744);
+			Controls.Add(kryptonButton1);
 			Controls.Add(btn_playgamedirect2);
 			Controls.Add(groupBox2);
 			Controls.Add(btn_tpsettings);
@@ -632,5 +645,6 @@
 		private Krypton.Toolkit.KryptonButton btn_playgamedirect2;
 		private Krypton.Toolkit.KryptonComboBox cmb_patchlink;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel9;
+		private Krypton.Toolkit.KryptonButton kryptonButton1;
 	}
 }
