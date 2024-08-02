@@ -118,6 +118,14 @@ namespace TeknoparrotAutoXinput
 		public bool gunAvjoy { get; set; } = false;
 		public bool gunBvjoy { get; set; } = false;
 
+		public int gunA_sindenRecoil1 { get; set; } = 7;
+		public int gunA_sindenRecoil2 { get; set; } = 6;
+		public int gunA_sindenRecoil3 { get; set; } = 6;
+		public int gunB_sindenRecoil1 { get; set; } = 7;
+		public int gunB_sindenRecoil2 { get; set; } = 6;
+		public int gunB_sindenRecoil3 { get; set; } = 6;
+
+
 		public bool reversePedals { get; set; } = false;
 		public bool alwaysRunMamehooker { get; set; } = false;
 
@@ -268,6 +276,12 @@ namespace TeknoparrotAutoXinput
 				this.gunBdomagerumble = DeserializeData.gunBdomagerumble;
 				this.gunAvjoy = DeserializeData.gunAvjoy;
 				this.gunBvjoy = DeserializeData.gunBvjoy;
+				this.gunA_sindenRecoil1 = DeserializeData.gunA_sindenRecoil1;
+				this.gunA_sindenRecoil2 = DeserializeData.gunA_sindenRecoil2;
+				this.gunA_sindenRecoil3 = DeserializeData.gunA_sindenRecoil3;
+				this.gunB_sindenRecoil1 = DeserializeData .gunB_sindenRecoil1;
+				this.gunB_sindenRecoil2 = DeserializeData .gunB_sindenRecoil2;
+				this.gunB_sindenRecoil3 = DeserializeData .gunB_sindenRecoil3;
 				this.reversePedals = DeserializeData.reversePedals;
 				this.alwaysRunMamehooker = DeserializeData.alwaysRunMamehooker;
 				this.rivatunerExe = DeserializeData.rivatunerExe;

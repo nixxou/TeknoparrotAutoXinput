@@ -950,6 +950,60 @@ namespace TeknoparrotAutoXinput
 
 				}
 				catch (Exception ex) { }
+
+				try
+				{
+					var keycombi = Combination.FromString("NumPad9");
+					Action actionPauseMenu = () =>
+					{
+						if (GunA_manual && !isActivated)
+						{
+							trk_forceA_X.Value += 50;
+						}
+					};
+					assignment.Add(keycombi, actionPauseMenu);
+				}
+				catch (Exception ex) { }
+				try
+				{
+					var keycombi = Combination.FromString("NumPad3");
+					Action actionPauseMenu = () =>
+					{
+						if (GunA_manual && !isActivated)
+						{
+							trk_forceA_X.Value -= 50;
+						}
+					};
+					assignment.Add(keycombi, actionPauseMenu);
+				}
+				catch (Exception ex) { }
+				try
+				{
+					var keycombi = Combination.FromString("NumPad7");
+					Action actionPauseMenu = () =>
+					{
+						if (GunA_manual && !isActivated)
+						{
+							trk_forceA_Y.Value += 50;
+						}
+					};
+					assignment.Add(keycombi, actionPauseMenu);
+				}
+				catch (Exception ex) { }
+				try
+				{
+					var keycombi = Combination.FromString("NumPad1");
+					Action actionPauseMenu = () =>
+					{
+						if (GunA_manual && !isActivated)
+						{
+							trk_forceA_Y.Value -= 50;
+						}
+					};
+					assignment.Add(keycombi, actionPauseMenu);
+				}
+				catch (Exception ex) { }
+
 				try
 				{
 					var keycombi = Combination.FromString("NumPad0");

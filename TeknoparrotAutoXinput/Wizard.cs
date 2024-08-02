@@ -71,11 +71,13 @@ namespace TeknoparrotAutoXinput
 		int gunA_comport = 0;
 		int gunA_type = -1;
 		string gunA_json = "";
+		int gunA_sindenType = 0;
 
 
 		int gunB_comport = 0;
 		int gunB_type = -1;
 		string gunB_json = "";
+		int gunB_sindenType = 0;
 
 		int selectController_xinput = 0;
 		int selectController_wheel = 0;
@@ -214,10 +216,12 @@ namespace TeknoparrotAutoXinput
 			this.gunA_type = SavedWizardSettings.gunA_type;
 			this.gunA_json = SavedWizardSettings.gunA_json;
 			this.gunA_comport = SavedWizardSettings.gunA_comport;
+			this.gunA_sindenType = SavedWizardSettings.gunA_sindenType;
 
 			this.gunB_comport = SavedWizardSettings.gunB_comport;
 			this.gunB_type = SavedWizardSettings.gunB_type;
 			this.gunB_json = SavedWizardSettings.gunB_json;
+			this.gunB_sindenType = SavedWizardSettings.gunB_sindenType;
 
 			this.IsGunAConfigured = SavedWizardSettings.IsGunAConfigured;
 			this.IsGunBConfigured = SavedWizardSettings.IsGunBConfigured;
@@ -2029,6 +2033,8 @@ namespace TeknoparrotAutoXinput
 				gunA_json = "";
 				gunA_comport = 0;
 				IsGunAConfigured = false;
+				gunA_sindenType = 0;
+				SavedWizardSettings.gunA_sindenType = 0;
 				SavedWizardSettings.IsGunAConfigured = false;
 				SavedWizardSettings.gunA_json = "";
 				SavedWizardSettings.gunA_comport = 0;
@@ -2047,6 +2053,8 @@ namespace TeknoparrotAutoXinput
 				gunB_json = "";
 				gunB_comport = 0;
 				IsGunBConfigured = false;
+				gunB_sindenType = 0;
+				SavedWizardSettings.gunB_sindenType = 0;
 				SavedWizardSettings.IsGunBConfigured = false;
 				SavedWizardSettings.gunB_json = "";
 				SavedWizardSettings.gunB_comport = 0;
@@ -2073,6 +2081,8 @@ namespace TeknoparrotAutoXinput
 					gunA_json = frm.Dialogconfig;
 					IsGunAConfigured = true;
 					gunA_comport = frm.gunCom;
+					gunA_sindenType = frm.gunSindenType;
+					SavedWizardSettings.gunA_sindenType = gunA_sindenType;
 					SavedWizardSettings.gunA_comport = gunA_comport;
 					SavedWizardSettings.gunA_json = gunA_json;
 					SavedWizardSettings.IsGunAConfigured = IsGunAConfigured;
@@ -2116,6 +2126,8 @@ namespace TeknoparrotAutoXinput
 					gunB_json = frm.Dialogconfig;
 					IsGunBConfigured = true;
 					gunB_comport = frm.gunCom;
+					gunB_sindenType = frm.gunSindenType;
+					SavedWizardSettings.gunB_sindenType = gunB_sindenType;
 					SavedWizardSettings.gunB_comport = gunB_comport;
 					SavedWizardSettings.gunB_json = gunB_json;
 					SavedWizardSettings.IsGunBConfigured = IsGunBConfigured;
@@ -2794,6 +2806,8 @@ namespace TeknoparrotAutoXinput
 					NewConfig.useHotasWithWheel = true;
 				}
 			}
+
+			int gun_sinden_set = 0;
 			if(selectController_lightgun > 0)
 			{
 				string typeGunTxt = "";
@@ -2822,9 +2836,13 @@ namespace TeknoparrotAutoXinput
 				}
 				if(gunType == 2)
 				{
-					NewConfig.gunARecoil = "sinden-gun1";
+					gun_sinden_set++;
+					if(gun_sinden_set == 1) NewConfig.gunARecoil = "sinden-gun1";
+					else NewConfig.gunARecoil = "sinden-gun2";
 				}
 				if (vjoy_installed) NewConfig.gunAvjoy = true;
+
+				NewConfig.gunACrosshair = true;
 			}
 			if (selectController_lightgun == 2)
 			{
@@ -2840,10 +2858,10 @@ namespace TeknoparrotAutoXinput
 				if (gunType == 6) { typeGunTxt = "wiimote"; }
 				NewConfig.gunBType = typeGunTxt;
 
-				if (typeGunTxt == "guncon1") NewConfig.bindingDinputGunAGuncon1 = gunB_json;
-				if (typeGunTxt == "guncon2") NewConfig.bindingDinputGunAGuncon2 = gunB_json;
-				if (typeGunTxt == "sinden") NewConfig.bindingDinputGunASinden = gunB_json;
-				if (typeGunTxt == "wiimote") NewConfig.bindingDinputGunAWiimote = gunB_json;
+				if (typeGunTxt == "guncon1") NewConfig.bindingDinputGunBGuncon1 = gunB_json;
+				if (typeGunTxt == "guncon2") NewConfig.bindingDinputGunBGuncon2 = gunB_json;
+				if (typeGunTxt == "sinden") NewConfig.bindingDinputGunBSinden = gunB_json;
+				if (typeGunTxt == "wiimote") NewConfig.bindingDinputGunBWiimote = gunB_json;
 
 				if (gunType == 0 || gunType == 1)
 				{
@@ -2854,14 +2872,18 @@ namespace TeknoparrotAutoXinput
 				}
 				if (gunType == 2)
 				{
-					NewConfig.gunBRecoil = "sinden-gun2";
+					gun_sinden_set++;
+					if (gun_sinden_set == 1) NewConfig.gunARecoil = "sinden-gun1";
+					else NewConfig.gunARecoil = "sinden-gun2";
 				}
 				if (vjoy_installed) NewConfig.gunBvjoy = true;
+
+				NewConfig.gunBCrosshair = true;
 			}
 			string rivaPath = Utils.checkInstalled("RivaTuner Statistics");
 			if (!string.IsNullOrEmpty(rivaPath))
 			{
-				NewConfig.rivatunerExe = Path.Combine(Path.GetDirectoryName(rivaPath), "RTTS.exe");
+				NewConfig.rivatunerExe = Path.Combine(Path.GetDirectoryName(rivaPath), "RTSS.exe");
 			}
 
 			string XenosPath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.exe");
@@ -2880,6 +2902,49 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig = NewConfig;
 			ConfigurationManager.SaveConfig();
 
+			/*
+			if(gun_sinden_set > 0)
+			{
+				string sindenConfigContent = File.ReadAllText(Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "sinden", "Lightgun.exe.Config.Base"));
+				if(gun_sinden_set == 1)
+				{
+					if (cmb_gunA_type.SelectedIndex == 2)
+					{
+						sindenConfigContent = Regex.Replace(sindenConfigContent,
+							@"<add key=""comboLightgunAType"" value=""\d+"" />",
+							$@"<add key=""comboLightgunAType"" value=""{gunA_sindenType}"" />");
+
+						sindenConfigContent = Regex.Replace(sindenConfigContent,
+							@"<add key=""comboLightgunBType"" value=""\d+"" />",
+							$@"<add key=""comboLightgunBType"" value=""0"" />");
+					}
+					else
+					{
+						sindenConfigContent = Regex.Replace(sindenConfigContent,
+							@"<add key=""comboLightgunAType"" value=""\d+"" />",
+							$@"<add key=""comboLightgunAType"" value=""{gunB_sindenType}"" />");
+
+						sindenConfigContent = Regex.Replace(sindenConfigContent,
+							@"<add key=""comboLightgunBType"" value=""\d+"" />",
+							$@"<add key=""comboLightgunBType"" value=""0"" />");
+					}
+				}
+				else
+				{
+					sindenConfigContent = Regex.Replace(sindenConfigContent,
+						@"<add key=""comboLightgunAType"" value=""\d+"" />",
+						$@"<add key=""comboLightgunAType"" value=""{gunA_sindenType}"" />");
+
+					sindenConfigContent = Regex.Replace(sindenConfigContent,
+						@"<add key=""comboLightgunBType"" value=""\d+"" />",
+						$@"<add key=""comboLightgunBType"" value=""{gunB_sindenType}"" />");
+				}
+				File.WriteAllText(File.ReadAllText(Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "sinden", "Lightgun.exe.Config")),sindenConfigContent);
+			}
+			*/
+
+			MessageBox.Show("Install Done, please restart your app");
+			Application.Exit();
 
 
 		}
@@ -2953,10 +3018,12 @@ public class WizardSettings
 	public int gunA_type = -1;
 	public string gunA_json = "";
 	public int gunA_comport = 0;
+	public int gunA_sindenType = 0;
 
 	public int gunB_comport = 0;
 	public int gunB_type = -1;
 	public string gunB_json = "";
+	public int gunB_sindenType = 0;
 
 	public string patchArchive = "";
 
@@ -3009,11 +3076,13 @@ public class WizardSettings
 				this.gunA_type = DeserializeData.gunA_type;
 				this.gunA_json = DeserializeData.gunA_json;
 				this.gunA_comport = DeserializeData.gunA_comport;
+				this.gunA_sindenType = DeserializeData.gunA_sindenType;
 
 
 				this.gunB_type = DeserializeData.gunB_type;
 				this.gunB_json = DeserializeData.gunB_json;
 				this.gunB_comport = DeserializeData.gunB_comport;
+				this.gunB_sindenType = DeserializeData.gunB_sindenType;
 
 				this.patchArchive = DeserializeData.patchArchive;
 				this.IsWheelConfigured = DeserializeData.IsWheelConfigured;

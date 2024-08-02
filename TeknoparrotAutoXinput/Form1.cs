@@ -251,6 +251,14 @@ namespace TeknoparrotAutoXinput
 			chk_gunA_OffscreenReload.Checked = ConfigurationManager.MainConfig.gunAOffscreenReload;
 			chk_gunB_OffscreenReload.Checked = ConfigurationManager.MainConfig.gunBOffscreenReload;
 
+			num_gunA_sindenRecoil1.Value = ConfigurationManager.MainConfig.gunA_sindenRecoil1;
+			num_gunA_sindenRecoil2.Value = ConfigurationManager.MainConfig.gunA_sindenRecoil2;
+			num_gunA_sindenRecoil3.Value = ConfigurationManager.MainConfig.gunA_sindenRecoil3;
+			num_gunB_sindenRecoil1.Value = ConfigurationManager.MainConfig.gunB_sindenRecoil1;
+			num_gunB_sindenRecoil2.Value = ConfigurationManager.MainConfig.gunB_sindenRecoil2;
+			num_gunB_sindenRecoil3.Value = ConfigurationManager.MainConfig.gunB_sindenRecoil3;
+
+
 			updateStooz();
 
 			if (!chk_enableVirtualKeyboard.Checked)
@@ -679,6 +687,13 @@ namespace TeknoparrotAutoXinput
 
 			ConfigurationManager.MainConfig.gunAvjoy = chk_gunA_Vjoy.Checked;
 			ConfigurationManager.MainConfig.gunBvjoy = chk_gunB_Vjoy.Checked;
+
+			ConfigurationManager.MainConfig.gunA_sindenRecoil1 = (int)num_gunA_sindenRecoil1.Value;
+			ConfigurationManager.MainConfig.gunA_sindenRecoil2 = (int)num_gunA_sindenRecoil2.Value;
+			ConfigurationManager.MainConfig.gunA_sindenRecoil3 = (int)num_gunA_sindenRecoil3.Value;
+			ConfigurationManager.MainConfig.gunB_sindenRecoil1 = (int)num_gunB_sindenRecoil1.Value;
+			ConfigurationManager.MainConfig.gunB_sindenRecoil2 = (int)num_gunB_sindenRecoil2.Value;
+			ConfigurationManager.MainConfig.gunB_sindenRecoil3 = (int)num_gunB_sindenRecoil3.Value;
 
 			ConfigurationManager.MainConfig.reasignPedals = chk_reasignGunPedal.Checked;
 			ConfigurationManager.MainConfig.reversePedals = chk_reversePedal.Checked;

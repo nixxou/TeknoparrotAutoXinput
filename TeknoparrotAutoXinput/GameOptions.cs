@@ -543,6 +543,14 @@ namespace TeknoparrotAutoXinput
 			cmb_gunB_UseVjoy.SelectedIndex = gameSettings.gunB_useVjoy;
 			cmb_gunB_OffscreenReload.SelectedIndex = gameSettings.gunB_OffscreenReload;
 
+			cmb_gunA_sindenRecoil1.SelectedIndex = gameSettings.gunA_sindenRecoil1;
+			cmb_gunA_sindenRecoil2.SelectedIndex = gameSettings.gunA_sindenRecoil2;
+			cmb_gunA_sindenRecoil3.SelectedIndex = gameSettings.gunA_sindenRecoil3;
+			cmb_gunB_sindenRecoil1.SelectedIndex = gameSettings.gunB_sindenRecoil1;
+			cmb_gunB_sindenRecoil2.SelectedIndex = gameSettings.gunB_sindenRecoil2;
+			cmb_gunB_sindenRecoil3.SelectedIndex = gameSettings.gunB_sindenRecoil3;
+
+
 			chk_sindenextra.Checked = !gameSettings.gun_useExtraSinden;
 			txt_sindenextra.Text = gameSettings.gun_ExtraSinden;
 
@@ -734,6 +742,14 @@ namespace TeknoparrotAutoXinput
 			gameSettings.gunB_4tiers = cmb_gunB_4tiers.SelectedIndex;
 			gameSettings.gunB_useVjoy = cmb_gunB_UseVjoy.SelectedIndex;
 			gameSettings.gunB_OffscreenReload = cmb_gunB_OffscreenReload.SelectedIndex;
+
+
+			gameSettings.gunA_sindenRecoil1 = cmb_gunA_sindenRecoil1.SelectedIndex;
+			gameSettings.gunA_sindenRecoil2 = cmb_gunA_sindenRecoil2.SelectedIndex;
+			gameSettings.gunA_sindenRecoil3 = cmb_gunA_sindenRecoil3.SelectedIndex;
+			gameSettings.gunB_sindenRecoil1 = cmb_gunB_sindenRecoil1.SelectedIndex;
+			gameSettings.gunB_sindenRecoil2 = cmb_gunB_sindenRecoil2.SelectedIndex;
+			gameSettings.gunB_sindenRecoil3 = cmb_gunB_sindenRecoil3.SelectedIndex;
 
 			gameSettings.gun_useExtraSinden = !chk_sindenextra.Checked;
 			gameSettings.gun_ExtraSinden = txt_sindenextra.Text;

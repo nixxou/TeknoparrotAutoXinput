@@ -37,6 +37,7 @@ namespace TeknoparrotAutoXinput
 		public string gunGuid = "";
 		public string gunName = "";
 		public int gunCom = 0;
+		public int gunSindenType = 0;
 
 		private int _gunType;
 		private int _gunIndex;
@@ -519,6 +520,18 @@ namespace TeknoparrotAutoXinput
 			lbl_sinden_nojoystick.Visible = false;
 			btn_sinden_configurekeys.Enabled = false;
 			btn_sinden_done.Enabled = false;
+
+			if(cmb_selectSinden.SelectedIndex >= 0)
+			{
+				if (cmb_selectSinden.SelectedItem.ToString().StartsWith("SindenLightgun-Black")) gunSindenType = 1;
+				if (cmb_selectSinden.SelectedItem.ToString().StartsWith("SindenLightgun-Blue")) gunSindenType = 2;
+				if (cmb_selectSinden.SelectedItem.ToString().StartsWith("SindenLightgun-Red")) gunSindenType = 3;
+				if (cmb_selectSinden.SelectedItem.ToString().StartsWith("SindenLightgun-Player2")) gunSindenType = 4;
+			}
+			else
+			{
+				gunSindenType = 0;
+			}
 
 			int selectedIndex = cmb_selectSinden.SelectedIndex;
 			if (selectedIndex >= 0 && selectedIndex < listSinden.Count)

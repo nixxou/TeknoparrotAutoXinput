@@ -62,6 +62,13 @@ namespace TeknoparrotAutoXinput
 		public int gunA_OffscreenReload { get; set; } = 0;
 		public int gunB_OffscreenReload { get; set; } = 0;
 
+		public int gunA_sindenRecoil1 { get; set; } = 0;
+		public int gunA_sindenRecoil2 { get; set; } = 0;
+		public int gunA_sindenRecoil3 { get; set; } = 0;
+		public int gunB_sindenRecoil1 { get; set; } = 0;
+		public int gunB_sindenRecoil2 { get; set; } = 0;
+		public int gunB_sindenRecoil3 { get; set; } = 0;
+
 		public int useMagpie { get; set; } = 0;
 		public int magpieScaling { get; set; } = 0;
 		public int magpieCapture { get; set; } = 0;
@@ -147,6 +154,12 @@ namespace TeknoparrotAutoXinput
 				this.gunB_useVjoy = DeserializeData.gunB_useVjoy;
 				this.gunA_4tiers = DeserializeData.gunA_4tiers;
 				this.gunB_4tiers = DeserializeData.gunB_4tiers;
+				this.gunA_sindenRecoil1 = DeserializeData.gunA_sindenRecoil1;
+				this.gunA_sindenRecoil2 = DeserializeData.gunA_sindenRecoil2;
+				this.gunA_sindenRecoil3 = DeserializeData.gunA_sindenRecoil3;
+				this.gunB_sindenRecoil1 = DeserializeData.gunB_sindenRecoil1;
+				this.gunB_sindenRecoil2 = DeserializeData.gunB_sindenRecoil2;
+				this.gunB_sindenRecoil3 = DeserializeData.gunB_sindenRecoil3;
 				this.runRivaTuner = DeserializeData.runRivaTuner;
 				this.gunA_OffscreenReload = DeserializeData.gunA_OffscreenReload;
 				this.gunB_OffscreenReload = DeserializeData.gunB_OffscreenReload;

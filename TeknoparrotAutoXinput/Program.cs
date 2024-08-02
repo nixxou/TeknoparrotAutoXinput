@@ -66,6 +66,10 @@ namespace TeknoparrotAutoXinput
 		public static string GunAType = "";
 		public static string GunBType = "";
 
+		public static int GunASindenType = 0;
+		public static int GunBSindenType = 0;
+
+
 		public static string VjoyGuid = "";
 
 		public static Guid? FirstKeyboardGuid = null;
@@ -1507,12 +1511,34 @@ namespace TeknoparrotAutoXinput
 										Utils.LogMessage($"GunAGuid Found");
 										dinputLightgunAFound = true;
 										haveLightgun = true;
+										if (GunAGuid != "" && GunAType == "sinden")
+										{
+											var joystick = new Joystick(directInput, device.InstanceGuid);
+											var sindentype = 0;
+											if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F38")) sindentype = 1; //Black
+											if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F01")) sindentype = 2; //Blue
+											if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F02")) sindentype = 3; //Red
+											if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F39")) sindentype = 4; //Player2
+											GunASindenType = sindentype;
+											joystick.Dispose();
+										}
 									}
 									if (device.InstanceGuid.ToString() == GunBGuid)
 									{
 										Utils.LogMessage($"GunBGuid Found");
 										dinputLightgunBFound = true;
 										haveLightgun = true;
+										if (GunBGuid != "" && GunBType == "sinden")
+										{
+											var joystick = new Joystick(directInput, device.InstanceGuid);
+											var sindentype = 0;
+											if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F38")) sindentype = 1; //Black
+											if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F01")) sindentype = 2; //Blue
+											if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F02")) sindentype = 3; //Red
+											if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F39")) sindentype = 4; //Player2
+											GunBSindenType = sindentype;
+											joystick.Dispose();
+										}
 									}
 								}
 							}
@@ -4068,7 +4094,7 @@ namespace TeknoparrotAutoXinput
 							bool gunA4tiers = false;
 							bool gunB4tiers = false;
 
-
+							int sindenRumbleGunASet = 0;
 							if (GunAGuid != "")
 							{
 								bool AutoJoy = false;
@@ -4100,8 +4126,16 @@ namespace TeknoparrotAutoXinput
 								}
 								if(RumbleType == "sinden-gun1" || RumbleType == "sinden-gun2")
 								{
-									if (RumbleType == "sinden-gun1") RumbleParameter = "RecoilSindenGunA";
-									if (RumbleType == "sinden-gun2") RumbleParameter = "RecoilSindenGunB";
+									if (RumbleType == "sinden-gun1")
+									{
+										RumbleParameter = "RecoilSindenGunA";
+										sindenRumbleGunASet = 1;
+									}
+									if (RumbleType == "sinden-gun2")
+									{
+										RumbleParameter = "RecoilSindenGunB";
+										sindenRumbleGunASet = 2;
+									}
 									RumbleType = "sinden";
 								}
 								if (RumbleType == "rumble")
@@ -4165,6 +4199,10 @@ namespace TeknoparrotAutoXinput
 									if (RumbleType == "sinden-gun1") RumbleParameter = "RecoilSindenGunA";
 									if (RumbleType == "sinden-gun2") RumbleParameter = "RecoilSindenGunB";
 									RumbleType = "sinden";
+
+									if (RumbleParameter == "RecoilSindenGunA" && sindenRumbleGunASet == 1) RumbleParameter = "RecoilSindenGunB";
+									if (RumbleParameter == "RecoilSindenGunB" && sindenRumbleGunASet == 2) RumbleParameter = "RecoilSindenGunA";
+
 								}
 								if (RumbleType == "rumble")
 								{
@@ -4390,9 +4428,94 @@ namespace TeknoparrotAutoXinput
 						int sinden_process_pid = -1;
 						if(useDinputLightGun && ((GunAGuid != "" && GunAType == "sinden") || (GunBGuid != "" && GunBType == "sinden")) )
 						{
+							
+							int firstSindenGun = 0;
+							int secondSindenGun = 0;
+
+							string RumbleTypeA = ConfigurationManager.MainConfig.gunARecoil;
+							if (gameOptions.gunA_recoil == 1) RumbleTypeA = "";
+
+							string RumbleTypeB = ConfigurationManager.MainConfig.gunBRecoil;
+							if (gameOptions.gunB_recoil == 1) RumbleTypeB = "";
+
+							if (RumbleTypeA == RumbleTypeB) RumbleTypeB = "";
+
+							//MessageBox.Show($"GunAGuid={GunAGuid}, GunAType={GunAType}, RumbleTypeA={RumbleTypeA}, GunASindenType={GunASindenType}");
+							//MessageBox.Show($"GunBGuid={GunBGuid}, GunAType={GunBType}, RumbleTypeA={RumbleTypeB}, GunASindenType={GunBSindenType}");
 
 
-							if (File.Exists(ConfigurationManager.MainConfig.sindenExe))
+							if (GunAGuid != "" && GunAType == "sinden" && GunASindenType > 0)
+							{
+
+								if (RumbleTypeA == "sinden-gun1" && firstSindenGun == 0) firstSindenGun = 1;
+								if (RumbleTypeA == "sinden-gun2" && secondSindenGun == 0) secondSindenGun = 1;
+							}
+							if (GunBGuid != "" && GunBType == "sinden" && GunBSindenType > 0)
+							{
+
+								if (RumbleTypeB == "sinden-gun1" && firstSindenGun == 0) firstSindenGun = 2;
+								if (RumbleTypeB == "sinden-gun2" && secondSindenGun == 0) secondSindenGun = 2;
+							}
+							if (GunAGuid != "" && GunAType == "sinden" && GunASindenType > 0 && firstSindenGun !=1 && secondSindenGun != 1)
+							{
+								if (firstSindenGun == 0) firstSindenGun = 1;
+								else if (secondSindenGun == 0) secondSindenGun = 1;
+							}
+							if (GunBGuid != "" && GunBType == "sinden" && GunBSindenType > 0 && firstSindenGun != 2 && secondSindenGun != 2)
+							{
+								if (firstSindenGun == 0) firstSindenGun = 2;
+								else if (secondSindenGun == 0) secondSindenGun = 2;
+							}
+
+							if (firstSindenGun == secondSindenGun) secondSindenGun = 0; //shouldn't happen
+
+							//MessageBox.Show($"firstSindenGun={firstSindenGun} secondSindenGun={secondSindenGun}");
+
+							int firstSindenType = 0;
+							int firstSindenRecoil1 = 0;
+							int firstSindenRecoil2 = 0;
+							int firstSindenRecoil3 = 0;
+							int secondSindenType = 0;
+							int secondSindenRecoil1 = 0;
+							int secondSindenRecoil2 = 0;
+							int secondSindenRecoil3 = 0;
+
+							if(firstSindenGun > 0)
+							{
+								if(firstSindenGun == 1)
+								{
+									firstSindenType = GunASindenType;
+									firstSindenRecoil1 = gameOptions.gunA_sindenRecoil1 > 0 ? gameOptions.gunA_sindenRecoil1 - 1 : ConfigurationManager.MainConfig.gunA_sindenRecoil1;
+									firstSindenRecoil2 = gameOptions.gunA_sindenRecoil2 > 0 ? gameOptions.gunA_sindenRecoil2 - 1 : ConfigurationManager.MainConfig.gunA_sindenRecoil2;
+									firstSindenRecoil3 = gameOptions.gunA_sindenRecoil3 > 0 ? gameOptions.gunA_sindenRecoil3 - 1 : ConfigurationManager.MainConfig.gunA_sindenRecoil3;
+								}
+								if (firstSindenGun == 2)
+								{
+									firstSindenType = GunBSindenType;
+									firstSindenRecoil1 = gameOptions.gunB_sindenRecoil1 > 0 ? gameOptions.gunB_sindenRecoil1 - 1 : ConfigurationManager.MainConfig.gunB_sindenRecoil1;
+									firstSindenRecoil2 = gameOptions.gunB_sindenRecoil2 > 0 ? gameOptions.gunB_sindenRecoil2 - 1 : ConfigurationManager.MainConfig.gunB_sindenRecoil2;
+									firstSindenRecoil3 = gameOptions.gunB_sindenRecoil3 > 0 ? gameOptions.gunB_sindenRecoil3 - 1 : ConfigurationManager.MainConfig.gunB_sindenRecoil3;
+								}
+							}
+							if (secondSindenGun > 0)
+							{
+								if (secondSindenGun == 1)
+								{
+									secondSindenType = GunASindenType;
+									secondSindenRecoil1 = gameOptions.gunA_sindenRecoil1 > 0 ? gameOptions.gunA_sindenRecoil1 - 1 : ConfigurationManager.MainConfig.gunA_sindenRecoil1;
+									secondSindenRecoil2 = gameOptions.gunA_sindenRecoil2 > 0 ? gameOptions.gunA_sindenRecoil2 - 1 : ConfigurationManager.MainConfig.gunA_sindenRecoil2;
+									secondSindenRecoil3 = gameOptions.gunA_sindenRecoil3 > 0 ? gameOptions.gunA_sindenRecoil3 - 1 : ConfigurationManager.MainConfig.gunA_sindenRecoil3;
+								}
+								if (secondSindenGun == 2)
+								{
+									secondSindenType = GunBSindenType;
+									secondSindenRecoil1 = gameOptions.gunB_sindenRecoil1 > 0 ? gameOptions.gunB_sindenRecoil1 - 1 : ConfigurationManager.MainConfig.gunB_sindenRecoil1;
+									secondSindenRecoil2 = gameOptions.gunB_sindenRecoil2 > 0 ? gameOptions.gunB_sindenRecoil2 - 1 : ConfigurationManager.MainConfig.gunB_sindenRecoil2;
+									secondSindenRecoil3 = gameOptions.gunB_sindenRecoil3 > 0 ? gameOptions.gunB_sindenRecoil3 - 1 : ConfigurationManager.MainConfig.gunB_sindenRecoil3;
+								}
+							}
+
+							if ((firstSindenType > 0 || secondSindenType > 0) && File.Exists(ConfigurationManager.MainConfig.sindenExe))
 							{
 
 								ProcessStartInfo psi = new ProcessStartInfo
@@ -4407,6 +4530,8 @@ namespace TeknoparrotAutoXinput
 
 								string argument_sinden = ConfigurationManager.MainConfig.sindenExtraCmd;
 								if (gameOptions.gun_useExtraSinden) argument_sinden = gameOptions.gun_ExtraSinden;
+								if (argument_sinden != "") argument_sinden += " ";
+								argument_sinden += $"--p1-{firstSindenType}-{firstSindenRecoil1}-{firstSindenRecoil2}-{firstSindenRecoil3} --p2-{secondSindenType}-{secondSindenRecoil1}-{secondSindenRecoil2}-{secondSindenRecoil3}";
 
 								Process sinden_process = new Process();
 								sinden_process.StartInfo.FileName = ConfigurationManager.MainConfig.sindenExe;
@@ -4473,6 +4598,16 @@ namespace TeknoparrotAutoXinput
 						{
 							string magpieExe = ConfigurationManager.MainConfig.magpieExe;
 							string magpieConfig = Path.Combine(Path.GetDirectoryName(magpieExe), "config", "config.json");
+
+							ProcessStartInfo psi = new ProcessStartInfo
+							{
+								FileName = "taskkill",
+								Arguments = $"/F /IM Magpie.exe",
+								CreateNoWindow = true,
+								UseShellExecute = false
+							};
+							Process.Start(psi);
+							Thread.Sleep(1000);
 
 							int magpieDelay = ConfigurationManager.MainConfig.magpieDelay;
 							if (gameOptions.magpieDelay > 0)

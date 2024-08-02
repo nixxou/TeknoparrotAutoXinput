@@ -108,6 +108,8 @@
 			radio_useCustomStooz_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			radio_useDefaultStooze_Hotas = new Krypton.Toolkit.KryptonRadioButton();
 			groupBox10 = new GroupBox();
+			kryptonLabel56 = new Krypton.Toolkit.KryptonLabel();
+			kryptonButton2 = new Krypton.Toolkit.KryptonButton();
 			chk_magpieGunCalibration = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel54 = new Krypton.Toolkit.KryptonLabel();
 			num_magpieBorderSize = new Krypton.Toolkit.KryptonNumericUpDown();
@@ -130,10 +132,16 @@
 			kryptonLabel43 = new Krypton.Toolkit.KryptonLabel();
 			cmb_gunB_com = new Krypton.Toolkit.KryptonComboBox();
 			grp_gunB_sindenOptions = new GroupBox();
+			kryptonLabel69 = new Krypton.Toolkit.KryptonLabel();
 			radio_gunB_sindenPump1 = new Krypton.Toolkit.KryptonRadioButton();
+			kryptonLabel75 = new Krypton.Toolkit.KryptonLabel();
 			radio_gunB_sindenPump2 = new Krypton.Toolkit.KryptonRadioButton();
+			kryptonLabel76 = new Krypton.Toolkit.KryptonLabel();
 			radio_gunB_sindenPump3 = new Krypton.Toolkit.KryptonRadioButton();
+			num_gunB_sindenRecoil3 = new Krypton.Toolkit.KryptonNumericUpDown();
+			num_gunB_sindenRecoil2 = new Krypton.Toolkit.KryptonNumericUpDown();
 			kryptonLabel38 = new Krypton.Toolkit.KryptonLabel();
+			num_gunB_sindenRecoil1 = new Krypton.Toolkit.KryptonNumericUpDown();
 			chk_gunB_Crosshair = new Krypton.Toolkit.KryptonCheckBox();
 			kryptonLabel36 = new Krypton.Toolkit.KryptonLabel();
 			cmb_gunB_recoil = new Krypton.Toolkit.KryptonComboBox();
@@ -148,6 +156,12 @@
 			kryptonLabel41 = new Krypton.Toolkit.KryptonLabel();
 			chk_gunA_Vjoy = new Krypton.Toolkit.KryptonCheckBox();
 			grp_gunA_sindenOptions = new GroupBox();
+			kryptonLabel74 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel73 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel57 = new Krypton.Toolkit.KryptonLabel();
+			num_gunA_sindenRecoil3 = new Krypton.Toolkit.KryptonNumericUpDown();
+			num_gunA_sindenRecoil2 = new Krypton.Toolkit.KryptonNumericUpDown();
+			num_gunA_sindenRecoil1 = new Krypton.Toolkit.KryptonNumericUpDown();
 			radio_gunA_sindenPump1 = new Krypton.Toolkit.KryptonRadioButton();
 			radio_gunA_sindenPump2 = new Krypton.Toolkit.KryptonRadioButton();
 			radio_gunA_sindenPump3 = new Krypton.Toolkit.KryptonRadioButton();
@@ -276,8 +290,6 @@
 			btn_magpieExe = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel50 = new Krypton.Toolkit.KryptonLabel();
 			txt_magpieExe = new Krypton.Toolkit.KryptonTextBox();
-			kryptonButton2 = new Krypton.Toolkit.KryptonButton();
-			kryptonLabel56 = new Krypton.Toolkit.KryptonLabel();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -1095,9 +1107,25 @@
 			groupBox10.TabStop = false;
 			groupBox10.Text = "Lightgun Settings";
 			// 
+			// kryptonLabel56
+			// 
+			kryptonLabel56.Location = new Point(12, 571);
+			kryptonLabel56.Name = "kryptonLabel56";
+			kryptonLabel56.Size = new Size(130, 20);
+			kryptonLabel56.TabIndex = 110;
+			kryptonLabel56.Values.Text = "Border Size (percent) :";
+			// 
+			// kryptonButton2
+			// 
+			kryptonButton2.Location = new Point(165, 471);
+			kryptonButton2.Name = "kryptonButton2";
+			kryptonButton2.Size = new Size(150, 25);
+			kryptonButton2.TabIndex = 109;
+			kryptonButton2.Values.Text = "Run MameHooker";
+			// 
 			// chk_magpieGunCalibration
 			// 
-			chk_magpieGunCalibration.Location = new Point(12, 550);
+			chk_magpieGunCalibration.Location = new Point(12, 597);
 			chk_magpieGunCalibration.Name = "chk_magpieGunCalibration";
 			chk_magpieGunCalibration.Size = new Size(388, 20);
 			chk_magpieGunCalibration.TabIndex = 108;
@@ -1105,7 +1133,7 @@
 			// 
 			// kryptonLabel54
 			// 
-			kryptonLabel54.Location = new Point(24, 550);
+			kryptonLabel54.Location = new Point(24, 597);
 			kryptonLabel54.Name = "kryptonLabel54";
 			kryptonLabel54.Size = new Size(236, 20);
 			kryptonLabel54.TabIndex = 106;
@@ -1116,7 +1144,7 @@
 			num_magpieBorderSize.AllowDecimals = true;
 			num_magpieBorderSize.DecimalPlaces = 1;
 			num_magpieBorderSize.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-			num_magpieBorderSize.Location = new Point(148, 522);
+			num_magpieBorderSize.Location = new Point(148, 569);
 			num_magpieBorderSize.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
 			num_magpieBorderSize.Minimum = new decimal(new int[] { 0, 0, 0, 0 });
 			num_magpieBorderSize.Name = "num_magpieBorderSize";
@@ -1126,7 +1154,7 @@
 			// 
 			// chk_magpieSindenBorder
 			// 
-			chk_magpieSindenBorder.Location = new Point(12, 498);
+			chk_magpieSindenBorder.Location = new Point(12, 545);
 			chk_magpieSindenBorder.Name = "chk_magpieSindenBorder";
 			chk_magpieSindenBorder.Size = new Size(460, 20);
 			chk_magpieSindenBorder.TabIndex = 107;
@@ -1134,7 +1162,7 @@
 			// 
 			// btn_runSinden
 			// 
-			btn_runSinden.Location = new Point(6, 424);
+			btn_runSinden.Location = new Point(6, 471);
 			btn_runSinden.Name = "btn_runSinden";
 			btn_runSinden.Size = new Size(150, 25);
 			btn_runSinden.TabIndex = 73;
@@ -1143,7 +1171,7 @@
 			// 
 			// chk_alwaysrunmamehooker
 			// 
-			chk_alwaysrunmamehooker.Location = new Point(12, 398);
+			chk_alwaysrunmamehooker.Location = new Point(12, 445);
 			chk_alwaysrunmamehooker.Name = "chk_alwaysrunmamehooker";
 			chk_alwaysrunmamehooker.Size = new Size(316, 20);
 			chk_alwaysrunmamehooker.TabIndex = 72;
@@ -1151,7 +1179,7 @@
 			// 
 			// btn_vjoyconfig
 			// 
-			btn_vjoyconfig.Location = new Point(311, 461);
+			btn_vjoyconfig.Location = new Point(311, 508);
 			btn_vjoyconfig.Name = "btn_vjoyconfig";
 			btn_vjoyconfig.Size = new Size(110, 23);
 			btn_vjoyconfig.TabIndex = 54;
@@ -1160,7 +1188,7 @@
 			// 
 			// kryptonLabel28
 			// 
-			kryptonLabel28.Location = new Point(6, 464);
+			kryptonLabel28.Location = new Point(6, 511);
 			kryptonLabel28.Name = "kryptonLabel28";
 			kryptonLabel28.Size = new Size(113, 20);
 			kryptonLabel28.TabIndex = 53;
@@ -1172,7 +1200,7 @@
 			cmb_vjoy.DropDownWidth = 150;
 			cmb_vjoy.IntegralHeight = false;
 			cmb_vjoy.Items.AddRange(new object[] { "Auto (Last availiable)", "Vjoy 1", "Vjoy 2", "Vjoy 3", "Vjoy 4", "Vjoy 5", "Vjoy 6", "" });
-			cmb_vjoy.Location = new Point(155, 463);
+			cmb_vjoy.Location = new Point(155, 510);
 			cmb_vjoy.Name = "cmb_vjoy";
 			cmb_vjoy.Size = new Size(150, 21);
 			cmb_vjoy.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1197,7 +1225,7 @@
 			groupBox12.Controls.Add(kryptonLabel27);
 			groupBox12.Location = new Point(390, 22);
 			groupBox12.Name = "groupBox12";
-			groupBox12.Size = new Size(372, 370);
+			groupBox12.Size = new Size(372, 390);
 			groupBox12.TabIndex = 48;
 			groupBox12.TabStop = false;
 			groupBox12.Text = "Gun B";
@@ -1302,16 +1330,30 @@
 			// 
 			// grp_gunB_sindenOptions
 			// 
+			grp_gunB_sindenOptions.Controls.Add(kryptonLabel69);
 			grp_gunB_sindenOptions.Controls.Add(radio_gunB_sindenPump1);
+			grp_gunB_sindenOptions.Controls.Add(kryptonLabel75);
 			grp_gunB_sindenOptions.Controls.Add(radio_gunB_sindenPump2);
+			grp_gunB_sindenOptions.Controls.Add(kryptonLabel76);
 			grp_gunB_sindenOptions.Controls.Add(radio_gunB_sindenPump3);
+			grp_gunB_sindenOptions.Controls.Add(num_gunB_sindenRecoil3);
+			grp_gunB_sindenOptions.Controls.Add(num_gunB_sindenRecoil2);
 			grp_gunB_sindenOptions.Controls.Add(kryptonLabel38);
+			grp_gunB_sindenOptions.Controls.Add(num_gunB_sindenRecoil1);
 			grp_gunB_sindenOptions.Location = new Point(7, 230);
 			grp_gunB_sindenOptions.Name = "grp_gunB_sindenOptions";
-			grp_gunB_sindenOptions.Size = new Size(357, 76);
+			grp_gunB_sindenOptions.Size = new Size(357, 104);
 			grp_gunB_sindenOptions.TabIndex = 74;
 			grp_gunB_sindenOptions.TabStop = false;
 			grp_gunB_sindenOptions.Text = "Sinden Specific Options";
+			// 
+			// kryptonLabel69
+			// 
+			kryptonLabel69.Location = new Point(277, 72);
+			kryptonLabel69.Name = "kryptonLabel69";
+			kryptonLabel69.Size = new Size(32, 20);
+			kryptonLabel69.TabIndex = 76;
+			kryptonLabel69.Values.Text = ">6 :";
 			// 
 			// radio_gunB_sindenPump1
 			// 
@@ -1321,6 +1363,14 @@
 			radio_gunB_sindenPump1.TabIndex = 64;
 			radio_gunB_sindenPump1.Values.Text = "Reload";
 			// 
+			// kryptonLabel75
+			// 
+			kryptonLabel75.Location = new Point(171, 72);
+			kryptonLabel75.Name = "kryptonLabel75";
+			kryptonLabel75.Size = new Size(58, 20);
+			kryptonLabel75.TabIndex = 75;
+			kryptonLabel75.Values.Text = ">3 shots";
+			// 
 			// radio_gunB_sindenPump2
 			// 
 			radio_gunB_sindenPump2.Location = new Point(171, 22);
@@ -1328,6 +1378,14 @@
 			radio_gunB_sindenPump2.Size = new Size(58, 20);
 			radio_gunB_sindenPump2.TabIndex = 65;
 			radio_gunB_sindenPump2.Values.Text = "Action";
+			// 
+			// kryptonLabel76
+			// 
+			kryptonLabel76.Location = new Point(3, 72);
+			kryptonLabel76.Name = "kryptonLabel76";
+			kryptonLabel76.Size = new Size(115, 20);
+			kryptonLabel76.TabIndex = 74;
+			kryptonLabel76.Values.Text = "Recoil Power Base :";
 			// 
 			// radio_gunB_sindenPump3
 			// 
@@ -1337,6 +1395,28 @@
 			radio_gunB_sindenPump3.TabIndex = 66;
 			radio_gunB_sindenPump3.Values.Text = "Action if Reload Offscreen availiable";
 			// 
+			// num_gunB_sindenRecoil3
+			// 
+			num_gunB_sindenRecoil3.Increment = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunB_sindenRecoil3.Location = new Point(315, 70);
+			num_gunB_sindenRecoil3.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
+			num_gunB_sindenRecoil3.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunB_sindenRecoil3.Name = "num_gunB_sindenRecoil3";
+			num_gunB_sindenRecoil3.Size = new Size(42, 22);
+			num_gunB_sindenRecoil3.TabIndex = 73;
+			num_gunB_sindenRecoil3.Value = new decimal(new int[] { 1, 0, 0, 0 });
+			// 
+			// num_gunB_sindenRecoil2
+			// 
+			num_gunB_sindenRecoil2.Increment = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunB_sindenRecoil2.Location = new Point(235, 70);
+			num_gunB_sindenRecoil2.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
+			num_gunB_sindenRecoil2.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunB_sindenRecoil2.Name = "num_gunB_sindenRecoil2";
+			num_gunB_sindenRecoil2.Size = new Size(36, 22);
+			num_gunB_sindenRecoil2.TabIndex = 72;
+			num_gunB_sindenRecoil2.Value = new decimal(new int[] { 1, 0, 0, 0 });
+			// 
 			// kryptonLabel38
 			// 
 			kryptonLabel38.Location = new Point(3, 22);
@@ -1344,6 +1424,17 @@
 			kryptonLabel38.Size = new Size(89, 20);
 			kryptonLabel38.TabIndex = 67;
 			kryptonLabel38.Values.Text = "Sinden Pump :";
+			// 
+			// num_gunB_sindenRecoil1
+			// 
+			num_gunB_sindenRecoil1.Increment = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunB_sindenRecoil1.Location = new Point(124, 70);
+			num_gunB_sindenRecoil1.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+			num_gunB_sindenRecoil1.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunB_sindenRecoil1.Name = "num_gunB_sindenRecoil1";
+			num_gunB_sindenRecoil1.Size = new Size(42, 22);
+			num_gunB_sindenRecoil1.TabIndex = 71;
+			num_gunB_sindenRecoil1.Value = new decimal(new int[] { 1, 0, 0, 0 });
 			// 
 			// chk_gunB_Crosshair
 			// 
@@ -1424,7 +1515,7 @@
 			groupBox11.Controls.Add(chk_reasignGunPedal);
 			groupBox11.Location = new Point(12, 22);
 			groupBox11.Name = "groupBox11";
-			groupBox11.Size = new Size(372, 370);
+			groupBox11.Size = new Size(372, 390);
 			groupBox11.TabIndex = 47;
 			groupBox11.TabStop = false;
 			groupBox11.Text = "Gun A";
@@ -1447,7 +1538,7 @@
 			// 
 			// chk_reversePedal
 			// 
-			chk_reversePedal.Location = new Point(9, 334);
+			chk_reversePedal.Location = new Point(6, 359);
 			chk_reversePedal.Name = "chk_reversePedal";
 			chk_reversePedal.Size = new Size(290, 20);
 			chk_reversePedal.TabIndex = 74;
@@ -1480,16 +1571,79 @@
 			// 
 			// grp_gunA_sindenOptions
 			// 
+			grp_gunA_sindenOptions.Controls.Add(kryptonLabel74);
+			grp_gunA_sindenOptions.Controls.Add(kryptonLabel73);
+			grp_gunA_sindenOptions.Controls.Add(kryptonLabel57);
+			grp_gunA_sindenOptions.Controls.Add(num_gunA_sindenRecoil3);
+			grp_gunA_sindenOptions.Controls.Add(num_gunA_sindenRecoil2);
+			grp_gunA_sindenOptions.Controls.Add(num_gunA_sindenRecoil1);
 			grp_gunA_sindenOptions.Controls.Add(radio_gunA_sindenPump1);
 			grp_gunA_sindenOptions.Controls.Add(radio_gunA_sindenPump2);
 			grp_gunA_sindenOptions.Controls.Add(radio_gunA_sindenPump3);
 			grp_gunA_sindenOptions.Controls.Add(kryptonLabel29);
 			grp_gunA_sindenOptions.Location = new Point(9, 230);
 			grp_gunA_sindenOptions.Name = "grp_gunA_sindenOptions";
-			grp_gunA_sindenOptions.Size = new Size(357, 76);
+			grp_gunA_sindenOptions.Size = new Size(357, 104);
 			grp_gunA_sindenOptions.TabIndex = 73;
 			grp_gunA_sindenOptions.TabStop = false;
 			grp_gunA_sindenOptions.Text = "Sinden Specific Options";
+			// 
+			// kryptonLabel74
+			// 
+			kryptonLabel74.Location = new Point(277, 72);
+			kryptonLabel74.Name = "kryptonLabel74";
+			kryptonLabel74.Size = new Size(32, 20);
+			kryptonLabel74.TabIndex = 70;
+			kryptonLabel74.Values.Text = ">6 :";
+			// 
+			// kryptonLabel73
+			// 
+			kryptonLabel73.Location = new Point(171, 72);
+			kryptonLabel73.Name = "kryptonLabel73";
+			kryptonLabel73.Size = new Size(58, 20);
+			kryptonLabel73.TabIndex = 69;
+			kryptonLabel73.Values.Text = ">3 shots";
+			// 
+			// kryptonLabel57
+			// 
+			kryptonLabel57.Location = new Point(3, 72);
+			kryptonLabel57.Name = "kryptonLabel57";
+			kryptonLabel57.Size = new Size(115, 20);
+			kryptonLabel57.TabIndex = 67;
+			kryptonLabel57.Values.Text = "Recoil Power Base :";
+			// 
+			// num_gunA_sindenRecoil3
+			// 
+			num_gunA_sindenRecoil3.Increment = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunA_sindenRecoil3.Location = new Point(315, 70);
+			num_gunA_sindenRecoil3.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
+			num_gunA_sindenRecoil3.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunA_sindenRecoil3.Name = "num_gunA_sindenRecoil3";
+			num_gunA_sindenRecoil3.Size = new Size(42, 22);
+			num_gunA_sindenRecoil3.TabIndex = 66;
+			num_gunA_sindenRecoil3.Value = new decimal(new int[] { 1, 0, 0, 0 });
+			// 
+			// num_gunA_sindenRecoil2
+			// 
+			num_gunA_sindenRecoil2.Increment = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunA_sindenRecoil2.Location = new Point(235, 70);
+			num_gunA_sindenRecoil2.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
+			num_gunA_sindenRecoil2.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunA_sindenRecoil2.Name = "num_gunA_sindenRecoil2";
+			num_gunA_sindenRecoil2.Size = new Size(36, 22);
+			num_gunA_sindenRecoil2.TabIndex = 65;
+			num_gunA_sindenRecoil2.Value = new decimal(new int[] { 1, 0, 0, 0 });
+			// 
+			// num_gunA_sindenRecoil1
+			// 
+			num_gunA_sindenRecoil1.Increment = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunA_sindenRecoil1.Location = new Point(124, 70);
+			num_gunA_sindenRecoil1.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+			num_gunA_sindenRecoil1.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+			num_gunA_sindenRecoil1.Name = "num_gunA_sindenRecoil1";
+			num_gunA_sindenRecoil1.Size = new Size(42, 22);
+			num_gunA_sindenRecoil1.TabIndex = 64;
+			num_gunA_sindenRecoil1.Value = new decimal(new int[] { 1, 0, 0, 0 });
 			// 
 			// radio_gunA_sindenPump1
 			// 
@@ -1644,7 +1798,7 @@
 			// 
 			// chk_reasignGunPedal
 			// 
-			chk_reasignGunPedal.Location = new Point(9, 315);
+			chk_reasignGunPedal.Location = new Point(6, 340);
 			chk_reasignGunPedal.Name = "chk_reasignGunPedal";
 			chk_reasignGunPedal.Size = new Size(361, 20);
 			chk_reasignGunPedal.TabIndex = 49;
@@ -2725,22 +2879,6 @@
 			txt_magpieExe.TabIndex = 82;
 			txt_magpieExe.Visible = false;
 			// 
-			// kryptonButton2
-			// 
-			kryptonButton2.Location = new Point(165, 424);
-			kryptonButton2.Name = "kryptonButton2";
-			kryptonButton2.Size = new Size(150, 25);
-			kryptonButton2.TabIndex = 109;
-			kryptonButton2.Values.Text = "Run MameHooker";
-			// 
-			// kryptonLabel56
-			// 
-			kryptonLabel56.Location = new Point(12, 524);
-			kryptonLabel56.Name = "kryptonLabel56";
-			kryptonLabel56.Size = new Size(130, 20);
-			kryptonLabel56.TabIndex = 110;
-			kryptonLabel56.Values.Text = "Border Size (percent) :";
-			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -3092,5 +3230,17 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_tplicence_unreg_onexit;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel56;
 		private Krypton.Toolkit.KryptonButton kryptonButton2;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel69;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel75;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel76;
+		private Krypton.Toolkit.KryptonNumericUpDown num_gunB_sindenRecoil3;
+		private Krypton.Toolkit.KryptonNumericUpDown num_gunB_sindenRecoil2;
+		private Krypton.Toolkit.KryptonNumericUpDown num_gunB_sindenRecoil1;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel74;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel73;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel57;
+		private Krypton.Toolkit.KryptonNumericUpDown num_gunA_sindenRecoil3;
+		private Krypton.Toolkit.KryptonNumericUpDown num_gunA_sindenRecoil2;
+		private Krypton.Toolkit.KryptonNumericUpDown num_gunA_sindenRecoil1;
 	}
 }
