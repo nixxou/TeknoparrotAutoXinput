@@ -35,6 +35,7 @@ namespace TeknoparrotAutoXinput
 		{
 			Dialogconfig = dialogconfig;
 			InitializeComponent();
+			
 			if (gunIndex != 1 && gunIndex != 2) { return; }
 			switch (gunType)
 			{
@@ -104,6 +105,8 @@ namespace TeknoparrotAutoXinput
 					label3.Location = new Point(label3.Location.X, label3.Location.Y);
 					break;
 			}
+			//HighDpiHelper.AdjustFormBGDpiScale(this);
+			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			GunIndex = gunIndex;
 			GunType = gunType;
 

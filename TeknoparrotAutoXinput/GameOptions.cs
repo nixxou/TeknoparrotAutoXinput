@@ -781,7 +781,6 @@ namespace TeknoparrotAutoXinput
 			if (result == DialogResult.OK)
 			{
 				txt_monitorswitch.Text = frm.result;
-
 			}
 		}
 

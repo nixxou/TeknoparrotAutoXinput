@@ -35,6 +35,7 @@ namespace TeknoparrotAutoXinput
 	}
 	public class Configuration
 	{
+		public bool advancedConfig { get; set; } = false;
 		public bool virtualKeyboard { get; set; } = false;
 		public string keyTest { get; set; } = "";
 		public string keyService1 { get; set; } = "";
@@ -196,6 +197,7 @@ namespace TeknoparrotAutoXinput
 		public bool tpLicenceUnRegAfterStart { get; set; } = false;
 
 
+
 		public Configuration()
 		{
 
@@ -339,7 +341,7 @@ namespace TeknoparrotAutoXinput
 				this.tpLicenceRegOnLaunch = DeserializeData.tpLicenceRegOnLaunch;
 				this.tpLicenceUnRegAfterStart = DeserializeData.tpLicenceUnRegAfterStart;
 
-
+				this.advancedConfig = DeserializeData.advancedConfig;
 
 
 			}

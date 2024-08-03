@@ -547,6 +547,7 @@ namespace TeknoparrotAutoXinput
 				string xmlFile = args.Last();
 				if (xmlFile.ToLower().EndsWith(".xml") && File.Exists(xmlFile))
 				{
+					Application.SetHighDpiMode(HighDpiMode.DpiUnaware);
 					string baseTpDir = Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName;
 					string originalConfigFileName = Path.GetFileName(xmlFile);
 					string originalConfigFileNameWithoutExt = Path.GetFileNameWithoutExtension(xmlFile);
@@ -601,7 +602,7 @@ namespace TeknoparrotAutoXinput
 
 				string TeknoparrotAutoXinputConfigFile = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "TeknoparrotAutoXinput.json");
 				if (!File.Exists(TeknoparrotAutoXinputConfigFile)) Application.Run(new Wizard());
-				else Application.Run(new Main());
+				else Application.Run(new MainDPIcs());
 			}
 			if (args.Length > 0)
 			{
@@ -1232,7 +1233,10 @@ namespace TeknoparrotAutoXinput
 						}
 						Utils.LogMessage($"linkSourceFolderExe = {linkSourceFolderExe}");
 						Utils.LogMessage($"linkTargetFolderExe = {linkTargetFolderExe}");
-						Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
+						if (!nolink && Utils.IsEligibleHardLink(linkTargetFolderExe))
+						{
+							Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
+						}
 					}
 
 					ParrotDataOriginal = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "ParrotData.xml");

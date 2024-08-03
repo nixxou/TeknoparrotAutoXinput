@@ -1,4 +1,6 @@
-﻿namespace TeknoparrotAutoXinput
+﻿using SharpDX;
+
+namespace TeknoparrotAutoXinput
 {
 	partial class Main
 	{

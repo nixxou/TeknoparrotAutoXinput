@@ -29,6 +29,7 @@ namespace TeknoparrotAutoXinput
 		{
 			Dialogconfig = dialogconfig;
 			InitializeComponent();
+			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			_joystickCollection.Clear();
 			devices = new List<DeviceInstance>();
 			_stopListening = false;

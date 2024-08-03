@@ -21,6 +21,7 @@ using System.Linq;
 using System.Management;
 using System.Net.Sockets;
 using System.Runtime.Intrinsics.X86;
+using System.Security.Cryptography.Xml;
 using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -113,8 +114,8 @@ namespace TeknoparrotAutoXinput
 			//Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
 			//Font = new Font(Font.Name, Font.Size * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
 
-			//this.AutoScaleMode = AutoScaleMode.Dpi;
 			InitializeComponent();
+			
 			this.Activated += VotreForm_Activated;
 			this.Deactivate += VotreForm_Deactivate;
 
@@ -1864,7 +1865,7 @@ namespace TeknoparrotAutoXinput
 
 		private void kryptonButton1_Click(object sender, EventArgs e)
 		{
-			var frm = new Wizard();
+						var frm = new Wizard();
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
@@ -1880,5 +1881,11 @@ namespace TeknoparrotAutoXinput
 		public string UserConfigFile;
 		public Metadata Metadata;
 		public Dictionary<string, string> existingConfig = new Dictionary<string, string>();
+		public bool isSupported = false;
+		public string DisplayName = "";
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }
