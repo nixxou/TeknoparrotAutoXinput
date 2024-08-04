@@ -15,6 +15,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.Management;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -147,6 +148,14 @@ namespace TeknoparrotAutoXinput
 		public static JoystickButtonData dinputTriggerGunB = null;
 
 		public static int vjoyIndex;
+
+		public static bool linkAutoWritable = false;
+		public static bool linkAutoHardLink = false;
+		public static bool linkAutoSoftLink = false;
+
+		public static bool linkExeWritable = false;
+		public static bool linkExeHardLink = false;
+		public static bool linkExeSoftLink = false;
 
 		//public static string xmlFileContent = "";
 
@@ -298,7 +307,6 @@ namespace TeknoparrotAutoXinput
 				}
 				return;
 			}
-
 			//Demulshooter run as admin
 			if (args.Length == 1 && args.First() == "--demulshooter")
 			{
@@ -330,38 +338,42 @@ namespace TeknoparrotAutoXinput
 						CreateNoWindow = true,
 						UseShellExecute = false
 					};
-
 					if (DemulshooterManager.UseMamehooker && ConfigurationManager.MainConfig.mamehookerExe != "" && File.Exists(ConfigurationManager.MainConfig.mamehookerExe))
 					{
 
 						Process.Start(psi3);
 					}
-
 					int pid = DemulshooterManager.ParentProcess;
-					if (pid == -1) return;
-					Process processParent = Process.GetProcessById(pid);
-					if (processParent != null)
+
+					try
 					{
-						Thread monitoringThread = new Thread(() =>
+						//	if (pid == -1) return;
+						Process processParent = Process.GetProcessById(pid);
+						string processName = processParent.ProcessName;
+
+						if (processParent != null && processName == Process.GetCurrentProcess().ProcessName)
 						{
-							// Attendre que le processus associé au PID se termine
-							processParent.WaitForExit();
+							Thread monitoringThread = new Thread(() =>
+							{
 
-							Process.Start(psi);
-							Process.Start(psi2);
-							Process.Start(psi3);
-							Thread.Sleep(100);
-							Utils.KillProcessById(Process.GetCurrentProcess().Id);
+								// Attendre que le processus associé au PID se termine
+								processParent.WaitForExit();
+								Process.Start(psi);
+								Process.Start(psi2);
+								Process.Start(psi3);
+								Thread.Sleep(100);
+								Utils.KillProcessById(Process.GetCurrentProcess().Id);
 
-						});
-						monitoringThread.Start();
+							});
+							monitoringThread.Start();
+						}
 					}
+					catch { }
 
 					Thread.Sleep(1000);
 					//MessageBox.Show($"mamehooker debug1 {DemulshooterManager.UseMamehooker} {ConfigurationManager.MainConfig.mamehookerExe}");
 					if (DemulshooterManager.UseMamehooker && ConfigurationManager.MainConfig.mamehookerExe != "" && File.Exists(ConfigurationManager.MainConfig.mamehookerExe))
 					{
-
 						Process processMamehooker = new Process();
 						processMamehooker.StartInfo.FileName = ConfigurationManager.MainConfig.mamehookerExe;
 						processMamehooker.StartInfo.WorkingDirectory = Path.GetDirectoryName(ConfigurationManager.MainConfig.mamehookerExe);
@@ -371,7 +383,6 @@ namespace TeknoparrotAutoXinput
 						Thread.Sleep(1000);
 
 					}
-
 
 					string exePath = DemulshooterManager.Is64bits ? DemulshooterManager.Demulshooter64 : DemulshooterManager.Demulshooter32;
 					string exeDir = Path.GetDirectoryName(exePath);
@@ -1105,8 +1116,55 @@ namespace TeknoparrotAutoXinput
 						return;
 					}
 
+					if(Directory.Exists(perGameLinkFolder))
+					{
+						string targetTest = Path.Combine(baseTpDir, "TeknoParrot");
+						string linktest1 = Path.Combine(targetTest, "test.link.write");
+						string linktest2 = Path.Combine(targetTest, "test.link.hardlink");
+						string linktest3 = Path.Combine(targetTest, "test.link.softlink");
+						try
+						{
+							if (File.Exists(linktest1)) File.Delete(linktest1);
+							if (File.Exists(linktest2)) File.Delete(linktest2);
+							if (File.Exists(linktest3)) File.Delete(linktest3);
+						}
+						catch { }
+						string sourceLinkTest = "";
+						if (!string.IsNullOrEmpty(perGameLinkFolder) && Directory.Exists(perGameLinkFolder))
+						{
+							sourceLinkTest = Utils.FindAnyFile(perGameLinkFolder);
+						}
+
+						try
+						{
+							File.WriteAllText(linktest1, "todelete");
+						}
+						catch { }
+						if (sourceLinkTest != "")
+						{
+							try
+							{
+								Utils.MakeLink(sourceLinkTest, linktest2);
+							}
+							catch { }
+							try
+							{
+								Utils.CreateSoftlink(sourceLinkTest, linktest3);
+							}
+							catch { }
+						}
+						try
+						{
+							if (File.Exists(linktest1)) { linkAutoWritable = true; File.Delete(linktest1); }
+							if (File.Exists(linktest2)) { linkAutoHardLink = true; File.Delete(linktest2); }
+							if (File.Exists(linktest3)) { linkAutoSoftLink = true; File.Delete(linktest3); }
+						}
+						catch { }
+						Utils.LogMessage($"linkAutoWritable={linkAutoWritable} linkAutoHardLink={linkAutoHardLink} linkAutoSoftLink={linkAutoSoftLink}");
+					}
+
 					Utils.LogMessage($"check if eligigible to HardLink");
-					if (Utils.IsEligibleHardLink(baseTpDir))
+					if (linkAutoWritable && ((Utils.IsEligibleHardLink(baseTpDir) && linkAutoHardLink) || linkAutoSoftLink))
 					{
 						Utils.LogMessage($"Starting Clean HardlinkFiles");
 						Utils.CleanHardLinksFilesOriginal(Path.Combine(baseTpDir, "TeknoParrot"), perGameLinkFolder);
@@ -1233,8 +1291,55 @@ namespace TeknoparrotAutoXinput
 						}
 						Utils.LogMessage($"linkSourceFolderExe = {linkSourceFolderExe}");
 						Utils.LogMessage($"linkTargetFolderExe = {linkTargetFolderExe}");
-						if (!nolink && Utils.IsEligibleHardLink(linkTargetFolderExe))
+
 						{
+							string linktest1 = Path.Combine(linkTargetFolderExe, "test.link.write");
+							string linktest2 = Path.Combine(linkTargetFolderExe, "test.link.hardlink");
+							string linktest3 = Path.Combine(linkTargetFolderExe, "test.link.softlink");
+							try
+							{
+								if (File.Exists(linktest1)) File.Delete(linktest1);
+								if (File.Exists(linktest2)) File.Delete(linktest2);
+								if (File.Exists(linktest3)) File.Delete(linktest3);
+							}
+							catch { }
+							string sourceLinkTest = "";
+							if (!string.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe))
+							{
+								sourceLinkTest = Utils.FindAnyFile(linkSourceFolderExe);
+							}
+
+							try
+							{
+								File.WriteAllText(linktest1, "todelete");
+							}
+							catch { }
+							if (sourceLinkTest != "")
+							{
+								try
+								{
+									Utils.MakeLink(sourceLinkTest, linktest2);
+								}
+								catch { }
+								try
+								{
+									Utils.CreateSoftlink(sourceLinkTest, linktest3);
+								}
+								catch { }
+							}
+							try
+							{
+								if (File.Exists(linktest1)) { linkExeWritable = true; File.Delete(linktest1); }
+								if (File.Exists(linktest2)) { linkExeHardLink = true; File.Delete(linktest2); }
+								if (File.Exists(linktest3)) { linkExeSoftLink = true; File.Delete(linktest3); }
+							}
+							catch { }
+							Utils.LogMessage($"linkExeWritable={linkExeWritable} linkExeHardLink={linkExeHardLink} linkExeSoftLink={linkExeSoftLink}");
+						}
+
+						if (!nolink && ((Utils.IsEligibleHardLink(linkTargetFolderExe) && linkExeHardLink) || linkExeSoftLink) && linkExeWritable)
+						{
+							Utils.LogMessage("Pre clean linkTargetFolderExe");
 							Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
 						}
 					}
@@ -4073,7 +4178,6 @@ namespace TeknoparrotAutoXinput
 
 					}
 					//Fin if(FinalConfig=="")
-
 					if (finalConfig != "")
 					{
 						if (!nolink)
@@ -4081,17 +4185,25 @@ namespace TeknoparrotAutoXinput
 							if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
 							{
 								Utils.LogMessage($"HardLinkFiles {linkSourceFolder}, {linkTargetFolder}");
-								if (Utils.IsEligibleHardLink(linkSourceFolder, linkTargetFolder))
+								if (Utils.IsEligibleHardLink(linkSourceFolder, linkTargetFolder) && linkAutoHardLink)
 								{
 									Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder, executableGameFile);
 								}
+								else if (linkAutoSoftLink)
+								{
+									Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder, executableGameFile,true);
+								}
 							}
-							if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe))
+							if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe) && linkExeWritable)
 							{
 								Utils.LogMessage($"HardLinkFiles {linkSourceFolderExe}, {linkTargetFolderExe}");
-								if (Utils.IsEligibleHardLink(linkSourceFolderExe, linkTargetFolderExe))
+								if (Utils.IsEligibleHardLink(linkSourceFolderExe, linkTargetFolderExe) && linkExeHardLink)
 								{
 									Utils.HardLinkFiles(linkSourceFolderExe, linkTargetFolderExe, executableGameFile);
+								}
+								else if (linkExeSoftLink)
+								{
+									Utils.HardLinkFiles(linkSourceFolderExe, linkTargetFolderExe, executableGameFile,true);
 								}
 							}
 						}
@@ -5593,19 +5705,19 @@ _Translate=0.000000,0.000000
 
 						if (!nolink)
 						{
-							if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder))
+							if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder) && linkAutoWritable)
 							{
 								Utils.LogMessage($"CleanHardLinksFiles Elf");
-								if (Utils.IsEligibleHardLink(linkTargetFolder))
+								if ((Utils.IsEligibleHardLink(linkTargetFolder) && linkAutoHardLink) || linkAutoSoftLink)
 								{
 									Utils.CleanHardLinksFilesOriginal(linkTargetFolder, linkSourceFolder);
 								}
 							}
 
-							if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe))
+							if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe) && linkExeWritable)
 							{
 								Utils.LogMessage($"CleanHardLinksFiles GameDir");
-								if (Utils.IsEligibleHardLink(linkTargetFolderExe))
+								if ((Utils.IsEligibleHardLink(linkTargetFolderExe) && linkExeHardLink) || linkExeSoftLink)
 								{
 									Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
 								}

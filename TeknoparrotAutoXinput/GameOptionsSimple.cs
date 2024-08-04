@@ -63,6 +63,7 @@ namespace TeknoparrotAutoXinput
 			typeConfig.Add("hotas");
 			typeConfig.Add("lightgun");
 			string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+			/*
 			foreach (var type in typeConfig)
 			{
 				var configPath = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + "." + type + ".txt");
@@ -82,6 +83,7 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
+			*/
 
 			var infoFile = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + ".info.json");
 			if (File.Exists(infoFile))
@@ -277,6 +279,7 @@ namespace TeknoparrotAutoXinput
 			}
 			catch { }
 
+			/*
 			if (grp_link.Enabled)
 			{
 				if (!Utils.IsEligibleHardLink(_linkTargetFolder))
@@ -375,6 +378,7 @@ namespace TeknoparrotAutoXinput
 
 				}
 			}
+			*/
 
 		}
 
@@ -944,6 +948,21 @@ namespace TeknoparrotAutoXinput
 		private void trk_crosshairp2Size_Scroll(object sender, EventArgs e)
 		{
 			lbl_crosshairp2ReSize.Text = trk_crosshairp2Size.Value.ToString();
+		}
+
+		private void txt_linkFrom_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void grp_linkExe_Paint(object sender, PaintEventArgs e)
+		{
+
+		}
+
+		private void kryptonLabel1_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

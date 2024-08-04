@@ -32,12 +32,15 @@
 			tabInfo = new TabControl();
 			tabGeneral = new TabPage();
 			panel4 = new Panel();
+			kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
 			txt_linkToExe = new Krypton.Toolkit.KryptonTextBox();
 			btn_linkTarget_openExe = new Krypton.Toolkit.KryptonButton();
 			grp_linkExe = new Panel();
+			kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
 			txt_linkFromExe = new Krypton.Toolkit.KryptonTextBox();
 			btn_link_openExe = new Krypton.Toolkit.KryptonButton();
 			grp_link = new Panel();
+			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
 			btn_link_open = new Krypton.Toolkit.KryptonButton();
 			txt_linkFrom = new Krypton.Toolkit.KryptonTextBox();
 			cmb_resolution = new Krypton.Toolkit.KryptonComboBox();
@@ -247,16 +250,26 @@
 			// 
 			// panel4
 			// 
+			panel4.Controls.Add(kryptonLabel1);
 			panel4.Controls.Add(txt_linkToExe);
 			panel4.Controls.Add(btn_linkTarget_openExe);
-			panel4.Location = new Point(9, 257);
+			panel4.Location = new Point(16, 173);
 			panel4.Name = "panel4";
-			panel4.Size = new Size(585, 39);
+			panel4.Size = new Size(584, 36);
 			panel4.TabIndex = 221;
+			// 
+			// kryptonLabel1
+			// 
+			kryptonLabel1.Location = new Point(9, 10);
+			kryptonLabel1.Name = "kryptonLabel1";
+			kryptonLabel1.Size = new Size(68, 20);
+			kryptonLabel1.TabIndex = 219;
+			kryptonLabel1.Values.Text = "Game Dir :";
+			kryptonLabel1.Click += kryptonLabel1_Click;
 			// 
 			// txt_linkToExe
 			// 
-			txt_linkToExe.Location = new Point(1, 13);
+			txt_linkToExe.Location = new Point(126, 7);
 			txt_linkToExe.Name = "txt_linkToExe";
 			txt_linkToExe.ReadOnly = true;
 			txt_linkToExe.Size = new Size(371, 23);
@@ -264,7 +277,7 @@
 			// 
 			// btn_linkTarget_openExe
 			// 
-			btn_linkTarget_openExe.Location = new Point(435, 13);
+			btn_linkTarget_openExe.Location = new Point(500, 7);
 			btn_linkTarget_openExe.Name = "btn_linkTarget_openExe";
 			btn_linkTarget_openExe.Size = new Size(79, 23);
 			btn_linkTarget_openExe.TabIndex = 218;
@@ -273,16 +286,26 @@
 			// 
 			// grp_linkExe
 			// 
+			grp_linkExe.Controls.Add(kryptonLabel2);
 			grp_linkExe.Controls.Add(txt_linkFromExe);
 			grp_linkExe.Controls.Add(btn_link_openExe);
-			grp_linkExe.Location = new Point(10, 218);
+			grp_linkExe.Location = new Point(16, 218);
 			grp_linkExe.Name = "grp_linkExe";
-			grp_linkExe.Size = new Size(584, 33);
+			grp_linkExe.Size = new Size(584, 36);
 			grp_linkExe.TabIndex = 220;
+			grp_linkExe.Paint += grp_linkExe_Paint;
+			// 
+			// kryptonLabel2
+			// 
+			kryptonLabel2.Location = new Point(9, 9);
+			kryptonLabel2.Name = "kryptonLabel2";
+			kryptonLabel2.Size = new Size(94, 20);
+			kryptonLabel2.TabIndex = 220;
+			kryptonLabel2.Values.Text = "Game Patches :";
 			// 
 			// txt_linkFromExe
 			// 
-			txt_linkFromExe.Location = new Point(3, 3);
+			txt_linkFromExe.Location = new Point(125, 6);
 			txt_linkFromExe.Name = "txt_linkFromExe";
 			txt_linkFromExe.ReadOnly = true;
 			txt_linkFromExe.Size = new Size(371, 23);
@@ -290,7 +313,7 @@
 			// 
 			// btn_link_openExe
 			// 
-			btn_link_openExe.Location = new Point(437, 3);
+			btn_link_openExe.Location = new Point(499, 6);
 			btn_link_openExe.Name = "btn_link_openExe";
 			btn_link_openExe.Size = new Size(79, 23);
 			btn_link_openExe.TabIndex = 215;
@@ -299,29 +322,39 @@
 			// 
 			// grp_link
 			// 
+			grp_link.Controls.Add(kryptonLabel4);
 			grp_link.Controls.Add(btn_link_open);
 			grp_link.Controls.Add(txt_linkFrom);
-			grp_link.Location = new Point(9, 167);
+			grp_link.Location = new Point(16, 257);
 			grp_link.Name = "grp_link";
-			grp_link.Size = new Size(591, 35);
+			grp_link.Size = new Size(585, 36);
 			grp_link.TabIndex = 219;
+			// 
+			// kryptonLabel4
+			// 
+			kryptonLabel4.Location = new Point(9, 9);
+			kryptonLabel4.Name = "kryptonLabel4";
+			kryptonLabel4.Size = new Size(75, 20);
+			kryptonLabel4.TabIndex = 221;
+			kryptonLabel4.Values.Text = "TP Patches :";
 			// 
 			// btn_link_open
 			// 
-			btn_link_open.Location = new Point(389, 6);
+			btn_link_open.Location = new Point(499, 6);
 			btn_link_open.Name = "btn_link_open";
-			btn_link_open.Size = new Size(125, 23);
+			btn_link_open.Size = new Size(79, 23);
 			btn_link_open.TabIndex = 213;
 			btn_link_open.Values.Text = "Open Folder";
 			btn_link_open.Click += btn_link_open_Click;
 			// 
 			// txt_linkFrom
 			// 
-			txt_linkFrom.Location = new Point(3, 6);
+			txt_linkFrom.Location = new Point(126, 6);
 			txt_linkFrom.Name = "txt_linkFrom";
 			txt_linkFrom.ReadOnly = true;
 			txt_linkFrom.Size = new Size(371, 23);
 			txt_linkFrom.TabIndex = 214;
+			txt_linkFrom.TextChanged += txt_linkFrom_TextChanged;
 			// 
 			// cmb_resolution
 			// 
@@ -339,7 +372,7 @@
 			// 
 			chk_group_monitorDisposition.Checked = true;
 			chk_group_monitorDisposition.CheckState = CheckState.Checked;
-			chk_group_monitorDisposition.Location = new Point(470, 29);
+			chk_group_monitorDisposition.Location = new Point(486, 1);
 			chk_group_monitorDisposition.Name = "chk_group_monitorDisposition";
 			chk_group_monitorDisposition.Size = new Size(130, 20);
 			chk_group_monitorDisposition.TabIndex = 211;
@@ -412,9 +445,9 @@
 			grp_monitorDisposition.Controls.Add(btn_editMonitorSwitch);
 			grp_monitorDisposition.Controls.Add(kryptonLabel12);
 			grp_monitorDisposition.Enabled = false;
-			grp_monitorDisposition.Location = new Point(335, 52);
+			grp_monitorDisposition.Location = new Point(318, 17);
 			grp_monitorDisposition.Name = "grp_monitorDisposition";
-			grp_monitorDisposition.Size = new Size(265, 115);
+			grp_monitorDisposition.Size = new Size(298, 115);
 			grp_monitorDisposition.TabIndex = 210;
 			grp_monitorDisposition.TabStop = false;
 			grp_monitorDisposition.Text = "Custom Monitor Disposition";
@@ -429,9 +462,9 @@
 			// 
 			// btn_editMonitorSwitch
 			// 
-			btn_editMonitorSwitch.Location = new Point(201, 51);
+			btn_editMonitorSwitch.Location = new Point(198, 51);
 			btn_editMonitorSwitch.Name = "btn_editMonitorSwitch";
-			btn_editMonitorSwitch.Size = new Size(58, 23);
+			btn_editMonitorSwitch.Size = new Size(78, 23);
 			btn_editMonitorSwitch.TabIndex = 43;
 			btn_editMonitorSwitch.Values.Text = "Edit";
 			btn_editMonitorSwitch.Click += btn_editMonitorSwitch_Click;
@@ -1520,5 +1553,8 @@
 		private Panel panel4;
 		private Panel grp_linkExe;
 		private Panel grp_link;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel1;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel2;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel4;
 	}
 }

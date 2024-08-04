@@ -30,6 +30,17 @@ namespace TeknoparrotAutoXinput
 		public static Dictionary<string,string> md5Cache = new Dictionary<string,string>();
 
 
+		[DllImport("kernel32.dll", SetLastError = true)]
+		static extern bool GetFinalPathNameByHandle(SafeFileHandle hFile, StringBuilder lpszFilePath, uint cchFilePath, uint dwFlags);
+
+
+		private const uint FILE_SHARE_READ = 1;
+		private const uint OPEN_EXISTING = 3;
+		private const uint FILE_FLAG_OPEN_REPARSE_POINT = 0x00200000;
+		private const uint FILE_NAME_NORMALIZED = 0x0;
+		private const uint FILE_ATTRIBUTE_REPARSE_POINT = 0x0400;
+
+
 		[StructLayout(LayoutKind.Sequential)]
 		public struct BY_HANDLE_FILE_INFORMATION
 		{
@@ -211,6 +222,148 @@ namespace TeknoparrotAutoXinput
 		public static extern bool IsWindowVisible(IntPtr hWnd);
 
 
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+		private static extern bool CreateSymbolicLink(string symlinkFileName, string targetFileName, int flags);
+		// Constante pour le type de lien symbolique
+		private const int SYMBOLIC_LINK_FLAG_FILE = 0x0;
+		private const int SYMBOLIC_LINK_FLAG_DIRECTORY = 0x1;
+
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		static extern uint GetShortPathName(
+			[MarshalAs(UnmanagedType.LPTStr)]
+	string lpszLongPath,
+			[MarshalAs(UnmanagedType.LPTStr)]
+	StringBuilder lpszShortPath,
+			uint cchBuffer);
+
+		public static string ShortFilenameFor(string longFilename)
+		{
+			// Add to the long filename a prefix to cause the API to handle filenames longer than 260 characters.
+
+			const string PREFIX = @"\\?\";
+			//longFilename = PREFIX + longFilename;
+
+			// First check how much space is required for the short filename.
+
+			uint length = GetShortPathName(longFilename, null, 0);
+
+			if (length == 0)
+				throw new Win32Exception(Marshal.GetLastWin32Error());
+
+			// Now allocate buffer of the correct length and fill it.
+
+			StringBuilder buffer = new StringBuilder((int)length);
+			uint result = GetShortPathName(longFilename, buffer, length);
+
+			if (result == 0)
+				throw new Win32Exception(Marshal.GetLastWin32Error());
+
+			buffer.Remove(0, PREFIX.Length);
+			return buffer.ToString();
+		}
+
+		public static bool CreateSoftlink(string sourceFilePath, string targetFilePath)
+		{
+			// Vérifier si le fichier source existe
+			if (!File.Exists(sourceFilePath))
+			{
+				return false;
+			}
+
+			// Créer le lien symbolique
+			try
+			{
+				if (File.Exists(targetFilePath))
+				{
+					// Supprimer le fichier existant s'il existe déjà
+					File.Delete(targetFilePath);
+				}
+
+				// Appeler la fonction CreateSymbolicLink pour créer le lien symbolique
+				bool success = CreateSymbolicLink(targetFilePath, sourceFilePath, SYMBOLIC_LINK_FLAG_FILE);
+
+				return success;
+			}
+			catch (Exception)
+			{
+				// Gérer les erreurs éventuelles lors de la création du lien symbolique
+				return false;
+			}
+		}
+
+		public static bool IsSoftLink(string filePath)
+		{
+			// Vérifier si le fichier existe
+			if (!File.Exists(filePath))
+			{
+				return false;
+			}
+
+			try
+			{
+
+				// Obtenir les attributs du fichier
+				FileAttributes attributes = File.GetAttributes(filePath);
+
+				// Vérifier si le fichier est un lien symbolique
+				return (attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint;
+			}
+			catch { return false; }
+		}
+
+		public static string GetSoftLinkTarget(string linkPath)
+		{
+			if (!IsSoftLink(linkPath))
+				throw new InvalidOperationException("Not a soft link");
+
+			using (SafeFileHandle handle = CreateFile(
+				linkPath,
+				FileAccess.Read,
+				FileShare.Read,
+				IntPtr.Zero,
+				FileMode.Open,
+				(FileAttributes)FILE_ATTRIBUTE_REPARSE_POINT, // Utilisation des attributs appropriés
+				IntPtr.Zero))
+			{
+				if (handle.IsInvalid)
+					throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+
+				StringBuilder targetPath = new StringBuilder(1024);
+				if (GetFinalPathNameByHandle(handle, targetPath, (uint)targetPath.Capacity, FILE_NAME_NORMALIZED))
+				{
+					return targetPath.ToString().TrimEnd('\0');
+				}
+				throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+			}
+		}
+		private static string NormalizePath(string path)
+		{
+			// Enlever le préfixe \\?\ s'il est présent
+			if (path.StartsWith(@"\\?\"))
+			{
+				path = path.Substring(4);
+			}
+
+			// Convertir les barres obliques inverses doubles en simples pour la compatibilité
+			return path.Replace(@"\\", @"\");
+		}
+		public static bool IsSoftLink(string filePath, string directoryPath)
+		{
+			if (!IsSoftLink(filePath))
+				return false;
+
+			try
+			{
+				string targetPath = GetSoftLinkTarget(filePath);
+				// Normaliser les chemins pour les comparer
+				string normalizedFilePath = NormalizePath(targetPath);
+				string normalizedDirectoryPath = NormalizePath(directoryPath);
+
+				return normalizedFilePath.StartsWith(normalizedDirectoryPath, StringComparison.OrdinalIgnoreCase);
+			}
+			catch { return false; }
+
+		}
 		public static bool IsHardLink(string fileToTestPath, string fromDirPath)
 		{
 			if (!File.Exists(fileToTestPath)) throw new Exception("file does not exist");
@@ -253,7 +406,7 @@ namespace TeknoparrotAutoXinput
 		}
 
 
-		public static void HardLinkFiles(string directorySource, string directoryDest, string executableGame = "")
+		public static void HardLinkFiles(string directorySource, string directoryDest, string executableGame = "",bool useSoftLink = false)
 		{
 			/*
 			if (!Directory.Exists(directorySource)) return;
@@ -296,7 +449,7 @@ namespace TeknoparrotAutoXinput
 			directorySource = Path.GetFullPath(directorySource);
 			directoryDest = Path.GetFullPath(directoryDest);
 
-			if (!AreFoldersOnSameDrive(directorySource, directoryDest)) return;
+			if (!useSoftLink && !AreFoldersOnSameDrive(directorySource, directoryDest)) return;
 
 			var filePaths = Directory.EnumerateFiles(directorySource, "*", new EnumerationOptions
 			{
@@ -860,7 +1013,8 @@ namespace TeknoparrotAutoXinput
 				{
 					File.Move(newfile, newfile + ".filetorestore");
 				}
-				MakeLink(file, newfile);
+				if (useSoftLink) CreateSoftlink(file, newfile);
+				else MakeLink(file, newfile);
 			}
 			if (DirectoryList.Count() > 0)
 			{
@@ -890,14 +1044,98 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		
+		public static bool RealTestHardLinkEligible(string target, string source = "", bool checkOnlyHardlink = false)
+		{
+			bool linkAutoHardLink = false;
+			bool linkAutoSoftLink = false;
+
+			if (Directory.Exists(target))
+			{
+				string targetTest = target;
+				string linktest1 = Path.Combine(targetTest, "test.link.write");
+				string linktest2 = Path.Combine(targetTest, "test.link.hardlink");
+				string linktest3 = Path.Combine(targetTest, "test.link.softlink");
+				try
+				{
+					if (File.Exists(linktest1)) File.Delete(linktest1);
+					if (File.Exists(linktest2)) File.Delete(linktest2);
+					if (File.Exists(linktest3)) File.Delete(linktest3);
+				}
+				catch { }
+
+
+				try
+				{
+					File.WriteAllText(linktest1, "todelete");
+				}
+				catch {
+					if (File.Exists(linktest1)) { File.Delete(linktest1); }
+					return false;
+
+				}
+
+				string sourceLinkTest = linktest1;
+				if (!string.IsNullOrEmpty(source))
+				{
+					if(File.Exists(source)) sourceLinkTest = source;
+					else if (Directory.Exists(source))
+					{
+						try
+						{
+							sourceLinkTest = Path.Combine(source, "test.link.write");
+							File.WriteAllText(sourceLinkTest, "todelete");
+						}
+						catch
+						{
+							if (File.Exists(linktest1)) { File.Delete(linktest1); }
+							if (File.Exists(sourceLinkTest)) { File.Delete(sourceLinkTest); }
+							return false;
+						}
+					}
+				}
+
+				if (!File.Exists(linktest1)) return false;
+
+				if (sourceLinkTest != "")
+				{
+					try
+					{
+						Utils.MakeLink(sourceLinkTest, linktest2);
+					}
+					catch { }
+					try
+					{
+						Utils.CreateSoftlink(sourceLinkTest, linktest3);
+					}
+					catch { }
+				}
+				try
+				{
+					if (File.Exists(linktest1)) { File.Delete(linktest1); }
+					if (File.Exists(linktest2)) { linkAutoHardLink = true; File.Delete(linktest2); }
+					if (File.Exists(linktest3)) { linkAutoSoftLink = true; File.Delete(linktest3); }
+				}
+				catch { }
+				if (checkOnlyHardlink)
+				{
+					return linkAutoHardLink;
+				}
+				if (linkAutoHardLink || linkAutoSoftLink) return true;
+			}
+			return false;
+		}
+
 		public static void CleanHardLinksFilesOriginal(string directoryToClean, string originalLinkDir)
 		{
 			originalLinkDir = Path.GetFullPath(originalLinkDir);
 			if (!Directory.Exists(directoryToClean)) return;
 			if (!Directory.Exists(originalLinkDir)) return;
 
-			if (!AreFoldersOnSameDrive(directoryToClean, originalLinkDir)) return;
+			bool CanUseHardLink = true;
+			if (!AreFoldersOnSameDrive(directoryToClean, originalLinkDir)) CanUseHardLink = false;
+			if(!Program.linkAutoHardLink) CanUseHardLink = false;
+
+			bool CanUseSoftLink = Program.linkAutoSoftLink;
 
 			var filePaths = Directory.EnumerateFiles(directoryToClean, "*", new EnumerationOptions
 			{
@@ -907,7 +1145,7 @@ namespace TeknoparrotAutoXinput
 			foreach (var file in filePaths)
 			{
 				//if (Program.DebugMode) Utils.LogMessage($"Check Link for {file}");
-				if (IsHardLink(file, originalLinkDir))
+				if (CanUseHardLink && IsHardLink(file, originalLinkDir))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
 					try
@@ -922,6 +1160,31 @@ namespace TeknoparrotAutoXinput
 							{
 								FileInfo finfo = new FileInfo(file);
 								if(finfo.IsReadOnly)
+								{
+									finfo.IsReadOnly = false;
+									finfo.Delete();
+								}
+							}
+							catch (Exception ex2) { }
+						}
+
+					}
+				}
+				else if(CanUseSoftLink && IsSoftLink(file, originalLinkDir))
+				{
+					if (Program.DebugMode) Utils.LogMessage($"{file} is Softlink, delete it");
+					try
+					{
+						File.Delete(file);
+					}
+					catch (Exception ex)
+					{
+						if (File.Exists(file))
+						{
+							try
+							{
+								FileInfo finfo = new FileInfo(file);
+								if (finfo.IsReadOnly)
 								{
 									finfo.IsReadOnly = false;
 									finfo.Delete();
@@ -973,7 +1236,11 @@ namespace TeknoparrotAutoXinput
 			if (!Directory.Exists(directoryToClean)) return;
 			if (!Directory.Exists(originalLinkDir)) return;
 
-			if (!AreFoldersOnSameDrive(directoryToClean, originalLinkDir)) return;
+			bool CanUseHardLink = true;
+			if (!AreFoldersOnSameDrive(directoryToClean, originalLinkDir)) CanUseHardLink = false;
+			if (!Program.linkExeHardLink) CanUseHardLink = false;
+			bool CanUseSoftLink = Program.linkExeSoftLink;
+			bool CanWrite = Program.linkExeWritable;
 
 			var filePaths = Directory.EnumerateFiles(originalLinkDir, "*", new EnumerationOptions
 			{
@@ -1223,7 +1490,7 @@ namespace TeknoparrotAutoXinput
 
 				if (!File.Exists(file)) continue;
 
-				if (IsHardLink(file, originalLinkDir))
+				if (CanUseHardLink && IsHardLink(file, originalLinkDir))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
 					try
@@ -1248,6 +1515,33 @@ namespace TeknoparrotAutoXinput
 
 					}
 				}
+
+				if (CanUseSoftLink && IsSoftLink(file, originalLinkDir))
+				{
+					if (Program.DebugMode) Utils.LogMessage($"{file} is SoftLink, delete it");
+					try
+					{
+						File.Delete(file);
+					}
+					catch (Exception ex)
+					{
+						if (File.Exists(file))
+						{
+							try
+							{
+								FileInfo finfo = new FileInfo(file);
+								if (finfo.IsReadOnly)
+								{
+									finfo.IsReadOnly = false;
+									finfo.Delete();
+								}
+							}
+							catch (Exception ex2) { }
+						}
+
+					}
+				}
+
 				string fileToRestore = file + ".filetorestore";
 				if (File.Exists(fileToRestore))
 				{
@@ -1260,9 +1554,34 @@ namespace TeknoparrotAutoXinput
 			if (executableGameFile != "" &&  File.Exists(executableGameFile))
 			{
 				string file = executableGameFile;
-				if (IsHardLink(file, originalLinkDir))
+				if (CanUseHardLink && IsHardLink(file, originalLinkDir))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
+					try
+					{
+						File.Delete(file);
+					}
+					catch (Exception ex)
+					{
+						if (File.Exists(file))
+						{
+							try
+							{
+								FileInfo finfo = new FileInfo(file);
+								if (finfo.IsReadOnly)
+								{
+									finfo.IsReadOnly = false;
+									finfo.Delete();
+								}
+							}
+							catch (Exception ex2) { }
+						}
+
+					}
+				}
+				if (CanUseSoftLink && IsSoftLink(file, originalLinkDir))
+				{
+					if (Program.DebugMode) Utils.LogMessage($"{file} is SoftLink, delete it");
 					try
 					{
 						File.Delete(file);
@@ -1360,6 +1679,50 @@ namespace TeknoparrotAutoXinput
 			catch (Exception ex)
 			{
 			}
+		}
+
+		public static string FindAnyFile(string rootDirectory)
+		{
+			if (!Directory.Exists(rootDirectory))
+				return "";
+
+			// Utiliser une queue pour explorer les répertoires de manière itérative
+			var directoriesToExplore = new Queue<string>();
+			directoriesToExplore.Enqueue(rootDirectory);
+
+			while (directoriesToExplore.Count > 0)
+			{
+				string currentDirectory = directoriesToExplore.Dequeue();
+
+				try
+				{
+					// Recherche des fichiers dans le répertoire actuel
+					foreach (var file in Directory.EnumerateFiles(currentDirectory, "*"))
+					{
+						// Retourner dès qu'un fichier est trouvé
+						return file;
+					}
+
+					// Ajouter les sous-répertoires à la queue pour exploration
+					foreach (var directory in Directory.EnumerateDirectories(currentDirectory))
+					{
+						directoriesToExplore.Enqueue(directory);
+					}
+				}
+				catch (UnauthorizedAccessException)
+				{
+					// Gérer les exceptions d'accès refusé en continuant à explorer les autres répertoires
+					Console.WriteLine($"Access denied to directory: {currentDirectory}");
+				}
+				catch (IOException ex)
+				{
+					// Gérer les exceptions d'entrée/sortie en continuant à explorer les autres répertoires
+					Console.WriteLine($"IO Exception in directory {currentDirectory}: {ex.Message}");
+				}
+			}
+
+			// Aucun fichier trouvé
+			return "";
 		}
 
 		public static bool HasWritePermissionOnDir(string path)

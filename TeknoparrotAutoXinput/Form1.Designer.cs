@@ -290,6 +290,7 @@
 			btn_magpieExe = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel50 = new Krypton.Toolkit.KryptonLabel();
 			txt_magpieExe = new Krypton.Toolkit.KryptonTextBox();
+			chk_enableAdvancedOptions = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -873,7 +874,7 @@
 			// 
 			// chk_enableDebug
 			// 
-			chk_enableDebug.Location = new Point(618, 21);
+			chk_enableDebug.Location = new Point(608, 22);
 			chk_enableDebug.Name = "chk_enableDebug";
 			chk_enableDebug.Size = new Size(135, 20);
 			chk_enableDebug.TabIndex = 41;
@@ -882,7 +883,7 @@
 			// 
 			// btn_checkConfig
 			// 
-			btn_checkConfig.Location = new Point(541, 47);
+			btn_checkConfig.Location = new Point(541, 79);
 			btn_checkConfig.Name = "btn_checkConfig";
 			btn_checkConfig.Size = new Size(223, 25);
 			btn_checkConfig.TabIndex = 42;
@@ -1908,6 +1909,7 @@
 			// 
 			// groupBox13
 			// 
+			groupBox13.Controls.Add(chk_enableAdvancedOptions);
 			groupBox13.Controls.Add(chk_useXenosInjector);
 			groupBox13.Controls.Add(cmb_showStartup);
 			groupBox13.Controls.Add(kryptonLabel40);
@@ -2879,6 +2881,14 @@
 			txt_magpieExe.TabIndex = 82;
 			txt_magpieExe.Visible = false;
 			// 
+			// chk_enableAdvancedOptions
+			// 
+			chk_enableAdvancedOptions.Location = new Point(608, 51);
+			chk_enableAdvancedOptions.Name = "chk_enableAdvancedOptions";
+			chk_enableAdvancedOptions.Size = new Size(162, 20);
+			chk_enableAdvancedOptions.TabIndex = 82;
+			chk_enableAdvancedOptions.Values.Text = "Enable Advanced options";
+			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -3242,5 +3252,6 @@
 		private Krypton.Toolkit.KryptonNumericUpDown num_gunA_sindenRecoil3;
 		private Krypton.Toolkit.KryptonNumericUpDown num_gunA_sindenRecoil2;
 		private Krypton.Toolkit.KryptonNumericUpDown num_gunA_sindenRecoil1;
+		private Krypton.Toolkit.KryptonCheckBox chk_enableAdvancedOptions;
 	}
 }

@@ -412,6 +412,8 @@ namespace TeknoparrotAutoXinput
 				Dictionary<string, string> filesSet = new Dictionary<string, string>();
 
 				bool isTmpSameDrive = Utils.IsEligibleHardLink(TmpDirFiles, PathAutoXinputLinks);
+				bool CanDoHardLink = Utils.RealTestHardLinkEligible(TmpDirFiles, PathAutoXinputLinks, true);
+
 				foreach (var fileToProcess in patchInfoJson.autoXinputLinksFiles)
 				{
 					string trueFile = Path.Combine(TmpDirFiles, fileToProcess.Key);
@@ -441,7 +443,7 @@ namespace TeknoparrotAutoXinput
 							if (size == 0) useHardlink = false;
 							if (useHardlink && trueDest.EndsWith(".cfg") || trueDest.EndsWith(".json") || trueDest.EndsWith(".xml") || trueDest.EndsWith(".txt")) useHardlink = false;
 
-							if (useHardlink)
+							if (useHardlink && CanDoHardLink)
 							{
 								Utils.MakeLink(trueFile, trueDest);
 							}
@@ -460,6 +462,7 @@ namespace TeknoparrotAutoXinput
 
 				if (!isBothPathDirInSameDrive) filesSet.Clear();
 				isTmpSameDrive = Utils.IsEligibleHardLink(TmpDirFiles, PathTeknoparrotPatchs);
+				CanDoHardLink = Utils.RealTestHardLinkEligible(TmpDirFiles, PathTeknoparrotPatchs, true);
 
 				progress_extract.Minimum = 0;
 				progress_extract.Maximum = patchInfoJson.teknoparrotPatchs.Count();
@@ -498,7 +501,7 @@ namespace TeknoparrotAutoXinput
 							if (size == 0) useHardlink = false;
 							if (useHardlink && trueDest.EndsWith(".cfg") || trueDest.EndsWith(".json") || trueDest.EndsWith(".xml") || trueDest.EndsWith(".txt")) useHardlink = false;
 
-							if (useHardlink)
+							if (useHardlink && CanDoHardLink)
 							{
 								Utils.MakeLink(trueFile, trueDest);
 							}

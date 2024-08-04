@@ -439,7 +439,7 @@ namespace TeknoparrotAutoXinput
 				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
 				{
 					
-					if (!Utils.IsEligibleHardLink(fbd.SelectedPath))
+					if (!Utils.IsEligibleHardLink(fbd.SelectedPath) && !Utils.RealTestHardLinkEligible(fbd.SelectedPath))
 					{
 						MessageBox.Show("The drive does not seems eligible for hardlink (Must be NTFS and Windows 10 or newer)");
 					}

@@ -471,11 +471,24 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_globalconfig_Click(object sender, EventArgs e)
 		{
-			var frm = new Form1();
-			var result = frm.ShowDialog();
-			if (result == DialogResult.OK)
+			if (ConfigurationManager.MainConfig.advancedConfig)
 			{
-				Reload();
+				var frm = new Form1();
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					Reload();
+				}
+
+			}
+			else
+			{
+				var frm = new Form1Simple();
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					Reload();
+				}
 			}
 		}
 		/*
@@ -939,6 +952,12 @@ namespace TeknoparrotAutoXinput
 
 		private void kryptonButton1_Click(object sender, EventArgs e)
 		{
+			var frm = new Wizard();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+			}
 
 		}
 

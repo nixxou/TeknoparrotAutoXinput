@@ -36,12 +36,12 @@ namespace TeknoparrotAutoXinput
 	public class Configuration
 	{
 		public bool advancedConfig { get; set; } = false;
-		public bool virtualKeyboard { get; set; } = false;
-		public string keyTest { get; set; } = "";
-		public string keyService1 { get; set; } = "";
-		public string keyService2 { get; set; } = "";
+		public bool virtualKeyboard { get; set; } = true;
+		public string keyTest { get; set; } = "F1";
+		public string keyService1 { get; set; } = "F2";
+		public string keyService2 { get; set; } = "F3";
 		public bool showStartup { get; set; } = false;
-		public bool FFB { get; set; } = false;
+		public bool FFB { get; set; } = true;
 		public string wheelXinputData { get; set; } = "Type=Wheel";
 		public string arcadeXinputData { get; set; } = "Type=ArcadeStick,Type=ArcadePad";
 		public string gamepadXinputData { get; set; } = "Type=Gamepad";
@@ -56,7 +56,7 @@ namespace TeknoparrotAutoXinput
 		public string ffbDinputWheel { get; set; } = "";
 		public bool favorAB { get; set; } = false;
 		public string TpFolder { get; set; } = "";
-		public bool ShowAllGames { get; set; } = false;
+		public bool ShowAllGames { get; set; } = true;
 		public string Disposition { get; set; } = "";
 		public bool debugMode { get; set; } = false;
 		public string perGameLinkFolder { get; set; } = @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)";
@@ -156,7 +156,7 @@ namespace TeknoparrotAutoXinput
 
 		public bool useXenos { get; set; } = false;
 		public int magpieFsrSharp { get; set; } = 87;
-		public bool magpieExclusiveFullscreen { get; set; } = false;
+		public bool magpieExclusiveFullscreen { get; set; } = true;
 
 		public int gpuType { get; set; } = 0;
 		public bool patchGpuFix { get; set; } = true;

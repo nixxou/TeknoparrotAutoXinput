@@ -1,41 +1,33 @@
-using Krypton.Toolkit;
-using Nefarius.ViGEm.Client;
-using Nefarius.ViGEm.Client.Exceptions;
+ï»¿using Krypton.Toolkit;
 using SDL2;
-using SharpDX.DirectInput;
 using System;
-using System.Buffers.Text;
-using System.Collections.Immutable;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
+using System.Drawing;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using TestVgme;
-using vJoyInterfaceWrap;
-using XJoy;
 
 namespace TeknoparrotAutoXinput
 {
-	public partial class Form1 : KryptonForm
+	public partial class Form1Simple : KryptonForm
 	{
-		private PickKeyCombo KeyPicker { get; set; }
-		public Keys[] Keys { get; set; }
 
 		private List<string> FFBGuidList = new List<string>();
 
 		private string previous_gunARecoil = "";
 		private string previous_gunBRecoil = "";
 		private bool DoRedoGunRecoilCombo = false;
-		public Form1()
+		public Form1Simple()
 		{
 			InitializeComponent();
-		}
 
-		private void Form1_Load(object sender, EventArgs e)
-		{
-			this.KeyPicker = new PickKeyCombo(this);
 			//System.Diagnostics.Debugger.Break();
 
 			chk_enableAdvancedOptions.Checked = ConfigurationManager.MainConfig.advancedConfig;
@@ -46,76 +38,22 @@ namespace TeknoparrotAutoXinput
 			chk_tplicence_unreg_onexit.Checked = !chk_tplicence_unreg_onlaunch.Checked;
 
 			cmb_gpu.SelectedIndex = ConfigurationManager.MainConfig.gpuType;
-			chk_patchGpuFix.Checked = ConfigurationManager.MainConfig.patchGpuFix;
-			chk_patchGpuTP.Checked = ConfigurationManager.MainConfig.patchGpuTP;
 			cmb_resolution.SelectedIndex = ConfigurationManager.MainConfig.gpuResolution;
-			chk_patchResolutionFix.Checked = ConfigurationManager.MainConfig.patchResolutionFix;
-			chk_patchResolutionTP.Checked = ConfigurationManager.MainConfig.patchResolutionTP;
 			cmb_displayMode.SelectedIndex = ConfigurationManager.MainConfig.displayMode;
-			chk_patchDisplayModeFix.Checked = ConfigurationManager.MainConfig.patchDisplayModeFix;
-			chk_patchDisplayModeTP.Checked = ConfigurationManager.MainConfig.patchDisplayModeTP;
 			chk_patchFFB.Checked = ConfigurationManager.MainConfig.patch_FFB;
 			chk_patchReshade.Checked = ConfigurationManager.MainConfig.patchReshade;
 			chk_patchGameID.Checked = ConfigurationManager.MainConfig.patchGameID;
 			chk_patchNetwork.Checked = ConfigurationManager.MainConfig.patchNetwork;
-			chk_patchOthersTPSettings.Checked = ConfigurationManager.MainConfig.patchOtherTPSettings;
-			chk_patchOthersGameOptions.Checked = ConfigurationManager.MainConfig.patchOthersGameOptions;
 
 
 			txt_apm3id.Text = ConfigurationManager.MainConfig.patch_apm3id;
 			txt_mariokartId.Text = ConfigurationManager.MainConfig.patch_mariokartId;
 			txt_customName.Text = ConfigurationManager.MainConfig.patch_customName;
-			radio_networkModeAuto.Checked = ConfigurationManager.MainConfig.patch_networkAuto;
-			if (!ConfigurationManager.MainConfig.patch_networkAuto)
-			{
-				radio_networkModeManual.Checked = true;
-				txt_networkIP.Text = ConfigurationManager.MainConfig.patch_networkIP;
-				txt_networkGateway.Text = ConfigurationManager.MainConfig.patch_networkGateway;
-				txt_BroadcastAddress.Text = ConfigurationManager.MainConfig.patch_BroadcastAddress;
-				txt_networkDns1.Text = ConfigurationManager.MainConfig.patch_networkDns1;
-				txt_networkDns2.Text = ConfigurationManager.MainConfig.patch_networkDns2;
-				txt_networkMask.Text = ConfigurationManager.MainConfig.patch_networkMask;
-			}
-
-
-
-
-			chk_useXenosInjector.Checked = ConfigurationManager.MainConfig.useXenos;
-
-			txt_magpieExe.Text = ConfigurationManager.MainConfig.magpieExe;
-			num_magpieDelay.Value = ConfigurationManager.MainConfig.magpieDelay;
-			cmb_magpieScaling.SelectedIndex = ConfigurationManager.MainConfig.magpieScaling;
-			cmb_magpieCapture.SelectedIndex = ConfigurationManager.MainConfig.magpieCapture;
-			chk_useMagpie.Checked = ConfigurationManager.MainConfig.useMagpie;
-			chk_magpieShowFps.Checked = ConfigurationManager.MainConfig.magpieShowFps;
-			chk_magpieVsync.Checked = ConfigurationManager.MainConfig.magpieVsync;
-			chk_magpieTripleBuffering.Checked = ConfigurationManager.MainConfig.magpieTripleBuffering;
-
-			//cmb_useMagpieLightgun.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgun;
-			//cmb_MagpieLightgunCalibration.SelectedIndex = ConfigurationManager.MainConfig.magpieLightgunCalibration;
-
-			chk_magpieSindenBorder.Checked = ConfigurationManager.MainConfig.magpieSinden;
-			chk_magpieGunCalibration.Checked = ConfigurationManager.MainConfig.magpieGunCalibration;
-
-			num_magpieBorderSize.Value = (decimal)ConfigurationManager.MainConfig.magpieBorderSize;
-			chk_magpieExclusiveFullscreen.Checked = ConfigurationManager.MainConfig.magpieExclusiveFullscreen;
-			trk_magpieFsrSharp.Value = ConfigurationManager.MainConfig.magpieFsrSharp;
-			lbl_magpieFsrSharp.Text = trk_magpieFsrSharp.Value.ToString() + "%";
 
 
 			cmb_showStartup.SelectedIndex = ConfigurationManager.MainConfig.TPConsoleAction;
 
-			chk_FFB.Checked = ConfigurationManager.MainConfig.FFB;
 			chk_showStartup.Checked = ConfigurationManager.MainConfig.showStartup;
-			chk_enableVirtualKeyboard.Checked = ConfigurationManager.MainConfig.virtualKeyboard;
-			txt_KeyTest.Text = ConfigurationManager.MainConfig.keyTest;
-			txt_KeyService1.Text = ConfigurationManager.MainConfig.keyService1;
-			txt_KeyService2.Text = ConfigurationManager.MainConfig.keyService2;
-
-			txt_wheelXinputData.Text = ConfigurationManager.MainConfig.wheelXinputData;
-			txt_arcadeXinputData.Text = ConfigurationManager.MainConfig.arcadeXinputData;
-			txt_gamepadXinputData.Text = ConfigurationManager.MainConfig.gamepadXinputData;
-
 
 			radio_useCustomStooz_Gamepad.Checked = ConfigurationManager.MainConfig.gamepadStooz;
 			radio_useCustomStooz_Wheel.Checked = ConfigurationManager.MainConfig.wheelStooz;
@@ -171,37 +109,6 @@ namespace TeknoparrotAutoXinput
 			if (cmb_gunA_type.SelectedIndex <= 0) btn_gunA_configure.Enabled = false;
 			if (cmb_gunB_type.SelectedIndex <= 0) btn_gunB_configure.Enabled = false;
 
-			cmb_vjoy.SelectedIndex = ConfigurationManager.MainConfig.indexvjoy;
-
-			bool vjoyEnabled = false;
-			string vjoyPath = Utils.checkInstalled("vJoy");
-			if (!string.IsNullOrEmpty(vjoyPath)) vjoyEnabled = true;
-			if (!vjoyEnabled)
-			{
-				btn_vjoyconfig.Enabled = false;
-				cmb_vjoy.Enabled = false;
-			}
-			/*
-			bool vjoyEnabled = false;
-			try
-			{
-				var m_joystick = new vJoy();
-				try
-				{
-					vjoyEnabled = (m_joystick != null && m_joystick.vJoyEnabled());
-				}
-				catch (DllNotFoundException)
-				{
-					vjoyEnabled = false;
-				}
-			}
-			catch { }
-			if (!vjoyEnabled)
-			{
-				btn_vjoyconfig.Enabled = false;
-				cmb_vjoy.Enabled = false;
-			}
-			*/
 
 			previous_gunARecoil = ConfigurationManager.MainConfig.gunARecoil;
 			previous_gunBRecoil = ConfigurationManager.MainConfig.gunBRecoil;
@@ -224,10 +131,6 @@ namespace TeknoparrotAutoXinput
 			radio_gunB_sindenPump2.Checked = ConfigurationManager.MainConfig.gunBSidenPump == 2 ? true : false;
 			radio_gunB_sindenPump3.Checked = ConfigurationManager.MainConfig.gunBSidenPump == 3 ? true : false;
 
-			txt_rivatunersoft.Text = ConfigurationManager.MainConfig.rivatunerExe;
-			txt_demulshootersoft.Text = ConfigurationManager.MainConfig.demulshooterExe;
-			txt_sindensoft.Text = ConfigurationManager.MainConfig.sindenExe;
-			txt_mamehookersoft.Text = ConfigurationManager.MainConfig.mamehookerExe;
 
 			chk_gunA_Crosshair.Checked = ConfigurationManager.MainConfig.gunACrosshair;
 			chk_gunB_Crosshair.Checked = ConfigurationManager.MainConfig.gunBCrosshair;
@@ -263,17 +166,6 @@ namespace TeknoparrotAutoXinput
 
 			updateStooz();
 
-			if (!chk_enableVirtualKeyboard.Checked)
-			{
-				btn_ClearService1.Enabled = false;
-				btn_ClearService2.Enabled = false;
-				btn_ClearTest.Enabled = false;
-				btn_setService1.Enabled = false;
-				btn_setService2.Enabled = false;
-				btn_setTest.Enabled = false;
-			}
-
-
 			{
 				int selectedFFBIndex = -1;
 				int selectedFTBIndexHotas = -1;
@@ -287,7 +179,7 @@ namespace TeknoparrotAutoXinput
 					string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
 					{
 
-						const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
+						const int bufferSize = 256; // La taille doit Ãªtre au moins 33 pour stocker le GUID sous forme de chaÃ®ne (32 caractÃ¨res + le caractÃ¨re nul)
 						byte[] guidBuffer = new byte[bufferSize];
 						SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
 						string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
@@ -374,200 +266,40 @@ namespace TeknoparrotAutoXinput
 
 			grp_gunB_sindenOptions.Enabled = false;
 			grp_gunA_sindenOptions.Enabled = false;
-			//radio_gunA_sindenPump1.Enabled = false;
-			//radio_gunA_sindenPump2.Enabled = false;
-			//radio_gunA_sindenPump3.Enabled = false;
-			//radio_gunB_sindenPump1.Enabled = false;
-			//radio_gunB_sindenPump2.Enabled = false;
-			//radio_gunB_sindenPump3.Enabled = false;
 			if (cmb_gunA_type.SelectedItem != null && cmb_gunA_type.SelectedItem.ToString() == "sinden")
 			{
-				//radio_gunA_sindenPump1.Enabled = true;
-				//radio_gunA_sindenPump2.Enabled = true;
-				//radio_gunA_sindenPump3.Enabled = true;
 				grp_gunA_sindenOptions.Enabled = true;
 			}
 			if (cmb_gunB_type.SelectedItem != null && cmb_gunB_type.SelectedItem.ToString() == "sinden")
 			{
-				//radio_gunB_sindenPump1.Enabled = true;
-				//radio_gunB_sindenPump2.Enabled = true;
-				//radio_gunB_sindenPump3.Enabled = true;
 				grp_gunB_sindenOptions.Enabled = true;
 			}
 
 			grp_gunA_gun4irOptions.Enabled = false;
 			grp_gunB_gun4irOptions.Enabled = false;
-			//chk_gunA_AutoJoy.Enabled = false;
-			//chk_gunB_AutoJoy.Enabled = false;
-			//cmb_gunA_com.Enabled = false;
-			//cmb_gunB_com.Enabled = false;
 			if (cmb_gunA_recoil.SelectedItem != null && cmb_gunA_recoil.SelectedItem.ToString() == "gun4ir")
 			{
-				//cmb_gunA_com.Enabled = true;
-				//chk_gunA_AutoJoy.Enabled = true;
 				grp_gunA_gun4irOptions.Enabled = true;
 			}
 			if (cmb_gunB_recoil.SelectedItem != null && cmb_gunB_recoil.SelectedItem.ToString() == "gun4ir")
 			{
-				//chk_gunB_AutoJoy.Enabled = true;
-				//cmb_gunB_com.Enabled = true;
 				grp_gunB_gun4irOptions.Enabled = true;
 			}
 			DoRedoGunRecoilCombo = false;
 		}
 
-		private void chk_enableVirtualKeyboard_CheckedChanged(object sender, EventArgs e)
-		{
-			if (chk_enableVirtualKeyboard.Checked)
-			{
-				string vigemPath = Utils.checkInstalled("ViGEm");
-				if (string.IsNullOrEmpty(vigemPath))
-				{
-					chk_enableVirtualKeyboard.Checked = false;
-					MessageBox.Show("ViGEm bus not found, please make sure ViGEm is correctly installed.");
-
-				}
-				/*
-				try
-				{
-					var client = new ViGEmClient();
-					client.Dispose();
-				}
-				catch (VigemBusNotFoundException ex)
-				{
-					chk_enableVirtualKeyboard.Checked = false;
-					MessageBox.Show("ViGEm bus not found, please make sure ViGEm is correctly installed.");
-				}
-				*/
-
-			}
-
-
-			btn_ClearService1.Enabled = chk_enableVirtualKeyboard.Checked;
-			btn_ClearService2.Enabled = chk_enableVirtualKeyboard.Checked;
-			btn_ClearTest.Enabled = chk_enableVirtualKeyboard.Checked;
-			btn_setService1.Enabled = chk_enableVirtualKeyboard.Checked;
-			btn_setService2.Enabled = chk_enableVirtualKeyboard.Checked;
-			btn_setTest.Enabled = chk_enableVirtualKeyboard.Checked;
-			ConfigurationManager.MainConfig.virtualKeyboard = chk_enableVirtualKeyboard.Checked;
-			ConfigurationManager.SaveConfig();
-		}
-		public void DrawKeyDisplay(string TextBoxName)
-		{
-
-			if (TextBoxName == "txt_KeyTest") txt_KeyTest.Text = PickKeyCombo.GetKeyCombo(this.Keys, true);
-			if (TextBoxName == "txt_KeyService1") txt_KeyService1.Text = PickKeyCombo.GetKeyCombo(this.Keys, true);
-			if (TextBoxName == "txt_KeyService2") txt_KeyService2.Text = PickKeyCombo.GetKeyCombo(this.Keys, true);
-
-			ConfigurationManager.MainConfig.keyTest = txt_KeyTest.Text;
-			ConfigurationManager.MainConfig.keyService1 = txt_KeyService1.Text;
-			ConfigurationManager.MainConfig.keyService2 = txt_KeyService2.Text;
-			ConfigurationManager.SaveConfig();
-
-		}
-
-		private void btn_setTest_Click(object sender, EventArgs e)
-		{
-			foreach (Control c in this.Controls)
-			{
-				c.Enabled = false;
-			}
-			txt_KeyTest.Text = "Press up to three keys...";
-			KeyPicker.StartPicking("txt_KeyTest");
-			Focus();
-			txt_KeyTest.Focus();
-			txt_KeyTest.Select(txt_KeyTest.Text.Length, 0);
-		}
-
-		private void btn_setService1_Click(object sender, EventArgs e)
-		{
-			foreach (Control c in this.Controls)
-			{
-				c.Enabled = false;
-			}
-			txt_KeyService1.Text = "Press up to three keys...";
-			KeyPicker.StartPicking("txt_KeyService1");
-			Focus();
-			txt_KeyService1.Focus();
-			txt_KeyService1.Select(txt_KeyService1.Text.Length, 0);
-		}
-
-		private void btn_setService2_Click(object sender, EventArgs e)
-		{
-			foreach (Control c in this.Controls)
-			{
-				c.Enabled = false;
-			}
-			txt_KeyService2.Text = "Press up to three keys...";
-			KeyPicker.StartPicking("txt_KeyService2");
-			Focus();
-			txt_KeyService2.Focus();
-			txt_KeyService2.Select(txt_KeyService2.Text.Length, 0);
-		}
-
-		private void btn_ClearTest_Click(object sender, EventArgs e)
-		{
-			txt_KeyTest.Text = "";
-			ConfigurationManager.MainConfig.keyTest = txt_KeyTest.Text;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void btn_ClearService1_Click(object sender, EventArgs e)
-		{
-			txt_KeyService1.Text = "";
-			ConfigurationManager.MainConfig.keyService1 = txt_KeyService1.Text;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void btn_ClearService2_Click(object sender, EventArgs e)
-		{
-			txt_KeyService2.Text = "";
-			ConfigurationManager.MainConfig.keyService2 = txt_KeyService2.Text;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			var frm = new Startup();
-			var result = frm.ShowDialog();
-
-		}
-
-		private void chk_showStartup_CheckedChanged(object sender, EventArgs e)
+		private void Form1Simple_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			ConfigurationManager.MainConfig.showStartup = chk_showStartup.Checked;
-			ConfigurationManager.SaveConfig();
-		}
+			ConfigurationManager.MainConfig.useDinputWheel = chk_useDinputWheel.Checked;
+			ConfigurationManager.MainConfig.favorAB = chk_favorAB.Checked;
+			ConfigurationManager.MainConfig.useDinputShifter = chk_useDinputShifter.Checked;
+			ConfigurationManager.MainConfig.useDinputHotas = chk_useDinputHotas.Checked;
+			ConfigurationManager.MainConfig.useHotasWithWheel = chk_useHotasWithWheel.Checked;
+			ConfigurationManager.MainConfig.TPConsoleAction = cmb_showStartup.SelectedIndex;
+			ConfigurationManager.MainConfig.gpuType = cmb_gpu.SelectedIndex;
 
-		private void chk_FFB_CheckedChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.FFB = chk_FFB.Checked;
-			ConfigurationManager.SaveConfig();
-		}
 
-		private void btn_testxinput_Click(object sender, EventArgs e)
-		{
-			txt_xinputdata.Text = HIDInfo.GetXINPUT(true);
-		}
-
-		private void kryptonLabel4_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void kryptonButton1_Click(object sender, EventArgs e)
-		{
-			txt_wheelXinputData.Text = "Type=Wheel";
-			txt_arcadeXinputData.Text = "Type=ArcadeStick,Type=ArcadePad";
-			txt_gamepadXinputData.Text = "Type=Gamepad";
-			ConfigurationManager.MainConfig.wheelXinputData = txt_wheelXinputData.Text;
-			ConfigurationManager.MainConfig.arcadeXinputData = txt_arcadeXinputData.Text;
-			ConfigurationManager.MainConfig.gamepadXinputData = txt_gamepadXinputData.Text;
-
-		}
-
-		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-		{
 			ConfigurationManager.MainConfig.advancedConfig = chk_enableAdvancedOptions.Checked;
 
 
@@ -577,20 +309,12 @@ namespace TeknoparrotAutoXinput
 
 
 			ConfigurationManager.MainConfig.gpuType = cmb_gpu.SelectedIndex;
-			ConfigurationManager.MainConfig.patchGpuFix = chk_patchGpuFix.Checked;
-			ConfigurationManager.MainConfig.patchGpuTP = chk_patchGpuTP.Checked;
 			ConfigurationManager.MainConfig.gpuResolution = cmb_resolution.SelectedIndex;
-			ConfigurationManager.MainConfig.patchResolutionFix = chk_patchResolutionFix.Checked;
-			ConfigurationManager.MainConfig.patchResolutionTP = chk_patchResolutionTP.Checked;
 			ConfigurationManager.MainConfig.displayMode = cmb_displayMode.SelectedIndex;
-			ConfigurationManager.MainConfig.patchDisplayModeFix = chk_patchDisplayModeFix.Checked;
-			ConfigurationManager.MainConfig.patchDisplayModeTP = chk_patchDisplayModeTP.Checked;
 			ConfigurationManager.MainConfig.patch_FFB = chk_patchFFB.Checked;
 			ConfigurationManager.MainConfig.patchReshade = chk_patchReshade.Checked;
 			ConfigurationManager.MainConfig.patchGameID = chk_patchGameID.Checked;
 			ConfigurationManager.MainConfig.patchNetwork = chk_patchNetwork.Checked;
-			ConfigurationManager.MainConfig.patchOtherTPSettings = chk_patchOthersTPSettings.Checked;
-			ConfigurationManager.MainConfig.patchOthersGameOptions = chk_patchOthersGameOptions.Checked;
 
 			ConfigurationManager.MainConfig.patch_apm3id = txt_apm3id.Text;
 			ConfigurationManager.MainConfig.patch_mariokartId = txt_mariokartId.Text;
@@ -609,31 +333,6 @@ namespace TeknoparrotAutoXinput
 				ConfigurationManager.MainConfig.patch_networkDns2 = txt_networkDns2.Text;
 				ConfigurationManager.MainConfig.patch_networkMask = txt_networkMask.Text;
 			}
-
-
-			ConfigurationManager.MainConfig.magpieExe = txt_magpieExe.Text;
-			ConfigurationManager.MainConfig.magpieDelay = (int)num_magpieDelay.Value;
-			ConfigurationManager.MainConfig.magpieScaling = cmb_magpieScaling.SelectedIndex;
-			ConfigurationManager.MainConfig.magpieCapture = cmb_magpieCapture.SelectedIndex;
-			ConfigurationManager.MainConfig.useMagpie = chk_useMagpie.Checked;
-			ConfigurationManager.MainConfig.magpieShowFps = chk_magpieShowFps.Checked;
-			ConfigurationManager.MainConfig.magpieVsync = chk_magpieVsync.Checked;
-			ConfigurationManager.MainConfig.magpieTripleBuffering = chk_magpieTripleBuffering.Checked;
-
-			//ConfigurationManager.MainConfig.magpieLightgun = cmb_useMagpieLightgun.SelectedIndex;
-			//ConfigurationManager.MainConfig.magpieLightgunCalibration = cmb_MagpieLightgunCalibration.SelectedIndex;
-
-			ConfigurationManager.MainConfig.magpieSinden = chk_magpieSindenBorder.Checked;
-			ConfigurationManager.MainConfig.magpieGunCalibration = chk_magpieGunCalibration.Checked;
-
-			ConfigurationManager.MainConfig.magpieBorderSize = (double)num_magpieBorderSize.Value;
-
-			ConfigurationManager.MainConfig.magpieExclusiveFullscreen = chk_magpieExclusiveFullscreen.Checked;
-			ConfigurationManager.MainConfig.magpieFsrSharp = trk_magpieFsrSharp.Value;
-
-			ConfigurationManager.MainConfig.wheelXinputData = txt_wheelXinputData.Text;
-			ConfigurationManager.MainConfig.arcadeXinputData = txt_arcadeXinputData.Text;
-			ConfigurationManager.MainConfig.gamepadXinputData = txt_gamepadXinputData.Text;
 
 			ConfigurationManager.MainConfig.gamepadStooz = radio_useCustomStooz_Gamepad.Checked;
 			ConfigurationManager.MainConfig.wheelStooz = radio_useCustomStooz_Wheel.Checked;
@@ -804,39 +503,11 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		private void chk_useDinputWheel_CheckedChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.useDinputWheel = chk_useDinputWheel.Checked;
-			ConfigurationManager.SaveConfig();
-		}
-
 		private void btn_setffbguid_Click(object sender, EventArgs e)
 		{
 			if (cmb_ffbguid.SelectedIndex >= 0)
 			{
 				txt_ffbguid.Text = FFBGuidList[cmb_ffbguid.SelectedIndex];
-			}
-		}
-
-		private void chk_favorAB_CheckedChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.favorAB = chk_favorAB.Checked;
-			ConfigurationManager.SaveConfig();
-		}
-
-
-		private void btn_selectTP_Click(object sender, EventArgs e)
-		{
-			using (var fbd = new FolderBrowserDialog())
-			{
-				DialogResult result = fbd.ShowDialog();
-
-				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-				{
-					txt_tpfolder.Text = fbd.SelectedPath;
-					ConfigurationManager.MainConfig.TpFolder = fbd.SelectedPath;
-					ConfigurationManager.SaveConfig();
-				}
 			}
 		}
 
@@ -881,7 +552,7 @@ namespace TeknoparrotAutoXinput
 				// Charger le fichier XML
 				XDocument doc = XDocument.Load(gameProfileFile);
 
-				// Récupérer tous les éléments <ButtonName>
+				// RÃ©cupÃ©rer tous les Ã©lÃ©ments <ButtonName>
 				var buttonNames = doc.Descendants("ButtonName")
 									 .Select(button => button.Value);
 
@@ -890,7 +561,7 @@ namespace TeknoparrotAutoXinput
 				if (File.Exists(gamepadConfig))
 				{
 					string gamepadConfigContent = File.ReadAllText(gamepadConfig);
-					// Utiliser une expression régulière pour extraire les valeurs des éléments <ButtonName>
+					// Utiliser une expression rÃ©guliÃ¨re pour extraire les valeurs des Ã©lÃ©ments <ButtonName>
 					var buttonNameMatches = Regex.Matches(gamepadConfigContent, "<ButtonName>(.*?)</ButtonName>")
 												 .Cast<Match>()
 												 .Select(match => match.Groups[1].Value);
@@ -928,40 +599,6 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		private void chk_enableDebug_CheckedChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.debugMode = chk_enableDebug.Checked;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void kryptonButton3_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void btn_resetdefaultlinksource_Click(object sender, EventArgs e)
-		{
-			txt_linksourcefolder.Text = @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)";
-			ConfigurationManager.MainConfig.perGameLinkFolder = txt_linksourcefolder.Text;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void btn_selectLinkFolder_Click(object sender, EventArgs e)
-		{
-			MessageBox.Show("You have to make sure that the Link Folder use the same drive as Teknoparrot (That's why, by default, it use a Subfolder of Teknoparrot)");
-			using (var fbd = new FolderBrowserDialog())
-			{
-				DialogResult result = fbd.ShowDialog();
-
-				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-				{
-					txt_linksourcefolder.Text = fbd.SelectedPath;
-					ConfigurationManager.MainConfig.perGameLinkFolder = fbd.SelectedPath;
-					ConfigurationManager.SaveConfig();
-				}
-			}
-		}
-
 		private void btn_configureDinputShifter_Click(object sender, EventArgs e)
 		{
 			var frm = new dinputshifter();
@@ -969,44 +606,6 @@ namespace TeknoparrotAutoXinput
 			if (result == DialogResult.OK)
 			{
 
-			}
-		}
-
-		private void chk_useDinputShifter_CheckedChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.useDinputShifter = chk_useDinputShifter.Checked;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void chk_useDinputHotas_CheckedChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.useDinputHotas = chk_useDinputHotas.Checked;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void kryptonLabel15_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void kryptonLabel18_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void btn_selectLinkFolderExe_Click(object sender, EventArgs e)
-		{
-			MessageBox.Show("You must select a directory that use the same Drive as your game folder.");
-			using (var fbd = new FolderBrowserDialog())
-			{
-				DialogResult result = fbd.ShowDialog();
-
-				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-				{
-					txt_linksourcefolderexe.Text = fbd.SelectedPath;
-					ConfigurationManager.MainConfig.perGameLinkFolderExe = fbd.SelectedPath;
-					ConfigurationManager.SaveConfig();
-				}
 			}
 		}
 
@@ -1020,39 +619,12 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		private void chk_reverseYAxis_Hotas_CheckedChanged(object sender, EventArgs e)
-		{
-			//ConfigurationManager.MainConfig.reverseYAxis_Hotas = chk_reverseYAxis_Hotas.Checked;
-			//ConfigurationManager.SaveConfig();
-		}
-
-		private void cmb_ffbguid_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
-		}
-
 		private void btn_setffbguidHotas_Click(object sender, EventArgs e)
 		{
 			if (cmb_ffbguidHotas.SelectedIndex >= 0)
 			{
 				txt_ffbguidHotas.Text = FFBGuidList[cmb_ffbguidHotas.SelectedIndex];
 			}
-		}
-
-		private void groupBox1_Enter(object sender, EventArgs e)
-		{
-
-		}
-
-		private void chk_useHotasWithWheel_CheckedChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.useHotasWithWheel = chk_useHotasWithWheel.Checked;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void kryptonGroupBox1_Paint(object sender, PaintEventArgs e)
-		{
-
 		}
 
 		private void btn_gunA_configure_Click(object sender, EventArgs e)
@@ -1077,7 +649,6 @@ namespace TeknoparrotAutoXinput
 			}
 
 			RedoGunRecoilCombo();
-
 		}
 
 		private void btn_gunB_configure_Click(object sender, EventArgs e)
@@ -1103,40 +674,6 @@ namespace TeknoparrotAutoXinput
 			RedoGunRecoilCombo();
 		}
 
-		private void btn_vjoyconfig_Click(object sender, EventArgs e)
-		{
-			// Recherche de la fenêtre à fermer parmi les fenêtres ouvertes
-			foreach (Form form in Application.OpenForms)
-			{
-				if (form.GetType() == typeof(VjoyControl))
-				{
-					// La fenêtre Fenetre1 est ouverte, fermez-la
-					form.Close();
-					Thread.Sleep(100);
-					break; // Sortir de la boucle une fois que la fenêtre est trouvée et fermée
-				}
-			}
-
-			bool vjoy_gunA = chk_gunA_Vjoy.Checked;
-			bool vjoy_gunB = chk_gunB_Vjoy.Checked;
-
-			var frm = new VjoyControl(true, "", null, vjoy_gunA, vjoy_gunB);
-			var result = frm.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				//if (!string.IsNullOrEmpty(frm.GunA_json)) ConfigurationManager.MainConfig.vjoySettingsGunA = frm.GunA_json;
-				//if (!string.IsNullOrEmpty(frm.GunB_json)) ConfigurationManager.MainConfig.vjoySettingsGunB = frm.GunB_json;
-				//ConfigurationManager.SaveConfig();
-			}
-
-		}
-
-		private void cmb_vjoy_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.indexvjoy = cmb_vjoy.SelectedIndex;
-			ConfigurationManager.SaveConfig();
-		}
-
 		private void chk_reasignGunPedal_CheckedChanged(object sender, EventArgs e)
 		{
 			if (chk_reversePedal.Checked)
@@ -1147,11 +684,6 @@ namespace TeknoparrotAutoXinput
 			{
 				chk_reversePedal.Enabled = true;
 			}
-		}
-
-		private void groupBox9_Enter(object sender, EventArgs e)
-		{
-
 		}
 
 		private void cmb_gunA_recoil_SelectedIndexChanged(object sender, EventArgs e)
@@ -1186,262 +718,19 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		private void btn_demulshooter_Click(object sender, EventArgs e)
-		{
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			openFileDialog.Filter = "DemulShooter executable (DemulShooter.exe)|DemulShooter.exe"; // Filtre pour n'afficher que RTSS.exe
-			openFileDialog.Title = "Select DemulShooter.exe"; // Titre de la boîte de dialogue
-
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				txt_demulshootersoft.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
-				ConfigurationManager.MainConfig.demulshooterExe = Path.GetFullPath(openFileDialog.FileName);
-				ConfigurationManager.SaveConfig();
-			}
-		}
-
-		private void chk_gunA_Crosshair_CheckedChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void kryptonButton4_Click(object sender, EventArgs e)
-		{
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			openFileDialog.Filter = "Lightgun executable (Lightgun.exe)|Lightgun.exe"; // Filtre pour n'afficher que RTSS.exe
-			openFileDialog.Title = "Select Lightgun.exe"; // Titre de la boîte de dialogue
-
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				txt_sindensoft.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
-				ConfigurationManager.MainConfig.sindenExe = Path.GetFullPath(openFileDialog.FileName);
-				ConfigurationManager.SaveConfig();
-			}
-		}
-
-		private void chk_reversePedal_CheckedChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void chk_gunA_AutoJoy_CheckedChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void btn_rivatuner_Click(object sender, EventArgs e)
-		{
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			openFileDialog.Filter = "RTSS exécutable (RTSS.exe)|RTSS.exe"; // Filtre pour n'afficher que RTSS.exe
-			openFileDialog.Title = "Sélectionnez le fichier RTSS.exe"; // Titre de la boîte de dialogue
-
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				txt_rivatunersoft.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
-				ConfigurationManager.MainConfig.rivatunerExe = Path.GetFullPath(openFileDialog.FileName);
-				ConfigurationManager.SaveConfig();
-			}
-		}
-
-		private void btn_mamehooker_Click(object sender, EventArgs e)
-		{
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			openFileDialog.Filter = "mamehooker executable (mamehook.exe)|mamehook.exe"; // Filtre pour n'afficher que RTSS.exe
-			openFileDialog.Title = "Select mamehook.exe"; // Titre de la boîte de dialogue
-
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				txt_mamehookersoft.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
-				ConfigurationManager.MainConfig.mamehookerExe = Path.GetFullPath(openFileDialog.FileName);
-				ConfigurationManager.SaveConfig();
-			}
-		}
 
 		private void btn_runSinden_Click(object sender, EventArgs e)
 		{
-			if (File.Exists(txt_sindensoft.Text))
+			if (File.Exists(ConfigurationManager.MainConfig.sindenExe))
 			{
 				Process siden_process = new Process();
-				siden_process.StartInfo.FileName = txt_sindensoft.Text;
-				siden_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(txt_sindensoft.Text);
-				siden_process.StartInfo.Arguments = txt_sindenextra.Text;
+				siden_process.StartInfo.FileName = ConfigurationManager.MainConfig.sindenExe;
+				siden_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(ConfigurationManager.MainConfig.sindenExe);
+				siden_process.StartInfo.Arguments = ConfigurationManager.MainConfig.sindenExtraCmd;
 				siden_process.StartInfo.UseShellExecute = true;
 				siden_process.Start();
 
 			}
-
-		}
-
-		private void groupBox13_Enter(object sender, EventArgs e)
-		{
-
-		}
-
-		private void cmb_showStartup_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.TPConsoleAction = cmb_showStartup.SelectedIndex;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void btn_magpieExe_Click(object sender, EventArgs e)
-		{
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			openFileDialog.Filter = "Magpie (Magpie.exe)|Magpie.exe"; // Filtre pour n'afficher que RTSS.exe
-			openFileDialog.Title = "Select Magpie.exe"; // Titre de la boîte de dialogue
-
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				txt_magpieExe.Text = Path.GetFullPath(openFileDialog.FileName); // Stocke le chemin du fichier sélectionné
-				ConfigurationManager.MainConfig.magpieExe = Path.GetFullPath(openFileDialog.FileName);
-				ConfigurationManager.SaveConfig();
-			}
-		}
-
-		private void btn_magpieSindenExe_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void kryptonLabel19_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void chk_useXenosInjector_CheckedChanged(object sender, EventArgs e)
-		{
-			if (chk_useXenosInjector.Checked)
-			{
-				bool valid = true;
-				string Xenos7z = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.7z");
-				string XenosPath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos", "Xenos.exe");
-				if (!File.Exists(XenosPath))
-				{
-					valid = false;
-					if (File.Exists(Xenos7z))
-					{
-						AddXenos addXenos = new AddXenos();
-						DialogResult result = addXenos.ShowDialog();
-						if (result == DialogResult.OK)
-						{
-							MessageBox.Show("Xenos Activated, you must configure the injection per game on the game options");
-							valid = true;
-						}
-					}
-				}
-				if (valid)
-				{
-					ConfigurationManager.MainConfig.useXenos = chk_useXenosInjector.Checked;
-					ConfigurationManager.SaveConfig();
-				}
-				else
-				{
-					chk_useXenosInjector.Checked = false;
-				}
-			}
-			else
-			{
-				ConfigurationManager.MainConfig.useXenos = chk_useXenosInjector.Checked;
-				ConfigurationManager.SaveConfig();
-			}
-		}
-
-		private void kryptonComboBox1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void groupBox4_Enter(object sender, EventArgs e)
-		{
-
-		}
-
-		private void cmb_gpu_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			ConfigurationManager.MainConfig.gpuType = cmb_gpu.SelectedIndex;
-			ConfigurationManager.SaveConfig();
-		}
-
-		private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void trackBar1_Scroll(object sender, EventArgs e)
-		{
-			lbl_magpieFsrSharp.Text = trk_magpieFsrSharp.Value.ToString() + "%";
-		}
-
-		private void tabGlobal_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void chk_magpieReshadeAdaptiveSharpen_CheckedChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void kryptonButton2_Click(object sender, EventArgs e)
-		{
-			/*
-			NetworkInterface[] networks = NetworkInterface.GetAllNetworkInterfaces();
-
-			var activeAdapter = networks.First(x => x.NetworkInterfaceType != NetworkInterfaceType.Loopback
-								&& x.NetworkInterfaceType != NetworkInterfaceType.Tunnel
-								&& x.OperationalStatus == OperationalStatus.Up
-								&& x.Name.StartsWith("vEthernet") == false);
-
-			var xxx = activeAdapter.GetIPProperties();
-
-			if(xxx != null)
-			{
-				txt_networkGateway.Text = xxx.GatewayAddresses.First().Address.ToString();
-
-
-			}
-			*/
-
-			/*
-			NetworkInterface activeAdapter = null;
-			Task.Run(async () =>
-			{
-				NetworkInterface primaryAdapter = await GetPrimaryNetworkAdapterAsync();
-				if (primaryAdapter != null)
-				{
-					activeAdapter = primaryAdapter;
-				}
-				else
-				{
-					Console.WriteLine("No primary network adapter found or it is not connected to the internet.");
-				}
-			}).GetAwaiter().GetResult();
-
-			var ipProperties = activeAdapter.GetIPProperties();
-			var unicastAddress = ipProperties.UnicastAddresses.FirstOrDefault(ip => ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
-
-			if (unicastAddress != null)
-			{
-				var ipAddress = unicastAddress.Address;
-				var subnetMask = unicastAddress.IPv4Mask;
-				var gatewayAddress = ipProperties.GatewayAddresses.FirstOrDefault()?.Address;
-				var dnsAddresses = ipProperties.DnsAddresses.Where(dns => dns.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToArray();
-
-				var broadcastAddress = GetBroadcastAddress(ipAddress, subnetMask);
-
-				txt_networkGateway.Text = gatewayAddress?.ToString();
-				txt_networkIP.Text = ipAddress.ToString();
-				txt_networkMask.Text = subnetMask.ToString();
-				txt_BroadcastAddress.Text = broadcastAddress.ToString();
-				if (dnsAddresses.Length > 0)
-				{
-					txt_networkDns1.Text = dnsAddresses[0].ToString();
-				}
-				if (dnsAddresses.Length > 1)
-				{
-					txt_networkDns2.Text = dnsAddresses[1].ToString();
-				}
-			}
-			*/
 
 		}
 
@@ -1451,18 +740,23 @@ namespace TeknoparrotAutoXinput
 
 			var ThreadNetWork = new Thread(() =>
 			{
-				var networkInfo = Utils.GetFirstNetworkAdapterInfo();
-				this.Invoke(new MethodInvoker(delegate
+				try
 				{
+					var networkInfo = Utils.GetFirstNetworkAdapterInfo();
+					this.Invoke(new MethodInvoker(delegate
+					{
 
-					txt_networkIP.Text = networkInfo.ContainsKey("networkIP") ? networkInfo["networkIP"] : "0.0.0.0";
-					txt_networkMask.Text = networkInfo.ContainsKey("networkMask") ? networkInfo["networkMask"] : "0.0.0.0";
-					txt_networkGateway.Text = networkInfo.ContainsKey("networkGateway") ? networkInfo["networkGateway"] : "0.0.0.0";
-					txt_networkDns1.Text = networkInfo.ContainsKey("networkDns1") ? networkInfo["networkDns1"] : "0.0.0.0";
-					txt_networkDns2.Text = networkInfo.ContainsKey("networkDns2") ? networkInfo["networkDns2"] : "0.0.0.0";
-					txt_BroadcastAddress.Text = networkInfo.ContainsKey("BroadcastAddress") ? networkInfo["BroadcastAddress"] : "0.0.0.0";
+						txt_networkIP.Text = networkInfo.ContainsKey("networkIP") ? networkInfo["networkIP"] : "0.0.0.0";
+						txt_networkMask.Text = networkInfo.ContainsKey("networkMask") ? networkInfo["networkMask"] : "0.0.0.0";
+						txt_networkGateway.Text = networkInfo.ContainsKey("networkGateway") ? networkInfo["networkGateway"] : "0.0.0.0";
+						txt_networkDns1.Text = networkInfo.ContainsKey("networkDns1") ? networkInfo["networkDns1"] : "0.0.0.0";
+						txt_networkDns2.Text = networkInfo.ContainsKey("networkDns2") ? networkInfo["networkDns2"] : "0.0.0.0";
+						txt_BroadcastAddress.Text = networkInfo.ContainsKey("BroadcastAddress") ? networkInfo["BroadcastAddress"] : "0.0.0.0";
 
-				}));
+					}));
+				}
+				catch { }
+
 
 
 			});
@@ -1480,46 +774,6 @@ namespace TeknoparrotAutoXinput
 			txt_networkDns1.Text = ConfigurationManager.MainConfig.patch_networkDns1 == "" ? txt_networkDns1.Text : ConfigurationManager.MainConfig.patch_networkDns1;
 			txt_networkDns2.Text = ConfigurationManager.MainConfig.patch_networkDns2 == "" ? txt_networkDns2.Text : ConfigurationManager.MainConfig.patch_networkDns2;
 			txt_networkMask.Text = ConfigurationManager.MainConfig.patch_networkMask == "" ? txt_networkMask.Text : ConfigurationManager.MainConfig.patch_networkMask;
-
-		}
-
-		private void kryptonLabel60_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void tabPatch_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void txt_networkMask_TextChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void cmb_gpu_SelectedIndexChanged_1(object sender, EventArgs e)
-		{
-
-		}
-
-		private void cmb_reverseYAxis_Hotas_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void cmb_patchGpuTP_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void kryptonCheckBox1_CheckedChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void chk_patchOthersGameOptions_CheckedChanged(object sender, EventArgs e)
-		{
 
 		}
 
@@ -1541,16 +795,6 @@ namespace TeknoparrotAutoXinput
 			else txt_tplicence.PasswordChar = '*';
 		}
 
-		private void kryptonCheckBox1_CheckedChanged_1(object sender, EventArgs e)
-		{
-
-		}
-
-		private void groupBox17_Enter(object sender, EventArgs e)
-		{
-
-		}
-
 		private void chk_tplicence_unreg_onexit_CheckedChanged(object sender, EventArgs e)
 		{
 			chk_tplicence_unreg_onlaunch.Checked = !chk_tplicence_unreg_onexit.Checked;
@@ -1559,6 +803,21 @@ namespace TeknoparrotAutoXinput
 		private void chk_tplicence_unreg_onlaunch_CheckedChanged(object sender, EventArgs e)
 		{
 			chk_tplicence_unreg_onexit.Checked = !chk_tplicence_unreg_onlaunch.Checked;
+		}
+
+		private void Form1Simple_Load(object sender, EventArgs e)
+		{
+						radio_networkModeAuto.Checked = ConfigurationManager.MainConfig.patch_networkAuto;
+			if (!ConfigurationManager.MainConfig.patch_networkAuto)
+			{
+				radio_networkModeManual.Checked = true;
+				txt_networkIP.Text = ConfigurationManager.MainConfig.patch_networkIP;
+				txt_networkGateway.Text = ConfigurationManager.MainConfig.patch_networkGateway;
+				txt_BroadcastAddress.Text = ConfigurationManager.MainConfig.patch_BroadcastAddress;
+				txt_networkDns1.Text = ConfigurationManager.MainConfig.patch_networkDns1;
+				txt_networkDns2.Text = ConfigurationManager.MainConfig.patch_networkDns2;
+				txt_networkMask.Text = ConfigurationManager.MainConfig.patch_networkMask;
+			}
 		}
 	}
 }
