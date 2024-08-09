@@ -13,6 +13,7 @@ using SharpDX.Multimedia;
 using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO.Pipes;
 using System.Management;
 using System.Runtime.CompilerServices;
@@ -158,6 +159,9 @@ namespace TeknoparrotAutoXinput
 		public static bool linkExeWritable = false;
 		public static bool linkExeHardLink = false;
 		public static bool linkExeSoftLink = false;
+		public static bool linkExePrecheck = false;
+
+		public static Dictionary<int, string> vjoyData = new Dictionary<int, string>();
 
 		//public static string xmlFileContent = "";
 
@@ -208,7 +212,14 @@ namespace TeknoparrotAutoXinput
 				return;
 			}
 
-				//rivatuner run as admin
+			if (args.Length >= 1 && args.First() == "--listvjoy")
+			{
+				string json = Utils.getVjoyData();
+				File.WriteAllText(Path.Combine(Path.GetTempPath(), "list_vjoy.json"), json);
+				return;
+			}
+
+			//rivatuner run as admin
 			if (args.Length >= 1 && args.First() == "--xenos")
 			{
 				string XenosDir = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "xenos");
@@ -521,6 +532,17 @@ namespace TeknoparrotAutoXinput
 				return;
 			}
 
+			if (args.Length >= 1 && args.First() == "--registerAllTask")
+			{
+
+				string selfExe = Process.GetCurrentProcess().MainModule.FileName;
+				if (!Utils.CheckTaskExist(selfExe, "--rivatuner")) Utils.RegisterTask(selfExe, "--rivatuner");
+				if (!Utils.CheckTaskExist(selfExe, "--xenos")) Utils.RegisterTask(selfExe, "--xenos");
+				if (!Utils.CheckTaskExist(selfExe, "--demulshooter")) Utils.RegisterTask(selfExe, "--demulshooter");
+				if (!Utils.CheckTaskExist(selfExe, "--listvjoy")) Utils.RegisterUserTaskAtLogon(selfExe, "--listvjoy");
+				return;
+			}
+
 			//Vjoy
 			if (args.Length >= 2 && args.First() == "--runvjoy")
 			{
@@ -600,8 +622,11 @@ namespace TeknoparrotAutoXinput
 
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
 
-
-			
+			string markerFilePath = Path.Combine(Path.GetTempPath(), "list_vjoy.json");
+			if (File.Exists(markerFilePath))
+			{
+				vjoyData = JsonConvert.DeserializeObject<Dictionary<int, string>>(File.ReadAllText(markerFilePath));
+			}
 
 			wheelXinputData = ConfigurationManager.MainConfig.wheelXinputData;
 			arcadeXinputData = ConfigurationManager.MainConfig.arcadeXinputData;
@@ -1354,8 +1379,12 @@ namespace TeknoparrotAutoXinput
 
 								if (!nolink && ((Utils.IsEligibleHardLink(linkTargetFolderExe) && linkExeHardLink) || linkExeSoftLink) && linkExeWritable)
 								{
-									Utils.LogMessage("Pre clean linkTargetFolderExe");
-									Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
+									if(Utils.PrecheckLinksFile(linkTargetFolderExe, linkSourceFolderExe, executableGameFile))
+									{
+										linkExePrecheck = true;
+										Utils.LogMessage("Pre clean linkTargetFolderExe");
+										Utils.CleanHardLinksFiles(linkTargetFolderExe, linkSourceFolderExe, executableGameFile);
+									}
 								}
 							}
 
@@ -1594,6 +1623,36 @@ namespace TeknoparrotAutoXinput
 										if (LightgunA_Type == "guncon2") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2;
 										if (LightgunA_Type == "wiimote") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
 										bindingDinputLightGunA = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunAJson);
+
+										if(LightgunA_Type == "wiimote")
+										{
+											if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
+											{
+												string tempGuid = bindingDinputLightGunA["LightgunX"].JoystickGuid.ToString();
+												string tempDeviceName = bindingDinputLightGunA["LightgunX"].DeviceName;
+												var match = Regex.Match(tempDeviceName, @"^vjoy(\d+)$");
+												if (match.Success)
+												{
+													int tempvjoynumber = int.Parse(match.Groups[1].Value);
+													if (vjoyData.ContainsKey(tempvjoynumber))
+													{
+														string newGuid = vjoyData[tempvjoynumber];
+														Guid newGuid2;
+														if (Guid.TryParse(newGuid, out newGuid2))
+														{
+															foreach (var key in bindingDinputLightGunA.Keys.ToList())
+															{
+																if (bindingDinputLightGunA[key].JoystickGuid.ToString() == tempGuid)
+																{
+																	bindingDinputLightGunA[key].JoystickGuid = newGuid2;
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+
 										if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
 										{
 											GunAGuid = bindingDinputLightGunA["LightgunX"].JoystickGuid.ToString();
@@ -1626,6 +1685,37 @@ namespace TeknoparrotAutoXinput
 										if (LightgunB_Type == "guncon2") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2;
 										if (LightgunB_Type == "wiimote") bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBWiimote;
 										bindingDinputLightGunB = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunBJson);
+
+
+										if (LightgunB_Type == "wiimote")
+										{
+											if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
+											{
+												string tempGuid = bindingDinputLightGunB["LightgunX"].JoystickGuid.ToString();
+												string tempDeviceName = bindingDinputLightGunB["LightgunX"].DeviceName;
+												var match = Regex.Match(tempDeviceName, @"^vjoy(\d+)$");
+												if (match.Success)
+												{
+													int tempvjoynumber = int.Parse(match.Groups[1].Value);
+													if (vjoyData.ContainsKey(tempvjoynumber))
+													{
+														string newGuid = vjoyData[tempvjoynumber];
+														Guid newGuid2;
+														if (Guid.TryParse(newGuid, out newGuid2))
+														{
+															foreach (var key in bindingDinputLightGunB.Keys.ToList())
+															{
+																if (bindingDinputLightGunB[key].JoystickGuid.ToString() == tempGuid)
+																{
+																	bindingDinputLightGunB[key].JoystickGuid = newGuid2;
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+
 										if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
 										{
 											GunBGuid = bindingDinputLightGunB["LightgunX"].JoystickGuid.ToString();
@@ -4209,7 +4299,7 @@ namespace TeknoparrotAutoXinput
 											Utils.HardLinkFiles(linkSourceFolder, linkTargetFolder, executableGameFile, true);
 										}
 									}
-									if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe) && linkExeWritable)
+									if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe) && linkExeWritable && linkExePrecheck)
 									{
 										Utils.LogMessage($"HardLinkFiles {linkSourceFolderExe}, {linkTargetFolderExe}");
 										if (Utils.IsEligibleHardLink(linkSourceFolderExe, linkTargetFolderExe) && linkExeHardLink)
@@ -5751,7 +5841,7 @@ _Translate=0.000000,0.000000
 										}
 									}
 
-									if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe) && linkExeWritable)
+									if (gameOptions.EnableLinkExe && !String.IsNullOrEmpty(linkTargetFolderExe) && !String.IsNullOrEmpty(linkSourceFolderExe) && Directory.Exists(linkSourceFolderExe) && linkExeWritable && linkExePrecheck)
 									{
 										Utils.LogMessage($"CleanHardLinksFiles GameDir");
 										if ((Utils.IsEligibleHardLink(linkTargetFolderExe) && linkExeHardLink) || linkExeSoftLink)

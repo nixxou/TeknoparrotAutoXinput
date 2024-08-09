@@ -169,12 +169,14 @@ namespace TeknoparrotAutoXinput
 
 		public static void Start(string targetExecutable)
 		{
+			Utils.LogMessage("DemulshooterManager Start");
 			if (!ValidPath) return;
 			WriteConfig(targetExecutable);
+			Utils.LogMessage("DemulshooterManager Ini written");
 			string selfExe = Process.GetCurrentProcess().MainModule.FileName;
 			if (!Utils.CheckTaskExist(selfExe, "--demulshooter"))
 			{
-
+				Utils.LogMessage("DemulshooterManager create task");
 				string exePath = selfExe;
 				string exeDir = Path.GetDirectoryName(exePath);
 				Process process = new Process();
@@ -185,10 +187,12 @@ namespace TeknoparrotAutoXinput
 				process.StartInfo.Verb = "runas";
 				process.Start();
 				process.WaitForExit();
+				Utils.LogMessage("DemulshooterManager task created");
 			}
 			Utils.ExecuteTask(Utils.ExeToTaskName(selfExe, "--demulshooter"),-1);
 			MonitorDemulshooter = new Thread(() => ClientDemulshooter());
 			MonitorDemulshooter.Start();
+			Utils.LogMessage("DemulshooterManager task start");
 
 		}
 

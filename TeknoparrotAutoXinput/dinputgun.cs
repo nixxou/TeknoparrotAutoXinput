@@ -729,6 +729,7 @@ namespace TeknoparrotAutoXinput
 					gunCom = frm.gunCom;
 					gunGuid = frm.gunGuid;
 					gunConfig = frm.Dialogconfig;
+
 				}
 			}
 			if (GunType == "gamepad")
@@ -762,6 +763,8 @@ namespace TeknoparrotAutoXinput
 						{
 							control.Text = buttonData[XinputTitle].Title;
 						}
+
+
 					}
 				}
 			}

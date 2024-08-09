@@ -2952,6 +2952,26 @@ namespace TeknoparrotAutoXinput
 				catch { }
 			}
 
+			string selfExe = Process.GetCurrentProcess().MainModule.FileName;
+			//if (!Utils.CheckTaskExist(selfExe, "--rivatuner"))
+			{
+				string exePath = selfExe;
+				string exeDir = Path.GetDirectoryName(exePath);
+				Process process = new Process();
+				process.StartInfo.FileName = selfExe;
+				process.StartInfo.Arguments = "--registerAllTask";
+				process.StartInfo.WorkingDirectory = exeDir;
+				process.StartInfo.UseShellExecute = true;
+				process.StartInfo.Verb = "runas";
+				process.Start();
+				process.WaitForExit();
+			}
+
+
+
+
+
+
 			MessageBox.Show("Install Done, please restart your app");
 			Application.Exit();
 

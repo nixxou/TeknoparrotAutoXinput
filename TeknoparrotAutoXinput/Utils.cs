@@ -20,6 +20,8 @@ using System.Net.NetworkInformation;
 using BsDiff;
 using Microsoft.Win32;
 using System.Reflection;
+using SharpDX.DirectInput;
+using XJoy;
 
 
 namespace TeknoparrotAutoXinput
@@ -1243,7 +1245,315 @@ namespace TeknoparrotAutoXinput
 			}
 
 		}
-		
+
+		public static bool PrecheckLinksFile(string directoryToClean, string originalLinkDir, string executableGameFile)
+		{
+
+			directoryToClean = Path.GetFullPath(directoryToClean);
+			originalLinkDir = Path.GetFullPath(originalLinkDir);
+			if (!Directory.Exists(directoryToClean)) return false;
+			if (!Directory.Exists(originalLinkDir)) return false;
+
+			List<string> filesToCheck = new List<string>();
+			var filePaths = Directory.EnumerateFiles(originalLinkDir, "*", new EnumerationOptions
+			{
+				IgnoreInaccessible = true,
+				RecurseSubdirectories = true
+			});
+			foreach (var fileInLinkFolder in filePaths)
+			{
+				string file = directoryToClean + fileInLinkFolder.Remove(0, originalLinkDir.Length).TrimStart();
+				file = file.Replace("[..]", "..");
+
+
+				if (Path.GetDirectoryName(file).Contains(@"\[!windowed!]") && file.Contains(@"\[!windowed!]\"))
+				{
+					file = file.Replace(@"\[!windowed!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!fullscreen!]") && file.Contains(@"\[!fullscreen!]\"))
+				{
+					file = file.Replace(@"\[!fullscreen!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!amd!]") && file.Contains(@"\[!amd!]\"))
+				{
+					file = file.Replace(@"\[!amd!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!amdold!]") && file.Contains(@"\[!amdold!]\"))
+				{
+					file = file.Replace(@"\[!amdold!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!amdnew!]") && file.Contains(@"\[!amdnew!]\"))
+				{
+					file = file.Replace(@"\[!amdnew!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!amdrid!]") && file.Contains(@"\[!amdrid!]\"))
+				{
+					file = file.Replace(@"\[!amdrid!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!nvidia!]") && file.Contains(@"\[!nvidia!]\"))
+				{
+					file = file.Replace(@"\[!nvidia!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!intel!]") && file.Contains(@"\[!intel!]\"))
+				{
+					file = file.Replace(@"\[!intel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!dwheel!]") && file.Contains(@"\[!dwheel!]\"))
+				{
+					file = file.Replace(@"\[!dwheel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!dhotas!]") && file.Contains(@"\[!dhotas!]\"))
+				{
+					file = file.Replace(@"\[!dhotas!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!dlightgun!]") && file.Contains(@"\[!dlightgun!]\"))
+				{
+					file = file.Replace(@"\[!dlightgun!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!xinput!]") && file.Contains(@"\[!xinput!]\"))
+				{
+					file = file.Replace(@"\[!xinput!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!ffb!]") && file.Contains(@"\[!ffb!]\"))
+				{
+					file = file.Replace(@"\[!ffb!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!set_resolution!]") && file.Contains(@"\[!set_resolution!]\"))
+				{
+					file = file.Replace(@"\[!set_resolution!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!dont_set_resolution!]") && file.Contains(@"\[!dont_set_resolution!]\"))
+				{
+					file = file.Replace(@"\[!dont_set_resolution!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!set_displaymode!]") && file.Contains(@"\[!set_displaymode!]\"))
+				{
+					file = file.Replace(@"\[!set_displaymode!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!dont_set_displaymode!]") && file.Contains(@"\[!dont_set_displaymode!]\"))
+				{
+					file = file.Replace(@"\[!dont_set_displaymode!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!720p!]") && file.Contains(@"\[!720p!]\"))
+				{
+					file = file.Replace(@"\[!720p!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!1080p!]") && file.Contains(@"\[!1080p!]\"))
+				{
+					file = file.Replace(@"\[!1080p!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!2k!]") && file.Contains(@"\[!2k!]\"))
+				{
+					file = file.Replace(@"\[!2k!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!4k!]") && file.Contains(@"\[!4k!]\"))
+				{
+					file = file.Replace(@"\[!4k!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!720p+!]") && file.Contains(@"\[!720p+!]\"))
+				{
+					file = file.Replace(@"\[!720p+!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!1080p+!]") && file.Contains(@"\[!1080p+!]\"))
+				{
+					file = file.Replace(@"\[!1080p+!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!2k+!]") && file.Contains(@"\[!2k+!]\"))
+				{
+					file = file.Replace(@"\[!2k+!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!4k+!]") && file.Contains(@"\[!4k+!]\"))
+				{
+					file = file.Replace(@"\[!4k+!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!720p-!]") && file.Contains(@"\[!720p-!]\"))
+				{
+					file = file.Replace(@"\[!720p-!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!1080p-!]") && file.Contains(@"\[!1080p-!]\"))
+				{
+					file = file.Replace(@"\[!1080p-!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!2k-!]") && file.Contains(@"\[!2k-!]\"))
+				{
+					file = file.Replace(@"\[!2k-!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!4k-!]") && file.Contains(@"\[!4k-!]\"))
+				{
+					file = file.Replace(@"\[!4k-!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!optional_reshade!]") && file.Contains(@"\[!optional_reshade!]\"))
+				{
+					file = file.Replace(@"\[!optional_reshade!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_reshade!]") && file.Contains(@"\[!no_reshade!]\"))
+				{
+					file = file.Replace(@"\[!no_reshade!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!at_least_one_sinden!]") && file.Contains(@"\[!at_least_one_sinden!]\"))
+				{
+					file = file.Replace(@"\[!at_least_one_sinden!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!magpie_sinden_bezel!]") && file.Contains(@"\[!magpie_sinden_bezel!]\"))
+				{
+					file = file.Replace(@"\[!magpie_sinden_bezel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_sinden!]") && file.Contains(@"\[!no_sinden!]\"))
+				{
+					file = file.Replace(@"\[!no_sinden!]\", @"\");
+				}
+
+				if (Path.GetDirectoryName(file).Contains(@"\[!crosshair_gun1_and_gun2!]") && file.Contains(@"\[!crosshair_gun1_and_gun2!]\"))
+				{
+					file = file.Replace(@"\[!crosshair_gun1_and_gun2!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!crosshair_gun1_only!]") && file.Contains(@"\[!crosshair_gun1_only!]\"))
+				{
+					file = file.Replace(@"\[!crosshair_gun1_only!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!crosshair_gun2_only!]") && file.Contains(@"\[!crosshair_gun2_only!]\"))
+				{
+					file = file.Replace(@"\[!crosshair_gun2_only!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!hide_crosshair!]") && file.Contains(@"\[!hide_crosshair!]\"))
+				{
+					file = file.Replace(@"\[!hide_crosshair!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!show_crosshair!]") && file.Contains(@"\[!show_crosshair!]\"))
+				{
+					file = file.Replace(@"\[!show_crosshair!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!guna_found!]") && file.Contains(@"\[!guna_found!]\"))
+				{
+					file = file.Replace(@"\[!guna_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!gunb_found!]") && file.Contains(@"\[!gunb_found!]\"))
+				{
+					file = file.Replace(@"\[!gunb_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_guna_found!]") && file.Contains(@"\[!no_guna_found!]\"))
+				{
+					file = file.Replace(@"\[!no_guna_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_gunb_found!]") && file.Contains(@"\[!no_gunb_found!]\"))
+				{
+					file = file.Replace(@"\[!no_gunb_found!]\", @"\");
+				}
+
+				if (Path.GetDirectoryName(file) != null && Regex.IsMatch(Path.GetDirectoryName(file), @"\\\[!!([A-Za-z0-9 ]+)!!\]") && Regex.IsMatch(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\"))
+				{
+					file = Regex.Replace(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\", @"\");
+				}
+
+
+				if (Path.GetFileNameWithoutExtension(file).StartsWith(@"[!main_executable!") && Path.GetFileNameWithoutExtension(file).EndsWith(@"]"))
+				{
+					if (executableGameFile != "" && File.Exists(executableGameFile))
+					{
+						file = executableGameFile;
+					}
+				}
+
+				file = Path.GetFullPath(file);
+				if (!File.Exists(file)) continue;
+				if(!filesToCheck.Contains(file)) filesToCheck.Add(file);
+
+				//Utils.LogMessage("check rights for " + file);
+
+			}
+			List<string> errorList = new List<string>();
+			bool valid = true;
+			foreach(var file in filesToCheck)
+			{
+				if (!verifyRightFile(file))
+				{
+					if (RemoveReadOnly(file))
+					{
+						if (!verifyRightFile(file))
+						{
+							valid = false;
+							errorList.Add(file);
+						}
+					}
+					else
+					{
+						valid = false;
+						errorList.Add(file);
+					}
+
+				}
+
+			}
+			if (valid)
+			{
+				Utils.LogMessage($"Precheck {filesToCheck.Count} files, all ok");
+			}
+			else
+			{
+				Utils.LogMessage($"Precheck {filesToCheck.Count} files, error");
+				MessageBox.Show($"No read/write access to {errorList.Count()} files like {errorList.First()}, patch linking will be disabled");
+
+			}
+			return valid;
+
+		}
+
+		public static bool verifyRightFile(string filePath)
+		{
+			if (File.Exists(filePath))
+			{
+				
+				try
+				{
+					bool valid1 = false;
+					bool valid2 = false;
+					// Vérifier les permissions en lecture
+					using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read))
+					{
+						valid1 = true;
+					}
+
+					// Vérifier les permissions en écriture
+					using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Write))
+					{
+						valid2 = true;
+					}
+
+					if(valid1 && valid2) { return true; }
+				}
+				catch (UnauthorizedAccessException)
+				{
+					Utils.LogMessage("No rights for " + filePath);
+				}
+				catch (Exception ex)
+				{
+				}
+			}
+			return false;
+		}
+
+		public static bool RemoveReadOnly(string filePath)
+		{
+			if (!File.Exists(filePath)) return false;
+
+			try
+			{
+				var attributes = File.GetAttributes(filePath);
+
+				if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+				{
+					File.SetAttributes(filePath, attributes & ~FileAttributes.ReadOnly);
+				}
+
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+
 		public static void CleanHardLinksFiles(string directoryToClean, string originalLinkDir, string executableGameFile)
 		{
 			string moveToDest = "";
@@ -1965,6 +2275,31 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
+		public static void RegisterUserTaskAtLogon(string taskExe, string taskArgument)
+		{
+			string taskName = ExeToTaskName(taskExe, taskArgument);
+			using (TaskService ts = new TaskService())
+			{
+				if (ts.GetTask(taskName) == null)
+				{
+					var UsersRights = TaskLogonType.InteractiveToken;
+					TaskDefinition td = ts.NewTask();
+					td.RegistrationInfo.Description = "User Task at Logon";
+					td.Principal.LogonType = UsersRights;
+					td.Principal.UserId = Environment.UserName;
+
+					// Crée un déclencheur qui démarre la tâche à l'ouverture de session
+					td.Triggers.Add(new LogonTrigger());
+
+					// Crée une action qui lancera le programme souhaité
+					td.Actions.Add(taskExe, taskArgument, null);
+
+					// Enregistre la tâche dans le dossier de l'utilisateur
+					ts.RootFolder.RegisterTaskDefinition(taskName, td, TaskCreation.CreateOrUpdate, Environment.UserName, null, UsersRights, null);
+				}
+			}
+		}
+
 		public static string ExeToTaskName(string exeFile, string arguments)
 		{
 			var argsReformated = CommandLineToArgs(arguments);
@@ -2586,6 +2921,82 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 			return "";
+		}
+
+		public static string getVjoyData()
+		{
+			bool vjoy_installed = false;
+			string vjoyPath = Utils.checkInstalled("vJoy");
+			if (!string.IsNullOrEmpty(vjoyPath)) vjoy_installed = true;
+
+			Dictionary<int, string> vjoyGuidData = new Dictionary<int, string>();
+			string markerFilePath = Path.Combine(Path.GetTempPath(), "list_vjoy.json");
+
+			if (vjoy_installed)
+			{
+
+				DirectInput directInput = new DirectInput();
+				List<DeviceInstance> devices = new List<DeviceInstance>();
+				devices.AddRange(directInput.GetDevices().Where(x => x.Type != SharpDX.DirectInput.DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+				Dictionary<string, Joystick> joyList = new Dictionary<string, Joystick>();
+				var joystickState = new JoystickState();
+				foreach (var device in devices)
+				{
+					if (device.ProductName.ToLower().Contains("vjoy"))
+					{
+						Joystick joystick = new Joystick(directInput, device.InstanceGuid);
+						joystick.Properties.BufferSize = 512;
+						joystick.Acquire();
+						joyList.Add(device.InstanceGuid.ToString(), joystick);
+					}
+				}
+				var vJoyObj = new vJoyManager();
+				if (vJoyObj.vJoyEnabled())
+				{
+
+					for (uint i = 0; i <= 16; i++)
+					{
+						VjdStat status = vJoyObj.m_joystick.GetVJDStatus(i);
+						if (status == VjdStat.VJD_STAT_FREE)
+						{
+
+							vJoyObj.InitDevice((uint)(i));
+							vJoyObj.SetButton(1, true);
+							vJoyObj.SetButton(2, false);
+							vJoyObj.SetButton(3, true);
+							Thread.Sleep(100);
+
+							foreach (var joy in joyList)
+							{
+								var joystick = joy.Value;
+								joystick.GetCurrentState(ref joystickState);
+								if (joystickState != null && joystickState.Buttons.Count() >= 3 && joystickState.Buttons[0] && !joystickState.Buttons[1] && joystickState.Buttons[2])
+								{
+									vjoyGuidData.Add((int)i, joy.Key);
+									break;
+								}
+
+							}
+
+							vJoyObj.SetButton(1, false);
+							vJoyObj.SetButton(2, false);
+							vJoyObj.SetButton(3, false);
+							vJoyObj.ReleaseDevice();
+
+						}
+					}
+						
+					foreach (var joy in joyList)
+					{
+						joy.Value.Dispose();
+
+					}
+
+				}
+
+			}
+			string json = JsonConvert.SerializeObject(vjoyGuidData, Newtonsoft.Json.Formatting.Indented);
+			return json;
 		}
 
 		public static string checkInstalled(string findByName)

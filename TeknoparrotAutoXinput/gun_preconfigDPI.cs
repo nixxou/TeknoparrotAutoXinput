@@ -1034,6 +1034,17 @@ namespace TeknoparrotAutoXinput
 		{
 			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
 			base_content = base_content.Replace("[gunguid]", gunGuid);
+
+			string gunNameNew = gunName;
+			foreach (var vdata in Program.vjoyData)
+			{
+				if (vdata.Value.ToLower() == gunGuid.ToLower())
+				{
+					gunNameNew = "vjoy" + vdata.Key.ToString();
+					break;
+				}
+			}
+
 			base_content = base_content.Replace("[gunname]", gunName);
 			string typeGunTxt = "wiimote";
 
@@ -1055,7 +1066,18 @@ namespace TeknoparrotAutoXinput
 		{
 			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
 			base_content = base_content.Replace("[gunguid]", gunGuid);
-			base_content = base_content.Replace("[gunname]", gunName);
+
+			string gunNameNew = gunName;
+			foreach (var vdata in Program.vjoyData)
+			{
+				if(vdata.Value.ToLower() == gunGuid.ToLower())
+				{
+					gunNameNew = "vjoy" + vdata.Key.ToString();
+					break;
+				}
+			}
+
+			base_content = base_content.Replace("[gunname]", gunNameNew);
 			string typeGunTxt = "wiimote";
 
 
