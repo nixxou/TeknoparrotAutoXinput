@@ -31,7 +31,7 @@ namespace TeknoparrotAutoXinput
 			{"H", (VirtualKeyCode.VK_H,Key.H)},
 			{"J", (VirtualKeyCode.VK_J,Key.J)},
 			{"K", (VirtualKeyCode.VK_K,Key.K)},
-			{"L", (VirtualKeyCode.VK_L,Key.L)},
+			{"V", (VirtualKeyCode.VK_V,Key.V)},
 			{"B", (VirtualKeyCode.VK_B,Key.B)},
 			{"N", (VirtualKeyCode.VK_N,Key.N)},
 			{"P", (VirtualKeyCode.VK_P,Key.P)}

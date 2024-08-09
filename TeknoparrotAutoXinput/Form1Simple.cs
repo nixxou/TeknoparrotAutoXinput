@@ -1,5 +1,8 @@
 ﻿using Krypton.Toolkit;
+using Newtonsoft.Json;
 using SDL2;
+using SharpDX.DirectInput;
+using SharpDX.Multimedia;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,12 +27,13 @@ namespace TeknoparrotAutoXinput
 		private string previous_gunARecoil = "";
 		private string previous_gunBRecoil = "";
 		private bool DoRedoGunRecoilCombo = false;
+		bool isInit = true;
 		public Form1Simple()
 		{
 			InitializeComponent();
 
 			//System.Diagnostics.Debugger.Break();
-
+			chk_patchResolutionFix.Checked = ConfigurationManager.MainConfig.patchResolutionFix;
 			chk_enableAdvancedOptions.Checked = ConfigurationManager.MainConfig.advancedConfig;
 
 			txt_tplicence.Text = Utils.Decrypt(ConfigurationManager.MainConfig.tpLicence);
@@ -43,7 +47,6 @@ namespace TeknoparrotAutoXinput
 			chk_patchFFB.Checked = ConfigurationManager.MainConfig.patch_FFB;
 			chk_patchReshade.Checked = ConfigurationManager.MainConfig.patchReshade;
 			chk_patchGameID.Checked = ConfigurationManager.MainConfig.patchGameID;
-			chk_patchNetwork.Checked = ConfigurationManager.MainConfig.patchNetwork;
 
 
 			txt_apm3id.Text = ConfigurationManager.MainConfig.patch_apm3id;
@@ -207,6 +210,7 @@ namespace TeknoparrotAutoXinput
 					cmb_ffbguidHotas.SelectedIndex = selectedFTBIndexHotas;
 				}
 			}
+			isInit = false;
 
 		}
 
@@ -225,7 +229,7 @@ namespace TeknoparrotAutoXinput
 				}
 				if (cmb_gunA_type.SelectedItem.ToString() == "guncon1" || cmb_gunA_type.SelectedItem.ToString() == "guncon2") cmb_gunA_recoil.Items.Add("gun4ir");
 				if (cmb_gunA_type.SelectedItem.ToString() == "gamepad") cmb_gunA_recoil.Items.Add("rumble");
-				if (cmb_gunA_type.SelectedItem.ToString() == "wiimote") cmb_gunA_recoil.Items.Add("rumble");
+				if (cmb_gunA_type.SelectedItem.ToString() == "wiimote") cmb_gunA_recoil.Items.Add("lichtknarre");
 				if (cmb_gunA_type.SelectedItem.ToString() != "<none>") cmb_gunA_recoil.Items.Add("mamehooker");
 			}
 
@@ -239,7 +243,7 @@ namespace TeknoparrotAutoXinput
 				}
 				if (cmb_gunB_type.SelectedItem.ToString() == "guncon1" || cmb_gunB_type.SelectedItem.ToString() == "guncon2") cmb_gunB_recoil.Items.Add("gun4ir");
 				if (cmb_gunB_type.SelectedItem.ToString() == "gamepad") cmb_gunB_recoil.Items.Add("rumble");
-				if (cmb_gunB_type.SelectedItem.ToString() == "wiimote") cmb_gunB_recoil.Items.Add("rumble");
+				if (cmb_gunB_type.SelectedItem.ToString() == "wiimote") cmb_gunB_recoil.Items.Add("lichtknarre");
 				if (cmb_gunB_type.SelectedItem.ToString() != "<none>") cmb_gunB_recoil.Items.Add("mamehooker");
 			}
 
@@ -286,10 +290,37 @@ namespace TeknoparrotAutoXinput
 				grp_gunB_gun4irOptions.Enabled = true;
 			}
 			DoRedoGunRecoilCombo = false;
+
+			if (!isInit)
+			{
+				if (cmb_gunA_type.SelectedItem.ToString() == "guncon1" || cmb_gunA_type.SelectedItem.ToString() == "guncon2")
+				{
+					if (gun_preconfigDPI.isValidGun4ir(cmb_gunA_type.SelectedItem.ToString() == "guncon1" ? ConfigurationManager.MainConfig.bindingDinputGunAGuncon1 : ConfigurationManager.MainConfig.bindingDinputGunAGuncon2, cmb_gunA_com.SelectedIndex))
+					{
+						try
+						{
+							cmb_gunA_recoil.SelectedIndex = 1;
+						}
+						catch { }
+					}
+				}
+				if (cmb_gunB_type.SelectedItem.ToString() == "guncon1" || cmb_gunB_type.SelectedItem.ToString() == "guncon2")
+				{
+					if (gun_preconfigDPI.isValidGun4ir(cmb_gunB_type.SelectedItem.ToString() == "guncon1" ? ConfigurationManager.MainConfig.bindingDinputGunBGuncon1 : ConfigurationManager.MainConfig.bindingDinputGunBGuncon2, cmb_gunB_com.SelectedIndex))
+					{
+						try
+						{
+							cmb_gunB_recoil.SelectedIndex = 1;
+						}
+						catch { }
+					}
+				}
+			}
 		}
 
 		private void Form1Simple_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			ConfigurationManager.MainConfig.patchResolutionFix = chk_patchResolutionFix.Checked;
 			ConfigurationManager.MainConfig.showStartup = chk_showStartup.Checked;
 			ConfigurationManager.MainConfig.useDinputWheel = chk_useDinputWheel.Checked;
 			ConfigurationManager.MainConfig.favorAB = chk_favorAB.Checked;
@@ -314,25 +345,12 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.patch_FFB = chk_patchFFB.Checked;
 			ConfigurationManager.MainConfig.patchReshade = chk_patchReshade.Checked;
 			ConfigurationManager.MainConfig.patchGameID = chk_patchGameID.Checked;
-			ConfigurationManager.MainConfig.patchNetwork = chk_patchNetwork.Checked;
+
 
 			ConfigurationManager.MainConfig.patch_apm3id = txt_apm3id.Text;
 			ConfigurationManager.MainConfig.patch_mariokartId = txt_mariokartId.Text;
 			ConfigurationManager.MainConfig.patch_customName = txt_customName.Text;
-			if (radio_networkModeAuto.Checked)
-			{
-				ConfigurationManager.MainConfig.patch_networkAuto = true;
-			}
-			else
-			{
-				ConfigurationManager.MainConfig.patch_networkAuto = false;
-				ConfigurationManager.MainConfig.patch_networkIP = txt_networkIP.Text;
-				ConfigurationManager.MainConfig.patch_networkGateway = txt_networkGateway.Text;
-				ConfigurationManager.MainConfig.patch_BroadcastAddress = txt_BroadcastAddress.Text;
-				ConfigurationManager.MainConfig.patch_networkDns1 = txt_networkDns1.Text;
-				ConfigurationManager.MainConfig.patch_networkDns2 = txt_networkDns2.Text;
-				ConfigurationManager.MainConfig.patch_networkMask = txt_networkMask.Text;
-			}
+
 
 			ConfigurationManager.MainConfig.gamepadStooz = radio_useCustomStooz_Gamepad.Checked;
 			ConfigurationManager.MainConfig.wheelStooz = radio_useCustomStooz_Wheel.Checked;
@@ -359,7 +377,7 @@ namespace TeknoparrotAutoXinput
 			{
 				string recoilValue = cmb_gunA_recoil.SelectedItem.ToString();
 				ConfigurationManager.MainConfig.gunARecoil = recoilValue;
-				if (recoilValue == "gun4ir")
+				//if (recoilValue == "gun4ir")
 				{
 					ConfigurationManager.MainConfig.gunAComPort = cmb_gunA_com.SelectedIndex;
 					ConfigurationManager.MainConfig.gunAAutoJoy = chk_gunA_AutoJoy.Checked;
@@ -377,7 +395,7 @@ namespace TeknoparrotAutoXinput
 			{
 				string recoilValue = cmb_gunB_recoil.SelectedItem.ToString();
 				ConfigurationManager.MainConfig.gunBRecoil = recoilValue;
-				if (recoilValue == "gun4ir")
+				//if (recoilValue == "gun4ir")
 				{
 					ConfigurationManager.MainConfig.gunBComPort = cmb_gunB_com.SelectedIndex;
 					ConfigurationManager.MainConfig.gunBAutoJoy = chk_gunB_AutoJoy.Checked;
@@ -404,14 +422,14 @@ namespace TeknoparrotAutoXinput
 
 
 			ConfigurationManager.MainConfig.gunASidenPump = 1;
-			if (ConfigurationManager.MainConfig.gunAType == "sinden")
+			//if (ConfigurationManager.MainConfig.gunAType == "sinden")
 			{
 				if (radio_gunA_sindenPump1.Checked) ConfigurationManager.MainConfig.gunASidenPump = 1;
 				if (radio_gunA_sindenPump2.Checked) ConfigurationManager.MainConfig.gunASidenPump = 2;
 				if (radio_gunA_sindenPump3.Checked) ConfigurationManager.MainConfig.gunASidenPump = 3;
 			}
 			ConfigurationManager.MainConfig.gunBSidenPump = 1;
-			if (ConfigurationManager.MainConfig.gunBType == "sinden")
+			//if (ConfigurationManager.MainConfig.gunBType == "sinden")
 			{
 				if (radio_gunB_sindenPump1.Checked) ConfigurationManager.MainConfig.gunBSidenPump = 1;
 				if (radio_gunB_sindenPump2.Checked) ConfigurationManager.MainConfig.gunBSidenPump = 2;
@@ -633,7 +651,18 @@ namespace TeknoparrotAutoXinput
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-
+				if (frm.GunCom > 0)
+				{
+					cmb_gunA_com.SelectedIndex = frm.GunCom;
+					chk_gunA_AutoJoy.Checked = true;
+					chk_gunA_domagerumble.Checked = true;
+					chk_gunA_4tiers.Checked = false;
+					cmb_gunA_recoil.SelectedIndex = 1;
+				}
+				if (frm.GunRumbleIndex > 0)
+				{
+					cmb_gunA_recoil.SelectedIndex = frm.GunRumbleIndex;
+				}
 			}
 		}
 
@@ -647,7 +676,6 @@ namespace TeknoparrotAutoXinput
 			{
 				btn_gunA_configure.Enabled = false;
 			}
-
 			RedoGunRecoilCombo();
 		}
 
@@ -657,7 +685,18 @@ namespace TeknoparrotAutoXinput
 			var result = frm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-
+				if (frm.GunCom > 0)
+				{
+					cmb_gunB_com.SelectedIndex = frm.GunCom;
+					chk_gunB_AutoJoy.Checked = true;
+					chk_gunB_domagerumble.Checked = true;
+					chk_gunB_4tiers.Checked = false;
+					cmb_gunB_recoil.SelectedIndex = 1;
+				}
+				if (frm.GunRumbleIndex > 0)
+				{
+					cmb_gunB_recoil.SelectedIndex = frm.GunRumbleIndex;
+				}
 			}
 		}
 
@@ -723,10 +762,138 @@ namespace TeknoparrotAutoXinput
 		{
 			if (File.Exists(ConfigurationManager.MainConfig.sindenExe))
 			{
+				string GunAGuid = "";
+				string GunBGuid = "";
+				bool dinputLightgunAFound = false;
+				bool dinputLightgunBFound = false;
+				int GunASindenType = 0;
+				int GunBSindenType = 0;
+
+				if (cmb_gunA_type.SelectedItem.ToString() == "sinden")
+				{
+					var bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunASinden;
+					if (!string.IsNullOrEmpty(bindingDinputLightgunAJson))
+					{
+						var bindingDinputLightGunA = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunAJson);
+						if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
+						{
+							GunAGuid = bindingDinputLightGunA["LightgunX"].JoystickGuid.ToString();
+						}
+					}
+				}
+				if (cmb_gunB_type.SelectedItem.ToString() == "sinden")
+				{
+					var bindingDinputLightgunBJson = ConfigurationManager.MainConfig.bindingDinputGunBSinden;
+					if (!string.IsNullOrEmpty(bindingDinputLightgunBJson))
+					{
+						var bindingDinputLightGunB = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunBJson);
+						if (bindingDinputLightGunB != null && bindingDinputLightGunB.ContainsKey("LightgunX"))
+						{
+							GunBGuid = bindingDinputLightGunB["LightgunX"].JoystickGuid.ToString();
+						}
+					}
+				}
+				if (!string.IsNullOrEmpty(GunAGuid) || !string.IsNullOrEmpty(GunBGuid))
+				{
+					DirectInput directInput = new DirectInput();
+					List<DeviceInstance> devices = new List<DeviceInstance>();
+					devices.AddRange(directInput.GetDevices().Where(x => x.Type == SharpDX.DirectInput.DeviceType.FirstPerson && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+					foreach (var device in devices)
+					{
+						if (device.InstanceGuid.ToString() == GunAGuid)
+						{
+							Utils.LogMessage($"GunAGuid Found");
+							dinputLightgunAFound = true;
+							if (GunAGuid != "")
+							{
+								var joystick = new Joystick(directInput, device.InstanceGuid);
+								var sindentype = 0;
+								if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F38")) sindentype = 1; //Black
+								if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F01")) sindentype = 2; //Blue
+								if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F02")) sindentype = 3; //Red
+								if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F39")) sindentype = 4; //Player2
+								GunASindenType = sindentype;
+								joystick.Dispose();
+							}
+						}
+						if (device.InstanceGuid.ToString() == GunBGuid)
+						{
+							Utils.LogMessage($"GunBGuid Found");
+							dinputLightgunBFound = true;
+							if (GunBGuid != "")
+							{
+								var joystick = new Joystick(directInput, device.InstanceGuid);
+								var sindentype = 0;
+								if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F38")) sindentype = 1; //Black
+								if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F01")) sindentype = 2; //Blue
+								if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F02")) sindentype = 3; //Red
+								if (joystick.Properties.InterfacePath.ToUpper().Contains("VID_16C0&PID_0F39")) sindentype = 4; //Player2
+								GunBSindenType = sindentype;
+								joystick.Dispose();
+							}
+						}
+					}
+				}
+				if (!dinputLightgunAFound) GunAGuid = "";
+				if (!dinputLightgunBFound) GunBGuid = "";
+
+				int firstSindenGun = 0;
+				int secondSindenGun = 0;
+
+				string RumbleTypeA = cmb_gunA_recoil.SelectedItem.ToString();
+				string RumbleTypeB = cmb_gunB_recoil.SelectedItem.ToString();
+
+				if (RumbleTypeA == RumbleTypeB) RumbleTypeB = "";
+
+				if (GunAGuid != "" && GunASindenType > 0)
+				{
+
+					if (RumbleTypeA == "sinden-gun1" && firstSindenGun == 0) firstSindenGun = 1;
+					if (RumbleTypeA == "sinden-gun2" && secondSindenGun == 0) secondSindenGun = 1;
+				}
+				if (GunBGuid != "" && GunBSindenType > 0)
+				{
+
+					if (RumbleTypeB == "sinden-gun1" && firstSindenGun == 0) firstSindenGun = 2;
+					if (RumbleTypeB == "sinden-gun2" && secondSindenGun == 0) secondSindenGun = 2;
+				}
+				if (GunAGuid != "" && GunASindenType > 0 && firstSindenGun != 1 && secondSindenGun != 1)
+				{
+					if (firstSindenGun == 0) firstSindenGun = 1;
+					else if (secondSindenGun == 0) secondSindenGun = 1;
+				}
+				if (GunBGuid != "" && GunBSindenType > 0 && firstSindenGun != 2 && secondSindenGun != 2)
+				{
+					if (firstSindenGun == 0) firstSindenGun = 2;
+					else if (secondSindenGun == 0) secondSindenGun = 2;
+				}
+
+				if (firstSindenGun == secondSindenGun) secondSindenGun = 0; //shouldn't happen
+
+
+				int firstSindenType = 0;
+				int secondSindenType = 0;
+
+				if (firstSindenGun > 0)
+				{
+					if (firstSindenGun == 1) firstSindenType = GunASindenType;
+					if (firstSindenGun == 2) firstSindenType = GunBSindenType;
+				}
+				if (secondSindenGun > 0)
+				{
+					if (secondSindenGun == 1) secondSindenType = GunASindenType;
+					if (secondSindenGun == 2) secondSindenType = GunBSindenType;
+				}
+
+				string argument_sinden = ConfigurationManager.MainConfig.sindenExtraCmd;
+				if (argument_sinden != "") argument_sinden += " ";
+				argument_sinden += $"--p1-{firstSindenType}-7-6-6 --p2-{secondSindenType}-7-6-6";
+
+
 				Process siden_process = new Process();
 				siden_process.StartInfo.FileName = ConfigurationManager.MainConfig.sindenExe;
 				siden_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(ConfigurationManager.MainConfig.sindenExe);
-				siden_process.StartInfo.Arguments = ConfigurationManager.MainConfig.sindenExtraCmd;
+				siden_process.StartInfo.Arguments = argument_sinden;
 				siden_process.StartInfo.UseShellExecute = true;
 				siden_process.Start();
 
@@ -734,48 +901,8 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		private void radio_networkModeAuto_CheckedChanged(object sender, EventArgs e)
-		{
-			txt_networkIP.Enabled = txt_networkMask.Enabled = txt_networkGateway.Enabled = txt_networkDns1.Enabled = txt_networkDns2.Enabled = txt_BroadcastAddress.Enabled = false;
-
-			var ThreadNetWork = new Thread(() =>
-			{
-				try
-				{
-					var networkInfo = Utils.GetFirstNetworkAdapterInfo();
-					this.Invoke(new MethodInvoker(delegate
-					{
-
-						txt_networkIP.Text = networkInfo.ContainsKey("networkIP") ? networkInfo["networkIP"] : "0.0.0.0";
-						txt_networkMask.Text = networkInfo.ContainsKey("networkMask") ? networkInfo["networkMask"] : "0.0.0.0";
-						txt_networkGateway.Text = networkInfo.ContainsKey("networkGateway") ? networkInfo["networkGateway"] : "0.0.0.0";
-						txt_networkDns1.Text = networkInfo.ContainsKey("networkDns1") ? networkInfo["networkDns1"] : "0.0.0.0";
-						txt_networkDns2.Text = networkInfo.ContainsKey("networkDns2") ? networkInfo["networkDns2"] : "0.0.0.0";
-						txt_BroadcastAddress.Text = networkInfo.ContainsKey("BroadcastAddress") ? networkInfo["BroadcastAddress"] : "0.0.0.0";
-
-					}));
-				}
-				catch { }
 
 
-
-			});
-			ThreadNetWork.Start();
-
-
-		}
-
-		private void radio_networkModeManual_CheckedChanged(object sender, EventArgs e)
-		{
-			txt_networkIP.Enabled = txt_networkMask.Enabled = txt_networkGateway.Enabled = txt_networkDns1.Enabled = txt_networkDns2.Enabled = txt_BroadcastAddress.Enabled = true;
-			txt_networkIP.Text = ConfigurationManager.MainConfig.patch_networkIP == "" ? txt_networkIP.Text : ConfigurationManager.MainConfig.patch_networkIP;
-			txt_networkGateway.Text = ConfigurationManager.MainConfig.patch_networkGateway == "" ? txt_networkGateway.Text : ConfigurationManager.MainConfig.patch_networkGateway;
-			txt_BroadcastAddress.Text = ConfigurationManager.MainConfig.patch_BroadcastAddress == "" ? txt_BroadcastAddress.Text : ConfigurationManager.MainConfig.patch_BroadcastAddress;
-			txt_networkDns1.Text = ConfigurationManager.MainConfig.patch_networkDns1 == "" ? txt_networkDns1.Text : ConfigurationManager.MainConfig.patch_networkDns1;
-			txt_networkDns2.Text = ConfigurationManager.MainConfig.patch_networkDns2 == "" ? txt_networkDns2.Text : ConfigurationManager.MainConfig.patch_networkDns2;
-			txt_networkMask.Text = ConfigurationManager.MainConfig.patch_networkMask == "" ? txt_networkMask.Text : ConfigurationManager.MainConfig.patch_networkMask;
-
-		}
 
 		private void btn_apm3id_show_Click(object sender, EventArgs e)
 		{
@@ -807,17 +934,25 @@ namespace TeknoparrotAutoXinput
 
 		private void Form1Simple_Load(object sender, EventArgs e)
 		{
-						radio_networkModeAuto.Checked = ConfigurationManager.MainConfig.patch_networkAuto;
-			if (!ConfigurationManager.MainConfig.patch_networkAuto)
+
+		}
+
+		private void kryptonButton2_Click(object sender, EventArgs e)
+		{
+			if (File.Exists(ConfigurationManager.MainConfig.mamehookerExe))
 			{
-				radio_networkModeManual.Checked = true;
-				txt_networkIP.Text = ConfigurationManager.MainConfig.patch_networkIP;
-				txt_networkGateway.Text = ConfigurationManager.MainConfig.patch_networkGateway;
-				txt_BroadcastAddress.Text = ConfigurationManager.MainConfig.patch_BroadcastAddress;
-				txt_networkDns1.Text = ConfigurationManager.MainConfig.patch_networkDns1;
-				txt_networkDns2.Text = ConfigurationManager.MainConfig.patch_networkDns2;
-				txt_networkMask.Text = ConfigurationManager.MainConfig.patch_networkMask;
+				Process siden_process = new Process();
+				siden_process.StartInfo.FileName = ConfigurationManager.MainConfig.mamehookerExe;
+				siden_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(ConfigurationManager.MainConfig.mamehookerExe);
+				siden_process.StartInfo.UseShellExecute = true;
+				siden_process.Start();
+
 			}
+		}
+
+		private void chk_patchFFB_CheckedChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

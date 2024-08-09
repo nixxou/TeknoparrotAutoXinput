@@ -14,18 +14,22 @@
 		"magpieNoLateFocus": "False",
 		"magpieNoClick": "True",
 		"magpieExecutable": "LLA/Binaries/Win64/DomeShooterGame-Win64-Shipping.exe",
+		"recoil": "auto",
 		"recommanded_vjoy_fullscreen": "all",
 		"recommanded_vjoy_windowed": "all"
 	},
 	"tpoptions": {
         "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
+            "General||Windowed": "1",
+			"General||Borderless Fullscreen": "0"
         },
         "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
+            "General||Windowed": "0",
+			"General||Borderless Fullscreen": "1"
         },
         "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
+            "General||Windowed": "1",
+			"General||Borderless Fullscreen": "0"
         },
         "recommanded_tp_settings": {
             "Arguments||Enable": "1",

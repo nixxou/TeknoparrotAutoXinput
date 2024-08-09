@@ -7,14 +7,19 @@ using SharpDX.Multimedia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Pipes;
 using System.IO.Ports;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Sockets;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Interop;
+using System.Windows.Media.Effects;
+using Effect = SharpDX.DirectInput.Effect;
 
 namespace TeknoparrotAutoXinput
 {
@@ -45,6 +50,9 @@ namespace TeknoparrotAutoXinput
 		public static bool gunBGun4ir = false;
 		public static bool gunARumble = false;
 		public static bool gunBRumble = false;
+		public static bool gunALichtknarre = false;
+		public static bool gunBLichtknarre = false;
+
 		public static string gunAParameter = "";
 		public static string gunBParameter = "";
 
@@ -87,6 +95,16 @@ namespace TeknoparrotAutoXinput
 		public static long lastRecoilGunA = 0;
 		public static long lastRecoilGunB = 0;
 
+		public static Form dummyForm = null;
+		public static IntPtr dummyFormHandle = IntPtr.Zero;
+		static int[] _actuatorObjectIds_gunA;
+		static int[] dirVector_gunA;
+		static Effect effect_gunA = null;
+		static Joystick gunA_lichtknarrejoy = null;
+		static int[] _actuatorObjectIds_gunB;
+		static int[] dirVector_gunB;
+		static Effect effect_gunB = null;
+		static Joystick gunB_lichtknarrejoy = null;
 
 		public static bool SetPath(string demulshooterExe)
 		{
@@ -514,6 +532,13 @@ namespace TeknoparrotAutoXinput
 				gunAParameter = rumbleParameterA;
 			}
 
+			if (rumbleTypeA == "lichtknarre" && rumbleParameterA != "")
+			{
+				gunALichtknarre = true;
+				gunARecoil = true;
+				gunAParameter = rumbleParameterA;
+			}
+
 			if (rumbleTypeB == "gun4ir" && rumbleParameterB != "")
 			{
 				gunBGun4ir = true;
@@ -536,12 +561,142 @@ namespace TeknoparrotAutoXinput
 				gunBParameter = rumbleParameterB;
 			}
 
-			if(rumbleTypeA == "rumble" || rumbleTypeB == "rumble")
+			if (rumbleTypeB == "lichtknarre" && rumbleParameterB != "")
+			{
+				gunBLichtknarre = true;
+				gunBRecoil = true;
+				gunBParameter = rumbleParameterA;
+			}
+
+			if (rumbleTypeA == "rumble" || rumbleTypeB == "rumble")
 			{
 				SDL2.SDL.SDL_Quit();
 				SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
 				SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER);
 			}
+
+			if (rumbleTypeA == "lichtknarre" || rumbleTypeB == "lichtknarre")
+			{
+				if(dummyForm == null)
+				{
+					dummyForm = new Form();
+					dummyForm.Visible = false;
+					dummyForm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+					dummyForm.ShowInTaskbar = false;
+					dummyForm.Opacity = 0;
+					dummyForm.Size = new Size(0, 0);
+					dummyForm.Show(); // Montre la fenêtre pour obtenir le handle
+					dummyFormHandle = dummyForm.Handle;
+					InitLichtknarre();
+				}
+			}
+
+		}
+
+		public static void InitLichtknarre()
+		{
+			if (gunALichtknarre)
+			{
+				Guid deviceGuid;
+				if (Guid.TryParse(gunAParameter, out deviceGuid))
+				{
+					var directInput = new DirectInput();
+					gunA_lichtknarrejoy = new Joystick(directInput, deviceGuid);
+					var actuatorsLst = new List<int>(1);
+					foreach (var obj in gunA_lichtknarrejoy.GetObjects())
+					{
+						if (obj.ObjectId.Flags.HasFlag(DeviceObjectTypeFlags.ForceFeedbackActuator))
+							actuatorsLst.Add((int)obj.ObjectId);
+
+					}
+					_actuatorObjectIds_gunA = actuatorsLst.ToArray();
+					if(_actuatorObjectIds_gunA.Length > 0)
+					{
+						dirVector_gunA = Enumerable.Repeat(1, _actuatorObjectIds_gunA.Length).ToArray();
+						gunA_lichtknarrejoy.Properties.BufferSize = 128;
+						gunA_lichtknarrejoy.SetCooperativeLevel(dummyFormHandle, CooperativeLevel.Exclusive | CooperativeLevel.Background);
+						gunA_lichtknarrejoy.Acquire();
+
+						var constantForce = new ConstantForce
+						{
+							Magnitude = 5000 // Set the force magnitude (range is typically -10,000 to 10,000)
+						};
+
+						var effectParameters = new EffectParameters
+						{
+							Flags = EffectFlags.Cartesian | EffectFlags.ObjectIds,
+							Duration = 200,
+							SamplePeriod = 0,
+							Gain = 10000,
+							TriggerButton = -1,
+							TriggerRepeatInterval = int.MaxValue,
+							Axes = _actuatorObjectIds_gunA,
+							Directions = dirVector_gunA,
+							StartDelay = 0,
+							Envelope = null,
+							Parameters = constantForce
+						};
+						effect_gunA = new Effect(gunA_lichtknarrejoy, EffectGuid.ConstantForce, effectParameters);
+
+						effect_gunA.Start(1, EffectPlayFlags.NoDownload);
+						Thread.Sleep(200);
+						effect_gunA.Stop();
+
+					}
+
+				}
+			}
+			if (gunBLichtknarre)
+			{
+				Guid deviceGuid;
+				if (Guid.TryParse(gunBParameter, out deviceGuid))
+				{
+					var directInput = new DirectInput();
+					gunB_lichtknarrejoy = new Joystick(directInput, deviceGuid);
+					var actuatorsLst = new List<int>(1);
+					foreach (var obj in gunB_lichtknarrejoy.GetObjects())
+					{
+						if (obj.ObjectId.Flags.HasFlag(DeviceObjectTypeFlags.ForceFeedbackActuator))
+							actuatorsLst.Add((int)obj.ObjectId);
+
+					}
+					_actuatorObjectIds_gunB = actuatorsLst.ToArray();
+					if(_actuatorObjectIds_gunB.Length > 0)
+					{
+						dirVector_gunB = Enumerable.Repeat(1, _actuatorObjectIds_gunB.Length).ToArray();
+						gunB_lichtknarrejoy.Properties.BufferSize = 128;
+						gunB_lichtknarrejoy.SetCooperativeLevel(dummyFormHandle, CooperativeLevel.Exclusive | CooperativeLevel.Background);
+						gunB_lichtknarrejoy.Acquire();
+
+						var constantForce = new ConstantForce
+						{
+							Magnitude = 5000 // Set the force magnitude (range is typically -10,000 to 10,000)
+						};
+
+						var effectParameters = new EffectParameters
+						{
+							Flags = EffectFlags.Cartesian | EffectFlags.ObjectIds,
+							Duration = 200,
+							SamplePeriod = 0,
+							Gain = 10000,
+							TriggerButton = -1,
+							TriggerRepeatInterval = int.MaxValue,
+							Axes = _actuatorObjectIds_gunA,
+							Directions = dirVector_gunA,
+							StartDelay = 0,
+							Envelope = null,
+							Parameters = constantForce
+						};
+						effect_gunB = new Effect(gunB_lichtknarrejoy, EffectGuid.ConstantForce, effectParameters);
+
+						effect_gunB.Start(1, EffectPlayFlags.NoDownload);
+						Thread.Sleep(200);
+						effect_gunB.Stop();
+					}
+
+				}
+			}
+
 
 
 		}
@@ -554,7 +709,7 @@ namespace TeknoparrotAutoXinput
 			{
 				Task.Run(() =>
 				{
-					if(rumble && gunARumble==false && (gunAGun4ir && GunADamageRumble)==false ) 
+					if(rumble && gunARumble==false && gunALichtknarre==false && (gunAGun4ir && GunADamageRumble)==false ) 
 					{
 						return;
 					}
@@ -572,6 +727,7 @@ namespace TeknoparrotAutoXinput
 					if (gunAGun4ir) Gunshot_Gun4ir(gunIndex, rumble);
 					if (gunASinden) Gunshot_Sinden(gunIndex);
 					if (gunARumble) Gunshot_Rumble(gunIndex, rumble);
+					if (gunALichtknarre) Gunshot_Lichtknarre(gunIndex, rumble);
 
 					lock (lockGunB)
 					{
@@ -581,7 +737,7 @@ namespace TeknoparrotAutoXinput
 			}
 			if (gunIndex == 2 && gunBRecoil)
 			{
-				if (rumble && gunBRumble == false && (gunBGun4ir && GunBDamageRumble) == false)
+				if (rumble && gunBRumble == false && gunBLichtknarre == false && (gunBGun4ir && GunBDamageRumble) == false)
 				{
 					return;
 				}
@@ -599,6 +755,7 @@ namespace TeknoparrotAutoXinput
 					if (gunBGun4ir) Gunshot_Gun4ir(gunIndex, rumble);
 					if (gunBSinden) Gunshot_Sinden(gunIndex);
 					if (gunBRumble) Gunshot_Rumble(gunIndex, rumble);
+					if (gunBLichtknarre) Gunshot_Lichtknarre(gunIndex, rumble);
 
 					lock (lockGunB)
 					{
@@ -606,6 +763,31 @@ namespace TeknoparrotAutoXinput
 					}
 				});
 			}
+		}
+
+		private static void Gunshot_Lichtknarre(int gunIndex, bool rumble = false)
+		{
+			if (gunIndex == 1)
+			{
+				if (effect_gunA != null)
+				{
+					effect_gunA.Start(1, EffectPlayFlags.NoDownload);
+					if (rumble) Thread.Sleep(300);
+					else Thread.Sleep(120);
+					effect_gunA.Stop();
+				}
+			}
+			if (gunIndex == 2)
+			{
+				if (effect_gunB != null)
+				{
+					effect_gunB.Start(1, EffectPlayFlags.NoDownload);
+					if (rumble) Thread.Sleep(300);
+					else Thread.Sleep(120);
+					effect_gunB.Stop();
+				}
+			}
+
 		}
 
 		private static void Gunshot_Rumble(int gunIndex, bool rumble = false)

@@ -17,8 +17,9 @@ namespace TeknoparrotAutoXinput
 {
 	public partial class dinputgun : Form
 	{
-		public int GunIndex;
+		public int GunIndex;       
 		public string GunType;
+		public int GunCom = 0;
 
 		private List<Joystick> _joystickCollection = new List<Joystick>();
 		private readonly DirectInput _directInput = new DirectInput();
@@ -30,17 +31,22 @@ namespace TeknoparrotAutoXinput
 		public string FocusedTextBoxName = "";
 		public string Dialogconfig = null;
 		public bool IsConfigured = false;
+		public int GunRumbleIndex = -1;
+
 
 		public dinputgun(int gunIndex, string gunType, string dialogconfig = null)
 		{
 			Dialogconfig = dialogconfig;
 			InitializeComponent();
-			
+			btn_autobind.Enabled = false;
+			if (dialogconfig != null) btn_autobind.Visible = false;
+
 			if (gunIndex != 1 && gunIndex != 2) { return; }
 			switch (gunType)
 			{
 				case "sinden":
 					BackgroundImage = Properties.Resources.sinden;
+					if (gun_preconfigDPI.haveSinden()) btn_autobind.Enabled = true;
 					break;
 				case "gamepad":
 					BackgroundImage = Properties.Resources.gun360;
@@ -49,10 +55,12 @@ namespace TeknoparrotAutoXinput
 					label5.Text = "X";
 					label3.Text = "LB";
 
-					label11.Location = new Point(label11.Location.X+90, label11.Location.Y);
+					label11.Location = new Point(label11.Location.X + 90, label11.Location.Y);
 					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
 					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
 					label3.Location = new Point(label3.Location.X + 20, label3.Location.Y);
+					if (gun_preconfigDPI.have360Controller()) btn_autobind.Enabled = true;
+
 					break;
 				case "guncon1":
 					BackgroundImage = Properties.Resources.guncon1;
@@ -81,6 +89,7 @@ namespace TeknoparrotAutoXinput
 					label21.Visible = false;
 					label12.Visible = false;
 					label15.Visible = false;
+					if (gun_preconfigDPI.haveGun4ir()) btn_autobind.Enabled = true;
 					break;
 				case "guncon2":
 					BackgroundImage = Properties.Resources.guncon2;
@@ -92,6 +101,7 @@ namespace TeknoparrotAutoXinput
 					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
 					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
 					label3.Location = new Point(label3.Location.X + 20, label3.Location.Y);
+					if (gun_preconfigDPI.haveGun4ir()) btn_autobind.Enabled = true;
 					break;
 				case "wiimote":
 					BackgroundImage = Properties.Resources.wiimote;
@@ -103,6 +113,7 @@ namespace TeknoparrotAutoXinput
 					label6.Location = new Point(label6.Location.X + 82, label6.Location.Y);
 					label5.Location = new Point(label5.Location.X + 80, label5.Location.Y);
 					label3.Location = new Point(label3.Location.X, label3.Location.Y);
+					if (gun_preconfigDPI.haveWiimote()) btn_autobind.Enabled = true;
 					break;
 			}
 			//HighDpiHelper.AdjustFormBGDpiScale(this);
@@ -124,11 +135,12 @@ namespace TeknoparrotAutoXinput
 
 		private void dinputgun_Load(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		private void cmb_devicelist_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			if(cmb_devicelist.SelectedIndex >= 0) lbl_warning.Visible = false;
 			foreach (Control control in this.Controls)
 			{
 				if (control is KryptonTextBox)
@@ -156,6 +168,14 @@ namespace TeknoparrotAutoXinput
 		private void SpawnDirectInputListener(Joystick joystick, DeviceInstance deviceInstance)
 		{
 			_joystickCollection.Add(joystick);
+			int productId = -1;
+			int vendorId = -1;
+			try
+			{
+				productId = joystick.Properties.ProductId;
+				vendorId = joystick.Properties.VendorId;
+			}
+			catch (Exception ex) { }
 			// Acquire the joystick
 			try
 			{
@@ -214,7 +234,7 @@ namespace TeknoparrotAutoXinput
 							if (FocusedTextBoxName == "txt_LightgunX" && key.Offset == JoystickOffset.Y) continue;
 							if (FocusedTextBoxName == "txt_LightgunY" && key.Offset == JoystickOffset.X) continue;
 
-							if (FocusedTextBoxName != "txt_LightgunX" && FocusedTextBoxName != "txt_LightgunY" && FocusedTextBoxName != "txt_LightgunPedalRight" && FocusedTextBoxName != "txt_LightgunPedalLeft" && FocusedTextBoxName != "txt_LightgunRightX" && FocusedTextBoxName != "txt_LightgunRightY" && FocusedTextBoxName != "txt_LightgunWheelX") continue;
+							if (FocusedTextBoxName != "txt_LightgunArcade7" && FocusedTextBoxName != "txt_LightgunArcade8" && FocusedTextBoxName != "txt_LightgunX" && FocusedTextBoxName != "txt_LightgunY" && FocusedTextBoxName != "txt_LightgunPedalRight" && FocusedTextBoxName != "txt_LightgunPedalLeft" && FocusedTextBoxName != "txt_LightgunRightX" && FocusedTextBoxName != "txt_LightgunRightY" && FocusedTextBoxName != "txt_LightgunWheelX") continue;
 							// Positive direction
 							if (key.Value > short.MaxValue + 15000)
 							{
@@ -259,15 +279,15 @@ namespace TeknoparrotAutoXinput
 								if (deviceInstance.Type == DeviceType.Keyboard)
 								{
 									bool reservedKey = false;
-									foreach(var k in ButtonToKeyManager.buttonToKey.keyToAssign)
+									foreach (var k in ButtonToKeyManager.buttonToKey.keyToAssign)
 									{
-										if(k.Value.Item2 == ((Key)key.Offset - 47))
+										if (k.Value.Item2 == ((Key)key.Offset - 47))
 										{
 											reservedKey = true;
 										}
 									}
 
-									if(reservedKey)
+									if (reservedKey)
 									{
 										MessageBox.Show("This keyboard key is reserved, you can't assign it");
 										continue;
@@ -484,14 +504,14 @@ namespace TeknoparrotAutoXinput
 				if (AssignedButtons.ContainsKey(assignedButton))
 				{
 					bool exceptionCase = false;
-					if(btnData.Key == "LightgunRightX" || btnData.Key == "LightgunWheelX")
+					if (btnData.Key == "LightgunRightX" || btnData.Key == "LightgunWheelX")
 					{
 						if (AssignedButtons[assignedButton] == "LightgunRightX" || AssignedButtons[assignedButton] == "LightgunWheelX")
 						{
 							exceptionCase = true;
 						}
 					}
-					if(!exceptionCase)
+					if (!exceptionCase)
 					{
 						validConfig = false;
 						errorConfig = $"{btnData.Value.Title} in {btnData.Key} is asigned multiple time \r\n";
@@ -530,16 +550,16 @@ namespace TeknoparrotAutoXinput
 						ConfigurationManager.MainConfig.bindingDinputGunASinden = json;
 						break;
 					case "gamepad":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAXbox = json;
+						ConfigurationManager.MainConfig.bindingDinputGunAXbox = json;
 						break;
 					case "guncon1":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon1 = json;
+						ConfigurationManager.MainConfig.bindingDinputGunAGuncon1 = json;
 						break;
 					case "guncon2":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAGuncon2 = json;
+						ConfigurationManager.MainConfig.bindingDinputGunAGuncon2 = json;
 						break;
 					case "wiimote":
-						json = ConfigurationManager.MainConfig.bindingDinputGunAWiimote = json;
+						ConfigurationManager.MainConfig.bindingDinputGunAWiimote = json;
 						break;
 					default:
 						json = "";
@@ -551,19 +571,19 @@ namespace TeknoparrotAutoXinput
 				switch (GunType)
 				{
 					case "sinden":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBSinden = json;
+						ConfigurationManager.MainConfig.bindingDinputGunBSinden = json;
 						break;
 					case "gamepad":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBXbox = json;
+						ConfigurationManager.MainConfig.bindingDinputGunBXbox = json;
 						break;
 					case "guncon1":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon1 = json;
+						ConfigurationManager.MainConfig.bindingDinputGunBGuncon1 = json;
 						break;
 					case "guncon2":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBGuncon2 = json;
+						ConfigurationManager.MainConfig.bindingDinputGunBGuncon2 = json;
 						break;
 					case "wiimote":
-						json = ConfigurationManager.MainConfig.bindingDinputGunBWiimote = json;
+						ConfigurationManager.MainConfig.bindingDinputGunBWiimote = json;
 						break;
 					default:
 						json = "";
@@ -649,8 +669,123 @@ namespace TeknoparrotAutoXinput
 					buttonData.Remove(XinputTitle);
 					control.Text = "";
 				}
-				
+
 			}
+		}
+
+		private void btn_autobind_Click(object sender, EventArgs e)
+		{
+			string gunGuid = "";
+			string gunName = "";
+			int gunCom = 0;
+			string gunConfig = "";
+
+
+			if (GunType == "sinden")
+			{
+				var frm = new gun_preconfigDPI(2, GunIndex, "", false);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunName = frm.gunName;
+					gunCom = frm.gunCom;
+					gunGuid = frm.gunGuid;
+					gunConfig = frm.Dialogconfig;
+				}
+			}
+			if (GunType == "guncon1")
+			{
+				var frm = new gun_preconfigDPI(1, GunIndex, "", false);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunName = frm.gunName;
+					gunCom = frm.gunCom;
+					gunGuid = frm.gunGuid;
+					gunConfig = frm.Dialogconfig;
+					this.GunCom = gunCom;
+				}
+			}
+			if (GunType == "guncon2")
+			{
+				var frm = new gun_preconfigDPI(0, GunIndex, "", false);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunName = frm.gunName;
+					gunCom = frm.gunCom;
+					gunGuid = frm.gunGuid;
+					gunConfig = frm.Dialogconfig;
+					this.GunCom = gunCom;
+				}
+			}
+			if (GunType == "wiimote")
+			{
+				var frm = new gun_preconfigDPI(3, GunIndex, "", false);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunName = frm.gunName;
+					gunCom = frm.gunCom;
+					gunGuid = frm.gunGuid;
+					gunConfig = frm.Dialogconfig;
+				}
+			}
+			if (GunType == "gamepad")
+			{
+				var frm = new gun_preconfigDPI(10, GunIndex, "", false);
+				var result = frm.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					gunName = frm.gunName;
+					gunCom = frm.gunCom;
+					gunGuid = frm.gunGuid;
+					gunConfig = frm.Dialogconfig;
+					GunRumbleIndex = 1;
+				}
+			}
+
+			if (!string.IsNullOrEmpty(gunConfig))
+			{
+				buttonData = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(gunConfig);
+				foreach (Control control in this.Controls)
+				{
+					// Vérifier si le contrôle est un TextBox et s'il a le focus
+					if (control is KryptonTextBox)
+					{
+						string XinputTitle = control.Name.Substring(4).Trim();
+						if (XinputTitle.EndsWith("plus"))
+						{
+							XinputTitle = XinputTitle.Substring(0, XinputTitle.Length - 4) + "+";
+						}
+						if (buttonData.ContainsKey(XinputTitle))
+						{
+							control.Text = buttonData[XinputTitle].Title;
+						}
+					}
+				}
+			}
+
+
+
+			/*
+			var frm = new gun_preconfigDPI();
+			var result = frm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+
+			}
+			*/
+		}
+
+		private void txt_LightgunArcadeStartBis_MouseClick(object sender, MouseEventArgs e)
+		{
+
+		}
+
+		private void txt_LightgunArcadeStartBis_TextChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

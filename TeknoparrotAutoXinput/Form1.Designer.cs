@@ -191,6 +191,7 @@
 			kryptonLabel30 = new Krypton.Toolkit.KryptonLabel();
 			txt_demulshootersoft = new Krypton.Toolkit.KryptonTextBox();
 			groupBox13 = new GroupBox();
+			chk_enableAdvancedOptions = new Krypton.Toolkit.KryptonCheckBox();
 			chk_useXenosInjector = new Krypton.Toolkit.KryptonCheckBox();
 			cmb_showStartup = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel40 = new Krypton.Toolkit.KryptonLabel();
@@ -290,7 +291,6 @@
 			btn_magpieExe = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel50 = new Krypton.Toolkit.KryptonLabel();
 			txt_magpieExe = new Krypton.Toolkit.KryptonTextBox();
-			chk_enableAdvancedOptions = new Krypton.Toolkit.KryptonCheckBox();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -1123,6 +1123,7 @@
 			kryptonButton2.Size = new Size(150, 25);
 			kryptonButton2.TabIndex = 109;
 			kryptonButton2.Values.Text = "Run MameHooker";
+			kryptonButton2.Click += kryptonButton2_Click_1;
 			// 
 			// chk_magpieGunCalibration
 			// 
@@ -1458,7 +1459,7 @@
 			cmb_gunB_recoil.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_gunB_recoil.DropDownWidth = 150;
 			cmb_gunB_recoil.IntegralHeight = false;
-			cmb_gunB_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden-Gun1", "Sinden-Gun2", "Rumble" });
+			cmb_gunB_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden-Gun1", "Sinden-Gun2", "Rumble", "lichtknarre" });
 			cmb_gunB_recoil.Location = new Point(112, 47);
 			cmb_gunB_recoil.Name = "cmb_gunB_recoil";
 			cmb_gunB_recoil.Size = new Size(138, 21);
@@ -1759,7 +1760,7 @@
 			cmb_gunA_recoil.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_gunA_recoil.DropDownWidth = 150;
 			cmb_gunA_recoil.IntegralHeight = false;
-			cmb_gunA_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden-Gun1", "Sinden-Gun2", "Rumble" });
+			cmb_gunA_recoil.Items.AddRange(new object[] { "<none>", "Mamehooker", "Gun4IR", "Sinden-Gun1", "Sinden-Gun2", "Rumble", "lichtknarre" });
 			cmb_gunA_recoil.Location = new Point(110, 47);
 			cmb_gunA_recoil.Name = "cmb_gunA_recoil";
 			cmb_gunA_recoil.Size = new Size(137, 21);
@@ -1927,6 +1928,14 @@
 			groupBox13.TabStop = false;
 			groupBox13.Text = "Miscs Options";
 			groupBox13.Enter += groupBox13_Enter;
+			// 
+			// chk_enableAdvancedOptions
+			// 
+			chk_enableAdvancedOptions.Location = new Point(608, 51);
+			chk_enableAdvancedOptions.Name = "chk_enableAdvancedOptions";
+			chk_enableAdvancedOptions.Size = new Size(162, 20);
+			chk_enableAdvancedOptions.TabIndex = 82;
+			chk_enableAdvancedOptions.Values.Text = "Enable Advanced options";
 			// 
 			// chk_useXenosInjector
 			// 
@@ -2329,6 +2338,7 @@
 			chk_patchResolutionFix.Size = new Size(158, 20);
 			chk_patchResolutionFix.TabIndex = 158;
 			chk_patchResolutionFix.Values.Text = "Use fix from patch folder";
+			chk_patchResolutionFix.CheckedChanged += chk_patchResolutionFix_CheckedChanged;
 			// 
 			// kryptonLabel71
 			// 
@@ -2880,14 +2890,6 @@
 			txt_magpieExe.Size = new Size(272, 23);
 			txt_magpieExe.TabIndex = 82;
 			txt_magpieExe.Visible = false;
-			// 
-			// chk_enableAdvancedOptions
-			// 
-			chk_enableAdvancedOptions.Location = new Point(608, 51);
-			chk_enableAdvancedOptions.Name = "chk_enableAdvancedOptions";
-			chk_enableAdvancedOptions.Size = new Size(162, 20);
-			chk_enableAdvancedOptions.TabIndex = 82;
-			chk_enableAdvancedOptions.Values.Text = "Enable Advanced options";
 			// 
 			// Form1
 			// 

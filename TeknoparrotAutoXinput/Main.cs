@@ -20,6 +20,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography.Xml;
 using System.Security.Policy;
@@ -35,12 +36,48 @@ using TeknoparrotAutoXinput.Properties;
 using TeknoParrotUi.Common;
 using WiimoteLib;
 using XInput.Wrapper;
+using XJoy;
+using static SDL2.SDL;
 using Image = System.Drawing.Image;
 
 namespace TeknoparrotAutoXinput
 {
 	public partial class Main : KryptonForm
 	{
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_HapticDirection
+		{
+			public byte type;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public int[] dir;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_HapticConstant
+		{
+			public ushort type;
+			public SDL_HapticDirection direction;
+			public uint length;
+			public ushort delay;
+			public ushort button;
+			public ushort interval;
+			public short level;
+			public ushort attack_length;
+			public ushort attack_level;
+			public ushort fade_length;
+			public ushort fade_level;
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		public struct SDL_HapticEffect
+		{
+			[FieldOffset(0)]
+			public ushort type;
+			[FieldOffset(4)]
+			public SDL_HapticConstant constant;
+		}
+
+
 		private Dictionary<string, Game> _gameList = new Dictionary<string, Game>();
 		private string _tpFolder = "";
 		private string _userProfileFolder = "";
@@ -1434,56 +1471,168 @@ namespace TeknoparrotAutoXinput
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			string finalConfig = "";
-			if (list_games.SelectedItems.Count > 0)
-			{
-				string GameSelected = list_games.SelectedItems[0].ToString();
-				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
-				if (_gameList.ContainsKey(GameSelected))
+				/*
+				string finalConfig = "";
+				if (list_games.SelectedItems.Count > 0)
 				{
-					finalConfig = _gameList[GameSelected].UserConfigFile;
-				}
-			}
-			if (string.IsNullOrEmpty(finalConfig)) return;
-			Dictionary<string, string> XiToDi = new Dictionary<string, string>();
-			//finalConfig = finalConfig.Replace("UserProfiles", "GameProfiles");
-			if (File.Exists(finalConfig))
-			{
-				string finalConfigData = File.ReadAllText(finalConfig);
-				XmlDocument xmlDoc = new XmlDocument();
-				xmlDoc.LoadXml(finalConfigData);
-				XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
-				string result = "";
-				foreach (XmlNode node in joystickButtonsNodes)
-				{
-					XmlNode buttonNameNodeXi = node.SelectSingleNode("BindNameXi");
-					string buttonNameXi = "";
-					if (buttonNameNodeXi != null && !string.IsNullOrEmpty(buttonNameNodeXi.InnerText)) buttonNameXi = buttonNameNodeXi.InnerText;
-
-					XmlNode buttonNameNodeDi = node.SelectSingleNode("BindNameDi");
-					string buttonNameDi = "";
-					if (buttonNameNodeDi != null && !string.IsNullOrEmpty(buttonNameNodeDi.InnerText)) buttonNameDi = buttonNameNodeDi.InnerText;
-
-					result += $"{buttonNameXi} => {buttonNameDi} \n";
-					if (buttonNameXi != "")
+					string GameSelected = list_games.SelectedItems[0].ToString();
+					GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
+					if (_gameList.ContainsKey(GameSelected))
 					{
-						XiToDi[buttonNameXi] = buttonNameDi;
+						finalConfig = _gameList[GameSelected].UserConfigFile;
 					}
-
 				}
-				string json = JsonConvert.SerializeObject(XiToDi, Newtonsoft.Json.Formatting.Indented);
-				File.WriteAllText("XiToDi.json", json);
-				MessageBox.Show(json);
+				if (string.IsNullOrEmpty(finalConfig)) return;
+				Dictionary<string, string> XiToDi = new Dictionary<string, string>();
+				//finalConfig = finalConfig.Replace("UserProfiles", "GameProfiles");
+				if (File.Exists(finalConfig))
+				{
+					string finalConfigData = File.ReadAllText(finalConfig);
+					XmlDocument xmlDoc = new XmlDocument();
+					xmlDoc.LoadXml(finalConfigData);
+					XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+					string result = "";
+					foreach (XmlNode node in joystickButtonsNodes)
+					{
+						XmlNode buttonNameNodeXi = node.SelectSingleNode("BindNameXi");
+						string buttonNameXi = "";
+						if (buttonNameNodeXi != null && !string.IsNullOrEmpty(buttonNameNodeXi.InnerText)) buttonNameXi = buttonNameNodeXi.InnerText;
+
+						XmlNode buttonNameNodeDi = node.SelectSingleNode("BindNameDi");
+						string buttonNameDi = "";
+						if (buttonNameNodeDi != null && !string.IsNullOrEmpty(buttonNameNodeDi.InnerText)) buttonNameDi = buttonNameNodeDi.InnerText;
+
+						result += $"{buttonNameXi} => {buttonNameDi} \n";
+						if (buttonNameXi != "")
+						{
+							XiToDi[buttonNameXi] = buttonNameDi;
+						}
+
+					}
+					string json = JsonConvert.SerializeObject(XiToDi, Newtonsoft.Json.Formatting.Indented);
+					File.WriteAllText("XiToDi.json", json);
+					MessageBox.Show(json);
+				}
+				*/
 			}
-		}
+
+		private static SDL.SDL_HapticEffect INTERNAL_effect = new SDL.SDL_HapticEffect
+		{
+			type = SDL.SDL_HAPTIC_LEFTRIGHT,
+			leftright = new SDL.SDL_HapticLeftRight
+			{
+				type = SDL.SDL_HAPTIC_LEFTRIGHT,
+				length = SDL.SDL_HAPTIC_INFINITY,
+				large_magnitude = ushort.MaxValue,
+				small_magnitude = ushort.MaxValue
+			}
+		};
 
 		private void button3_Click(object sender, EventArgs e)
 		{
-			var frm = new Wizard();
-			var result = frm.ShowDialog();
-			if (result == DialogResult.OK)
-			{
 
+			SDL2.SDL.SDL_Quit();
+			SDL2.SDL.SDL_SetHint(SDL2.SDL.SDL_HINT_JOYSTICK_RAWINPUT, "0");
+			SDL2.SDL.SDL_Init(SDL2.SDL.SDL_INIT_JOYSTICK | SDL2.SDL.SDL_INIT_GAMECONTROLLER | SDL2.SDL.SDL_INIT_HAPTIC);
+			string target_guid = "0300f80034120000adbe000000000000";
+			int found_guid = -1;
+			SDL2.SDL.SDL_JoystickUpdate();
+			for (int i = 0; i < SDL2.SDL.SDL_NumJoysticks(); i++)
+			{
+				//if (SDL.SDL_IsGameController(i) == SDL.SDL_bool.SDL_FALSE) continue;
+				//if (i == GunASDLIndex || i == GunBSDLIndex) continue;
+
+				var currentJoy = SDL.SDL_JoystickOpen(i);
+				//string nameController = SDL2.SDL.SDL_JoystickNameForIndex(i).Trim('\0');
+				{
+					const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
+					byte[] guidBuffer = new byte[bufferSize];
+					SDL.SDL_JoystickGetGUIDString(SDL.SDL_JoystickGetGUID(currentJoy), guidBuffer, bufferSize);
+					string guidString = System.Text.Encoding.UTF8.GetString(guidBuffer).Trim('\0');
+					if (guidString == target_guid)
+					{
+						found_guid = i;
+						SDL.SDL_JoystickClose(currentJoy);
+
+						IntPtr joystick = SDL.SDL_GameControllerOpen(i);
+						// Ouvrir le dispositif haptic associé
+						IntPtr haptic = SDL.SDL_HapticOpenFromJoystick(joystick);
+						if (haptic == IntPtr.Zero)
+						{
+							Console.WriteLine($"Erreur d'ouverture du dispositif haptic : {SDL.SDL_GetError()}");
+							SDL.SDL_JoystickClose(joystick);
+							SDL.SDL_Quit();
+							return;
+						}
+
+						if ((SDL.SDL_HapticQuery(haptic) & SDL.SDL_HAPTIC_CONSTANT) == 0)
+						{
+							Console.WriteLine("L'effet constant n'est pas supporté par ce dispositif haptic.");
+							SDL.SDL_HapticClose(haptic);
+							SDL.SDL_JoystickClose(joystick);
+							SDL.SDL_Quit();
+							return;
+						}
+/*
+						// Créer l'effet constant
+						// Créer l'effet constant
+						// Initialiser l'effet constant
+						// Créer l'effet constant
+						SDL2.SDL.SDL_HapticEffect effect = new SDL_HapticEffect
+						{
+							type = SDL.SDL_HAPTIC_CONSTANT,
+							constant = new SDL_HapticConstant
+							{
+								type = SDL.SDL_HAPTIC_CONSTANT,
+								direction = new SDL_HapticDirection
+								{
+									type = SDL.SDL_HAPTIC_CARTESIAN,
+									dir = new int[3] { 0, 1, 0 }
+								},
+								length = SDL.SDL_HAPTIC_INFINITY,
+								level = 0x6000,  // Force de l'effet
+								attack_length = 0,
+								attack_level = 0,
+								fade_length = 0,
+								fade_level = 0
+							}
+						};
+*/
+						int effectId = SDL.SDL_HapticNewEffect(haptic, ref INTERNAL_effect);
+						if (effectId < 0)
+						{
+							Console.WriteLine($"Erreur de création de l'effet haptic : {SDL.SDL_GetError()}");
+							SDL.SDL_HapticClose(haptic);
+							SDL.SDL_JoystickClose(joystick);
+							SDL.SDL_Quit();
+							return;
+						}
+
+						// Jouer l'effet
+						if (SDL.SDL_HapticRunEffect(haptic, effectId, 1) != 0)
+						{
+							Console.WriteLine($"Erreur de lecture de l'effet haptic : {SDL.SDL_GetError()}");
+							SDL.SDL_HapticDestroyEffect(haptic, effectId);
+							SDL.SDL_HapticClose(haptic);
+							SDL.SDL_JoystickClose(joystick);
+							SDL.SDL_Quit();
+							return;
+						}
+
+						// Attendre un moment pour sentir l'effet
+						Console.WriteLine("Appuyez sur une touche pour arrêter...");
+						Console.ReadKey();
+
+						// Arrêter l'effet et nettoyer
+						SDL.SDL_HapticStopEffect(haptic, effectId);
+						SDL.SDL_HapticDestroyEffect(haptic, effectId);
+						SDL.SDL_HapticClose(haptic);
+						SDL.SDL_JoystickClose(joystick);
+						SDL.SDL_Quit();
+						//break;
+					}
+					SDL.SDL_JoystickClose(currentJoy);
+				}
 			}
 		}
 

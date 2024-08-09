@@ -104,8 +104,8 @@ namespace TeknoparrotAutoXinput
 		public string mamehookerExe { get; set; } = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "mamehooker", "mamehook.exe");
 
 		public string sindenExtraCmd { get; set; } = "";
-		public bool gunAAutoJoy { get; set; } = false;
-		public bool gunBAutoJoy { get; set; } = false;
+		public bool gunAAutoJoy { get; set; } = true;
+		public bool gunBAutoJoy { get; set; } = true;
 
 		public bool gunACrosshair { get; set; } = false;
 		public bool gunBCrosshair { get; set; } = false;
@@ -113,8 +113,8 @@ namespace TeknoparrotAutoXinput
 		public bool gunA4tiers { get; set; } = false;
 		public bool gunB4tiers { get; set; } = false;
 
-		public bool gunAdomagerumble { get; set; } = false;
-		public bool gunBdomagerumble { get; set; } = false;
+		public bool gunAdomagerumble { get; set; } = true;
+		public bool gunBdomagerumble { get; set; } = true;
 
 		public bool gunAvjoy { get; set; } = false;
 		public bool gunBvjoy { get; set; } = false;

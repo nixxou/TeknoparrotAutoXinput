@@ -35,6 +35,10 @@
 			lbl_GameTitle = new Krypton.Toolkit.KryptonLabel();
 			groupBox2 = new GroupBox();
 			panel2 = new Panel();
+			kryptonLabel9 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
 			cmb_patchlink = new Krypton.Toolkit.KryptonComboBox();
 			cmb_displayMode = new Krypton.Toolkit.KryptonComboBox();
 			cmb_patchReshade = new Krypton.Toolkit.KryptonComboBox();
@@ -74,10 +78,6 @@
 			timer_controllerUpdate = new System.Windows.Forms.Timer(components);
 			KryptonPalette1 = new Krypton.Toolkit.KryptonCustomPaletteBase(components);
 			kryptonManager1 = new Krypton.Toolkit.KryptonManager(components);
-			kryptonLabel9 = new Krypton.Toolkit.KryptonLabel();
-			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
-			kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
-			kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
 			tableLayoutPanel2.SuspendLayout();
 			groupBox2.SuspendLayout();
 			panel2.SuspendLayout();
@@ -153,9 +153,9 @@
 			groupBox2.Dock = DockStyle.Fill;
 			groupBox2.Font = new Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point);
 			groupBox2.ForeColor = Color.FromArgb(30, 57, 91);
-			groupBox2.Location = new Point(846, 3);
+			groupBox2.Location = new Point(796, 3);
 			groupBox2.Name = "groupBox2";
-			groupBox2.Size = new Size(244, 138);
+			groupBox2.Size = new Size(294, 138);
 			groupBox2.TabIndex = 217;
 			groupBox2.TabStop = false;
 			groupBox2.Text = "Quick Options (Not saved)";
@@ -173,8 +173,40 @@
 			panel2.Dock = DockStyle.Fill;
 			panel2.Location = new Point(3, 18);
 			panel2.Name = "panel2";
-			panel2.Size = new Size(238, 117);
+			panel2.Size = new Size(288, 117);
 			panel2.TabIndex = 0;
+			// 
+			// kryptonLabel9
+			// 
+			kryptonLabel9.Location = new Point(11, 89);
+			kryptonLabel9.Name = "kryptonLabel9";
+			kryptonLabel9.Size = new Size(63, 20);
+			kryptonLabel9.TabIndex = 212;
+			kryptonLabel9.Values.Text = "Link files :";
+			// 
+			// kryptonLabel4
+			// 
+			kryptonLabel4.Location = new Point(11, 9);
+			kryptonLabel4.Name = "kryptonLabel4";
+			kryptonLabel4.Size = new Size(91, 20);
+			kryptonLabel4.TabIndex = 209;
+			kryptonLabel4.Values.Text = "Display Mode :";
+			// 
+			// kryptonLabel8
+			// 
+			kryptonLabel8.Location = new Point(11, 61);
+			kryptonLabel8.Name = "kryptonLabel8";
+			kryptonLabel8.Size = new Size(63, 20);
+			kryptonLabel8.TabIndex = 211;
+			kryptonLabel8.Values.Text = "Reshade :";
+			// 
+			// kryptonLabel7
+			// 
+			kryptonLabel7.Location = new Point(11, 35);
+			kryptonLabel7.Name = "kryptonLabel7";
+			kryptonLabel7.Size = new Size(74, 20);
+			kryptonLabel7.TabIndex = 210;
+			kryptonLabel7.Values.Text = "Resolution :";
 			// 
 			// cmb_patchlink
 			// 
@@ -182,7 +214,7 @@
 			cmb_patchlink.DropDownWidth = 242;
 			cmb_patchlink.IntegralHeight = false;
 			cmb_patchlink.Items.AddRange(new object[] { "Global Settings", "Don't link anything" });
-			cmb_patchlink.Location = new Point(102, 90);
+			cmb_patchlink.Location = new Point(131, 88);
 			cmb_patchlink.Name = "cmb_patchlink";
 			cmb_patchlink.Size = new Size(133, 21);
 			cmb_patchlink.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -194,7 +226,7 @@
 			cmb_displayMode.DropDownWidth = 242;
 			cmb_displayMode.IntegralHeight = false;
 			cmb_displayMode.Items.AddRange(new object[] { "Global Settings", "Recommanded Settings", "Fullscreen", "Windowed" });
-			cmb_displayMode.Location = new Point(102, 8);
+			cmb_displayMode.Location = new Point(131, 8);
 			cmb_displayMode.Name = "cmb_displayMode";
 			cmb_displayMode.Size = new Size(133, 21);
 			cmb_displayMode.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -206,7 +238,7 @@
 			cmb_patchReshade.DropDownWidth = 242;
 			cmb_patchReshade.IntegralHeight = false;
 			cmb_patchReshade.Items.AddRange(new object[] { "Global Settings", "Yes", "No" });
-			cmb_patchReshade.Location = new Point(102, 60);
+			cmb_patchReshade.Location = new Point(131, 61);
 			cmb_patchReshade.Name = "cmb_patchReshade";
 			cmb_patchReshade.Size = new Size(133, 21);
 			cmb_patchReshade.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -218,7 +250,7 @@
 			cmb_resolution.DropDownWidth = 242;
 			cmb_resolution.IntegralHeight = false;
 			cmb_resolution.Items.AddRange(new object[] { "Global Settings", "720p", "1080p", "1440p (2K)", "2160p (4K)" });
-			cmb_resolution.Location = new Point(102, 34);
+			cmb_resolution.Location = new Point(131, 34);
 			cmb_resolution.Name = "cmb_resolution";
 			cmb_resolution.Size = new Size(133, 21);
 			cmb_resolution.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -251,7 +283,7 @@
 			tableLayoutPanel1.SetColumnSpan(tableLayoutPanel3, 3);
 			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
 			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
+			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 300F));
 			tableLayoutPanel3.Controls.Add(groupBox2, 2, 0);
 			tableLayoutPanel3.Controls.Add(groupBox3, 0, 0);
 			tableLayoutPanel3.Dock = DockStyle.Fill;
@@ -271,7 +303,7 @@
 			groupBox3.ForeColor = Color.FromArgb(30, 57, 91);
 			groupBox3.Location = new Point(3, 3);
 			groupBox3.Name = "groupBox3";
-			groupBox3.Size = new Size(837, 138);
+			groupBox3.Size = new Size(787, 138);
 			groupBox3.TabIndex = 0;
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Controller Status";
@@ -282,7 +314,7 @@
 			panel1.Dock = DockStyle.Fill;
 			panel1.Location = new Point(3, 18);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(831, 117);
+			panel1.Size = new Size(781, 117);
 			panel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel4
@@ -309,7 +341,7 @@
 			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
 			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
 			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-			tableLayoutPanel4.Size = new Size(831, 117);
+			tableLayoutPanel4.Size = new Size(781, 117);
 			tableLayoutPanel4.TabIndex = 0;
 			// 
 			// lbl_gunslist
@@ -619,38 +651,6 @@
 			// 
 			kryptonManager1.GlobalPalette = KryptonPalette1;
 			kryptonManager1.GlobalPaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-			// 
-			// kryptonLabel9
-			// 
-			kryptonLabel9.Location = new Point(11, 91);
-			kryptonLabel9.Name = "kryptonLabel9";
-			kryptonLabel9.Size = new Size(63, 20);
-			kryptonLabel9.TabIndex = 212;
-			kryptonLabel9.Values.Text = "Link files :";
-			// 
-			// kryptonLabel4
-			// 
-			kryptonLabel4.Location = new Point(11, 9);
-			kryptonLabel4.Name = "kryptonLabel4";
-			kryptonLabel4.Size = new Size(91, 20);
-			kryptonLabel4.TabIndex = 209;
-			kryptonLabel4.Values.Text = "Display Mode :";
-			// 
-			// kryptonLabel8
-			// 
-			kryptonLabel8.Location = new Point(11, 61);
-			kryptonLabel8.Name = "kryptonLabel8";
-			kryptonLabel8.Size = new Size(63, 20);
-			kryptonLabel8.TabIndex = 211;
-			kryptonLabel8.Values.Text = "Reshade :";
-			// 
-			// kryptonLabel7
-			// 
-			kryptonLabel7.Location = new Point(11, 35);
-			kryptonLabel7.Name = "kryptonLabel7";
-			kryptonLabel7.Size = new Size(74, 20);
-			kryptonLabel7.TabIndex = 210;
-			kryptonLabel7.Values.Text = "Resolution :";
 			// 
 			// MainDPIcs
 			// 

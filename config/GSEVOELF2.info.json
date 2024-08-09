@@ -1,0 +1,35 @@
+{
+	"global": {
+		"_comment": "Progress where made but as of 07/24 not totally stable and no sound",
+		"rom": "",
+		"target": "",
+		"64bits": "False",
+		"windowed": "General,Windowed,1",
+		"magpieClass": "FREEGLUT",
+		"magpie3DGameMode": "False",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+		"recommanded_vjoy_windowed": "all"
+	},
+    "tpoptions": {
+		"use_gpu_fix_in_tp_settings & amd": {
+			"General||EnableAmdFix": "1"
+		},
+        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_displaymode_in_tp_settings & set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_displaymode_in_tp_settings & set_windowed": {
+            "General||Windowed": "1"
+        },
+        "recommanded_tp_settings": {
+            "General||HideCursor": "1"
+        }
+    },
+    "gameoptions": {
+    }
+}

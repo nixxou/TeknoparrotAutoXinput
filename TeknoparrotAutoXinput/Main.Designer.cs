@@ -321,7 +321,6 @@ namespace TeknoparrotAutoXinput
 			button2.TabIndex = 9;
 			button2.Text = "button2";
 			button2.UseVisualStyleBackColor = true;
-			button2.Visible = false;
 			button2.Click += button2_Click;
 			// 
 			// kryptonLabel1
@@ -351,7 +350,6 @@ namespace TeknoparrotAutoXinput
 			button3.TabIndex = 10;
 			button3.Text = "button3";
 			button3.UseVisualStyleBackColor = true;
-			button3.Visible = false;
 			button3.Click += button3_Click;
 			// 
 			// timer_controllerUpdate

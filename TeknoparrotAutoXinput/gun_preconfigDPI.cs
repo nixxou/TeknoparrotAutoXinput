@@ -1,5 +1,6 @@
-﻿using Henooh.DeviceEmulator.Net;
+﻿using Krypton.Toolkit;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using SerialPortLib2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
@@ -16,10 +17,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WiimoteLib;
 
 namespace TeknoparrotAutoXinput
 {
-	public partial class gun_preconfig : Form
+	public partial class gun_preconfigDPI : KryptonForm
 	{
 		private List<Thread> threadJoystick = new List<Thread>();
 		List<Task> taskJoystick = new List<Task>();
@@ -42,6 +44,7 @@ namespace TeknoparrotAutoXinput
 		private int _gunType;
 		private int _gunIndex;
 		private string _gunConfig;
+
 
 		public static string[,] gun4irBoards = new string[8, 2]
 		{
@@ -79,16 +82,30 @@ namespace TeknoparrotAutoXinput
 			  }
 		};
 
-		public gun_preconfig(int gunType, int gunIndex, string gunConfig)
+		public gun_preconfigDPI(int gunType, int gunIndex, string gunConfig, bool fromwizard = true)
 		{
+
 			_gunType = gunType;
 			_gunIndex = gunIndex;
 			_gunConfig = gunConfig;
-
 			InitializeComponent();
-			this.Size = new Size(858, 371);
-			grp_gun4ir.Visible = false;
-			grp_sinden.Visible = false;
+
+			if (!fromwizard)
+			{
+				btn_sinden_done2.Visible = true;
+				btn_wiimote_done2.Visible = true;
+				btn_gunir_done2.Visible = true;
+
+				btn_sinden_done.Visible = false;
+				btn_wiimote_done.Visible = false;
+				btn_gunir_done.Visible = false;
+
+				btn_sinden_configurekeys.Visible = false;
+				btn_wiimote_configurekeys.Visible = false;
+				btn_configure_key_gun4ir.Visible = false;
+			}
+			tabControl1.Region = new Region(tabControl1.DisplayRectangle);
+			tabControl1.SelectedIndex = 0;
 
 			lbl_gunindex.Text = gunIndex.ToString();
 			string gunTypeStr = "";
@@ -106,6 +123,9 @@ namespace TeknoparrotAutoXinput
 				case 3:
 					gunTypeStr = "Wiimote(Lichtknarre)";
 					break;
+				case 10:
+					gunTypeStr = "Controller";
+					break;
 				default:
 					gunTypeStr = "";
 					break;
@@ -114,9 +134,7 @@ namespace TeknoparrotAutoXinput
 
 			if (gunType == 0 || gunType == 1)
 			{
-				grp_gun4ir.Location = new Point(12, 64);
-				grp_gun4ir.Visible = true;
-
+				tabControl1.SelectedIndex = 1;
 				var boardList = gun4irBoards;
 				for (int index = 0; index < boardList.GetUpperBound(0) + 1; ++index)
 				{
@@ -142,13 +160,11 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 				}
-
 			}
 
 			if (gunType == 2)
 			{
-				grp_sinden.Location = new Point(12, 64);
-				grp_sinden.Visible = true;
+				tabControl1.SelectedIndex = 2;
 				if (Process.GetProcesses().Any(p => p.ProcessName.Equals("Lightgun", StringComparison.OrdinalIgnoreCase)))
 				{
 					Process.Start(new ProcessStartInfo
@@ -189,20 +205,140 @@ namespace TeknoparrotAutoXinput
 				{
 					cmb_selectSinden.Items.Add(sindengun.Item1);
 				}
-
-
 			}
 			if (gunType == 3)
 			{
-				grp_wiimote.Location = new Point(12, 64);
-				grp_wiimote.Visible = true;
+				tabControl1.SelectedIndex = 0;
+				InitializeFormAsync();
+			}
+			if (gunType == 10)
+			{
+				tabControl1.SelectedIndex = 3;
 				InitializeFormAsync();
 			}
 
-
 		}
 
-		private List<string> ComPortNames(string VID, string PID)
+		public static bool haveSinden()
+		{
+			string[] portNames = SerialPortLib2.SerialPortInput.GetPorts();
+			if (portNames.Length != 0)
+				Array.Sort<string>(portNames);
+			ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher("Select * from WIN32_SerialPort");
+			foreach (ManagementObject managementObject in managementObjectSearcher.Get())
+			{
+				string str2 = managementObject.GetPropertyValue("PNPDeviceID").ToString();
+				if (str2.Contains("VID_16C0&PID_0F01")) return true;
+				if (str2.Contains("VID_16C0&PID_0F02")) return true;
+				if (str2.Contains("VID_16C0&PID_0F38")) return true;
+				if (str2.Contains("VID_16C0&PID_0F39")) return true;
+
+			}
+			return false;
+		}
+
+		public static bool haveGun4ir()
+		{
+			var directInput = new DirectInput();
+			Joystick joystick = null;
+			var devicesInstance = new List<DeviceInstance>();
+			devicesInstance.AddRange(directInput.GetDevices().Where(x => x.Type != DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+			List<string> guids = new List<string>();
+			foreach (var device in devicesInstance)
+			{
+				if (device.InstanceName.ToLower().Contains("gun4ir"))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static bool haveWiimote()
+		{
+			WiimoteCollection mWC = new WiimoteCollection();
+			try
+			{
+				mWC.FindAllWiimotes();
+			}
+			catch (Exception ex)
+			{
+
+			}
+			foreach (Wiimote wm in mWC)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public static bool have360Controller()
+		{
+			var directInput = new DirectInput();
+			Joystick joystick = null;
+			var devicesInstance = new List<DeviceInstance>();
+			devicesInstance.AddRange(directInput.GetDevices().Where(x => x.Type != DeviceType.Mouse && x.UsagePage != UsagePage.VendorDefinedBegin && x.Usage != UsageId.AlphanumericBitmapSizeX && x.Usage != UsageId.AlphanumericAlphanumericDisplay && x.UsagePage != unchecked((UsagePage)0xffffff43) && x.UsagePage != UsagePage.Vr).ToList());
+			List<string> guids = new List<string>();
+			foreach (var device in devicesInstance)
+			{
+				if (device.Type != SharpDX.DirectInput.DeviceType.Gamepad) continue;
+				if (device.InstanceName.ToLower().Contains("xbox 360 for windows")) return true;
+
+				joystick = new Joystick(directInput, device.InstanceGuid);
+				try
+				{
+					string knowDevice = Program.GetJoyId(joystick.Properties.VendorId, joystick.Properties.ProductId);
+					if (knowDevice != "Unknown") return true;
+
+				}
+				catch { }
+
+
+			}
+			return false;
+		}
+
+		public static bool isValidGun4ir(string Config, int comPort)
+		{
+			if(string.IsNullOrEmpty(Config)) return false;
+			var buttonData = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(Config);
+			if (buttonData.ContainsKey("LightgunX")) 
+			{
+				if (buttonData["LightgunX"].DeviceName.ToLower().Contains("gun4ir"))
+				{
+					return isValidGun4irPort(comPort);
+				}
+				return false;
+			}
+			return false;
+		}
+
+		public static bool isValidGun4irPort(int comPort)
+		{
+			if(comPort <= 0) return false;
+			string comToSearch = "COM" + comPort.ToString();
+			var boardList = gun4irBoards;
+			for (int index = 0; index < boardList.GetUpperBound(0) + 1; ++index)
+			{
+				List<string> stringList = ComPortNames(boardList[index, 0], boardList[index, 1]);
+				if (stringList.Count > 0)
+				{
+					foreach (string portName in SerialPortLib2.SerialPortInput.GetPorts())
+					{
+						if (stringList.Contains(portName))
+						{
+							if (portName == comToSearch) return true;
+						}
+
+					}
+				}
+			}
+			return false;
+		}
+
+
+
+		private static List<string> ComPortNames(string VID, string PID)
 		{
 			Regex regex = new Regex(string.Format("^VID_{0}.PID_{1}", (object)VID, (object)PID), RegexOptions.IgnoreCase);
 			List<string> stringList = new List<string>();
@@ -231,7 +367,6 @@ namespace TeknoparrotAutoXinput
 			}
 			return stringList;
 		}
-
 
 		private void cmb_comport_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -297,6 +432,7 @@ namespace TeknoparrotAutoXinput
 
 			btn_configure_key_gun4ir.Enabled = true;
 
+			btn_gunir_done2.Enabled = true;
 			if (_gunType == 0) btn_gunir_done.Enabled = true;
 			if (_gunType == 1) label_warning_guncon1.Visible = true;
 		}
@@ -321,6 +457,19 @@ namespace TeknoparrotAutoXinput
 			{
 				lbl_presstrigger_wiimote.Visible = false;
 				lbl_gunguidwiimote.Text = gunGuid;
+			}));
+			_stopListening = true;
+
+
+		}
+
+		public void controllerFound()
+		{
+			//StopMonitor();
+			this.Invoke(new Action(() =>
+			{
+				lbl_presstrigger_controller.Visible = false;
+				lbl_gunguidcontroller.Text = gunGuid;
 			}));
 			_stopListening = true;
 
@@ -430,6 +579,13 @@ namespace TeknoparrotAutoXinput
 									gunName = deviceName;
 									wiimoteFound();
 								}
+								if (_gunType == 10 && inputText.StartsWith("Buttons"))
+								{
+									gunGuid = device_guid.ToString();
+									gunName = deviceName;
+									controllerFound();
+								}
+
 							}
 						}
 
@@ -500,16 +656,14 @@ namespace TeknoparrotAutoXinput
 			this.Close();
 		}
 
-		private void kryptonButton1_Click(object sender, EventArgs e)
+		private static bool IsStickType(DeviceInstance deviceInstance)
 		{
-			var frm = new dinputgun(_gunIndex, "gamepad", "");
-			var result = frm.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				var json = frm.Dialogconfig;
-				File.WriteAllText(@"E:/out.json", json);
-
-			}
+			return deviceInstance.Type == SharpDX.DirectInput.DeviceType.Joystick
+					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.Gamepad
+					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.FirstPerson
+					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.Flight
+					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.Driving
+					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.Supplemental;
 		}
 
 		private void cmb_selectSinden_SelectedIndexChanged(object sender, EventArgs e)
@@ -520,8 +674,9 @@ namespace TeknoparrotAutoXinput
 			lbl_sinden_nojoystick.Visible = false;
 			btn_sinden_configurekeys.Enabled = false;
 			btn_sinden_done.Enabled = false;
+			btn_sinden_done2.Enabled = false;
 
-			if(cmb_selectSinden.SelectedIndex >= 0)
+			if (cmb_selectSinden.SelectedIndex >= 0)
 			{
 				if (cmb_selectSinden.SelectedItem.ToString().StartsWith("SindenLightgun-Black")) gunSindenType = 1;
 				if (cmb_selectSinden.SelectedItem.ToString().StartsWith("SindenLightgun-Blue")) gunSindenType = 2;
@@ -566,12 +721,14 @@ namespace TeknoparrotAutoXinput
 				{
 					btn_sinden_configurekeys.Enabled = true;
 					btn_sinden_done.Enabled = true;
+					btn_sinden_done2.Enabled = true;
 
 				}
 				else
 				{
 					btn_sinden_configurekeys.Enabled = false;
 					btn_sinden_done.Enabled = false;
+					btn_sinden_done2.Enabled = false;
 
 					if (Process.GetProcesses().Any(p => p.ProcessName.Equals("Lightgun", StringComparison.OrdinalIgnoreCase)))
 					{
@@ -637,69 +794,8 @@ namespace TeknoparrotAutoXinput
 
 				}
 
-
-
-
-
-				/*
-				var gunSerial = new SerialPortInput(false);
-				gunSerial.SetPort(portName, 115200);
-				var tcs = new TaskCompletionSource<bool>();
-				string version = "";
-
-				gunSerial.MessageReceived += (object sender, MessageReceivedEventArgs args) =>
-				{
-					if (args.Data.Length >= 2)
-					{
-						byte mainVersion = args.Data[0];
-						byte mainVersionSub = args.Data[1];
-
-						// Enregistrer la version dans une chaîne de caractères
-						version = $"{mainVersion}.{mainVersionSub}";
-
-						tcs.SetResult(true);
-					}
-				};
-
-				byte[] message = new byte[7]
-				{
-					Convert.ToByte(170),
-					Convert.ToByte(101),
-					Convert.ToByte(0),
-					Convert.ToByte(0),
-					Convert.ToByte(0),
-					Convert.ToByte(0),
-					Convert.ToByte(187)
-				};
-
-				gunSerial.Connect();
-				gunSerial.SendMessage(message);
-
-				if (!tcs.Task.Wait(1000)) // 1000 millisecondes = 1 seconde
-				{
-					
-				}
-
-				gunSerial.Disconnect();
-				MessageBox.Show(version);
-				*/
 			}
 
-
-		}
-
-		private static bool IsStickType(DeviceInstance deviceInstance)
-		{
-			return deviceInstance.Type == SharpDX.DirectInput.DeviceType.Joystick
-					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.Gamepad
-					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.FirstPerson
-					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.Flight
-					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.Driving
-					|| deviceInstance.Type == SharpDX.DirectInput.DeviceType.Supplemental;
-		}
-
-		private void gun_preconfig_Load(object sender, EventArgs e)
-		{
 
 		}
 
@@ -850,6 +946,7 @@ namespace TeknoparrotAutoXinput
 			// Appelez votre méthode asynchrone
 			await StartListeningAsync();
 		}
+
 		private async Task StartListeningAsync()
 		{
 			_stopListening = false;
@@ -867,13 +964,42 @@ namespace TeknoparrotAutoXinput
 
 			List<string> guids = new List<string>();
 
-			foreach (var device in devicesInstance)
+			if (_gunType == 3)
 			{
-				if (device.InstanceName.ToLower().Contains("vjoy"))
+
+				foreach (var device in devicesInstance)
 				{
-					guids.Add(device.InstanceGuid.ToString());
+					if (device.InstanceName.ToLower().Contains("vjoy"))
+					{
+						guids.Add(device.InstanceGuid.ToString());
+					}
 				}
 			}
+			if (_gunType == 10)
+			{
+				foreach (var device in devicesInstance)
+				{
+					if (device.Type != SharpDX.DirectInput.DeviceType.Gamepad) continue;
+					if (device.InstanceName.ToLower().Contains("xbox 360 for windows"))
+					{
+						guids.Add(device.InstanceGuid.ToString());
+						continue;
+					}
+
+					var joystick = new Joystick(directInput, device.InstanceGuid);
+					try
+					{
+						string knowDevice = Program.GetJoyId(joystick.Properties.VendorId, joystick.Properties.ProductId);
+						if (knowDevice != "Unknown")
+						{
+							guids.Add(device.InstanceGuid.ToString());
+						}
+
+					}
+					catch { }
+				}
+			}
+
 
 			if (guids.Count > 0)
 			{
@@ -885,27 +1011,23 @@ namespace TeknoparrotAutoXinput
 					await Task.Delay(1000); // Attendre 1 seconde entre les démarrages
 				}
 
-				lbl_presstrigger_wiimote.Visible = true;
+				if (_gunType == 3) lbl_presstrigger_wiimote.Visible = true;
+				if (_gunType == 10) lbl_presstrigger_controller.Visible = true;
 
 				await Task.WhenAll(taskJoystick);
 				taskJoystick.Clear();
 			}
-			btn_wiimote_configurekeys.Enabled = true;
-			btn_wiimote_done.Enabled = true;
-		}
+			if (_gunType == 3)
+			{
+				btn_wiimote_configurekeys.Enabled = true;
+				btn_wiimote_done.Enabled = true;
+				btn_wiimote_done2.Enabled = true;
+			}
+			if (_gunType == 10)
+			{
+				btn_controller_done.Enabled = true;
+			}
 
-		private void btn_wiimote_done_Click(object sender, EventArgs e)
-		{
-			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
-			base_content = base_content.Replace("[gunguid]", gunGuid);
-			base_content = base_content.Replace("[gunname]", gunName);
-			string typeGunTxt = "wiimote";
-
-
-
-			Dialogconfig = base_content;
-			this.DialogResult = DialogResult.OK;
-			this.Close();
 		}
 
 		private void btn_wiimote_configurekeys_Click(object sender, EventArgs e)
@@ -927,6 +1049,39 @@ namespace TeknoparrotAutoXinput
 				this.Close();
 
 			}
+		}
+
+		private void btn_wiimote_done_Click(object sender, EventArgs e)
+		{
+			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
+			base_content = base_content.Replace("[gunguid]", gunGuid);
+			base_content = base_content.Replace("[gunname]", gunName);
+			string typeGunTxt = "wiimote";
+
+
+
+			Dialogconfig = base_content;
+			this.DialogResult = DialogResult.OK;
+			this.Close();
+		}
+
+		private void kryptonButton1_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_controller_done_Click(object sender, EventArgs e)
+		{
+			string base_content = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames().Single(str => str.EndsWith("gunpreset_" + _gunType + ".json")))).ReadToEnd();
+			base_content = base_content.Replace("[gunguid]", gunGuid);
+			base_content = base_content.Replace("[gunname]", gunName);
+			string typeGunTxt = "gamepad";
+
+
+
+			Dialogconfig = base_content;
+			this.DialogResult = DialogResult.OK;
+			this.Close();
 		}
 	}
 }

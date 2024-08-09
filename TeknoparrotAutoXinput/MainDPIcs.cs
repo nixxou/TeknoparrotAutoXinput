@@ -84,6 +84,11 @@ namespace TeknoparrotAutoXinput
 
 		public MainDPIcs()
 		{
+			float dpiVal = CreateGraphics().DpiX;
+			if (dpiVal > 120)
+			{
+				Font = new Font(Font.Name, 8.25f * 0.85f, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+			}
 			InitializeComponent();
 
 			PaletteImageScaler.ScalePalette(this, KryptonPalette1);
@@ -467,6 +472,8 @@ namespace TeknoparrotAutoXinput
 			cmb_patchReshade.SelectedIndex = 0;
 			cmb_resolution.SelectedIndex = 0;
 			cmb_patchlink.SelectedIndex = 0;
+
+
 		}
 
 		private void btn_globalconfig_Click(object sender, EventArgs e)

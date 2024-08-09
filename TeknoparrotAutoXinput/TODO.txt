@@ -24,3 +24,9 @@ Problem pm folder for auto add archive Walking dead, maybe others ? -> Just done
 Build Generator
 
 Attention a la modif sur les links, si aucun fichier lors du test, ca va poser des soucis
+
+After config, release all gun4ir
+Mamehooker Run from options
+Sinden app from regular options
+                                                                                
+Xinput should have crosshair mandatory

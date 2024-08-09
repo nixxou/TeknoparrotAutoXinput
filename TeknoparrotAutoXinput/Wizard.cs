@@ -2072,7 +2072,7 @@ namespace TeknoparrotAutoXinput
 			int selected_index = cmb_gunA_type.SelectedIndex;
 			if (selected_index <= 3)
 			{
-				var frm = new gun_preconfig(selected_index, 1, config);
+				var frm = new gun_preconfigDPI(selected_index, 1, config);
 				var result = frm.ShowDialog();
 				if (result == DialogResult.OK)
 				{
@@ -2117,7 +2117,7 @@ namespace TeknoparrotAutoXinput
 			int selected_index = cmb_gunB_type.SelectedIndex;
 			if (selected_index <= 3)
 			{
-				var frm = new gun_preconfig(selected_index, 2, config);
+				var frm = new gun_preconfigDPI(selected_index, 2, config);
 				var result = frm.ShowDialog();
 				if (result == DialogResult.OK)
 				{
@@ -2871,8 +2871,8 @@ namespace TeknoparrotAutoXinput
 				if (gunType == 2)
 				{
 					gun_sinden_set++;
-					if (gun_sinden_set == 1) NewConfig.gunARecoil = "sinden-gun1";
-					else NewConfig.gunARecoil = "sinden-gun2";
+					if (gun_sinden_set == 1) NewConfig.gunBRecoil = "sinden-gun1";
+					else NewConfig.gunBRecoil = "sinden-gun2";
 				}
 				if (vjoy_installed) NewConfig.gunBvjoy = true;
 

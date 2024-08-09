@@ -143,6 +143,16 @@ namespace TeknoparrotAutoXinput.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Byte[].
         /// </summary>
+        internal static byte[] gunpreset_10 {
+            get {
+                object obj = ResourceManager.GetObject("gunpreset_10", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Byte[].
+        /// </summary>
         internal static byte[] gunpreset_2 {
             get {
                 object obj = ResourceManager.GetObject("gunpreset_2", resourceCulture);

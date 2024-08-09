@@ -33,11 +33,13 @@
   <ItemGroup>
     <None Remove="Resources\gunpreset_0.json" />
     <None Remove="Resources\gunpreset_1.json" />
+    <None Remove="Resources\gunpreset_10.json" />
     <None Remove="Resources\gunpreset_2.json" />
     <None Remove="Resources\gunpreset_3.json" />
   </ItemGroup>
 	
   <ItemGroup>
+    <EmbeddedResource Include="Resources\gunpreset_10.json" />
     <EmbeddedResource Include="Resources\gunpreset_0.json" />
     <EmbeddedResource Include="Resources\gunpreset_1.json" />
     <EmbeddedResource Include="Resources\gunpreset_2.json" />

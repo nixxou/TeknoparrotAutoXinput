@@ -10,7 +10,6 @@
 
 	public string Title { get; set; }
 	public string XinputTitle { get; set; }
-
 	public string DeviceName { get; set; } = string.Empty;
 
 }

@@ -142,6 +142,9 @@
   <data name="gunpreset_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gunpreset_1.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="gunpreset_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gunpreset_10.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="gunpreset_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gunpreset_2.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

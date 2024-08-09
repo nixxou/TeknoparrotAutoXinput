@@ -384,6 +384,7 @@ namespace TeknoparrotAutoXinput
 
 		private void GameOptionsSimple_Load(object sender, EventArgs e)
 		{
+			cmb_patchResolutionFix.SelectedIndex = gameSettings.patchResolutionFix;
 			cmb_resolution.SelectedIndex = gameSettings.gpuResolution;
 			cmb_displayMode.SelectedIndex = gameSettings.displayMode;
 
@@ -506,7 +507,7 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_Save_Click(object sender, EventArgs e)
 		{
-
+			gameSettings.patchResolutionFix = cmb_patchResolutionFix.SelectedIndex;
 			gameSettings.gpuResolution = cmb_resolution.SelectedIndex;
 			gameSettings.displayMode = cmb_displayMode.SelectedIndex;
 

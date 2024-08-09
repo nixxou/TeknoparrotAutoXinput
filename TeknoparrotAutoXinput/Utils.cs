@@ -371,10 +371,27 @@ namespace TeknoparrotAutoXinput
 
 			fileToTestPath = Path.GetFullPath(fileToTestPath).ToLower();
 			fromDirPath = Path.GetFullPath(fromDirPath).ToLower();
+
+			//Utils.LogMessage($"DEBUG Baggio 3 : fileToTestPath = {fileToTestPath} -> {fromDirPath}");
+
 			var sibling = GetFileSiblingHardLinks(fileToTestPath);
-			foreach(var siblingLink in sibling)
+			if (sibling == null) return false;
+
+			foreach (var siblingLink in sibling)
 			{
+				if (siblingLink == null)
+				{
+					//Utils.LogMessage("DEBUG Baggio 4: siblingLink is null");
+					continue;
+				}
 				string siblingDir = Path.GetDirectoryName(siblingLink).ToLower();
+
+				if (siblingDir == null)
+				{
+					//Utils.LogMessage("DEBUG Baggio 5: siblingDir is null");
+					continue;
+				}
+
 
 				if (siblingDir.StartsWith(fromDirPath) || siblingDir == fromDirPath) return true;
 			}
@@ -1011,7 +1028,8 @@ namespace TeknoparrotAutoXinput
 				}
 				if (File.Exists(newfile))
 				{
-					File.Move(newfile, newfile + ".filetorestore");
+					if(File.Exists(newfile + ".filetorestore")) File.Delete(newfile + ".filetorestore");
+					File.Move(newfile, newfile + ".filetorestore",true);
 				}
 				if (useSoftLink) CreateSoftlink(file, newfile);
 				else MakeLink(file, newfile);
@@ -1144,6 +1162,7 @@ namespace TeknoparrotAutoXinput
 			});
 			foreach (var file in filePaths)
 			{
+				//Utils.LogMessage($"DEBUG Baggio 1: IsHardLink({file}, {originalLinkDir})");
 				//if (Program.DebugMode) Utils.LogMessage($"Check Link for {file}");
 				if (CanUseHardLink && IsHardLink(file, originalLinkDir))
 				{
@@ -1547,6 +1566,7 @@ namespace TeknoparrotAutoXinput
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} must be restored");
 					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(fileToRestore));
+					if (File.Exists(newFilePath)) File.Delete(newFilePath);
 					File.Move(fileToRestore, newFilePath,true);
 				}
 			}
@@ -1609,6 +1629,7 @@ namespace TeknoparrotAutoXinput
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} must be restored");
 					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(fileToRestore));
+					if (File.Exists(newFilePath)) File.Delete(newFilePath);
 					File.Move(fileToRestore, newFilePath, true);
 				}
 			}
