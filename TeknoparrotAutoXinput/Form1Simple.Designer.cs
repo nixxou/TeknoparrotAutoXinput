@@ -192,6 +192,9 @@
 			cmb_gunA_type = new Krypton.Toolkit.KryptonComboBox();
 			chk_reasignGunPedal = new Krypton.Toolkit.KryptonCheckBox();
 			btn_Save = new Krypton.Toolkit.KryptonButton();
+			kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
+			cmb_performance = new Krypton.Toolkit.KryptonComboBox();
+			chk_forcevsync = new Krypton.Toolkit.KryptonCheckBox();
 			tabControl1.SuspendLayout();
 			tabGlobal.SuspendLayout();
 			groupBox4.SuspendLayout();
@@ -231,6 +234,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_com).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_performance).BeginInit();
 			SuspendLayout();
 			// 
 			// tabControl1
@@ -400,6 +404,9 @@
 			// 
 			// tabPatch
 			// 
+			tabPatch.Controls.Add(chk_forcevsync);
+			tabPatch.Controls.Add(kryptonLabel1);
+			tabPatch.Controls.Add(cmb_performance);
 			tabPatch.Controls.Add(chk_patchResolutionFix);
 			tabPatch.Controls.Add(groupBox17);
 			tabPatch.Controls.Add(kryptonLabel72);
@@ -423,7 +430,7 @@
 			// 
 			// chk_patchResolutionFix
 			// 
-			chk_patchResolutionFix.Location = new Point(140, 384);
+			chk_patchResolutionFix.Location = new Point(140, 399);
 			chk_patchResolutionFix.Name = "chk_patchResolutionFix";
 			chk_patchResolutionFix.Size = new Size(234, 20);
 			chk_patchResolutionFix.TabIndex = 171;
@@ -437,7 +444,7 @@
 			groupBox17.Controls.Add(txt_tplicence);
 			groupBox17.Controls.Add(btn_tplicence_show);
 			groupBox17.Controls.Add(chk_tplicence_onstart);
-			groupBox17.Location = new Point(18, 404);
+			groupBox17.Location = new Point(18, 416);
 			groupBox17.Name = "groupBox17";
 			groupBox17.Size = new Size(770, 72);
 			groupBox17.TabIndex = 170;
@@ -498,7 +505,7 @@
 			// 
 			// kryptonLabel72
 			// 
-			kryptonLabel72.Location = new Point(19, 306);
+			kryptonLabel72.Location = new Point(12, 308);
 			kryptonLabel72.Name = "kryptonLabel72";
 			kryptonLabel72.Size = new Size(91, 20);
 			kryptonLabel72.TabIndex = 160;
@@ -511,7 +518,7 @@
 			cmb_displayMode.DropDownWidth = 242;
 			cmb_displayMode.IntegralHeight = false;
 			cmb_displayMode.Items.AddRange(new object[] { "Use Recommanded Settings", "Force Fullscreen & Res (if possible)", "Force Windowed & Res (if possible)" });
-			cmb_displayMode.Location = new Point(140, 302);
+			cmb_displayMode.Location = new Point(140, 307);
 			cmb_displayMode.Name = "cmb_displayMode";
 			cmb_displayMode.Size = new Size(219, 21);
 			cmb_displayMode.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -519,7 +526,7 @@
 			// 
 			// chk_patchFFB
 			// 
-			chk_patchFFB.Location = new Point(140, 358);
+			chk_patchFFB.Location = new Point(140, 375);
 			chk_patchFFB.Name = "chk_patchFFB";
 			chk_patchFFB.Size = new Size(82, 20);
 			chk_patchFFB.TabIndex = 154;
@@ -626,7 +633,7 @@
 			// 
 			// kryptonLabel60
 			// 
-			kryptonLabel60.Location = new Point(22, 277);
+			kryptonLabel60.Location = new Point(13, 258);
 			kryptonLabel60.Name = "kryptonLabel60";
 			kryptonLabel60.Size = new Size(74, 20);
 			kryptonLabel60.TabIndex = 102;
@@ -638,7 +645,7 @@
 			cmb_resolution.DropDownWidth = 242;
 			cmb_resolution.IntegralHeight = false;
 			cmb_resolution.Items.AddRange(new object[] { "720p", "1080p", "1440p (2K)", "2160p (4K)" });
-			cmb_resolution.Location = new Point(140, 275);
+			cmb_resolution.Location = new Point(140, 257);
 			cmb_resolution.Name = "cmb_resolution";
 			cmb_resolution.Size = new Size(219, 21);
 			cmb_resolution.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -646,7 +653,7 @@
 			// 
 			// kryptonLabel53
 			// 
-			kryptonLabel53.Location = new Point(22, 251);
+			kryptonLabel53.Location = new Point(13, 231);
 			kryptonLabel53.Name = "kryptonLabel53";
 			kryptonLabel53.Size = new Size(39, 20);
 			kryptonLabel53.TabIndex = 100;
@@ -658,7 +665,7 @@
 			cmb_gpu.DropDownWidth = 242;
 			cmb_gpu.IntegralHeight = false;
 			cmb_gpu.Items.AddRange(new object[] { "Nvidia", "Intel", "AMD Old", "AMD New", "AMD R.ID" });
-			cmb_gpu.Location = new Point(140, 247);
+			cmb_gpu.Location = new Point(140, 231);
 			cmb_gpu.Name = "cmb_gpu";
 			cmb_gpu.Size = new Size(219, 21);
 			cmb_gpu.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1831,6 +1838,34 @@
 			btn_Save.Values.Text = "Close";
 			btn_Save.Click += btn_Save_Click;
 			// 
+			// kryptonLabel1
+			// 
+			kryptonLabel1.Location = new Point(13, 284);
+			kryptonLabel1.Name = "kryptonLabel1";
+			kryptonLabel1.Size = new Size(124, 20);
+			kryptonLabel1.TabIndex = 173;
+			kryptonLabel1.Values.Text = "Performance profile :";
+			// 
+			// cmb_performance
+			// 
+			cmb_performance.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_performance.DropDownWidth = 242;
+			cmb_performance.IntegralHeight = false;
+			cmb_performance.Items.AddRange(new object[] { "Normal", "Low", "Hight" });
+			cmb_performance.Location = new Point(140, 282);
+			cmb_performance.Name = "cmb_performance";
+			cmb_performance.Size = new Size(219, 21);
+			cmb_performance.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_performance.TabIndex = 172;
+			// 
+			// chk_forcevsync
+			// 
+			chk_forcevsync.Location = new Point(140, 353);
+			chk_forcevsync.Name = "chk_forcevsync";
+			chk_forcevsync.Size = new Size(88, 20);
+			chk_forcevsync.TabIndex = 174;
+			chk_forcevsync.Values.Text = "Force Vsync";
+			// 
 			// Form1Simple
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1899,6 +1934,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_com).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_performance).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -2068,5 +2104,8 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_reasignGunPedal;
 		private Krypton.Toolkit.KryptonButton btn_Save;
 		private Krypton.Toolkit.KryptonCheckBox chk_patchResolutionFix;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel1;
+		private Krypton.Toolkit.KryptonComboBox cmb_performance;
+		private Krypton.Toolkit.KryptonCheckBox chk_forcevsync;
 	}
 }

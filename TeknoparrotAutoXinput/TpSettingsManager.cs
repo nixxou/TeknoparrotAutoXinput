@@ -194,6 +194,7 @@ namespace TeknoparrotAutoXinput
 				if (value.ToLower() == "{{broadcastaddress}}") value = Program.patch_BroadcastAddress;
 				if (value.ToLower() == "{{networkdns1}}") value = Program.patch_networkDns1;
 				if (value.ToLower() == "{{networkdns2}}") value = Program.patch_networkDns2;
+				if (value.ToLower() == "{{refreshrate}}") value = Program.refreshRate.ToString();
 
 				TpSettings[key] = value;
 				

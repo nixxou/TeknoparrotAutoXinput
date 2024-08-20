@@ -8,13 +8,17 @@
 		"magpieClass": "ACTION-DEKA",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",
+		"recoil": "auto",		
 		"recommanded_vjoy_fullscreen": "all",
 		"recommanded_vjoy_windowed": "all"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & !low_perfprofile": {
 			"General||Windowed" : "0"
 		},
+		"set_displaymode_in_tp_settings & set_displaymode_recommanded & low_perfprofile": {
+			"General||Windowed" : "1"
+		},		
 		"set_displaymode_in_tp_settings & set_fullscreen": {
 			"General||Windowed" : "0"
 		},

@@ -720,6 +720,80 @@ namespace MonitorSwitcherGUI
 			return output;
 		}
 
+		public static String PrintDisplaySettings2ForFrequency(CCDWrapper.DisplayConfigPathInfo[] pathInfoArray, CCDWrapper.DisplayConfigModeInfo[] modeInfoArray, CCDWrapper.DpiInfo[] dpiInfoArray)
+		{
+			// initialize result
+			String output = "";
+
+			// initialize text writer
+			StringWriter textWriter = new StringWriter();
+
+			// initialize XmlWriterSettings with ConformanceLevel set to Fragment
+			XmlWriterSettings settings = new XmlWriterSettings
+			{
+				ConformanceLevel = ConformanceLevel.Fragment, // Allow XML fragments
+				Indent = true
+			};
+
+			using (XmlWriter xmlWriter = XmlWriter.Create(textWriter, settings))
+			{
+				// initialize xml serializer
+				System.Xml.Serialization.XmlSerializer writerPath = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigPathInfo));
+				System.Xml.Serialization.XmlSerializer writerModeTarget = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigTargetMode));
+				System.Xml.Serialization.XmlSerializer writerModeSource = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigSourceMode));
+				System.Xml.Serialization.XmlSerializer writerModeInfoType = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigModeInfoType));
+				System.Xml.Serialization.XmlSerializer writerModeAdapterID = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.LUID));
+				System.Xml.Serialization.XmlSerializer writerDpiInfoType = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DpiInfo));
+
+				// write content to string
+				xmlWriter.WriteStartElement("displaySettings");
+				xmlWriter.WriteStartElement("pathInfoArray");
+				foreach (CCDWrapper.DisplayConfigPathInfo pathInfo in pathInfoArray)
+				{
+					writerPath.Serialize(xmlWriter, pathInfo);
+				}
+				xmlWriter.WriteEndElement(); // close pathInfoArray
+
+				xmlWriter.WriteStartElement("modeInfoArray");
+				for (int iModeInfo = 0; iModeInfo < modeInfoArray.Length; iModeInfo++)
+				{
+					xmlWriter.WriteStartElement("modeInfo");
+					CCDWrapper.DisplayConfigModeInfo modeInfo = modeInfoArray[iModeInfo];
+					xmlWriter.WriteElementString("id", modeInfo.id.ToString());
+					writerModeAdapterID.Serialize(xmlWriter, modeInfo.adapterId);
+					writerModeInfoType.Serialize(xmlWriter, modeInfo.infoType);
+					if (modeInfo.infoType == CCDWrapper.DisplayConfigModeInfoType.Target)
+					{
+						writerModeTarget.Serialize(xmlWriter, modeInfo.targetMode);
+					}
+					else
+					{
+						writerModeSource.Serialize(xmlWriter, modeInfo.sourceMode);
+					}
+					xmlWriter.WriteEndElement(); // close modeInfo
+				}
+				xmlWriter.WriteEndElement(); // close modeInfoArray
+
+				/*
+				xmlWriter.WriteStartElement("dpiInfoArray");
+				for (int i = 0; i < dpiInfoArray.Length; i++)
+				{
+					xmlWriter.WriteStartElement("dpiInfo");
+					CCDWrapper.DpiInfo dpiInfo = dpiInfoArray[i];
+					xmlWriter.WriteElementString("id", dpiInfo.id.ToString());
+					xmlWriter.WriteElementString("adapter", dpiInfo.adapter.ToString());
+					xmlWriter.WriteElementString("dpi", dpiInfo.dpi.ToString());
+					xmlWriter.WriteEndElement(); // close dpiInfo
+				}
+				xmlWriter.WriteEndElement(); // close dpiInfoArray
+				*/
+				xmlWriter.WriteEndElement(); // close displaySettings
+			}
+
+			output = textWriter.ToString();
+			return output;
+		}
+
 		public static Boolean SaveDisplaySettings(String fileName)
 		{
 			CCDWrapper.DisplayConfigPathInfo[] pathInfoArray = new CCDWrapper.DisplayConfigPathInfo[0];

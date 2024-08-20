@@ -22,6 +22,7 @@ using Microsoft.Win32;
 using System.Reflection;
 using SharpDX.DirectInput;
 using XJoy;
+using System.Data.SqlTypes;
 
 
 namespace TeknoparrotAutoXinput
@@ -624,10 +625,15 @@ namespace TeknoparrotAutoXinput
 			}
 			//End Apply Patch
 
+			string reshadeiniFile = "";
+
 			foreach (var file in filePaths)
 			{
+				string originalFileName = file;
 				string newfile = directoryDest + file.Remove(0, directorySource.Length);
 				newfile = newfile.Replace("[..]", "..");
+				
+
 				
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!windowed!]") && newfile.Contains(@"\[!windowed!]\"))
@@ -854,12 +860,68 @@ namespace TeknoparrotAutoXinput
 					if (Program.GunBGuid != "") continue;
 				}
 
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!vsync!]") && newfile.Contains(@"\[!vsync!]\"))
+				{
+					newfile = newfile.Replace(@"\[!vsync!]\", @"\");
+					if (!Program.forceVsync) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_vsync!]") && newfile.Contains(@"\[!no_vsync!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_vsync!]\", @"\");
+					if (Program.forceVsync) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!normal_perfprofile!]") && newfile.Contains(@"\[!normal_perfprofile!]\"))
+				{
+					newfile = newfile.Replace(@"\[!normal_perfprofile!]\", @"\");
+					if (Program.performanceProfile != 0) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!low_perfprofile!]") && newfile.Contains(@"\[!low_perfprofile!]\"))
+				{
+					newfile = newfile.Replace(@"\[!low_perfprofile!]\", @"\");
+					if (Program.performanceProfile != 1) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!high_perfprofile!]") && newfile.Contains(@"\[!high_perfprofile!]\"))
+				{
+					newfile = newfile.Replace(@"\[!high_perfprofile!]\", @"\");
+					if (Program.performanceProfile != 2) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!not_normal_perfprofile!]") && newfile.Contains(@"\[!not_normal_perfprofile!]\"))
+				{
+					newfile = newfile.Replace(@"\[!not_normal_perfprofile!]\", @"\");
+					if (Program.performanceProfile == 0) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!not_low_perfprofile!]") && newfile.Contains(@"\[!not_low_perfprofile!]\"))
+				{
+					newfile = newfile.Replace(@"\[!not_low_perfprofile!]\", @"\");
+					if (Program.performanceProfile == 1) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!not_high_perfprofile!]") && newfile.Contains(@"\[!not_high_perfprofile!]\"))
+				{
+					newfile = newfile.Replace(@"\[!not_high_perfprofile!]\", @"\");
+					if (Program.performanceProfile == 2) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!120hz!]") && newfile.Contains(@"\[!120hz!]\"))
+				{
+					newfile = newfile.Replace(@"\[!120hz!]\", @"\");
+					if (Program.refreshRate < 120) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!60hz!]") && newfile.Contains(@"\[!60hz!]\"))
+				{
+					newfile = newfile.Replace(@"\[!60hz!]\", @"\");
+					if (Program.refreshRate >= 120) continue;
+				}
+
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!cachereshade!]") && newfile.Contains(@"\[!cachereshade!]\"))
 				{
 					continue;
 				}
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!patch_generation!]") && newfile.Contains(@"\[!patch_generation!]\"))
+				{
+					continue;
+				}
+
+				if (Path.GetFileName(newfile).ToLower() == "dgvoodoo.conf.custom")
 				{
 					continue;
 				}
@@ -872,9 +934,50 @@ namespace TeknoparrotAutoXinput
 				newfile = Path.GetFullPath(newfile);
 
 
-				if(Path.GetFileName(newfile).ToLower() == "reshade.ini")
+				
+				if (Path.GetFileName(newfile).ToLower() == "dgvoodoo.conf")
 				{
-					string currentDir = Path.GetDirectoryName(file);
+					try
+					{
+						File.Copy(file, file + ".custom", true);
+						if (File.Exists(file + ".custom"))
+						{
+							IniFile dgvodooIni = new IniFile(file + ".custom");
+							string dgvAntialiasing = dgvodooIni.Read("Antialiasing", "DirectX");
+							string dgvFiltering = dgvodooIni.Read("Filtering", "DirectX");
+							int dgvFilteringValue = 0;
+							int.TryParse(dgvFiltering, out dgvFilteringValue);
+							int dgvAntialiasingValue = 0;
+							int.TryParse(dgvAntialiasing.Trim('x'), out dgvAntialiasingValue);
+							string dgvForceVerticalSync = dgvodooIni.Read("ForceVerticalSync", "DirectX");
+							if(Program.performanceProfile == 1)
+							{
+								dgvodooIni.Write("Antialiasing", "appdriven", "DirectX");
+								dgvodooIni.Write("Filtering", "appdriven", "DirectX");
+							}
+							if(Program.performanceProfile == 2) {
+								dgvodooIni.Write("Antialiasing", "8x", "DirectX");
+								dgvodooIni.Write("Filtering", "16", "DirectX");
+							}
+
+							if (Program.forceVsync) dgvodooIni.Write("ForceVerticalSync", "true", "DirectX");
+							else dgvodooIni.Write("ForceVerticalSync", "false", "DirectX");
+							originalFileName = file + ".custom";
+						}
+					}
+					catch { }
+					
+
+
+
+
+					
+				}
+
+				if (Path.GetFileName(newfile).ToLower() == "reshade.ini")
+				{
+					reshadeiniFile = newfile;
+					string currentDir = Path.GetDirectoryName(reshadeiniFile);
 					string reshadePath = Path.Combine(currentDir, "reshade-shaders");
 					if (Directory.Exists(reshadePath))
 					{
@@ -1033,9 +1136,76 @@ namespace TeknoparrotAutoXinput
 					if(File.Exists(newfile + ".filetorestore")) File.Delete(newfile + ".filetorestore");
 					File.Move(newfile, newfile + ".filetorestore",true);
 				}
-				if (useSoftLink) CreateSoftlink(file, newfile);
-				else MakeLink(file, newfile);
+				if (useSoftLink) CreateSoftlink(originalFileName, newfile);
+				else MakeLink(originalFileName, newfile);
 			}
+
+			if(reshadeiniFile != "" && File.Exists(reshadeiniFile))
+			{
+				string currentDir = Path.GetDirectoryName(reshadeiniFile);
+				IniFile reshadeIniFile = new IniFile(reshadeiniFile);
+				string reshadePreset = reshadeIniFile.Read("PresetPath", "GENERAL").Trim();
+
+				if (reshadePreset.ToLower().EndsWith(".ini"))
+				{
+
+					string reshadePresetFile = reshadePreset;
+					string reshadePresetBase = reshadePreset.Replace("-low.ini", ".ini");
+					reshadePresetBase = reshadePresetBase.Replace("-high.ini", ".ini");
+					reshadePresetBase = reshadePresetBase.Substring(0, reshadePresetBase.Length - 4);
+
+					string reshadePresetFileBase = reshadePresetBase + ".ini";
+					string reshadePresetFileLow = reshadePresetBase + "-low.ini";
+					string reshadePresetFileHigh = reshadePresetBase + "-high.ini";
+
+					if (!Path.IsPathRooted(reshadePreset))
+					{
+						reshadePresetFile = Path.Combine(currentDir, reshadePreset);
+						reshadePresetFileBase = Path.Combine(currentDir, reshadePresetBase + ".ini");
+						reshadePresetFileLow = Path.Combine(currentDir, reshadePresetBase + "-low.ini");
+						reshadePresetFileHigh = Path.Combine(currentDir, reshadePresetBase + "-high.ini");
+					}
+
+
+
+					if (Program.performanceProfile == 0 && reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
+					{
+						reshadeIniFile.Write("PresetPath", reshadePresetBase + ".ini", "GENERAL");
+					}
+
+					if (Program.performanceProfile == 1 && reshadePresetFile.ToLower() != reshadePresetFileLow.ToLower())
+					{
+						if (File.Exists(reshadePresetFileLow))
+						{
+							reshadeIniFile.Write("PresetPath", reshadePresetBase + "-low.ini", "GENERAL");
+						}
+						else if(reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
+						{
+							reshadeIniFile.Write("PresetPath", reshadePresetBase + ".ini", "GENERAL");
+						}
+					}
+
+					if (Program.performanceProfile == 2 && reshadePresetFile.ToLower() != reshadePresetFileHigh.ToLower())
+					{
+						if (File.Exists(reshadePresetFileHigh))
+						{
+							reshadeIniFile.Write("PresetPath", reshadePresetBase + "-high.ini", "GENERAL");
+						}
+						else if (reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
+						{
+							reshadeIniFile.Write("PresetPath", reshadePresetBase + ".ini", "GENERAL");
+						}
+					}
+
+					if(reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower() && !File.Exists(reshadePresetFile)) reshadeIniFile.Write("PresetPath", reshadePresetBase + ".ini", "GENERAL");
+
+
+					
+				}
+
+
+			}
+
 			if (DirectoryList.Count() > 0)
 			{
 				string json = JsonConvert.SerializeObject(DirectoryList, Formatting.Indented);
@@ -1439,6 +1609,48 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!no_gunb_found!]\", @"\");
 				}
+
+				if (Path.GetDirectoryName(file).Contains(@"\[!vsync!]") && file.Contains(@"\[!vsync!]\"))
+				{
+					file = file.Replace(@"\[!vsync!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_vsync!]") && file.Contains(@"\[!no_vsync!]\"))
+				{
+					file = file.Replace(@"\[!no_vsync!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!normal_perfprofile!]") && file.Contains(@"\[!normal_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!normal_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!low_perfprofile!]") && file.Contains(@"\[!low_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!low_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!high_perfprofile!]") && file.Contains(@"\[!high_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!high_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!not_normal_perfprofile!]") && file.Contains(@"\[!not_normal_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!not_normal_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!not_low_perfprofile!]") && file.Contains(@"\[!not_low_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!not_low_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!not_high_perfprofile!]") && file.Contains(@"\[!not_high_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!not_high_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!120hz!]") && file.Contains(@"\[!120hz!]\"))
+				{
+					file = file.Replace(@"\[!120hz!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!60hz!]") && file.Contains(@"\[!60hz!]\"))
+				{
+					file = file.Replace(@"\[!60hz!]\", @"\");
+				}
+
 
 				if (Path.GetDirectoryName(file) != null && Regex.IsMatch(Path.GetDirectoryName(file), @"\\\[!!([A-Za-z0-9 ]+)!!\]") && Regex.IsMatch(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\"))
 				{
@@ -3084,6 +3296,95 @@ namespace TeknoparrotAutoXinput
 
 			}
 			return null;
+		}
+
+		public static int GetPrimaryMonitorRefreshRateFromXml(string xmlData)
+		{
+			try
+			{
+				// Charger le document XML
+				XDocument xmlDoc = XDocument.Parse(xmlData);
+
+				// Trouver l'écran principal (position x = 0, y = 0)
+				var mainScreen = xmlDoc.Descendants("modeInfo")
+					.FirstOrDefault(e =>
+					{
+						var positionElement = e.Element("DisplayConfigSourceMode")?.Element("position");
+						if (positionElement != null)
+						{
+							var x = positionElement.Element("x")?.Value;
+							var y = positionElement.Element("y")?.Value;
+							return x == "0" && y == "0";
+						}
+						return false;
+					});
+
+				if (mainScreen != null)
+				{
+					// Trouver la configuration de mode correspondant à l'ID du modeInfo
+					var id = (int?)mainScreen.Element("id");
+					if (id.HasValue)
+					{
+						var targetId = id.Value.ToString();
+						if (string.IsNullOrEmpty(targetId))
+						{
+							return 60; // Identifiant du moniteur principal non trouvé
+						}
+
+						// Trouver le chemin d'information avec le targetId correspondant dans sourceInfo
+						var pathInfoElement = xmlDoc.Descendants("DisplayConfigPathInfo")
+							.FirstOrDefault(pi =>
+							{
+								var sourceInfoId = pi.Element("sourceInfo")?.Element("id")?.Value;
+								return sourceInfoId == targetId;
+							});
+
+						if (pathInfoElement == null)
+						{
+							return 60;
+						}
+
+						var targetInfoElement = pathInfoElement.Element("targetInfo");
+
+						if (targetInfoElement == null)
+						{
+							return 60;
+						}
+
+						var refreshRateElement = targetInfoElement.Element("refreshRate");
+
+						if (refreshRateElement == null)
+						{
+							return 60;
+						}
+
+						// Extraire le numérateur et le dénominateur de la fréquence de rafraîchissement
+						var numeratorElement = refreshRateElement.Element("numerator")?.Value;
+						var denominatorElement = refreshRateElement.Element("denominator")?.Value;
+
+						if (int.TryParse(numeratorElement, out int numerator) &&
+							int.TryParse(denominatorElement, out int denominator) &&
+							denominator != 0)
+						{
+							// Calculer la fréquence de rafraîchissement en Hz
+							return (int)Math.Round((double)numerator / denominator);
+						}
+						else
+						{
+							return 60; // Erreur de conversion ou dénominateur nul
+						}
+
+					}
+				}
+
+				// Si l'écran principal n'est pas trouvé, retourner la valeur par défaut de 60 Hz
+				return 60;
+				
+			}
+			catch (Exception ex)
+			{
+				return 60;
+			}
 		}
 
 	}

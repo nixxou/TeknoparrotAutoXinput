@@ -125,6 +125,10 @@ namespace TeknoparrotAutoXinput
 		public static bool patchResolutionFix = ConfigurationManager.MainConfig.patchResolutionFix;
 		public static bool patchResolutionTP = ConfigurationManager.MainConfig.patchResolutionTP;
 
+		public static int performanceProfile = ConfigurationManager.MainConfig.performanceProfile;
+		public static bool forceVsync = ConfigurationManager.MainConfig.forceVsync;
+		public static int refreshRate = 60;
+
 		public static int displayMode = ConfigurationManager.MainConfig.displayMode;
 		public static bool patchDisplayModeFix = ConfigurationManager.MainConfig.patchDisplayModeFix;
 		public static bool patchDisplayModeTP = ConfigurationManager.MainConfig.patchDisplayModeTP;
@@ -979,6 +983,40 @@ namespace TeknoparrotAutoXinput
 							Utils.LogMessage($"Alt Config dir = {potentialAltConfigDir}");
 
 
+							bool refreshrate_done = false;
+							_dispositionToSwitch = ConfigurationManager.MainConfig.Disposition;
+							if (gameOptions.UseGlobalDisposition == false) _dispositionToSwitch = gameOptions.Disposition;
+							if (!string.IsNullOrEmpty(_dispositionToSwitch) && _dispositionToSwitch != "<none>")
+							{
+								var cfg = Path.Combine(Program.DispositionFolder, "disposition_" + _dispositionToSwitch + ".xml");
+								if (File.Exists(cfg))
+								{
+									try
+									{
+										Program.refreshRate = Utils.GetPrimaryMonitorRefreshRateFromXml(File.ReadAllText(cfg));
+										refreshrate_done = true;
+									}
+									catch { }
+								}
+							}
+							if (!refreshrate_done)
+							{
+								try
+								{
+									CCDWrapper.DisplayConfigPathInfo[] pathInfoArray = new CCDWrapper.DisplayConfigPathInfo[0];
+									CCDWrapper.DisplayConfigModeInfo[] modeInfoArray = new CCDWrapper.DisplayConfigModeInfo[0];
+									CCDWrapper.MonitorAdditionalInfo[] additionalInfo = new CCDWrapper.MonitorAdditionalInfo[0];
+									CCDWrapper.DpiInfo[] dpiInfoArray = new CCDWrapper.DpiInfo[0];
+									Boolean status = MonitorSwitcher.GetDisplaySettings(ref pathInfoArray, ref modeInfoArray, ref additionalInfo, ref dpiInfoArray, true);
+									if (status)
+									{
+										var monitorData = MonitorSwitcher.PrintDisplaySettings2ForFrequency(pathInfoArray, modeInfoArray, dpiInfoArray);
+										Program.refreshRate = Utils.GetPrimaryMonitorRefreshRateFromXml(monitorData);
+									}
+								}
+								catch { }
+							}
+
 							//Tag Define Part1
 							TpSettingsManager.tags = new List<string>();
 							if (Program.patchGpuTP)
@@ -1008,6 +1046,31 @@ namespace TeknoparrotAutoXinput
 
 							}
 
+							if (Program.performanceProfile == 0)
+							{
+								TpSettingsManager.tags.Add("normal_perfprofile");
+								TpSettingsManager.tags.Add("!low_perfprofile");
+								TpSettingsManager.tags.Add("!high_perfprofile");
+							}
+							if (Program.performanceProfile == 1)
+							{
+								TpSettingsManager.tags.Add("!normal_perfprofile");
+								TpSettingsManager.tags.Add("low_perfprofile");
+								TpSettingsManager.tags.Add("!high_perfprofile");
+							}
+							if (Program.performanceProfile == 2)
+							{
+								TpSettingsManager.tags.Add("!normal_perfprofile");
+								TpSettingsManager.tags.Add("!low_perfprofile");
+								TpSettingsManager.tags.Add("high_perfprofile");
+							}
+
+
+							if (Program.forceVsync) TpSettingsManager.tags.Add("vsync");
+							else TpSettingsManager.tags.Add("!vsync");
+
+							if (Program.refreshRate >= 120) TpSettingsManager.tags.Add("120hz");
+							else TpSettingsManager.tags.Add("60hz");
 
 
 							if (Program.patchGpuTP) TpSettingsManager.tags.Add("use_gpu_fix_in_tp_settings"); //Apply gpu amd/intel/nvidia fix in TP
@@ -1279,9 +1342,7 @@ namespace TeknoparrotAutoXinput
 
 							//Utils.LogMessage($"Checking gameOverride options");
 							//GameOptionOverrite
-							_dispositionToSwitch = ConfigurationManager.MainConfig.Disposition;
 
-							if (gameOptions.UseGlobalDisposition == false) _dispositionToSwitch = gameOptions.Disposition;
 							if (gameOptions.UseGlobalStoozZoneGamepad == false)
 							{
 								gamepadStooz = gameOptions.gamepadStooz;

@@ -196,6 +196,11 @@ namespace TeknoparrotAutoXinput
 		public bool tpLicenceRegOnLaunch { get; set; } = false;
 		public bool tpLicenceUnRegAfterStart { get; set; } = false;
 
+		public bool tpLicenceShow { get; set; } = false;
+
+		public int performanceProfile {  get; set; } = 0;
+		public bool forceVsync { get; set; } = true;
+
 
 
 		public Configuration()
@@ -342,6 +347,10 @@ namespace TeknoparrotAutoXinput
 				this.tpLicenceUnRegAfterStart = DeserializeData.tpLicenceUnRegAfterStart;
 
 				this.advancedConfig = DeserializeData.advancedConfig;
+				this.tpLicenceShow = DeserializeData.tpLicenceShow;
+
+				this.performanceProfile = DeserializeData.performanceProfile;
+				this.forceVsync = DeserializeData.forceVsync;
 
 
 			}

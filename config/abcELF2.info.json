@@ -1,5 +1,6 @@
 {
 	"global": {
+		"_comment": "I use windowed, because of incompatibility with ffb and reshade, if i use fullscreen i have to inject the ffb dll post launch, also in 4K i added some magnifier in reshade to move some ui element",
 		"windowed": "General,Windowed,1",
 		"magpieClass": "FREEGLUT",
 		"magpie3DGameMode": "True",
@@ -7,7 +8,7 @@
 	},
 	"tpoptions": {
 		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-			"General||Windowed" : "0"
+			"General||Windowed" : "1"
 		},
 		"set_displaymode_in_tp_settings & set_fullscreen": {
 			"General||Windowed" : "0"
@@ -26,7 +27,7 @@
 		"recommanded_gameoptions": {
 			"runRivaTuner" : "True"
 		},
-		"recommanded_gameoptions & ffb": {
+		"recommanded_gameoptions & ffb & fullscreen": {
 			"useInjector": "true",
 			"injectorDllList": "winmm.dll.inject",
 			"injectorDelay": "40"

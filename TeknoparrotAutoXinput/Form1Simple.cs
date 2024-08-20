@@ -40,6 +40,10 @@ namespace TeknoparrotAutoXinput
 			chk_tplicence_onstart.Checked = ConfigurationManager.MainConfig.tpLicenceRegOnLaunch;
 			chk_tplicence_unreg_onlaunch.Checked = ConfigurationManager.MainConfig.tpLicenceUnRegAfterStart;
 			chk_tplicence_unreg_onexit.Checked = !chk_tplicence_unreg_onlaunch.Checked;
+			groupBox17.Visible = ConfigurationManager.MainConfig.tpLicenceShow;
+
+			cmb_performance.SelectedIndex = ConfigurationManager.MainConfig.performanceProfile;
+			chk_forcevsync.Checked = ConfigurationManager.MainConfig.forceVsync;
 
 			cmb_gpu.SelectedIndex = ConfigurationManager.MainConfig.gpuType;
 			cmb_resolution.SelectedIndex = ConfigurationManager.MainConfig.gpuResolution;
@@ -338,6 +342,8 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.tpLicenceRegOnLaunch = chk_tplicence_onstart.Checked;
 			ConfigurationManager.MainConfig.tpLicenceUnRegAfterStart = chk_tplicence_unreg_onlaunch.Checked;
 
+			ConfigurationManager.MainConfig.performanceProfile = cmb_performance.SelectedIndex;
+			ConfigurationManager.MainConfig.forceVsync = chk_forcevsync.Checked;
 
 			ConfigurationManager.MainConfig.gpuType = cmb_gpu.SelectedIndex;
 			ConfigurationManager.MainConfig.gpuResolution = cmb_resolution.SelectedIndex;
