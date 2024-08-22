@@ -75,6 +75,17 @@
 			tableLayoutPanel8 = new TableLayoutPanel();
 			fastObjectListView1 = new BrightIdeasSoftware.FastObjectListView();
 			columnHeader1 = new BrightIdeasSoftware.OLVColumn();
+			contextMenuStrip1 = new ContextMenuStrip(components);
+			MenuItem_labelFilterText = new ToolStripMenuItem();
+			MenuItem_textBoxFilter = new ToolStripTextBox();
+			MenuItem_filterArcade = new ToolStripMenuItem();
+			MenuItem_filterWheel = new ToolStripMenuItem();
+			MenuItem_filterHotas = new ToolStripMenuItem();
+			MenuItem_filterLightgun = new ToolStripMenuItem();
+			MenuItem_clearFilters = new ToolStripMenuItem();
+			toolStripSeparator1 = new ToolStripSeparator();
+			MenuItem_save = new ToolStripMenuItem();
+			MenuItem_load = new ToolStripMenuItem();
 			timer_controllerUpdate = new System.Windows.Forms.Timer(components);
 			KryptonPalette1 = new Krypton.Toolkit.KryptonCustomPaletteBase(components);
 			kryptonManager1 = new Krypton.Toolkit.KryptonManager(components);
@@ -97,6 +108,7 @@
 			tableLayoutPanel7.SuspendLayout();
 			tableLayoutPanel8.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)fastObjectListView1).BeginInit();
+			contextMenuStrip1.SuspendLayout();
 			SuspendLayout();
 			// 
 			// tableLayoutPanel2
@@ -613,6 +625,7 @@
 			// fastObjectListView1
 			// 
 			fastObjectListView1.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
+			fastObjectListView1.ContextMenuStrip = contextMenuStrip1;
 			fastObjectListView1.Dock = DockStyle.Fill;
 			fastObjectListView1.Font = new Font("Calibri", 10F, FontStyle.Regular, GraphicsUnit.Point);
 			fastObjectListView1.ForeColor = Color.FromArgb(30, 57, 91);
@@ -624,6 +637,7 @@
 			fastObjectListView1.ShowGroups = false;
 			fastObjectListView1.Size = new Size(537, 642);
 			fastObjectListView1.TabIndex = 8;
+			fastObjectListView1.UseFiltering = true;
 			fastObjectListView1.View = View.Details;
 			fastObjectListView1.VirtualMode = true;
 			fastObjectListView1.SelectedIndexChanged += fastObjectListView1_SelectedIndexChanged;
@@ -633,6 +647,83 @@
 			columnHeader1.AspectName = "DisplayName";
 			columnHeader1.FillsFreeSpace = true;
 			columnHeader1.Width = 100;
+			// 
+			// contextMenuStrip1
+			// 
+			contextMenuStrip1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+			contextMenuStrip1.Items.AddRange(new ToolStripItem[] { MenuItem_labelFilterText, MenuItem_textBoxFilter, MenuItem_filterArcade, MenuItem_filterWheel, MenuItem_filterHotas, MenuItem_filterLightgun, MenuItem_clearFilters, toolStripSeparator1, MenuItem_save, MenuItem_load });
+			contextMenuStrip1.Name = "contextMenuStrip1";
+			contextMenuStrip1.Size = new Size(302, 233);
+			contextMenuStrip1.Opening += contextMenuStrip1_Opening;
+			// 
+			// MenuItem_labelFilterText
+			// 
+			MenuItem_labelFilterText.Enabled = false;
+			MenuItem_labelFilterText.Name = "MenuItem_labelFilterText";
+			MenuItem_labelFilterText.Size = new Size(301, 22);
+			MenuItem_labelFilterText.Text = "↓↓↓Filter Text ↓↓↓";
+			// 
+			// MenuItem_textBoxFilter
+			// 
+			MenuItem_textBoxFilter.BorderStyle = BorderStyle.FixedSingle;
+			MenuItem_textBoxFilter.Name = "MenuItem_textBoxFilter";
+			MenuItem_textBoxFilter.Size = new Size(100, 23);
+			// 
+			// MenuItem_filterArcade
+			// 
+			MenuItem_filterArcade.BackColor = SystemColors.Control;
+			MenuItem_filterArcade.Name = "MenuItem_filterArcade";
+			MenuItem_filterArcade.Size = new Size(301, 22);
+			MenuItem_filterArcade.Text = "Only show game with Arcade stick Support";
+			MenuItem_filterArcade.Click += MenuItem_filterArcade_Click;
+			// 
+			// MenuItem_filterWheel
+			// 
+			MenuItem_filterWheel.Name = "MenuItem_filterWheel";
+			MenuItem_filterWheel.Size = new Size(301, 22);
+			MenuItem_filterWheel.Text = "Only show game with Wheel support";
+			MenuItem_filterWheel.Click += MenuItem_filterWheel_Click;
+			// 
+			// MenuItem_filterHotas
+			// 
+			MenuItem_filterHotas.Name = "MenuItem_filterHotas";
+			MenuItem_filterHotas.Size = new Size(301, 22);
+			MenuItem_filterHotas.Text = "Only show game with Hotas support";
+			MenuItem_filterHotas.Click += MenuItem_filterHotas_Click;
+			// 
+			// MenuItem_filterLightgun
+			// 
+			MenuItem_filterLightgun.Name = "MenuItem_filterLightgun";
+			MenuItem_filterLightgun.Size = new Size(301, 22);
+			MenuItem_filterLightgun.Text = "Only show game with Lightgun support";
+			MenuItem_filterLightgun.Click += MenuItem_filterLightgun_Click;
+			// 
+			// MenuItem_clearFilters
+			// 
+			MenuItem_clearFilters.Enabled = false;
+			MenuItem_clearFilters.Name = "MenuItem_clearFilters";
+			MenuItem_clearFilters.Size = new Size(301, 22);
+			MenuItem_clearFilters.Text = "Clear Filters !";
+			MenuItem_clearFilters.Click += MenuItem_clearFilters_Click;
+			// 
+			// toolStripSeparator1
+			// 
+			toolStripSeparator1.Name = "toolStripSeparator1";
+			toolStripSeparator1.Size = new Size(298, 6);
+			// 
+			// MenuItem_save
+			// 
+			MenuItem_save.Name = "MenuItem_save";
+			MenuItem_save.Size = new Size(301, 22);
+			MenuItem_save.Text = "Export Game Patches";
+			MenuItem_save.Click += MenuItem_save_Click;
+			// 
+			// MenuItem_load
+			// 
+			MenuItem_load.Name = "MenuItem_load";
+			MenuItem_load.Size = new Size(301, 22);
+			MenuItem_load.Text = "Import Game Patches";
+			MenuItem_load.Click += MenuItem_load_Click;
 			// 
 			// timer_controllerUpdate
 			// 
@@ -686,6 +777,8 @@
 			tableLayoutPanel7.PerformLayout();
 			tableLayoutPanel8.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)fastObjectListView1).EndInit();
+			contextMenuStrip1.ResumeLayout(false);
+			contextMenuStrip1.PerformLayout();
 			ResumeLayout(false);
 		}
 
@@ -740,5 +833,16 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel4;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel8;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel7;
+		private ContextMenuStrip contextMenuStrip1;
+		private ToolStripMenuItem MenuItem_labelFilterText;
+		private ToolStripTextBox MenuItem_textBoxFilter;
+		private ToolStripMenuItem MenuItem_clearFilters;
+		private ToolStripMenuItem MenuItem_filterArcade;
+		private ToolStripMenuItem MenuItem_filterWheel;
+		private ToolStripMenuItem MenuItem_filterHotas;
+		private ToolStripMenuItem MenuItem_filterLightgun;
+		private ToolStripSeparator toolStripSeparator1;
+		private ToolStripMenuItem MenuItem_save;
+		private ToolStripMenuItem MenuItem_load;
 	}
 }

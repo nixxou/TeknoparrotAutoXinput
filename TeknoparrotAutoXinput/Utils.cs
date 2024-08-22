@@ -220,6 +220,23 @@ namespace TeknoparrotAutoXinput
 			CreateHardLink(target, source, IntPtr.Zero);
 		}
 
+		public static bool MakeLinkBool(string source, string target)
+		{
+			if (!File.Exists(source)) return false;
+			if (File.Exists(target)) return false;
+			if (!AreFoldersOnSameDrive(source, target)) return false;
+
+			bool result = false;
+			try
+			{
+				result = CreateHardLink(target, source, IntPtr.Zero);
+			}
+			catch {
+				return false;
+			}
+			return result;
+		}
+
 		[DllImport("user32.dll")]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool IsWindowVisible(IntPtr hWnd);
@@ -1144,8 +1161,15 @@ namespace TeknoparrotAutoXinput
 			{
 				string currentDir = Path.GetDirectoryName(reshadeiniFile);
 				IniFile reshadeIniFile = new IniFile(reshadeiniFile);
+				string presetStr = "PresetPath";
 				string reshadePreset = reshadeIniFile.Read("PresetPath", "GENERAL").Trim();
+				if (reshadePreset == "")
+				{
+					reshadePreset = reshadeIniFile.Read("CurrentPresetPath", "GENERAL").Trim();
+					if (reshadePreset != "") presetStr = "CurrentPresetPath";
+				}
 
+				
 				if (reshadePreset.ToLower().EndsWith(".ini"))
 				{
 
@@ -1170,18 +1194,18 @@ namespace TeknoparrotAutoXinput
 
 					if (Program.performanceProfile == 0 && reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
 					{
-						reshadeIniFile.Write("PresetPath", reshadePresetBase + ".ini", "GENERAL");
+						reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
 					}
 
 					if (Program.performanceProfile == 1 && reshadePresetFile.ToLower() != reshadePresetFileLow.ToLower())
 					{
 						if (File.Exists(reshadePresetFileLow))
 						{
-							reshadeIniFile.Write("PresetPath", reshadePresetBase + "-low.ini", "GENERAL");
+							reshadeIniFile.Write(presetStr, reshadePresetBase + "-low.ini", "GENERAL");
 						}
 						else if(reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
 						{
-							reshadeIniFile.Write("PresetPath", reshadePresetBase + ".ini", "GENERAL");
+							reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
 						}
 					}
 
@@ -1189,15 +1213,15 @@ namespace TeknoparrotAutoXinput
 					{
 						if (File.Exists(reshadePresetFileHigh))
 						{
-							reshadeIniFile.Write("PresetPath", reshadePresetBase + "-high.ini", "GENERAL");
+							reshadeIniFile.Write(presetStr, reshadePresetBase + "-high.ini", "GENERAL");
 						}
 						else if (reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
 						{
-							reshadeIniFile.Write("PresetPath", reshadePresetBase + ".ini", "GENERAL");
+							reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
 						}
 					}
 
-					if(reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower() && !File.Exists(reshadePresetFile)) reshadeIniFile.Write("PresetPath", reshadePresetBase + ".ini", "GENERAL");
+					if(reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower() && !File.Exists(reshadePresetFile)) reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
 
 
 					

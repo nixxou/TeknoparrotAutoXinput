@@ -1,6 +1,7 @@
 ﻿using Henooh.DeviceEmulator.Net;
 using Krypton.Toolkit;
 using Microsoft.VisualBasic.ApplicationServices;
+using Microsoft.Win32.TaskScheduler;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SDL2;
@@ -1182,7 +1183,7 @@ namespace TeknoparrotAutoXinput
 			arguments = arguments.Trim();
 			isPlaying = true;
 
-			await Task.Run(() =>
+			await System.Threading.Tasks.Task.Run(() =>
 			{
 				ProcessStartInfo startInfo = new ProcessStartInfo
 				{
@@ -1248,7 +1249,7 @@ namespace TeknoparrotAutoXinput
 
 			isPlaying = true;
 
-			await Task.Run(() =>
+			await System.Threading.Tasks.Task.Run(() =>
 			{
 				ProcessStartInfo startInfo = new ProcessStartInfo
 				{
@@ -1999,7 +2000,7 @@ namespace TeknoparrotAutoXinput
 
 			isPlaying = true;
 
-			await Task.Run(() =>
+			await System.Threading.Tasks.Task.Run(() =>
 			{
 				ProcessStartInfo startInfo = new ProcessStartInfo
 				{
@@ -2046,9 +2047,19 @@ namespace TeknoparrotAutoXinput
 		public Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 		public bool isSupported = false;
 		public string DisplayName = "";
+
+		public bool haveWheelSupport = false;
+		public bool haveHotasSupport = false;
+		public bool haveArcadeStickSupport = false;
+		public bool haveLightgunSupport = false;
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		public bool Match(string input)
+		{
+			return Wildcard.Match(this.Name.ToLower(), input.ToLower().Trim());
 		}
 	}
 }

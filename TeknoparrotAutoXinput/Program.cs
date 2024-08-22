@@ -32,6 +32,8 @@ namespace TeknoparrotAutoXinput
 {
 	internal static class Program
 	{
+		public static float version = 0.90f;
+
 		// Importer la fonction AllocConsole depuis Kernel32.dll
 		[DllImport("kernel32.dll")]
 		public static extern bool AllocConsole();
@@ -178,8 +180,7 @@ namespace TeknoparrotAutoXinput
 
 #if DEBUG
 			List<string> fakeArgs = new List<string>();
-			fakeArgs.Add("--runvjoy");
-			fakeArgs.Add("all");
+			fakeArgs.Add(@"C:\teknoparrot\UserProfiles\AkaiKatanaShinNesica.xml");
 			//args = fakeArgs.ToArray();
 #endif
 			//Up there to be load before demulshooter start
@@ -727,6 +728,64 @@ namespace TeknoparrotAutoXinput
 				int forced_resolution = 0;
 				int forced_reshade = 0;
 				bool nolink = false;
+
+				/*
+				{
+					string processName = "TeknoParrotUI";
+					Process targetProcess = Process.GetProcessesByName(processName).FirstOrDefault();
+
+					if (targetProcess != null)
+					{
+						Process TPAutoXinputProcess = null;
+						var tparent = ParentProcessUtilities.GetParentProcess(targetProcess.Id);
+						if(tparent != null && tparent.ProcessName.ToLower().Contains("teknoparrotautoxinput"))
+						{
+							TPAutoXinputProcess = tparent;
+						}
+
+						// Liste pour stocker les processus fils
+						List<Process> childProcesses = new List<Process>();
+
+						// Obtenir tous les processus en cours
+						foreach (Process process in Process.GetProcesses())
+						{
+							try
+							{
+								// Ajouter le processus à la liste s'il est un fils du processus cible
+								if (ParentProcessUtilities.GetParentProcess(process.Id).Id == targetProcess.Id)
+								{
+									childProcesses.Add(process);
+								}
+							}
+							catch
+							{
+								// Ignorer les exceptions pour les processus inaccessibles
+							}
+						}
+
+
+
+						foreach(var p in childProcesses)
+						{
+							p.Kill();
+						}
+						targetProcess.Kill();
+						Thread.Sleep(3000);
+						for (int i = 0; i < 15; i++)
+						{
+							if (TPAutoXinputProcess != null && !TPAutoXinputProcess.HasExited)
+							{
+								break;
+								Thread.Sleep(1000);
+							}
+						}
+						Thread.Sleep(500);
+
+
+
+					}
+				}
+				*/
 
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
@@ -5019,38 +5078,74 @@ namespace TeknoparrotAutoXinput
 										magpieAllowScalingMaximized = true;
 									}
 
-									if (!useDinputLightGun) //A inverser
+									if (!useDinputLightGun)
 									{
-										if (File.Exists(magpieExe) && File.Exists(magpieConfig))
+
+										bool magpieContentWritten = false;
+
+										WaitForWindowed = new Thread(() =>
 										{
-
-											WaitForWindowed = new Thread(() =>
+											Utils.LogMessage("Start Magpie Thread");
+											string trueClassName = "";
+											IntPtr windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
+											while (!isExiting)
 											{
-												if (magpieLaunchBefore)
+												while (windowHandle == IntPtr.Zero && !isExiting)
 												{
-
-													Process magpie_process = new Process();
-													magpie_process.StartInfo.FileName = magpieExe;
-													magpie_process.StartInfo.Arguments = "-t";
-													magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
-													magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
-													magpie_process.StartInfo.UseShellExecute = true;
-													magpie_process.Start();
-													magpie_process_pid = magpie_process.Id;
+													windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
+													Thread.Sleep(500);
+													Utils.LogMessage("Search Window ...");
 												}
 
-												string trueClassName = "";
-												IntPtr windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
-												while (!isExiting)
+												Utils.LogMessage("Window Found");
+
+												Thread.Sleep(500 + (magpieDelay * 1000));
+
+												int screenWidth = 1920;
+												int screenHeight = 1080;
+												Screen[] screens = Screen.AllScreens;
+												for (int i = 0; i < screens.Length; i++)
 												{
-													while (windowHandle == IntPtr.Zero && !isExiting)
+													Screen screen = screens[i];
+													string DeviceName = screen.DeviceName.Trim('\\').Trim('.').Trim('\\');
+													if (screen.Primary)
 													{
-														windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
-														Thread.Sleep(500);
+														screenWidth = screen.Bounds.Width;
+														screenHeight = screen.Bounds.Height;
 													}
+												}
+
+												Utils.RECT clientRect;
+												Utils.GetClientRect(windowHandle, out clientRect);
+												int clientWidth = clientRect.Right - clientRect.Left;
+												int clientHeight = clientRect.Bottom - clientRect.Top;
+
+												if (GameInfo.ContainsKey("magpieRegisterAsSize") && GameInfo["magpieRegisterAsSize"].ToLower().Contains("x"))
+												{
+													string tailleReg = GameInfo["magpieRegisterAsSize"];
+													try
+													{
+														clientWidth = int.Parse(tailleReg.Split("x")[0]);
+														clientHeight = int.Parse(tailleReg.Split("x")[1]);
+													}
+													catch { }
+												}
+
+
+												double originalRatio = (double)clientWidth / clientHeight;
+												int maxWindowWidth = Math.Min(screenWidth, (int)(screenHeight * originalRatio));
+												int maxWindowHeight = (int)(maxWindowWidth / originalRatio);
+
+												Utils.LogMessage("Informations sur la fenêtre :");
+												Utils.LogMessage("Taille actuelle de la fenêtre : " + clientWidth + "x" + clientHeight);
+												Utils.LogMessage("Taille maximisée de la fenêtre sur l'écran : " + maxWindowWidth + "x" + maxWindowHeight);
+
+
+												if (File.Exists(magpieExe) && File.Exists(magpieConfig))
+												{
 
 													string magpieReshadeDll = Path.Combine(Path.GetDirectoryName(magpieExe), "d2d1.dll");
-													if (string.IsNullOrEmpty(Program.magpieIni))
+													if (string.IsNullOrEmpty(Program.magpieIni) && magpieContentWritten == false)
 													{
 														if (File.Exists(magpieReshadeDll))
 														{
@@ -5065,7 +5160,10 @@ namespace TeknoparrotAutoXinput
 														}
 
 														string magpieReshadeIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
-														File.Copy(Program.magpieIni, magpieReshadeIni, true);
+														if (!magpieContentWritten)
+														{
+															File.Copy(Program.magpieIni, magpieReshadeIni, true);
+														}
 
 														string cacheShaderDirMagpie = Path.Combine(Path.GetDirectoryName(magpieExe), "reshade-shaders", "Cache");
 														if (Directory.Exists(cacheShaderDirMagpie))
@@ -5076,6 +5174,7 @@ namespace TeknoparrotAutoXinput
 																foreach (string file in files) File.Delete(file);
 																string[] files2 = Directory.GetFiles(cacheShaderDirMagpie, "reshade-UIMask*");
 																foreach (string file2 in files) File.Delete(file2);
+
 															}
 															catch (Exception ex) { }
 														}
@@ -5088,21 +5187,17 @@ namespace TeknoparrotAutoXinput
 															catch { }
 														}
 
-
-
 														string magpieReshadeMainIni = Path.Combine(Path.GetDirectoryName(magpieExe), "ReShadePreset.ini");
 														if (File.Exists(magpieReshadeMainIni))
 														{
 															IniFile reshadeIniFile = new IniFile(magpieReshadeMainIni);
 															reshadeIniFile.Write("IntermediateCachePath", Path.GetFullPath(cacheShaderDirMagpie), "GENERAL");
 														}
-													}
 
+													}
 
 													string jsonText = File.ReadAllText(magpieConfig);
 													JObject jsonObject = JObject.Parse(jsonText);
-
-
 													jsonObject["allowScalingMaximized"] = magpieAllowScalingMaximized;
 													jsonObject["simulateExclusiveFullscreen"] = magpieExclusiveFullscreen;
 													try
@@ -5128,79 +5223,60 @@ namespace TeknoparrotAutoXinput
 													}
 													string modifiedJsonText = JsonConvert.SerializeObject(jsonObject, Newtonsoft.Json.Formatting.Indented);
 													File.WriteAllText(magpieConfig, modifiedJsonText);
-
-
-													Thread.Sleep(500 + (magpieDelay * 1000));
-													if (File.Exists(magpieExe) && File.Exists(magpieConfig))
+													try
 													{
-
-														try
-														{
-															if (!magpieNoMoveWindow) Utils.MoveWindowsToZero(windowHandle);
-															Thread.Sleep(100);
-															Utils.SetForegroundWindow(windowHandle);
-															Thread.Sleep(100);
-														}
-														catch { }
-
-														if (!magpieLaunchBefore)
-														{
-
-															Process magpie_process = new Process();
-															magpie_process.StartInfo.FileName = magpieExe;
-															magpie_process.StartInfo.Arguments = "-t";
-															magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
-															magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
-															magpie_process.StartInfo.UseShellExecute = true;
-															magpie_process.Start();
-															magpie_process_pid = magpie_process.Id;
-
-														}
-														if (!magpieNoClick)
-														{
-															var ClickOnPrimaryScreen = new Thread(() =>
-															{
-																for (int i = 0; i < 100; i++)
-																{
-																	if (isExiting) break;
-																	string foregroundClassName = Utils.GetForegroundClassName();
-																	Thread.Sleep(100);
-																	if (foregroundClassName == "Magpie_Main")
-																	{
-																		Thread.Sleep(2000);
-																		Utils.ClickOnPrimaryScreen(30, 30);
-																		break;
-																	}
-																}
-															});
-															ClickOnPrimaryScreen.Start();
-
-														}
-
-
+														if (!magpieNoMoveWindow) Utils.MoveWindowsToZero(windowHandle);
 														Thread.Sleep(100);
 														Utils.SetForegroundWindow(windowHandle);
+														Thread.Sleep(100);
 
-														if (!magpieNoLateFocus)
+														//Utils.ClickWindow(windowHandle);
+													}
+													catch { }
+
+
+													Process magpie_process = new Process();
+													magpie_process.StartInfo.FileName = magpieExe;
+													magpie_process.StartInfo.Arguments = "-t";
+													magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
+													magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
+													magpie_process.StartInfo.UseShellExecute = true;
+													magpie_process.Start();
+													magpie_process_pid = magpie_process.Id;
+
+													if (!magpieNoClick)
+													{
+														var ClickOnPrimaryScreen = new Thread(() =>
 														{
-															Thread.Sleep(2000);
-															//Utils.ClickWindow(windowHandle);
-
-															Thread.Sleep(100);
-															Utils.SetForegroundWindow(windowHandle);         // Finally, activate the window 
-															Thread.Sleep(100);
-														}
+															for (int i = 0; i < 100; i++)
+															{
+																if (isExiting) break;
+																string foregroundClassName = Utils.GetForegroundClassName();
+																Thread.Sleep(100);
+																if (foregroundClassName == "Magpie_Main")
+																{
+																	Thread.Sleep(2000);
+																	Utils.ClickOnPrimaryScreen(30, 30);
+																	break;
+																}
+															}
+														});
+														ClickOnPrimaryScreen.Start();
 
 													}
 
 
-													return;
+
 
 												}
-											});
-											WaitForWindowed.Start();
 
-										}
+
+												return;
+
+											}
+										});
+										WaitForWindowed.Start();
+
 
 									}
 									else

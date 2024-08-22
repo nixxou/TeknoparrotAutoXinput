@@ -2,14 +2,19 @@
 using Krypton.Toolkit;
 using Newtonsoft.Json;
 using SerialPortLib2;
+using SevenZip;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO.Pipes;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using TeknoParrotUi.Common;
 using WiimoteLib;
 using XInput.Wrapper;
@@ -20,7 +25,11 @@ namespace TeknoparrotAutoXinput
 {
 	public partial class MainDPIcs : KryptonForm
 	{
-
+		public string filter_text = "";
+		public bool filter_arcade = false;
+		public bool filter_wheel = false;
+		public bool filter_hotas = false;
+		public bool filter_lightgun = false;
 
 		private Dictionary<string, Game> _gameList = new Dictionary<string, Game>();
 		private string _tpFolder = "";
@@ -90,6 +99,7 @@ namespace TeknoparrotAutoXinput
 				Font = new Font(Font.Name, 8.25f * 0.85f, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
 			}
 			InitializeComponent();
+			SevenZipExtractor.SetLibraryPath(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "thirdparty", "7zip", "7z.dll"));
 
 			PaletteImageScaler.ScalePalette(this, KryptonPalette1);
 
@@ -113,6 +123,8 @@ namespace TeknoparrotAutoXinput
 
 			Reload();
 			UpdateGamePadList();
+			MenuItem_textBoxFilter.LostFocus += new System.EventHandler(this.MenuItem_textBoxFilter_Leave);
+			MenuItem_textBoxFilter.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MenuItem_textBoxFilter_CheckEnterKeyPress);
 		}
 
 		private void ChangePalette(PaletteMode palMode)
@@ -159,6 +171,40 @@ namespace TeknoparrotAutoXinput
 							newGame.UserConfigFile = profile;
 							newGame.FileName = Path.GetFileName(profile);
 							newGame.Metadata = DeSerializeMetadata(profile);
+
+
+							List<string> typeConfig = new List<string>();
+							typeConfig.Add("gamepad");
+							typeConfig.Add("gamepadalt");
+							typeConfig.Add("arcade");
+							typeConfig.Add("wheel");
+							typeConfig.Add("hotas");
+							typeConfig.Add("lightgun");
+							string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+							foreach (var type in typeConfig)
+							{
+								var configPath = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(profile) + "." + type + ".txt");
+								if (File.Exists(configPath))
+								{
+									if (type == "wheel")
+									{
+										newGame.haveWheelSupport = true;
+									}
+									if (type == "hotas")
+									{
+										newGame.haveHotasSupport = true;
+									}
+									if (type == "lightgun")
+									{
+										newGame.haveLightgunSupport = true;
+									}
+									if (type == "arcade")
+									{
+										newGame.haveArcadeStickSupport = true;
+									}
+								}
+							}
+
 							if (newGame.Metadata != null)
 							{
 								newGame.Name = newGame.Metadata.game_name;
@@ -536,6 +582,17 @@ namespace TeknoparrotAutoXinput
 
 		public static Image ResizeImageBest(Image image, Size newSize)
 		{
+			return image;
+			Image imageInMem = new Bitmap(image.Width, image.Height);
+
+			// Utiliser Graphics pour dessiner l'image originale sur la nouvelle image
+			using (Graphics graphics = Graphics.FromImage(imageInMem))
+			{
+				graphics.DrawImage(image, 0, 0, image.Width, image.Height);
+			}
+
+			return imageInMem;
+
 			return image;
 			if (image == null)
 				throw new ArgumentNullException(nameof(image));
@@ -1346,9 +1403,90 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
+		private void Updatefilter()
+		{
+			List<IModelFilter> filter_list = new List<IModelFilter>();
+			if (this.filter_text != "")
+			{
+				if (this.filter_text.Contains("*") || this.filter_text.Contains("?"))
+				{
+					filter_list.Add(new ModelFilter(delegate (object x)
+					{
+						return ((Game)x).Match(this.filter_text);
+					}));
+				}
+				else
+				{
+					filter_list.Add(TextMatchFilter.Contains(this.fastObjectListView1, this.filter_text));
+				}
+				MenuItem_textBoxFilter.BackColor = Color.Yellow;
+			}
+			else MenuItem_textBoxFilter.BackColor = SystemColors.Control;
+
+			if (this.filter_arcade)
+			{
+				filter_list.Add(new ModelFilter(delegate (object x)
+				{
+					return ((Game)x).haveArcadeStickSupport;
+				}));
+				MenuItem_filterArcade.Font = new Font(MenuItem_filterArcade.Font, FontStyle.Bold);
+			}
+			else MenuItem_filterArcade.Font = new Font(MenuItem_filterArcade.Font, MenuItem_filterArcade.Font.Style & ~FontStyle.Bold);
+
+			if (this.filter_wheel)
+			{
+				filter_list.Add(new ModelFilter(delegate (object x)
+				{
+					return ((Game)x).haveWheelSupport;
+				}));
+				MenuItem_filterWheel.Font = new Font(MenuItem_filterWheel.Font, FontStyle.Bold);
+			}
+			else MenuItem_filterWheel.Font = new Font(MenuItem_filterWheel.Font, MenuItem_filterWheel.Font.Style & ~FontStyle.Bold);
+
+			if (this.filter_hotas)
+			{
+				filter_list.Add(new ModelFilter(delegate (object x)
+				{
+					return ((Game)x).haveHotasSupport;
+				}));
+				MenuItem_filterHotas.Font = new Font(MenuItem_filterHotas.Font, FontStyle.Bold);
+			}
+			else MenuItem_filterHotas.Font = new Font(MenuItem_filterHotas.Font, MenuItem_filterHotas.Font.Style & ~FontStyle.Bold);
+
+			if (this.filter_lightgun)
+			{
+				filter_list.Add(new ModelFilter(delegate (object x)
+				{
+					return ((Game)x).haveLightgunSupport;
+				}));
+				MenuItem_filterLightgun.Font = new Font(MenuItem_filterLightgun.Font, FontStyle.Bold);
+			}
+			else MenuItem_filterLightgun.Font = new Font(MenuItem_filterLightgun.Font, MenuItem_filterLightgun.Font.Style & ~FontStyle.Bold);
+
+			if (filter_list.Count > 0)
+			{
+				this.fastObjectListView1.AdditionalFilter = new CompositeAllFilter(filter_list);
+				MenuItem_clearFilters.Enabled = true;
+			}
+			else
+			{
+				this.fastObjectListView1.AdditionalFilter = null;
+				MenuItem_clearFilters.Enabled = false;
+			}
+
+
+		}
+
 		private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
+			MenuItem_save.Visible = false;
+			MenuItem_load.Visible = false;
 
+			if (fastObjectListView1.SelectedIndex >= 0)
+			{
+				MenuItem_save.Visible = true;
+				MenuItem_load.Visible = true;
+			}
 		}
 
 		private void MainDPIcs_FormClosing(object sender, FormClosingEventArgs e)
@@ -1361,5 +1499,766 @@ namespace TeknoparrotAutoXinput
 		{
 
 		}
+
+		private void contextMenuStrip1_Opening_1(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+
+		}
+
+		private void MenuItem_clearFilters_Click(object sender, EventArgs e)
+		{
+			filter_arcade = filter_hotas = filter_lightgun = filter_wheel = false;
+			MenuItem_textBoxFilter.Text = "";
+			this.filter_text = "";
+			Updatefilter();
+		}
+
+		private void MenuItem_textBoxFilter_Leave(object sender, EventArgs e)
+		{
+			if (MenuItem_textBoxFilter.Text != this.filter_text)
+			{
+				this.filter_text = MenuItem_textBoxFilter.Text;
+				Updatefilter();
+			}
+		}
+		private void MenuItem_textBoxFilter_CheckEnterKeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+		{
+			if (e.KeyChar == (char)Keys.Return)
+			{
+				// Then Do your Thang
+				contextMenuStrip1.Hide();
+				if (MenuItem_textBoxFilter.Text != this.filter_text)
+				{
+					this.filter_text = MenuItem_textBoxFilter.Text;
+					Updatefilter();
+				}
+			}
+		}
+
+		private void MenuItem_filterArcade_Click(object sender, EventArgs e)
+		{
+			filter_hotas = filter_lightgun = filter_wheel = false;
+			this.filter_arcade = !this.filter_arcade;
+			Updatefilter();
+		}
+
+		private void MenuItem_filterWheel_Click(object sender, EventArgs e)
+		{
+			filter_arcade = filter_hotas = filter_lightgun = false;
+			this.filter_wheel = !this.filter_wheel;
+			Updatefilter();
+		}
+
+		private void MenuItem_filterHotas_Click(object sender, EventArgs e)
+		{
+			filter_arcade = filter_lightgun = filter_wheel = false;
+			this.filter_hotas = !this.filter_hotas;
+			Updatefilter();
+		}
+
+		private void MenuItem_filterLightgun_Click(object sender, EventArgs e)
+		{
+			filter_arcade = filter_hotas = filter_wheel = false;
+			this.filter_lightgun = !this.filter_lightgun;
+			Updatefilter();
+		}
+
+		private void MenuItem_save_Click(object sender, EventArgs e)
+		{
+			if (fastObjectListView1.SelectedIndex >= 0)
+			{
+				btn_playgamedirect.Enabled = true;
+				btn_playgamedirect2.Enabled = true;
+
+				Game DataGame = (Game)fastObjectListView1.SelectedObject;
+				
+
+				// Chemin de sortie de l'archive
+
+				// Fichier à ajouter à la racine de l'archive
+
+
+
+
+				SaveFileDialog saveFileDialog = new SaveFileDialog();
+				saveFileDialog.Filter = "Fichiers 7z (*.7z)|*.7z";
+				saveFileDialog.DefaultExt = "7z"; // Extension par défaut
+				saveFileDialog.FileName = Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".7z";
+				saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+				if (saveFileDialog.ShowDialog() == DialogResult.OK)
+				{
+					string filePath = saveFileDialog.FileName;
+					if (!filePath.EndsWith(".7z", StringComparison.OrdinalIgnoreCase))
+					{
+						filePath += ".7z";
+					}
+					string outputArchive = filePath;
+
+					string SevenZipExe = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "7zip", "7z.exe");
+					string rootFile = @"C:\Users\Mehdi\source\repos\TeknoparrotAutoXinput\TeknoparrotAutoXinput\bin\Debug\net6.0-windows\config\abc.info.json";
+
+					string tmpFolder = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "tmparchive");
+					try
+					{
+						if (Directory.Exists(tmpFolder))
+						{
+							Directory.Delete(tmpFolder, true);
+						}
+						Directory.CreateDirectory(tmpFolder);
+
+						string tmpTpPatches = Path.Combine(tmpFolder, "tp-patches");
+						string tmpGamePatches = Path.Combine(tmpFolder, "games-patches");
+						string tmpConfigDir = Path.Combine(tmpFolder, "config");
+						string tmpImageDir = Path.Combine(tmpFolder, "img");
+						string tmpMagpieDir = Path.Combine(tmpFolder, "magpie");
+
+						Directory.CreateDirectory(tmpTpPatches);
+						Directory.CreateDirectory(tmpGamePatches);
+						Directory.CreateDirectory(tmpConfigDir);
+						Directory.CreateDirectory(tmpImageDir);
+						Directory.CreateDirectory(tmpMagpieDir);
+
+						List<string> magpieReshadeFile = new List<string>();
+
+						UpdatePatchArchive updatePatchArchive = new UpdatePatchArchive();
+						updatePatchArchive.Game = Path.GetFileNameWithoutExtension(DataGame.UserConfigFile);
+
+
+
+						var infoFile = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "config", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".info.json");
+						if (File.Exists(infoFile))
+						{
+							//File.Copy(infoFile, Path.Combine(tmpFolder, Path.GetFileName(infoFile)));
+						
+							
+							string pathAutoXinputLinks = "";
+							string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
+							if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
+							{
+								pathAutoXinputLinks = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "AutoXinputLinks", Path.GetFileNameWithoutExtension(DataGame.FileName));
+							}
+							else
+							{
+								pathAutoXinputLinks = Path.Combine(perGameLinkFolder, Path.GetFileNameWithoutExtension(DataGame.FileName));
+							}
+							if (Directory.Exists(pathAutoXinputLinks))
+							{
+								List<string> excludeFiles = new List<string>();
+								var patchlist = new List<string>();
+								patchlist.AddRange(Directory.GetFiles(pathAutoXinputLinks, "patchdata.json", SearchOption.AllDirectories));
+								foreach (var patchJsonFile in patchlist)
+								{
+									string directorySource = Path.GetDirectoryName(patchJsonFile);
+									directorySource = Path.GetDirectoryName(directorySource);
+									string jsonData = File.ReadAllText(patchJsonFile);
+									List<PatchInfoJsonElement> patchInfoJson = JsonConvert.DeserializeObject<List<PatchInfoJsonElement>>(jsonData);
+									foreach (var patch in patchInfoJson)
+									{
+										string expectedPatchFile = Path.Combine(directorySource, patch.destination);
+										if (File.Exists(expectedPatchFile))
+										{
+											excludeFiles.Add(expectedPatchFile);
+										}
+									}
+								}
+								foreach(var file in Directory.GetFiles(pathAutoXinputLinks, "*", SearchOption.AllDirectories))
+								{
+									if (Path.GetFileName(file) == "[!magpiereshade!].ini") magpieReshadeFile.Add(file);
+
+									if (excludeFiles.Contains(file)) continue;
+									if (file.ToLower().Contains("[!cachereshade!]")) continue;
+									if (Path.GetFileName(file) == "patchinfo.php") continue;
+									if (Path.GetFileName(file).ToLower() == "dgvoodoo.conf.custom") continue;
+
+									string newFile = file.Replace(pathAutoXinputLinks, tmpTpPatches);
+									string newDir = Path.GetDirectoryName(newFile);
+									updatePatchArchive.tpPatches = true;
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									if (!Utils.MakeLinkBool(file, newFile))
+									{
+										File.Copy(file, newFile, true);
+									}
+								}
+							}
+
+						
+							GameSettings gameOptionsSelectedGame = null;
+							string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
+							if (File.Exists(optionFile))
+							{
+								gameOptionsSelectedGame = new GameSettings(File.ReadAllText(optionFile));
+							}
+							string linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, Path.GetFileNameWithoutExtension(DataGame.FileName));
+							if (gameOptionsSelectedGame != null && gameOptionsSelectedGame.CustomPerGameLinkFolder != null && gameOptionsSelectedGame.CustomPerGameLinkFolder != "")
+							{
+								string lastFolder = Path.GetFileName(gameOptionsSelectedGame.CustomPerGameLinkFolder);
+								if (lastFolder == Path.GetFileNameWithoutExtension(DataGame.FileName))
+								{
+									linkSourceFolderExe = gameOptionsSelectedGame.CustomPerGameLinkFolder;
+								}
+							}
+							if (Directory.Exists(linkSourceFolderExe))
+							{
+								List<string> excludeFiles = new List<string>();
+								var patchlist = new List<string>();
+								patchlist.AddRange(Directory.GetFiles(linkSourceFolderExe, "patchdata.json", SearchOption.AllDirectories));
+								foreach (var patchJsonFile in patchlist)
+								{
+									string directorySource = Path.GetDirectoryName(patchJsonFile);
+									directorySource = Path.GetDirectoryName(directorySource);
+									string jsonData = File.ReadAllText(patchJsonFile);
+									List<PatchInfoJsonElement> patchInfoJson = JsonConvert.DeserializeObject<List<PatchInfoJsonElement>>(jsonData);
+									foreach (var patch in patchInfoJson)
+									{
+										string expectedPatchFile = Path.Combine(directorySource, patch.destination);
+										if (File.Exists(expectedPatchFile))
+										{
+											excludeFiles.Add(expectedPatchFile);
+										}
+									}
+								}
+								foreach (var file in Directory.GetFiles(linkSourceFolderExe, "*", SearchOption.AllDirectories))
+								{
+									if(Path.GetFileName(file) == "[!magpiereshade!].ini") magpieReshadeFile.Add(file);
+
+									if (excludeFiles.Contains(file)) continue;
+									if (file.ToLower().Contains("[!cachereshade!]")) continue;
+									if (Path.GetFileName(file) == "patchinfo.php") continue;
+									if (Path.GetFileName(file).ToLower() == "dgvoodoo.conf.custom") continue;
+
+									string newFile = file.Replace(linkSourceFolderExe, tmpGamePatches);
+									string newDir = Path.GetDirectoryName(newFile);
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									updatePatchArchive.gamePatches = true;
+									if (!Utils.MakeLinkBool(file, newFile))
+									{
+										File.Copy(file, newFile, true);
+									}
+								}
+							}
+
+							var configDir = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "config");
+							if (Directory.Exists(configDir))
+							{
+								foreach (var file in Directory.GetFiles(configDir, Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".*", SearchOption.AllDirectories))
+								{
+									string newFile = file.Replace(configDir, tmpConfigDir);
+									string newDir = Path.GetDirectoryName(newFile);
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									File.Copy(file, newFile, true);
+								}
+							}
+
+							var imageDir = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "img");
+							if (Directory.Exists(imageDir))
+							{
+								foreach (var file in Directory.GetFiles(imageDir, Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".*", SearchOption.AllDirectories))
+								{
+									string newFile = file.Replace(imageDir, tmpImageDir);
+									string newDir = Path.GetDirectoryName(newFile);
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									File.Copy(file, newFile, true);
+								}
+							}
+
+
+
+							string magpieDir = Path.Combine(Path.GetDirectoryName(ConfigurationManager.MainConfig.magpieExe), "reshade-shaders");
+							if (Directory.Exists(magpieDir))
+							{
+								List<string> whitelist = new List<string> { "areatex.png", "areacopy.fx", "areacopypercent.fx", "ascii.fx", "bezelmagpie.fx", "bezelmagpiefirst.fx", "blending.fxh", "border.fx", "bordersinden.fx", "bordersinden2.fx", "cartoon.fx", "cas.fx", "chromaticaberration.fx", "colormatrix.fx", "colourfulness.fx", "crt-guest-advanced.fx", "crt-guest-hd.fx", "crt-guest-ntsc.fx", "crt-guest-preshader.fx", "crt.fx", "crtgeommod.fx", "curves.fx", "daltonize.fx", "deband.fx", "displaydepth.fx", "dpx.fx", "drawtext.fxh", "fakehdr.fx", "filmgrain.fx", "fxaa.fx", "fxaa.fxh", "gridfirst.fx", "gridlast.fx", "hq4x.fx", "layer.fx", "levels.fx", "liftgammagain.fx", "lumasharpen.fx", "lut.fx", "macros.fxh", "monochrome.fx", "nostalgia.fx", "reshade.fxh", "reshadeui.fxh", "sepia.fx", "smaa.fx", "smaa.fxh", "splitscreen.fx", "technicolor.fx", "technicolor2.fx", "tonemap.fx", "tridither.fxh", "uimask.fx", "vibrance.fx", "vignette.fx", "bloominghdr.fx", "clarity.fx", "nfaa.fx", "overwatch.fxh", "smart_sharp.fx", "temporal_aa.fx", "tobiieye_freepie_astrayfx.py", "cdiscblur.fx", "cmotionblur.fx", "ctransform.fx", "ctransformsinden.fx", "cbuffers.fxh", "cgraphics.fxh", "cimageprocessing.fxh", "cmacros.fxh", "cvideoprocessing.fxh", "aspectratio.fx", "bluenoisedither.fxh", "colorconversion.fxh", "lineargammaworkflow.fxh", "background.png", "bezel.png", "bezel43.png", "bezel_off.png", "crt-lut-1.png", "crt-lut-2.png", "crt-lut-3.png", "crt-lut-4.png", "fontatlas.png", "frame.png", "grid.png", "layer.png", "lut.png", "mask.png", "mask2x2.png", "overlay.png", "searchtex.png", "testbezel.png", "uimask.png" };
+								List<string> usedShaders = new List<string>();
+								var fileList = Directory.GetFiles(magpieDir, "*", SearchOption.AllDirectories);
+								List<string> presetFilesName = new List<string>();
+								try
+								{
+									foreach (var file in magpieReshadeFile)
+									{
+										var content = File.ReadAllText(file);
+										string existingTechniques = Regex.Match(content, @"^Techniques=(.*)", RegexOptions.Multiline).Groups[1].Value.Trim('\n').Trim('\r').Trim('\n');
+										foreach (var technique in existingTechniques.Split(','))
+										{
+											if (technique.Split("@").Length == 2 && !usedShaders.Contains(technique.Split("@")[1])) usedShaders.Add(technique.Split("@")[1].ToLower());
+										}
+										string pattern = "\"[^\"]*\\.(png|fx|fxh)\"";
+										MatchCollection matches = Regex.Matches(content, pattern);
+										foreach (Match match in matches)
+										{
+											string newFile = Path.GetFileName(match.Value.ToLower().Trim('"'));
+											foreach (var f in fileList)
+											{
+												if (Path.GetFileName(f).ToLower() == newFile.ToLower())
+												{
+													if (!usedShaders.Contains(newFile)) usedShaders.Add(newFile);
+													break;
+												}
+											}
+
+										}
+
+									}
+
+									var fileCount = usedShaders.Count;
+									var usedShaders2 = new List<string>(usedShaders.ToArray());
+									int compteur = 0;
+									while (true)
+									{
+										compteur++;
+										Console.WriteLine("Turn " + compteur);
+										foreach (var file in fileList)
+										{
+											if (file.ToLower().EndsWith(".png")) continue;
+											if (usedShaders.Contains(Path.GetFileName(file).ToLower()))
+											{
+												string fileContent = File.ReadAllText(file);
+												string pattern = "\"[^\"]*\\.(png|fx|fxh)\"";
+												MatchCollection matches = Regex.Matches(fileContent, pattern);
+												foreach (Match match in matches)
+												{
+													string newFile = Path.GetFileName(match.Value.ToLower().Trim('"'));
+													if (!usedShaders2.Contains(newFile)) usedShaders2.Add(newFile);
+												}
+											}
+										}
+										if (usedShaders2.Count == usedShaders.Count)
+										{
+											break;
+										}
+										usedShaders = new List<string>(usedShaders2.ToArray());
+									}
+
+								}
+								catch {
+									usedShaders = new List<string> { };
+								}
+
+
+
+								foreach (var shad in usedShaders)
+								{
+									if (whitelist.Contains(shad.ToLower())) continue;
+									foreach (var file in fileList)
+									{
+										if (Path.GetFileName(file).ToLower() == shad.ToLower())
+										{
+											string newFile = file.Replace(magpieDir, tmpMagpieDir);
+											string newDir = Path.GetDirectoryName(newFile);
+											if (!Directory.Exists(newDir))
+											{
+												Directory.CreateDirectory(newDir);
+											}
+											File.Copy(file, newFile, true);
+											updatePatchArchive.magpiePatches = true;
+										}
+									}
+								}
+							}
+
+							string jsondata = JsonConvert.SerializeObject(updatePatchArchive, Newtonsoft.Json.Formatting.Indented);
+							File.WriteAllText(Path.Combine(tmpFolder, "info.json"), jsondata);
+
+							if (File.Exists(outputArchive)) File.Delete(outputArchive);
+
+							{
+								// Construire la commande pour 7z.exe
+								ProcessStartInfo processStartInfo = new ProcessStartInfo
+								{
+									FileName = SevenZipExe, // Si 7z.exe n'est pas dans PATH, spécifiez le chemin complet ici
+									Arguments = $"a -mx=0 {outputArchive} info.json",
+									WorkingDirectory = tmpFolder,
+									RedirectStandardOutput = true,
+									UseShellExecute = false,
+									CreateNoWindow = true
+								};
+
+								// Exécuter la commande
+								using (Process process = new Process())
+								{
+									process.StartInfo = processStartInfo;
+									process.Start();
+									process.WaitForExit();
+
+									// Lire la sortie de la commande si nécessaire
+									string output = process.StandardOutput.ReadToEnd();
+									Console.WriteLine(output);
+								}
+							}
+
+							{
+								// Construire la commande pour 7z.exe
+								ProcessStartInfo processStartInfo = new ProcessStartInfo
+								{
+									FileName = SevenZipExe, // Si 7z.exe n'est pas dans PATH, spécifiez le chemin complet ici
+									Arguments = $"a -mx=9 {outputArchive} . -x!info.json",
+									WorkingDirectory = tmpFolder,
+									RedirectStandardOutput = true,
+									UseShellExecute = false,
+									CreateNoWindow = true
+								};
+
+								// Exécuter la commande
+								using (Process process = new Process())
+								{
+									process.StartInfo = processStartInfo;
+									process.Start();
+									process.WaitForExit();
+
+									// Lire la sortie de la commande si nécessaire
+									string output = process.StandardOutput.ReadToEnd();
+									Console.WriteLine(output);
+								}
+							}
+
+
+						}
+						Directory.Delete(tmpFolder, true);
+					}
+					catch { };
+					
+					MessageBox.Show("Saved in " + filePath);
+				}
+			}
+		}
+
+		private void MenuItem_load_Click(object sender, EventArgs e)
+		{
+			if (fastObjectListView1.SelectedIndex >= 0)
+			{
+
+				Game DataGame = (Game)fastObjectListView1.SelectedObject;
+
+					// Créez une instance de OpenFileDialog
+				OpenFileDialog openFileDialog = new OpenFileDialog();
+
+				// Définissez le filtre pour afficher uniquement les fichiers .7z
+				openFileDialog.Filter = "Fichiers 7z (*.7z)|*.7z";
+
+				// Définissez le répertoire initial sur le dossier Documents de l'utilisateur
+				openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+				// Si l'utilisateur clique sur OK
+				if (openFileDialog.ShowDialog() == DialogResult.OK)
+				{
+					// Récupérez le chemin du fichier sélectionné par l'utilisateur
+					string filePath = openFileDialog.FileName;
+
+					string fileContent = "";
+					try
+					{
+						using (SevenZipExtractor extractor = new SevenZipExtractor(filePath))
+						{
+							string fileToExtract = "info.json";
+
+							using (MemoryStream ms = new MemoryStream())
+							{
+								extractor.ExtractFile(fileToExtract, ms);
+								ms.Seek(0, SeekOrigin.Begin);
+								using (StreamReader reader = new StreamReader(ms))
+								{
+									fileContent = reader.ReadToEnd();
+								}
+							}
+						}
+					}
+					catch
+					{
+						fileContent = "";
+					}
+					if (string.IsNullOrEmpty(fileContent))
+					{
+						MessageBox.Show("Invalid archive");
+						return;
+					}
+					else
+					{
+						UpdatePatchArchive patchInfoJson = JsonConvert.DeserializeObject<UpdatePatchArchive>(fileContent);
+						if (patchInfoJson != null && !string.IsNullOrEmpty(patchInfoJson.Game))
+						{
+							if(patchInfoJson.Game.ToLower() != Path.GetFileNameWithoutExtension(DataGame.UserConfigFile))
+							{
+								MessageBox.Show("Wrong game for patch");
+								return;
+							}
+
+							MessageBox.Show(fileContent);
+							string SevenZipExe = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "7zip", "7z.exe");
+
+							GameSettings gameOptionsSelectedGame = null;
+							string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", patchInfoJson.Game + ".json");
+							if (File.Exists(optionFile))
+							{
+								gameOptionsSelectedGame = new GameSettings(File.ReadAllText(optionFile));
+							}
+							string linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, patchInfoJson.Game);
+							if (gameOptionsSelectedGame != null && gameOptionsSelectedGame.CustomPerGameLinkFolder != null && gameOptionsSelectedGame.CustomPerGameLinkFolder != "")
+							{
+								string lastFolder = Path.GetFileName(gameOptionsSelectedGame.CustomPerGameLinkFolder);
+								if (lastFolder == patchInfoJson.Game)
+								{
+									linkSourceFolderExe = gameOptionsSelectedGame.CustomPerGameLinkFolder;
+								}
+							}
+
+							string pathAutoXinputLinks = "";
+							string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
+							if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
+							{
+								pathAutoXinputLinks = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "AutoXinputLinks", patchInfoJson.Game);
+							}
+							else
+							{
+								pathAutoXinputLinks = Path.Combine(perGameLinkFolder, patchInfoJson.Game);
+							}
+
+							string configDir = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "config");
+							string imageDir = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "img");
+							string magpieDir = Path.Combine(Path.GetDirectoryName(ConfigurationManager.MainConfig.magpieExe), "reshade-shaders");
+
+							string tmpFolder = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "tmparchive");
+							try
+							{
+								if (Directory.Exists(tmpFolder))
+								{
+									Directory.Delete(tmpFolder, true);
+								}
+								Directory.CreateDirectory(tmpFolder);
+
+
+								ProcessStartInfo processStartInfo = new ProcessStartInfo
+								{
+									FileName = SevenZipExe, // Si 7z.exe n'est pas dans PATH, spécifiez le chemin complet ici
+									Arguments = $"x \"{filePath}\" -o\"{tmpFolder}\"",
+									RedirectStandardOutput = true,
+									UseShellExecute = false,
+									CreateNoWindow = true
+								};
+
+								// Exécuter la commande
+								using (Process process = new Process())
+								{
+									process.StartInfo = processStartInfo;
+									process.Start();
+									process.WaitForExit();
+								}
+
+							}
+							catch
+							{
+								MessageBox.Show("error occured");
+								return;
+							}
+
+							string tmpTpPatches = Path.Combine(tmpFolder, "tp-patches");
+							string tmpGamePatches = Path.Combine(tmpFolder, "games-patches");
+							string tmpConfigDir = Path.Combine(tmpFolder, "config");
+							string tmpImageDir = Path.Combine(tmpFolder, "img");
+							string tmpMagpieDir = Path.Combine(tmpFolder, "magpie");
+
+
+							if (patchInfoJson.gamePatches && (!Directory.Exists(tmpGamePatches) || Directory.GetFiles(tmpGamePatches, "*", SearchOption.AllDirectories).Count() == 0))
+							{
+								MessageBox.Show("Invalid archive (gamepatch dont match)");
+								return;
+							}
+							if (patchInfoJson.tpPatches && (!Directory.Exists(tmpTpPatches) || Directory.GetFiles(tmpTpPatches, "*", SearchOption.AllDirectories).Count() == 0))
+							{
+								MessageBox.Show("Invalid archive (tppatch dont match)");
+								return;
+							}
+							if (patchInfoJson.magpiePatches && (!Directory.Exists(tmpMagpieDir) || Directory.GetFiles(tmpMagpieDir, "*", SearchOption.AllDirectories).Count() == 0))
+							{
+								MessageBox.Show("Invalid archive (Magpiepatch dont match)");
+								return;
+							}
+
+
+							foreach (Control control in flowLayoutPanelThumbs.Controls)
+							{
+								if (control is PictureBox pictureBox)
+								{
+									if (pictureBox.Image != null)
+									{
+										Image copiedImage = CreateImageCopy(pictureBox.Image);
+										pictureBox.Image.Dispose();
+										pictureBox.Image = copiedImage;
+									}
+
+								}
+							}
+							if (pictureBox_gameControls.Image != null)
+							{
+								Image copiedImage = CreateImageCopy(pictureBox_gameControls.Image);
+								pictureBox_gameControls.Image.Dispose();
+								pictureBox_gameControls.Image = copiedImage;
+
+							}
+
+							MessageBox.Show("done");
+
+							if (Directory.Exists(pathAutoXinputLinks))
+							{
+								Directory.Delete(pathAutoXinputLinks, true);
+							}
+							if (Directory.Exists(linkSourceFolderExe))
+							{
+								Directory.Delete(linkSourceFolderExe, true);
+							}
+
+							if (Directory.Exists(tmpConfigDir) || Directory.GetFiles(tmpConfigDir, "*", SearchOption.AllDirectories).Count() > 0)
+							{
+								if (Directory.Exists(configDir))
+								{
+									foreach (var file in Directory.GetFiles(configDir, patchInfoJson.Game + ".*", SearchOption.AllDirectories))
+									{
+										File.Delete(file);
+									}
+								}
+							}
+
+							if (Directory.Exists(tmpImageDir) || Directory.GetFiles(tmpImageDir, "*", SearchOption.AllDirectories).Count() > 0)
+							{
+								if (Directory.Exists(imageDir))
+								{
+									foreach (var file in Directory.GetFiles(imageDir, patchInfoJson.Game + ".*", SearchOption.AllDirectories))
+									{
+										File.Delete(file);
+									}
+								}
+							}
+
+							MessageBox.Show("done 2");
+
+							if (Directory.Exists(configDir) && Directory.Exists(tmpConfigDir))
+							{
+								foreach (var file in Directory.GetFiles(tmpConfigDir, "*", SearchOption.AllDirectories))
+								{
+									string newFile = file.Replace(tmpConfigDir, configDir);
+									string newDir = Path.GetDirectoryName(newFile);
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									File.Copy(file, newFile, true);
+								}
+							}
+
+							MessageBox.Show("done 2x1");
+
+							if (Directory.Exists(imageDir) && Directory.Exists(tmpImageDir))
+							{
+								foreach (var file in Directory.GetFiles(tmpImageDir, "*", SearchOption.AllDirectories))
+								{
+									string newFile = file.Replace(tmpImageDir, imageDir);
+									string newDir = Path.GetDirectoryName(newFile);
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									File.Copy(file, newFile, true);
+								}
+							}
+
+							MessageBox.Show("done 2x2");
+
+							if (patchInfoJson.tpPatches && Directory.Exists(tmpTpPatches))
+							{
+								Directory.CreateDirectory(pathAutoXinputLinks);
+								foreach (var file in Directory.GetFiles(tmpTpPatches, "*", SearchOption.AllDirectories))
+								{
+									string newFile = file.Replace(tmpTpPatches, pathAutoXinputLinks);
+									string newDir = Path.GetDirectoryName(newFile);
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									File.Copy(file, newFile, true);
+								}
+							}
+
+							MessageBox.Show("done 2x3");
+
+							if (patchInfoJson.gamePatches && Directory.Exists(tmpGamePatches))
+							{
+								Directory.CreateDirectory(linkSourceFolderExe);
+								foreach (var file in Directory.GetFiles(tmpGamePatches, "*", SearchOption.AllDirectories))
+								{
+									string newFile = file.Replace(tmpGamePatches, linkSourceFolderExe);
+									string newDir = Path.GetDirectoryName(newFile);
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									File.Copy(file, newFile, true);
+								}
+							}
+
+							MessageBox.Show("done 2x4");
+
+							if (patchInfoJson.magpiePatches && Directory.Exists(tmpMagpieDir) && Directory.Exists(magpieDir))
+							{
+								foreach (var file in Directory.GetFiles(tmpMagpieDir, "*", SearchOption.AllDirectories))
+								{
+									string newFile = file.Replace(tmpMagpieDir, magpieDir);
+									string newDir = Path.GetDirectoryName(newFile);
+									if (!Directory.Exists(newDir))
+									{
+										Directory.CreateDirectory(newDir);
+									}
+									File.Copy(file, newFile, true);
+								}
+							}
+
+							MessageBox.Show("done 3");
+							Reload();
+
+						}
+						else
+						{
+							MessageBox.Show("Invalid archive");
+							return;
+						}
+
+					}
+
+				}
+
+			}
+		}
+
+		private Image CreateImageCopy(Image originalImage)
+		{
+			// Créer une nouvelle image de la même taille que l'originale
+			Image newImage = new Bitmap(originalImage.Width, originalImage.Height);
+
+			// Utiliser Graphics pour dessiner l'image originale sur la nouvelle image
+			using (Graphics graphics = Graphics.FromImage(newImage))
+			{
+				graphics.DrawImage(originalImage, 0, 0, originalImage.Width, originalImage.Height);
+			}
+
+			return newImage;
+		}
 	}
+
+	public class UpdatePatchArchive
+	{
+		public float version = Program.version;
+		public string Game = "";
+		public bool tpPatches = false;
+		public bool gamePatches = false;
+		public bool magpiePatches = false;
+	}
+
 }
