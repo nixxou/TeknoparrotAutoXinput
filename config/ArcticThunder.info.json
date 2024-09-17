@@ -1,40 +1,66 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "WinGlideClass",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False"
-	},
-	"tpoptions": {
-		"set_res_in_tp_settings & fullscreen": {
-			"Glide||Aspect": "Integer rendering"
-		},
-		"set_res_in_tp_settings & windowed": {
-			"Glide||Aspect": "Entire screen (Default)"
-		},
-		"set_res_in_tp_settings & fullscreen & 720p": {
-			"Glide||Resolution": "1280 x 720"
-		},
-		"set_res_in_tp_settings & fullscreen & 1080p": {
-			"Glide||Resolution": "1920 x 1080"
-		},
-		"set_res_in_tp_settings & fullscreen & 2k": {
-			"Glide||Resolution": "2560 x 1440"
-		},
-		"set_res_in_tp_settings & fullscreen & 4k": {
-			"Glide||Resolution": "3840 x 2160"
-		},		
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        }		
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "magpieClass": "WinGlideClass",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False"
+  },
+  "tpoptions": {
+    "set_resolution & fullscreen & keepaspectratio": {
+      "Glide||Aspect": "Integer rendering"
+    },
+    "set_resolution & fullscreen & no_keepaspectratio": {
+      "Glide||Aspect": "Entire screen (Default)"
+    },
+    "set_resolution & windowed": {
+      "Glide||Aspect": "Integer rendering"
+    },
+    "set_resolution & 720p": {
+      "Glide||Resolution": "1280 x 720"
+    },
+    "set_resolution & 1080p": {
+      "Glide||Resolution": "1920 x 1080"
+    },
+    "set_resolution & 2k": {
+      "Glide||Resolution": "2560 x 1440"
+    },
+    "set_resolution & 4k": {
+      "Glide||Resolution": "3840 x 2160"
+    },
+    "game_native_res": {
+      "Glide||Resolution": "640 x 480"
+    },
+    "set_resolution & vsync": {
+      "Glide||VSync": "On"
+    },
+    "set_resolution & no_vsync": {
+      "Glide||VSync": "Off"
+    },
+    "set_resolution & 60hz": {
+      "Glide||Refresh": "60 Hz"
+    },
+    "set_resolution & 120hz": {
+      "Glide||Refresh": "120 Hz"
+    },
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {}
 }

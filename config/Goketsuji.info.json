@@ -1,31 +1,44 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "tx_gouketu",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },	
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-		"replace_network": {
-			"Network||Dhcp": "1",
-			"Network||Ip": "{{networkip}}",
-			"Network||Mask": "{{networkmask}}",
-			"Network||Gateway": "{{networkgateway}}",
-			"Network||Dns1": "{{networkdns1}}"
-		},
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "True",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "tx_gouketu",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "replace_network": {
+      "Network||Dhcp": "1",
+      "Network||Ip": "{{networkip}}",
+      "Network||Mask": "{{networkmask}}",
+      "Network||Gateway": "{{networkgateway}}",
+      "Network||Dns1": "{{networkdns1}}"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & crtfilter": {
+      "magpieScaling": "6"
+    }
+  }
 }

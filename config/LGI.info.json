@@ -1,33 +1,52 @@
 {
-	"global": {
-		"_comment": "Can't upscale all the way to 2K, so i use a slightly lower res and magpie to make fullscreen, that's why i advise windowed",
-		"rom": "lgi",
-		"target": "ringwide",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "TeknoParrot - Let's Go Island",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "sinden_and_notsinden"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "recommanded_tp_settings": {
-            "General||HideCursor": "1",
-			"General||Enable Outputs": "1"
-        }
-	},
-    "gameoptions": {}
+  "global": {
+    "_comment": "Will look better fs than windowed",
+    "originalRes": "1024x600",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "rom": "lgi",
+    "target": "ringwide",
+    "64bits": "False",
+    "windowed": "General,Windowed,1",
+    "magpieClass": "TeknoParrot - Let's Go Island",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "sinden_and_notsinden"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1",
+      "General||Enable Outputs": "1",
+      "General||DongleRegion": "USA",
+      "General||PcbRegion": "USA"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[O]+(([X]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+    }
+  }
 }

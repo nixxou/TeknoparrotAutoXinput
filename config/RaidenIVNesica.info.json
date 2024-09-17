@@ -1,24 +1,35 @@
 {
-	"global": {
-		"_comment": "Maybe it's possible with nvidia, but on amd, i can't run the game without dvxk without flicker and cant upscale it, so i use windowed",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "JJ11X",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "True"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        }
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1280x720",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "need60hz": "True",
+    "forceResSwitchFullscreen": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "JJ11X",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "True"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {}
 }

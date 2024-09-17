@@ -1,28 +1,38 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "RawApp",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-		"recommanded_tp_settings": {
-			"General||FpsLimitEnable" : "1",
-			"General||FpsLimit" : "60"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "To make this game work, i had to move it to the root folder of my hdd",
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "need60hz": "True",
+    "magpieClass": "RawApp",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||FpsLimitEnable": "1",
+      "General||FpsLimit": "60"
+    }
+  },
+  "gameoptions": {}
 }

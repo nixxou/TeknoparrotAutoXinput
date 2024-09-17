@@ -15,51 +15,51 @@
 		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},
     "tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+        "set_displaymode_recommanded": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
-        "set_res_in_tp_settings & fullscreen & 720p": {
+        "set_resolution & fullscreen & 720p": {
             "General||Use Custom Resolution": "1",
             "General||Custom Resolution Width": "1280",
             "General||Custom Resolution Height": "720"
         },
-        "set_res_in_tp_settings & fullscreen & 1080p": {
+        "set_resolution & fullscreen & 1080p": {
             "General||Use Custom Resolution": "1",
             "General||Custom Resolution Width": "1920",
             "General||Custom Resolution Height": "1080"
         },
-        "set_res_in_tp_settings & fullscreen & 2k": {
+        "set_resolution & fullscreen & 2k": {
             "General||Use Custom Resolution": "1",
             "General||Custom Resolution Width": "2560",
             "General||Custom Resolution Height": "1440"
         },
-        "set_res_in_tp_settings & fullscreen & 4k": {
+        "set_resolution & fullscreen & 4k": {
             "General||Use Custom Resolution": "1",
             "General||Custom Resolution Width": "3840",
             "General||Custom Resolution Height": "2160"
         },
-        "set_res_in_tp_settings & windowed & 720p": {
+        "set_resolution & windowed & 720p": {
             "General||Use Custom Resolution": "1",
             "General||Custom Resolution Width": "1275",
             "General||Custom Resolution Height": "720"
         },
-        "set_res_in_tp_settings & windowed & 1080p": {
+        "set_resolution & windowed & 1080p": {
             "General||Use Custom Resolution": "1",
             "General||Custom Resolution Width": "1913",
             "General||Custom Resolution Height": "1080"
         },
-        "set_res_in_tp_settings & windowed & 2k": {
+        "set_resolution & windowed & 2k": {
             "General||Use Custom Resolution": "1",
             "General||Custom Resolution Width": "2550",
             "General||Custom Resolution Height": "1440"
         },
-        "set_res_in_tp_settings & windowed & 4k": {
+        "set_resolution & windowed & 4k": {
             "General||Use Custom Resolution": "1",
             "General||Custom Resolution Width": "3825",
             "General||Custom Resolution Height": "2160"

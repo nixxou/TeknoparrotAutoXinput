@@ -14,32 +14,32 @@
 		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},
     "tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+        "set_displaymode_recommanded": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
         "recommanded_tp_settings": {
 			"General||HideCursor": "1",
 			"General||Enable Outputs": "1"
         },
-        "set_res_in_tp_settings & 720p": {
+        "set_resolution & 720p": {
 			"General||Enable Custom Resolution": "1",
             "General||Custom Resolution": "1280x720",
         },
-        "set_res_in_tp_settings & 1080p": {
+        "set_resolution & 1080p": {
 			"General||Enable Custom Resolution": "1",
             "General||Custom Resolution": "1920x1080",
         },
-        "set_res_in_tp_settings & 2k": {
+        "set_resolution & 2k": {
 			"General||Enable Custom Resolution": "1",
             "General||Custom Resolution": "2560x1440",
         },
-        "set_res_in_tp_settings & 4k": {
+        "set_resolution & 4k": {
 			"General||Enable Custom Resolution": "1",
             "General||Custom Resolution": "3840x2160",
         }

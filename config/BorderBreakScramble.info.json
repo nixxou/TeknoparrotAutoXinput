@@ -1,32 +1,41 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "WGL",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-		"replace_network": {
-			"Network||Dhcp": "1",
-			"Network||Ip": "{{networkip}}",
-			"Network||Mask": "{{networkmask}}",
-			"Network||Gateway": "{{networkgateway}}",
-			"Network||Dns1": "{{networkdns1}}",
-			"Network||Dns2": "{{networkdns2}}",
-			"Network||BroadcastIP": "{{broadcastaddress}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1024x600",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+	"need60hz": "True",
+    "magpieClass": "WGL",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "replace_network": {
+      "Network||Dhcp": "1",
+      "Network||Ip": "{{networkip}}",
+      "Network||Mask": "{{networkmask}}",
+      "Network||Gateway": "{{networkgateway}}",
+      "Network||Dns1": "{{networkdns1}}",
+      "Network||Dns2": "{{networkdns2}}",
+      "Network||BroadcastIP": "{{broadcastaddress}}"
+    }
+  },
+  "gameoptions": {}
 }

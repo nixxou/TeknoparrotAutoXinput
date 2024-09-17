@@ -1,72 +1,88 @@
 {
-	"global": {
-		"_comment": "Using fullscreen is a mess, some elements are draw in 4/3 some in 16/9, so i use windowed",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "FREEGLUT",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-		"set_res_in_tp_settings": {
-			"General||CustomResolution": "1",
-		},
-		"set_res_in_tp_settings & fullscreen": {
-			"General||Stretch2D": "1",
-		},
-		"set_res_in_tp_settings & windowed": {
-			"General||Stretch2D": "0",
-		},
-        "set_res_in_tp_settings & fullscreen & 720p": {
-            "General||ResolutionWidth": "1280",
-            "General||ResolutionHeight": "720"
-        },
-        "set_res_in_tp_settings & fullscreen &1080p": {
-            "General||ResolutionWidth": "1920",
-            "General||ResolutionHeight": "1080"
-        },
-        "set_res_in_tp_settings & fullscreen & 2k": {
-            "General||ResolutionWidth": "2560",
-            "General||ResolutionHeight": "1440"
-        },
-        "set_res_in_tp_settings & fullscreen &4k": {
-            "General||ResolutionWidth": "3840",
-            "General||ResolutionHeight": "2160"
-        },
-        "set_res_in_tp_settings & windowed & 720p": {
-            "General||ResolutionWidth": "960",
-            "General||ResolutionHeight": "720"
-        },
-        "set_res_in_tp_settings & windowed & 1080p": {
-            "General||ResolutionWidth": "1440",
-            "General||ResolutionHeight": "1080"
-        },
-        "set_res_in_tp_settings & windowed & 2k": {
-            "General||ResolutionWidth": "1920",
-            "General||ResolutionHeight": "1440"
-        },
-        "set_res_in_tp_settings & windowed & 4k": {
-            "General||ResolutionWidth": "2880",
-            "General||ResolutionHeight": "2160"
-        },
-		"ffb":{
-			"General||Enable Outputs" : "1"
-		},
-		"recommanded_tp_settings": {
-			"General||Framelimiter": "1"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "Using fullscreen is a mess, some elements are draw in 4/3 some in 16/9, so i use windowed",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1360x768",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "magpieClass": "FREEGLUT",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution": {
+      "General||CustomResolution": "1"
+    },
+    "set_resolution & fullscreen": {
+      "General||Stretch2D": "0"
+    },
+    "set_resolution & windowed": {
+      "General||Stretch2D": "0"
+    },
+    "set_resolution & fullscreen & 720p": {
+      "General||ResolutionWidth": "1280",
+      "General||ResolutionHeight": "720"
+    },
+    "set_resolution & fullscreen &1080p": {
+      "General||ResolutionWidth": "1920",
+      "General||ResolutionHeight": "1080"
+    },
+    "set_resolution & fullscreen & 2k": {
+      "General||ResolutionWidth": "2560",
+      "General||ResolutionHeight": "1440"
+    },
+    "set_resolution & fullscreen &4k": {
+      "General||ResolutionWidth": "3840",
+      "General||ResolutionHeight": "2160"
+    },
+    "set_resolution & windowed & 720p": {
+      "General||ResolutionWidth": "960",
+      "General||ResolutionHeight": "720"
+    },
+    "set_resolution & windowed & 1080p": {
+      "General||ResolutionWidth": "1440",
+      "General||ResolutionHeight": "1080"
+    },
+    "set_resolution & windowed & 2k": {
+      "General||ResolutionWidth": "1920",
+      "General||ResolutionHeight": "1440"
+    },
+    "set_resolution & windowed & 4k": {
+      "General||ResolutionWidth": "2880",
+      "General||ResolutionHeight": "2160"
+    },
+    "game_native_res": {
+      "General||CustomResolution": "0",
+      "General||ResolutionWidth": "1360",
+      "General||ResolutionHeight": "768"
+    },
+    "ffb": {
+      "General||Enable Outputs": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||Framelimiter": "1",
+      "General||AntiAliasing": "1",
+      "General||DongleRegion": "EXPORT",
+      "General||PcbRegion": "EXPORT"
+    }
+  },
+  "gameoptions": {}
 }

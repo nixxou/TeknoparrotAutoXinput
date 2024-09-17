@@ -1,51 +1,70 @@
 {
-	"global": {
-		"_comment": "",
-		"rom": "friction",
-		"target": "windows",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "CD3D9Window",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "sinden_and_notsinden"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },		
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "set_res_in_tp_settings & 720p": {		
-            "Resolution||Width": "1280",
-            "Resolution||Height": "720"
-        },
-        "set_res_in_tp_settings & 1080p": {					
-            "Resolution||Width": "1920",
-            "Resolution||Height": "1080"
-        },
-        "set_res_in_tp_settings & 2k": {				
-            "Resolution||Width": "2560",
-            "Resolution||Height": "1440"
-        },
-        "set_res_in_tp_settings & 4k": {	
-            "Resolution||Width": "3840",
-            "Resolution||Height": "2160"
-        },		
-		"hide_crosshair": {
-            "Custom Crosshairs||Enable": "0"
-        },
-        "show_crosshair": {
-            "Custom Crosshairs||Enable": "1"
-        }
-	},
-    "gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "rom": "friction",
+    "target": "windows",
+    "64bits": "False",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "CD3D9Window",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "sinden_and_notsinden"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution & 720p": {
+      "Resolution||Width": "1280",
+      "Resolution||Height": "720"
+    },
+    "set_resolution & 1080p": {
+      "Resolution||Width": "1920",
+      "Resolution||Height": "1080"
+    },
+    "set_resolution & 2k": {
+      "Resolution||Width": "2560",
+      "Resolution||Height": "1440"
+    },
+    "set_resolution & 4k": {
+      "Resolution||Width": "3840",
+      "Resolution||Height": "2160"
+    },
+    "game_native_res": {
+      "Resolution||Width": "640",
+      "Resolution||Height": "480"
+    },
+    "hide_crosshair": {
+      "Custom Crosshairs||Enable": "0"
+    },
+    "show_crosshair": {
+      "Custom Crosshairs||Enable": "1"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & windowed & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy & game_native_res": {
+      "gunA_4tiers": "2"
+    },
+    "recommanded_gameoptions & windowed & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy & game_native_res": {
+      "gunB_4tiers": "2"
+    }
+  }
 }

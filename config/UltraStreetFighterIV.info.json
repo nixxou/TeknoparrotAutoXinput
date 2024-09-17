@@ -11,31 +11,31 @@
 		"magpieNoLateFocus": "False"
 	},
 	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+        "set_displaymode_recommanded": {
             "General||DisplayMode": "Fullscreen"
         },		
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||DisplayMode": "Fullscreen"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||DisplayMode": "Windowed"
         },
-		"set_res_in_tp_settings": {
+		"set_resolution": {
 			"General||Custom Resolution Enabled": "1"
 		},
-        "set_res_in_tp_settings & 720p": {
+        "set_resolution & 720p": {
             "General||Custom Resolution Width": "1280",			
             "General||Custom Resolution Height": "720"
         },
-        "set_res_in_tp_settings & 1080p": {
+        "set_resolution & 1080p": {
             "General||Custom Resolution Width": "1920",			
             "General||Custom Resolution Height": "1080"
         },
-        "set_res_in_tp_settings & 2k": {
+        "set_resolution & 2k": {
             "General||Custom Resolution Width": "2560",			
             "General||Custom Resolution Height": "1440"
         },
-        "set_res_in_tp_settings & 4k": {
+        "set_resolution & 4k": {
             "General||Enable Custom Resolution": "3840",			
             "General||Custom Resolution": "2160"
         },		

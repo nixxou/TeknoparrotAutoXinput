@@ -11,31 +11,31 @@
 		"magpieNoLateFocus": "False"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & set_res_in_tp_settings & 720p": {
+		"set_displaymode_recommanded & set_resolution & 720p": {
             "General||Windowed": "0"
         },
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & set_res_in_tp_settings & 1080p": {
+		"set_displaymode_recommanded & set_resolution & 1080p": {
             "General||Windowed": "0"
         },
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & set_res_in_tp_settings & 2k": {
+		"set_displaymode_recommanded & set_resolution & 2k": {
             "General||Windowed": "1"
         },
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & set_res_in_tp_settings & 4k": {
+		"set_displaymode_recommanded & set_resolution & 4k": {
             "General||Windowed": "1"
         },
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & !set_res_in_tp_settings": {
+		"set_displaymode_recommanded & dont_set_resolution": {
             "General||Windowed": "0"
         },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
-        "set_res_in_tp_settings & 720p": {
+        "set_resolution & 720p": {
 			"General||Resolution": "720p"
         },
-        "set_res_in_tp_settings & !720p": {
+        "set_resolution & no_720p": {
 			"General||CustomResolution": "1080p"
         }
 	},

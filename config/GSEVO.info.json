@@ -1,35 +1,76 @@
 {
-	"global": {
-		"_comment": "Progress where made but as of 07/24 not totally stable and no sound",
-		"rom": "",
-		"target": "",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "FREEGLUT",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "all"
-	},
-    "tpoptions": {
-		"use_gpu_fix_in_tp_settings & amd": {
-			"General||EnableAmdFix": "1"
-		},
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "recommanded_tp_settings": {
-            "General||HideCursor": "1"
-        }
+  "global": {
+    "_comment": "Buggy, use the elf2 version",
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "rom": "",
+    "target": "",
+    "64bits": "False",
+    "magpieClass": "FREEGLUT",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieRegisterAsSize_dontkeepaspectratio": "640x360",
+    "recommanded_vjoy_fullscreen_keepaspectratio": "sinden_and_notsinden,wiimote,gamepad",
+    "recommanded_vjoy_windowed_keepaspectratio": "sinden_and_notsinden,wiimote,gamepad",
+    "recommanded_vjoy_fullscreen_dontkeepaspectratio": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed_dontkeepaspectratio": "sinden_and_notsinden"
+  },
+  "tpoptions": {
+    "amd": {
+      "General||EnableAmdFix": "1"
     },
-    "gameoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1"
     }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy & keepaspectratio": {
+      "gun_ExtraSinden": "-action \"set-offsets -13.625,1.2725,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & keepaspectratio": {
+      "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.37457)",
+      "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+    },
+    "recommanded_gameoptions & fullscreen & !at_least_one_sinden & keepaspectratio": {
+      "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.33333)",
+      "tmpGunYFormula": ""
+    },
+    "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy & keepaspectratio": {
+      "gunA_4tiers": "2"
+    },
+    "recommanded_gameoptions & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy & keepaspectratio": {
+      "gunB_4tiers": "2"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy & no_keepaspectratio": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_keepaspectratio": {
+      "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+    },
+    "recommanded_gameoptions & fullscreen & !at_least_one_sinden & no_keepaspectratio": {
+      "tmpGunXFormula": "",
+      "tmpGunYFormula": ""
+    }
+  }
 }

@@ -1,6 +1,12 @@
 {
 	"global": {
 		"windowed": "General,Windowed,1",
+		"showGameOptionBezel": "True",
+		"showGameOptionCrt": "False",
+		"showGameOptionVsync": "False",
+		"showGameOptionFFB": "True",
+		"upscaleFullscreen": "True",
+		"upscaleWindowed": "True",
 		"magpieClass": "FREEGLUT",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",
@@ -10,28 +16,28 @@
 		"magpieNoLateFocus": "False"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||Windowed": "1"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
-		"use_gpu_fix_in_tp_settings & nvidia": {
+		"nvidia": {
 			"Graphics||GPU Fix": "None"
 		},
-		"use_gpu_fix_in_tp_settings & amdold": {
+		"amdold": {
 			"Graphics||GPU Fix": "AMD"
 		},
-		"use_gpu_fix_in_tp_settings & amdnew": {
+		"amdnew": {
 			"Graphics||GPU Fix": "New AMD Driver"
 		},
-		"use_gpu_fix_in_tp_settings & amdrid": {
+		"amdrid": {
 			"Graphics||GPU Fix": "New AMD Driver"
 		},
-		"use_gpu_fix_in_tp_settings & intel": {
+		"intel": {
 			"Graphics||GPU Fix": "INTEL"
 		},
 		"replace_network": {

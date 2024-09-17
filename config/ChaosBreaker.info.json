@@ -1,28 +1,45 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "chaosbreaker",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
-	},
-	"tpoptions": {	
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        }		
-	},
-	"gameoptions": {
-		"recommanded_gameoptions": {
-			"magpieScaling" : "6",
-			"runRivaTuner" : "True"
-		}
-	}
+  "global": {
+    "_comment": "Wrong res in windowed (634x451 instead of 640x480)",
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "True",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "forceResSwitchFullscreen": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "chaosbreaker",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+	"forceResize": "640x480|windowed",
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded & not_low_perfprofile": {
+      "General||Windowed": "0"
+    },
+    "set_displaymode_recommanded & low_perfprofile": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions": {
+      "runRivaTuner": "True"
+    },
+    "recommanded_gameoptions & windowed & crtfilter": {
+      "magpieScaling": "6"
+    }
+  }
 }

@@ -13,16 +13,16 @@
 		"magpieExecutable": ""
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & use_optional_reshade": {
+		"set_displaymode_recommanded & optional_reshade": {
             "General||Windowed": "1"
         },
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & !use_optional_reshade": {
+		"set_displaymode_recommanded & no_reshade": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
         "recommanded_tp_settings": {

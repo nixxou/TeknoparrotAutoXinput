@@ -1,48 +1,72 @@
 {
-	"global": {
-		"_comment": "Demulshooter won't work for me, if you want to try rom=le3, target=konami",
-		"rom": "le3",
-		"target": "konami",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "GAME",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False",
-		"magpieNoClick": "True",
-		"recommanded_vjoy_fullscreen": "all",
-		"recommanded_vjoy_windowed": "all"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "recommanded_tp_settings": {
-            "General||HideCursor": "1",
-			"Bezel||Enable": "1"
-        },
-        "hide_crosshair": {
-            "Crosshair||Enable": "0"
-        },
-        "show_crosshair": {
-            "Crosshair||Enable": "1"
-        },
-        "recommanded_tp_settings & !dgunb": {
-			"General||GameMode": "PLAYER 1 ONLY"
-        },
-        "recommanded_tp_settings & dgunb": {
-			"General||GameMode": "2 PLAYERS"
-        }		
-	},
-	"gameoptions": {
-	}
+  "global": {
+    "_comment": "With sinden, issue with 2P in fullscreen with reshade for border, use windowed",
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "rom": "le3",
+    "target": "konami",
+    "64bits": "False",
+    "magpieClass": "GAME",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False",
+    "magpieNoClick": "True",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "not_all_sinden"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1"
+    },
+    "recommanded_tp_settings & bezel": {
+      "Bezel||Enable": "1"
+    },
+    "recommanded_tp_settings & no_bezel": {
+      "Bezel||Enable": "0"
+    },
+    "hide_crosshair": {
+      "Crosshair||Enable": "0"
+    },
+    "show_crosshair": {
+      "Crosshair||Enable": "1"
+    },
+    "recommanded_tp_settings & no_gunb_found": {
+      "General||GameMode": "PLAYER 1 ONLY"
+    },
+    "recommanded_tp_settings & gunb_found": {
+      "General||GameMode": "2 PLAYERS"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[O]+(([X]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+    },
+    "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy & no_gunb_found & windowed": {
+      "gunA_4tiers": "2"
+    }
+  }
 }

@@ -1,43 +1,56 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "LaunchUnrealUWindowsClient",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "set_res_in_tp_settings & 720p": {
-            "General||ResolutionWidth": "1280",
-            "General||ResolutionHeight": "720"
-        },
-        "set_res_in_tp_settings & 1080p": {
-            "General||ResolutionWidth": "1920",
-            "General||ResolutionHeight": "1080"
-        },
-        "set_res_in_tp_settings & 2k": {
-            "General||ResolutionWidth": "2560",
-            "General||ResolutionHeight": "1440"
-        },
-        "set_res_in_tp_settings & 4k": {
-            "General||ResolutionWidth": "3840",
-            "General||ResolutionHeight": "2160"
-        },
-        "recommanded_tp_settings": {
-            "General||EnglishHack": "1"
-        }		
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "LaunchUnrealUWindowsClient",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution & 720p": {
+      "General||ResolutionWidth": "1280",
+      "General||ResolutionHeight": "720"
+    },
+    "set_resolution & 1080p": {
+      "General||ResolutionWidth": "1920",
+      "General||ResolutionHeight": "1080"
+    },
+    "set_resolution & 2k": {
+      "General||ResolutionWidth": "2560",
+      "General||ResolutionHeight": "1440"
+    },
+    "set_resolution & 4k": {
+      "General||ResolutionWidth": "3840",
+      "General||ResolutionHeight": "2160"
+    },
+    "game_native_res": {
+      "General||ResolutionWidth": "1280",
+      "General||ResolutionHeight": "720"
+    },
+    "recommanded_tp_settings": {
+      "General||EnglishHack": "1"
+    }
+  },
+  "gameoptions": {}
 }

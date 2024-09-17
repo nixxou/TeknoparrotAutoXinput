@@ -1,46 +1,59 @@
 {
-	"global": {
-		"_comment": "The patch resolution will change the graphic quality 4K = best, 720p = potato pc",
-		"rom": "hodsd",
-		"target": "alls",
-		"64bits": "True",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "UnrealWindow",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "sinden_and_notsinden"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },		
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "hide_crosshair": {
-            "Crosshairs||Enable Custom": "0",
-			"Crosshairs||Enable Native": "0"
-        },
-        "show_crosshair": {
-            "Crosshairs||Enable Custom": "1",
-			"Crosshairs||Enable Native": "0"
-        }		
-	},
-    "gameoptions": {
-        "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
-            "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
-            "gun_useExtraSinden": "True"
-        },
-        "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
-            "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.03093)",
-            "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
-        }	
+  "global": {
+    "_comment": "Performance profile option matter for this game",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1600x900",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "forceResSwitchFullscreen": "True",
+    "forceResSwitchNative": "1600x900",
+    "rom": "hodsd",
+    "target": "alls",
+    "64bits": "True",
+    "magpieClass": "UnrealWindow",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "sinden_and_notsinden"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "hide_crosshair": {
+      "Crosshairs||Enable Custom": "0",
+      "Crosshairs||Enable Native": "0"
+    },
+    "show_crosshair": {
+      "Crosshairs||Enable Custom": "1",
+      "Crosshairs||Enable Native": "0"
+    },
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1"
     }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+    }
+  }
 }

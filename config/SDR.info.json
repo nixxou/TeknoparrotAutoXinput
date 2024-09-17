@@ -1,38 +1,48 @@
 {
-	"global": {
-		"rom": "sdr",
-		"target": "ringwide",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "gamewin",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden,wiimote,gamepad",
-		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
-	},
-    "tpoptions": {
-		"recommanded_tp_settings":{
-			"General||HideCursor": "1"
-		},	
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        }
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1280x720",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "rom": "sdr",
+    "target": "ringwide",
+    "64bits": "False",
+    "magpieClass": "gamewin",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "sinden_and_notsinden"
+  },
+  "tpoptions": {
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1"
     },
-	"gameoptions": {
-        "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy": {
-            "gunA_4tiers": "2"
-        },
-        "recommanded_gameoptions & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy": {
-            "gunB_4tiers": "2"
-        }
-	}
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+    }
+  }
 }

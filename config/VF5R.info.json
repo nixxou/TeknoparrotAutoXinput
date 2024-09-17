@@ -11,51 +11,51 @@
 		"magpieNoLateFocus": "False"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||Windowed": "1"
         },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
-        "set_res_in_tp_settings & 720p & windowed": {
+        "set_resolution & 720p & windowed": {
             "General||CustomResolution": "1",
             "General||ResolutionWidth": "1200",
             "General||ResolutionHeight": "720"
         },
-        "set_res_in_tp_settings & 1080p & windowed": {
+        "set_resolution & 1080p & windowed": {
             "General||CustomResolution": "1",
             "General||ResolutionWidth": "1800",
             "General||ResolutionHeight": "1080"
         },
-        "set_res_in_tp_settings & 2k & windowed": {
+        "set_resolution & 2k & windowed": {
             "General||CustomResolution": "1",
             "General||ResolutionWidth": "2400",
             "General||ResolutionHeight": "1440"
         },
-        "set_res_in_tp_settings & 4k & windowed": {
+        "set_resolution & 4k & windowed": {
             "General||CustomResolution": "1",
             "General||ResolutionWidth": "3600",
             "General||ResolutionHeight": "2160"
         },
-        "set_res_in_tp_settings & 720p & fullscreen": {
+        "set_resolution & 720p & fullscreen": {
             "General||CustomResolution": "1",
             "General||ResolutionWidth": "1280",
             "General||ResolutionHeight": "720"
         },
-        "set_res_in_tp_settings & 1080p & fullscreen": {
+        "set_resolution & 1080p & fullscreen": {
             "General||CustomResolution": "1",
             "General||ResolutionWidth": "1920",
             "General||ResolutionHeight": "1080"
         },
-        "set_res_in_tp_settings & 2k & fullscreen": {
+        "set_resolution & 2k & fullscreen": {
             "General||CustomResolution": "1",
             "General||ResolutionWidth": "2560",
             "General||ResolutionHeight": "1440"
         },
-        "set_res_in_tp_settings & 4k & fullscreen": {
+        "set_resolution & 4k & fullscreen": {
             "General||CustomResolution": "1",
             "General||ResolutionWidth": "3840",
             "General||ResolutionHeight": "2160"

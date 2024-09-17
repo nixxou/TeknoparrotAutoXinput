@@ -1,34 +1,43 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "Test of the Day",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "True"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-		"replace_network": {
-			"Network||Dhcp": "1",
-			"Network||Ip": "{{networkip}}",
-			"Network||Mask": "{{networkmask}}",
-			"Network||Gateway": "{{networkgateway}}",
-			"Network||Dns1": "{{networkdns1}}"	
-		},		
-	},
-	"gameoptions": {
-		"recommanded_gameoptions": {
-			"useMagpie" : "2"
-		}
-	}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "??? (Scale)",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "Test of the Day",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "True"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "replace_network": {
+      "Network||Dhcp": "1",
+      "Network||Ip": "{{networkip}}",
+      "Network||Mask": "{{networkmask}}",
+      "Network||Gateway": "{{networkgateway}}",
+      "Network||Dns1": "{{networkdns1}}"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions": {
+      "useMagpie": "2"
+    }
+  }
 }

@@ -1,6 +1,12 @@
 {
 	"global": {
 		"windowed": "General,Windowed,1",
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "False",
+		"showGameOptionVsync": "False",
+		"showGameOptionFFB": "True",
+		"upscaleFullscreen": "True",
+		"upscaleWindowed": "True",
 		"magpieClass": "SEGA RACING CLASSIC",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",
@@ -10,25 +16,25 @@
 		"magpieNoLateFocus": "False"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
-        "set_res_in_tp_settings & 720p": {
+        "set_resolution & 720p": {
             "General||Resolution": "1280 x 720",
         },
-        "set_res_in_tp_settings & 1080p": {
+        "set_resolution & 1080p": {
             "General||Resolution": "1920 x 1080",
         },
-        "set_res_in_tp_settings & 2k": {
+        "set_resolution & 2k": {
             "General||Resolution": "2560 x 1440",
         },
-        "set_res_in_tp_settings & 4k": {
+        "set_resolution & 4k": {
             "General||Resolution": "3840 x 2160",
         },
         "recommanded_tp_settings": {},

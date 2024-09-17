@@ -1,51 +1,74 @@
 {
-	"global": {
-		"windowed": "Graphics,DisplayMode,Windowed",
-		"magpieClass": "UnrealWindow",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||DisplayMode": "Fullscreen"
-        },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||DisplayMode": "Fullscreen"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||DisplayMode": "Windowed"
-        },
-        "set_res_in_tp_settings & 720p": {
-            "Graphics||Use Custom Resolution": "1",
-            "Graphics||Resolution Width": "1280",
-            "Graphics||Resolution Height": "720"
-        },
-        "set_res_in_tp_settings & 1080p": {
-            "Graphics||Use Custom Resolution": "1",
-            "Graphics||Resolution Width": "1920",
-            "Graphics||Resolution Height": "1080"
-        },
-        "set_res_in_tp_settings & 2k": {
-            "Graphics||Use Custom Resolution": "1",
-            "Graphics||Resolution Width": "2560",
-            "Graphics||Resolution Height": "1440"
-        },
-        "set_res_in_tp_settings & 4k": {
-            "Graphics||Use Custom Resolution": "1",
-            "Graphics||Resolution Width": "3840",
-            "Graphics||Resolution Height": "2160"
-        },	
-		"replace_network": {
-			"Network||Force Specific Network Adapter": "1",
-			"Network||Network Adapter IP": "{{networkip}}"
-		},
-		"replace_gameid": {
-			"General||OnlineID": "{{apm3id}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "Graphics,DisplayMode,Windowed",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "UnrealWindow",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "Graphics||DisplayMode": "Fullscreen"
+    },
+    "set_fullscreen": {
+      "Graphics||DisplayMode": "Fullscreen"
+    },
+    "set_windowed": {
+      "Graphics||DisplayMode": "Windowed"
+    },
+    "set_resolution & 720p": {
+      "Graphics||Use Custom Resolution": "1",
+      "Graphics||Resolution Width": "1280",
+      "Graphics||Resolution Height": "720"
+    },
+    "set_resolution & 1080p": {
+      "Graphics||Use Custom Resolution": "1",
+      "Graphics||Resolution Width": "1920",
+      "Graphics||Resolution Height": "1080"
+    },
+    "set_resolution & 2k": {
+      "Graphics||Use Custom Resolution": "1",
+      "Graphics||Resolution Width": "2560",
+      "Graphics||Resolution Height": "1440"
+    },
+    "set_resolution & 4k": {
+      "Graphics||Use Custom Resolution": "1",
+      "Graphics||Resolution Width": "3840",
+      "Graphics||Resolution Height": "2160"
+    },
+    "game_native_res": {
+      "Graphics||Use Custom Resolution": "0",
+      "Graphics||Resolution Width": "1920",
+      "Graphics||Resolution Height": "1080"
+    },
+    "recommanded_tp_settings & low_perfprofile": {
+      "Graphics||Render Scale": "75"
+    },
+    "recommanded_tp_settings & high_perfprofile": {
+      "Graphics||Render Scale": "125"
+    },
+    "recommanded_tp_settings & normal_perfprofile": {
+      "Graphics||Render Scale": "100"
+    },
+    "replace_network": {
+      "Network||Force Specific Network Adapter": "1",
+      "Network||Network Adapter IP": "{{networkip}}"
+    },
+    "replace_gameid": {
+      "General||OnlineID": "{{apm3id}}"
+    }
+  },
+  "gameoptions": {}
 }

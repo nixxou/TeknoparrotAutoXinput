@@ -1,0 +1,25 @@
+{
+	"global": {
+		"windowed": "General,Windowed,1",
+		"magpieClass": "SQ",
+		"magpie3DGameMode": "True",
+		"magpieDisableDirectFlip": "False",
+		"magpieAllowScalingMaximized": "False",
+		"magpieLaunchBefore": "False",
+		"magpieNoMoveWindow": "False",
+		"magpieShowCursor": "True",
+		"environmentVariables" : "GALLIUM_DRIVER==zink"
+	},
+	"tpoptions": {
+		"set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_windowed": {
+            "General||Windowed": "1"
+        }
+	},
+	"gameoptions": {}
+}

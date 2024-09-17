@@ -11,48 +11,48 @@
 		"magpieNoLateFocus": "False"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||Windowed": "1"
         },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
-        "set_res_in_tp_settings & fullscreen & 720p": {
+        "set_resolution & fullscreen & 720p": {
             "General||ResolutionWidth": "1280",
             "General||ResolutionHeight": "720"
         },
-        "set_res_in_tp_settings & fullscreen & 1080p": {
+        "set_resolution & fullscreen & 1080p": {
             "General||ResolutionWidth": "1920",
             "General||ResolutionHeight": "1080"
         },
-        "set_res_in_tp_settings & fullscreen & 2k": {
+        "set_resolution & fullscreen & 2k": {
             "General||ResolutionWidth": "2560",
             "General||ResolutionHeight": "1440"
         },
-        "set_res_in_tp_settings & fullscreen & 4k": {
+        "set_resolution & fullscreen & 4k": {
             "General||ResolutionWidth": "3840",
             "General||ResolutionHeight": "2160"
         },
-        "set_res_in_tp_settings & windowed & 720p": {
+        "set_resolution & windowed & 720p": {
             "General||ResolutionWidth": "920",
             "General||ResolutionHeight": "720"
         },
-        "set_res_in_tp_settings & windowed & 1080p": {
+        "set_resolution & windowed & 1080p": {
             "General||ResolutionWidth": "1440",
             "General||ResolutionHeight": "1080"
         },
-        "set_res_in_tp_settings & windowed & 2k": {
+        "set_resolution & windowed & 2k": {
             "General||ResolutionWidth": "1920",
             "General||ResolutionHeight": "1440"
         },
-        "set_res_in_tp_settings & windowed & 4k": {
+        "set_resolution & windowed & 4k": {
             "General||ResolutionWidth": "2880",
             "General||ResolutionHeight": "2160"
         },
-		"use_gpu_fix_in_tp_settings & amd": {
+		"amd": {
 			"General||AMDCrashFix": "1"
 		}
 	},

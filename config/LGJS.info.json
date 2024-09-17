@@ -1,37 +1,52 @@
 {
-	"global": {
-		"rom": "lgjsp",
-		"target": "lindbergh",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "FREEGLUT",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden,wiimote,gamepad",
-		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
-	},
-	"tpoptions": {
-		"use_gpu_fix_in_tp_settings & amd": {
-			"General||EnableAmdFix": "1"
-		},
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "recommanded_tp_settings": {
-            "General||HideCursor": "1",
-			"General||OriginalDualScreen": "0"
-        }
-	},
-    "gameoptions": {
-        "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy": {
-            "gunA_4tiers": "2"
-        },
-        "recommanded_gameoptions & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy": {
-            "gunB_4tiers": "2"
-        }	
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1024x768",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "need60hz": "True",
+    "rom": "lgjsp",
+    "target": "lindbergh",
+    "64bits": "False",
+    "magpieClass": "FREEGLUT",
+    "magpieRegisterAsSize_dontkeepaspectratio": "640x360",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden,wiimote,gamepad",
+    "recommanded_vjoy_windowed": "all"
+  },
+  "tpoptions": {
+    "amd": {
+      "General||EnableAmdFix": "1"
+    },
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1",
+      "General||OriginalDualScreen": "0",
+      "General||DongleRegion": "USA",
+      "General||PcbRegion": "USA"
     }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy & keepaspectratio": {
+      "gunA_4tiers": "2"
+    },
+    "recommanded_gameoptions & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy & keepaspectratio": {
+      "gunB_4tiers": "2"
+    },
+    "recommanded_gameoptions": {
+      "runRivaTuner": "True"
+    }
+  }
 }

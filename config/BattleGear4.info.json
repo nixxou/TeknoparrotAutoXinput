@@ -1,28 +1,37 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "‚a‚`‚s‚s‚k‚d@‚f‚d‚`‚q@‚S",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False"
-	},
-	"tpoptions": {	
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-		"recommanded_tp_settings": {
-				"General||IntroFix": "1"
-		},
-		"replace_network": {
-				"Network||BroadcastAddress": "{{broadcastaddress}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "800x600",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "need60hzWindowed": "True",
+    "magpieClass": "‚a‚`‚s‚s‚k‚d@‚f‚d‚`‚q@‚S",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||IntroFix": "1"
+    },
+    "replace_network": {
+      "Network||BroadcastAddress": "{{broadcastaddress}}"
+    }
+  },
+  "gameoptions": {}
 }

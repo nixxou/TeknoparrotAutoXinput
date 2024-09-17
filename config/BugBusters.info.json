@@ -1,31 +1,74 @@
 {
-	"global": {
-		"_comment": "Dont work on recent intel cpu",
-		"rom": "bugbust",
-		"target": "windows",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "BBUSTER",
-		"magpieTitle": "",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-       "recommanded_tp_settings": {  
-        },
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "Dont work fine on my computer, so i only configured windowed",
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "need60hz": "True",
+    "rom": "bugbust",
+    "target": "windows",
+    "64bits": "False",
+    "magpieClass": "BBUSTER",
+    "magpieTitle": "",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False",
+    "magpieRegisterAsSize_dontkeepaspectratio": "640x360",
+    "recommanded_vjoy_fullscreen_keepaspectratio": "all",
+    "recommanded_vjoy_windowed_keepaspectratio": "all",
+    "recommanded_vjoy_fullscreen_dontkeepaspectratio": "all",
+    "recommanded_vjoy_windowed_dontkeepaspectratio": "all"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy & keepaspectratio": {
+      "gun_ExtraSinden": "-action \"set-offsets -13.625,1.2725,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & keepaspectratio": {
+      "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.37457)",
+      "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+    },
+    "recommanded_gameoptions & fullscreen & !at_least_one_sinden & keepaspectratio": {
+      "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.33333)",
+      "tmpGunYFormula": ""
+    },
+    "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy & keepaspectratio": {
+      "gunA_4tiers": "2"
+    },
+    "recommanded_gameoptions & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy & keepaspectratio": {
+      "gunB_4tiers": "2"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy & no_keepaspectratio": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_keepaspectratio": {
+      "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+    },
+    "recommanded_gameoptions & fullscreen & !at_least_one_sinden & no_keepaspectratio": {
+      "tmpGunXFormula": "",
+      "tmpGunYFormula": ""
+    }
+  }
 }

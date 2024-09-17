@@ -1,55 +1,118 @@
 {
-	"global": {
-		"windowed": "Graphics,DisplayMode,Windowed",
-		"magpieClass": "Direct3DWindowClass",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||DisplayMode": "Fullscreen"
-        },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||DisplayMode": "Fullscreen"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||DisplayMode": "Windowed"
-        },
-        "set_res_in_tp_settings & 720p": {
-			"General||Screen Width": "1280",
-            "General||Screen Height": "720",
-            "General||Render Resolution X": "1280",
-			"General||Render Resolution Y": "720"
-        },
-        "set_res_in_tp_settings & 1080p": {
-			"General||Screen Width": "1920",
-            "General||Screen Height": "1080",
-            "General||Render Resolution X": "1920",
-			"General||Render Resolution Y": "1080"
-        },
-        "set_res_in_tp_settings & 2k": {
-			"General||Screen Width": "2560",
-            "General||Screen Height": "1440",
-            "General||Render Resolution X": "2560",
-			"General||Render Resolution Y": "1440"
-        },
-        "set_res_in_tp_settings & 4k": {
-			"General||Screen Width": "3840",
-            "General||Screen Height": "2160",
-            "General||Render Resolution X": "3840",
-			"General||Render Resolution Y": "2160"
-        },		
-		"replace_network": {
-			"Network||Force Specific Network Adapter": "1",
-			"Network||Network Adapter IP": "{{networkip}}"
-		},
-		"replace_gameid": {
-			"General||OnlineID": "{{apm3id}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "Graphics,DisplayMode,Windowed",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "Direct3DWindowClass",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||DisplayMode": "Fullscreen"
+    },
+    "set_fullscreen": {
+      "General||DisplayMode": "Fullscreen"
+    },
+    "set_windowed": {
+      "General||DisplayMode": "Windowed"
+    },
+    "set_resolution & 720p & low_perfprofile": {
+      "General||Screen Width": "1280",
+      "General||Screen Height": "720",
+      "General||Render Resolution X": "900",
+      "General||Render Resolution Y": "720"
+    },
+    "set_resolution & 1080p & low_perfprofile": {
+      "General||Screen Width": "1920",
+      "General||Screen Height": "1080",
+      "General||Render Resolution X": "1350",
+      "General||Render Resolution Y": "1080"
+    },
+    "set_resolution & 2k & low_perfprofile": {
+      "General||Screen Width": "2560",
+      "General||Screen Height": "1440",
+      "General||Render Resolution X": "1800",
+      "General||Render Resolution Y": "1440"
+    },
+    "set_resolution & 4k & low_perfprofile": {
+      "General||Screen Width": "3840",
+      "General||Screen Height": "2160",
+      "General||Render Resolution X": "2700",
+      "General||Render Resolution Y": "2160"
+    },
+    "set_resolution & 720p & normal_perfprofile": {
+      "General||Screen Width": "1280",
+      "General||Screen Height": "720",
+      "General||Render Resolution X": "1280",
+      "General||Render Resolution Y": "720"
+    },
+    "set_resolution & 1080p & normal_perfprofile": {
+      "General||Screen Width": "1920",
+      "General||Screen Height": "1080",
+      "General||Render Resolution X": "1920",
+      "General||Render Resolution Y": "1080"
+    },
+    "set_resolution & 2k & normal_perfprofile": {
+      "General||Screen Width": "2560",
+      "General||Screen Height": "1440",
+      "General||Render Resolution X": "2560",
+      "General||Render Resolution Y": "1440"
+    },
+    "set_resolution & 4k & normal_perfprofile": {
+      "General||Screen Width": "3840",
+      "General||Screen Height": "2160",
+      "General||Render Resolution X": "3840",
+      "General||Render Resolution Y": "2160"
+    },
+    "set_resolution & 720p & high_perfprofile": {
+      "General||Screen Width": "1280",
+      "General||Screen Height": "720",
+      "General||Render Resolution X": "1600",
+      "General||Render Resolution Y": "900"
+    },
+    "set_resolution & 1080p & high_perfprofile": {
+      "General||Screen Width": "1920",
+      "General||Screen Height": "1080",
+      "General||Render Resolution X": "2400",
+      "General||Render Resolution Y": "1350"
+    },
+    "set_resolution & 2k & high_perfprofile": {
+      "General||Screen Width": "2560",
+      "General||Screen Height": "1440",
+      "General||Render Resolution X": "3200",
+      "General||Render Resolution Y": "1800"
+    },
+    "set_resolution & 4k & high_perfprofile": {
+      "General||Screen Width": "3840",
+      "General||Screen Height": "2160",
+      "General||Render Resolution X": "4800",
+      "General||Render Resolution Y": "2700"
+    },
+    "game_native_res": {
+      "General||Screen Width": "1920",
+      "General||Screen Height": "1080",
+      "General||Render Resolution X": "1920",
+      "General||Render Resolution Y": "1080"
+    },
+    "replace_network": {
+      "Network||Force Specific Network Adapter": "1",
+      "Network||Network Adapter IP": "{{networkip}}"
+    },
+    "replace_gameid": {
+      "General||OnlineID": "{{apm3id}}"
+    }
+  },
+  "gameoptions": {}
 }

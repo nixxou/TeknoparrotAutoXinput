@@ -1,33 +1,49 @@
 {
-	"global": {
-		"rom": "lgj",
-		"target": "lindbergh",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "FREEGLUT",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "all"
-	},
-	"tpoptions": {
-		"use_gpu_fix_in_tp_settings & amd": {
-			"General||EnableAmdFix": "1"
-		},
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "recommanded_tp_settings": {
-            "General||HideCursor": "1"
-        }
-	},
-	"gameoptions": {
-		"recommanded_gameoptions": {
-			"runRivaTuner" : "True"
-		}
-	}
+  "global": {
+    "_comment": "Some Audio issue linked to 5.1, aim fix so vjoy is mandatory",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1360x768",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "need60hz": "True",
+    "rom": "lgj",
+    "target": "lindbergh",
+    "64bits": "False",
+    "magpieClass": "FREEGLUT",
+    "recommanded_vjoy_fullscreen": "all",
+    "recommanded_vjoy_windowed": "all"
+  },
+  "tpoptions": {
+    "amd": {
+      "General||EnableAmdFix": "1"
+    },
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1",
+      "General||DongleRegion": "USA",
+      "General||PcbRegion": "USA"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions": {
+      "tmpGunAXFormulaBefore": "if([X]<16384,(0.000006589949510093*([X]*[X]))+(1.00495*[X])+178,(-0.0000155155*([X]*[X]))+(1.6436*[X])-4444)",
+      "tmpGunAYFormulaBefore": "(1.03236*[Y])-1264.44",
+      "tmpGunBXFormulaBefore": "if([X]<16384,(0.000006589949510093*([X]*[X]))+(1.00495*[X])+178,(-0.0000155155*([X]*[X]))+(1.6436*[X])-4444)",
+      "tmpGunBYFormulaBefore": "(1.03236*[Y])-1264.44",
+      "runRivaTuner": "True"
+    }
+  }
 }

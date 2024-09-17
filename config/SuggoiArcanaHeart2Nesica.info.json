@@ -1,6 +1,13 @@
 {
 	"global": {
 		"windowed": "",
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "True",
+		"showGameOptionVsync": "False",
+		"showGameOptionFFB": "False",
+		"upscaleFullscreen": "False",
+		"upscaleWindowed": "False",
+		"canUseJoyInsteadOfDpad":"True",
 		"magpieClass": "AH2 CLASS",
 		"magpieTitle": "",
 		"magpie3DGameMode": "False",

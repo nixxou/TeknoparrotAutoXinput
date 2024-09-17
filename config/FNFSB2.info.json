@@ -1,6 +1,12 @@
 {
 	"global": {
 		"windowed": "General,Windowed,1",
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "False",
+		"showGameOptionVsync": "True",
+		"showGameOptionFFB": "False",
+		"upscaleFullscreen": "True",
+		"upscaleWindowed": "False",
 		"magpieClass": "RawApp",
 		"magpieTitle": "",
 		"magpie3DGameMode": "True",
@@ -12,13 +18,13 @@
 		"magpieExecutable": ""
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
         "recommanded_tp_settings": {

@@ -1,18 +1,26 @@
 {
-	"global": {
-		"_comment": "No option for windowed",
-		"windowed": "",
-		"magpieClass": "rr::win32::Window",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
-	},
-	"tpoptions": {
-		"replace_gameid": {
-			"General||APM3ID": "{{apm3id}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "No option for windowed",
+    "windowed": "",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "rr::win32::Window",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False"
+  },
+  "tpoptions": {
+    "replace_gameid": {
+      "General||APM3ID": "{{apm3id}}"
+    }
+  },
+  "gameoptions": {}
 }

@@ -1,36 +1,44 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "Direct3DWindowClass",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-			"General||Windowed" : "0"
-		},
-		"set_displaymode_in_tp_settings & set_fullscreen": {
-			"General||Windowed" : "0"
-		},
-		"set_displaymode_in_tp_settings & set_windowed": {
-			"General||Windowed" : "1"
-		},		
-		"ffb":{
-			"General||Enable Outputs" : "1"
-		},
-		"recommanded_tp_settings": {
-			"General||Dome Hack" : "1"
-		},
-		"recommanded_tp_settings & xinput": {
-			"General||Reverse Y Axis" : "0"
-		},
-		"recommanded_tp_settings & hotas": {
-			"General||Reverse Y Axis" : "1"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "960x540",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "magpieClass": "Direct3DWindowClass",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "ffb": {
+      "General||Enable Outputs": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||Dome Hack": "1"
+    },
+    "recommanded_tp_settings & xinput": {
+      "General||Reverse Y Axis": "0"
+    },
+    "recommanded_tp_settings & hotas": {
+      "General||Reverse Y Axis": "1"
+    }
+  },
+  "gameoptions": {}
 }

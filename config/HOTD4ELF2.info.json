@@ -14,13 +14,13 @@
 		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||DisplayMode": "Windowed"
         },		
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||DisplayMode": "Fullscreen"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||DisplayMode": "Windowed"
         },
         "hide_crosshair": {
@@ -30,42 +30,42 @@
             "Crosshairs||Enable": "1",
 			"Crosshairs||Scaling": "1"
         },
-        "set_res_in_tp_settings & fullscreen & 720p": {
+        "set_resolution & fullscreen & 720p": {
 			"General||CustomResolution": "1",
             "General||ResolutionWidth": "1280",
             "General||ResolutionHeight": "720"
         },
-        "set_res_in_tp_settings & fullscreen & 1080p": {
+        "set_resolution & fullscreen & 1080p": {
 			"General||CustomResolution": "1",
             "General||ResolutionWidth": "1920",
             "General||ResolutionHeight": "1080"
         },
-        "set_res_in_tp_settings & fullscreen & 2k": {
+        "set_resolution & fullscreen & 2k": {
 			"General||CustomResolution": "1",
             "General||ResolutionWidth": "2560",
             "General||ResolutionHeight": "1440"
         },
-        "set_res_in_tp_settings & fullscreen & 4k": {
+        "set_resolution & fullscreen & 4k": {
 			"General||CustomResolution": "1",
             "General||ResolutionWidth": "3840",
             "General||ResolutionHeight": "2160"
         },
-        "set_res_in_tp_settings & windowed & 720p": {
+        "set_resolution & windowed & 720p": {
 			"General||CustomResolution": "1",
             "General||ResolutionWidth": "960",
             "General||ResolutionHeight": "720"
         },
-        "set_res_in_tp_settings & windowed & 1080p": {
+        "set_resolution & windowed & 1080p": {
 			"General||CustomResolution": "1",
             "General||ResolutionWidth": "1440",
             "General||ResolutionHeight": "1080"
         },
-        "set_res_in_tp_settings & windowed & 2k": {
+        "set_resolution & windowed & 2k": {
 			"General||CustomResolution": "1",
             "General||ResolutionWidth": "1920",
             "General||ResolutionHeight": "1440"
         },
-        "set_res_in_tp_settings & windowed & 4k": {
+        "set_resolution & windowed & 4k": {
 			"General||CustomResolution": "1",
             "General||ResolutionWidth": "2880",
             "General||ResolutionHeight": "2160"

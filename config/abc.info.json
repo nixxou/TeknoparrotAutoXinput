@@ -1,30 +1,44 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "FREEGLUT",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-			"General||Windowed" : "0"
-		},
-		"set_displaymode_in_tp_settings & set_fullscreen": {
-			"General||Windowed" : "0"
-		},
-		"set_displaymode_in_tp_settings & set_windowed": {
-			"General||Windowed" : "1"
-		},		
-		"ffb":{
-			"General||Enable Outputs" : "1"
-		},
-		"recommanded_tp_settings & xinput": {
-			"General||Reverse Y Axis" : "1"
-		}
-	},
-	"gameoptions": {
-		"recommanded_gameoptions": {
-			"runRivaTuner" : "True"
-		}
-	}
+  "global": {
+    "_comment": "On amd, you need the old opengl",
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "FREEGLUT",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_displaymode_recommanded & game_native_res": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "ffb": {
+      "General||Enable Outputs": "1"
+    },
+    "recommanded_tp_settings & xinput": {
+      "General||Reverse Y Axis": "1"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions": {
+      "runRivaTuner": "True",
+      "magpieDelay": "3"
+    }
+  }
 }

@@ -1,10 +1,20 @@
 {
-	"global": {
-		"windowed": "",
-		"magpieClass": "AH2 CLASS",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False"
-	},
-	"tpoptions": {},
-	"gameoptions": {}
+  "global": {
+    "windowed": "",
+    "originalRes": "1280x720",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "True",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "canUseJoyInsteadOfDpad": "True",
+    "need60hz": "True",
+    "magpieClass": "AH2 CLASS",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False"
+  },
+  "tpoptions": {},
+  "gameoptions": {}
 }

@@ -1,135 +1,167 @@
 {
-	"global": {
-		"_comment": "Fullscreen not always work on my computer, so i set it as windowed by default, can be changed if needed",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "FREEGLUT",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"use_gpu_fix_in_tp_settings & nvidia": {
-			"Graphics||GPU Fix": "None"
-		},
-		"use_gpu_fix_in_tp_settings & amdold": {
-			"Graphics||GPU Fix": "AMD"
-		},
-		"use_gpu_fix_in_tp_settings & amdnew": {
-			"Graphics||GPU Fix": "New AMD Driver"
-		},
-		"use_gpu_fix_in_tp_settings & amdrid": {
-			"Graphics||GPU Fix": "AMD"
-		},
-		"use_gpu_fix_in_tp_settings & intel": {
-			"Graphics||GPU Fix": "INTEL"
-		},
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "set_res_in_tp_settings & 720p": {
-			"General||ResolutionWidth": "1280",
-            "General||ResolutionHeight": "720",
-            "General||FrameBufferWidth": "900",
-			"General||FrameBufferHeight": "720",
-            "General||CourseSpecularWidth": "60",
-            "General||CourseSpecularHeight": "60",
-			"General||ShadowMapWidth": "480",
-            "General||ShadowMapHeight": "480",
-            "General||CharacterShadowMapWidth": "480",
-			"General||CharacterShadowMapHeight": "240",
-            "General||SpecularWorkWidth": "60",
-            "General||SpecularWorkHeight": "60",
-			"General||SpecularWidth": "480",
-            "General||SpecularHeight": "240",
-			"General||GlareWidth": "375",
-            "General||GlareHeight": "280"
-			
-        },
-        "set_res_in_tp_settings & 1080p": {
-			"General||ResolutionWidth": "1920",
-            "General||ResolutionHeight": "1080",
-            "General||FrameBufferWidth": "1920",
-			"General||FrameBufferHeight": "1080",
-            "General||CourseSpecularWidth": "90",
-            "General||CourseSpecularHeight": "90",
-			"General||ShadowMapWidth": "720",
-            "General||ShadowMapHeight": "720",
-            "General||CharacterShadowMapWidth": "720",
-			"General||CharacterShadowMapHeight": "360",
-            "General||SpecularWorkWidth": "90",
-            "General||SpecularWorkHeight": "45",
-			"General||SpecularWidth": "720",
-            "General||SpecularHeight": "360",
-			"General||GlareWidth": "560",
-            "General||GlareHeight": "420"
-        },
-        "set_res_in_tp_settings & 2k": {
-			"General||ResolutionWidth": "2560",
-            "General||ResolutionHeight": "1440",
-            "General||FrameBufferWidth": "2560",
-			"General||FrameBufferHeight": "1440",
-            "General||CourseSpecularWidth": "120",
-            "General||CourseSpecularHeight": "120",
-			"General||ShadowMapWidth": "960",
-            "General||ShadowMapHeight": "960",
-            "General||CharacterShadowMapWidth": "960",
-			"General||CharacterShadowMapHeight": "480",
-            "General||SpecularWorkWidth": "120",
-            "General||SpecularWorkHeight": "60",
-			"General||SpecularWidth": "960",
-            "General||SpecularHeight": "480",
-			"General||GlareWidth": "750",
-            "General||GlareHeight": "560"
-        },
-        "set_res_in_tp_settings & 4k": {
-			"General||ResolutionWidth": "3840",
-            "General||ResolutionHeight": "2160",
-            "General||FrameBufferWidth": "3840",
-			"General||FrameBufferHeight": "2160",
-            "General||CourseSpecularWidth": "180",
-            "General||CourseSpecularHeight": "180",
-			"General||ShadowMapWidth": "1440",
-            "General||ShadowMapHeight": "1440",
-            "General||CharacterShadowMapWidth": "1440",
-			"General||CharacterShadowMapHeight": "720",
-            "General||SpecularWorkWidth": "180",
-            "General||SpecularWorkHeight": "90",
-			"General||SpecularWidth": "1440",
-            "General||SpecularHeight": "720",
-			"General||GlareWidth": "1125",
-            "General||GlareHeight": "840"
-        },		
-		"shifter": {
-			"General||RealGearshift": "1"
-		},
-		"!shifter": {
-			"General||RealGearshift": "0"
-		},
-        "recommanded_tp_settings": {
-            "General||Framelimiter": "1"
-        },
-        "ffb": {
-            "General||Enable Outputs": "1"
-        },
-		"replace_network": {
-			"Network||Dhcp": "0",
-			"Network||Ip": "{{networkip}}",
-			"Network||Cab1IP": "{{networkip}}",
-			"Network||Mask": "{{networkmask}}",
-			"Network||Gateway": "{{networkgateway}}",
-			"Network||Dns1": "{{networkdns1}}",
-			"Network||Dns2": "{{networkdns2}}",
-			"Network||BroadcastIP": "{{broadcastaddress}}"
-		}		
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "Fullscreen not always work on my computer, so i set it as windowed by default, also windowed can do 120hz+",
+    "originalRes": "1360x768",
+    "windowed": "General,Windowed,1",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "FREEGLUT",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "nvidia": {
+      "Graphics||GPU Fix": "None"
+    },
+    "amdold": {
+      "Graphics||GPU Fix": "AMD"
+    },
+    "amdnew": {
+      "Graphics||GPU Fix": "New AMD Driver"
+    },
+    "amdrid": {
+      "Graphics||GPU Fix": "AMD"
+    },
+    "intel": {
+      "Graphics||GPU Fix": "INTEL"
+    },
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution & 720p": {
+      "General||ResolutionWidth": "1280",
+      "General||ResolutionHeight": "720",
+      "General||FrameBufferWidth": "900",
+      "General||FrameBufferHeight": "720",
+      "General||CourseSpecularWidth": "60",
+      "General||CourseSpecularHeight": "60",
+      "General||ShadowMapWidth": "480",
+      "General||ShadowMapHeight": "480",
+      "General||CharacterShadowMapWidth": "480",
+      "General||CharacterShadowMapHeight": "240",
+      "General||SpecularWorkWidth": "60",
+      "General||SpecularWorkHeight": "60",
+      "General||SpecularWidth": "480",
+      "General||SpecularHeight": "240",
+      "General||GlareWidth": "375",
+      "General||GlareHeight": "280"
+    },
+    "set_resolution & 1080p": {
+      "General||ResolutionWidth": "1920",
+      "General||ResolutionHeight": "1080",
+      "General||FrameBufferWidth": "1920",
+      "General||FrameBufferHeight": "1080",
+      "General||CourseSpecularWidth": "90",
+      "General||CourseSpecularHeight": "90",
+      "General||ShadowMapWidth": "720",
+      "General||ShadowMapHeight": "720",
+      "General||CharacterShadowMapWidth": "720",
+      "General||CharacterShadowMapHeight": "360",
+      "General||SpecularWorkWidth": "90",
+      "General||SpecularWorkHeight": "45",
+      "General||SpecularWidth": "720",
+      "General||SpecularHeight": "360",
+      "General||GlareWidth": "560",
+      "General||GlareHeight": "420"
+    },
+    "set_resolution & 2k": {
+      "General||ResolutionWidth": "2560",
+      "General||ResolutionHeight": "1440",
+      "General||FrameBufferWidth": "2560",
+      "General||FrameBufferHeight": "1440",
+      "General||CourseSpecularWidth": "120",
+      "General||CourseSpecularHeight": "120",
+      "General||ShadowMapWidth": "960",
+      "General||ShadowMapHeight": "960",
+      "General||CharacterShadowMapWidth": "960",
+      "General||CharacterShadowMapHeight": "480",
+      "General||SpecularWorkWidth": "120",
+      "General||SpecularWorkHeight": "60",
+      "General||SpecularWidth": "960",
+      "General||SpecularHeight": "480",
+      "General||GlareWidth": "750",
+      "General||GlareHeight": "560"
+    },
+    "set_resolution & 4k": {
+      "General||ResolutionWidth": "3840",
+      "General||ResolutionHeight": "2160",
+      "General||FrameBufferWidth": "3840",
+      "General||FrameBufferHeight": "2160",
+      "General||CourseSpecularWidth": "180",
+      "General||CourseSpecularHeight": "180",
+      "General||ShadowMapWidth": "1440",
+      "General||ShadowMapHeight": "1440",
+      "General||CharacterShadowMapWidth": "1440",
+      "General||CharacterShadowMapHeight": "720",
+      "General||SpecularWorkWidth": "180",
+      "General||SpecularWorkHeight": "90",
+      "General||SpecularWidth": "1440",
+      "General||SpecularHeight": "720",
+      "General||GlareWidth": "1125",
+      "General||GlareHeight": "840"
+    },
+    "game_native_res": {
+      "General||ResolutionWidth": "1360",
+      "General||ResolutionHeight": "768",
+      "General||FrameBufferWidth": "962",
+      "General||FrameBufferHeight": "768",
+      "General||CourseSpecularWidth": "64",
+      "General||CourseSpecularHeight": "64",
+      "General||ShadowMapWidth": "512",
+      "General||ShadowMapHeight": "512",
+      "General||CharacterShadowMapWidth": "512",
+      "General||CharacterShadowMapHeight": "256",
+      "General||SpecularWorkWidth": "64",
+      "General||SpecularWorkHeight": "32",
+      "General||SpecularWidth": "512",
+      "General||SpecularHeight": "256",
+      "General||GlareWidth": "400",
+      "General||GlareHeight": "300"
+    },
+    "shifter_found": {
+      "General||RealGearshift": "1"
+    },
+    "no_shifter_found": {
+      "General||RealGearshift": "0"
+    },
+    "recommanded_tp_settings & fullscreen": {
+      "General||Framelimiter": "1"
+    },
+    "recommanded_tp_settings & windowed & 60hz": {
+      "General||Framelimiter": "1"
+    },
+    "recommanded_tp_settings & windowed & 120hz": {
+      "General||Framelimiter": "0"
+    },
+    "ffb": {
+      "General||Enable Outputs": "1"
+    },
+    "replace_network": {
+      "Network||Dhcp": "0",
+      "Network||Ip": "{{networkip}}",
+      "Network||Cab1IP": "{{networkip}}",
+      "Network||Mask": "{{networkmask}}",
+      "Network||Gateway": "{{networkgateway}}",
+      "Network||Dns1": "{{networkdns1}}",
+      "Network||Dns2": "{{networkdns2}}",
+      "Network||BroadcastIP": "{{broadcastaddress}}"
+    }
+  },
+  "gameoptions": {}
 }

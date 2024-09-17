@@ -14,13 +14,13 @@
 		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||DisplayMode": "Windowed"
         },		
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||DisplayMode": "Fullscreen"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||DisplayMode": "Windowed"
         },
         "hide_crosshair": {

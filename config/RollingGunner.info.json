@@ -1,6 +1,13 @@
 {
 	"global": {
 		"windowed": "",
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "True",
+		"showGameOptionVsync": "False",
+		"showGameOptionFFB": "False",
+		"upscaleFullscreen": "True",
+		"upscaleWindowed": "False",
+		"canUseJoyInsteadOfDpad":"True",
 		"magpieClass": "SDL_App",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",

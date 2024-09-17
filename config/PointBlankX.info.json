@@ -1,38 +1,53 @@
 {
-	"global": {
-		"_comment": "",
-		"rom": "",
-		"target": "",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "UnityWndClass",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False",
-		"recoil": "gunshot",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "sinden_and_notsinden"
-	},
-    "tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-		"hide_crosshair": {
-            "Crosshair||Enable": "0",
-			"Crosshair||Enable Alpha Blend": "0"
-        },
-        "show_crosshair": {
-            "Crosshair||Enable": "1",
-			"Crosshair||Enable Alpha Blend": "1"
-        }
+  "global": {
+    "_comment": "",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1280x720",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "rom": "",
+    "target": "",
+    "64bits": "False",
+    "magpieClass": "UnityWndClass",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "recoil": "gunshot",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "sinden_and_notsinden"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
     },
-    "gameoptions": {
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "hide_crosshair": {
+      "Crosshair||Enable": "0",
+      "Crosshair||Enable Alpha Blend": "0"
+    },
+    "show_crosshair": {
+      "Crosshair||Enable": "1",
+      "Crosshair||Enable Alpha Blend": "1"
     }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+    }
+  }
 }

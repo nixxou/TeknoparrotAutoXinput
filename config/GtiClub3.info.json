@@ -1,31 +1,39 @@
 {
-	"global": {
-		"_comment": "For 4k, custom executable, seems possible to use dgvodoo with nvidia, but that wont work for me on amd",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "GTI Club - Supermini Festa!",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & !4k": {
-            "General||Windowed": "1"
-        },
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded & 4k": {
-            "General||Windowed": "0"
-        },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },		
-		"ffb":{
-			"General||Enable Outputs" : "1"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "Run only at 30 fps, so if you find a way to unlock it, keep us in the loop",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1376x807",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "magpieClass": "GTI Club - Supermini Festa!",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_displaymode_recommanded & game_native_res": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "ffb": {
+      "General||Enable Outputs": "1"
+    }
+  },
+  "gameoptions": {}
 }

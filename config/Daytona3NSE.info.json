@@ -1,33 +1,40 @@
 {
-	"global": {
-		"windowed": "General,Borderless Fullscreen,1",
-		"magpieClass": "NRT Application",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "True"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Borderless Fullscreen": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Borderless Fullscreen": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Borderless Fullscreen": "1"
-        },
-		"ffb":{
-			"General||Enable Outputs": "1"
-		},
-		"recommanded_tp_settings": {
-			"General||Hide Cursor": "1"
-		}		
-	},
-	"gameoptions": {
-		"recommanded_gameoptions": {
-			"useMagpie" : "2"
-		}
-	}
+  "global": {
+    "_comment": "On amd, i have to use dvkx or crash on title screen",
+    "windowed": "General,Borderless Fullscreen,1",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "need60hz": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "NRT Application",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "True"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Borderless Fullscreen": "0"
+    },
+    "set_fullscreen": {
+      "General||Borderless Fullscreen": "0"
+    },
+    "set_windowed": {
+      "General||Borderless Fullscreen": "1"
+    },
+    "ffb": {
+      "General||Enable Outputs": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||Hide Cursor": "1"
+    }
+  },
+  "gameoptions": {}
 }

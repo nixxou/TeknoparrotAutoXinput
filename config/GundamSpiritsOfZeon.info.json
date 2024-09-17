@@ -1,48 +1,61 @@
 {
-	"global": {
-		"_comment": "",
-		"rom": "gsoz",
-		"target": "ttx",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "",
-		"magpieTitle": "TeknoParrot - Gundam Spirits Of Zeon",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False",
-		"magpieNoClick": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "all"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "recommanded_tp_settings": {
-            "General||HideCursor": "1",
-			"General||FpsLimitEnable": "1",
-			"General||FpsLimit": "60",
-			"Bezel||Enable": "1"
-        },
-        "recommanded_tp_settings & !dgunb": {
-			"General||GameMode": "PLAYER 1 ONLY"
-        },
-        "recommanded_tp_settings & dgunb": {
-			"General||GameMode": "2 PLAYERS"
-        }		
-	},
-	"gameoptions": {
-		"fullscreen & recommanded_gameoptions": {
-			"useMagpie" : "3"
-		}
-	}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1280x480",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "True",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "rom": "gsoz",
+    "target": "ttx",
+    "64bits": "False",
+    "magpieClass": "",
+    "magpieTitle": "TeknoParrot - Gundam Spirits Of Zeon",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False",
+    "magpieNoClick": "False",
+	"magpieRegisterAsSize_tag": "640x480,windowed&no_gunb_found",
+	"magpieCrop": "320x0x320x0,windowed&no_gunb_found",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "not_all_sinden"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1",
+      "General||FpsLimitEnable": "1",
+      "General||FpsLimit": "60",
+	  "Bezel||Enable": "0"
+    },
+    "recommanded_tp_settings & no_gunb_found": {
+      "General||GameMode": "PLAYER 1 ONLY"
+    },
+    "recommanded_tp_settings & gunb_found": {
+      "General||GameMode": "2 PLAYERS"
+    }
+  },
+  "gameoptions": {
+    "fullscreen & recommanded_gameoptions": {
+      "useMagpie": "3",
+      "magpieSinden": "1"
+    },
+    "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy & windowed & no_gunb_found": {
+      "gunA_4tiers": "2"
+    },
+  }
 }

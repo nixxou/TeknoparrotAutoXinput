@@ -1,32 +1,40 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "FULL_BLOWN",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "True"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },		
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        }		
-	},
-	"gameoptions": {
-		"recommanded_gameoptions & use_optional_reshade & fix_res_in_patches & fullscreen": {
-			"useInjector": "true",
-			"injectorDllList": "dxgi.dll.inject",
-			"injectorDelay": "0"
-		},
-		"shifter": {
-			"EnableGearChange": "True"
-		}		
-	}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "magpieClass": "FULL_BLOWN",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "True"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & optional_reshade & set_resolution_patches & fullscreen & no_game_native_res": {
+      "useInjector": "true",
+      "injectorDllList": "dxgi.dll.inject",
+      "injectorDelay": "0"
+    },
+    "shifter_found": {
+      "EnableGearChange": "True"
+    }
+  }
 }

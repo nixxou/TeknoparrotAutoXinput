@@ -1,5 +1,11 @@
 {
 	"global": {
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "False",
+		"showGameOptionVsync": "True",
+		"showGameOptionFFB": "False",
+		"upscaleFullscreen": "True",
+		"upscaleWindowed": "False",
 		"rom": "sgg",
 		"target": "ringwide",
 		"64bits": "False",
@@ -14,13 +20,13 @@
 		"recommanded_vjoy_windowed": "all"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         }
 	},

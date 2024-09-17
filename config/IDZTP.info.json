@@ -1,6 +1,13 @@
 {
 	"global": {
 		"windowed": "Graphics,DisplayMode,Windowed",
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "False",
+		"showGameOptionVsync": "False",
+		"showGameOptionFFB": "True",
+	    "showGameOptionKeepAspectRatio": "False",
+		"upscaleFullscreen": "True",
+		"upscaleWindowed": "True",
 		"magpieClass": "Direct3DWindowClass",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",

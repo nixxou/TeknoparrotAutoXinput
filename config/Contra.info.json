@@ -1,66 +1,100 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "AMCONTRA",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },
-        "set_res_in_tp_settings & 720p & fullscreen": {
-            "General||Custom Resolution (Stretches)": "1",			
-            "General||Resolution Width": "1280",
-            "General||Resolution Height": "720"
-        },
-        "set_res_in_tp_settings & 1080p & fullscreen": {
-            "General||Custom Resolution (Stretches)": "1",					
-            "General||Resolution Width": "1920",
-            "General||Resolution Height": "1080"
-        },
-        "set_res_in_tp_settings & 2k & fullscreen": {
-            "General||Custom Resolution (Stretches)": "1",					
-            "General||Resolution Width": "2560",
-            "General||Resolution Height": "1440"
-        },
-        "set_res_in_tp_settings & 4k & fullscreen": {
-            "General||Custom Resolution (Stretches)": "1",			
-            "General||Resolution Width": "3840",
-            "General||Resolution Height": "2160"
-        },
-        "set_res_in_tp_settings & 720p & windowed": {
-            "General||Custom Resolution (Stretches)": "1",			
-            "General||Resolution Width": "960",
-            "General||Resolution Height": "720"
-        },
-        "set_res_in_tp_settings & 1080p & windowed": {
-            "General||Custom Resolution (Stretches)": "1",					
-            "General||Resolution Width": "1440",
-            "General||Resolution Height": "1080"
-        },
-        "set_res_in_tp_settings & 2k & windowed": {
-            "General||Custom Resolution (Stretches)": "1",					
-            "General||Resolution Width": "1920",
-            "General||Resolution Height": "1440"
-        },
-        "set_res_in_tp_settings & 4k & windowed": {
-            "General||Custom Resolution (Stretches)": "1",			
-            "General||Resolution Width": "2880",
-            "General||Resolution Height": "2160"
-        },		
-        "recommanded_tp_settings": {
-            "General||Framelimiter": "1"
-        }			
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "800x600",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "AMCONTRA",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution & 720p & fullscreen": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "1280",
+      "General||Resolution Height": "720"
+    },
+    "set_resolution & 1080p & fullscreen": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "1920",
+      "General||Resolution Height": "1080"
+    },
+    "set_resolution & 2k & fullscreen": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "2560",
+      "General||Resolution Height": "1440"
+    },
+    "set_resolution & 4k & fullscreen": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "3840",
+      "General||Resolution Height": "2160"
+    },
+    "set_resolution & 720p & windowed & keepaspectratio": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "960",
+      "General||Resolution Height": "720"
+    },
+    "set_resolution & 1080p & windowed & keepaspectratio": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "1440",
+      "General||Resolution Height": "1080"
+    },
+    "set_resolution & 2k & windowed & keepaspectratio": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "1920",
+      "General||Resolution Height": "1440"
+    },
+    "set_resolution & 4k & windowed & keepaspectratio": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "2880",
+      "General||Resolution Height": "2160"
+    },
+    "set_resolution & 720p & windowed & no_keepaspectratio": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "1280",
+      "General||Resolution Height": "720"
+    },
+    "set_resolution & 1080p & windowed &no_keepaspectratio": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "1920",
+      "General||Resolution Height": "1080"
+    },
+    "set_resolution & 2k & windowed & no_keepaspectratio": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "2560",
+      "General||Resolution Height": "1440"
+    },
+    "set_resolution & 4k & windowed & no_keepaspectratio": {
+      "General||Custom Resolution (Stretches)": "1",
+      "General||Resolution Width": "3840",
+      "General||Resolution Height": "2160"
+    },
+    "game_native_res": {
+      "General||Custom Resolution (Stretches)": "0",
+      "General||Resolution Width": "800",
+      "General||Resolution Height": "600"
+    },
+    "recommanded_tp_settings": {
+      "General||Framelimiter": "1"
+    }
+  },
+  "gameoptions": {}
 }

@@ -1,6 +1,14 @@
 {
 	"global": {
 		"windowed": "General,Windowed,1",
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "True",
+		"showGameOptionVsync": "False",
+		"showGameOptionFFB": "False",
+		"upscaleFullscreen": "False",
+		"upscaleWindowed": "False",
+		"canUseJoyInsteadOfDpad":"True",
+		"need60hz":"True",
 		"magpieClass": "MT FRAMEWORK",
 		"magpieTitle": "",
 		"magpie3DGameMode": "False",
@@ -12,13 +20,13 @@
 		"magpieExecutable": ""
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         }
 	},

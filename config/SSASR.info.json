@@ -1,6 +1,12 @@
 {
 	"global": {
 		"windowed": "General,Windowed,1",
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "False",
+		"showGameOptionVsync": "False",
+		"showGameOptionFFB": "True",
+		"upscaleFullscreen": "True",
+		"upscaleWindowed": "True",
 		"magpieClass": "TeknoParrot - Sonic & SEGA All-Stars Racing",
 		"magpie3DGameMode": "False",
 		"magpieDisableDirectFlip": "False",
@@ -10,19 +16,19 @@
 		"magpieNoLateFocus": "False"
 	},
 	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
+		"set_displaymode_recommanded": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
+        "set_fullscreen": {
             "General||Windowed": "0"
         },
-        "set_displaymode_in_tp_settings & set_windowed": {
+        "set_windowed": {
             "General||Windowed": "1"
         },
-		"use_gpu_fix_in_tp_settings & intel": {
+		"intel": {
 			"Graphics||GPU Fix": "INTEL"
 		},
-		"use_gpu_fix_in_tp_settings & !intel": {
+		"no_intel": {
 			"Graphics||GPU Fix": "None"
 		},
 		"ffb": {

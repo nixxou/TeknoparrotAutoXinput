@@ -1,6 +1,13 @@
 {
 	"global": {
+		"_comment": "Cant upscale this game on my amd setup and my nvidia potato pc cant use the recommanded settings (x3 with dgvodoo), so i m letting this as windowed for now",
 		"windowed": "General,Windowed,1",
+		"showGameOptionBezel": "False",
+		"showGameOptionCrt": "False",
+		"showGameOptionVsync": "False",
+		"showGameOptionFFB": "True",
+		"upscaleFullscreen": "False",
+		"upscaleWindowed": "False",
 		"magpieClass": "WindowClass",
 		"magpieTitle": "",
 		"magpie3DGameMode": "True",
@@ -11,6 +18,16 @@
 		"magpieNoLateFocus": "False",
 		"magpieExecutable": ""
 	},
-	"tpoptions": {},
+	"tpoptions": {
+		"set_displaymode_recommanded": {
+            "General||Windowed": "1"
+        },
+        "set_fullscreen": {
+            "General||Windowed": "0"
+        },
+        "set_windowed": {
+            "General||Windowed": "1"
+        }
+	},
 	"gameoptions": {}
 }

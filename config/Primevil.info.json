@@ -1,86 +1,98 @@
 {
-	"global": {
-		"rom": "",
-		"target": "",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "FREEGLUT",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden,wiimote,gamepad",
-		"recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
-	},
-    "tpoptions": {
-		"recommanded_tp_settings":{
-			"General||HideCursor": "1",
-			"General||FpsLimitEnable": "1",
-			"General||FpsLimit": "60",
-			"General||UseLocaleEmulator": "1",
-			"General||EnglishTestMenu": "1"
-		},
-        "hide_crosshair": {
-            "Crosshairs||Enable": "0",
-			"Crosshairs||Scaling": "0"
-        },
-        "show_crosshair": {
-            "Crosshairs||Enable": "1",
-			"Crosshairs||Scaling": "1"
-        },		
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0",
-			"General||OneDisplay": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0",
-			"General||OneDisplay": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1",
-			"General||OneDisplay": "1"
-			
-        },
-        "set_res_in_tp_settings & 720p": {
-			"General||CustomResolution": "1",
-            "General||ResolutionWidth": "1280",
-            "General||ResolutionHeight": "720"
-        },
-        "set_res_in_tp_settings & 1080p": {
-			"General||CustomResolution": "1",
-            "General||ResolutionWidth": "1920",
-            "General||ResolutionHeight": "1080"
-        },
-        "set_res_in_tp_settings & 2k": {
-			"General||CustomResolution": "1",
-            "General||ResolutionWidth": "2560",
-            "General||ResolutionHeight": "1440"
-        },
-        "set_res_in_tp_settings & 4k": {
-			"General||CustomResolution": "1",
-            "General||ResolutionWidth": "3840",
-            "General||ResolutionHeight": "2160"
-        }	
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "rom": "",
+    "target": "",
+    "64bits": "False",
+    "magpieClass": "FREEGLUT",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden,wiimote,gamepad",
+    "recommanded_vjoy_windowed": "sinden_and_notsinden,wiimote,gamepad"
+  },
+  "tpoptions": {
+    "recommanded_tp_settings": {
+      "General||HideCursor": "1",
+      "General||FpsLimitEnable": "1",
+      "General||FpsLimit": "60",
+      "General||UseLocaleEmulator": "1",
+      "General||EnglishTestMenu": "1"
     },
-	"gameoptions": {
-        "recommanded_gameoptions & fullscreen & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy": {
-            "gunA_4tiers": "2"
-        },
-        "recommanded_gameoptions & fullscreen & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy": {
-            "gunB_4tiers": "2"
-        },
-        "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
-            "gun_ExtraSinden": "-action \"set-offsets -13.625,1.2725,-1.5,1.03\"",
-            "gun_useExtraSinden": "True"
-        },
-        "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
-            "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.37457)",
-            "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
-        },
-        "recommanded_gameoptions & fullscreen & !at_least_one_sinden": {
-            "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.33333)",
-            "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0)"
-        }
-	}
+    "hide_crosshair": {
+      "Crosshairs||Enable": "0",
+      "Crosshairs||Scaling": "0"
+    },
+    "show_crosshair": {
+      "Crosshairs||Enable": "1",
+      "Crosshairs||Scaling": "1"
+    },
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0",
+      "General||OneDisplay": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0",
+      "General||OneDisplay": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1",
+      "General||OneDisplay": "1"
+    },
+    "set_resolution & 720p": {
+      "General||CustomResolution": "1",
+      "General||ResolutionWidth": "1280",
+      "General||ResolutionHeight": "720"
+    },
+    "set_resolution & 1080p": {
+      "General||CustomResolution": "1",
+      "General||ResolutionWidth": "1920",
+      "General||ResolutionHeight": "1080"
+    },
+    "set_resolution & 2k": {
+      "General||CustomResolution": "1",
+      "General||ResolutionWidth": "2560",
+      "General||ResolutionHeight": "1440"
+    },
+    "set_resolution & 4k": {
+      "General||CustomResolution": "1",
+      "General||ResolutionWidth": "3840",
+      "General||ResolutionHeight": "2160"
+    },
+    "game_native_res": {
+      "General||CustomResolution": "0",
+      "General||ResolutionWidth": "640",
+      "General||ResolutionHeight": "480"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy": {
+      "gunA_4tiers": "2"
+    },
+    "recommanded_gameoptions & fullscreen & !at_least_one_sinden & gun2_is_gun4ir_without_vjoy": {
+      "gunB_4tiers": "2"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -13.625,1.2725,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.37457)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+    },
+    "recommanded_gameoptions & fullscreen & !at_least_one_sinden": {
+      "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.33333)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0)"
+    }
+  }
 }

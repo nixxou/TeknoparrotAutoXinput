@@ -1,62 +1,70 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "InitialD 7 - WGL_RE_FINAL",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"use_gpu_fix_in_tp_settings & nvidia": {
-			"Graphics||GPU Fix": "None"
-		},
-		"use_gpu_fix_in_tp_settings & amdold": {
-			"Graphics||GPU Fix": "AMD"
-		},
-		"use_gpu_fix_in_tp_settings & amdnew": {
-			"Graphics||GPU Fix": "New AMD Driver"
-		},
-		"use_gpu_fix_in_tp_settings & amdrid": {
-			"Graphics||GPU Fix": "AMD"
-		},
-		"use_gpu_fix_in_tp_settings & intel": {
-			"Graphics||GPU Fix": "INTEL"
-		},
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },			
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1"
-        },	
-		"shifter": {
-			"General||RealGearshift": "1"
-		},
-		"!shifter": {
-			"General||RealGearshift": "0"
-		},
-        "recommanded_tp_settings": {
-            "General||Framelimiter": "1"
-        },
-        "ffb": {
-            "General||Enable Outputs": "1"
-        },
-		"replace_network": {
-			"Network||Dhcp": "0",
-			"Network||Ip": "{{networkip}}",
-			"Network||Cab1IP": "{{networkip}}",
-			"Network||Mask": "{{networkmask}}",
-			"Network||Gateway": "{{networkgateway}}",
-			"Network||Dns1": "{{networkdns1}}",
-			"Network||Dns2": "{{networkdns2}}",
-			"Network||BroadcastIP": "{{broadcastaddress}}"
-		}		
-	},
-	"gameoptions": {		
-	}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1360x768",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "InitialD 7 - WGL_RE_FINAL",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "nvidia": {
+      "Graphics||GPU Fix": "None"
+    },
+    "amdold": {
+      "Graphics||GPU Fix": "AMD"
+    },
+    "amdnew": {
+      "Graphics||GPU Fix": "New AMD Driver"
+    },
+    "amdrid": {
+      "Graphics||GPU Fix": "AMD"
+    },
+    "intel": {
+      "Graphics||GPU Fix": "INTEL"
+    },
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "shifter_found": {
+      "General||RealGearshift": "1"
+    },
+    "no_shifter_found": {
+      "General||RealGearshift": "0"
+    },
+    "recommanded_tp_settings": {
+      "General||Framelimiter": "1"
+    },
+    "ffb": {
+      "General||Enable Outputs": "1"
+    },
+    "replace_network": {
+      "Network||Dhcp": "0",
+      "Network||Ip": "{{networkip}}",
+      "Network||Cab1IP": "{{networkip}}",
+      "Network||Mask": "{{networkmask}}",
+      "Network||Gateway": "{{networkgateway}}",
+      "Network||Dns1": "{{networkdns1}}",
+      "Network||Dns2": "{{networkdns2}}",
+      "Network||BroadcastIP": "{{broadcastaddress}}"
+    }
+  },
+  "gameoptions": {}
 }

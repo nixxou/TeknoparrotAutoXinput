@@ -1,53 +1,67 @@
 {
-	"global": {
-		"windowed": "General,DisplayMode,Windowed",
-		"magpieClass": "NGL",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
-	},
-	"tpoptions": {
-        "set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||DisplayMode": "Fullscreen"
-        },		
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||DisplayMode": "Fullscreen"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||DisplayMode": "Windowed"
-        },
-		"set_res_in_tp_settings": {
-			"General||Custom Resolution Enabled": "1",
-			"General||Custom Resolution 4:3": "1"
-		},
-        "set_res_in_tp_settings & 720p": {
-            "General||Custom Resolution Width": "1280",			
-            "General||Custom Resolution Height": "720"
-        },
-        "set_res_in_tp_settings & 1080p": {
-            "General||Custom Resolution Width": "1920",			
-            "General||Custom Resolution Height": "1080"
-        },
-        "set_res_in_tp_settings & 2k": {
-            "General||Custom Resolution Width": "2560",			
-            "General||Custom Resolution Height": "1440"
-        },
-        "set_res_in_tp_settings & 4k": {
-            "General||Enable Custom Resolution": "3840",			
-            "General||Custom Resolution": "2160"
-        },		
-		"replace_network": {
-			"Network||Dhcp": "1",
-			"Network||Ip": "{{networkip}}",
-			"Network||Mask": "{{networkmask}}",
-			"Network||Gateway": "{{networkgateway}}",
-			"Network||Dns1": "{{networkdns1}}"	
-		},
-		"replace_gameid": {
-			"General||Player Name for new cards (P1)": "{{customname}}"
-		}		
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,DisplayMode,Windowed",
+    "originalRes": "1280x720",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "NGL",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||DisplayMode": "Fullscreen"
+    },
+    "set_fullscreen": {
+      "General||DisplayMode": "Fullscreen"
+    },
+    "set_windowed": {
+      "General||DisplayMode": "Windowed"
+    },
+    "set_resolution": {
+      "General||Custom Resolution Enabled": "1",
+      "General||Custom Resolution 4:3": "0"
+    },
+    "set_resolution & 720p": {
+      "General||Custom Resolution Width": "1280",
+      "General||Custom Resolution Height": "720"
+    },
+    "set_resolution & 1080p": {
+      "General||Custom Resolution Width": "1920",
+      "General||Custom Resolution Height": "1080"
+    },
+    "set_resolution & 2k": {
+      "General||Custom Resolution Width": "2560",
+      "General||Custom Resolution Height": "1440"
+    },
+    "set_resolution & 4k": {
+      "General||Custom Resolution Width": "3840",
+      "General||Custom Resolution Height": "2160"
+    },
+    "game_native_res": {
+      "General||Custom Resolution Width": "1280",
+      "General||Custom Resolution Height": "720"
+    },
+    "replace_network": {
+      "Network||Dhcp": "1",
+      "Network||Ip": "{{networkip}}",
+      "Network||Mask": "{{networkmask}}",
+      "Network||Gateway": "{{networkgateway}}",
+      "Network||Dns1": "{{networkdns1}}"
+    },
+    "replace_gameid": {
+      "General||Player Name for new cards (P1)": "{{customname}}"
+    }
+  },
+  "gameoptions": {}
 }

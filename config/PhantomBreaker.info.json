@@ -1,27 +1,41 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"magpieClass": "TeknoParrot - Phantom Breaker Another Code",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-            "General||Windowed": "1",
-			"General||FullscreenHack": "0"
-        },
-        "set_displaymode_in_tp_settings & set_fullscreen": {
-            "General||Windowed": "0",
-			"General||FullscreenHack": "1"
-        },
-        "set_displaymode_in_tp_settings & set_windowed": {
-            "General||Windowed": "1",
-			"General||FullscreenHack": "0"
-        }
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1280x720",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieNoLaunchIfSameRes": "Force",
+    "magpieClass": "TeknoParrot - Phantom Breaker Another Code",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False",
+    "forceResizeNative": "1280x720|windowed",
+    "forceResize720p": "1280x720|windowed",
+    "forceResize1080p": "1920x1080|windowed",
+    "forceResize2k": "2560x1440|windowed",
+    "forceResize4k": "3840x2160|windowed"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1",
+      "General||FullscreenHack": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0",
+      "General||FullscreenHack": "1"
+    },
+    "set_windowed": {
+      "General||Windowed": "1",
+      "General||FullscreenHack": "0"
+    }
+  },
+  "gameoptions": {}
 }

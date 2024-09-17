@@ -1,35 +1,50 @@
 {
-	"global": {
-		"_comment": "",
-		"rom": "mgungun2",
-		"target": "ttx",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "Mug Ver",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "all"
-	},
-	"tpoptions": {
-		"set_displaymode_in_tp_settings & set_displaymode_recommanded": {
-			"General||Windowed" : "0"
-		},
-		"set_displaymode_in_tp_settings & set_fullscreen": {
-			"General||Windowed" : "0"
-		},
-		"set_displaymode_in_tp_settings & set_windowed": {
-			"General||Windowed" : "1"
-		}		
-	},
-	"gameoptions": {
-		"recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
-			"gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
-			"gun_useExtraSinden": "True"
-		},
-		"recommanded_gameoptions & fullscreen & at_least_one_sinden": {
-			"tmpGunXFormula":"[OX]+(([OX]-(32767/2))*0.03093)",
-			"tmpGunYFormula":"[OY]+(([OY]-(32767/2))*0.03093)",			
-		}
-	}
+  "global": {
+    "_comment": "demulshooter disabled as it doesnt handle recoil for this game, mgungun2/ttx",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1366x797",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "recoil": "gunshot",
+    "rom": "",
+    "target": "",
+    "64bits": "False",
+    "magpieNoLaunchIfSameRes": "False",
+    "magpieClass": "Mug Ver",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "all",
+    "forceResize720p": "1280x720|windowed & set_resolution",
+    "forceResize1080p": "1920x1080|windowed & set_resolution",
+    "forceResize2k": "2560x1440|windowed & set_resolution",
+    "forceResize4k": "3840x2160|windowed & set_resolution"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+    }
+  }
 }
