@@ -133,7 +133,7 @@ namespace TeknoparrotAutoXinput
 
 		// Importation des fonctions de la Windows API
 		[DllImport("user32.dll")]
-		static extern bool SetCursorPos(int X, int Y);
+		public static extern bool SetCursorPos(int X, int Y);
 
 		[DllImport("user32.dll")]
 		static extern bool SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
@@ -666,34 +666,48 @@ namespace TeknoparrotAutoXinput
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!amd!]") && newfile.Contains(@"\[!amd!]\"))
 				{
 					newfile = newfile.Replace(@"\[!amd!]\", @"\");
-					if(!Program.patchGpuFix || ConfigurationManager.MainConfig.gpuType <= 1) continue;
+					if(!Program.patchGpuFix || Program.gpuType <= 1) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!amdold!]") && newfile.Contains(@"\[!amdold!]\"))
 				{
 					newfile = newfile.Replace(@"\[!amdold!]\", @"\");
-					if (!Program.patchGpuFix || ConfigurationManager.MainConfig.gpuType != 2) continue;
+					if (!Program.patchGpuFix || Program.gpuType != 2) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!amdnew!]") && newfile.Contains(@"\[!amdnew!]\"))
 				{
 					newfile = newfile.Replace(@"\[!amdnew!]\", @"\");
-					if (!Program.patchGpuFix || ConfigurationManager.MainConfig.gpuType != 3) continue;
+					if (!Program.patchGpuFix || Program.gpuType != 3) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!amdrid!]") && newfile.Contains(@"\[!amdrid!]\"))
 				{
 					newfile = newfile.Replace(@"\[!amdrid!]\", @"\");
-					if (!Program.patchGpuFix || ConfigurationManager.MainConfig.gpuType != 4) continue;
+					if (!Program.patchGpuFix || Program.gpuType != 4) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!nvidia!]") && newfile.Contains(@"\[!nvidia!]\"))
 				{
 					newfile = newfile.Replace(@"\[!nvidia!]\", @"\");
-					if (!Program.patchGpuFix || ConfigurationManager.MainConfig.gpuType != 0) continue;
+					if (!Program.patchGpuFix || Program.gpuType != 0) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!intel!]") && newfile.Contains(@"\[!intel!]\"))
 				{
 					newfile = newfile.Replace(@"\[!intel!]\", @"\");
-					if (!Program.patchGpuFix || ConfigurationManager.MainConfig.gpuType != 1) continue;
+					if (!Program.patchGpuFix || Program.gpuType != 1) continue;
 				}
-
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_amd!]") && newfile.Contains(@"\[!no_amd!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_amd!]\", @"\");
+					if (!Program.patchGpuFix || Program.gpuType >= 2) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_nvidia!]") && newfile.Contains(@"\[!no_nvidia!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_nvidia!]\", @"\");
+					if (!Program.patchGpuFix || Program.gpuType == 0) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_intel!]") && newfile.Contains(@"\[!no_intel!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_intel!]\", @"\");
+					if (!Program.patchGpuFix || Program.gpuType == 1) continue;
+				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!dwheel!]") && newfile.Contains(@"\[!dwheel!]\"))
 				{
 					newfile = newfile.Replace(@"\[!dwheel!]\", @"\");
@@ -714,6 +728,26 @@ namespace TeknoparrotAutoXinput
 					newfile = newfile.Replace(@"\[!xinput!]\", @"\");
 					if (!Program.useXinput) continue;
 				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_dwheel!]") && newfile.Contains(@"\[!no_dwheel!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_dwheel!]\", @"\");
+					if (Program.useDinputWheel) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_dhotas!]") && newfile.Contains(@"\[!no_dhotas!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_dhotas!]\", @"\");
+					if (Program.useDinputHotas) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_dlightgun!]") && newfile.Contains(@"\[!no_dlightgun!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_dlightgun!]\", @"\");
+					if (Program.useDinputLightGun) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_xinput!]") && newfile.Contains(@"\[!no_xinput!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_xinput!]\", @"\");
+					if (Program.useXinput) continue;
+				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!ffb!]") && newfile.Contains(@"\[!ffb!]\"))
 				{
 					newfile = newfile.Replace(@"\[!ffb!]\", @"\");
@@ -729,15 +763,25 @@ namespace TeknoparrotAutoXinput
 					newfile = newfile.Replace(@"\[!dont_set_resolution!]\", @"\");
 					if (Program.patchResolutionFix) continue;
 				}
-				if (Path.GetDirectoryName(newfile).Contains(@"\[!set_displaymode!]") && newfile.Contains(@"\[!set_displaymode!]\"))
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!set_displaymode_recommanded!]") && newfile.Contains(@"\[!set_displaymode_recommanded!]\"))
 				{
-					newfile = newfile.Replace(@"\[!set_displaymode!]\", @"\");
-					if (!Program.patchDisplayModeFix) continue;
+					newfile = newfile.Replace(@"\[!set_displaymode_recommanded!]\", @"\");
+					if (!Program.patchDisplayModeFix || Program.displayMode != 0) continue;
 				}
-				if (Path.GetDirectoryName(newfile).Contains(@"\[!dont_set_displaymode!]") && newfile.Contains(@"\[!dont_set_displaymode!]\"))
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!set_fullscreen!]") && newfile.Contains(@"\[!set_fullscreen!]\"))
 				{
-					newfile = newfile.Replace(@"\[!dont_set_displaymode!]\", @"\");
-					if (Program.patchDisplayModeFix) continue;
+					newfile = newfile.Replace(@"\[!set_fullscreen!]\", @"\");
+					if (!Program.patchDisplayModeFix || Program.displayMode != 1) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!set_windowed!]") && newfile.Contains(@"\[!set_windowed!]\"))
+				{
+					newfile = newfile.Replace(@"\[!set_windowed!]\", @"\");
+					if (!Program.patchDisplayModeFix || Program.displayMode != 2) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!game_native_res!]") && newfile.Contains(@"\[!game_native_res!]\"))
+				{
+					newfile = newfile.Replace(@"\[!game_native_res!]\", @"\");
+					if (Program.gpuResolution != 4) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!720p!]") && newfile.Contains(@"\[!720p!]\"))
 				{
@@ -759,49 +803,71 @@ namespace TeknoparrotAutoXinput
 					newfile = newfile.Replace(@"\[!4k!]\", @"\");
 					if (Program.gpuResolution != 3) continue;
 				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_game_native_res!]") && newfile.Contains(@"\[!no_game_native_res!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_game_native_res!]\", @"\");
+					if (Program.gpuResolution == 4) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_720p!]") && newfile.Contains(@"\[!no_720p!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_720p!]\", @"\");
+					if (Program.gpuResolution == 0) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_1080p!]") && newfile.Contains(@"\[!no_1080p!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_1080p!]\", @"\");
+					if (Program.gpuResolution == 1) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_2k!]") && newfile.Contains(@"\[!no_2k!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_2k!]\", @"\");
+					if (Program.gpuResolution == 2) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_4k!]") && newfile.Contains(@"\[!no_4k!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_4k!]\", @"\");
+					if (Program.gpuResolution == 3) continue;
+				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!720p+!]") && newfile.Contains(@"\[!720p+!]\"))
 				{
 					newfile = newfile.Replace(@"\[!720p+!]\", @"\");
-					if (Program.gpuResolution < 0) continue;
+					if (Program.gpuResolution < 0 || Program.gpuResolution == 4) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!1080p+!]") && newfile.Contains(@"\[!1080p+!]\"))
 				{
 					newfile = newfile.Replace(@"\[!1080p+!]\", @"\");
-					if (Program.gpuResolution <1) continue;
+					if (Program.gpuResolution < 1 || Program.gpuResolution == 4) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!2k+!]") && newfile.Contains(@"\[!2k+!]\"))
 				{
 					newfile = newfile.Replace(@"\[!2k+!]\", @"\");
-					if (Program.gpuResolution < 2) continue;
+					if (Program.gpuResolution < 2 || Program.gpuResolution == 4) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!4k+!]") && newfile.Contains(@"\[!4k+!]\"))
 				{
 					newfile = newfile.Replace(@"\[!4k+!]\", @"\");
-					if (Program.gpuResolution < 3) continue;
+					if (Program.gpuResolution < 3 || Program.gpuResolution == 4) continue;
 				}
-
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!720p-!]") && newfile.Contains(@"\[!720p-!]\"))
 				{
 					newfile = newfile.Replace(@"\[!720p-!]\", @"\");
-					if (Program.gpuResolution > 0) continue;
+					if (Program.gpuResolution > 0 || Program.gpuResolution == 4) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!1080p-!]") && newfile.Contains(@"\[!1080p-!]\"))
 				{
 					newfile = newfile.Replace(@"\[!1080p-!]\", @"\");
-					if (Program.gpuResolution > 1) continue;
+					if (Program.gpuResolution > 1 || Program.gpuResolution == 4) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!2k-!]") && newfile.Contains(@"\[!2k-!]\"))
 				{
 					newfile = newfile.Replace(@"\[!2k-!]\", @"\");
-					if (Program.gpuResolution > 2) continue;
+					if (Program.gpuResolution > 2 || Program.gpuResolution == 4) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!4k-!]") && newfile.Contains(@"\[!4k-!]\"))
 				{
 					newfile = newfile.Replace(@"\[!4k-!]\", @"\");
-					if (Program.gpuResolution > 3) continue;
+					if (Program.gpuResolution > 3 || Program.gpuResolution == 4) continue;
 				}
-
-
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!optional_reshade!]") && newfile.Contains(@"\[!optional_reshade!]\"))
 				{
 					newfile = newfile.Replace(@"\[!optional_reshade!]\", @"\");
@@ -812,10 +878,41 @@ namespace TeknoparrotAutoXinput
 					newfile = newfile.Replace(@"\[!no_reshade!]\", @"\");
 					if (Program.patchReshade) continue;
 				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!bezel!]") && newfile.Contains(@"\[!bezel!]\"))
+				{
+					newfile = newfile.Replace(@"\[!bezel!]\", @"\");
+					if (!Program.useBezel) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_bezel!]") && newfile.Contains(@"\[!no_bezel!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_bezel!]\", @"\");
+					if (Program.useBezel) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!crtfilter!]") && newfile.Contains(@"\[!crtfilter!]\"))
+				{
+					newfile = newfile.Replace(@"\[!crtfilter!]\", @"\");
+					if (!Program.useCrt) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_crtfilter!]") && newfile.Contains(@"\[!no_crtfilter!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_crtfilter!]\", @"\");
+					if (Program.useCrt) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!keepaspectratio!]") && newfile.Contains(@"\[!keepaspectratio!]\"))
+				{
+					newfile = newfile.Replace(@"\[!keepaspectratio!]\", @"\");
+					if (!Program.useKeepAspectRatio) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_keepaspectratio!]") && newfile.Contains(@"\[!no_keepaspectratio!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_keepaspectratio!]\", @"\");
+					if (Program.useKeepAspectRatio) continue;
+				}
+
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!at_least_one_sinden!]") && newfile.Contains(@"\[!at_least_one_sinden!]\"))
 				{
 					newfile = newfile.Replace(@"\[!at_least_one_sinden!]\", @"\");
-					if (!Program.useDinputLightGun || (ConfigurationManager.MainConfig.gunAType != "sinden" && ConfigurationManager.MainConfig.gunBType != "sinden")) continue;
+					if (!Program.useDinputLightGun || ((Program.GunAGuid == "" || ConfigurationManager.MainConfig.gunAType != "sinden") && (Program.GunBGuid == "" || ConfigurationManager.MainConfig.gunBType != "sinden"))) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!magpie_sinden_bezel!]") && newfile.Contains(@"\[!magpie_sinden_bezel!]\"))
 				{
@@ -826,7 +923,7 @@ namespace TeknoparrotAutoXinput
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_sinden!]") && newfile.Contains(@"\[!no_sinden!]\"))
 				{
 					newfile = newfile.Replace(@"\[!no_sinden!]\", @"\");
-					if (ConfigurationManager.MainConfig.gunAType == "sinden" || ConfigurationManager.MainConfig.gunBType == "sinden") continue;
+					if ((Program.GunAGuid != "" && ConfigurationManager.MainConfig.gunAType == "sinden") || (Program.GunAGuid != "" && ConfigurationManager.MainConfig.gunBType == "sinden")) continue;
 				}
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!crosshair_gun1_and_gun2!]") && newfile.Contains(@"\[!crosshair_gun1_and_gun2!]\"))
@@ -876,6 +973,26 @@ namespace TeknoparrotAutoXinput
 					newfile = newfile.Replace(@"\[!no_gunb_found!]\", @"\");
 					if (Program.GunBGuid != "") continue;
 				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!shifter_found!]") && newfile.Contains(@"\[!shifter_found!]\"))
+				{
+					newfile = newfile.Replace(@"\[!shifter_found!]\", @"\");
+					if (!Program.shifterGuidFound) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_shifter_found!]") && newfile.Contains(@"\[!no_shifter_found!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_shifter_found!]\", @"\");
+					if (Program.shifterGuidFound) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!throttle_found!]") && newfile.Contains(@"\[!throttle_found!]\"))
+				{
+					newfile = newfile.Replace(@"\[!throttle_found!]\", @"\");
+					if (!Program.throttleGuidFound) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_throttle_found!]") && newfile.Contains(@"\[!no_throttle_found!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_throttle_found!]\", @"\");
+					if (Program.throttleGuidFound) continue;
+				}
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!vsync!]") && newfile.Contains(@"\[!vsync!]\"))
 				{
@@ -919,13 +1036,72 @@ namespace TeknoparrotAutoXinput
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!120hz!]") && newfile.Contains(@"\[!120hz!]\"))
 				{
+					//MessageBox.Show("ok");
 					newfile = newfile.Replace(@"\[!120hz!]\", @"\");
 					if (Program.refreshRate < 120) continue;
+					if (file.ToLower().EndsWith(".remplacerefreshrate"))
+					{
+						string filedata = File.ReadAllText(file);
+						string newContent = filedata.Replace("{refreshRate}", Program.refreshRate.ToString());
+						File.WriteAllText(Path.Combine(Path.GetDirectoryName(file),Path.GetFileNameWithoutExtension(file)),newContent);
+						originalFileName = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file));
+						newfile = Path.Combine(Path.GetDirectoryName(newfile), Path.GetFileNameWithoutExtension(newfile));
+					}
+					if(File.Exists(file+ ".remplacerefreshrate"))
+					{
+						continue;
+					}
+
+					
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!60hz!]") && newfile.Contains(@"\[!60hz!]\"))
 				{
 					newfile = newfile.Replace(@"\[!60hz!]\", @"\");
 					if (Program.refreshRate >= 120) continue;
+				}
+
+				var anyTagMatch = Regex.Match(newfile, @"\\\[!tag-any\{[a-zA-Z0-9+\-_]+\}!\]\\", RegexOptions.IgnoreCase);
+				if (anyTagMatch.Success)
+				{
+					string anyTagDir = anyTagMatch.Groups[0].Value;
+					string anyTagFlags = anyTagMatch.Groups[0].Value.Substring(11, anyTagMatch.Groups[0].Value.Length - 15);
+					bool anyFlagsValid = false;
+					foreach(var flag in anyTagFlags.Split(","))
+					{
+						if (flag.Trim() == "") continue;
+						if (TpSettingsManager.tags.Contains(flag.Trim().ToLower()))
+						{
+							anyFlagsValid = true;
+							break;
+						}
+					}
+					if (anyFlagsValid)
+					{
+						newfile = newfile.Replace(anyTagDir, @"\");
+					}
+					else continue;
+				}
+
+				var allTagMatch = Regex.Match(newfile, @"\\\[!tag-all\{[a-zA-Z0-9+\-_]+\}!\]\\", RegexOptions.IgnoreCase);
+				if (allTagMatch.Success)
+				{
+					string allTagDir = allTagMatch.Groups[0].Value;
+					string allTagFlags = allTagMatch.Groups[0].Value.Substring(11, allTagMatch.Groups[0].Value.Length - 15);
+					bool allFlagsValid = true;
+					foreach (var flag in allTagFlags.Split(","))
+					{
+						if (flag.Trim() == "") continue;
+						if (!TpSettingsManager.tags.Contains(flag.Trim().ToLower()))
+						{
+							allFlagsValid = false;
+							break;
+						}
+					}
+					if (allFlagsValid)
+					{
+						newfile = newfile.Replace(allTagDir, @"\");
+					}
+					else continue;
 				}
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!cachereshade!]") && newfile.Contains(@"\[!cachereshade!]\"))
@@ -1102,6 +1278,7 @@ namespace TeknoparrotAutoXinput
 
 				if (Path.GetFileName(newfile).ToLower() == "[!magpiereshade!].ini")
 				{
+					Utils.LogMessage("Magpie Reshade : " + file);
 					Program.magpieIni = file;
 					continue;
 				}
@@ -1155,10 +1332,13 @@ namespace TeknoparrotAutoXinput
 				}
 				if (useSoftLink) CreateSoftlink(originalFileName, newfile);
 				else MakeLink(originalFileName, newfile);
+
+				Utils.LogMessage($"{originalFileName}");
 			}
 
 			if(reshadeiniFile != "" && File.Exists(reshadeiniFile))
 			{
+				Utils.LogMessage($"found reshade ici : {reshadeiniFile}");
 				string currentDir = Path.GetDirectoryName(reshadeiniFile);
 				IniFile reshadeIniFile = new IniFile(reshadeiniFile);
 				string presetStr = "PresetPath";
@@ -1168,8 +1348,8 @@ namespace TeknoparrotAutoXinput
 					reshadePreset = reshadeIniFile.Read("CurrentPresetPath", "GENERAL").Trim();
 					if (reshadePreset != "") presetStr = "CurrentPresetPath";
 				}
+				Utils.LogMessage($"reshadePreset : {reshadePreset}");
 
-				
 				if (reshadePreset.ToLower().EndsWith(".ini"))
 				{
 
@@ -1190,11 +1370,13 @@ namespace TeknoparrotAutoXinput
 						reshadePresetFileHigh = Path.Combine(currentDir, reshadePresetBase + "-high.ini");
 					}
 
+					Utils.LogMessage($"check for : {reshadePresetFileBase} {reshadePresetFileLow} {reshadePresetFileHigh}");
 
 
 					if (Program.performanceProfile == 0 && reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
 					{
 						reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
+						Utils.LogMessage($"write : " + reshadePresetBase + ".ini");
 					}
 
 					if (Program.performanceProfile == 1 && reshadePresetFile.ToLower() != reshadePresetFileLow.ToLower())
@@ -1202,10 +1384,12 @@ namespace TeknoparrotAutoXinput
 						if (File.Exists(reshadePresetFileLow))
 						{
 							reshadeIniFile.Write(presetStr, reshadePresetBase + "-low.ini", "GENERAL");
+							Utils.LogMessage($"write2 : " + reshadePresetBase + "-low.ini");
 						}
 						else if(reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
 						{
 							reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
+							Utils.LogMessage($"write2 : " + reshadePresetBase + ".ini");
 						}
 					}
 
@@ -1214,14 +1398,20 @@ namespace TeknoparrotAutoXinput
 						if (File.Exists(reshadePresetFileHigh))
 						{
 							reshadeIniFile.Write(presetStr, reshadePresetBase + "-high.ini", "GENERAL");
+							Utils.LogMessage($"write3 : " + reshadePresetBase + "-high.ini");
 						}
 						else if (reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
 						{
 							reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
+							Utils.LogMessage($"write3 : " + reshadePresetBase + ".ini");
 						}
 					}
 
-					if(reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower() && !File.Exists(reshadePresetFile)) reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
+					if (reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower() && !File.Exists(reshadePresetFile))
+					{
+						reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
+						Utils.LogMessage($"write5 : " + reshadePresetBase + ".ini");
+					}
 
 
 					
@@ -1492,6 +1682,18 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!intel!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_nvidia!]") && file.Contains(@"\[!no_nvidia!]\"))
+				{
+					file = file.Replace(@"\[!no_nvidia!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_intel!]") && file.Contains(@"\[!no_intel!]\"))
+				{
+					file = file.Replace(@"\[!no_intel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_amd!]") && file.Contains(@"\[!no_amd!]\"))
+				{
+					file = file.Replace(@"\[!no_amd!]\", @"\");
+				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!dwheel!]") && file.Contains(@"\[!dwheel!]\"))
 				{
 					file = file.Replace(@"\[!dwheel!]\", @"\");
@@ -1508,6 +1710,22 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!xinput!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_dwheel!]") && file.Contains(@"\[!no_dwheel!]\"))
+				{
+					file = file.Replace(@"\[!no_dwheel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_dhotas!]") && file.Contains(@"\[!no_dhotas!]\"))
+				{
+					file = file.Replace(@"\[!no_dhotas!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_dlightgun!]") && file.Contains(@"\[!no_dlightgun!]\"))
+				{
+					file = file.Replace(@"\[!no_dlightgun!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_xinput!]") && file.Contains(@"\[!no_xinput!]\"))
+				{
+					file = file.Replace(@"\[!no_xinput!]\", @"\");
+				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!ffb!]") && file.Contains(@"\[!ffb!]\"))
 				{
 					file = file.Replace(@"\[!ffb!]\", @"\");
@@ -1520,13 +1738,21 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!dont_set_resolution!]\", @"\");
 				}
-				if (Path.GetDirectoryName(file).Contains(@"\[!set_displaymode!]") && file.Contains(@"\[!set_displaymode!]\"))
+				if (Path.GetDirectoryName(file).Contains(@"\[!set_displaymode_recommanded!]") && file.Contains(@"\[!set_displaymode_recommanded!]\"))
 				{
-					file = file.Replace(@"\[!set_displaymode!]\", @"\");
+					file = file.Replace(@"\[!set_displaymode_recommanded!]\", @"\");
 				}
-				if (Path.GetDirectoryName(file).Contains(@"\[!dont_set_displaymode!]") && file.Contains(@"\[!dont_set_displaymode!]\"))
+				if (Path.GetDirectoryName(file).Contains(@"\[!set_fullscreen!]") && file.Contains(@"\[!set_fullscreen!]\"))
 				{
-					file = file.Replace(@"\[!dont_set_displaymode!]\", @"\");
+					file = file.Replace(@"\[!set_fullscreen!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!set_windowed!]") && file.Contains(@"\[!set_windowed!]\"))
+				{
+					file = file.Replace(@"\[!set_windowed!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!game_native_res!]") && file.Contains(@"\[!game_native_res!]\"))
+				{
+					file = file.Replace(@"\[!game_native_res!]\", @"\");
 				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!720p!]") && file.Contains(@"\[!720p!]\"))
 				{
@@ -1543,6 +1769,26 @@ namespace TeknoparrotAutoXinput
 				if (Path.GetDirectoryName(file).Contains(@"\[!4k!]") && file.Contains(@"\[!4k!]\"))
 				{
 					file = file.Replace(@"\[!4k!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_game_native_res!]") && file.Contains(@"\[!no_game_native_res!]\"))
+				{
+					file = file.Replace(@"\[!no_game_native_res!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_720p!]") && file.Contains(@"\[!no_720p!]\"))
+				{
+					file = file.Replace(@"\[!no_720p!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_1080p!]") && file.Contains(@"\[!no_1080p!]\"))
+				{
+					file = file.Replace(@"\[!no_1080p!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_2k!]") && file.Contains(@"\[!no_2k!]\"))
+				{
+					file = file.Replace(@"\[!no_2k!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_4k!]") && file.Contains(@"\[!no_4k!]\"))
+				{
+					file = file.Replace(@"\[!no_4k!]\", @"\");
 				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!720p+!]") && file.Contains(@"\[!720p+!]\"))
 				{
@@ -1583,6 +1829,30 @@ namespace TeknoparrotAutoXinput
 				if (Path.GetDirectoryName(file).Contains(@"\[!no_reshade!]") && file.Contains(@"\[!no_reshade!]\"))
 				{
 					file = file.Replace(@"\[!no_reshade!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!bezel!]") && file.Contains(@"\[!bezel!]\"))
+				{
+					file = file.Replace(@"\[!bezel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_bezel!]") && file.Contains(@"\[!no_bezel!]\"))
+				{
+					file = file.Replace(@"\[!no_bezel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!crtfilter!]") && file.Contains(@"\[!crtfilter!]\"))
+				{
+					file = file.Replace(@"\[!crtfilter!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_crtfilter!]") && file.Contains(@"\[!no_crtfilter!]\"))
+				{
+					file = file.Replace(@"\[!no_crtfilter!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!keepaspectratio!]") && file.Contains(@"\[!keepaspectratio!]\"))
+				{
+					file = file.Replace(@"\[!keepaspectratio!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_keepaspectratio!]") && file.Contains(@"\[!no_keepaspectratio!]\"))
+				{
+					file = file.Replace(@"\[!no_keepaspectratio!]\", @"\");
 				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!at_least_one_sinden!]") && file.Contains(@"\[!at_least_one_sinden!]\"))
 				{
@@ -1633,7 +1903,22 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!no_gunb_found!]\", @"\");
 				}
-
+				if (Path.GetDirectoryName(file).Contains(@"\[!shifter_found!]") && file.Contains(@"\[!shifter_found!]\"))
+				{
+					file = file.Replace(@"\[!shifter_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_shifter_found!]") && file.Contains(@"\[!no_shifter_found!]\"))
+				{
+					file = file.Replace(@"\[!no_shifter_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!throttle_found!]") && file.Contains(@"\[!throttle_found!]\"))
+				{
+					file = file.Replace(@"\[!throttle_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_throttle_found!]") && file.Contains(@"\[!no_throttle_found!]\"))
+				{
+					file = file.Replace(@"\[!no_throttle_found!]\", @"\");
+				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!vsync!]") && file.Contains(@"\[!vsync!]\"))
 				{
 					file = file.Replace(@"\[!vsync!]\", @"\");
@@ -1674,7 +1959,16 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!60hz!]\", @"\");
 				}
-
+				var anyTagMatch = Regex.Match(file, @"\\\[!tag-any\{[a-zA-Z0-9+\-_]+\}!\]\\", RegexOptions.IgnoreCase);
+				if (anyTagMatch.Success)
+				{
+					file = file.Replace(anyTagMatch.Groups[0].Value, @"\");
+				}
+				var allTagMatch = Regex.Match(file, @"\\\[!tag-all\{[a-zA-Z0-9+\-_]+\}!\]\\", RegexOptions.IgnoreCase);
+				if (allTagMatch.Success)
+				{
+					file = file.Replace(allTagMatch.Groups[0].Value, @"\");
+				}
 
 				if (Path.GetDirectoryName(file) != null && Regex.IsMatch(Path.GetDirectoryName(file), @"\\\[!!([A-Za-z0-9 ]+)!!\]") && Regex.IsMatch(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\"))
 				{
@@ -1792,6 +2086,7 @@ namespace TeknoparrotAutoXinput
 
 		public static void CleanHardLinksFiles(string directoryToClean, string originalLinkDir, string executableGameFile)
 		{
+			List<string> restauredFiles = new List<string>();
 			string moveToDest = "";
 			bool moveNeedAdmin = false;
 			string moveAhkCode = "";
@@ -1817,7 +2112,7 @@ namespace TeknoparrotAutoXinput
 				string file = directoryToClean + fileInLinkFolder.Remove(0, originalLinkDir.Length).TrimStart();
 				file = file.Replace("[..]", "..");
 
-				
+
 				if (Path.GetDirectoryName(file).Contains(@"\[!windowed!]") && file.Contains(@"\[!windowed!]\"))
 				{
 					file = file.Replace(@"\[!windowed!]\", @"\");
@@ -1850,6 +2145,18 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!intel!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_nvidia!]") && file.Contains(@"\[!no_nvidia!]\"))
+				{
+					file = file.Replace(@"\[!no_nvidia!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_intel!]") && file.Contains(@"\[!no_intel!]\"))
+				{
+					file = file.Replace(@"\[!no_intel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_amd!]") && file.Contains(@"\[!no_amd!]\"))
+				{
+					file = file.Replace(@"\[!no_amd!]\", @"\");
+				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!dwheel!]") && file.Contains(@"\[!dwheel!]\"))
 				{
 					file = file.Replace(@"\[!dwheel!]\", @"\");
@@ -1866,6 +2173,22 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!xinput!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_dwheel!]") && file.Contains(@"\[!no_dwheel!]\"))
+				{
+					file = file.Replace(@"\[!no_dwheel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_dhotas!]") && file.Contains(@"\[!no_dhotas!]\"))
+				{
+					file = file.Replace(@"\[!no_dhotas!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_dlightgun!]") && file.Contains(@"\[!no_dlightgun!]\"))
+				{
+					file = file.Replace(@"\[!no_dlightgun!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_xinput!]") && file.Contains(@"\[!no_xinput!]\"))
+				{
+					file = file.Replace(@"\[!no_xinput!]\", @"\");
+				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!ffb!]") && file.Contains(@"\[!ffb!]\"))
 				{
 					file = file.Replace(@"\[!ffb!]\", @"\");
@@ -1878,13 +2201,21 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!dont_set_resolution!]\", @"\");
 				}
-				if (Path.GetDirectoryName(file).Contains(@"\[!set_displaymode!]") && file.Contains(@"\[!set_displaymode!]\"))
+				if (Path.GetDirectoryName(file).Contains(@"\[!set_displaymode_recommanded!]") && file.Contains(@"\[!set_displaymode_recommanded!]\"))
 				{
-					file = file.Replace(@"\[!set_displaymode!]\", @"\");
+					file = file.Replace(@"\[!set_displaymode_recommanded!]\", @"\");
 				}
-				if (Path.GetDirectoryName(file).Contains(@"\[!dont_set_displaymode!]") && file.Contains(@"\[!dont_set_displaymode!]\"))
+				if (Path.GetDirectoryName(file).Contains(@"\[!set_fullscreen!]") && file.Contains(@"\[!set_fullscreen!]\"))
 				{
-					file = file.Replace(@"\[!dont_set_displaymode!]\", @"\");
+					file = file.Replace(@"\[!set_fullscreen!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!set_windowed!]") && file.Contains(@"\[!set_windowed!]\"))
+				{
+					file = file.Replace(@"\[!set_windowed!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!game_native_res!]") && file.Contains(@"\[!game_native_res!]\"))
+				{
+					file = file.Replace(@"\[!game_native_res!]\", @"\");
 				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!720p!]") && file.Contains(@"\[!720p!]\"))
 				{
@@ -1901,6 +2232,26 @@ namespace TeknoparrotAutoXinput
 				if (Path.GetDirectoryName(file).Contains(@"\[!4k!]") && file.Contains(@"\[!4k!]\"))
 				{
 					file = file.Replace(@"\[!4k!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_game_native_res!]") && file.Contains(@"\[!no_game_native_res!]\"))
+				{
+					file = file.Replace(@"\[!no_game_native_res!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_720p!]") && file.Contains(@"\[!no_720p!]\"))
+				{
+					file = file.Replace(@"\[!no_720p!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_1080p!]") && file.Contains(@"\[!no_1080p!]\"))
+				{
+					file = file.Replace(@"\[!no_1080p!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_2k!]") && file.Contains(@"\[!no_2k!]\"))
+				{
+					file = file.Replace(@"\[!no_2k!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_4k!]") && file.Contains(@"\[!no_4k!]\"))
+				{
+					file = file.Replace(@"\[!no_4k!]\", @"\");
 				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!720p+!]") && file.Contains(@"\[!720p+!]\"))
 				{
@@ -1941,6 +2292,30 @@ namespace TeknoparrotAutoXinput
 				if (Path.GetDirectoryName(file).Contains(@"\[!no_reshade!]") && file.Contains(@"\[!no_reshade!]\"))
 				{
 					file = file.Replace(@"\[!no_reshade!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!bezel!]") && file.Contains(@"\[!bezel!]\"))
+				{
+					file = file.Replace(@"\[!bezel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_bezel!]") && file.Contains(@"\[!no_bezel!]\"))
+				{
+					file = file.Replace(@"\[!no_bezel!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!crtfilter!]") && file.Contains(@"\[!crtfilter!]\"))
+				{
+					file = file.Replace(@"\[!crtfilter!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_crtfilter!]") && file.Contains(@"\[!no_crtfilter!]\"))
+				{
+					file = file.Replace(@"\[!no_crtfilter!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!keepaspectratio!]") && file.Contains(@"\[!keepaspectratio!]\"))
+				{
+					file = file.Replace(@"\[!keepaspectratio!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_keepaspectratio!]") && file.Contains(@"\[!no_keepaspectratio!]\"))
+				{
+					file = file.Replace(@"\[!no_keepaspectratio!]\", @"\");
 				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!at_least_one_sinden!]") && file.Contains(@"\[!at_least_one_sinden!]\"))
 				{
@@ -1991,8 +2366,72 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!no_gunb_found!]\", @"\");
 				}
-
-
+				if (Path.GetDirectoryName(file).Contains(@"\[!shifter_found!]") && file.Contains(@"\[!shifter_found!]\"))
+				{
+					file = file.Replace(@"\[!shifter_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_shifter_found!]") && file.Contains(@"\[!no_shifter_found!]\"))
+				{
+					file = file.Replace(@"\[!no_shifter_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!throttle_found!]") && file.Contains(@"\[!throttle_found!]\"))
+				{
+					file = file.Replace(@"\[!throttle_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_throttle_found!]") && file.Contains(@"\[!no_throttle_found!]\"))
+				{
+					file = file.Replace(@"\[!no_throttle_found!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!vsync!]") && file.Contains(@"\[!vsync!]\"))
+				{
+					file = file.Replace(@"\[!vsync!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_vsync!]") && file.Contains(@"\[!no_vsync!]\"))
+				{
+					file = file.Replace(@"\[!no_vsync!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!normal_perfprofile!]") && file.Contains(@"\[!normal_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!normal_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!low_perfprofile!]") && file.Contains(@"\[!low_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!low_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!high_perfprofile!]") && file.Contains(@"\[!high_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!high_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!not_normal_perfprofile!]") && file.Contains(@"\[!not_normal_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!not_normal_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!not_low_perfprofile!]") && file.Contains(@"\[!not_low_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!not_low_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!not_high_perfprofile!]") && file.Contains(@"\[!not_high_perfprofile!]\"))
+				{
+					file = file.Replace(@"\[!not_high_perfprofile!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!120hz!]") && file.Contains(@"\[!120hz!]\"))
+				{
+					file = file.Replace(@"\[!120hz!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!60hz!]") && file.Contains(@"\[!60hz!]\"))
+				{
+					file = file.Replace(@"\[!60hz!]\", @"\");
+				}
+				var anyTagMatch = Regex.Match(file, @"\\\[!tag-any\{[a-zA-Z0-9+\-_]+\}!\]\\", RegexOptions.IgnoreCase);
+				if (anyTagMatch.Success)
+				{
+					file = file.Replace(anyTagMatch.Groups[0].Value, @"\");
+				}
+				var allTagMatch = Regex.Match(file, @"\\\[!tag-all\{[a-zA-Z0-9+\-_]+\}!\]\\", RegexOptions.IgnoreCase);
+				if (allTagMatch.Success)
+				{
+					file = file.Replace(allTagMatch.Groups[0].Value, @"\");
+				}
 
 
 
@@ -2055,7 +2494,7 @@ namespace TeknoparrotAutoXinput
 
 				if (!File.Exists(file)) continue;
 
-				if (CanUseHardLink && IsHardLink(file, originalLinkDir))
+				if (CanUseHardLink && IsHardLink(file, originalLinkDir) && !restauredFiles.Contains(file))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} is Hardlink, delete it");
 					try
@@ -2081,7 +2520,7 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 
-				if (CanUseSoftLink && IsSoftLink(file, originalLinkDir))
+				if (CanUseSoftLink && IsSoftLink(file, originalLinkDir) && !restauredFiles.Contains(file))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} is SoftLink, delete it");
 					try
@@ -2114,6 +2553,7 @@ namespace TeknoparrotAutoXinput
 					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(fileToRestore));
 					if (File.Exists(newFilePath)) File.Delete(newFilePath);
 					File.Move(fileToRestore, newFilePath,true);
+					restauredFiles.Add(newFilePath);
 				}
 			}
 
@@ -2897,36 +3337,60 @@ namespace TeknoparrotAutoXinput
 
 		public static void MoveWindowsToZero(IntPtr hWnd)
 		{
+			int compteur = 0;
 
 			RECT windowRect;
-			GetWindowRect(hWnd, out windowRect);
-
-			// Récupérer les dimensions du client de la fenêtre
 			RECT clientRect;
-			GetClientRect(hWnd, out clientRect);
+			Utils.GetWindowRect(hWnd, out windowRect);
+			Utils.GetClientRect(hWnd, out clientRect);
 
 			int winWidth = (windowRect.Right - windowRect.Left);
 			int clientWidth = (clientRect.Right - clientRect.Left);
 
 			int winHeight = (windowRect.Bottom - windowRect.Top);
 			int clientHeight = (clientRect.Bottom - clientRect.Top);
+			Utils.LogMessage($"{clientWidth}x{clientHeight}");
+			while ((clientWidth < 150 || clientHeight < 100) && compteur < 50)
+			{
+				compteur++;
+				Thread.Sleep(200);
+				Utils.GetWindowRect(hWnd, out windowRect);
+				Utils.GetClientRect(hWnd, out clientRect);
+				winWidth = (windowRect.Right - windowRect.Left);
+				clientWidth = (clientRect.Right - clientRect.Left);
+				winHeight = (windowRect.Bottom - windowRect.Top);
+				clientHeight = (clientRect.Bottom - clientRect.Top);
+				Utils.LogMessage($"{clientWidth}x{clientHeight}");
+			}
+			
 
 			int borderSizeWidth = (int)Math.Floor(((double)winWidth - (double)clientWidth) / 2.0);
 			int diffHeight = (winHeight - clientHeight);
 
 			//Screen screen = Screen.FromHandle(hWnd);
 			Screen screen = Screen.PrimaryScreen;
-
+			if (Program.moveWindowToOriginalMonitor)
+			{
+				foreach(var s in Screen.AllScreens)
+				{
+					if(s.DeviceName == Program.originalMonitorDeviceName)
+					{
+						screen = s;
+					}
+				}
+			}
+			
 			//int style = GetWindowLong(hWnd, GWL_STYLE);
 			//SetWindowLong(hWnd, GWL_STYLE, style & ~WS_CAPTION & ~WS_SYSMENU);
-			
+
 
 			if (winWidth <= screen.Bounds.Width && winHeight <= screen.Bounds.Height)
 			{
-				SetWindowPos(hWnd, IntPtr.Zero, 0, 0, 0, 0, 0x0001 | 0x0004 | 0x0010);
+				SetWindowPos(hWnd, IntPtr.Zero, screen.Bounds.X, screen.Bounds.Y, 0, 0, 0x0001 | 0x0004 | 0x0010);
 			}
 			else
 			{
+				Utils.LogMessage("Try move window");
 				SetWindowPos(hWnd, IntPtr.Zero, screen.Bounds.X - (borderSizeWidth), screen.Bounds.Y - (diffHeight - borderSizeWidth), 0, 0, 0x0001 | 0x0004 | 0x0010);
 			}
 
@@ -3056,11 +3520,11 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		public static Dictionary<string,string> GetFirstNetworkAdapterInfo()
+		public static Dictionary<string, string> GetFirstNetworkAdapterInfo()
 		{
-			Dictionary<string,string> results = new Dictionary<string,string>();
+			Dictionary<string, string> results = new Dictionary<string, string>();
 			NetworkInterface activeAdapter = null;
-            System.Threading.Tasks.Task.Run(async () =>
+			System.Threading.Tasks.Task.Run(async () =>
 			{
 				NetworkInterface primaryAdapter = await GetPrimaryNetworkAdapterAsync();
 				if (primaryAdapter != null)
@@ -3069,36 +3533,41 @@ namespace TeknoparrotAutoXinput
 				}
 			}).GetAwaiter().GetResult();
 
-			var ipProperties = activeAdapter.GetIPProperties();
-			var unicastAddress = ipProperties.UnicastAddresses.FirstOrDefault(ip => ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
-
-			if (unicastAddress != null)
+			if (activeAdapter != null)
 			{
-				var ipAddress = unicastAddress.Address;
-				var subnetMask = unicastAddress.IPv4Mask;
-				var gatewayAddress = ipProperties.GatewayAddresses.FirstOrDefault()?.Address;
-				var dnsAddresses = ipProperties.DnsAddresses.Where(dns => dns.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToArray();
+				var ipProperties = activeAdapter.GetIPProperties();
+				var unicastAddress = ipProperties.UnicastAddresses
+					.FirstOrDefault(ip => ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
 
-				var broadcastAddress = GetBroadcastAddress(ipAddress, subnetMask);
+				if (unicastAddress != null)
+				{
+					var ipAddress = unicastAddress.Address;
+					var subnetMask = unicastAddress.IPv4Mask;
+					var gatewayAddress = ipProperties.GatewayAddresses
+						.FirstOrDefault(g => g.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.Address;
+					var dnsAddresses = ipProperties.DnsAddresses
+						.Where(dns => dns.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+						.ToArray();
 
-				results.Add("networkGateway",gatewayAddress?.ToString());
-				results.Add("networkIP", ipAddress.ToString());
-				results.Add("networkMask",subnetMask.ToString());
-				results.Add("BroadcastAddress",broadcastAddress.ToString());
-				if (dnsAddresses.Length > 0)
-				{
-					results.Add("networkDns1",dnsAddresses[0].ToString());
-				}
-				if (dnsAddresses.Length > 1)
-				{
-					results.Add("networkDns2",dnsAddresses[1].ToString());
+					var broadcastAddress = GetBroadcastAddress(ipAddress, subnetMask);
+
+					results.Add("networkGateway", gatewayAddress?.ToString());
+					results.Add("networkIP", ipAddress.ToString());
+					results.Add("networkMask", subnetMask.ToString());
+					results.Add("BroadcastAddress", broadcastAddress.ToString());
+
+					if (dnsAddresses.Length > 0)
+					{
+						results.Add("networkDns1", dnsAddresses[0].ToString());
+					}
+					if (dnsAddresses.Length > 1)
+					{
+						results.Add("networkDns2", dnsAddresses[1].ToString());
+					}
 				}
 			}
 
 			return results;
-
-
-
 		}
 
 		public static string Encrypt(string plainText)
@@ -3347,6 +3816,23 @@ namespace TeknoparrotAutoXinput
 				{
 					// Trouver la configuration de mode correspondant à l'ID du modeInfo
 					var id = (int?)mainScreen.Element("id");
+					try
+					{
+						var positionElement = mainScreen.Element("DisplayConfigSourceMode");
+						if (positionElement != null)
+						{
+							var widthScreen = (int?)positionElement.Element("width");
+							var heightScreen = (int?)positionElement.Element("height");
+							if (widthScreen.HasValue && heightScreen.HasValue)
+							{
+								Program.currentResX = widthScreen.Value;
+								Program.currentResY = heightScreen.Value;
+							}
+						}
+					}
+					catch { }
+
+
 					if (id.HasValue)
 					{
 						var targetId = id.Value.ToString();

@@ -51,7 +51,14 @@ namespace TeknoparrotAutoXinput
 		{
 			cmb_DispositionList.Items.Clear();
 			cmb_DispositionList.Items.Add("<none>");
-
+			cmb_DispositionList.Items.Add("MainMonitor:720p 60hz");
+			cmb_DispositionList.Items.Add("MainMonitor:1080p 60hz");
+			cmb_DispositionList.Items.Add("MainMonitor:2k 60hz");
+			cmb_DispositionList.Items.Add("MainMonitor:4k 60hz");
+			cmb_DispositionList.Items.Add("MainMonitor:720p 120hz");
+			cmb_DispositionList.Items.Add("MainMonitor:1080p 120hz");
+			cmb_DispositionList.Items.Add("MainMonitor:2k 120hz");
+			cmb_DispositionList.Items.Add("MainMonitor:4k 120hz");
 			foreach (var disposition in Directory.GetFiles(Program.DispositionFolder, "disposition_*.xml"))
 			{
 				string disposition_name = Path.GetFileNameWithoutExtension(disposition);

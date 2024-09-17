@@ -35,6 +35,8 @@
 			lbl_GameTitle = new Krypton.Toolkit.KryptonLabel();
 			groupBox2 = new GroupBox();
 			panel2 = new Panel();
+			cmb_nativeRes = new Krypton.Toolkit.KryptonComboBox();
+			button1 = new Button();
 			kryptonLabel9 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
@@ -92,6 +94,7 @@
 			tableLayoutPanel2.SuspendLayout();
 			groupBox2.SuspendLayout();
 			panel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_nativeRes).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_patchlink).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_displayMode).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_patchReshade).BeginInit();
@@ -174,6 +177,8 @@
 			// 
 			// panel2
 			// 
+			panel2.Controls.Add(cmb_nativeRes);
+			panel2.Controls.Add(button1);
 			panel2.Controls.Add(kryptonLabel9);
 			panel2.Controls.Add(kryptonLabel4);
 			panel2.Controls.Add(kryptonLabel8);
@@ -187,6 +192,29 @@
 			panel2.Name = "panel2";
 			panel2.Size = new Size(288, 117);
 			panel2.TabIndex = 0;
+			// 
+			// cmb_nativeRes
+			// 
+			cmb_nativeRes.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_nativeRes.DropDownWidth = 242;
+			cmb_nativeRes.Enabled = false;
+			cmb_nativeRes.IntegralHeight = false;
+			cmb_nativeRes.Items.AddRange(new object[] { "Native" });
+			cmb_nativeRes.Location = new Point(131, 34);
+			cmb_nativeRes.Name = "cmb_nativeRes";
+			cmb_nativeRes.Size = new Size(133, 21);
+			cmb_nativeRes.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_nativeRes.TabIndex = 215;
+			// 
+			// button1
+			// 
+			button1.Location = new Point(27, 72);
+			button1.Name = "button1";
+			button1.Size = new Size(75, 23);
+			button1.TabIndex = 213;
+			button1.Text = "button1";
+			button1.UseVisualStyleBackColor = true;
+			button1.Click += button1_Click;
 			// 
 			// kryptonLabel9
 			// 
@@ -243,6 +271,7 @@
 			cmb_displayMode.Size = new Size(133, 21);
 			cmb_displayMode.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_displayMode.TabIndex = 206;
+			cmb_displayMode.SelectedIndexChanged += cmb_displayMode_SelectedIndexChanged_1;
 			// 
 			// cmb_patchReshade
 			// 
@@ -261,7 +290,7 @@
 			cmb_resolution.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_resolution.DropDownWidth = 242;
 			cmb_resolution.IntegralHeight = false;
-			cmb_resolution.Items.AddRange(new object[] { "Global Settings", "720p", "1080p", "1440p (2K)", "2160p (4K)" });
+			cmb_resolution.Items.AddRange(new object[] { "Global Settings", "720p", "1080p", "1440p (2K)", "2160p (4K)", "Native" });
 			cmb_resolution.Location = new Point(131, 34);
 			cmb_resolution.Name = "cmb_resolution";
 			cmb_resolution.Size = new Size(133, 21);
@@ -653,7 +682,7 @@
 			contextMenuStrip1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
 			contextMenuStrip1.Items.AddRange(new ToolStripItem[] { MenuItem_labelFilterText, MenuItem_textBoxFilter, MenuItem_filterArcade, MenuItem_filterWheel, MenuItem_filterHotas, MenuItem_filterLightgun, MenuItem_clearFilters, toolStripSeparator1, MenuItem_save, MenuItem_load });
 			contextMenuStrip1.Name = "contextMenuStrip1";
-			contextMenuStrip1.Size = new Size(302, 233);
+			contextMenuStrip1.Size = new Size(302, 211);
 			contextMenuStrip1.Opening += contextMenuStrip1_Opening;
 			// 
 			// MenuItem_labelFilterText
@@ -758,6 +787,7 @@
 			groupBox2.ResumeLayout(false);
 			panel2.ResumeLayout(false);
 			panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_nativeRes).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_patchlink).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_displayMode).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_patchReshade).EndInit();
@@ -844,5 +874,7 @@
 		private ToolStripSeparator toolStripSeparator1;
 		private ToolStripMenuItem MenuItem_save;
 		private ToolStripMenuItem MenuItem_load;
+		private Button button1;
+		private Krypton.Toolkit.KryptonComboBox cmb_nativeRes;
 	}
 }

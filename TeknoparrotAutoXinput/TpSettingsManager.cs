@@ -165,6 +165,7 @@ namespace TeknoparrotAutoXinput
 				XmlNode fieldValueNode = fieldNode.SelectSingleNode("FieldValue");
 
 				if (categoryNameNode != null && fieldNameNode != null && fieldValueNode != null)
+				
 				{
 					string keyToSearch = categoryNameNode.InnerText.Trim().ToLower() + "||" + fieldNameNode.InnerText.Trim().ToLower();
 					if (TpSettings.ContainsKey(keyToSearch))

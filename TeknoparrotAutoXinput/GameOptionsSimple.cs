@@ -1,4 +1,5 @@
 ﻿using Krypton.Toolkit;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -29,6 +31,7 @@ namespace TeknoparrotAutoXinput
 		public string PerGameConfigFile = "";
 
 		private List<string> dllPathList = new List<string>();
+		private Dictionary<string, string> GameInfo = new Dictionary<string, string>();
 
 		GameSettings gameSettings = new GameSettings();
 
@@ -63,6 +66,33 @@ namespace TeknoparrotAutoXinput
 			typeConfig.Add("hotas");
 			typeConfig.Add("lightgun");
 			string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+			bool hideWheelTab = true;
+			bool hideHotasTab = true;
+			bool hideGunTab = true;
+			foreach (var type in typeConfig)
+			{
+				var configPath = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + "." + type + ".txt");
+				if (File.Exists(configPath))
+				{
+					if (type == "wheel")
+					{
+						hideWheelTab = false;
+					}
+					if (type == "hotas")
+					{
+						hideHotasTab= false;
+					}
+					if (type == "lightgun")
+					{
+						hideGunTab = false;
+					}
+				}
+			}
+			if(hideWheelTab) tabInfo.TabPages.RemoveByKey("tabWheel");
+			if(hideHotasTab) tabInfo.TabPages.RemoveByKey("tabHotas");
+			if(hideGunTab) tabInfo.TabPages.RemoveByKey("tabLightgun");
+
+
 			/*
 			foreach (var type in typeConfig)
 			{
@@ -89,6 +119,19 @@ namespace TeknoparrotAutoXinput
 			if (File.Exists(infoFile))
 			{
 				txt_info.Text = File.ReadAllText(infoFile);
+				try
+				{
+					var gameInfoParsedJson = JObject.Parse(txt_info.Text);
+					var gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
+					GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
+					if (GameInfo.ContainsKey("showGameOptionBezel") && GameInfo["showGameOptionBezel"].ToLower() == "false") kryptonLabel6.Visible = cmb_useBezel.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionCrt") && GameInfo["showGameOptionCrt"].ToLower() == "false") kryptonLabel7.Visible = cmb_useCrt.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionVsync") && GameInfo["showGameOptionVsync"].ToLower() == "false") kryptonLabel18.Visible = cmb_forcevsync.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionFFB") && GameInfo["showGameOptionFFB"].ToLower() == "false") kryptonLabel39.Visible = cmb_patchFFB.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionKeepAspectRatio") && GameInfo["showGameOptionKeepAspectRatio"].ToLower() == "false") kryptonLabel21.Visible = cmb_keepAspectRatio.Visible = false;
+
+				}
+				catch (Exception ex) { MessageBox.Show("Invalid game.info json, please report the issue"); }
 			}
 
 		}
@@ -384,7 +427,7 @@ namespace TeknoparrotAutoXinput
 
 		private void GameOptionsSimple_Load(object sender, EventArgs e)
 		{
-			cmb_patchResolutionFix.SelectedIndex = gameSettings.patchResolutionFix;
+			cmb_favorJoystick.SelectedIndex = gameSettings.favorJoystick;
 			cmb_resolution.SelectedIndex = gameSettings.gpuResolution;
 			cmb_displayMode.SelectedIndex = gameSettings.displayMode;
 
@@ -441,6 +484,55 @@ namespace TeknoparrotAutoXinput
 
 			chk_runRivaTuner.Checked = gameSettings.runRivaTuner;
 
+			cmb_forcevsync.SelectedIndex = gameSettings.forceVsync;
+			cmb_performance.SelectedIndex = gameSettings.performanceProfile;
+			cmb_useCrt.SelectedIndex = gameSettings.useCrt;
+			cmb_useBezel.SelectedIndex = gameSettings.useBezel;
+			cmb_keepAspectRatio.SelectedIndex = gameSettings.keepAspectRatio;
+			SetBezelCmb();
+			SetCrtCmb();
+			SetKeepRatioCmb();
+
+		}
+
+		public void SetKeepRatioCmb()
+		{
+			bool enabled = true;
+			if (cmb_patchReshade.SelectedIndex == 0)
+			{
+				if (!ConfigurationManager.MainConfig.patchReshade) enabled = false;
+			}
+			if (cmb_patchReshade.SelectedIndex == 2) enabled = false;
+
+			cmb_keepAspectRatio.Enabled = enabled;
+		}
+		public void SetBezelCmb()
+		{
+			bool enabled = true;
+			if (cmb_patchReshade.SelectedIndex == 0)
+			{
+				if (!ConfigurationManager.MainConfig.patchReshade) enabled = false;
+			}
+			if (cmb_patchReshade.SelectedIndex == 2) enabled = false;
+
+			cmb_useBezel.Enabled = enabled;
+		}
+
+		public void SetCrtCmb()
+		{
+			bool enabled = true;
+			if (cmb_patchReshade.SelectedIndex == 0)
+			{
+				if (!ConfigurationManager.MainConfig.patchReshade) enabled = false;
+			}
+			if (cmb_patchReshade.SelectedIndex == 2) enabled = false;
+
+			if (cmb_performance.SelectedIndex == 0)
+			{
+				if (ConfigurationManager.MainConfig.performanceProfile == 1) enabled = false;
+			}
+			if (cmb_performance.SelectedIndex == 2) enabled = false;
+			cmb_useCrt.Enabled = enabled;
 		}
 
 		private void Reload()
@@ -507,7 +599,7 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_Save_Click(object sender, EventArgs e)
 		{
-			gameSettings.patchResolutionFix = cmb_patchResolutionFix.SelectedIndex;
+			gameSettings.favorJoystick = cmb_favorJoystick.SelectedIndex;
 			gameSettings.gpuResolution = cmb_resolution.SelectedIndex;
 			gameSettings.displayMode = cmb_displayMode.SelectedIndex;
 
@@ -555,6 +647,12 @@ namespace TeknoparrotAutoXinput
 			gameSettings.gunB_sindenRecoil3 = cmb_gunB_sindenRecoil3.SelectedIndex;
 
 			gameSettings.runRivaTuner = chk_runRivaTuner.Checked;
+
+			gameSettings.forceVsync = cmb_forcevsync.SelectedIndex;
+			gameSettings.performanceProfile = cmb_performance.SelectedIndex;
+			if (cmb_useCrt.Enabled) gameSettings.useCrt = cmb_useCrt.SelectedIndex;
+			if (cmb_useBezel.Enabled) gameSettings.useBezel = cmb_useBezel.SelectedIndex;
+			if (cmb_keepAspectRatio.Enabled) gameSettings.keepAspectRatio = cmb_keepAspectRatio.SelectedIndex;
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;
@@ -732,7 +830,7 @@ namespace TeknoparrotAutoXinput
 						MessageBox.Show(ex.Message);
 					}
 				}
-				pic_crosshairp1.Image = Image.FromFile(frm.selectedImagePath);
+				pic_crosshairp1.Image = System.Drawing.Image.FromFile(frm.selectedImagePath);
 				lbl_crosshairp1Size.Text = $"{pic_crosshairp1.Image.Width}x{pic_crosshairp1.Image.Height}";
 				int tailleImg = pic_crosshairp1.Image.Width > pic_crosshairp1.Image.Height ? pic_crosshairp1.Image.Width : pic_crosshairp1.Image.Height;
 				if (tailleImg >= 10)
@@ -752,11 +850,11 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		private Image LoadImage(string path)
+		private System.Drawing.Image LoadImage(string path)
 		{
 			using (var stream = new MemoryStream(File.ReadAllBytes(path)))
 			{
-				return Image.FromStream(stream);
+				return System.Drawing.Image.FromStream(stream);
 			}
 		}
 
@@ -793,7 +891,7 @@ namespace TeknoparrotAutoXinput
 						MessageBox.Show(ex.Message);
 					}
 				}
-				pic_crosshairp2.Image = Image.FromFile(frm.selectedImagePath);
+				pic_crosshairp2.Image = System.Drawing.Image.FromFile(frm.selectedImagePath);
 				lbl_crosshairp2Size.Text = $"{pic_crosshairp2.Image.Width}x{pic_crosshairp2.Image.Height}";
 				int tailleImg = pic_crosshairp2.Image.Width > pic_crosshairp2.Image.Height ? pic_crosshairp2.Image.Width : pic_crosshairp2.Image.Height;
 				if (tailleImg >= 10)
@@ -820,7 +918,7 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_crosshairp1Size_Click(object sender, EventArgs e)
 		{
-			Image image = pic_crosshairp1.Image;
+			System.Drawing.Image image = pic_crosshairp1.Image;
 			int newSize = trk_crosshairp1Size.Value;
 			float aspectRatio = (float)image.Width / image.Height;
 
@@ -884,7 +982,7 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_crosshairp2Size_Click(object sender, EventArgs e)
 		{
-			Image image = pic_crosshairp2.Image;
+			System.Drawing.Image image = pic_crosshairp2.Image;
 			int newSize = trk_crosshairp2Size.Value;
 			float aspectRatio = (float)image.Width / image.Height;
 
@@ -962,6 +1060,28 @@ namespace TeknoparrotAutoXinput
 		}
 
 		private void kryptonLabel1_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_patchReshade_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			SetBezelCmb();
+			SetCrtCmb();
+			SetKeepRatioCmb();
+		}
+
+		private void cmb_performance_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			SetCrtCmb();
+		}
+
+		private void cmb_resolution_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
 		{
 
 		}

@@ -46,9 +46,13 @@ namespace TeknoparrotAutoXinput
 			chk_forcevsync.Checked = ConfigurationManager.MainConfig.forceVsync;
 
 			cmb_gpu.SelectedIndex = ConfigurationManager.MainConfig.gpuType;
+
 			cmb_resolution.SelectedIndex = ConfigurationManager.MainConfig.gpuResolution;
 			cmb_displayMode.SelectedIndex = ConfigurationManager.MainConfig.displayMode;
 			chk_patchFFB.Checked = ConfigurationManager.MainConfig.patch_FFB;
+			chk_useBezel.Checked = ConfigurationManager.MainConfig.useBezel;
+			chk_useCrt.Checked = ConfigurationManager.MainConfig.useCrt;
+			chk_keepAspectRatio.Checked = ConfigurationManager.MainConfig.keepAspectRatio;
 			chk_patchReshade.Checked = ConfigurationManager.MainConfig.patchReshade;
 			chk_patchGameID.Checked = ConfigurationManager.MainConfig.patchGameID;
 
@@ -84,6 +88,7 @@ namespace TeknoparrotAutoXinput
 			txt_ffbguidHotas.Text = ConfigurationManager.MainConfig.ffbDinputHotas;
 
 			chk_favorAB.Checked = ConfigurationManager.MainConfig.favorAB;
+			chk_favorJoystick.Checked = ConfigurationManager.MainConfig.favorJoystick;
 
 			txt_tpfolder.Text = ConfigurationManager.MainConfig.TpFolder;
 			txt_monitorswitch.Text = ConfigurationManager.MainConfig.Disposition;
@@ -328,11 +333,12 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.showStartup = chk_showStartup.Checked;
 			ConfigurationManager.MainConfig.useDinputWheel = chk_useDinputWheel.Checked;
 			ConfigurationManager.MainConfig.favorAB = chk_favorAB.Checked;
+			ConfigurationManager.MainConfig.favorJoystick = chk_favorJoystick.Checked;
+
 			ConfigurationManager.MainConfig.useDinputShifter = chk_useDinputShifter.Checked;
 			ConfigurationManager.MainConfig.useDinputHotas = chk_useDinputHotas.Checked;
 			ConfigurationManager.MainConfig.useHotasWithWheel = chk_useHotasWithWheel.Checked;
 			ConfigurationManager.MainConfig.TPConsoleAction = cmb_showStartup.SelectedIndex;
-			ConfigurationManager.MainConfig.gpuType = cmb_gpu.SelectedIndex;
 
 
 			ConfigurationManager.MainConfig.advancedConfig = chk_enableAdvancedOptions.Checked;
@@ -349,6 +355,9 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.gpuResolution = cmb_resolution.SelectedIndex;
 			ConfigurationManager.MainConfig.displayMode = cmb_displayMode.SelectedIndex;
 			ConfigurationManager.MainConfig.patch_FFB = chk_patchFFB.Checked;
+			if (chk_useCrt.Enabled) ConfigurationManager.MainConfig.useBezel = chk_useBezel.Checked;
+			if (chk_useBezel.Enabled) ConfigurationManager.MainConfig.useCrt = chk_useCrt.Checked;
+			if (chk_keepAspectRatio.Enabled) ConfigurationManager.MainConfig.keepAspectRatio = chk_keepAspectRatio.Checked;
 			ConfigurationManager.MainConfig.patchReshade = chk_patchReshade.Checked;
 			ConfigurationManager.MainConfig.patchGameID = chk_patchGameID.Checked;
 
@@ -960,5 +969,39 @@ namespace TeknoparrotAutoXinput
 		{
 
 		}
+
+		private void cmb_displayMode_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_performance_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cmb_performance.SelectedIndex == 1)
+			{
+				chk_useCrt.Enabled = false;
+			}
+			else if (chk_patchReshade.Checked)
+			{
+				chk_useCrt.Enabled = true;
+			}
+		}
+
+		private void chk_patchReshade_CheckedChanged(object sender, EventArgs e)
+		{
+			if (chk_patchReshade.Checked == false)
+			{
+				chk_useCrt.Enabled = false;
+				chk_useBezel.Enabled = false;
+				chk_keepAspectRatio.Enabled = false;
+			}
+			else if (cmb_performance.SelectedIndex != 1)
+			{
+				chk_useCrt.Enabled = true;
+				chk_useBezel.Enabled = true;
+				chk_keepAspectRatio.Enabled = true;
+			}
+		}
+
 	}
 }

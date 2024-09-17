@@ -16,6 +16,8 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using TestVgme;
 using vJoyInterfaceWrap;
+using Westwind.SetResolution.CommandLine;
+using Westwind.SetResolution;
 using XJoy;
 
 namespace TeknoparrotAutoXinput
@@ -61,6 +63,9 @@ namespace TeknoparrotAutoXinput
 			chk_patchDisplayModeFix.Checked = ConfigurationManager.MainConfig.patchDisplayModeFix;
 			chk_patchDisplayModeTP.Checked = ConfigurationManager.MainConfig.patchDisplayModeTP;
 			chk_patchFFB.Checked = ConfigurationManager.MainConfig.patch_FFB;
+			chk_useBezel.Checked = ConfigurationManager.MainConfig.useBezel;
+			chk_useCrt.Checked = ConfigurationManager.MainConfig.useCrt;
+			chk_keepAspectRatio.Checked = ConfigurationManager.MainConfig.keepAspectRatio;
 			chk_patchReshade.Checked = ConfigurationManager.MainConfig.patchReshade;
 			chk_patchGameID.Checked = ConfigurationManager.MainConfig.patchGameID;
 			chk_patchNetwork.Checked = ConfigurationManager.MainConfig.patchNetwork;
@@ -145,6 +150,7 @@ namespace TeknoparrotAutoXinput
 			txt_ffbguidHotas.Text = ConfigurationManager.MainConfig.ffbDinputHotas;
 
 			chk_favorAB.Checked = ConfigurationManager.MainConfig.favorAB;
+			chk_favorJoystick.Checked = ConfigurationManager.MainConfig.favorJoystick;
 
 			txt_tpfolder.Text = ConfigurationManager.MainConfig.TpFolder;
 			txt_monitorswitch.Text = ConfigurationManager.MainConfig.Disposition;
@@ -574,6 +580,8 @@ namespace TeknoparrotAutoXinput
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
+
+			ConfigurationManager.MainConfig.favorJoystick = chk_favorJoystick.Checked;
 			ConfigurationManager.MainConfig.advancedConfig = chk_enableAdvancedOptions.Checked;
 
 			ConfigurationManager.MainConfig.performanceProfile = cmb_performance.SelectedIndex;
@@ -588,12 +596,15 @@ namespace TeknoparrotAutoXinput
 			ConfigurationManager.MainConfig.patchGpuFix = chk_patchGpuFix.Checked;
 			ConfigurationManager.MainConfig.patchGpuTP = chk_patchGpuTP.Checked;
 			ConfigurationManager.MainConfig.gpuResolution = cmb_resolution.SelectedIndex;
-			ConfigurationManager.MainConfig.patchResolutionFix = chk_patchResolutionFix.Checked;
-			ConfigurationManager.MainConfig.patchResolutionTP = chk_patchResolutionTP.Checked;
+			if (chk_patchResolutionFix.Enabled) ConfigurationManager.MainConfig.patchResolutionFix = chk_patchResolutionFix.Checked;
+			if (chk_patchResolutionTP.Enabled) ConfigurationManager.MainConfig.patchResolutionTP = chk_patchResolutionTP.Checked;
 			ConfigurationManager.MainConfig.displayMode = cmb_displayMode.SelectedIndex;
 			ConfigurationManager.MainConfig.patchDisplayModeFix = chk_patchDisplayModeFix.Checked;
 			ConfigurationManager.MainConfig.patchDisplayModeTP = chk_patchDisplayModeTP.Checked;
 			ConfigurationManager.MainConfig.patch_FFB = chk_patchFFB.Checked;
+			if (chk_useCrt.Enabled) ConfigurationManager.MainConfig.useBezel = chk_useBezel.Checked;
+			if (chk_useBezel.Enabled) ConfigurationManager.MainConfig.useCrt = chk_useCrt.Checked;
+			if (chk_keepAspectRatio.Enabled) ConfigurationManager.MainConfig.keepAspectRatio = chk_keepAspectRatio.Checked;
 			ConfigurationManager.MainConfig.patchReshade = chk_patchReshade.Checked;
 			ConfigurationManager.MainConfig.patchGameID = chk_patchGameID.Checked;
 			ConfigurationManager.MainConfig.patchNetwork = chk_patchNetwork.Checked;
@@ -1713,6 +1724,139 @@ namespace TeknoparrotAutoXinput
 		private void chk_patchResolutionFix_CheckedChanged(object sender, EventArgs e)
 		{
 
+		}
+
+		private void button1_Click_1(object sender, EventArgs e)
+		{
+			var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+			var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+			var currentSettings = Westwind.SetResolution.DisplayManager.GetCurrentDisplaySetting();
+
+			var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+			int presetDispositionWith = 2560;
+			int presetDispositionHeight = 1440;
+			int presetFrequency = 60;
+
+			var resolutionAvailiable = list
+				.Where(d => d.BitCount == 32 && d.Orientation == 0)
+				.OrderBy(d => d.Width)
+				.ThenBy(d => d.Height)
+				.ThenBy(d => d.Frequency)
+				.FirstOrDefault(d => d.Width == presetDispositionWith &&
+									 d.Height == presetDispositionHeight &&
+									 d.Frequency == presetFrequency);
+
+			if (resolutionAvailiable == null)
+			{
+				// Chercher la résolution immédiatement au-dessus de 60 Hz
+				resolutionAvailiable = list
+					.Where(d => d.Width == presetDispositionWith &&
+								d.Height == presetDispositionHeight &&
+								d.BitCount == 32 &&
+								d.Orientation == 0 &&
+								d.Frequency > presetFrequency)
+					.OrderBy(d => d.Frequency)
+					.FirstOrDefault();
+
+				// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+				if (resolutionAvailiable == null)
+				{
+					resolutionAvailiable = list
+						.Where(d => d.Width == presetDispositionWith &&
+									d.Height == presetDispositionHeight &&
+									d.BitCount == 32 &&
+									d.Orientation == 0 &&
+									d.Frequency < presetFrequency)
+						.OrderByDescending(d => d.Frequency)
+						.FirstOrDefault();
+				}
+			}
+			if (resolutionAvailiable != null)
+			{
+				presetFrequency = resolutionAvailiable.Frequency;
+			}
+
+			try
+			{
+				DisplayManager.SetDisplaySettings(resolutionAvailiable, monitor.DriverDeviceName);
+			}
+			catch (Exception ex)
+			{
+				return;
+			}
+
+			if (resolutionAvailiable == null)
+			{
+
+				return;
+			}
+		}
+
+		private void cmb_performance_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cmb_performance.SelectedIndex == 1)
+			{
+				chk_useCrt.Enabled = false;
+			}
+			else if (chk_patchReshade.Checked)
+			{
+				chk_useCrt.Enabled = true;
+			}
+		}
+
+		private void chk_patchReshade_CheckedChanged(object sender, EventArgs e)
+		{
+			if (chk_patchReshade.Checked == false)
+			{
+				chk_useCrt.Enabled = false;
+				chk_useBezel.Enabled = false;
+				chk_keepAspectRatio.Enabled = false;
+			}
+			else if (cmb_performance.SelectedIndex != 1)
+			{
+				chk_useCrt.Enabled = true;
+				chk_useBezel.Enabled = true;
+				chk_keepAspectRatio.Enabled = true;
+			}
+		}
+
+		private void cmb_resolution_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cmb_resolution.SelectedIndex == 4)
+			{
+				chk_patchResolutionFix.Enabled = false;
+				chk_patchResolutionTP.Enabled = false;
+			}
+			else
+			{
+				chk_patchResolutionFix.Enabled = true;
+				chk_patchResolutionTP.Enabled = true;
+			}
+		}
+
+		private void chk_patchDisplayModeTP_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void chk_patchResolutionTP_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cmb_scalingMode_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			/*
+			if (cmb_scalingMode.SelectedIndex == 1)
+			{
+				chk_keepAspectRatio.Enabled = false;
+			}
+			else if (cmb_scalingMode.SelectedIndex == 0)
+			{
+				chk_keepAspectRatio.Enabled = true;
+			}
+			*/
 		}
 	}
 }

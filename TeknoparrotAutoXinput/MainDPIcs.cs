@@ -1,10 +1,12 @@
 ﻿using BrightIdeasSoftware;
 using Krypton.Toolkit;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SerialPortLib2;
 using SevenZip;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -57,6 +59,9 @@ namespace TeknoparrotAutoXinput
 		private string _dinputGunBType = "";
 
 		private Game _selectedGame = null;
+		private Dictionary<string, string> _selectedGameInfo = new Dictionary<string, string>();
+		private GameSettings _selectedGameOptions = null;
+
 
 		private bool _isPlaying = false;
 		public bool isPlaying
@@ -1064,10 +1069,12 @@ namespace TeknoparrotAutoXinput
 				string displayModeSource = "Global";
 				string patchReshadeSource = "Global";
 				GameSettings gameOptions = null;
+				_selectedGameOptions = null;
 				string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
 				if (File.Exists(optionFile))
 				{
 					gameOptions = new GameSettings(File.ReadAllText(optionFile));
+					_selectedGameOptions = gameOptions;
 					gpuResolution = gameOptions.gpuResolution > 0 ? (gameOptions.gpuResolution - 1) : gpuResolution;
 					displayMode = gameOptions.displayMode > 0 ? (gameOptions.displayMode - 1) : displayMode;
 					patchReshade = gameOptions.patchReshade > 0 ? (gameOptions.patchReshade == 1 ? true : false) : patchReshade;
@@ -1084,8 +1091,132 @@ namespace TeknoparrotAutoXinput
 				if (gpuResolution == 1) cmb_resolution.Items[0] = "1080p" + $" ({gpuResolutionSource})";
 				if (gpuResolution == 2) cmb_resolution.Items[0] = "2k" + $" ({gpuResolutionSource})";
 				if (gpuResolution == 3) cmb_resolution.Items[0] = "4k" + $" ({gpuResolutionSource})";
+				if (gpuResolution == 4) cmb_resolution.Items[0] = "Native" + $" ({gpuResolutionSource})";
 
 				cmb_patchReshade.Items[0] = (patchReshade ? "Yes" : "No") + $" ({patchReshadeSource})";
+
+				string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+
+				cmb_resolution.Visible = true;
+				cmb_nativeRes.Visible = false;
+				cmb_nativeRes.SelectedIndex = 0;
+				var GameInfo = new Dictionary<string, string>();
+				_selectedGameInfo = new Dictionary<string, string>();
+				var infoFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "config", Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".info.json");
+				bool upscaleFullscreen = true;
+				bool upscaleWindowed = true;
+				string originalRes = "";
+				if (File.Exists(infoFile))
+				{
+					try
+					{
+						JObject gameInfoParsedJson = JObject.Parse(File.ReadAllText(infoFile));
+						JObject gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
+						GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
+
+						{
+							string WindowedString = "";
+							if (GameInfo.ContainsKey("windowed") && GameInfo["windowed"].Trim() != "") WindowedString = GameInfo["windowed"].Trim().ToLower();
+							JObject tpInfoGlobalSection = (JObject)gameInfoParsedJson["tpoptions"];
+							var allSettings = tpInfoGlobalSection.ToObject<Dictionary<string, Dictionary<string, string>>>();
+							if (allSettings.ContainsKey("set_displaymode_recommanded"))
+							{
+								string TargetWindowedString = allSettings["set_displaymode_recommanded"].First().Key.Trim().ToLower().Replace("||", ",") + "," + allSettings["set_displaymode_recommanded"].First().Value.Trim().ToLower();
+								if(TargetWindowedString == WindowedString)
+								{
+									if (displayMode == 0) cmb_displayMode.Items[0] = "Recommanded Windowed" + $" ({displayModeSource})";
+
+								}
+								else
+								{
+									if (displayMode == 0) cmb_displayMode.Items[0] = "Recommanded FS" + $" ({displayModeSource})";
+								}
+
+
+							}
+
+						}
+
+
+						_selectedGameInfo = GameInfo;
+						if (GameInfo.ContainsKey("upscaleWindowed") && GameInfo["upscaleWindowed"].ToLower() == "false") upscaleWindowed = false;
+						if (GameInfo.ContainsKey("upscaleFullscreen") && GameInfo["upscaleFullscreen"].ToLower() == "false") upscaleFullscreen = false;
+						if (GameInfo.ContainsKey("originalRes") && GameInfo["originalRes"] != "") originalRes = GameInfo["originalRes"];
+						if (originalRes != "")
+						{
+							cmb_resolution.Items[5] = "Native" + $" ({originalRes})";
+							cmb_nativeRes.Items[0] = "Native" + $" ({originalRes})";
+							if (cmb_resolution.Items[0].ToString().StartsWith("Native"))
+							{
+								string newValNative = cmb_resolution.Items[0].ToString();
+								newValNative = newValNative.Replace("Native", "Native : " + originalRes);
+								cmb_resolution.Items[0] = newValNative;
+							}
+						}
+						else
+						{
+							cmb_resolution.Items[5] = "Native";
+							cmb_nativeRes.Items[0] = "Native";
+						}
+						if (cmb_displayMode.SelectedIndex == 0)
+						{
+							if (displayMode == 0)
+							{
+								if (!upscaleFullscreen && !upscaleWindowed)
+								{
+									cmb_nativeRes.Visible = true;
+									cmb_resolution.Visible = false;
+								}
+							}
+							if (displayMode == 1)
+							{
+								if (!upscaleFullscreen)
+								{
+									cmb_nativeRes.Visible = true;
+									cmb_resolution.Visible = false;
+								}
+							}
+							if (displayMode == 2)
+							{
+								if (!upscaleWindowed)
+								{
+									cmb_nativeRes.Visible = true;
+									cmb_resolution.Visible = false;
+								}
+							}
+						}
+						if (cmb_displayMode.SelectedIndex == 1)
+						{
+							if (!upscaleFullscreen && !upscaleWindowed)
+							{
+								cmb_nativeRes.Visible = true;
+								cmb_resolution.Visible = false;
+							}
+						}
+						if (cmb_displayMode.SelectedIndex == 2)
+						{
+							if (!upscaleFullscreen)
+							{
+								cmb_nativeRes.Visible = true;
+								cmb_resolution.Visible = false;
+							}
+						}
+						if (cmb_displayMode.SelectedIndex == 3)
+						{
+							if (!upscaleWindowed)
+							{
+								cmb_nativeRes.Visible = true;
+								cmb_resolution.Visible = false;
+							}
+						}
+
+
+					}
+					catch { }
+
+
+				}
+
 
 				bool uselightgun = false;
 
@@ -1571,7 +1702,7 @@ namespace TeknoparrotAutoXinput
 				btn_playgamedirect2.Enabled = true;
 
 				Game DataGame = (Game)fastObjectListView1.SelectedObject;
-				
+
 
 				// Chemin de sortie de l'archive
 
@@ -1595,7 +1726,6 @@ namespace TeknoparrotAutoXinput
 					string outputArchive = filePath;
 
 					string SevenZipExe = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "7zip", "7z.exe");
-					string rootFile = @"C:\Users\Mehdi\source\repos\TeknoparrotAutoXinput\TeknoparrotAutoXinput\bin\Debug\net6.0-windows\config\abc.info.json";
 
 					string tmpFolder = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "tmparchive");
 					try
@@ -1629,8 +1759,8 @@ namespace TeknoparrotAutoXinput
 						if (File.Exists(infoFile))
 						{
 							//File.Copy(infoFile, Path.Combine(tmpFolder, Path.GetFileName(infoFile)));
-						
-							
+
+
 							string pathAutoXinputLinks = "";
 							string perGameLinkFolder = ConfigurationManager.MainConfig.perGameLinkFolder;
 							if (perGameLinkFolder == @"Default (<YourTeknoparrotFolder>\AutoXinputLinks)")
@@ -1661,7 +1791,7 @@ namespace TeknoparrotAutoXinput
 										}
 									}
 								}
-								foreach(var file in Directory.GetFiles(pathAutoXinputLinks, "*", SearchOption.AllDirectories))
+								foreach (var file in Directory.GetFiles(pathAutoXinputLinks, "*", SearchOption.AllDirectories))
 								{
 									if (Path.GetFileName(file) == "[!magpiereshade!].ini") magpieReshadeFile.Add(file);
 
@@ -1669,6 +1799,8 @@ namespace TeknoparrotAutoXinput
 									if (file.ToLower().Contains("[!cachereshade!]")) continue;
 									if (Path.GetFileName(file) == "patchinfo.php") continue;
 									if (Path.GetFileName(file).ToLower() == "dgvoodoo.conf.custom") continue;
+									if (File.Exists(file + ".remplaceRefreshRate")) continue;
+
 
 									string newFile = file.Replace(pathAutoXinputLinks, tmpTpPatches);
 									string newDir = Path.GetDirectoryName(newFile);
@@ -1684,7 +1816,7 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 
-						
+
 							GameSettings gameOptionsSelectedGame = null;
 							string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
 							if (File.Exists(optionFile))
@@ -1722,12 +1854,13 @@ namespace TeknoparrotAutoXinput
 								}
 								foreach (var file in Directory.GetFiles(linkSourceFolderExe, "*", SearchOption.AllDirectories))
 								{
-									if(Path.GetFileName(file) == "[!magpiereshade!].ini") magpieReshadeFile.Add(file);
+									if (Path.GetFileName(file) == "[!magpiereshade!].ini") magpieReshadeFile.Add(file);
 
 									if (excludeFiles.Contains(file)) continue;
 									if (file.ToLower().Contains("[!cachereshade!]")) continue;
 									if (Path.GetFileName(file) == "patchinfo.php") continue;
 									if (Path.GetFileName(file).ToLower() == "dgvoodoo.conf.custom") continue;
+									if (File.Exists(file + ".remplaceRefreshRate")) continue;
 
 									string newFile = file.Replace(linkSourceFolderExe, tmpGamePatches);
 									string newDir = Path.GetDirectoryName(newFile);
@@ -1840,7 +1973,8 @@ namespace TeknoparrotAutoXinput
 									}
 
 								}
-								catch {
+								catch
+								{
 									usedShaders = new List<string> { };
 								}
 
@@ -1926,7 +2060,7 @@ namespace TeknoparrotAutoXinput
 						Directory.Delete(tmpFolder, true);
 					}
 					catch { };
-					
+
 					MessageBox.Show("Saved in " + filePath);
 				}
 			}
@@ -1939,7 +2073,7 @@ namespace TeknoparrotAutoXinput
 
 				Game DataGame = (Game)fastObjectListView1.SelectedObject;
 
-					// Créez une instance de OpenFileDialog
+				// Créez une instance de OpenFileDialog
 				OpenFileDialog openFileDialog = new OpenFileDialog();
 
 				// Définissez le filtre pour afficher uniquement les fichiers .7z
@@ -1986,7 +2120,7 @@ namespace TeknoparrotAutoXinput
 						UpdatePatchArchive patchInfoJson = JsonConvert.DeserializeObject<UpdatePatchArchive>(fileContent);
 						if (patchInfoJson != null && !string.IsNullOrEmpty(patchInfoJson.Game))
 						{
-							if(patchInfoJson.Game.ToLower() != Path.GetFileNameWithoutExtension(DataGame.UserConfigFile))
+							if (patchInfoJson.Game.ToLower() != Path.GetFileNameWithoutExtension(DataGame.UserConfigFile).ToLower())
 							{
 								MessageBox.Show("Wrong game for patch");
 								return;
@@ -2249,6 +2383,105 @@ namespace TeknoparrotAutoXinput
 			}
 
 			return newImage;
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			if (_selectedGame != null)
+			{
+				string notepadPath = Utils.checkInstalled("Notepad++");
+				notepadPath = Path.Combine(Path.GetDirectoryName(notepadPath), "notepad++.exe");
+				string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+
+				var infoFile = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".info.json");
+				if (File.Exists(infoFile))
+				{
+					Process process = new Process();
+					process.StartInfo.FileName = notepadPath;
+					process.StartInfo.Arguments = infoFile;
+					process.StartInfo.UseShellExecute = true;
+					process.Start();
+				}
+
+			}
+		}
+
+		private void cmb_displayMode_SelectedIndexChanged_1(object sender, EventArgs e)
+		{
+			int displayMode = ConfigurationManager.MainConfig.displayMode;
+			if (_selectedGameOptions != null)
+			{
+				displayMode = _selectedGameOptions.displayMode > 0 ? (_selectedGameOptions.displayMode - 1) : displayMode;
+			}
+			if (_selectedGameInfo.Count() > 0)
+			{
+				try
+				{
+					bool upscaleWindowed = true;
+					bool upscaleFullscreen = true;
+					string originalRes = "";
+					var GameInfo = _selectedGameInfo;
+					if (GameInfo.ContainsKey("upscaleWindowed") && GameInfo["upscaleWindowed"].ToLower() == "false") upscaleWindowed = false;
+					if (GameInfo.ContainsKey("upscaleFullscreen") && GameInfo["upscaleFullscreen"].ToLower() == "false") upscaleFullscreen = false;
+					//cmb_nativeRes.Items[0] = "Native" + $" ({originalRes})";
+					cmb_nativeRes.Visible = false;
+					cmb_resolution.Visible = true;
+					if (cmb_displayMode.SelectedIndex == 0)
+					{
+						if (displayMode == 0)
+						{
+							if (!upscaleFullscreen && !upscaleWindowed)
+							{
+								cmb_nativeRes.Visible = true;
+								cmb_resolution.Visible = false;
+							}
+						}
+						if (displayMode == 1)
+						{
+							if (!upscaleFullscreen)
+							{
+								cmb_nativeRes.Visible = true;
+								cmb_resolution.Visible = false;
+							}
+						}
+						if (displayMode == 2)
+						{
+							if (!upscaleWindowed)
+							{
+								cmb_nativeRes.Visible = true;
+								cmb_resolution.Visible = false;
+							}
+						}
+					}
+					if (cmb_displayMode.SelectedIndex == 1)
+					{
+						if (!upscaleFullscreen && !upscaleWindowed)
+						{
+							cmb_nativeRes.Visible = true;
+							cmb_resolution.Visible = false;
+						}
+					}
+					if (cmb_displayMode.SelectedIndex == 2)
+					{
+						if (!upscaleFullscreen)
+						{
+							cmb_nativeRes.Visible = true;
+							cmb_resolution.Visible = false;
+						}
+					}
+					if (cmb_displayMode.SelectedIndex == 3)
+					{
+						if (!upscaleWindowed)
+						{
+							cmb_nativeRes.Visible = true;
+							cmb_resolution.Visible = false;
+						}
+					}
+
+
+				}
+				catch { }
+			}
 		}
 	}
 

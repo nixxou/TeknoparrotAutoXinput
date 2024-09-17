@@ -40,6 +40,10 @@ namespace TeknoparrotAutoXinput
 			kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
 			grp_gunA = new GroupBox();
+			lbl_vjoyAYBefore = new Krypton.Toolkit.KryptonLabel();
+			lbl_vjoyAXBefore = new Krypton.Toolkit.KryptonLabel();
+			txt_expAYBefore = new Krypton.Toolkit.KryptonTextBox();
+			txt_expAXBefore = new Krypton.Toolkit.KryptonTextBox();
 			chk_showCrosshair = new Krypton.Toolkit.KryptonCheckBox();
 			btn_clearA = new Krypton.Toolkit.KryptonButton();
 			btn_defaultA = new Krypton.Toolkit.KryptonButton();
@@ -86,6 +90,8 @@ namespace TeknoparrotAutoXinput
 			max_AX = new Krypton.Toolkit.KryptonNumericUpDown();
 			min_AX = new Krypton.Toolkit.KryptonNumericUpDown();
 			grp_gunB = new GroupBox();
+			txt_expBYBefore = new Krypton.Toolkit.KryptonTextBox();
+			txt_expBXBefore = new Krypton.Toolkit.KryptonTextBox();
 			chk_showCrosshairB = new Krypton.Toolkit.KryptonCheckBox();
 			btn_clearB = new Krypton.Toolkit.KryptonButton();
 			btn_defaultB = new Krypton.Toolkit.KryptonButton();
@@ -227,6 +233,10 @@ namespace TeknoparrotAutoXinput
 			// 
 			// grp_gunA
 			// 
+			grp_gunA.Controls.Add(lbl_vjoyAYBefore);
+			grp_gunA.Controls.Add(lbl_vjoyAXBefore);
+			grp_gunA.Controls.Add(txt_expAYBefore);
+			grp_gunA.Controls.Add(txt_expAXBefore);
 			grp_gunA.Controls.Add(chk_showCrosshair);
 			grp_gunA.Controls.Add(btn_clearA);
 			grp_gunA.Controls.Add(btn_defaultA);
@@ -268,6 +278,40 @@ namespace TeknoparrotAutoXinput
 			grp_gunA.TabStop = false;
 			grp_gunA.Text = "Gun A";
 			grp_gunA.Enter += grp_gunA_Enter;
+			// 
+			// lbl_vjoyAYBefore
+			// 
+			lbl_vjoyAYBefore.Location = new Point(753, 114);
+			lbl_vjoyAYBefore.Name = "lbl_vjoyAYBefore";
+			lbl_vjoyAYBefore.Size = new Size(19, 20);
+			lbl_vjoyAYBefore.TabIndex = 50;
+			lbl_vjoyAYBefore.Values.Text = "...";
+			// 
+			// lbl_vjoyAXBefore
+			// 
+			lbl_vjoyAXBefore.Location = new Point(706, 114);
+			lbl_vjoyAXBefore.Name = "lbl_vjoyAXBefore";
+			lbl_vjoyAXBefore.Size = new Size(19, 20);
+			lbl_vjoyAXBefore.TabIndex = 49;
+			lbl_vjoyAXBefore.Values.Text = "...";
+			// 
+			// txt_expAYBefore
+			// 
+			txt_expAYBefore.Location = new Point(337, 230);
+			txt_expAYBefore.Name = "txt_expAYBefore";
+			txt_expAYBefore.ReadOnly = true;
+			txt_expAYBefore.Size = new Size(293, 23);
+			txt_expAYBefore.TabIndex = 48;
+			txt_expAYBefore.Visible = false;
+			// 
+			// txt_expAXBefore
+			// 
+			txt_expAXBefore.Location = new Point(18, 230);
+			txt_expAXBefore.Name = "txt_expAXBefore";
+			txt_expAXBefore.ReadOnly = true;
+			txt_expAXBefore.Size = new Size(293, 23);
+			txt_expAXBefore.TabIndex = 47;
+			txt_expAXBefore.Visible = false;
 			// 
 			// chk_showCrosshair
 			// 
@@ -417,7 +461,7 @@ namespace TeknoparrotAutoXinput
 			grp_manual_A.Enabled = false;
 			grp_manual_A.Location = new Point(18, 22);
 			grp_manual_A.Name = "grp_manual_A";
-			grp_manual_A.Size = new Size(612, 220);
+			grp_manual_A.Size = new Size(612, 201);
 			grp_manual_A.TabIndex = 30;
 			grp_manual_A.TabStop = false;
 			grp_manual_A.Text = "Manual Controls :";
@@ -466,11 +510,11 @@ namespace TeknoparrotAutoXinput
 			// 
 			// btn_Down_A
 			// 
-			btn_Down_A.Location = new Point(327, 176);
+			btn_Down_A.Location = new Point(327, 172);
 			btn_Down_A.Name = "btn_Down_A";
 			btn_Down_A.Size = new Size(117, 25);
 			btn_Down_A.TabIndex = 26;
-			btn_Down_A.Values.Text = "Down (Num 2)";
+			btn_Down_A.Values.Text = "Down (Ctrl+Num 2)";
 			btn_Down_A.Click += btn_Down_A_Click;
 			// 
 			// lbl_trkA_X
@@ -483,11 +527,11 @@ namespace TeknoparrotAutoXinput
 			// 
 			// btn_Up_A
 			// 
-			btn_Up_A.Location = new Point(327, 114);
+			btn_Up_A.Location = new Point(327, 110);
 			btn_Up_A.Name = "btn_Up_A";
 			btn_Up_A.Size = new Size(117, 25);
 			btn_Up_A.TabIndex = 25;
-			btn_Up_A.Values.Text = "Up (Num 8)";
+			btn_Up_A.Values.Text = "Up (Ctrl+Num 8)";
 			btn_Up_A.Click += btn_Up_A_Click;
 			// 
 			// lbl_trkA_Y
@@ -500,29 +544,29 @@ namespace TeknoparrotAutoXinput
 			// 
 			// btn_Right_A
 			// 
-			btn_Right_A.Location = new Point(450, 145);
+			btn_Right_A.Location = new Point(450, 141);
 			btn_Right_A.Name = "btn_Right_A";
 			btn_Right_A.Size = new Size(117, 25);
 			btn_Right_A.TabIndex = 24;
-			btn_Right_A.Values.Text = "Right (Num 6)";
+			btn_Right_A.Values.Text = "Right (Ctrl+Num 6)";
 			btn_Right_A.Click += btn_Right_A_Click;
 			// 
 			// btn_Left_A
 			// 
-			btn_Left_A.Location = new Point(203, 145);
+			btn_Left_A.Location = new Point(203, 141);
 			btn_Left_A.Name = "btn_Left_A";
 			btn_Left_A.Size = new Size(120, 25);
 			btn_Left_A.TabIndex = 23;
-			btn_Left_A.Values.Text = "Left (Num 4)";
+			btn_Left_A.Values.Text = "Left (Ctrl+Num 4)";
 			btn_Left_A.Click += btn_Left_A_Click;
 			// 
 			// btn_Center_A
 			// 
-			btn_Center_A.Location = new Point(327, 145);
+			btn_Center_A.Location = new Point(327, 141);
 			btn_Center_A.Name = "btn_Center_A";
 			btn_Center_A.Size = new Size(117, 25);
 			btn_Center_A.TabIndex = 22;
-			btn_Center_A.Values.Text = "Center (Num 5)";
+			btn_Center_A.Values.Text = "Center (Ct+Num 5)";
 			btn_Center_A.Click += btn_Center_A_Click;
 			// 
 			// btn_switchModeA
@@ -531,12 +575,12 @@ namespace TeknoparrotAutoXinput
 			btn_switchModeA.Name = "btn_switchModeA";
 			btn_switchModeA.Size = new Size(234, 25);
 			btn_switchModeA.TabIndex = 28;
-			btn_switchModeA.Values.Text = "Switch Mode to Manual (Numpad 0)";
+			btn_switchModeA.Values.Text = "Switch Mode to Manual (Ctrl+Numpad 0)";
 			btn_switchModeA.Click += btn_switchModeA_Click;
 			// 
 			// lbl_modeA
 			// 
-			lbl_modeA.Location = new Point(707, 116);
+			lbl_modeA.Location = new Point(707, 134);
 			lbl_modeA.Name = "lbl_modeA";
 			lbl_modeA.Size = new Size(19, 20);
 			lbl_modeA.TabIndex = 27;
@@ -544,7 +588,7 @@ namespace TeknoparrotAutoXinput
 			// 
 			// kryptonLabel13
 			// 
-			kryptonLabel13.Location = new Point(647, 117);
+			kryptonLabel13.Location = new Point(647, 135);
 			kryptonLabel13.Name = "kryptonLabel13";
 			kryptonLabel13.Size = new Size(49, 20);
 			kryptonLabel13.TabIndex = 21;
@@ -684,6 +728,8 @@ namespace TeknoparrotAutoXinput
 			// 
 			// grp_gunB
 			// 
+			grp_gunB.Controls.Add(txt_expBYBefore);
+			grp_gunB.Controls.Add(txt_expBXBefore);
 			grp_gunB.Controls.Add(chk_showCrosshairB);
 			grp_gunB.Controls.Add(btn_clearB);
 			grp_gunB.Controls.Add(btn_defaultB);
@@ -724,6 +770,24 @@ namespace TeknoparrotAutoXinput
 			grp_gunB.TabIndex = 3;
 			grp_gunB.TabStop = false;
 			grp_gunB.Text = "Gun B";
+			// 
+			// txt_expBYBefore
+			// 
+			txt_expBYBefore.Location = new Point(337, 233);
+			txt_expBYBefore.Name = "txt_expBYBefore";
+			txt_expBYBefore.ReadOnly = true;
+			txt_expBYBefore.Size = new Size(293, 23);
+			txt_expBYBefore.TabIndex = 50;
+			txt_expBYBefore.Visible = false;
+			// 
+			// txt_expBXBefore
+			// 
+			txt_expBXBefore.Location = new Point(18, 233);
+			txt_expBXBefore.Name = "txt_expBXBefore";
+			txt_expBXBefore.ReadOnly = true;
+			txt_expBXBefore.Size = new Size(293, 23);
+			txt_expBXBefore.TabIndex = 49;
+			txt_expBXBefore.Visible = false;
 			// 
 			// chk_showCrosshairB
 			// 
@@ -873,7 +937,7 @@ namespace TeknoparrotAutoXinput
 			grp_manual_B.Enabled = false;
 			grp_manual_B.Location = new Point(18, 22);
 			grp_manual_B.Name = "grp_manual_B";
-			grp_manual_B.Size = new Size(612, 220);
+			grp_manual_B.Size = new Size(612, 205);
 			grp_manual_B.TabIndex = 30;
 			grp_manual_B.TabStop = false;
 			grp_manual_B.Text = "Manual Controls :";
@@ -922,7 +986,7 @@ namespace TeknoparrotAutoXinput
 			// 
 			// btn_Down_B
 			// 
-			btn_Down_B.Location = new Point(327, 176);
+			btn_Down_B.Location = new Point(327, 172);
 			btn_Down_B.Name = "btn_Down_B";
 			btn_Down_B.Size = new Size(117, 25);
 			btn_Down_B.TabIndex = 26;
@@ -939,7 +1003,7 @@ namespace TeknoparrotAutoXinput
 			// 
 			// btn_Up_B
 			// 
-			btn_Up_B.Location = new Point(327, 114);
+			btn_Up_B.Location = new Point(327, 110);
 			btn_Up_B.Name = "btn_Up_B";
 			btn_Up_B.Size = new Size(117, 25);
 			btn_Up_B.TabIndex = 25;
@@ -956,7 +1020,7 @@ namespace TeknoparrotAutoXinput
 			// 
 			// btn_Right_B
 			// 
-			btn_Right_B.Location = new Point(450, 145);
+			btn_Right_B.Location = new Point(450, 141);
 			btn_Right_B.Name = "btn_Right_B";
 			btn_Right_B.Size = new Size(117, 25);
 			btn_Right_B.TabIndex = 24;
@@ -965,7 +1029,7 @@ namespace TeknoparrotAutoXinput
 			// 
 			// btn_Left_B
 			// 
-			btn_Left_B.Location = new Point(203, 145);
+			btn_Left_B.Location = new Point(203, 141);
 			btn_Left_B.Name = "btn_Left_B";
 			btn_Left_B.Size = new Size(120, 25);
 			btn_Left_B.TabIndex = 23;
@@ -974,7 +1038,7 @@ namespace TeknoparrotAutoXinput
 			// 
 			// btn_Center_B
 			// 
-			btn_Center_B.Location = new Point(327, 145);
+			btn_Center_B.Location = new Point(327, 141);
 			btn_Center_B.Name = "btn_Center_B";
 			btn_Center_B.Size = new Size(117, 25);
 			btn_Center_B.TabIndex = 22;
@@ -1320,5 +1384,11 @@ namespace TeknoparrotAutoXinput
 		private Krypton.Toolkit.KryptonCheckBox chk_showCrosshairB;
 		private System.Windows.Forms.Timer TimerBlueCrosshair;
 		private Krypton.Toolkit.KryptonCheckBox chk_showGrid;
+		private Krypton.Toolkit.KryptonTextBox txt_expAYBefore;
+		private Krypton.Toolkit.KryptonTextBox txt_expAXBefore;
+		private Krypton.Toolkit.KryptonTextBox txt_expBYBefore;
+		private Krypton.Toolkit.KryptonTextBox txt_expBXBefore;
+		private Krypton.Toolkit.KryptonLabel lbl_vjoyAYBefore;
+		private Krypton.Toolkit.KryptonLabel lbl_vjoyAXBefore;
 	}
 }

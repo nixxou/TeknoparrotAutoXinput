@@ -12,6 +12,7 @@ using SharpDX.DirectInput;
 using SharpDX.Multimedia;
 using System;
 using System.Configuration;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Pipes;
@@ -21,7 +22,10 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Xml;
+using System.Xml.Linq;
+using Westwind.SetResolution;
 using WiimoteLib;
 using XInput.Wrapper;
 using XJoy;
@@ -40,6 +44,7 @@ namespace TeknoparrotAutoXinput
 
 		[DllImport("kernel32.dll", SetLastError = true)]
 		public static extern IntPtr GetStdHandle(int nStdHandle);
+
 
 		private static readonly string mutexName = "Global\\TAX_Launched";
 
@@ -102,6 +107,14 @@ namespace TeknoparrotAutoXinput
 		public static bool useDinputHotas = false;
 		public static bool useDinputLightGun = false;
 
+		public static bool shifterGuidFound = false;
+		public static bool throttleGuidFound = false;
+		public static bool dinputLightgunAFound = false;
+		public static bool dinputLightgunBFound = false;
+
+
+		public static bool favorJoystick = false;
+
 		public static Dictionary<string, string> GameInfo = new Dictionary<string, string>();
 
 		public static bool vjoy_gunA = false;
@@ -123,6 +136,7 @@ namespace TeknoparrotAutoXinput
 		public static bool patchGpuFix = ConfigurationManager.MainConfig.patchGpuFix;
 		public static bool patchGpuTP = ConfigurationManager.MainConfig.patchGpuTP;
 
+		public static int gpuType = ConfigurationManager.MainConfig.gpuType;
 		public static int gpuResolution = ConfigurationManager.MainConfig.gpuResolution;
 		public static bool patchResolutionFix = ConfigurationManager.MainConfig.patchResolutionFix;
 		public static bool patchResolutionTP = ConfigurationManager.MainConfig.patchResolutionTP;
@@ -130,6 +144,8 @@ namespace TeknoparrotAutoXinput
 		public static int performanceProfile = ConfigurationManager.MainConfig.performanceProfile;
 		public static bool forceVsync = ConfigurationManager.MainConfig.forceVsync;
 		public static int refreshRate = 60;
+		public static int currentResX = 0;
+		public static int currentResY = 0;
 
 		public static int displayMode = ConfigurationManager.MainConfig.displayMode;
 		public static bool patchDisplayModeFix = ConfigurationManager.MainConfig.patchDisplayModeFix;
@@ -142,6 +158,10 @@ namespace TeknoparrotAutoXinput
 		public static bool patchOtherTPSettings = ConfigurationManager.MainConfig.patchOtherTPSettings;
 		public static bool patchOthersGameOptions = ConfigurationManager.MainConfig.patchOthersGameOptions;
 		public static bool patchFFB = ConfigurationManager.MainConfig.patch_FFB;
+
+		public static bool useBezel = ConfigurationManager.MainConfig.useBezel;
+		public static bool useCrt = ConfigurationManager.MainConfig.useCrt;
+		public static bool useKeepAspectRatio = ConfigurationManager.MainConfig.keepAspectRatio;
 
 		public static string patch_networkIP = ConfigurationManager.MainConfig.patch_networkIP;
 		public static string patch_networkMask = ConfigurationManager.MainConfig.patch_networkMask;
@@ -169,7 +189,40 @@ namespace TeknoparrotAutoXinput
 
 		public static Dictionary<int, string> vjoyData = new Dictionary<int, string>();
 
+		public static bool usePresetDisposition = false;
+		public static int presetDispositionWith = 0;
+		public static int presetDispositionHeight = 0;
+		public static int presetDispositionFrequency = 60;
+		public static bool upscaleFullscreen = false;
+		public static bool upscaleWindowed = false;
+		public static bool need60hz = false;
+		public static bool need60hzFullscreen = false;
+		public static bool need60hzWindowed = false;
+
+		public static bool forceResSwitchFullscreen = false;
+		public static bool forceResSwitchWindowed = false;
+
+		public static bool moveWindowToOriginalMonitor = false;
+		public static string originalMonitorDeviceName = "";
+
+		public static int forceResizeWidth = 0;
+		public static int forceResizeHeight = 0;
+
+
 		//public static string xmlFileContent = "";
+		[DllImport("User32.dll")]
+		private static extern uint GetDpiForSystem();
+
+		[DllImport("shcore.dll")]
+		private static extern int SetProcessDpiAwareness(ProcessDpiAwareness awareness);
+
+		// Enumération pour la sensibilisation DPI
+		public enum ProcessDpiAwareness
+		{
+			Unaware = 0,
+			SystemDpiAware = 1,
+			PerMonitorDpiAware = 2
+		}
 
 		/// <summary>
 		///  The main entry point for the application.
@@ -177,6 +230,7 @@ namespace TeknoparrotAutoXinput
 		[STAThread]
 		static void Main(string[] args)
 		{
+
 
 #if DEBUG
 			List<string> fakeArgs = new List<string>();
@@ -568,6 +622,12 @@ namespace TeknoparrotAutoXinput
 				string gunAMinMax = "";
 				string gunBMinMax = "";
 
+				string formula_AX_before = "";
+				string formula_AY_before = "";
+				string formula_BX_before = "";
+				string formula_BY_before = "";
+
+
 				int vjoyindexvalue = 0;
 				try
 				{
@@ -575,12 +635,16 @@ namespace TeknoparrotAutoXinput
 				}
 				catch { vjoyindexvalue = 0; }
 
-				if (args.Length == 8)
+				if (args.Length == 12)
 				{
 					formula_X = args[3];
 					formula_Y = args[4];
 					gunAMinMax = args[5];
 					gunBMinMax = args[6];
+					formula_AX_before = args[7];
+					formula_AY_before = args[8];
+					formula_BX_before = args[9];
+					formula_BY_before = args[10];
 				}
 
 				ConfigurationManager.LoadConfig();			
@@ -596,12 +660,12 @@ namespace TeknoparrotAutoXinput
 					if (File.Exists(optionFile))
 					{
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
-						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB, formula_X, formula_Y,gunAMinMax,gunBMinMax, vjoyindexvalue);
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB, formula_X, formula_Y,gunAMinMax,gunBMinMax, formula_AX_before, formula_AY_before, formula_BX_before, formula_BY_before, vjoyindexvalue);;
 						Application.Run(frm);
 					}
 					else
 					{
-						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, null, enableGunA, enableGunB, formula_X, formula_Y, gunAMinMax, gunBMinMax, vjoyindexvalue);
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, null, enableGunA, enableGunB, formula_X, formula_Y, gunAMinMax, gunBMinMax, formula_AX_before, formula_AY_before, formula_BX_before, formula_BY_before, vjoyindexvalue);
 						Application.Run(frm);
 					}
 				}
@@ -790,6 +854,18 @@ namespace TeknoparrotAutoXinput
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
 				{
+					
+					try
+					{
+						int result = SetProcessDpiAwareness(ProcessDpiAwareness.PerMonitorDpiAware);
+					}
+					catch (Exception ex)
+					{
+					}
+
+					if(moveWindowToOriginalMonitor) originalMonitorDeviceName = Screen.PrimaryScreen.DeviceName;
+
+
 					using (Mutex mutex = new Mutex(false, mutexName, out bool createdNew))
 					{
 
@@ -915,6 +991,7 @@ namespace TeknoparrotAutoXinput
 							patchGpuFix = gameOptions.patchGpuFix > 0 ? (gameOptions.patchGpuFix == 1 ? true : false) : patchGpuFix;
 							patchGpuTP = gameOptions.patchGpuTP > 0 ? (gameOptions.patchGpuTP == 1 ? true : false) : patchGpuTP;
 
+							gpuType = gameOptions.gpuType > 0 ? (gameOptions.gpuType - 1) : gpuType;
 							gpuResolution = gameOptions.gpuResolution > 0 ? (gameOptions.gpuResolution - 1) : gpuResolution;
 							patchResolutionFix = gameOptions.patchResolutionFix > 0 ? (gameOptions.patchResolutionFix == 1 ? true : false) : patchResolutionFix;
 							patchResolutionTP = gameOptions.patchResolutionTP > 0 ? (gameOptions.patchResolutionTP == 1 ? true : false) : patchResolutionTP;
@@ -944,6 +1021,21 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 
+							performanceProfile = gameOptions.performanceProfile > 0 ? (gameOptions.performanceProfile-1) : performanceProfile;
+							forceVsync = gameOptions.forceVsync > 0 ? (gameOptions.patchDisplayModeFix == 1 ? true : false) : forceVsync;
+
+							useBezel = gameOptions.useBezel > 0 ? (gameOptions.useBezel == 1 ? true : false) : useBezel;
+							useCrt = gameOptions.useCrt > 0 ? (gameOptions.useCrt == 1 ? true : false) : useCrt;
+							useKeepAspectRatio = gameOptions.keepAspectRatio > 0 ? (gameOptions.keepAspectRatio == 1 ? true : false) : useKeepAspectRatio;
+							if (!patchReshade)
+							{
+								useBezel = false;
+								useCrt = false;
+								useKeepAspectRatio = false;
+							}
+
+							if (performanceProfile == 1) useCrt = false;
+
 							if (patchNetwork && ConfigurationManager.MainConfig.patch_networkAuto)
 							{
 								var networkInfo = Utils.GetFirstNetworkAdapterInfo();
@@ -958,6 +1050,12 @@ namespace TeknoparrotAutoXinput
 							displayMode = forced_displayMode > 0 ? (forced_displayMode - 1) : displayMode;
 							gpuResolution = forced_resolution > 0 ? (forced_resolution - 1) : gpuResolution;
 							patchReshade = forced_reshade > 0 ? (forced_reshade == 1 ? true : false) : patchReshade;
+
+							if(gpuResolution == 4)
+							{
+								patchResolutionFix = false;
+								patchResolutionTP = false;
+							}
 
 							string baseTpDirOriginal = baseTpDir;
 
@@ -1045,7 +1143,118 @@ namespace TeknoparrotAutoXinput
 							bool refreshrate_done = false;
 							_dispositionToSwitch = ConfigurationManager.MainConfig.Disposition;
 							if (gameOptions.UseGlobalDisposition == false) _dispositionToSwitch = gameOptions.Disposition;
-							if (!string.IsNullOrEmpty(_dispositionToSwitch) && _dispositionToSwitch != "<none>")
+
+							if (!string.IsNullOrEmpty(_dispositionToSwitch))
+							{
+								if(_dispositionToSwitch == "MainMonitor:720p 60hz")
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1280;
+									presetDispositionHeight = 720;
+									presetDispositionFrequency = 60;
+								}
+								if (_dispositionToSwitch == "MainMonitor:1080p 60hz")
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1920;
+									presetDispositionHeight = 1080;
+									presetDispositionFrequency = 60;
+								}
+								if (_dispositionToSwitch == "MainMonitor:2k 60hz")
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 2560;
+									presetDispositionHeight = 1440;
+									presetDispositionFrequency = 60;
+								}
+								if (_dispositionToSwitch == "MainMonitor:4k 60hz")
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 3840;
+									presetDispositionHeight = 2160;
+									presetDispositionFrequency = 60;
+								}
+								if (_dispositionToSwitch == "MainMonitor:720p 120hz")
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1280;
+									presetDispositionHeight = 720;
+									presetDispositionFrequency = 120;
+								}
+								if (_dispositionToSwitch == "MainMonitor:1080p 120hz")
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1920;
+									presetDispositionHeight = 1080;
+									presetDispositionFrequency = 120;
+								}
+								if (_dispositionToSwitch == "MainMonitor:2k 120hz")
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 2560;
+									presetDispositionHeight = 1440;
+									presetDispositionFrequency = 120;
+								}
+								if (_dispositionToSwitch == "MainMonitor:4k 120hz")
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 3840;
+									presetDispositionHeight = 2160;
+									presetDispositionFrequency = 120;
+								}
+								if (usePresetDisposition)
+								{
+									var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+									var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+									var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+									var resolutionAvailiable = list
+										.Where(d => d.BitCount == 32 && d.Orientation == 0)
+										.OrderBy(d => d.Width)
+										.ThenBy(d => d.Height)
+										.ThenBy(d => d.Frequency)
+										.FirstOrDefault(d => d.Width == presetDispositionWith &&
+															 d.Height == presetDispositionHeight &&
+															 d.Frequency == presetDispositionFrequency);
+
+									if (resolutionAvailiable == null)
+									{
+										// Chercher la résolution immédiatement au-dessus de 60 Hz
+										resolutionAvailiable = list
+											.Where(d => d.Width == presetDispositionWith &&
+														d.Height == presetDispositionHeight &&
+														d.BitCount == 32 &&
+														d.Orientation == 0 &&
+														d.Frequency > presetDispositionFrequency)
+											.OrderBy(d => d.Frequency)
+											.FirstOrDefault();
+
+										// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+										if (resolutionAvailiable == null)
+										{
+											resolutionAvailiable = list
+												.Where(d => d.Width == presetDispositionWith &&
+															d.Height == presetDispositionHeight &&
+															d.BitCount == 32 &&
+															d.Orientation == 0 &&
+															d.Frequency < presetDispositionFrequency)
+												.OrderByDescending(d => d.Frequency)
+												.FirstOrDefault();
+										}
+									}
+									if (resolutionAvailiable != null)
+									{
+										presetDispositionFrequency = resolutionAvailiable.Frequency;
+									}
+									else presetDispositionFrequency = 60;
+
+
+									Program.refreshRate = presetDispositionFrequency;
+									refreshrate_done = true;
+								}
+							}
+
+							if (!string.IsNullOrEmpty(_dispositionToSwitch) && _dispositionToSwitch != "<none>" && usePresetDisposition == false)
 							{
 								var cfg = Path.Combine(Program.DispositionFolder, "disposition_" + _dispositionToSwitch + ".xml");
 								if (File.Exists(cfg))
@@ -1054,6 +1263,7 @@ namespace TeknoparrotAutoXinput
 									{
 										Program.refreshRate = Utils.GetPrimaryMonitorRefreshRateFromXml(File.ReadAllText(cfg));
 										refreshrate_done = true;
+										if (gameOptions.moveBackWindowToOriginalMonitor) Program.moveWindowToOriginalMonitor = true;
 									}
 									catch { }
 								}
@@ -1080,98 +1290,103 @@ namespace TeknoparrotAutoXinput
 							TpSettingsManager.tags = new List<string>();
 							if (Program.patchGpuTP)
 							{
-								if (ConfigurationManager.MainConfig.gpuType == 0) TpSettingsManager.tags.Add("nvidia");
-								if (ConfigurationManager.MainConfig.gpuType == 1) TpSettingsManager.tags.Add("intel");
-								if (ConfigurationManager.MainConfig.gpuType == 2) TpSettingsManager.tags.Add("amdold");
-								if (ConfigurationManager.MainConfig.gpuType == 3) TpSettingsManager.tags.Add("amdnew");
-								if (ConfigurationManager.MainConfig.gpuType == 4) TpSettingsManager.tags.Add("amdrid");
-								if (ConfigurationManager.MainConfig.gpuType >= 2) TpSettingsManager.tags.Add("amd");
+								if (Program.gpuType == 0) TpSettingsManager.tags.Add("nvidia");
+								if (Program.gpuType == 1) TpSettingsManager.tags.Add("intel");
+								if (Program.gpuType == 2) TpSettingsManager.tags.Add("amdold");
+								if (Program.gpuType == 3) TpSettingsManager.tags.Add("amdnew");
+								if (Program.gpuType == 4) TpSettingsManager.tags.Add("amdrid");
+								if (Program.gpuType >= 2) TpSettingsManager.tags.Add("amd");
 
-								if (ConfigurationManager.MainConfig.gpuType != 0)
-								{
-									TpSettingsManager.tags.Add("!intel");
-									TpSettingsManager.tags.Add("!amd");
-								}
-								if (ConfigurationManager.MainConfig.gpuType != 1)
-								{
-									TpSettingsManager.tags.Add("!nvidia");
-									TpSettingsManager.tags.Add("!amd");
-								}
-								if (ConfigurationManager.MainConfig.gpuType < 2)
-								{
-									TpSettingsManager.tags.Add("!nvidia");
-									TpSettingsManager.tags.Add("!intel");
-								}
+								if (Program.gpuType != 0) TpSettingsManager.tags.Add("no_nvidia");
+								if (Program.gpuType != 1) TpSettingsManager.tags.Add("no_intel");
+								if (Program.gpuType <= 1) TpSettingsManager.tags.Add("no_amd");
 
 							}
 
 							if (Program.performanceProfile == 0)
 							{
 								TpSettingsManager.tags.Add("normal_perfprofile");
-								TpSettingsManager.tags.Add("!low_perfprofile");
-								TpSettingsManager.tags.Add("!high_perfprofile");
+								TpSettingsManager.tags.Add("not_low_perfprofile");
+								TpSettingsManager.tags.Add("not_high_perfprofile");
 							}
 							if (Program.performanceProfile == 1)
 							{
-								TpSettingsManager.tags.Add("!normal_perfprofile");
+								TpSettingsManager.tags.Add("not_normal_perfprofile");
 								TpSettingsManager.tags.Add("low_perfprofile");
-								TpSettingsManager.tags.Add("!high_perfprofile");
+								TpSettingsManager.tags.Add("not_high_perfprofile");
 							}
 							if (Program.performanceProfile == 2)
 							{
-								TpSettingsManager.tags.Add("!normal_perfprofile");
-								TpSettingsManager.tags.Add("!low_perfprofile");
+								TpSettingsManager.tags.Add("not_normal_perfprofile");
+								TpSettingsManager.tags.Add("not_low_perfprofile");
 								TpSettingsManager.tags.Add("high_perfprofile");
 							}
 
 
 							if (Program.forceVsync) TpSettingsManager.tags.Add("vsync");
-							else TpSettingsManager.tags.Add("!vsync");
+							else TpSettingsManager.tags.Add("no_vsync");
 
 							if (Program.refreshRate >= 120) TpSettingsManager.tags.Add("120hz");
 							else TpSettingsManager.tags.Add("60hz");
-
-
-							if (Program.patchGpuTP) TpSettingsManager.tags.Add("use_gpu_fix_in_tp_settings"); //Apply gpu amd/intel/nvidia fix in TP
-							else TpSettingsManager.tags.Add("!use_gpu_fix_in_tp_settings");
-
-							if (Program.patchGpuFix) TpSettingsManager.tags.Add("use_gpu_fix_in_patches"); //Apply gpu amd/intel/nvidia fix in TP
-							else TpSettingsManager.tags.Add("!use_gpu_fix_in_patches"); //Apply gpu amd/intel/nvidia fix in TP
-
 
 							if (Program.gpuResolution == 0) TpSettingsManager.tags.Add("720p");
 							if (Program.gpuResolution == 1) TpSettingsManager.tags.Add("1080p");
 							if (Program.gpuResolution == 2) TpSettingsManager.tags.Add("2k");
 							if (Program.gpuResolution == 3) TpSettingsManager.tags.Add("4k");
+							if (Program.gpuResolution == 4) TpSettingsManager.tags.Add("game_native_res");
 
-							if (Program.gpuResolution != 0) TpSettingsManager.tags.Add("!720p");
-							if (Program.gpuResolution != 1) TpSettingsManager.tags.Add("!1080p");
-							if (Program.gpuResolution != 2) TpSettingsManager.tags.Add("!2k");
-							if (Program.gpuResolution != 3) TpSettingsManager.tags.Add("!4k");
+							if(Program.gpuResolution != 4 && Program.gpuResolution >=0) TpSettingsManager.tags.Add("720p+");
+							if(Program.gpuResolution != 4 && Program.gpuResolution >=1) TpSettingsManager.tags.Add("1080p+");
+							if(Program.gpuResolution != 4 && Program.gpuResolution >=2) TpSettingsManager.tags.Add("2k+");
+							if(Program.gpuResolution != 4 && Program.gpuResolution >=3) TpSettingsManager.tags.Add("4k+");
 
-							if (Program.patchResolutionTP) TpSettingsManager.tags.Add("set_res_in_tp_settings");
-							if (Program.patchResolutionFix) TpSettingsManager.tags.Add("fix_res_in_patches");
+							if (Program.gpuResolution != 4 && Program.gpuResolution <= 0) TpSettingsManager.tags.Add("720p-");
+							if (Program.gpuResolution != 4 && Program.gpuResolution <= 1) TpSettingsManager.tags.Add("1080p-");
+							if (Program.gpuResolution != 4 && Program.gpuResolution <= 2) TpSettingsManager.tags.Add("2k-");
+							if (Program.gpuResolution != 4 && Program.gpuResolution <= 3) TpSettingsManager.tags.Add("4k-");
 
+							if (Program.gpuResolution != 0) TpSettingsManager.tags.Add("no_720p");
+							if (Program.gpuResolution != 1) TpSettingsManager.tags.Add("no_1080p");
+							if (Program.gpuResolution != 2) TpSettingsManager.tags.Add("no_2k");
+							if (Program.gpuResolution != 3) TpSettingsManager.tags.Add("no_4k");
+							if (Program.gpuResolution != 4) TpSettingsManager.tags.Add("no_game_native_res");
 
-							if (Program.displayMode == 0) TpSettingsManager.tags.Add("set_displaymode_recommanded"); //Apply Res & Fullscreen in TP
-							if (Program.displayMode == 1) TpSettingsManager.tags.Add("set_fullscreen"); //Apply Res & Fullscreen in TP
-							if (Program.displayMode == 2) TpSettingsManager.tags.Add("set_windowed"); //Apply Res & Fullscreen in TP
-							if (Program.patchDisplayModeTP) TpSettingsManager.tags.Add("set_displaymode_in_tp_settings");
-							else TpSettingsManager.tags.Add("!set_displaymode_in_tp_settings");
-
-							if (Program.patchDisplayModeFix) TpSettingsManager.tags.Add("fix_displaymode_in_patches");
-							else TpSettingsManager.tags.Add("!fix_displaymode_in_patches");
-
-							if (Program.patchReshade) TpSettingsManager.tags.Add("use_optional_reshade");
-							else TpSettingsManager.tags.Add("!use_optional_reshade");
+							if (Program.patchResolutionTP) TpSettingsManager.tags.Add("set_resolution");
+							else TpSettingsManager.tags.Add("dont_set_resolution");
 
 
+
+							if (Program.patchDisplayModeTP && Program.displayMode == 0) TpSettingsManager.tags.Add("set_displaymode_recommanded"); //Apply Res & Fullscreen in TP
+							if (Program.patchDisplayModeTP && Program.displayMode == 1) TpSettingsManager.tags.Add("set_fullscreen"); //Apply Res & Fullscreen in TP
+							if (Program.patchDisplayModeTP && Program.displayMode == 2) TpSettingsManager.tags.Add("set_windowed"); //Apply Res & Fullscreen in TP
+
+
+
+							if (Program.patchReshade) TpSettingsManager.tags.Add("optional_reshade");
+							else TpSettingsManager.tags.Add("no_reshade");
+
+
+
+							if (Program.patchFFB) TpSettingsManager.tags.Add("ffb");
+							
+							if(Program.useBezel) TpSettingsManager.tags.Add("bezel");
+							else TpSettingsManager.tags.Add("no_bezel");
+
+							if (Program.useCrt) TpSettingsManager.tags.Add("crtfilter");
+							else TpSettingsManager.tags.Add("no_crtfilter");
+
+							if (Program.useKeepAspectRatio) TpSettingsManager.tags.Add("keepaspectratio");
+							else TpSettingsManager.tags.Add("no_keepaspectratio");
+
+							//Tags that does not have equivalents on the file system
 							if (Program.patchGameID) TpSettingsManager.tags.Add("replace_gameid");
 							if (Program.patchNetwork) TpSettingsManager.tags.Add("replace_network");
 							if (Program.patchOtherTPSettings) TpSettingsManager.tags.Add("recommanded_tp_settings");
 							if (Program.patchOthersGameOptions) TpSettingsManager.tags.Add("recommanded_gameoptions");
-							if (Program.patchFFB) TpSettingsManager.tags.Add("ffb");
-
+							if (Program.patchDisplayModeFix) TpSettingsManager.tags.Add("set_displaymode_in_patches");
+							else TpSettingsManager.tags.Add("dont_set_displaymode_in_patches");
+							if (Program.patchResolutionFix) TpSettingsManager.tags.Add("set_resolution_patches");
+							else TpSettingsManager.tags.Add("dont_set_resolution_patches");
 
 							string gameInfoContent = "";
 							JObject gameInfoParsedJson = null;
@@ -1196,7 +1411,7 @@ namespace TeknoparrotAutoXinput
 								GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
 
 								gameInfoGOSection = (JObject)gameInfoParsedJson["gameoptions"];
-								gameOptions.Overwrite(gameInfoGOSection, TpSettingsManager.tags);
+								//gameOptions.Overwrite(gameInfoGOSection, TpSettingsManager.tags);
 
 								gameInfoTpSection = (JObject)gameInfoParsedJson["tpoptions"];
 								TpSettingsManager.SetSettings(gameInfoTpSection);
@@ -1206,17 +1421,450 @@ namespace TeknoparrotAutoXinput
 								}
 								//GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
 							}
+
+
 							TpSettingsManager.UpdateXML();
 							if (TpSettingsManager.IsWindowed) TpSettingsManager.tags.Add("windowed");
 							else TpSettingsManager.tags.Add("fullscreen");
+
+
+							
+
+							if (GameInfo.ContainsKey("upscaleFullscreen") && (GameInfo["upscaleFullscreen"].ToLower() == "true" || (GameInfo["upscaleFullscreen"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["upscaleFullscreen"].Trim())))) Program.upscaleFullscreen = true;
+							if (GameInfo.ContainsKey("upscaleWindowed") && (GameInfo["upscaleWindowed"].ToLower() == "true" || (GameInfo["upscaleWindowed"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["upscaleWindowed"].Trim())))) Program.upscaleWindowed = true;
+							if (GameInfo.ContainsKey("need60hz") && (GameInfo["need60hz"].ToLower() == "true" || (GameInfo["need60hz"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["need60hz"].Trim())))) Program.need60hz = true;
+							if (GameInfo.ContainsKey("need60hzFullscreen") && (GameInfo["need60hzFullscreen"].ToLower() == "true" || (GameInfo["need60hzFullscreen"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["need60hzFullscreen"].Trim())))) Program.need60hzFullscreen = true;
+							if (GameInfo.ContainsKey("need60hzWindowed") && (GameInfo["need60hzWindowed"].ToLower() == "true" || (GameInfo["need60hzWindowed"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["need60hzWindowed"].Trim())))) Program.need60hzWindowed = true;
+							if (GameInfo.ContainsKey("forceResSwitchFullscreen") && (GameInfo["forceResSwitchFullscreen"].ToLower() == "true" || (GameInfo["forceResSwitchFullscreen"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["forceResSwitchFullscreen"].Trim())))) Program.forceResSwitchFullscreen = true;
+							if (GameInfo.ContainsKey("forceResSwitchWindowed") && (GameInfo["forceResSwitchWindowed"].ToLower() == "true" || (GameInfo["forceResSwitchWindowed"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["forceResSwitchWindowed"].Trim())))) Program.forceResSwitchWindowed = true;
+
+							if (GameInfo.ContainsKey("canUseJoyInsteadOfDpad") && GameInfo["canUseJoyInsteadOfDpad"].ToLower() == "true")
+							{
+								Program.favorJoystick = gameOptions.favorJoystick > 0 ? (gameOptions.favorJoystick == 1 ? true : false) : ConfigurationManager.MainConfig.favorJoystick;
+							}
+							if (Program.forceResSwitchFullscreen && Program.gpuResolution == 4) Program.forceResSwitchFullscreen = false;
+							if (Program.forceResSwitchWindowed && Program.gpuResolution == 4) Program.forceResSwitchWindowed = false;
+
+
+
 							if (gameInfoGOSection != null) gameOptions.Overwrite(gameInfoGOSection, TpSettingsManager.tags);
 
+							string forceResizeCommand = "";
+							if (GameInfo.ContainsKey("forceResize") && GameInfo["forceResize"] != "") forceResizeCommand = GameInfo["forceResize"];
+							if (GameInfo.ContainsKey("forceResize720p") && GameInfo["forceResize720p"] != "" && Program.gpuResolution == 0) forceResizeCommand = GameInfo["forceResize720p"];
+							if (GameInfo.ContainsKey("forceResize1080p") && GameInfo["forceResize1080p"] != "" && Program.gpuResolution == 1) forceResizeCommand = GameInfo["forceResize1080p"];
+							if (GameInfo.ContainsKey("forceResize2k") && GameInfo["forceResize2k"] != "" && Program.gpuResolution == 2) forceResizeCommand = GameInfo["forceResize2k"];
+							if (GameInfo.ContainsKey("forceResize4k") && GameInfo["forceResize4k"] != "" && Program.gpuResolution == 3) forceResizeCommand = GameInfo["forceResize4k"];
+							if (GameInfo.ContainsKey("forceResizeNative") && GameInfo["forceResizeNative"] != "" && Program.gpuResolution == 4) forceResizeCommand = GameInfo["forceResizeNative"];
+							var matchForceResize = Regex.Match(forceResizeCommand, @"^([0-9]+)x([0-9]+)(\|(.+))?$");
+							if (matchForceResize.Success)
+							{
+								int forceResizeWidth = int.Parse(matchForceResize.Groups[1].Value);
+								int forceResizeHeight = int.Parse(matchForceResize.Groups[2].Value);
+								string forceResizeAfterBar = matchForceResize.Groups[4].Success ? matchForceResize.Groups[4].Value : string.Empty;
+								if(forceResizeAfterBar != "")
+								{
+									bool validForceResize = true;
+									foreach(var afterBarData in forceResizeAfterBar.Split("&"))
+									{
+										if(afterBarData.Trim() != "" && !TpSettingsManager.tags.Contains(afterBarData.Trim()))
+										{
+											validForceResize = false;
+											break;
+										}
+									}
+									if (!validForceResize)
+									{
+										forceResizeWidth = 0;
+										forceResizeHeight = 0;
+									}
+								}
+								Program.forceResizeWidth = forceResizeWidth;
+								Program.forceResizeHeight = forceResizeHeight;
+							}
 
 
+							if (!TpSettingsManager.IsWindowed && GameInfo.ContainsKey("forceResSwitchFullscreen") && GameInfo["forceResSwitchFullscreen"].ToLower().Split("x").Count() == 2)
+							{
+								var newResSplit = GameInfo["forceResSwitchFullscreen"].ToLower().Split("x");
+								usePresetDisposition = true;
+								presetDispositionWith = int.Parse(newResSplit[0].Trim());
+								presetDispositionHeight = int.Parse(newResSplit[1].Trim());
+								_dispositionToSwitch = "custom";
+							}
+
+							if (!TpSettingsManager.IsWindowed && Program.gpuResolution == 4 && GameInfo.ContainsKey("forceResSwitchNative") && GameInfo["forceResSwitchNative"].ToLower().Split("x").Count() == 2)
+							{
+								var newResSplit = GameInfo["forceResSwitchNative"].ToLower().Split("x");
+								usePresetDisposition = true;
+								presetDispositionWith = int.Parse(newResSplit[0].Trim());
+								presetDispositionHeight = int.Parse(newResSplit[1].Trim());
+								_dispositionToSwitch = "custom";
+							}
+
+							if (TpSettingsManager.IsWindowed && GameInfo.ContainsKey("forceResSwitchWindowed") && GameInfo["forceResSwitchWindowed"].ToLower().Split("x").Count() == 2)
+							{
+								var newResSplit = GameInfo["forceResSwitchWindowed"].ToLower().Split("x");
+								usePresetDisposition = true;
+								presetDispositionWith = int.Parse(newResSplit[0].Trim());
+								presetDispositionHeight = int.Parse(newResSplit[1].Trim());
+								_dispositionToSwitch = "custom";
+							}
+
+							if (TpSettingsManager.tags.Contains("windowed") && Program.need60hzWindowed) Program.need60hz = true;
+							if (TpSettingsManager.tags.Contains("fullscreen") && Program.need60hzFullscreen) Program.need60hz = true;
+
+							if (gameOptions.UseGlobalDisposition && Program.need60hz && Program.refreshRate > 60 && Program.currentResX > 0)
+							{
+								int target_refreshrate = 60;
+								usePresetDisposition = true;
+								presetDispositionWith = presetDispositionWith > 0 ? presetDispositionWith : Program.currentResX;
+								presetDispositionHeight = presetDispositionHeight > 0 ? presetDispositionHeight : Program.currentResY;
+								presetDispositionFrequency = target_refreshrate;
+
+								var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+								var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+								var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+								var resolutionAvailiable = list
+									.Where(d => d.BitCount == 32 && d.Orientation == 0)
+									.OrderBy(d => d.Width)
+									.ThenBy(d => d.Height)
+									.ThenBy(d => d.Frequency)
+									.FirstOrDefault(d => d.Width == presetDispositionWith &&
+														 d.Height == presetDispositionHeight &&
+														 d.Frequency == presetDispositionFrequency);
+
+								if (resolutionAvailiable == null)
+								{
+									// Chercher la résolution immédiatement au-dessus de 60 Hz
+									resolutionAvailiable = list
+										.Where(d => d.Width == presetDispositionWith &&
+													d.Height == presetDispositionHeight &&
+													d.BitCount == 32 &&
+													d.Orientation == 0 &&
+													d.Frequency > presetDispositionFrequency)
+										.OrderBy(d => d.Frequency)
+										.FirstOrDefault();
+
+									// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+									if (resolutionAvailiable == null)
+									{
+										resolutionAvailiable = list
+											.Where(d => d.Width == presetDispositionWith &&
+														d.Height == presetDispositionHeight &&
+														d.BitCount == 32 &&
+														d.Orientation == 0 &&
+														d.Frequency < presetDispositionFrequency)
+											.OrderByDescending(d => d.Frequency)
+											.FirstOrDefault();
+									}
+								}
+								if (resolutionAvailiable != null)
+								{
+									_dispositionToSwitch = "custom";
+									presetDispositionFrequency = resolutionAvailiable.Frequency;
+								}
+								else presetDispositionFrequency = 60;
+
+								Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (need60hz)");
+
+								Program.refreshRate = presetDispositionFrequency;
+								refreshrate_done = true;
+
+							}
+
+							if (TpSettingsManager.tags.Contains("fullscreen") && gameOptions.UseGlobalDisposition && Program.forceResSwitchFullscreen && Program.currentResX > 0)
+							{
+								int target_refreshrate = Program.refreshRate;
+								if (need60hz) target_refreshrate = 60;
+								int screenWidth = Program.currentResX;
+								int screenHeight = Program.currentResY;
+								bool changeres = false;
+								if (Program.gpuResolution == 0 && (screenWidth != 1280 || screenHeight != 720))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1280;
+									presetDispositionHeight = 720;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 1 && (screenWidth != 1920 || screenHeight != 1080))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1920;
+									presetDispositionHeight = 1080;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 2 && (screenWidth != 2560 || screenHeight != 1440))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 2560;
+									presetDispositionHeight = 1440;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 3 && (screenWidth != 3840 || screenHeight != 2160))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 3840;
+									presetDispositionHeight = 2160;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (changeres)
+								{
+
+									var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+									var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+									var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+									var resolutionAvailiable = list
+										.Where(d => d.BitCount == 32 && d.Orientation == 0)
+										.OrderBy(d => d.Width)
+										.ThenBy(d => d.Height)
+										.ThenBy(d => d.Frequency)
+										.FirstOrDefault(d => d.Width == presetDispositionWith &&
+															 d.Height == presetDispositionHeight &&
+															 d.Frequency == presetDispositionFrequency);
+
+									if (resolutionAvailiable == null)
+									{
+										// Chercher la résolution immédiatement au-dessus de 60 Hz
+										resolutionAvailiable = list
+											.Where(d => d.Width == presetDispositionWith &&
+														d.Height == presetDispositionHeight &&
+														d.BitCount == 32 &&
+														d.Orientation == 0 &&
+														d.Frequency > presetDispositionFrequency)
+											.OrderBy(d => d.Frequency)
+											.FirstOrDefault();
+
+										// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+										if (resolutionAvailiable == null)
+										{
+											resolutionAvailiable = list
+												.Where(d => d.Width == presetDispositionWith &&
+															d.Height == presetDispositionHeight &&
+															d.BitCount == 32 &&
+															d.Orientation == 0 &&
+															d.Frequency < presetDispositionFrequency)
+												.OrderByDescending(d => d.Frequency)
+												.FirstOrDefault();
+										}
+									}
+									if (resolutionAvailiable != null)
+									{
+										_dispositionToSwitch = "custom";
+										presetDispositionFrequency = resolutionAvailiable.Frequency;
+									}
+									else presetDispositionFrequency = 60;
+
+									Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (forceResSwitchFullscreen)");
+
+									Program.refreshRate = presetDispositionFrequency;
+									refreshrate_done = true;
+								}
+
+							}
+
+							if (TpSettingsManager.tags.Contains("windowed") && gameOptions.UseGlobalDisposition && Program.forceResSwitchWindowed && Program.currentResX > 0)
+							{
+								int target_refreshrate = Program.refreshRate;
+								if (need60hz) target_refreshrate = 60;
+								int screenWidth = Program.currentResX;
+								int screenHeight = Program.currentResY;
+								bool changeres = false;
+								if (Program.gpuResolution == 0 && (screenWidth != 1280 || screenHeight != 720))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1280;
+									presetDispositionHeight = 720;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 1 && (screenWidth != 1920 || screenHeight != 1080))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1920;
+									presetDispositionHeight = 1080;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 2 && (screenWidth != 2560 || screenHeight != 1440))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 2560;
+									presetDispositionHeight = 1440;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 3 && (screenWidth != 3840 || screenHeight != 2160))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 3840;
+									presetDispositionHeight = 2160;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (changeres)
+								{
+
+									var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+									var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+									var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+									var resolutionAvailiable = list
+										.Where(d => d.BitCount == 32 && d.Orientation == 0)
+										.OrderBy(d => d.Width)
+										.ThenBy(d => d.Height)
+										.ThenBy(d => d.Frequency)
+										.FirstOrDefault(d => d.Width == presetDispositionWith &&
+															 d.Height == presetDispositionHeight &&
+															 d.Frequency == presetDispositionFrequency);
+
+									if (resolutionAvailiable == null)
+									{
+										// Chercher la résolution immédiatement au-dessus de 60 Hz
+										resolutionAvailiable = list
+											.Where(d => d.Width == presetDispositionWith &&
+														d.Height == presetDispositionHeight &&
+														d.BitCount == 32 &&
+														d.Orientation == 0 &&
+														d.Frequency > presetDispositionFrequency)
+											.OrderBy(d => d.Frequency)
+											.FirstOrDefault();
+
+										// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+										if (resolutionAvailiable == null)
+										{
+											resolutionAvailiable = list
+												.Where(d => d.Width == presetDispositionWith &&
+															d.Height == presetDispositionHeight &&
+															d.BitCount == 32 &&
+															d.Orientation == 0 &&
+															d.Frequency < presetDispositionFrequency)
+												.OrderByDescending(d => d.Frequency)
+												.FirstOrDefault();
+										}
+									}
+									if (resolutionAvailiable != null)
+									{
+										_dispositionToSwitch = "custom";
+										presetDispositionFrequency = resolutionAvailiable.Frequency;
+									}
+									else presetDispositionFrequency = 60;
+
+									Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (forceResSwitchFullscreen)");
+
+									Program.refreshRate = presetDispositionFrequency;
+									refreshrate_done = true;
+								}
+
+							}
 
 
+							if (TpSettingsManager.tags.Contains("windowed") && gameOptions.UseGlobalDisposition && Program.upscaleWindowed && Program.currentResX > 0)
+							{
+								int target_refreshrate = Program.refreshRate;
+								if (need60hz) target_refreshrate = 60;
+								int screenWidth = Program.currentResX;
+								int screenHeight = Program.currentResY;
+								//MessageBox.Show($"screenWidth = {screenWidth} screenHeight= {screenHeight}");
+								//if (Program.gpuResolution != 0) TpSettingsManager.tags.Add("!720p");
+								//if (Program.gpuResolution != 1) TpSettingsManager.tags.Add("!1080p");
+								//if (Program.gpuResolution != 2) TpSettingsManager.tags.Add("!2k");
+								//if (Program.gpuResolution != 3) TpSettingsManager.tags.Add("!4k");
+								bool changeres = false;
+								if (Program.gpuResolution == 0 && (screenWidth < 1280 || screenHeight < 720))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1280;
+									presetDispositionHeight = 720;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 1 && (screenWidth < 1920 || screenHeight < 1080))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 1920;
+									presetDispositionHeight = 1080;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 2 && (screenWidth < 2560 || screenHeight < 1440))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 2560;
+									presetDispositionHeight = 1440;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (Program.gpuResolution == 3 && (screenWidth < 3840 || screenHeight < 2160))
+								{
+									usePresetDisposition = true;
+									presetDispositionWith = 3840;
+									presetDispositionHeight = 2160;
+									presetDispositionFrequency = target_refreshrate;
+									changeres = true;
+								}
+								if (changeres)
+								{
+
+									var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+									var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+									var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+									var resolutionAvailiable = list
+										.Where(d => d.BitCount == 32 && d.Orientation == 0)
+										.OrderBy(d => d.Width)
+										.ThenBy(d => d.Height)
+										.ThenBy(d => d.Frequency)
+										.FirstOrDefault(d => d.Width == presetDispositionWith &&
+															 d.Height == presetDispositionHeight &&
+															 d.Frequency == presetDispositionFrequency);
+
+									if (resolutionAvailiable == null)
+									{
+										// Chercher la résolution immédiatement au-dessus de 60 Hz
+										resolutionAvailiable = list
+											.Where(d => d.Width == presetDispositionWith &&
+														d.Height == presetDispositionHeight &&
+														d.BitCount == 32 &&
+														d.Orientation == 0 &&
+														d.Frequency > presetDispositionFrequency)
+											.OrderBy(d => d.Frequency)
+											.FirstOrDefault();
+
+										// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+										if (resolutionAvailiable == null)
+										{
+											resolutionAvailiable = list
+												.Where(d => d.Width == presetDispositionWith &&
+															d.Height == presetDispositionHeight &&
+															d.BitCount == 32 &&
+															d.Orientation == 0 &&
+															d.Frequency < presetDispositionFrequency)
+												.OrderByDescending(d => d.Frequency)
+												.FirstOrDefault();
+										}
+									}
+									if (resolutionAvailiable != null)
+									{
+										_dispositionToSwitch = "custom";
+										presetDispositionFrequency = resolutionAvailiable.Frequency;
+									}
+									else presetDispositionFrequency = 60;
+
+									Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (upscaleWindowed)");
+
+									Program.refreshRate = presetDispositionFrequency;
+									refreshrate_done = true;
+								}
 
 
+							}
 							/*
 
 							string TPAdvisedSettingsFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "tp_patch_settings" + ".json");
@@ -1700,8 +2348,8 @@ namespace TeknoparrotAutoXinput
 
 								string bindingDinputLightgunAJson = "";
 								string bindingDinputLightgunBJson = "";
-								bool dinputLightgunAFound = false;
-								bool dinputLightgunBFound = false;
+								//bool dinputLightgunAFound = false;
+								//bool dinputLightgunBFound = false;
 								Dictionary<string, JoystickButtonData> bindingDinputLightGunA = null;
 								Dictionary<string, JoystickButtonData> bindingDinputLightGunB = null;
 								Dictionary<string, JoystickButtonData> bindingDinputLightGun = new Dictionary<string, JoystickButtonData>();
@@ -2025,6 +2673,11 @@ namespace TeknoparrotAutoXinput
 									vjoy_gunA = false;
 									vjoy_gunB = false;
 									bool sinden_and_notsinden = false;
+									bool all_sinden = false;
+									if (dinputLightgunAFound || dinputLightgunBFound) all_sinden = true;
+									if (dinputLightgunAFound && GunAType != "sinden") all_sinden = false;
+									if (dinputLightgunBFound && GunBType != "sinden") all_sinden = false;
+
 									if (dinputLightgunAFound && dinputLightgunBFound)
 									{
 										if (GunAType == "sinden" && GunBType != "sinden")
@@ -2039,6 +2692,9 @@ namespace TeknoparrotAutoXinput
 
 									string key_vjoy_info = "recommanded_vjoy_fullscreen";
 									if (TpSettingsManager.IsWindowed) key_vjoy_info = "recommanded_vjoy_windowed";
+									if (useKeepAspectRatio && GameInfo.ContainsKey(key_vjoy_info + "_keepaspectratio") && GameInfo[key_vjoy_info + "_keepaspectratio"].Trim() != "") key_vjoy_info = key_vjoy_info + "_keepaspectratio";
+									if (!useKeepAspectRatio && GameInfo.ContainsKey(key_vjoy_info + "_dontkeepaspectratio") && GameInfo[key_vjoy_info + "_dontkeepaspectratio"].Trim() != "") key_vjoy_info = key_vjoy_info + "_dontkeepaspectratio";
+
 									if (GameInfo.ContainsKey(key_vjoy_info) && GameInfo[key_vjoy_info].Trim() != "")
 									{
 										if (dinputLightgunAFound)
@@ -2087,6 +2743,20 @@ namespace TeknoparrotAutoXinput
 														break;
 													}
 												}
+											}
+										}
+										if(GameInfo[key_vjoy_info].Trim() == "not_all_sinden")
+										{
+											if (all_sinden)
+											{
+												vjoy_gunA = false;
+												vjoy_gunB = false;
+											}
+											else
+											{
+												if (dinputLightgunAFound && vjoy_recommanded_gunA) vjoy_gunA = true;
+												if (dinputLightgunBFound && vjoy_recommanded_gunB) vjoy_gunB = true;
+
 											}
 										}
 									}
@@ -2497,10 +3167,10 @@ namespace TeknoparrotAutoXinput
 								bool checkDinputThrottle = (ConfigurationManager.MainConfig.useDinputHotas && ConfigurationManager.MainConfig.useDinputWheel && ConfigurationManager.MainConfig.useHotasWithWheel);
 
 								Guid throttleGuid = new Guid();
-								bool throttleGuidFound = false;
+								//bool throttleGuidFound = false;
 
 								Guid shifterGuid = new Guid();
-								bool shifterGuidFound = false;
+								//bool shifterGuidFound = false;
 
 								bool dinputHotasFound = false;
 								if (checkDinputHotas)
@@ -2686,25 +3356,28 @@ namespace TeknoparrotAutoXinput
 
 								//Tag Define Part 2
 								if (useXinput) TpSettingsManager.tags.Add("xinput");
-								else TpSettingsManager.tags.Add("!xinput");
+								else TpSettingsManager.tags.Add("no_xinput");
 
 								if (useDinputWheel) TpSettingsManager.tags.Add("dwheel");
-								else TpSettingsManager.tags.Add("!dwheel");
+								else TpSettingsManager.tags.Add("no_dwheel");
 
 								if (useDinputHotas) TpSettingsManager.tags.Add("dhotas");
-								else TpSettingsManager.tags.Add("!dhotas");
+								else TpSettingsManager.tags.Add("no_dhotas");
 
 								if (useDinputLightGun) TpSettingsManager.tags.Add("dlightgun");
-								else TpSettingsManager.tags.Add("!dlightgun");
+								else TpSettingsManager.tags.Add("no_dlightgun");
 
-								if (shifterGuidFound) TpSettingsManager.tags.Add("shifter");
-								else TpSettingsManager.tags.Add("!shifter");
+								if (shifterGuidFound) TpSettingsManager.tags.Add("shifter_found");
+								else TpSettingsManager.tags.Add("no_shifter_found");
 
-								if (dinputLightgunAFound) TpSettingsManager.tags.Add("dguna");
-								else TpSettingsManager.tags.Add("!dguna");
+								if (throttleGuidFound) TpSettingsManager.tags.Add("throttle_found");
+								else TpSettingsManager.tags.Add("no_throttle_found");
 
-								if (dinputLightgunBFound) TpSettingsManager.tags.Add("dgunb");
-								else TpSettingsManager.tags.Add("!dgunb");
+								if (dinputLightgunAFound) TpSettingsManager.tags.Add("guna_found");
+								else TpSettingsManager.tags.Add("no_guna_found");
+
+								if (dinputLightgunBFound) TpSettingsManager.tags.Add("gunb_found");
+								else TpSettingsManager.tags.Add("no_gunb_found");
 
 								if (!hideCrosshair) TpSettingsManager.tags.Add("show_crosshair");
 								if (hideCrosshair) TpSettingsManager.tags.Add("hide_crosshair");
@@ -2798,8 +3471,8 @@ namespace TeknoparrotAutoXinput
 
 											if (virtualKeyboardXinputSlot < 0 || virtualKeyboardXinputSlot > 3)
 											{
-												controller.Disconnect();
-												client.Dispose();
+												try { controller.Disconnect(); } catch { }
+												try { client.Dispose(); } catch { }
 											}
 
 											if (virtualKeyboardXinputSlot > -1)
@@ -3318,7 +3991,8 @@ namespace TeknoparrotAutoXinput
 										{
 											if (emptyJoystickButtonDictionary.ContainsKey(buttonData.Key))
 											{
-												emptyJoystickButtonDictionary[buttonData.Key] = buttonData.Value.RemapButtonData(newXinputSlot);
+												if(ConfigType=="gamepad") emptyJoystickButtonDictionary[buttonData.Key] = buttonData.Value.RemapButtonData(newXinputSlot, Program.favorJoystick);
+												else emptyJoystickButtonDictionary[buttonData.Key] = buttonData.Value.RemapButtonData(newXinputSlot);
 
 											}
 										}
@@ -4436,19 +5110,85 @@ namespace TeknoparrotAutoXinput
 
 								if (!string.IsNullOrEmpty(_dispositionToSwitch) && _dispositionToSwitch != "<none>")
 								{
-									var cfg = Path.Combine(Program.DispositionFolder, "disposition_" + _dispositionToSwitch + ".xml");
-									if (File.Exists(cfg))
+									if (usePresetDisposition)
 									{
-										Utils.LogMessage($"Disposition {cfg} Exist, save Current Disposition");
 										if (MonitorSwitcher.SaveDisplaySettings(Path.Combine(Path.GetFullPath(Program.DispositionFolder), "dispositionrestore_app.xml")))
 										{
-											if (UseMonitorDisposition(_dispositionToSwitch))
+											bool resolutionSwitchOk = true;
+											var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+											var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+											var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+											var set = list.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																	d.Height == presetDispositionHeight &&
+																	d.Frequency == presetDispositionFrequency
+																	&& d.BitCount == 32 && d.Orientation == 0);
+
+											if (set != null)
+											{
+												// Initialisation du processus
+												Process process = new Process();
+												process.StartInfo.FileName = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "QRes", "QRes.exe"); 
+												process.StartInfo.Arguments = $"/x:{presetDispositionWith} /y:{presetDispositionHeight} /r:{presetDispositionFrequency}";
+
+												// Configuration de la sortie standard pour capturer l'output
+												process.StartInfo.RedirectStandardOutput = true;
+												process.StartInfo.UseShellExecute = false;
+												process.StartInfo.CreateNoWindow = true;
+
+												// Démarrage du processus
+												process.Start();
+
+												// Lecture de l'output
+												string output = process.StandardOutput.ReadToEnd();
+
+												// Attente de la fin du processus
+												process.WaitForExit();
+
+												Utils.LogMessage(output);
+
+												if (output.ToLower().Contains("error:")) resolutionSwitchOk = false;
+												/*
+												try
+												{
+													Westwind.SetResolution.DisplayManager.SetDisplaySettings(set, monitor.DriverDeviceName);
+												}
+												catch (Exception ex)
+												{
+													resolutionSwitchOk = false;
+												}
+												*/
+											}
+											else resolutionSwitchOk = false;
+											
+
+											if (resolutionSwitchOk)
 											{
 												_restoreSwitch = true;
 												Thread.Sleep(1000);
 											}
+
+
+
 										}
 									}
+									else
+									{
+										var cfg = Path.Combine(Program.DispositionFolder, "disposition_" + _dispositionToSwitch + ".xml");
+										if (File.Exists(cfg))
+										{
+											Utils.LogMessage($"Disposition {cfg} Exist, save Current Disposition");
+											if (MonitorSwitcher.SaveDisplaySettings(Path.Combine(Path.GetFullPath(Program.DispositionFolder), "dispositionrestore_app.xml")))
+											{
+												if (UseMonitorDisposition(_dispositionToSwitch))
+												{
+													_restoreSwitch = true;
+													Thread.Sleep(1000);
+												}
+											}
+										}
+									}
+
 								}
 
 								if (useDinputLightGun)
@@ -4951,12 +5691,19 @@ namespace TeknoparrotAutoXinput
 									if (vjoy_gunB) gunOptions = "gunB";
 									if (vjoy_gunA && vjoy_gunB) gunOptions = "all";
 
-									if (gameOptions.tmpGunXFormula != "" || gameOptions.tmpGunYFormula != "" || gameOptions.tmpGunAMinMax != "" || gameOptions.tmpGunBMinMax != "")
+									if (gameOptions.tmpGunXFormula != "" || gameOptions.tmpGunYFormula != "" || gameOptions.tmpGunAMinMax != "" || gameOptions.tmpGunBMinMax != ""
+										|| gameOptions.tmpGunAXFormulaBefore != "" || gameOptions.tmpGunAYFormulaBefore != "" || gameOptions.tmpGunBXFormulaBefore != "" || gameOptions.tmpGunBYFormulaBefore != ""
+
+										)
 									{
 										gunOptions += $" \"{gameOptions.tmpGunXFormula}\"";
 										gunOptions += $" \"{gameOptions.tmpGunYFormula}\"";
 										gunOptions += $" \"{gameOptions.tmpGunAMinMax}\"";
 										gunOptions += $" \"{gameOptions.tmpGunBMinMax}\"";
+										gunOptions += $" \"{gameOptions.tmpGunAXFormulaBefore}\"";
+										gunOptions += $" \"{gameOptions.tmpGunAYFormulaBefore}\"";
+										gunOptions += $" \"{gameOptions.tmpGunBXFormulaBefore}\"";
+										gunOptions += $" \"{gameOptions.tmpGunBYFormulaBefore}\"";
 									}
 
 									Process vjoy_process = new Process();
@@ -4988,10 +5735,16 @@ namespace TeknoparrotAutoXinput
 								string magpieTitle = "";
 								if (GameInfo.ContainsKey("magpieTitle") && GameInfo["magpieTitle"].Trim() != "") magpieTitle = GameInfo["magpieTitle"].Trim();
 
+								string magpieExecutableGame = executableGame;
+								if (GameInfo.ContainsKey("magpieExecutable") && GameInfo["magpieExecutable"].Trim() != "")
+								{
+									magpieExecutableGame = Path.GetFullPath(Path.Combine(executableGameDir, GameInfo["magpieExecutable"]));
+								}
+
 								string forceSindenCalibration = "";
 								string forcevjoyXformula = "";
 								string forcevjoyYformula = "";
-
+								
 								if ((TpSettingsManager.IsWindowed || forceMagpie) && useMagpie)
 								{
 									string magpieExe = ConfigurationManager.MainConfig.magpieExe;
@@ -5043,39 +5796,73 @@ namespace TeknoparrotAutoXinput
 									if (gameOptions.magpieExclusiveFullscreen > 0) magpieExclusiveFullscreen = gameOptions.magpieExclusiveFullscreen == 1 ? true : false;
 
 									bool magpieDisableDirectFlip = false;
-									if (GameInfo.ContainsKey("magpieDisableDirectFlip") && GameInfo["magpieDisableDirectFlip"].ToLower() == "true") magpieDisableDirectFlip = true;
+									if (GameInfo.ContainsKey("magpieDisableDirectFlip") && (GameInfo["magpieDisableDirectFlip"].ToLower() == "true" || (GameInfo["magpieDisableDirectFlip"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpieDisableDirectFlip"].Trim())))) magpieDisableDirectFlip = true;
 
 									bool magpie3DGameMode = false;
-									if (GameInfo.ContainsKey("magpie3DGameMode") && GameInfo["magpie3DGameMode"].ToLower() == "true") magpie3DGameMode = true;
+									if (GameInfo.ContainsKey("magpie3DGameMode") && (GameInfo["magpie3DGameMode"].ToLower() == "true" || (GameInfo["magpie3DGameMode"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpie3DGameMode"].Trim())))) magpie3DGameMode = true;
 
 									bool magpieLaunchBefore = false;
-									if (GameInfo.ContainsKey("magpieLaunchBefore") && GameInfo["magpieLaunchBefore"].ToLower() == "true") magpieLaunchBefore = true;
+									if (GameInfo.ContainsKey("magpieLaunchBefore") && (GameInfo["magpieLaunchBefore"].ToLower() == "true" || (GameInfo["magpieLaunchBefore"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpieLaunchBefore"].Trim())))) magpieLaunchBefore = true;
 
 									bool magpieAllowScalingMaximized = false;
-									if (GameInfo.ContainsKey("magpieAllowScalingMaximized") && GameInfo["magpieAllowScalingMaximized"].ToLower() == "true") magpieAllowScalingMaximized = true;
+									if (GameInfo.ContainsKey("magpieAllowScalingMaximized") && (GameInfo["magpieAllowScalingMaximized"].ToLower() == "true" || (GameInfo["magpieAllowScalingMaximized"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpieAllowScalingMaximized"].Trim())))) magpieAllowScalingMaximized = true;
 
 									bool magpieNoMoveWindow = false;
-									if (GameInfo.ContainsKey("magpieNoMoveWindow") && GameInfo["magpieNoMoveWindow"].ToLower() == "true") magpieNoMoveWindow = true;
+									if (GameInfo.ContainsKey("magpieNoMoveWindow") && (GameInfo["magpieNoMoveWindow"].ToLower() == "true" || (GameInfo["magpieNoMoveWindow"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpieNoMoveWindow"].Trim())))) magpieNoMoveWindow = true;
 
 									bool magpieNoLateFocus = false;
-									if (GameInfo.ContainsKey("magpieNoLateFocus") && GameInfo["magpieNoLateFocus"].ToLower() == "true") magpieNoLateFocus = true;
+									if (GameInfo.ContainsKey("magpieNoLateFocus") && (GameInfo["magpieNoLateFocus"].ToLower() == "true" || (GameInfo["magpieNoLateFocus"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpieNoLateFocus"].Trim())))) magpieNoLateFocus = true;
 
 									bool magpieNoClick = false;
-									if (GameInfo.ContainsKey("magpieNoClick") && GameInfo["magpieNoClick"].ToLower() == "true") magpieNoClick = true;
+									if (GameInfo.ContainsKey("magpieNoClick") && (GameInfo["magpieNoClick"].ToLower() == "true" || (GameInfo["magpieNoClick"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpieNoClick"].Trim())))) magpieNoClick = true;
 
 									bool magpieShowCursor = false;
-									if (GameInfo.ContainsKey("magpieShowCursor") && GameInfo["magpieShowCursor"].ToLower() == "true") magpieShowCursor = true;
+									if (GameInfo.ContainsKey("magpieShowCursor") && (GameInfo["magpieShowCursor"].ToLower() == "true" || (GameInfo["magpieShowCursor"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpieShowCursor"].Trim())))) magpieShowCursor = true;
 
-									string magpieExecutableGame = executableGame;
-									if (GameInfo.ContainsKey("magpieExecutable") && GameInfo["magpieExecutable"].Trim() != "")
+									bool magpieNoLaunchIfSameRes = false;
+									if (GameInfo.ContainsKey("magpieNoLaunchIfSameRes") && ((GameInfo["magpieNoLaunchIfSameRes"].ToLower() == "true" || GameInfo["magpieNoLaunchIfSameRes"].ToLower() == "force") || (GameInfo["magpieNoLaunchIfSameRes"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["magpieNoLaunchIfSameRes"].Trim())))) magpieNoLaunchIfSameRes = true;
+
+									bool forceWindowResize = false;
+									if (GameInfo.ContainsKey("forceWindowResize") && (GameInfo["forceWindowResize"].ToLower() == "true" || (GameInfo["forceWindowResize"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["forceWindowResize"].Trim())))) forceWindowResize = true;
+
+									bool magpieCrop = false;
+									int[] magpieCropValue = { 0, 0, 0, 0 };
+									if (GameInfo.ContainsKey("magpieCrop") && GameInfo["magpieCrop"].Trim().ToLower() != "")
 									{
-										magpieExecutableGame = Path.GetFullPath(Path.Combine(executableGameDir, GameInfo["magpieExecutable"]));
+										string value_magpieCrop_tag = GameInfo["magpieCrop"].Trim().ToLower();
+										foreach (var magpieCropTag in value_magpieCrop_tag.Split('|'))
+										{
+
+											if (magpieCropTag.Split(',').Count() == 2 && magpieCropTag.Split(',')[0].Split('x').Count() == 4)
+											{
+												var splited_magpieCropTag = magpieCropTag.Split(',');
+												var magpieCropTag_tailleReg = splited_magpieCropTag[0];
+												var magpieCropTag_tag = splited_magpieCropTag[1].Trim().ToLower();
+												if (magpieCropTag_tag == "others" || magpieCropTag_tag.Replace(" ", "").Split('&').All(tag => TpSettingsManager.tags.Contains(tag)))
+												{
+													try
+													{
+														magpieCropValue[0] = int.Parse(magpieCropTag_tailleReg.Split("x")[0]);
+														magpieCropValue[1] = int.Parse(magpieCropTag_tailleReg.Split("x")[1]);
+														magpieCropValue[2] = int.Parse(magpieCropTag_tailleReg.Split("x")[2]);
+														magpieCropValue[3] = int.Parse(magpieCropTag_tailleReg.Split("x")[3]);
+													}
+													catch { }
+													break;
+												}
+											}
+										}
 									}
+									if (magpieCropValue[0] == 0 && magpieCropValue[1] == 0 && magpieCropValue[2] == 0 && magpieCropValue[3] == 0) magpieCrop = false;
+									else magpieCrop = true;
+
 
 									if (forceMagpie)
 									{
 										magpieNoMoveWindow = true;
 										magpieAllowScalingMaximized = true;
+										magpieNoLaunchIfSameRes = false;
+										if (GameInfo.ContainsKey("magpieNoLaunchIfSameRes") && GameInfo["magpieNoLaunchIfSameRes"].ToLower() == "force") magpieNoLaunchIfSameRes = true;
 									}
 
 									if (!useDinputLightGun)
@@ -5095,11 +5882,19 @@ namespace TeknoparrotAutoXinput
 													windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
 													Thread.Sleep(500);
 													Utils.LogMessage("Search Window ...");
+													if(windowHandle != IntPtr.Zero)
+													{
+														Utils.RECT clientRectTest;
+														Utils.GetClientRect(windowHandle, out clientRectTest);
+														int clientWidthTest = clientRectTest.Right - clientRectTest.Left;
+														int clientHeightTest = clientRectTest.Bottom - clientRectTest.Top;
+														if (clientWidthTest < 150 || clientHeightTest < 100) windowHandle = IntPtr.Zero;
+													}
 												}
 
 												Utils.LogMessage("Window Found");
 
-												Thread.Sleep(500 + (magpieDelay * 1000));
+												Thread.Sleep(1000 + (magpieDelay * 1000));
 
 												int screenWidth = 1920;
 												int screenHeight = 1080;
@@ -5120,15 +5915,50 @@ namespace TeknoparrotAutoXinput
 												int clientWidth = clientRect.Right - clientRect.Left;
 												int clientHeight = clientRect.Bottom - clientRect.Top;
 
-												if (GameInfo.ContainsKey("magpieRegisterAsSize") && GameInfo["magpieRegisterAsSize"].ToLower().Contains("x"))
+												/*
+												Utils.RECT WindowRect;
+												Utils.GetClientRect(windowHandle, out WindowRect);
+												int WindowWidth = WindowRect.Right - WindowRect.Left;
+												int WindowHeight = clientRect.Bottom - clientRect.Top;
+												*/
+
+												string key_RegisterAsSize = "magpieRegisterAsSize";
+												if (useKeepAspectRatio && GameInfo.ContainsKey(key_RegisterAsSize + "_keepaspectratio") && GameInfo[key_RegisterAsSize + "_keepaspectratio"].Trim() != "") key_RegisterAsSize = key_RegisterAsSize + "_keepaspectratio";
+												if (!useKeepAspectRatio && GameInfo.ContainsKey(key_RegisterAsSize + "_dontkeepaspectratio") && GameInfo[key_RegisterAsSize + "_dontkeepaspectratio"].Trim() != "") key_RegisterAsSize = key_RegisterAsSize + "_dontkeepaspectratio";
+												if (GameInfo.ContainsKey(key_RegisterAsSize) && GameInfo[key_RegisterAsSize].ToLower().Contains("x"))
 												{
-													string tailleReg = GameInfo["magpieRegisterAsSize"];
+													string tailleReg = GameInfo[key_RegisterAsSize];
 													try
 													{
 														clientWidth = int.Parse(tailleReg.Split("x")[0]);
 														clientHeight = int.Parse(tailleReg.Split("x")[1]);
 													}
 													catch { }
+												}
+												if (GameInfo.ContainsKey("magpieRegisterAsSize_tag") && GameInfo["magpieRegisterAsSize_tag"].Trim().ToLower() != "")
+												{
+													string value_magpieRegisterAsSize_tag = GameInfo["magpieRegisterAsSize_tag"].Trim().ToLower();
+													foreach(var magpieRegisterSizeTag in value_magpieRegisterAsSize_tag.Split('|'))
+													{
+														
+														if(magpieRegisterSizeTag.Split(',').Count()==2 && magpieRegisterSizeTag.Split(',')[0].Split('x').Count() == 2)
+														{
+															var splited_magpieRegisterSizeTag = magpieRegisterSizeTag.Split(',');
+															var magpieRegisterSizeTag_tailleReg = splited_magpieRegisterSizeTag[0];
+															var magpieRegisterSizeTag_tag = splited_magpieRegisterSizeTag[1].Trim().ToLower();
+															//if(magpieRegisterSizeTag_tag == "others" || TpSettingsManager.tags.Contains(magpieRegisterSizeTag_tag))
+															if (magpieRegisterSizeTag_tag == "others" || magpieRegisterSizeTag_tag.Replace(" ", "").Split('&').All(tag => TpSettingsManager.tags.Contains(tag)))
+															{
+																try
+																{
+																	clientWidth = int.Parse(magpieRegisterSizeTag_tailleReg.Split("x")[0]);
+																	clientHeight = int.Parse(magpieRegisterSizeTag_tailleReg.Split("x")[1]);
+																}
+																catch { }
+																break;
+															}
+														}
+													}
 												}
 
 
@@ -5140,6 +5970,25 @@ namespace TeknoparrotAutoXinput
 												Utils.LogMessage("Taille actuelle de la fenêtre : " + clientWidth + "x" + clientHeight);
 												Utils.LogMessage("Taille maximisée de la fenêtre sur l'écran : " + maxWindowWidth + "x" + maxWindowHeight);
 
+												if (forceResizeWidth > 0 && forceResizeHeight > 0)
+												{
+													WindowResizer.ResizeWindowToClientRect(windowHandle, forceResizeWidth, forceResizeHeight, true);
+													magpieNoMoveWindow = true;
+													if (magpieNoLaunchIfSameRes)
+													{
+														if (forceResizeWidth != Screen.PrimaryScreen.Bounds.Width) magpieNoLaunchIfSameRes = false;
+														if (forceResizeHeight != Screen.PrimaryScreen.Bounds.Height) magpieNoLaunchIfSameRes = false;
+													}
+												}
+												else
+												{
+													if (magpieNoLaunchIfSameRes)
+													{
+														if (clientWidth != Screen.PrimaryScreen.Bounds.Width) magpieNoLaunchIfSameRes = false;
+														if (clientHeight != Screen.PrimaryScreen.Bounds.Height) magpieNoLaunchIfSameRes = false;
+													}
+													if (forceWindowResize) WindowResizer.ResizeWindowToClientRect(windowHandle, maxWindowWidth, maxWindowHeight);
+												}
 
 												if (File.Exists(magpieExe) && File.Exists(magpieConfig))
 												{
@@ -5154,6 +6003,7 @@ namespace TeknoparrotAutoXinput
 													}
 													else
 													{
+														magpieNoLaunchIfSameRes = false;
 														if (File.Exists(magpieReshadeDll + ".disabled"))
 														{
 															File.Move(magpieReshadeDll + ".disabled", magpieReshadeDll);
@@ -5219,8 +6069,17 @@ namespace TeknoparrotAutoXinput
 															profile["tripleBuffering"] = magpieTripleBuffering;
 															profile["showFPS"] = magpieShowFps;
 															profile["drawCursor"] = magpieShowCursor;
+															profile["croppingEnabled"] = magpieCrop;
+															profile["cropping"]["left"] = magpieCropValue[0];
+															profile["cropping"]["top"] = magpieCropValue[1];
+															profile["cropping"]["right"] = magpieCropValue[2];
+															profile["cropping"]["bottom"] = magpieCropValue[3];
+
+
 														}
 													}
+
+
 													string modifiedJsonText = JsonConvert.SerializeObject(jsonObject, Newtonsoft.Json.Formatting.Indented);
 													File.WriteAllText(magpieConfig, modifiedJsonText);
 													try
@@ -5234,15 +6093,26 @@ namespace TeknoparrotAutoXinput
 													}
 													catch { }
 
+													if (!magpieNoLaunchIfSameRes)
+													{
+														Process magpie_process = new Process();
+														magpie_process.StartInfo.FileName = magpieExe;
+														magpie_process.StartInfo.Arguments = "-t";
+														magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
+														magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
+														magpie_process.StartInfo.UseShellExecute = true;
+														magpie_process.Start();
+														magpie_process_pid = magpie_process.Id;
+													}
+													else
+													{
+														int screenLeft = Screen.PrimaryScreen.Bounds.Left;
+														int screenBottom = Screen.PrimaryScreen.Bounds.Bottom;
 
-													Process magpie_process = new Process();
-													magpie_process.StartInfo.FileName = magpieExe;
-													magpie_process.StartInfo.Arguments = "-t";
-													magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
-													magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
-													magpie_process.StartInfo.UseShellExecute = true;
-													magpie_process.Start();
-													magpie_process_pid = magpie_process.Id;
+														// Déplacer le curseur en bas à gauche du deuxième écran
+														Utils.SetCursorPos(screenLeft, screenBottom - 1);
+													}
+
 
 													if (!magpieNoClick)
 													{
@@ -5330,11 +6200,18 @@ namespace TeknoparrotAutoXinput
 													windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
 													Thread.Sleep(500);
 													Utils.LogMessage("Search Window ...");
+													if (windowHandle != IntPtr.Zero)
+													{
+														Utils.RECT clientRectTest;
+														Utils.GetClientRect(windowHandle, out clientRectTest);
+														int clientWidthTest = clientRectTest.Right - clientRectTest.Left;
+														if (clientWidthTest < 150) windowHandle = IntPtr.Zero;
+													}
 												}
 
 												Utils.LogMessage("Window Found");
 
-												Thread.Sleep(500 + (magpieDelay * 1000));
+												Thread.Sleep(1000 + (magpieDelay * 1000));
 
 												int screenWidth = 1920;
 												int screenHeight = 1080;
@@ -5355,15 +6232,44 @@ namespace TeknoparrotAutoXinput
 												int clientWidth = clientRect.Right - clientRect.Left;
 												int clientHeight = clientRect.Bottom - clientRect.Top;
 
-												if (GameInfo.ContainsKey("magpieRegisterAsSize") && GameInfo["magpieRegisterAsSize"].ToLower().Contains("x"))
+												string key_RegisterAsSize = "magpieRegisterAsSize";
+												if (useKeepAspectRatio && GameInfo.ContainsKey(key_RegisterAsSize + "_keepaspectratio") && GameInfo[key_RegisterAsSize + "_keepaspectratio"].Trim() != "") key_RegisterAsSize = key_RegisterAsSize + "_keepaspectratio";
+												if (!useKeepAspectRatio && GameInfo.ContainsKey(key_RegisterAsSize + "_dontkeepaspectratio") && GameInfo[key_RegisterAsSize + "_dontkeepaspectratio"].Trim() != "") key_RegisterAsSize = key_RegisterAsSize + "_dontkeepaspectratio";
+												if (GameInfo.ContainsKey(key_RegisterAsSize) && GameInfo[key_RegisterAsSize].ToLower().Contains("x"))
 												{
-													string tailleReg = GameInfo["magpieRegisterAsSize"];
+													string tailleReg = GameInfo[key_RegisterAsSize];
 													try
 													{
 														clientWidth = int.Parse(tailleReg.Split("x")[0]);
 														clientHeight = int.Parse(tailleReg.Split("x")[1]);
 													}
 													catch { }
+												}
+
+												if (GameInfo.ContainsKey("magpieRegisterAsSize_tag") && GameInfo["magpieRegisterAsSize_tag"].Trim().ToLower() != "")
+												{
+													string value_magpieRegisterAsSize_tag = GameInfo["magpieRegisterAsSize_tag"].Trim().ToLower();
+													foreach (var magpieRegisterSizeTag in value_magpieRegisterAsSize_tag.Split('|'))
+													{
+
+														if (magpieRegisterSizeTag.Split(',').Count() == 2 && magpieRegisterSizeTag.Split(',')[0].Split('x').Count() == 2)
+														{
+															var splited_magpieRegisterSizeTag = magpieRegisterSizeTag.Split(',');
+															var magpieRegisterSizeTag_tailleReg = splited_magpieRegisterSizeTag[0];
+															var magpieRegisterSizeTag_tag = splited_magpieRegisterSizeTag[1].Trim().ToLower();
+															//if (magpieRegisterSizeTag_tag == "others" || TpSettingsManager.tags.Contains(magpieRegisterSizeTag_tag))
+															if (magpieRegisterSizeTag_tag == "others" || magpieRegisterSizeTag_tag.Replace(" ", "").Split('&').All(tag => TpSettingsManager.tags.Contains(tag)))
+															{
+																try
+																{
+																	clientWidth = int.Parse(magpieRegisterSizeTag_tailleReg.Split("x")[0]);
+																	clientHeight = int.Parse(magpieRegisterSizeTag_tailleReg.Split("x")[1]);
+																}
+																catch { }
+																break;
+															}
+														}
+													}
 												}
 
 
@@ -5374,6 +6280,26 @@ namespace TeknoparrotAutoXinput
 												Utils.LogMessage("Informations sur la fenêtre :");
 												Utils.LogMessage("Taille actuelle de la fenêtre : " + clientWidth + "x" + clientHeight);
 												Utils.LogMessage("Taille maximisée de la fenêtre sur l'écran : " + maxWindowWidth + "x" + maxWindowHeight);
+
+												if (forceResizeWidth > 0 && forceResizeHeight > 0)
+												{
+													WindowResizer.ResizeWindowToClientRect(windowHandle, forceResizeWidth, forceResizeHeight, true);
+													magpieNoMoveWindow = true;
+													if (magpieNoLaunchIfSameRes)
+													{
+														if (forceResizeWidth != Screen.PrimaryScreen.Bounds.Width) magpieNoLaunchIfSameRes = false;
+														if (forceResizeHeight != Screen.PrimaryScreen.Bounds.Height) magpieNoLaunchIfSameRes = false;
+													}
+												}
+												else
+												{
+													if (magpieNoLaunchIfSameRes)
+													{
+														if (clientWidth != Screen.PrimaryScreen.Bounds.Width) magpieNoLaunchIfSameRes = false;
+														if (clientHeight != Screen.PrimaryScreen.Bounds.Height) magpieNoLaunchIfSameRes = false;
+													}
+													if (forceWindowResize) WindowResizer.ResizeWindowToClientRect(windowHandle, maxWindowWidth, maxWindowHeight);
+												}
 
 												double borderSize = 0;
 												if (magpieSindenBorder) borderSize = magpieBorderSize;
@@ -5458,7 +6384,8 @@ namespace TeknoparrotAutoXinput
 														if (gameOptions.tmpGunYFormula != "") forcevjoyYformula = gameOptions.tmpGunYFormula;
 
 														Utils.LogMessage("Vjoy forced formula X : " + forcevjoyXformula);
-														Utils.LogMessage("Vjoy forced formula Y : " + forcevjoyYformula);
+														Utils.LogMessage("Vjoy forced formula Y : " + forcevjoyYformula); 
+
 														try
 														{
 															NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "VjoyControlCommand", PipeDirection.Out);
@@ -5469,8 +6396,20 @@ namespace TeknoparrotAutoXinput
 
 																using (StreamWriter writer = new StreamWriter(pipeClient, Encoding.UTF8))
 																{
-																	writer.Write(@$"formula={forcevjoyXformula},{forcevjoyYformula}");
+																	writer.Write(@$"formula={forcevjoyXformula}<-->{forcevjoyYformula}");
 																	writer.Flush();
+																	if (gameOptions.tmpGunAXFormulaBefore != "" || gameOptions.tmpGunAYFormulaBefore != "")
+																	{
+																		
+																		writer.Write(@$"beforeformula1={gameOptions.tmpGunAXFormulaBefore}<-->{gameOptions.tmpGunAYFormulaBefore}");
+																		writer.Flush();
+																	}
+																	if (gameOptions.tmpGunBXFormulaBefore != "" || gameOptions.tmpGunBYFormulaBefore != "")
+																	{
+																		writer.Write(@$"beforeformula2={gameOptions.tmpGunBXFormulaBefore}<-->{gameOptions.tmpGunBYFormulaBefore}");
+																		writer.Flush();
+																	}
+
 																}
 																pipeClient.Close();
 															}
@@ -5570,6 +6509,13 @@ _Translate=0.000000,0.000000
 													}
 												}
 
+
+												if (magpieNoLaunchIfSameRes)
+												{
+													if (clientWidth != Screen.PrimaryScreen.Bounds.Width) magpieNoLaunchIfSameRes = false;
+													if (clientHeight != Screen.PrimaryScreen.Bounds.Height) magpieNoLaunchIfSameRes = false;
+												}
+
 												if (File.Exists(magpieExe) && File.Exists(magpieConfig))
 												{
 
@@ -5583,6 +6529,7 @@ _Translate=0.000000,0.000000
 													}
 													else
 													{
+														magpieNoLaunchIfSameRes = false;
 														if (File.Exists(magpieReshadeDll + ".disabled"))
 														{
 															File.Move(magpieReshadeDll + ".disabled", magpieReshadeDll);
@@ -5648,6 +6595,11 @@ _Translate=0.000000,0.000000
 															profile["tripleBuffering"] = magpieTripleBuffering;
 															profile["showFPS"] = magpieShowFps;
 															profile["drawCursor"] = magpieShowCursor;
+															profile["croppingEnabled"] = magpieCrop;
+															profile["cropping"]["left"] = magpieCropValue[0];
+															profile["cropping"]["top"] = magpieCropValue[1];
+															profile["cropping"]["right"] = magpieCropValue[2];
+															profile["cropping"]["bottom"] = magpieCropValue[3];
 														}
 													}
 													string modifiedJsonText = JsonConvert.SerializeObject(jsonObject, Newtonsoft.Json.Formatting.Indented);
@@ -5664,14 +6616,25 @@ _Translate=0.000000,0.000000
 													catch { }
 
 
-													Process magpie_process = new Process();
-													magpie_process.StartInfo.FileName = magpieExe;
-													magpie_process.StartInfo.Arguments = "-t";
-													magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
-													magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
-													magpie_process.StartInfo.UseShellExecute = true;
-													magpie_process.Start();
-													magpie_process_pid = magpie_process.Id;
+													if (!magpieNoLaunchIfSameRes)
+													{
+														Process magpie_process = new Process();
+														magpie_process.StartInfo.FileName = magpieExe;
+														magpie_process.StartInfo.Arguments = "-t";
+														magpie_process.StartInfo.WorkingDirectory = Path.GetDirectoryName(magpieExe);
+														magpie_process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Ajout de cette ligne pour minimiser la fenêtre
+														magpie_process.StartInfo.UseShellExecute = true;
+														magpie_process.Start();
+														magpie_process_pid = magpie_process.Id;
+													}
+													else
+													{
+														int screenLeft = Screen.PrimaryScreen.Bounds.Left;
+														int screenBottom = Screen.PrimaryScreen.Bounds.Bottom;
+
+														// Déplacer le curseur en bas à gauche du deuxième écran
+														Utils.SetCursorPos(screenLeft, screenBottom - 1);
+													}
 
 													if (!magpieNoClick)
 													{
@@ -5731,6 +6694,92 @@ _Translate=0.000000,0.000000
 								}
 
 								bool useRivaTuner = gameOptions.runRivaTuner;
+								/*
+								if(!useRivaTuner && (need60hz || need60hzFullscreen || need60hzWindowed))
+								{
+									bool upscaleFullscreen = false;
+									if (GameInfo.ContainsKey("upscaleFullscreen") && GameInfo["upscaleFullscreen"].ToLower() == "true") upscaleFullscreen = true;
+									bool upscaleWindowed = false;
+									if (GameInfo.ContainsKey("upscaleWindowed") && GameInfo["upscaleWindowed"].ToLower() == "true") upscaleWindowed = true;
+
+
+									if (!TpSettingsManager.IsWindowed && !forceResSwitchFullscreen && upscaleFullscreen)
+									{
+										int target_refreshrate = 60;
+										int target_width = 0;
+										int target_height = 0;
+										if (Program.gpuResolution == 0)
+										{
+											target_width = 1280;
+											target_height = 720;
+										}
+										if (Program.gpuResolution == 1)
+										{
+											target_width = 1920;
+											target_height = 1080;
+										}
+										if (Program.gpuResolution == 2)
+										{
+											target_width = 2560;
+											target_height = 1440;
+										}
+										if (Program.gpuResolution == 3)
+										{
+											target_width = 3840;
+											target_height = 2160;
+										}
+
+										var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+										var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+										var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+										var resolutionAvailiable = list
+											.Where(d => d.BitCount == 32 && d.Orientation == 0)
+											.OrderBy(d => d.Width)
+											.ThenBy(d => d.Height)
+											.ThenBy(d => d.Frequency)
+											.FirstOrDefault(d => d.Width == target_width &&
+																 d.Height == target_height &&
+																 d.Frequency == target_refreshrate);
+
+										if (resolutionAvailiable == null)
+										{
+											Utils.LogMessage("Future 60hz frequency not found, force rivatuner");
+											useRivaTuner = true;
+										}
+
+
+
+
+									}
+									else
+									{
+										try
+										{
+											CCDWrapper.DisplayConfigPathInfo[] pathInfoArray = new CCDWrapper.DisplayConfigPathInfo[0];
+											CCDWrapper.DisplayConfigModeInfo[] modeInfoArray = new CCDWrapper.DisplayConfigModeInfo[0];
+											CCDWrapper.MonitorAdditionalInfo[] additionalInfo = new CCDWrapper.MonitorAdditionalInfo[0];
+											CCDWrapper.DpiInfo[] dpiInfoArray = new CCDWrapper.DpiInfo[0];
+											Boolean status = MonitorSwitcher.GetDisplaySettings(ref pathInfoArray, ref modeInfoArray, ref additionalInfo, ref dpiInfoArray, true);
+											if (status)
+											{
+												var monitorData = MonitorSwitcher.PrintDisplaySettings2ForFrequency(pathInfoArray, modeInfoArray, dpiInfoArray);
+												int freq = Utils.GetPrimaryMonitorRefreshRateFromXml(monitorData);
+												if(freq > 60)
+												{
+													Utils.LogMessage($"frequency = {freq}, force rivatuner");
+													useRivaTuner = true;
+												}
+											}
+										}
+										catch { }
+
+									}
+
+
+								}
+								*/
+
 								string rivaTunerExe = ConfigurationManager.MainConfig.rivatunerExe;
 								if (useRivaTuner && rivaTunerExe != "" && File.Exists(rivaTunerExe))
 								{
@@ -5810,6 +6859,26 @@ _Translate=0.000000,0.000000
 												xenosOutConf = xenosConf64;
 											}
 											int xenosDelay = (gameOptions.injectorDelay * 1000);
+
+											if (gameOptions.injectorWaitForGameWindow)
+											{
+												string trueClassName = "";
+												IntPtr windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
+												while (windowHandle == IntPtr.Zero && !isExiting)
+												{
+													windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
+													Thread.Sleep(500);
+													Utils.LogMessage("Search Window for injector ...");
+													if (windowHandle != IntPtr.Zero)
+													{
+														Utils.RECT clientRectTest;
+														Utils.GetClientRect(windowHandle, out clientRectTest);
+														int clientWidthTest = clientRectTest.Right - clientRectTest.Left;
+														if (clientWidthTest < 150) windowHandle = IntPtr.Zero;
+													}
+												}
+												Utils.LogMessage("Found Window for injector ...");
+											}
 
 											Thread.Sleep(xenosDelay);
 
@@ -6066,12 +7135,8 @@ _Translate=0.000000,0.000000
 								if (virtualKeyboardXinputSlot > -1)
 								{
 									Utils.LogMessage($"Dispose virtualKeyboard");
-									try
-									{
-										controller.Disconnect();
-										client.Dispose();
-									}
-									catch { }
+									try { controller.Disconnect(); } catch { }
+									try { client.Dispose(); } catch { }
 								}
 
 
@@ -6106,14 +7171,30 @@ _Translate=0.000000,0.000000
 								}
 								if (shifterHack != null) shifterHack.Stop();
 
+								if (createdNew)
+								{
+									try
+									{
+										mutex.ReleaseMutex();
+										createdNew = false;
+									}
+									catch { }
+								}
+
 								Utils.KillProcessById(Process.GetCurrentProcess().Id);
 							}
 
 						}
 						finally
 						{
-							// Libère le mutex à la fin
-							mutex.ReleaseMutex();
+							if (createdNew)
+							{
+								try
+								{
+									mutex.ReleaseMutex();
+								}
+								catch { }
+							}
 						}
 					}
 				}
@@ -6293,12 +7374,8 @@ _Translate=0.000000,0.000000
 
 			if (virtualKeyboardXinputSlot > -1)
 			{
-				try
-				{
-					controller.Disconnect();
-					client.Dispose();
-				}
-				catch { }
+				try{controller.Disconnect();}catch { }
+				try{client.Dispose();}catch { }
 			}
 		}
 
@@ -6529,13 +7606,68 @@ _Translate=0.000000,0.000000
 
 		public int XinputSlot { get; set; }
 
-		public JoystickButton RemapButtonData(int newXinputSlot)
+		public JoystickButton RemapButtonData(int newXinputSlot,bool changeDpadToJoy=false)
 		{
 			var button = new JoystickButton();
 			button.ButtonName = this.ButtonName;
 			button.Xml = this.Xml;
 			button.BindNameXi = this.BindNameXi;
 			button.XinputSlot = this.XinputSlot;
+
+			if (changeDpadToJoy)
+			{
+				string newBindNameXi = "";
+				if (this.BindNameXi.EndsWith("DPadUp"))
+				{
+					newBindNameXi = newBindNameXi.Replace("DPadUp", $"LeftThumbInput Device {newXinputSlot} Y+");
+					XDocument doc = XDocument.Parse(this.Xml);
+					XElement xInputButton = doc.Root.Element("XInputButton");
+					xInputButton.Element("IsLeftThumbY").Value = "true";
+					xInputButton.Element("ButtonCode").Value = "0";
+					xInputButton.Element("IsButton").Value = "false";
+					doc.Root.Element("BindNameXi").Value = newBindNameXi;
+					button.Xml = doc.ToString();
+					button.BindNameXi = newBindNameXi;
+				}
+				if (this.BindNameXi.EndsWith("DPadDown"))
+				{
+					newBindNameXi = newBindNameXi.Replace("DPadDown", $"LeftThumbInput Device {newXinputSlot} Y-");
+					XDocument doc = XDocument.Parse(this.Xml);
+					XElement xInputButton = doc.Root.Element("XInputButton");
+					xInputButton.Element("IsLeftThumbY").Value = "true";
+					xInputButton.Element("IsAxisMinus").Value = "true";
+					xInputButton.Element("ButtonCode").Value = "0";
+					xInputButton.Element("IsButton").Value = "false";
+					doc.Root.Element("BindNameXi").Value = newBindNameXi;
+					button.Xml = doc.ToString();
+					button.BindNameXi = newBindNameXi;
+				}
+				if (this.BindNameXi.EndsWith("DPadRight"))
+				{
+					newBindNameXi = newBindNameXi.Replace("DPadRight", $"LeftThumbInput Device {newXinputSlot} X+");
+					XDocument doc = XDocument.Parse(this.Xml);
+					XElement xInputButton = doc.Root.Element("XInputButton");
+					xInputButton.Element("IsLeftThumbX").Value = "true";
+					xInputButton.Element("ButtonCode").Value = "0";
+					xInputButton.Element("IsButton").Value = "false";
+					doc.Root.Element("BindNameXi").Value = newBindNameXi;
+					button.Xml = doc.ToString();
+					button.BindNameXi = newBindNameXi;
+				}
+				if (this.BindNameXi.EndsWith("DPadLeft"))
+				{
+					newBindNameXi = newBindNameXi.Replace("DPadLeft", $"LeftThumbInput Device {newXinputSlot} X-");
+					XDocument doc = XDocument.Parse(this.Xml);
+					XElement xInputButton = doc.Root.Element("XInputButton");
+					xInputButton.Element("IsLeftThumbX").Value = "true";
+					xInputButton.Element("IsAxisMinus").Value = "true";
+					xInputButton.Element("ButtonCode").Value = "0";
+					xInputButton.Element("IsButton").Value = "false";
+					doc.Root.Element("BindNameXi").Value = newBindNameXi;
+					button.Xml = doc.ToString();
+					button.BindNameXi = newBindNameXi;
+				}
+			}
 
 			button.Xml = button.Xml.Replace($"Input Device {XinputSlot}", $"Input Device {newXinputSlot}");
 			button.Xml = button.Xml.Replace($"<XInputIndex>{XinputSlot}</XInputIndex>", $"<XInputIndex>{newXinputSlot}</XInputIndex>");

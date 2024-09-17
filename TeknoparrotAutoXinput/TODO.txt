@@ -30,3 +30,21 @@ Mamehooker Run from options
 Sinden app from regular options
                                                                                 
 Xinput should have crosshair mandatory
+
+-----
+
+Cacher les tabs d'option non utilisé
+Cacher certaine options si pas valide pour le jeu (genre dpad->joy)
+Task management user a changer
+AutoDetect/AutoAssign Windowed
+Si need60hz et que 60hz pas dispo rivatuner force enable
+Rawinputtrackball
+Disable HUD in user settings for SpecialK
+Jeu : Chrono Regalia (coin ne marche pas, aussi probablement une erreur sur la touche Test)
+Jeu : GrooveCoaster2, mettre le joy droit sur dpad
+Jeu : Caladrus AC, verifier reg du bon crc dans gameList
+Jeu : Friction et Farcry must be set in 4/3
+Jeu : After burner climax et Alien Arma : crc
+Jeu : Ghost Squad : crc
+
+If corrupted magpie setting, restore copie

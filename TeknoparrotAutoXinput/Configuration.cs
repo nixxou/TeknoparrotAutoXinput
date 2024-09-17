@@ -55,6 +55,7 @@ namespace TeknoparrotAutoXinput
 		public bool useDinputWheel { get; set; } = false;
 		public string ffbDinputWheel { get; set; } = "";
 		public bool favorAB { get; set; } = false;
+		public bool favorJoystick { get; set; } = false;
 		public string TpFolder { get; set; } = "";
 		public bool ShowAllGames { get; set; } = true;
 		public string Disposition { get; set; } = "";
@@ -191,6 +192,8 @@ namespace TeknoparrotAutoXinput
 		public string patch_BroadcastAddress { get; set; } = "";
 
 		public bool patch_FFB { get; set; } = true;
+		public bool useBezel { get; set; } = true;
+		public bool useCrt { get; set; } = true;
 
 		public string tpLicence { get; set; } = "";
 		public bool tpLicenceRegOnLaunch { get; set; } = false;
@@ -200,8 +203,7 @@ namespace TeknoparrotAutoXinput
 
 		public int performanceProfile {  get; set; } = 0;
 		public bool forceVsync { get; set; } = true;
-
-
+		public bool keepAspectRatio { get; set; } = true;
 
 		public Configuration()
 		{
@@ -232,6 +234,7 @@ namespace TeknoparrotAutoXinput
 				this.useDinputWheel = DeserializeData.useDinputWheel;
 				this.ffbDinputWheel = DeserializeData.ffbDinputWheel;
 				this.favorAB = DeserializeData.favorAB;
+				this.favorJoystick = DeserializeData.favorJoystick;
 				this.TpFolder = DeserializeData.TpFolder;
 				this.ShowAllGames = DeserializeData.ShowAllGames;
 				this.Disposition = DeserializeData.Disposition;
@@ -341,6 +344,8 @@ namespace TeknoparrotAutoXinput
 				this.patch_networkDns2 = DeserializeData.patch_networkDns2;
 				this.patch_BroadcastAddress = DeserializeData.patch_BroadcastAddress;
 				this.patch_FFB = DeserializeData.patch_FFB;
+				this.useBezel = DeserializeData.useBezel;
+				this.useCrt = DeserializeData.useCrt;
 
 				this.tpLicence = DeserializeData.tpLicence;
 				this.tpLicenceRegOnLaunch = DeserializeData.tpLicenceRegOnLaunch;
@@ -351,6 +356,7 @@ namespace TeknoparrotAutoXinput
 
 				this.performanceProfile = DeserializeData.performanceProfile;
 				this.forceVsync = DeserializeData.forceVsync;
+				this.keepAspectRatio = DeserializeData.keepAspectRatio;
 
 
 			}

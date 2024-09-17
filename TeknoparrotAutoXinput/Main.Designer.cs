@@ -491,7 +491,7 @@ namespace TeknoparrotAutoXinput
 			cmb_resolution.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_resolution.DropDownWidth = 242;
 			cmb_resolution.IntegralHeight = false;
-			cmb_resolution.Items.AddRange(new object[] { "Global Settings", "720p", "1080p", "1440p (2K)", "2160p (4K)" });
+			cmb_resolution.Items.AddRange(new object[] { "Global Settings", "720p", "1080p", "1440p (2K)", "2160p (4K)", "Native" });
 			cmb_resolution.Location = new Point(95, 49);
 			cmb_resolution.Name = "cmb_resolution";
 			cmb_resolution.Size = new Size(150, 21);

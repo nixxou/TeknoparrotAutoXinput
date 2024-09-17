@@ -166,6 +166,16 @@ namespace TeknoparrotAutoXinput
 		Expression expBX = null;
 		Expression expBY = null;
 
+		Expression expAXBefore = null;
+		Expression expAYBefore = null;
+		Expression expBXBefore = null;
+		Expression expBYBefore = null;
+		private string FormulaAXBefore = "";
+		private string FormulaAYBefore = "";
+		private string FormulaBXBefore = "";
+		private string FormulaBYBefore = "";
+
+
 		private int _vjoyA_X = 0;
 		public int vjoyA_X
 		{
@@ -211,9 +221,8 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true, string formulaX = "", string formulaY = "", string gunAMinMax = "", string gunBMinMax = "", int vjoyIndex=0)
+		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true, string formulaX = "", string formulaY = "", string gunAMinMax = "", string gunBMinMax = "", string formula_AX_before = "", string formula_AY_before = "", string formula_BX_before = "", string formula_BY_before = "", int vjoyIndex=0)
 		{
-			//MessageBox.Show($"icizz {formulaX} {formulaY} {gunAMinMax} {gunBMinMax}");
 			_enableGunA = enableGunA;
 			_enableGunB = enableGunB;
 
@@ -221,8 +230,11 @@ namespace TeknoparrotAutoXinput
 			_gameOptions = gameOptions;
 			_game = game;
 			_indexVjoy = ConfigurationManager.MainConfig.indexvjoy;
-			
-			
+
+			FormulaAXBefore = formula_AX_before;
+			FormulaAYBefore = formula_AY_before;
+			FormulaBXBefore = formula_BX_before;
+			FormulaBYBefore = formula_BY_before;
 
 			if (_gameOptions != null && _gameOptions.indexvjoy != -1) _indexVjoy = _gameOptions.indexvjoy;
 			if (vjoyIndex > 0) _indexVjoy = vjoyIndex;
@@ -664,7 +676,7 @@ namespace TeknoparrotAutoXinput
 			{
 				//MessageBox.Show(message);
 				string secondPartMessage = message.Substring(8).Trim();
-				var formulaSplit = secondPartMessage.Split(',');
+				var formulaSplit = secondPartMessage.Split("<-->");
 				if (formulaSplit.Count() == 2)
 				{
 					string formulaX = formulaSplit[0];
@@ -679,6 +691,111 @@ namespace TeknoparrotAutoXinput
 					btn_updateBY_Click(null, null);
 				}
 			}
+			if (message.StartsWith("beforeformula1="))
+			{
+				string secondPartMessage = message.Substring(15).Trim();
+				var formulaSplit = secondPartMessage.Split("<-->");
+				if (formulaSplit.Count() == 2)
+				{
+					string formulaX = formulaSplit[0];
+					string formulaY = formulaSplit[1];
+					txt_expAXBefore.Text = formulaX;
+					txt_expAYBefore.Text = formulaY;
+
+					if (formulaX != "")
+					{
+						txt_expAXBefore.Visible = true;
+						expAXBefore = new Expression(formulaX);
+						if (expAXBefore.HasErrors())
+						{
+							MessageBox.Show("Invalid Expression");
+							expAXBefore = null;
+						}
+						else
+						{
+							trk_forceA_X_ValueChanged(null, null);
+						}
+					}
+					else
+					{
+						expAXBefore = null;
+					}
+
+					if (formulaY != "")
+					{
+						txt_expAYBefore.Visible = true;
+						expAYBefore = new Expression(formulaY);
+						if (expAYBefore.HasErrors())
+						{
+							MessageBox.Show("Invalid Expression");
+							expAYBefore = null;
+						}
+						else
+						{
+							trk_forceA_Y_ValueChanged(null, null);
+						}
+					}
+					else
+					{
+						expAYBefore = null;
+					}
+
+				}
+			}
+
+			if (message.StartsWith("beforeformula2="))
+			{
+				//MessageBox.Show(message);
+				string secondPartMessage = message.Substring(15).Trim();
+				var formulaSplit = secondPartMessage.Split("<-->");
+				if (formulaSplit.Count() == 2)
+				{
+					string formulaX = formulaSplit[0];
+					string formulaY = formulaSplit[1];
+					txt_expBXBefore.Text = formulaX;
+					txt_expBYBefore.Text = formulaY;
+
+					if (formulaX != "")
+					{
+						txt_expBXBefore.Visible = true;
+						expBXBefore = new Expression(formulaX);
+						if (expBXBefore.HasErrors())
+						{
+							MessageBox.Show("Invalid Expression");
+							expBXBefore = null;
+						}
+						else
+						{
+							trk_forceB_X_ValueChanged(null, null);
+						}
+					}
+					else
+					{
+						expBXBefore = null;
+					}
+
+					if (formulaY != "")
+					{
+						txt_expBYBefore.Visible = true;
+						expBYBefore = new Expression(formulaY);
+						if (expBYBefore.HasErrors())
+						{
+							MessageBox.Show("Invalid Expression");
+							expBYBefore = null;
+						}
+						else
+						{
+							trk_forceB_Y_ValueChanged(null, null);
+						}
+					}
+					else
+					{
+						expBYBefore = null;
+					}
+
+				}
+			}
+
 		}
 
 		private void LoadSettings()
@@ -712,6 +829,59 @@ namespace TeknoparrotAutoXinput
 
 			chk_alterManual_B.Checked = _settingsGunB.alterManual;
 			chk_enableNumpadB.Checked = _settingsGunB.enableNumpad;
+
+			if(FormulaAXBefore != "")
+			{
+				expAXBefore = new Expression(FormulaAXBefore);
+				if (expAXBefore.HasErrors())
+				{
+					expAXBefore = null;
+				}
+				else
+				{
+					txt_expAXBefore.Text = FormulaAXBefore;
+					txt_expAXBefore.Visible = true;
+				}
+			}
+			if (FormulaAYBefore != "")
+			{
+				expAYBefore = new Expression(FormulaAYBefore);
+				if (expAYBefore.HasErrors())
+				{
+					expAYBefore = null;
+				}
+				else
+				{
+					txt_expAYBefore.Text = FormulaAYBefore;
+					txt_expAYBefore.Visible = true;
+				}
+			}
+			if (FormulaBXBefore != "")
+			{
+				expBXBefore = new Expression(FormulaBXBefore);
+				if (expBXBefore.HasErrors())
+				{
+					expBXBefore = null;
+				}
+				else
+				{
+					txt_expBXBefore.Text = FormulaBXBefore;
+					txt_expBXBefore.Visible = true;
+				}
+			}
+			if (FormulaBYBefore != "")
+			{
+				expBYBefore = new Expression(FormulaBYBefore);
+				if (expBYBefore.HasErrors())
+				{
+					expBYBefore = null;
+				}
+				else
+				{
+					txt_expBYBefore.Text = FormulaBYBefore;
+					txt_expBYBefore.Visible = true;
+				}
+			}
 
 			if (_settingsGunA.formula_x.Trim() != "")
 			{
@@ -882,7 +1052,7 @@ namespace TeknoparrotAutoXinput
 			{
 				try
 				{
-					var keycombi = Combination.FromString("NumPad5");
+					var keycombi = Combination.FromString("Control+NumPad5");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -896,7 +1066,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 				try
 				{
-					var keycombi = Combination.FromString("NumPad8");
+					var keycombi = Combination.FromString("Control+NumPad8");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -910,7 +1080,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 				try
 				{
-					var keycombi = Combination.FromString("NumPad2");
+					var keycombi = Combination.FromString("Control+NumPad2");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -924,7 +1094,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 				try
 				{
-					var keycombi = Combination.FromString("NumPad4");
+					var keycombi = Combination.FromString("Control+NumPad4");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -938,7 +1108,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 				try
 				{
-					var keycombi = Combination.FromString("NumPad6");
+					var keycombi = Combination.FromString("Control+NumPad6");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -953,7 +1123,7 @@ namespace TeknoparrotAutoXinput
 
 				try
 				{
-					var keycombi = Combination.FromString("NumPad9");
+					var keycombi = Combination.FromString("Control+NumPad9");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -966,7 +1136,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 				try
 				{
-					var keycombi = Combination.FromString("NumPad3");
+					var keycombi = Combination.FromString("Control+NumPad3");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -979,7 +1149,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 				try
 				{
-					var keycombi = Combination.FromString("NumPad7");
+					var keycombi = Combination.FromString("Control+NumPad7");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -992,7 +1162,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 				try
 				{
-					var keycombi = Combination.FromString("NumPad1");
+					var keycombi = Combination.FromString("Control+NumPad1");
 					Action actionPauseMenu = () =>
 					{
 						if (GunA_manual && !isActivated)
@@ -1006,7 +1176,60 @@ namespace TeknoparrotAutoXinput
 
 				try
 				{
-					var keycombi = Combination.FromString("NumPad0");
+					var keycombi = Combination.FromString("Alt+NumPad9");
+					Action actionPauseMenu = () =>
+					{
+						if (GunB_manual && !isActivated)
+						{
+							trk_forceB_X.Value += 50;
+						}
+					};
+					assignment.Add(keycombi, actionPauseMenu);
+				}
+				catch (Exception ex) { }
+				try
+				{
+					var keycombi = Combination.FromString("Alt+NumPad3");
+					Action actionPauseMenu = () =>
+					{
+						if (GunB_manual && !isActivated)
+						{
+							trk_forceB_X.Value -= 50;
+						}
+					};
+					assignment.Add(keycombi, actionPauseMenu);
+				}
+				catch (Exception ex) { }
+				try
+				{
+					var keycombi = Combination.FromString("Alt+NumPad7");
+					Action actionPauseMenu = () =>
+					{
+						if (GunB_manual && !isActivated)
+						{
+							trk_forceB_Y.Value += 50;
+						}
+					};
+					assignment.Add(keycombi, actionPauseMenu);
+				}
+				catch (Exception ex) { }
+				try
+				{
+					var keycombi = Combination.FromString("Alt+NumPad1");
+					Action actionPauseMenu = () =>
+					{
+						if (GunB_manual && !isActivated)
+						{
+							trk_forceB_Y.Value -= 50;
+						}
+					};
+					assignment.Add(keycombi, actionPauseMenu);
+				}
+				catch (Exception ex) { }
+
+				try
+				{
+					var keycombi = Combination.FromString("Control+NumPad0");
 					Action actionPauseMenu = () =>
 					{
 						if (!isActivated)
@@ -1021,7 +1244,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 				try
 				{
-					var keycombi = Combination.FromString("Subtract");
+					var keycombi = Combination.FromString("Control+Subtract");
 					Action actionPauseMenu = () =>
 					{
 						if (!isActivated)
@@ -1187,6 +1410,7 @@ namespace TeknoparrotAutoXinput
 							{
 								int new_value = RemapValueToVJoy(GunA_X, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_X]);
 								x_original = new_value;
+								lbl_vjoyAXBefore.Text = x_original.ToString();
 								new_value = ReindexValueToVJoy(new_value, _settingsGunA.min_x, _settingsGunA.max_x, _settingsGunA.offset_x, HidExtents[HID_USAGES.HID_USAGE_X]);
 								new_Ax = new_value;
 								_GunA_X_change = false;
@@ -1195,6 +1419,7 @@ namespace TeknoparrotAutoXinput
 							{
 								int new_value = RemapValueToVJoy(GunA_Y, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_Y]);
 								y_original = new_value;
+								lbl_vjoyAYBefore.Text = y_original.ToString();
 								new_value = ReindexValueToVJoy(new_value, _settingsGunA.min_y, _settingsGunA.max_y, _settingsGunA.offset_y, HidExtents[HID_USAGES.HID_USAGE_Y]);
 								new_Ay = new_value;
 								_GunA_Y_change = false;
@@ -1223,6 +1448,78 @@ namespace TeknoparrotAutoXinput
 						{
 
 						}
+
+						if (new_Ax >= 0 && expAXBefore != null)
+						{
+							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_X];
+							expAXBefore.Parameters["X"] = new_Ax;
+							expAXBefore.Parameters["Y"] = new_Ay >= 0 ? new_Ay : vjoyA_Y;
+							expAXBefore.Parameters["OX"] = x_original;
+							expAXBefore.Parameters["OY"] = y_original;
+							try
+							{
+								var resultEvaluate = double.Parse(expAXBefore.Evaluate().ToString());
+								new_Ax = (int)Math.Round(resultEvaluate);
+								if (new_Ax < vJoyLimit.Min) new_Ax = (int)vJoyLimit.Min;
+								if (new_Ax > vJoyLimit.Max) new_Ax = (int)vJoyLimit.Max;
+							}
+							catch { }
+						}
+						if (new_Ay >= 0 && expAYBefore != null)
+						{
+							int original = new_Ay;
+							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_Y];
+							expAYBefore.Parameters["Y"] = new_Ay;
+							expAYBefore.Parameters["X"] = new_Ax >= 0 ? new_Ax : vjoyA_X;
+							expAYBefore.Parameters["OX"] = x_original;
+							expAYBefore.Parameters["OY"] = y_original;
+
+							try
+							{
+								var resultEvaluate = double.Parse(expAYBefore.Evaluate().ToString());
+								new_Ay = (int)Math.Round(resultEvaluate);
+								if (new_Ay < vJoyLimit.Min) new_Ay = (int)vJoyLimit.Min;
+								if (new_Ay > vJoyLimit.Max) new_Ay = (int)vJoyLimit.Max;
+							}
+							catch { }
+						}
+						if (new_Bx >= 0 && expBXBefore != null)
+						{
+							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RX];
+							expBXBefore.Parameters["X"] = new_Bx;
+							expBXBefore.Parameters["Y"] = new_By >= 0 ? new_By : vjoyB_Y;
+							expBXBefore.Parameters["OX"] = x2_original;
+							expBXBefore.Parameters["OY"] = y2_original;
+
+							try
+							{
+								var resultEvaluate = double.Parse(expBXBefore.Evaluate().ToString());
+								new_Bx = (int)Math.Round(resultEvaluate);
+								if (new_Bx < vJoyLimit.Min) new_Bx = (int)vJoyLimit.Min;
+								if (new_Bx > vJoyLimit.Max) new_Bx = (int)vJoyLimit.Max;
+							}
+							catch { }
+						}
+						if (new_By >= 0 && expBYBefore != null)
+						{
+							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RY];
+							expBYBefore.Parameters["Y"] = new_By;
+							expBYBefore.Parameters["X"] = new_Bx >= 0 ? new_Bx : vjoyB_X;
+							expBYBefore.Parameters["OX"] = x2_original;
+							expBYBefore.Parameters["OY"] = y2_original;
+
+							try
+							{
+								var resultEvaluate = double.Parse(expBYBefore.Evaluate().ToString());
+								new_By = (int)Math.Round(resultEvaluate);
+								if (new_By < vJoyLimit.Min) new_By = (int)vJoyLimit.Min;
+								if (new_By > vJoyLimit.Max) new_By = (int)vJoyLimit.Max;
+							}
+							catch { }
+						}
+
+
+
 						if (new_Ax >= 0 && expAX != null)
 						{
 							var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_X];
@@ -1393,9 +1690,28 @@ namespace TeknoparrotAutoXinput
 			{
 				int new_value = RemapValueToVJoy(trk_forceA_X.Value, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_X]);
 				x_original = new_value;
+				lbl_vjoyAXBefore.Text = x_original.ToString();
 				if (_settingsGunA.alterManual)
 				{
 					new_value = ReindexValueToVJoy(new_value, _settingsGunA.min_x, _settingsGunA.max_x, _settingsGunA.offset_x, HidExtents[HID_USAGES.HID_USAGE_X]);
+
+					if (new_value >= 0 && expAXBefore != null)
+					{
+						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_X];
+						expAXBefore.Parameters["X"] = new_value;
+						expAXBefore.Parameters["Y"] = vjoyA_Y;
+						expAXBefore.Parameters["OX"] = x_original;
+						expAXBefore.Parameters["OY"] = y_original;
+						try
+						{
+							var resultEvaluate = double.Parse(expAXBefore.Evaluate().ToString());
+							new_value = (int)Math.Round(resultEvaluate);
+							if (new_value < vJoyLimit.Min) new_value = (int)vJoyLimit.Min;
+							if (new_value > vJoyLimit.Max) new_value = (int)vJoyLimit.Max;
+						}
+						catch { }
+					}
+
 					if (new_value >= 0 && expAX != null)
 					{
 						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_X];
@@ -1429,9 +1745,28 @@ namespace TeknoparrotAutoXinput
 			{
 				int new_value = RemapValueToVJoy(trk_forceA_Y.Value, 0, 65535, HidExtents[HID_USAGES.HID_USAGE_Y]);
 				y_original = new_value;
+				lbl_vjoyAYBefore.Text = y_original.ToString();
 				if (_settingsGunA.alterManual)
 				{
 					new_value = ReindexValueToVJoy(new_value, _settingsGunA.min_y, _settingsGunA.max_y, _settingsGunA.offset_y, HidExtents[HID_USAGES.HID_USAGE_Y]);
+
+					if (new_value >= 0 && expAYBefore != null)
+					{
+						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_Y];
+						expAYBefore.Parameters["X"] = vjoyA_X;
+						expAYBefore.Parameters["Y"] = new_value;
+						expAYBefore.Parameters["OX"] = x_original;
+						expAYBefore.Parameters["OY"] = y_original;
+						try
+						{
+							var resultEvaluate = double.Parse(expAYBefore.Evaluate().ToString());
+							new_value = (int)Math.Round(resultEvaluate);
+							if (new_value < vJoyLimit.Min) new_value = (int)vJoyLimit.Min;
+							if (new_value > vJoyLimit.Max) new_value = (int)vJoyLimit.Max;
+						}
+						catch { }
+					}
+
 					if (new_value >= 0 && expAY != null)
 					{
 						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_Y];
@@ -1467,6 +1802,24 @@ namespace TeknoparrotAutoXinput
 				if (_settingsGunB.alterManual)
 				{
 					new_value = ReindexValueToVJoy(new_value, _settingsGunB.min_x, _settingsGunB.max_x, _settingsGunB.offset_x, HidExtents[HID_USAGES.HID_USAGE_RX]);
+
+					if (new_value >= 0 && expBXBefore != null)
+					{
+						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RX];
+						expBXBefore.Parameters["X"] = new_value;
+						expBXBefore.Parameters["Y"] = vjoyB_Y;
+						expBXBefore.Parameters["OX"] = x2_original;
+						expBXBefore.Parameters["OY"] = y2_original;
+						try
+						{
+							var resultEvaluate = double.Parse(expBXBefore.Evaluate().ToString());
+							new_value = (int)Math.Round(resultEvaluate);
+							if (new_value < vJoyLimit.Min) new_value = (int)vJoyLimit.Min;
+							if (new_value > vJoyLimit.Max) new_value = (int)vJoyLimit.Max;
+						}
+						catch { }
+					}
+
 					if (new_value >= 0 && expBX != null)
 					{
 						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RX];
@@ -1502,6 +1855,24 @@ namespace TeknoparrotAutoXinput
 				if (_settingsGunB.alterManual)
 				{
 					new_value = ReindexValueToVJoy(new_value, _settingsGunB.min_y, _settingsGunB.max_y, _settingsGunB.offset_y, HidExtents[HID_USAGES.HID_USAGE_RY]);
+
+					if (new_value >= 0 && expBYBefore != null)
+					{
+						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RY];
+						expBYBefore.Parameters["X"] = vjoyB_X;
+						expBYBefore.Parameters["Y"] = new_value;
+						expBYBefore.Parameters["OX"] = x2_original;
+						expBYBefore.Parameters["OY"] = y2_original;
+						try
+						{
+							var resultEvaluate = double.Parse(expBYBefore.Evaluate().ToString());
+							new_value = (int)Math.Round(resultEvaluate);
+							if (new_value < vJoyLimit.Min) new_value = (int)vJoyLimit.Min;
+							if (new_value > vJoyLimit.Max) new_value = (int)vJoyLimit.Max;
+						}
+						catch { }
+					}
+
 					if (new_value >= 0 && expBY != null)
 					{
 						var vJoyLimit = HidExtents[HID_USAGES.HID_USAGE_RY];
@@ -2262,7 +2633,7 @@ namespace TeknoparrotAutoXinput
 		public int max_y { get; set; } = 0;
 		public int offset_y { get; set; } = 0;
 		public string formula_y { get; set; } = "";
-		public bool alterManual { get; set; } = false;
+		public bool alterManual { get; set; } = true;
 		public bool enableNumpad { get; set; } = true;
 
 		public ConfigurationVjoyControl()

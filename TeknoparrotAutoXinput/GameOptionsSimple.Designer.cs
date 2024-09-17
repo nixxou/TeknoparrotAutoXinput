@@ -31,8 +31,14 @@
 			tableLayoutPanel1 = new TableLayoutPanel();
 			tabInfo = new TabControl();
 			tabGeneral = new TabPage();
-			kryptonLabel49 = new Krypton.Toolkit.KryptonLabel();
-			cmb_patchResolutionFix = new Krypton.Toolkit.KryptonComboBox();
+			cmb_forcevsync = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel18 = new Krypton.Toolkit.KryptonLabel();
+			kryptonLabel17 = new Krypton.Toolkit.KryptonLabel();
+			cmb_performance = new Krypton.Toolkit.KryptonComboBox();
+			cmb_useCrt = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
+			cmb_useBezel = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
 			panel4 = new Panel();
 			kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
 			txt_linkToExe = new Krypton.Toolkit.KryptonTextBox();
@@ -54,11 +60,14 @@
 			cmb_patchReshade = new Krypton.Toolkit.KryptonComboBox();
 			cmb_patchFFB = new Krypton.Toolkit.KryptonComboBox();
 			grp_monitorDisposition = new GroupBox();
+			txt_monitorswitch = new Krypton.Toolkit.KryptonTextBox();
 			btn_editMonitorSwitch = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel12 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel39 = new Krypton.Toolkit.KryptonLabel();
 			chk_runRivaTuner = new Krypton.Toolkit.KryptonCheckBox();
 			tabGamepad = new TabPage();
+			cmb_favorJoystick = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel46 = new Krypton.Toolkit.KryptonLabel();
 			groupBox1 = new GroupBox();
 			chk_group_StoozZone_Gamepad = new Krypton.Toolkit.KryptonCheckBox();
 			grp_StoozZone_Gamepad = new GroupBox();
@@ -140,11 +149,15 @@
 			panel1 = new Panel();
 			btn_Save = new Krypton.Toolkit.KryptonButton();
 			btn_Cancel = new Krypton.Toolkit.KryptonButton();
-			txt_monitorswitch = new Krypton.Toolkit.KryptonTextBox();
+			cmb_keepAspectRatio = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel21 = new Krypton.Toolkit.KryptonLabel();
 			tableLayoutPanel1.SuspendLayout();
 			tabInfo.SuspendLayout();
 			tabGeneral.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)cmb_patchResolutionFix).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_forcevsync).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_performance).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_useCrt).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_useBezel).BeginInit();
 			panel4.SuspendLayout();
 			grp_linkExe.SuspendLayout();
 			grp_link.SuspendLayout();
@@ -154,6 +167,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_patchFFB).BeginInit();
 			grp_monitorDisposition.SuspendLayout();
 			tabGamepad.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_favorJoystick).BeginInit();
 			groupBox1.SuspendLayout();
 			grp_StoozZone_Gamepad.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
@@ -192,6 +206,7 @@
 			((System.ComponentModel.ISupportInitialize)pic_crosshairp1).BeginInit();
 			tabConfig.SuspendLayout();
 			panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_keepAspectRatio).BeginInit();
 			SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -207,9 +222,9 @@
 			tableLayoutPanel1.RowCount = 3;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 39F));
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			tableLayoutPanel1.Size = new Size(635, 464);
+			tableLayoutPanel1.Size = new Size(635, 497);
 			tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tabInfo
@@ -224,13 +239,21 @@
 			tabInfo.Location = new Point(3, 43);
 			tabInfo.Name = "tabInfo";
 			tabInfo.SelectedIndex = 0;
-			tabInfo.Size = new Size(629, 383);
+			tabInfo.Size = new Size(629, 412);
 			tabInfo.TabIndex = 74;
 			// 
 			// tabGeneral
 			// 
-			tabGeneral.Controls.Add(kryptonLabel49);
-			tabGeneral.Controls.Add(cmb_patchResolutionFix);
+			tabGeneral.Controls.Add(cmb_keepAspectRatio);
+			tabGeneral.Controls.Add(kryptonLabel21);
+			tabGeneral.Controls.Add(cmb_forcevsync);
+			tabGeneral.Controls.Add(kryptonLabel18);
+			tabGeneral.Controls.Add(kryptonLabel17);
+			tabGeneral.Controls.Add(cmb_performance);
+			tabGeneral.Controls.Add(cmb_useCrt);
+			tabGeneral.Controls.Add(kryptonLabel7);
+			tabGeneral.Controls.Add(cmb_useBezel);
+			tabGeneral.Controls.Add(kryptonLabel6);
 			tabGeneral.Controls.Add(panel4);
 			tabGeneral.Controls.Add(grp_linkExe);
 			tabGeneral.Controls.Add(grp_link);
@@ -247,37 +270,98 @@
 			tabGeneral.Controls.Add(chk_runRivaTuner);
 			tabGeneral.Location = new Point(4, 24);
 			tabGeneral.Name = "tabGeneral";
-			tabGeneral.Size = new Size(621, 355);
+			tabGeneral.Size = new Size(621, 384);
 			tabGeneral.TabIndex = 4;
 			tabGeneral.Text = "General";
 			tabGeneral.UseVisualStyleBackColor = true;
 			// 
-			// kryptonLabel49
+			// cmb_forcevsync
 			// 
-			kryptonLabel49.Location = new Point(10, 141);
-			kryptonLabel49.Name = "kryptonLabel49";
-			kryptonLabel49.Size = new Size(122, 20);
-			kryptonLabel49.TabIndex = 223;
-			kryptonLabel49.Values.Text = "Res Fix from Patchs :";
+			cmb_forcevsync.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_forcevsync.DropDownWidth = 242;
+			cmb_forcevsync.IntegralHeight = false;
+			cmb_forcevsync.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
+			cmb_forcevsync.Location = new Point(140, 122);
+			cmb_forcevsync.Name = "cmb_forcevsync";
+			cmb_forcevsync.Size = new Size(169, 21);
+			cmb_forcevsync.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_forcevsync.TabIndex = 230;
 			// 
-			// cmb_patchResolutionFix
+			// kryptonLabel18
 			// 
-			cmb_patchResolutionFix.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmb_patchResolutionFix.DropDownWidth = 242;
-			cmb_patchResolutionFix.IntegralHeight = false;
-			cmb_patchResolutionFix.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_patchResolutionFix.Location = new Point(140, 140);
-			cmb_patchResolutionFix.Name = "cmb_patchResolutionFix";
-			cmb_patchResolutionFix.Size = new Size(169, 21);
-			cmb_patchResolutionFix.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-			cmb_patchResolutionFix.TabIndex = 222;
+			kryptonLabel18.Location = new Point(10, 123);
+			kryptonLabel18.Name = "kryptonLabel18";
+			kryptonLabel18.Size = new Size(81, 20);
+			kryptonLabel18.TabIndex = 231;
+			kryptonLabel18.Values.Text = "Force Vsync :";
+			// 
+			// kryptonLabel17
+			// 
+			kryptonLabel17.Location = new Point(10, 74);
+			kryptonLabel17.Name = "kryptonLabel17";
+			kryptonLabel17.Size = new Size(124, 20);
+			kryptonLabel17.TabIndex = 229;
+			kryptonLabel17.Values.Text = "Performance profile :";
+			// 
+			// cmb_performance
+			// 
+			cmb_performance.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_performance.DropDownWidth = 242;
+			cmb_performance.IntegralHeight = false;
+			cmb_performance.Items.AddRange(new object[] { "Use Global Settings", "Normal", "Low", "Hight" });
+			cmb_performance.Location = new Point(140, 73);
+			cmb_performance.Name = "cmb_performance";
+			cmb_performance.Size = new Size(169, 21);
+			cmb_performance.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_performance.TabIndex = 228;
+			cmb_performance.SelectedIndexChanged += cmb_performance_SelectedIndexChanged;
+			// 
+			// cmb_useCrt
+			// 
+			cmb_useCrt.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_useCrt.DropDownWidth = 242;
+			cmb_useCrt.IntegralHeight = false;
+			cmb_useCrt.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
+			cmb_useCrt.Location = new Point(447, 135);
+			cmb_useCrt.Name = "cmb_useCrt";
+			cmb_useCrt.Size = new Size(169, 21);
+			cmb_useCrt.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_useCrt.TabIndex = 226;
+			// 
+			// kryptonLabel7
+			// 
+			kryptonLabel7.Location = new Point(325, 136);
+			kryptonLabel7.Name = "kryptonLabel7";
+			kryptonLabel7.Size = new Size(92, 20);
+			kryptonLabel7.TabIndex = 227;
+			kryptonLabel7.Values.Text = "Use CRT Filter :";
+			// 
+			// cmb_useBezel
+			// 
+			cmb_useBezel.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_useBezel.DropDownWidth = 242;
+			cmb_useBezel.IntegralHeight = false;
+			cmb_useBezel.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
+			cmb_useBezel.Location = new Point(447, 110);
+			cmb_useBezel.Name = "cmb_useBezel";
+			cmb_useBezel.Size = new Size(169, 21);
+			cmb_useBezel.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_useBezel.TabIndex = 224;
+			// 
+			// kryptonLabel6
+			// 
+			kryptonLabel6.Location = new Point(325, 111);
+			kryptonLabel6.Name = "kryptonLabel6";
+			kryptonLabel6.Size = new Size(69, 20);
+			kryptonLabel6.TabIndex = 225;
+			kryptonLabel6.Values.Text = "Use Bezel :";
 			// 
 			// panel4
 			// 
 			panel4.Controls.Add(kryptonLabel1);
 			panel4.Controls.Add(txt_linkToExe);
 			panel4.Controls.Add(btn_linkTarget_openExe);
-			panel4.Location = new Point(16, 200);
+			panel4.Location = new Point(16, 248);
 			panel4.Name = "panel4";
 			panel4.Size = new Size(584, 36);
 			panel4.TabIndex = 221;
@@ -313,7 +397,7 @@
 			grp_linkExe.Controls.Add(kryptonLabel2);
 			grp_linkExe.Controls.Add(txt_linkFromExe);
 			grp_linkExe.Controls.Add(btn_link_openExe);
-			grp_linkExe.Location = new Point(16, 245);
+			grp_linkExe.Location = new Point(16, 293);
 			grp_linkExe.Name = "grp_linkExe";
 			grp_linkExe.Size = new Size(584, 36);
 			grp_linkExe.TabIndex = 220;
@@ -349,7 +433,7 @@
 			grp_link.Controls.Add(kryptonLabel4);
 			grp_link.Controls.Add(btn_link_open);
 			grp_link.Controls.Add(txt_linkFrom);
-			grp_link.Location = new Point(16, 284);
+			grp_link.Location = new Point(16, 332);
 			grp_link.Name = "grp_link";
 			grp_link.Size = new Size(585, 36);
 			grp_link.TabIndex = 219;
@@ -385,12 +469,13 @@
 			cmb_resolution.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_resolution.DropDownWidth = 242;
 			cmb_resolution.IntegralHeight = false;
-			cmb_resolution.Items.AddRange(new object[] { "Use Global Settings", "720p", "1080p", "1440p (2K)", "2160p (4K)" });
-			cmb_resolution.Location = new Point(140, 23);
+			cmb_resolution.Items.AddRange(new object[] { "Use Global Settings", "720p", "1080p", "1440p (2K)", "2160p (4K)", "Game Native Res" });
+			cmb_resolution.Location = new Point(140, 26);
 			cmb_resolution.Name = "cmb_resolution";
 			cmb_resolution.Size = new Size(169, 21);
 			cmb_resolution.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_resolution.TabIndex = 201;
+			cmb_resolution.SelectedIndexChanged += cmb_resolution_SelectedIndexChanged;
 			// 
 			// chk_group_monitorDisposition
 			// 
@@ -405,7 +490,7 @@
 			// 
 			// kryptonLabel60
 			// 
-			kryptonLabel60.Location = new Point(10, 24);
+			kryptonLabel60.Location = new Point(10, 27);
 			kryptonLabel60.Name = "kryptonLabel60";
 			kryptonLabel60.Size = new Size(74, 20);
 			kryptonLabel60.TabIndex = 202;
@@ -416,8 +501,8 @@
 			cmb_displayMode.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_displayMode.DropDownWidth = 242;
 			cmb_displayMode.IntegralHeight = false;
-			cmb_displayMode.Items.AddRange(new object[] { "Use Global Settings", "Use Recommanded Settings", "Force Fullscreen & Res (if possible)", "Force Windowed & Res (if possible)" });
-			cmb_displayMode.Location = new Point(140, 51);
+			cmb_displayMode.Items.AddRange(new object[] { "Use Global Settings", "Use Recommanded Settings", "Force Fullscreen", "Force Windowed" });
+			cmb_displayMode.Location = new Point(140, 49);
 			cmb_displayMode.Name = "cmb_displayMode";
 			cmb_displayMode.Size = new Size(170, 21);
 			cmb_displayMode.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -425,7 +510,7 @@
 			// 
 			// kryptonLabel53
 			// 
-			kryptonLabel53.Location = new Point(9, 52);
+			kryptonLabel53.Location = new Point(9, 50);
 			kryptonLabel53.Name = "kryptonLabel53";
 			kryptonLabel53.Size = new Size(91, 20);
 			kryptonLabel53.TabIndex = 204;
@@ -433,7 +518,7 @@
 			// 
 			// kryptonLabel40
 			// 
-			kryptonLabel40.Location = new Point(9, 81);
+			kryptonLabel40.Location = new Point(316, 86);
 			kryptonLabel40.Name = "kryptonLabel40";
 			kryptonLabel40.Size = new Size(129, 20);
 			kryptonLabel40.TabIndex = 206;
@@ -445,11 +530,12 @@
 			cmb_patchReshade.DropDownWidth = 242;
 			cmb_patchReshade.IntegralHeight = false;
 			cmb_patchReshade.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_patchReshade.Location = new Point(140, 80);
+			cmb_patchReshade.Location = new Point(447, 85);
 			cmb_patchReshade.Name = "cmb_patchReshade";
 			cmb_patchReshade.Size = new Size(169, 21);
 			cmb_patchReshade.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
 			cmb_patchReshade.TabIndex = 205;
+			cmb_patchReshade.SelectedIndexChanged += cmb_patchReshade_SelectedIndexChanged;
 			// 
 			// cmb_patchFFB
 			// 
@@ -457,7 +543,7 @@
 			cmb_patchFFB.DropDownWidth = 242;
 			cmb_patchFFB.IntegralHeight = false;
 			cmb_patchFFB.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_patchFFB.Location = new Point(140, 109);
+			cmb_patchFFB.Location = new Point(140, 97);
 			cmb_patchFFB.Name = "cmb_patchFFB";
 			cmb_patchFFB.Size = new Size(169, 21);
 			cmb_patchFFB.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -471,14 +557,22 @@
 			grp_monitorDisposition.Enabled = false;
 			grp_monitorDisposition.Location = new Point(318, 17);
 			grp_monitorDisposition.Name = "grp_monitorDisposition";
-			grp_monitorDisposition.Size = new Size(298, 115);
+			grp_monitorDisposition.Size = new Size(298, 64);
 			grp_monitorDisposition.TabIndex = 210;
 			grp_monitorDisposition.TabStop = false;
 			grp_monitorDisposition.Text = "Custom Monitor Disposition";
 			// 
+			// txt_monitorswitch
+			// 
+			txt_monitorswitch.Location = new Point(7, 37);
+			txt_monitorswitch.Name = "txt_monitorswitch";
+			txt_monitorswitch.ReadOnly = true;
+			txt_monitorswitch.Size = new Size(185, 23);
+			txt_monitorswitch.TabIndex = 44;
+			// 
 			// btn_editMonitorSwitch
 			// 
-			btn_editMonitorSwitch.Location = new Point(198, 51);
+			btn_editMonitorSwitch.Location = new Point(198, 36);
 			btn_editMonitorSwitch.Name = "btn_editMonitorSwitch";
 			btn_editMonitorSwitch.Size = new Size(78, 23);
 			btn_editMonitorSwitch.TabIndex = 43;
@@ -487,7 +581,7 @@
 			// 
 			// kryptonLabel12
 			// 
-			kryptonLabel12.Location = new Point(7, 25);
+			kryptonLabel12.Location = new Point(7, 19);
 			kryptonLabel12.Name = "kryptonLabel12";
 			kryptonLabel12.Size = new Size(187, 20);
 			kryptonLabel12.TabIndex = 41;
@@ -495,7 +589,7 @@
 			// 
 			// kryptonLabel39
 			// 
-			kryptonLabel39.Location = new Point(10, 110);
+			kryptonLabel39.Location = new Point(10, 98);
 			kryptonLabel39.Name = "kryptonLabel39";
 			kryptonLabel39.Size = new Size(59, 20);
 			kryptonLabel39.TabIndex = 208;
@@ -503,7 +597,7 @@
 			// 
 			// chk_runRivaTuner
 			// 
-			chk_runRivaTuner.Location = new Point(140, 167);
+			chk_runRivaTuner.Location = new Point(10, 149);
 			chk_runRivaTuner.Name = "chk_runRivaTuner";
 			chk_runRivaTuner.Size = new Size(204, 20);
 			chk_runRivaTuner.TabIndex = 209;
@@ -511,14 +605,36 @@
 			// 
 			// tabGamepad
 			// 
+			tabGamepad.Controls.Add(cmb_favorJoystick);
+			tabGamepad.Controls.Add(kryptonLabel46);
 			tabGamepad.Controls.Add(groupBox1);
 			tabGamepad.Location = new Point(4, 24);
 			tabGamepad.Name = "tabGamepad";
 			tabGamepad.Padding = new Padding(3);
-			tabGamepad.Size = new Size(621, 355);
+			tabGamepad.Size = new Size(621, 384);
 			tabGamepad.TabIndex = 0;
 			tabGamepad.Text = "Gamepad Options";
 			tabGamepad.UseVisualStyleBackColor = true;
+			// 
+			// cmb_favorJoystick
+			// 
+			cmb_favorJoystick.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_favorJoystick.DropDownWidth = 242;
+			cmb_favorJoystick.IntegralHeight = false;
+			cmb_favorJoystick.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
+			cmb_favorJoystick.Location = new Point(259, 156);
+			cmb_favorJoystick.Name = "cmb_favorJoystick";
+			cmb_favorJoystick.Size = new Size(166, 21);
+			cmb_favorJoystick.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_favorJoystick.TabIndex = 110;
+			// 
+			// kryptonLabel46
+			// 
+			kryptonLabel46.Location = new Point(10, 156);
+			kryptonLabel46.Name = "kryptonLabel46";
+			kryptonLabel46.Size = new Size(252, 20);
+			kryptonLabel46.TabIndex = 109;
+			kryptonLabel46.Values.Text = "Favor left joystick over Dpad for movement :";
 			// 
 			// groupBox1
 			// 
@@ -616,7 +732,7 @@
 			tabWheel.Location = new Point(4, 24);
 			tabWheel.Name = "tabWheel";
 			tabWheel.Padding = new Padding(3);
-			tabWheel.Size = new Size(621, 355);
+			tabWheel.Size = new Size(621, 384);
 			tabWheel.TabIndex = 1;
 			tabWheel.Text = "Wheel Options";
 			tabWheel.UseVisualStyleBackColor = true;
@@ -724,7 +840,7 @@
 			tabHotas.Controls.Add(groupBox4);
 			tabHotas.Location = new Point(4, 24);
 			tabHotas.Name = "tabHotas";
-			tabHotas.Size = new Size(621, 355);
+			tabHotas.Size = new Size(621, 361);
 			tabHotas.TabIndex = 2;
 			tabHotas.Text = "Hotas Options";
 			tabHotas.UseVisualStyleBackColor = true;
@@ -823,7 +939,7 @@
 			tabLightgun.Controls.Add(groupBox5);
 			tabLightgun.Location = new Point(4, 24);
 			tabLightgun.Name = "tabLightgun";
-			tabLightgun.Size = new Size(621, 355);
+			tabLightgun.Size = new Size(621, 384);
 			tabLightgun.TabIndex = 3;
 			tabLightgun.Text = "Lightgun Options";
 			tabLightgun.UseVisualStyleBackColor = true;
@@ -835,7 +951,7 @@
 			groupBox5.Controls.Add(groupCrosshair);
 			groupBox5.Location = new Point(3, 3);
 			groupBox5.Name = "groupBox5";
-			groupBox5.Size = new Size(599, 351);
+			groupBox5.Size = new Size(603, 378);
 			groupBox5.TabIndex = 49;
 			groupBox5.TabStop = false;
 			groupBox5.Text = "Lightgun Settings";
@@ -1190,7 +1306,7 @@
 			groupCrosshair.Controls.Add(btn_crosshairp1);
 			groupCrosshair.Controls.Add(pic_crosshairp2);
 			groupCrosshair.Controls.Add(pic_crosshairp1);
-			groupCrosshair.Location = new Point(10, 216);
+			groupCrosshair.Location = new Point(10, 247);
 			groupCrosshair.Name = "groupCrosshair";
 			groupCrosshair.Size = new Size(580, 123);
 			groupCrosshair.TabIndex = 212;
@@ -1317,7 +1433,7 @@
 			tabConfig.Location = new Point(4, 24);
 			tabConfig.Name = "tabConfig";
 			tabConfig.Padding = new Padding(3);
-			tabConfig.Size = new Size(621, 355);
+			tabConfig.Size = new Size(621, 384);
 			tabConfig.TabIndex = 5;
 			tabConfig.Text = "Tp Config (Read Only)";
 			tabConfig.UseVisualStyleBackColor = true;
@@ -1329,7 +1445,7 @@
 			txt_info.Name = "txt_info";
 			txt_info.ReadOnly = true;
 			txt_info.ScrollBars = RichTextBoxScrollBars.ForcedBoth;
-			txt_info.Size = new Size(615, 349);
+			txt_info.Size = new Size(615, 378);
 			txt_info.TabIndex = 192;
 			txt_info.Text = "";
 			txt_info.WordWrap = false;
@@ -1349,7 +1465,7 @@
 			panel1.Anchor = AnchorStyles.Right;
 			panel1.Controls.Add(btn_Save);
 			panel1.Controls.Add(btn_Cancel);
-			panel1.Location = new Point(430, 432);
+			panel1.Location = new Point(430, 463);
 			panel1.Name = "panel1";
 			panel1.Size = new Size(202, 29);
 			panel1.TabIndex = 75;
@@ -1372,19 +1488,31 @@
 			btn_Cancel.Values.Text = "Cancel";
 			btn_Cancel.Click += btn_Cancel_Click;
 			// 
-			// txt_monitorswitch
+			// cmb_keepAspectRatio
 			// 
-			txt_monitorswitch.Location = new Point(7, 51);
-			txt_monitorswitch.Name = "txt_monitorswitch";
-			txt_monitorswitch.ReadOnly = true;
-			txt_monitorswitch.Size = new Size(185, 23);
-			txt_monitorswitch.TabIndex = 44;
+			cmb_keepAspectRatio.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_keepAspectRatio.DropDownWidth = 242;
+			cmb_keepAspectRatio.IntegralHeight = false;
+			cmb_keepAspectRatio.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
+			cmb_keepAspectRatio.Location = new Point(447, 159);
+			cmb_keepAspectRatio.Name = "cmb_keepAspectRatio";
+			cmb_keepAspectRatio.Size = new Size(169, 21);
+			cmb_keepAspectRatio.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_keepAspectRatio.TabIndex = 232;
+			// 
+			// kryptonLabel21
+			// 
+			kryptonLabel21.Location = new Point(325, 160);
+			kryptonLabel21.Name = "kryptonLabel21";
+			kryptonLabel21.Size = new Size(112, 20);
+			kryptonLabel21.TabIndex = 233;
+			kryptonLabel21.Values.Text = "Keep AspectRatio :";
 			// 
 			// GameOptionsSimple
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(635, 464);
+			ClientSize = new Size(635, 497);
 			Controls.Add(tableLayoutPanel1);
 			Name = "GameOptionsSimple";
 			Text = "GameOptionsSimple";
@@ -1394,7 +1522,10 @@
 			tabInfo.ResumeLayout(false);
 			tabGeneral.ResumeLayout(false);
 			tabGeneral.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)cmb_patchResolutionFix).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_forcevsync).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_performance).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_useCrt).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_useBezel).EndInit();
 			panel4.ResumeLayout(false);
 			panel4.PerformLayout();
 			grp_linkExe.ResumeLayout(false);
@@ -1408,6 +1539,8 @@
 			grp_monitorDisposition.ResumeLayout(false);
 			grp_monitorDisposition.PerformLayout();
 			tabGamepad.ResumeLayout(false);
+			tabGamepad.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_favorJoystick).EndInit();
 			groupBox1.ResumeLayout(false);
 			groupBox1.PerformLayout();
 			grp_StoozZone_Gamepad.ResumeLayout(false);
@@ -1456,6 +1589,7 @@
 			((System.ComponentModel.ISupportInitialize)pic_crosshairp1).EndInit();
 			tabConfig.ResumeLayout(false);
 			panel1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)cmb_keepAspectRatio).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -1571,8 +1705,18 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel1;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel2;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel4;
-		private Krypton.Toolkit.KryptonComboBox cmb_patchResolutionFix;
-		private Krypton.Toolkit.KryptonLabel kryptonLabel49;
 		private Krypton.Toolkit.KryptonTextBox txt_monitorswitch;
+		private Krypton.Toolkit.KryptonComboBox cmb_favorJoystick;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel46;
+		private Krypton.Toolkit.KryptonComboBox cmb_useCrt;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel7;
+		private Krypton.Toolkit.KryptonComboBox cmb_useBezel;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel6;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel17;
+		private Krypton.Toolkit.KryptonComboBox cmb_performance;
+		private Krypton.Toolkit.KryptonComboBox cmb_forcevsync;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel18;
+		private Krypton.Toolkit.KryptonComboBox cmb_keepAspectRatio;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel21;
 	}
 }

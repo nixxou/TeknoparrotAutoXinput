@@ -428,7 +428,7 @@ namespace TeknoparrotAutoXinput
 			Thread.Sleep(1000);
 			try
 			{
-				if (MonitorDemulshooter.IsAlive)
+				if (MonitorDemulshooter != null && MonitorDemulshooter.IsAlive)
 				{
 					MonitorDemulshooter.Abort();
 				}

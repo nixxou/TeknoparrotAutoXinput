@@ -81,6 +81,7 @@ namespace TeknoparrotAutoXinput
 		public bool useInjector { get; set; } = false;
 		public string injectorDllList { get; set; } = "";
 		public int injectorDelay { get; set; } = 0;
+		public bool injectorWaitForGameWindow { get; set; } = false;
 		public int magpieFsrSharp { get; set; } = 0;
 		public int magpieExclusiveFullscreen { get; set; } = 0;
 		public int patchGpuFix { get; set; } = 0;
@@ -100,10 +101,24 @@ namespace TeknoparrotAutoXinput
 		public string tmpGunXFormula { get; set; } = "";
 		public string tmpGunYFormula { get; set; } = "";
 
+		public string tmpGunAXFormulaBefore { get; set; } = "";
+		public string tmpGunAYFormulaBefore { get; set; } = "";
+
+		public string tmpGunBXFormulaBefore { get; set; } = "";
+		public string tmpGunBYFormulaBefore { get; set; } = "";
+
 		public string tmpGunAMinMax { get; set; } = "";
 		public string tmpGunBMinMax { get; set; } = "";
 
+		public int favorJoystick { get; set; } = 0;
+		public int useBezel { get; set; } = 0;
+		public int useCrt { get; set; } = 0;
+		public int performanceProfile { get; set; } = 0;
+		public int forceVsync { get; set; } = 0;
 
+		public int keepAspectRatio { get; set; } = 0;
+		public int gpuType { get; set; } = 0;
+		public bool moveBackWindowToOriginalMonitor { get; set; } = false;
 
 		public GameSettings() 
 		{
@@ -175,6 +190,7 @@ namespace TeknoparrotAutoXinput
 				this.useInjector = DeserializeData.useInjector;
 				this.injectorDllList = DeserializeData.injectorDllList;
 				this.injectorDelay = DeserializeData.injectorDelay;
+				this.injectorWaitForGameWindow = DeserializeData.injectorWaitForGameWindow;
 				this.magpieFsrSharp = DeserializeData.magpieFsrSharp;
 				this.magpieExclusiveFullscreen = DeserializeData.magpieExclusiveFullscreen;
 
@@ -195,6 +211,15 @@ namespace TeknoparrotAutoXinput
 				this.patchOthersGameOptions = DeserializeData.patchOthersGameOptions;
 				this.patchOtherTPSettings = DeserializeData.patchOtherTPSettings;
 				this.patchFFB = DeserializeData.patchFFB;
+				this.favorJoystick = DeserializeData.favorJoystick;
+				this.useBezel = DeserializeData.useBezel;
+				this.useCrt = DeserializeData.useCrt;
+				this.performanceProfile = DeserializeData.performanceProfile;
+				this.forceVsync = DeserializeData.forceVsync;
+
+				this.keepAspectRatio = DeserializeData.keepAspectRatio;
+				this.gpuType = DeserializeData.gpuType;
+				this.moveBackWindowToOriginalMonitor = DeserializeData.moveBackWindowToOriginalMonitor;
 
 
 			}

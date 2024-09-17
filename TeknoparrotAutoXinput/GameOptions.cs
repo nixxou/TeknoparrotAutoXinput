@@ -1,4 +1,5 @@
 ﻿using Krypton.Toolkit;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,6 +33,8 @@ namespace TeknoparrotAutoXinput
 		public string PerGameConfigFile = "";
 
 		private List<string> dllPathList = new List<string>();
+
+		private Dictionary<string, string> GameInfo = new Dictionary<string, string>();
 
 		GameSettings gameSettings = new GameSettings();
 		public GameOptions(Game gameData)
@@ -88,6 +91,21 @@ namespace TeknoparrotAutoXinput
 			if (File.Exists(infoFile))
 			{
 				txt_info.Text = File.ReadAllText(infoFile);
+				try
+				{
+					var gameInfoParsedJson = JObject.Parse(txt_info.Text);
+					var gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
+					GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
+					if (GameInfo.ContainsKey("showGameOptionBezel") && GameInfo["showGameOptionBezel"].ToLower() == "false") kryptonLabel56.Visible = cmb_useBezel.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionCrt") && GameInfo["showGameOptionCrt"].ToLower() == "false") kryptonLabel55.Visible = cmb_useCrt.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionVsync") && GameInfo["showGameOptionVsync"].ToLower() == "false") kryptonLabel54.Visible = cmb_forcevsync.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionFFB") && GameInfo["showGameOptionFFB"].ToLower() == "false") kryptonLabel39.Visible = cmb_patchFFB.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionKeepAspectRatio") && GameInfo["showGameOptionKeepAspectRatio"].ToLower() == "false") kryptonLabel59.Visible = cmb_keepAspectRatio.Visible = false;
+				}
+				catch (Exception ex) { MessageBox.Show("Invalid game.info json, please report the issue"); }
+
+
+
 			}
 
 
@@ -427,13 +445,14 @@ namespace TeknoparrotAutoXinput
 		private void GameOptions_Load(object sender, EventArgs e)
 		{
 
+			cmb_favorJoystick.SelectedIndex = gameSettings.favorJoystick;
+			cmb_gpu.SelectedIndex = gameSettings.gpuType;
 
-			txt_gpu.Text = ConfigurationManager.MainConfig.gpuType.ToString();
 			cmb_patchGpuFix.SelectedIndex = gameSettings.patchGpuFix;
 			cmb_patchGpuTP.SelectedIndex = gameSettings.patchGpuTP;
 			cmb_resolution.SelectedIndex = gameSettings.gpuResolution;
-			cmb_patchResolutionFix.SelectedIndex = gameSettings.patchResolutionFix;
-			cmb_patchResolutionTP.SelectedIndex = gameSettings.patchResolutionTP;
+			if(cmb_patchResolutionFix.Enabled) cmb_patchResolutionFix.SelectedIndex = gameSettings.patchResolutionFix;
+			if (cmb_patchResolutionTP.Enabled) cmb_patchResolutionTP.SelectedIndex = gameSettings.patchResolutionTP;
 			cmb_displayMode.SelectedIndex = gameSettings.displayMode;
 			cmb_patchDisplayModeFix.SelectedIndex = gameSettings.patchDisplayModeFix;
 			cmb_patchDisplayModeTP.SelectedIndex = gameSettings.patchDisplayModeTP;
@@ -483,6 +502,8 @@ namespace TeknoparrotAutoXinput
 			radio_useDefaultStooze_Hotas.Checked = !radio_useCustomStooz_Hotas.Checked;
 
 			chk_group_monitorDisposition.Checked = gameSettings.UseGlobalDisposition;
+			chk_moveBackWindowToOriginalMonitor.Checked = gameSettings.moveBackWindowToOriginalMonitor;
+
 			chk_group_StoozZone_Gamepad.Checked = gameSettings.UseGlobalStoozZoneGamepad;
 			chk_group_StoozZone_Wheel.Checked = gameSettings.UseGlobalStoozZoneWheel;
 			chk_group_StoozZone_Hotas.Checked = gameSettings.UseGlobalStoozZoneHotas;
@@ -556,6 +577,54 @@ namespace TeknoparrotAutoXinput
 
 			chk_runRivaTuner.Checked = gameSettings.runRivaTuner;
 
+			cmb_forcevsync.SelectedIndex = gameSettings.forceVsync;
+			cmb_performance.SelectedIndex = gameSettings.performanceProfile;
+			cmb_useCrt.SelectedIndex = gameSettings.useCrt;
+			cmb_useBezel.SelectedIndex = gameSettings.useBezel;
+			cmb_keepAspectRatio.SelectedIndex = gameSettings.keepAspectRatio;
+			SetBezelCmb();
+			SetCrtCmb();
+			SetKeepRatioCmb();
+		}
+
+		public void SetKeepRatioCmb()
+		{
+			bool enabled = true;
+			if (cmb_patchReshade.SelectedIndex == 0)
+			{
+				if (!ConfigurationManager.MainConfig.patchReshade) enabled = false;
+			}
+			if (cmb_patchReshade.SelectedIndex == 2) enabled = false;
+
+			cmb_keepAspectRatio.Enabled = enabled;
+		}
+
+		public void SetBezelCmb()
+		{
+			bool enabled = true;
+			if (cmb_patchReshade.SelectedIndex == 0)
+			{
+				if (!ConfigurationManager.MainConfig.patchReshade) enabled = false;
+			}
+			if (cmb_patchReshade.SelectedIndex == 2) enabled = false;
+			cmb_useBezel.Enabled = enabled;
+		}
+
+		public void SetCrtCmb()
+		{
+			bool enabled = true;
+			if (cmb_patchReshade.SelectedIndex == 0)
+			{
+				if (!ConfigurationManager.MainConfig.patchReshade) enabled = false;
+			}
+			if (cmb_patchReshade.SelectedIndex == 2) enabled = false;
+
+			if (cmb_performance.SelectedIndex == 0)
+			{
+				if (ConfigurationManager.MainConfig.performanceProfile == 1) enabled = false;
+			}
+			if (cmb_performance.SelectedIndex == 2) enabled = false;
+			cmb_useCrt.Enabled = enabled;
 		}
 
 
@@ -668,6 +737,9 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
+			gameSettings.favorJoystick = cmb_favorJoystick.SelectedIndex;
+			gameSettings.gpuType = cmb_gpu.SelectedIndex;
+
 			gameSettings.patchGpuFix = cmb_patchGpuFix.SelectedIndex;
 			gameSettings.patchGpuTP = cmb_patchGpuTP.SelectedIndex;
 			gameSettings.gpuResolution = cmb_resolution.SelectedIndex;
@@ -708,6 +780,7 @@ namespace TeknoparrotAutoXinput
 			gameSettings.wheelStooz = radio_useCustomStooz_Wheel.Checked;
 			gameSettings.hotasStooz = radio_useCustomStooz_Hotas.Checked;
 
+			gameSettings.moveBackWindowToOriginalMonitor = chk_moveBackWindowToOriginalMonitor.Checked;
 			gameSettings.UseGlobalDisposition = chk_group_monitorDisposition.Checked;
 			gameSettings.UseGlobalStoozZoneGamepad = chk_group_StoozZone_Gamepad.Checked;
 			gameSettings.UseGlobalStoozZoneWheel = chk_group_StoozZone_Wheel.Checked;
@@ -760,7 +833,11 @@ namespace TeknoparrotAutoXinput
 
 			gameSettings.runRivaTuner = chk_runRivaTuner.Checked;
 
-
+			gameSettings.forceVsync = cmb_forcevsync.SelectedIndex;
+			gameSettings.performanceProfile = cmb_performance.SelectedIndex;
+			if (cmb_useCrt.Enabled) gameSettings.useCrt = cmb_useCrt.SelectedIndex;
+			if (cmb_useBezel.Enabled) gameSettings.useBezel = cmb_useBezel.SelectedIndex;
+			if (cmb_keepAspectRatio.Enabled) gameSettings.keepAspectRatio = cmb_keepAspectRatio.SelectedIndex;
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;
@@ -1465,6 +1542,37 @@ namespace TeknoparrotAutoXinput
 		private void trk_crosshairp2Size_Scroll(object sender, EventArgs e)
 		{
 			lbl_crosshairp2ReSize.Text = trk_crosshairp2Size.Value.ToString();
+		}
+
+		private void cmb_performance_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			SetCrtCmb();
+		}
+
+		private void cmb_patchReshade_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			SetBezelCmb();
+			SetCrtCmb();
+			SetKeepRatioCmb();
+		}
+
+		private void cmb_resolution_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if(cmb_resolution.SelectedIndex == 5)
+			{
+				cmb_patchResolutionFix.Enabled = false;
+				cmb_patchResolutionTP.Enabled = false;
+			}
+			else
+			{
+				cmb_patchResolutionFix.Enabled = true;
+				cmb_patchResolutionTP.Enabled = true;
+			}
+		}
+
+		private void cmb_patchResolutionFix_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
