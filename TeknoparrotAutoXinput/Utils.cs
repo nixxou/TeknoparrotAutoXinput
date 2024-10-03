@@ -4040,6 +4040,113 @@ namespace TeknoparrotAutoXinput
 			}
 			return null;
 		}
+		/*
+				public static int GetPrimaryMonitorRefreshRateFromXml(string xmlData)
+				{
+					try
+					{
+						// Charger le document XML
+						XDocument xmlDoc = XDocument.Parse(xmlData);
+
+						// Trouver l'écran principal (position x = 0, y = 0)
+						var mainScreen = xmlDoc.Descendants("modeInfo")
+							.FirstOrDefault(e =>
+							{
+								var positionElement = e.Element("DisplayConfigSourceMode")?.Element("position");
+								if (positionElement != null)
+								{
+									var x = positionElement.Element("x")?.Value;
+									var y = positionElement.Element("y")?.Value;
+									return x == "0" && y == "0";
+								}
+								return false;
+							});
+
+						if (mainScreen != null)
+						{
+							// Trouver la configuration de mode correspondant à l'ID du modeInfo
+							var id = (int?)mainScreen.Element("id");
+							try
+							{
+								var positionElement = mainScreen.Element("DisplayConfigSourceMode");
+								if (positionElement != null)
+								{
+									var widthScreen = (int?)positionElement.Element("width");
+									var heightScreen = (int?)positionElement.Element("height");
+									if (widthScreen.HasValue && heightScreen.HasValue)
+									{
+										Program.currentResX = widthScreen.Value;
+										Program.currentResY = heightScreen.Value;
+									}
+								}
+							}
+							catch { }
+
+
+							if (id.HasValue)
+							{
+								var targetId = id.Value.ToString();
+								if (string.IsNullOrEmpty(targetId))
+								{
+									return 60; // Identifiant du moniteur principal non trouvé
+								}
+
+								// Trouver le chemin d'information avec le targetId correspondant dans sourceInfo
+								var pathInfoElement = xmlDoc.Descendants("DisplayConfigPathInfo")
+									.FirstOrDefault(pi =>
+									{
+										var sourceInfoId = pi.Element("sourceInfo")?.Element("id")?.Value;
+										return sourceInfoId == targetId;
+									});
+
+								if (pathInfoElement == null)
+								{
+									return 60;
+								}
+
+								var targetInfoElement = pathInfoElement.Element("targetInfo");
+
+								if (targetInfoElement == null)
+								{
+									return 60;
+								}
+
+								var refreshRateElement = targetInfoElement.Element("refreshRate");
+
+								if (refreshRateElement == null)
+								{
+									return 60;
+								}
+
+								// Extraire le numérateur et le dénominateur de la fréquence de rafraîchissement
+								var numeratorElement = refreshRateElement.Element("numerator")?.Value;
+								var denominatorElement = refreshRateElement.Element("denominator")?.Value;
+
+								if (int.TryParse(numeratorElement, out int numerator) &&
+									int.TryParse(denominatorElement, out int denominator) &&
+									denominator != 0)
+								{
+									// Calculer la fréquence de rafraîchissement en Hz
+									return (int)Math.Round((double)numerator / denominator);
+								}
+								else
+								{
+									return 60; // Erreur de conversion ou dénominateur nul
+								}
+
+							}
+						}
+
+						// Si l'écran principal n'est pas trouvé, retourner la valeur par défaut de 60 Hz
+						return 60;
+
+					}
+					catch (Exception ex)
+					{
+						return 60;
+					}
+				}
+		*/
 
 		public static int GetPrimaryMonitorRefreshRateFromXml(string xmlData)
 		{
@@ -4062,10 +4169,10 @@ namespace TeknoparrotAutoXinput
 						return false;
 					});
 
+
 				if (mainScreen != null)
 				{
-					// Trouver la configuration de mode correspondant à l'ID du modeInfo
-					var id = (int?)mainScreen.Element("id");
+					var previousModeInfo = mainScreen.ElementsBeforeSelf("modeInfo").LastOrDefault();
 					try
 					{
 						var positionElement = mainScreen.Element("DisplayConfigSourceMode");
@@ -4083,35 +4190,11 @@ namespace TeknoparrotAutoXinput
 					catch { }
 
 
-					if (id.HasValue)
+					if (previousModeInfo !=null)
 					{
-						var targetId = id.Value.ToString();
-						if (string.IsNullOrEmpty(targetId))
-						{
-							return 60; // Identifiant du moniteur principal non trouvé
-						}
 
-						// Trouver le chemin d'information avec le targetId correspondant dans sourceInfo
-						var pathInfoElement = xmlDoc.Descendants("DisplayConfigPathInfo")
-							.FirstOrDefault(pi =>
-							{
-								var sourceInfoId = pi.Element("sourceInfo")?.Element("id")?.Value;
-								return sourceInfoId == targetId;
-							});
 
-						if (pathInfoElement == null)
-						{
-							return 60;
-						}
-
-						var targetInfoElement = pathInfoElement.Element("targetInfo");
-
-						if (targetInfoElement == null)
-						{
-							return 60;
-						}
-
-						var refreshRateElement = targetInfoElement.Element("refreshRate");
+						var refreshRateElement = previousModeInfo.Descendants("vSyncFreq").FirstOrDefault();
 
 						if (refreshRateElement == null)
 						{
@@ -4139,7 +4222,7 @@ namespace TeknoparrotAutoXinput
 
 				// Si l'écran principal n'est pas trouvé, retourner la valeur par défaut de 60 Hz
 				return 60;
-				
+
 			}
 			catch (Exception ex)
 			{

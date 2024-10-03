@@ -1228,6 +1228,20 @@ namespace TeknoparrotAutoXinput
 															 d.Height == presetDispositionHeight &&
 															 d.Frequency == presetDispositionFrequency);
 
+
+									if (resolutionAvailiable == null)
+									{
+										//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+										resolutionAvailiable = list
+										.Where(d => d.Width == presetDispositionWith &&
+													d.Height == presetDispositionHeight &&
+													d.BitCount == 32 &&
+														d.Orientation == 0 &&
+														d.Frequency < presetDispositionFrequency &&
+														d.Frequency >= presetDispositionFrequency - 1)
+										.OrderByDescending(d => d.Frequency)
+										.FirstOrDefault();
+									}
 									if (resolutionAvailiable == null)
 									{
 										// Chercher la résolution immédiatement au-dessus de 60 Hz
@@ -1239,19 +1253,18 @@ namespace TeknoparrotAutoXinput
 														d.Frequency > presetDispositionFrequency)
 											.OrderBy(d => d.Frequency)
 											.FirstOrDefault();
-
-										// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
-										if (resolutionAvailiable == null)
-										{
-											resolutionAvailiable = list
-												.Where(d => d.Width == presetDispositionWith &&
-															d.Height == presetDispositionHeight &&
-															d.BitCount == 32 &&
-															d.Orientation == 0 &&
-															d.Frequency < presetDispositionFrequency)
-												.OrderByDescending(d => d.Frequency)
-												.FirstOrDefault();
-										}
+									}
+									// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+									if (resolutionAvailiable == null)
+									{
+										resolutionAvailiable = list
+											.Where(d => d.Width == presetDispositionWith &&
+														d.Height == presetDispositionHeight &&
+														d.BitCount == 32 &&
+														d.Orientation == 0 &&
+														d.Frequency < presetDispositionFrequency)
+											.OrderByDescending(d => d.Frequency)
+											.FirstOrDefault();
 									}
 									if (resolutionAvailiable != null)
 									{
@@ -1273,6 +1286,7 @@ namespace TeknoparrotAutoXinput
 									try
 									{
 										Program.refreshRate = Utils.GetPrimaryMonitorRefreshRateFromXml(File.ReadAllText(cfg));
+										MessageBox.Show($"Refres = {Program.refreshRate}");
 										refreshrate_done = true;
 										if (gameOptions.moveBackWindowToOriginalMonitor)
 										{
@@ -1548,70 +1562,85 @@ namespace TeknoparrotAutoXinput
 							}
 							*/
 
-
-							if (!TpSettingsManager.IsWindowed && GameInfo.ContainsKey("forceResSwitchFullscreen") && GameInfo["forceResSwitchFullscreen"].ToLower().Split("x").Count() == 2)
+							if (usePresetDisposition || string.IsNullOrEmpty(_dispositionToSwitch) || _dispositionToSwitch == "<none>") 
 							{
-								var newResSplit = GameInfo["forceResSwitchFullscreen"].ToLower().Split("x");
-								usePresetDisposition = true;
-								presetDispositionWith = int.Parse(newResSplit[0].Trim());
-								presetDispositionHeight = int.Parse(newResSplit[1].Trim());
-								_dispositionToSwitch = "custom";
-							}
 
-							if (!TpSettingsManager.IsWindowed && Program.gpuResolution == 4 && GameInfo.ContainsKey("forceResSwitchNative") && GameInfo["forceResSwitchNative"].ToLower().Split("x").Count() == 2)
-							{
-								var newResSplit = GameInfo["forceResSwitchNative"].ToLower().Split("x");
-								usePresetDisposition = true;
-								presetDispositionWith = int.Parse(newResSplit[0].Trim());
-								presetDispositionHeight = int.Parse(newResSplit[1].Trim());
-								_dispositionToSwitch = "custom";
-							}
-
-							if (TpSettingsManager.IsWindowed && GameInfo.ContainsKey("forceResSwitchWindowed") && GameInfo["forceResSwitchWindowed"].ToLower().Split("x").Count() == 2)
-							{
-								var newResSplit = GameInfo["forceResSwitchWindowed"].ToLower().Split("x");
-								usePresetDisposition = true;
-								presetDispositionWith = int.Parse(newResSplit[0].Trim());
-								presetDispositionHeight = int.Parse(newResSplit[1].Trim());
-								_dispositionToSwitch = "custom";
-							}
-
-							if (TpSettingsManager.tags.Contains("windowed") && Program.need60hzWindowed) Program.need60hz = true;
-							if (TpSettingsManager.tags.Contains("fullscreen") && Program.need60hzFullscreen) Program.need60hz = true;
-
-							if (gameOptions.UseGlobalDisposition && Program.need60hz && Program.refreshRate > 60 && Program.currentResX > 0)
-							{
-								int target_refreshrate = 60;
-								usePresetDisposition = true;
-								presetDispositionWith = presetDispositionWith > 0 ? presetDispositionWith : Program.currentResX;
-								presetDispositionHeight = presetDispositionHeight > 0 ? presetDispositionHeight : Program.currentResY;
-								presetDispositionFrequency = target_refreshrate;
-
-								var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
-								var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
-								var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
-
-								var resolutionAvailiable = list
-									.Where(d => d.BitCount == 32 && d.Orientation == 0)
-									.OrderBy(d => d.Width)
-									.ThenBy(d => d.Height)
-									.ThenBy(d => d.Frequency)
-									.FirstOrDefault(d => d.Width == presetDispositionWith &&
-														 d.Height == presetDispositionHeight &&
-														 d.Frequency == presetDispositionFrequency);
-
-								if (resolutionAvailiable == null)
+								if (!TpSettingsManager.IsWindowed && GameInfo.ContainsKey("forceResSwitchFullscreen") && GameInfo["forceResSwitchFullscreen"].ToLower().Split("x").Count() == 2)
 								{
-									// Chercher la résolution immédiatement au-dessus de 60 Hz
-									resolutionAvailiable = list
+									var newResSplit = GameInfo["forceResSwitchFullscreen"].ToLower().Split("x");
+									usePresetDisposition = true;
+									presetDispositionWith = int.Parse(newResSplit[0].Trim());
+									presetDispositionHeight = int.Parse(newResSplit[1].Trim());
+									_dispositionToSwitch = "custom";
+								}
+
+								if (!TpSettingsManager.IsWindowed && Program.gpuResolution == 4 && GameInfo.ContainsKey("forceResSwitchNative") && GameInfo["forceResSwitchNative"].ToLower().Split("x").Count() == 2)
+								{
+									var newResSplit = GameInfo["forceResSwitchNative"].ToLower().Split("x");
+									usePresetDisposition = true;
+									presetDispositionWith = int.Parse(newResSplit[0].Trim());
+									presetDispositionHeight = int.Parse(newResSplit[1].Trim());
+									_dispositionToSwitch = "custom";
+								}
+
+								if (TpSettingsManager.IsWindowed && GameInfo.ContainsKey("forceResSwitchWindowed") && GameInfo["forceResSwitchWindowed"].ToLower().Split("x").Count() == 2)
+								{
+									var newResSplit = GameInfo["forceResSwitchWindowed"].ToLower().Split("x");
+									usePresetDisposition = true;
+									presetDispositionWith = int.Parse(newResSplit[0].Trim());
+									presetDispositionHeight = int.Parse(newResSplit[1].Trim());
+									_dispositionToSwitch = "custom";
+								}
+
+								if (TpSettingsManager.tags.Contains("windowed") && Program.need60hzWindowed) Program.need60hz = true;
+								if (TpSettingsManager.tags.Contains("fullscreen") && Program.need60hzFullscreen) Program.need60hz = true;
+
+								if (gameOptions.UseGlobalDisposition && Program.need60hz && Program.refreshRate != 60 && Program.currentResX > 0)
+								{
+									int target_refreshrate = 60;
+									usePresetDisposition = true;
+									presetDispositionWith = presetDispositionWith > 0 ? presetDispositionWith : Program.currentResX;
+									presetDispositionHeight = presetDispositionHeight > 0 ? presetDispositionHeight : Program.currentResY;
+									presetDispositionFrequency = target_refreshrate;
+
+									var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+									var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+									var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+									var resolutionAvailiable = list
+										.Where(d => d.BitCount == 32 && d.Orientation == 0)
+										.OrderBy(d => d.Width)
+										.ThenBy(d => d.Height)
+										.ThenBy(d => d.Frequency)
+										.FirstOrDefault(d => d.Width == presetDispositionWith &&
+															 d.Height == presetDispositionHeight &&
+															 d.Frequency == presetDispositionFrequency);
+
+									if (resolutionAvailiable == null)
+									{
+										//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+										resolutionAvailiable = list
 										.Where(d => d.Width == presetDispositionWith &&
 													d.Height == presetDispositionHeight &&
 													d.BitCount == 32 &&
-													d.Orientation == 0 &&
-													d.Frequency > presetDispositionFrequency)
-										.OrderBy(d => d.Frequency)
+														d.Orientation == 0 &&
+														d.Frequency < presetDispositionFrequency &&
+														d.Frequency >= presetDispositionFrequency - 1)
+										.OrderByDescending(d => d.Frequency)
 										.FirstOrDefault();
-
+									}
+									if (resolutionAvailiable == null)
+									{
+										// Chercher la résolution immédiatement au-dessus de 60 Hz
+										resolutionAvailiable = list
+											.Where(d => d.Width == presetDispositionWith &&
+														d.Height == presetDispositionHeight &&
+														d.BitCount == 32 &&
+														d.Orientation == 0 &&
+														d.Frequency > presetDispositionFrequency)
+											.OrderBy(d => d.Frequency)
+											.FirstOrDefault();
+									}
 									// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
 									if (resolutionAvailiable == null)
 									{
@@ -1624,88 +1653,100 @@ namespace TeknoparrotAutoXinput
 											.OrderByDescending(d => d.Frequency)
 											.FirstOrDefault();
 									}
-								}
-								if (resolutionAvailiable != null)
-								{
-									_dispositionToSwitch = "custom";
-									presetDispositionFrequency = resolutionAvailiable.Frequency;
-								}
-								else presetDispositionFrequency = 60;
-
-								Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (need60hz)");
-
-								Program.refreshRate = presetDispositionFrequency;
-								refreshrate_done = true;
-
-							}
-
-							if (TpSettingsManager.tags.Contains("fullscreen") && gameOptions.UseGlobalDisposition && Program.forceResSwitchFullscreen && Program.currentResX > 0)
-							{
-								int target_refreshrate = Program.refreshRate;
-								if (need60hz) target_refreshrate = 60;
-								int screenWidth = Program.currentResX;
-								int screenHeight = Program.currentResY;
-								bool changeres = false;
-								if (Program.gpuResolution == 0 && (screenWidth != 1280 || screenHeight != 720))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 1280;
-									presetDispositionHeight = 720;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 1 && (screenWidth != 1920 || screenHeight != 1080))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 1920;
-									presetDispositionHeight = 1080;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 2 && (screenWidth != 2560 || screenHeight != 1440))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 2560;
-									presetDispositionHeight = 1440;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 3 && (screenWidth != 3840 || screenHeight != 2160))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 3840;
-									presetDispositionHeight = 2160;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (changeres)
-								{
-
-									var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
-									var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
-									var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
-
-									var resolutionAvailiable = list
-										.Where(d => d.BitCount == 32 && d.Orientation == 0)
-										.OrderBy(d => d.Width)
-										.ThenBy(d => d.Height)
-										.ThenBy(d => d.Frequency)
-										.FirstOrDefault(d => d.Width == presetDispositionWith &&
-															 d.Height == presetDispositionHeight &&
-															 d.Frequency == presetDispositionFrequency);
-
-									if (resolutionAvailiable == null)
+									if (resolutionAvailiable != null)
 									{
-										// Chercher la résolution immédiatement au-dessus de 60 Hz
-										resolutionAvailiable = list
+										_dispositionToSwitch = "custom";
+										presetDispositionFrequency = resolutionAvailiable.Frequency;
+									}
+									else presetDispositionFrequency = 60;
+
+									Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (need60hz)");
+
+									Program.refreshRate = presetDispositionFrequency;
+									refreshrate_done = true;
+
+								}
+
+								if (TpSettingsManager.tags.Contains("fullscreen") && gameOptions.UseGlobalDisposition && Program.forceResSwitchFullscreen && Program.currentResX > 0)
+								{
+									int target_refreshrate = Program.refreshRate;
+									if (need60hz) target_refreshrate = 60;
+									int screenWidth = Program.currentResX;
+									int screenHeight = Program.currentResY;
+									bool changeres = false;
+									if (Program.gpuResolution == 0 && (screenWidth != 1280 || screenHeight != 720))
+									{
+										usePresetDisposition = true;
+										presetDispositionWith = 1280;
+										presetDispositionHeight = 720;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (Program.gpuResolution == 1 && (screenWidth != 1920 || screenHeight != 1080))
+									{
+										usePresetDisposition = true;
+										presetDispositionWith = 1920;
+										presetDispositionHeight = 1080;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (Program.gpuResolution == 2 && (screenWidth != 2560 || screenHeight != 1440))
+									{
+										usePresetDisposition = true;
+										presetDispositionWith = 2560;
+										presetDispositionHeight = 1440;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (Program.gpuResolution == 3 && (screenWidth != 3840 || screenHeight != 2160))
+									{
+										usePresetDisposition = true;
+										presetDispositionWith = 3840;
+										presetDispositionHeight = 2160;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (changeres)
+									{
+
+										var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+										var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+										var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+										var resolutionAvailiable = list
+											.Where(d => d.BitCount == 32 && d.Orientation == 0)
+											.OrderBy(d => d.Width)
+											.ThenBy(d => d.Height)
+											.ThenBy(d => d.Frequency)
+											.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																 d.Height == presetDispositionHeight &&
+																 d.Frequency == presetDispositionFrequency);
+
+										if (resolutionAvailiable == null)
+										{
+											//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+											resolutionAvailiable = list
 											.Where(d => d.Width == presetDispositionWith &&
 														d.Height == presetDispositionHeight &&
 														d.BitCount == 32 &&
-														d.Orientation == 0 &&
-														d.Frequency > presetDispositionFrequency)
-											.OrderBy(d => d.Frequency)
+															d.Orientation == 0 &&
+															d.Frequency < presetDispositionFrequency &&
+															d.Frequency >= presetDispositionFrequency - 1)
+											.OrderByDescending(d => d.Frequency)
 											.FirstOrDefault();
-
+										}
+										if (resolutionAvailiable == null)
+										{
+											// Chercher la résolution immédiatement au-dessus de 60 Hz
+											resolutionAvailiable = list
+												.Where(d => d.Width == presetDispositionWith &&
+															d.Height == presetDispositionHeight &&
+															d.BitCount == 32 &&
+															d.Orientation == 0 &&
+															d.Frequency > presetDispositionFrequency)
+												.OrderBy(d => d.Frequency)
+												.FirstOrDefault();
+										}
 										// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
 										if (resolutionAvailiable == null)
 										{
@@ -1718,89 +1759,101 @@ namespace TeknoparrotAutoXinput
 												.OrderByDescending(d => d.Frequency)
 												.FirstOrDefault();
 										}
+										if (resolutionAvailiable != null)
+										{
+											_dispositionToSwitch = "custom";
+											presetDispositionFrequency = resolutionAvailiable.Frequency;
+										}
+										else presetDispositionFrequency = 60;
+
+										Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (forceResSwitchFullscreen)");
+
+										Program.refreshRate = presetDispositionFrequency;
+										refreshrate_done = true;
 									}
-									if (resolutionAvailiable != null)
+
+								}
+
+								if (TpSettingsManager.tags.Contains("windowed") && gameOptions.UseGlobalDisposition && Program.forceResSwitchWindowed && Program.currentResX > 0)
+								{
+									int target_refreshrate = Program.refreshRate;
+									if (need60hz) target_refreshrate = 60;
+									int screenWidth = Program.currentResX;
+									int screenHeight = Program.currentResY;
+									bool changeres = false;
+									if (Program.gpuResolution == 0 && (screenWidth != 1280 || screenHeight != 720))
 									{
-										_dispositionToSwitch = "custom";
-										presetDispositionFrequency = resolutionAvailiable.Frequency;
+										usePresetDisposition = true;
+										presetDispositionWith = 1280;
+										presetDispositionHeight = 720;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
 									}
-									else presetDispositionFrequency = 60;
-
-									Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (forceResSwitchFullscreen)");
-
-									Program.refreshRate = presetDispositionFrequency;
-									refreshrate_done = true;
-								}
-
-							}
-
-							if (TpSettingsManager.tags.Contains("windowed") && gameOptions.UseGlobalDisposition && Program.forceResSwitchWindowed && Program.currentResX > 0)
-							{
-								int target_refreshrate = Program.refreshRate;
-								if (need60hz) target_refreshrate = 60;
-								int screenWidth = Program.currentResX;
-								int screenHeight = Program.currentResY;
-								bool changeres = false;
-								if (Program.gpuResolution == 0 && (screenWidth != 1280 || screenHeight != 720))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 1280;
-									presetDispositionHeight = 720;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 1 && (screenWidth != 1920 || screenHeight != 1080))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 1920;
-									presetDispositionHeight = 1080;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 2 && (screenWidth != 2560 || screenHeight != 1440))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 2560;
-									presetDispositionHeight = 1440;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 3 && (screenWidth != 3840 || screenHeight != 2160))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 3840;
-									presetDispositionHeight = 2160;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (changeres)
-								{
-
-									var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
-									var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
-									var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
-
-									var resolutionAvailiable = list
-										.Where(d => d.BitCount == 32 && d.Orientation == 0)
-										.OrderBy(d => d.Width)
-										.ThenBy(d => d.Height)
-										.ThenBy(d => d.Frequency)
-										.FirstOrDefault(d => d.Width == presetDispositionWith &&
-															 d.Height == presetDispositionHeight &&
-															 d.Frequency == presetDispositionFrequency);
-
-									if (resolutionAvailiable == null)
+									if (Program.gpuResolution == 1 && (screenWidth != 1920 || screenHeight != 1080))
 									{
-										// Chercher la résolution immédiatement au-dessus de 60 Hz
-										resolutionAvailiable = list
+										usePresetDisposition = true;
+										presetDispositionWith = 1920;
+										presetDispositionHeight = 1080;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (Program.gpuResolution == 2 && (screenWidth != 2560 || screenHeight != 1440))
+									{
+										usePresetDisposition = true;
+										presetDispositionWith = 2560;
+										presetDispositionHeight = 1440;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (Program.gpuResolution == 3 && (screenWidth != 3840 || screenHeight != 2160))
+									{
+										usePresetDisposition = true;
+										presetDispositionWith = 3840;
+										presetDispositionHeight = 2160;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (changeres)
+									{
+
+										var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+										var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+										var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+										var resolutionAvailiable = list
+											.Where(d => d.BitCount == 32 && d.Orientation == 0)
+											.OrderBy(d => d.Width)
+											.ThenBy(d => d.Height)
+											.ThenBy(d => d.Frequency)
+											.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																 d.Height == presetDispositionHeight &&
+																 d.Frequency == presetDispositionFrequency);
+
+										if (resolutionAvailiable == null)
+										{
+											//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+											resolutionAvailiable = list
 											.Where(d => d.Width == presetDispositionWith &&
 														d.Height == presetDispositionHeight &&
 														d.BitCount == 32 &&
-														d.Orientation == 0 &&
-														d.Frequency > presetDispositionFrequency)
-											.OrderBy(d => d.Frequency)
+															d.Orientation == 0 &&
+															d.Frequency < presetDispositionFrequency &&
+															d.Frequency >= presetDispositionFrequency - 1)
+											.OrderByDescending(d => d.Frequency)
 											.FirstOrDefault();
-
+										}
+										if (resolutionAvailiable == null)
+										{
+											// Chercher la résolution immédiatement au-dessus de 60 Hz
+											resolutionAvailiable = list
+												.Where(d => d.Width == presetDispositionWith &&
+															d.Height == presetDispositionHeight &&
+															d.BitCount == 32 &&
+															d.Orientation == 0 &&
+															d.Frequency > presetDispositionFrequency)
+												.OrderBy(d => d.Frequency)
+												.FirstOrDefault();
+										}
 										// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
 										if (resolutionAvailiable == null)
 										{
@@ -1813,95 +1866,106 @@ namespace TeknoparrotAutoXinput
 												.OrderByDescending(d => d.Frequency)
 												.FirstOrDefault();
 										}
+										if (resolutionAvailiable != null)
+										{
+											_dispositionToSwitch = "custom";
+											presetDispositionFrequency = resolutionAvailiable.Frequency;
+										}
+										else presetDispositionFrequency = 60;
+
+										Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (forceResSwitchFullscreen)");
+
+										Program.refreshRate = presetDispositionFrequency;
+										refreshrate_done = true;
 									}
-									if (resolutionAvailiable != null)
+
+								}
+
+								if (TpSettingsManager.tags.Contains("windowed") && gameOptions.UseGlobalDisposition && Program.upscaleWindowed && Program.currentResX > 0)
+								{
+									int target_refreshrate = Program.refreshRate;
+									if (need60hz) target_refreshrate = 60;
+									int screenWidth = Program.currentResX;
+									int screenHeight = Program.currentResY;
+									//MessageBox.Show($"screenWidth = {screenWidth} screenHeight= {screenHeight}");
+									//if (Program.gpuResolution != 0) TpSettingsManager.tags.Add("!720p");
+									//if (Program.gpuResolution != 1) TpSettingsManager.tags.Add("!1080p");
+									//if (Program.gpuResolution != 2) TpSettingsManager.tags.Add("!2k");
+									//if (Program.gpuResolution != 3) TpSettingsManager.tags.Add("!4k");
+									bool changeres = false;
+									if (Program.gpuResolution == 0 && (screenWidth < 1280 || screenHeight < 720))
 									{
-										_dispositionToSwitch = "custom";
-										presetDispositionFrequency = resolutionAvailiable.Frequency;
+										usePresetDisposition = true;
+										presetDispositionWith = 1280;
+										presetDispositionHeight = 720;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
 									}
-									else presetDispositionFrequency = 60;
-
-									Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (forceResSwitchFullscreen)");
-
-									Program.refreshRate = presetDispositionFrequency;
-									refreshrate_done = true;
-								}
-
-							}
-
-
-							if (TpSettingsManager.tags.Contains("windowed") && gameOptions.UseGlobalDisposition && Program.upscaleWindowed && Program.currentResX > 0)
-							{
-								int target_refreshrate = Program.refreshRate;
-								if (need60hz) target_refreshrate = 60;
-								int screenWidth = Program.currentResX;
-								int screenHeight = Program.currentResY;
-								//MessageBox.Show($"screenWidth = {screenWidth} screenHeight= {screenHeight}");
-								//if (Program.gpuResolution != 0) TpSettingsManager.tags.Add("!720p");
-								//if (Program.gpuResolution != 1) TpSettingsManager.tags.Add("!1080p");
-								//if (Program.gpuResolution != 2) TpSettingsManager.tags.Add("!2k");
-								//if (Program.gpuResolution != 3) TpSettingsManager.tags.Add("!4k");
-								bool changeres = false;
-								if (Program.gpuResolution == 0 && (screenWidth < 1280 || screenHeight < 720))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 1280;
-									presetDispositionHeight = 720;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 1 && (screenWidth < 1920 || screenHeight < 1080))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 1920;
-									presetDispositionHeight = 1080;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 2 && (screenWidth < 2560 || screenHeight < 1440))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 2560;
-									presetDispositionHeight = 1440;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (Program.gpuResolution == 3 && (screenWidth < 3840 || screenHeight < 2160))
-								{
-									usePresetDisposition = true;
-									presetDispositionWith = 3840;
-									presetDispositionHeight = 2160;
-									presetDispositionFrequency = target_refreshrate;
-									changeres = true;
-								}
-								if (changeres)
-								{
-
-									var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
-									var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
-									var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
-
-									var resolutionAvailiable = list
-										.Where(d => d.BitCount == 32 && d.Orientation == 0)
-										.OrderBy(d => d.Width)
-										.ThenBy(d => d.Height)
-										.ThenBy(d => d.Frequency)
-										.FirstOrDefault(d => d.Width == presetDispositionWith &&
-															 d.Height == presetDispositionHeight &&
-															 d.Frequency == presetDispositionFrequency);
-
-									if (resolutionAvailiable == null)
+									if (Program.gpuResolution == 1 && (screenWidth < 1920 || screenHeight < 1080))
 									{
-										// Chercher la résolution immédiatement au-dessus de 60 Hz
-										resolutionAvailiable = list
+										usePresetDisposition = true;
+										presetDispositionWith = 1920;
+										presetDispositionHeight = 1080;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (Program.gpuResolution == 2 && (screenWidth < 2560 || screenHeight < 1440))
+									{
+										usePresetDisposition = true;
+										presetDispositionWith = 2560;
+										presetDispositionHeight = 1440;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (Program.gpuResolution == 3 && (screenWidth < 3840 || screenHeight < 2160))
+									{
+										usePresetDisposition = true;
+										presetDispositionWith = 3840;
+										presetDispositionHeight = 2160;
+										presetDispositionFrequency = target_refreshrate;
+										changeres = true;
+									}
+									if (changeres)
+									{
+
+										var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+										var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+										var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+										var resolutionAvailiable = list
+											.Where(d => d.BitCount == 32 && d.Orientation == 0)
+											.OrderBy(d => d.Width)
+											.ThenBy(d => d.Height)
+											.ThenBy(d => d.Frequency)
+											.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																 d.Height == presetDispositionHeight &&
+																 d.Frequency == presetDispositionFrequency);
+
+										if (resolutionAvailiable == null)
+										{
+											//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+											resolutionAvailiable = list
 											.Where(d => d.Width == presetDispositionWith &&
 														d.Height == presetDispositionHeight &&
 														d.BitCount == 32 &&
-														d.Orientation == 0 &&
-														d.Frequency > presetDispositionFrequency)
-											.OrderBy(d => d.Frequency)
+															d.Orientation == 0 &&
+															d.Frequency < presetDispositionFrequency &&
+															d.Frequency >= presetDispositionFrequency - 1)
+											.OrderByDescending(d => d.Frequency)
 											.FirstOrDefault();
-
+										}
+										if (resolutionAvailiable == null)
+										{
+											// Chercher la résolution immédiatement au-dessus de 60 Hz
+											resolutionAvailiable = list
+												.Where(d => d.Width == presetDispositionWith &&
+															d.Height == presetDispositionHeight &&
+															d.BitCount == 32 &&
+															d.Orientation == 0 &&
+															d.Frequency > presetDispositionFrequency)
+												.OrderBy(d => d.Frequency)
+												.FirstOrDefault();
+										}
 										// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
 										if (resolutionAvailiable == null)
 										{
@@ -1914,22 +1978,24 @@ namespace TeknoparrotAutoXinput
 												.OrderByDescending(d => d.Frequency)
 												.FirstOrDefault();
 										}
-									}
-									if (resolutionAvailiable != null)
-									{
-										_dispositionToSwitch = "custom";
-										presetDispositionFrequency = resolutionAvailiable.Frequency;
-									}
-									else presetDispositionFrequency = 60;
+										if (resolutionAvailiable != null)
+										{
+											_dispositionToSwitch = "custom";
+											presetDispositionFrequency = resolutionAvailiable.Frequency;
+										}
+										else presetDispositionFrequency = 60;
 
-									Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (upscaleWindowed)");
+										Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (upscaleWindowed)");
 
-									Program.refreshRate = presetDispositionFrequency;
-									refreshrate_done = true;
+										Program.refreshRate = presetDispositionFrequency;
+										refreshrate_done = true;
+									}
+
+
 								}
-
-
 							}
+
+
 							/*
 
 							string TPAdvisedSettingsFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "tp_patch_settings" + ".json");
@@ -5252,6 +5318,477 @@ namespace TeknoparrotAutoXinput
 												}
 											}
 										}
+										//------------------
+										MessageBox.Show("ici");
+
+										if (gameOptions.UseGlobalDisposition && Program.need60hz && Program.refreshRate != 60 && Program.currentResX > 0)
+										{
+											int target_refreshrate = 60;
+											usePresetDisposition = true;
+											presetDispositionWith = presetDispositionWith > 0 ? presetDispositionWith : Program.currentResX;
+											presetDispositionHeight = presetDispositionHeight > 0 ? presetDispositionHeight : Program.currentResY;
+											presetDispositionFrequency = target_refreshrate;
+
+											var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+											var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+											var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+											var resolutionAvailiable = list
+												.Where(d => d.BitCount == 32 && d.Orientation == 0)
+												.OrderBy(d => d.Width)
+												.ThenBy(d => d.Height)
+												.ThenBy(d => d.Frequency)
+												.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																	 d.Height == presetDispositionHeight &&
+																	 d.Frequency == presetDispositionFrequency);
+
+											if (resolutionAvailiable == null)
+											{
+												//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+												resolutionAvailiable = list
+												.Where(d => d.Width == presetDispositionWith &&
+															d.Height == presetDispositionHeight &&
+															d.BitCount == 32 &&
+																d.Orientation == 0 &&
+																d.Frequency < presetDispositionFrequency &&
+																d.Frequency >= presetDispositionFrequency-1)
+												.OrderByDescending(d => d.Frequency)
+												.FirstOrDefault();
+											}
+											if (resolutionAvailiable == null)
+											{
+												// Chercher la résolution immédiatement au-dessus de 60 Hz
+												resolutionAvailiable = list
+													.Where(d => d.Width == presetDispositionWith &&
+																d.Height == presetDispositionHeight &&
+																d.BitCount == 32 &&
+																d.Orientation == 0 &&
+																d.Frequency > presetDispositionFrequency)
+													.OrderBy(d => d.Frequency)
+													.FirstOrDefault();
+											}
+											// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+											if (resolutionAvailiable == null)
+											{
+												resolutionAvailiable = list
+													.Where(d => d.Width == presetDispositionWith &&
+																d.Height == presetDispositionHeight &&
+																d.BitCount == 32 &&
+																d.Orientation == 0 &&
+																d.Frequency < presetDispositionFrequency)
+													.OrderByDescending(d => d.Frequency)
+													.FirstOrDefault();
+											}
+											
+											if (resolutionAvailiable != null)
+											{
+												_dispositionToSwitch = "custom";
+												presetDispositionFrequency = resolutionAvailiable.Frequency;
+											}
+											else presetDispositionFrequency = 60;
+
+											Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (need60hz)");
+
+											Program.refreshRate = presetDispositionFrequency;
+											refreshrate_done = true;
+
+										}
+
+										if (TpSettingsManager.tags.Contains("fullscreen") && gameOptions.UseGlobalDisposition && Program.forceResSwitchFullscreen && Program.currentResX > 0)
+										{
+											int target_refreshrate = Program.refreshRate;
+											if (need60hz) target_refreshrate = 60;
+											int screenWidth = Program.currentResX;
+											int screenHeight = Program.currentResY;
+											bool changeres = false;
+											if (Program.gpuResolution == 0 && (screenWidth != 1280 || screenHeight != 720))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 1280;
+												presetDispositionHeight = 720;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 1 && (screenWidth != 1920 || screenHeight != 1080))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 1920;
+												presetDispositionHeight = 1080;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 2 && (screenWidth != 2560 || screenHeight != 1440))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 2560;
+												presetDispositionHeight = 1440;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 3 && (screenWidth != 3840 || screenHeight != 2160))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 3840;
+												presetDispositionHeight = 2160;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (changeres)
+											{
+
+												var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+												var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+												var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+												var resolutionAvailiable = list
+													.Where(d => d.BitCount == 32 && d.Orientation == 0)
+													.OrderBy(d => d.Width)
+													.ThenBy(d => d.Height)
+													.ThenBy(d => d.Frequency)
+													.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																		 d.Height == presetDispositionHeight &&
+																		 d.Frequency == presetDispositionFrequency);
+
+												if (resolutionAvailiable == null)
+												{
+													//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+													resolutionAvailiable = list
+													.Where(d => d.Width == presetDispositionWith &&
+																d.Height == presetDispositionHeight &&
+																d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency < presetDispositionFrequency &&
+																	d.Frequency >= presetDispositionFrequency - 1)
+													.OrderByDescending(d => d.Frequency)
+													.FirstOrDefault();
+												}
+												if (resolutionAvailiable == null)
+												{
+													// Chercher la résolution immédiatement au-dessus de 60 Hz
+													resolutionAvailiable = list
+														.Where(d => d.Width == presetDispositionWith &&
+																	d.Height == presetDispositionHeight &&
+																	d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency > presetDispositionFrequency)
+														.OrderBy(d => d.Frequency)
+														.FirstOrDefault();
+												}
+												// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+												if (resolutionAvailiable == null)
+												{
+													resolutionAvailiable = list
+														.Where(d => d.Width == presetDispositionWith &&
+																	d.Height == presetDispositionHeight &&
+																	d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency < presetDispositionFrequency)
+														.OrderByDescending(d => d.Frequency)
+														.FirstOrDefault();
+												}
+												if (resolutionAvailiable != null)
+												{
+													_dispositionToSwitch = "custom";
+													presetDispositionFrequency = resolutionAvailiable.Frequency;
+												}
+												else presetDispositionFrequency = 60;
+
+												Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (forceResSwitchFullscreen)");
+
+												Program.refreshRate = presetDispositionFrequency;
+												refreshrate_done = true;
+											}
+
+										}
+
+										if (TpSettingsManager.tags.Contains("windowed") && gameOptions.UseGlobalDisposition && Program.forceResSwitchWindowed && Program.currentResX > 0)
+										{
+											int target_refreshrate = Program.refreshRate;
+											if (need60hz) target_refreshrate = 60;
+											int screenWidth = Program.currentResX;
+											int screenHeight = Program.currentResY;
+											bool changeres = false;
+											if (Program.gpuResolution == 0 && (screenWidth != 1280 || screenHeight != 720))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 1280;
+												presetDispositionHeight = 720;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 1 && (screenWidth != 1920 || screenHeight != 1080))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 1920;
+												presetDispositionHeight = 1080;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 2 && (screenWidth != 2560 || screenHeight != 1440))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 2560;
+												presetDispositionHeight = 1440;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 3 && (screenWidth != 3840 || screenHeight != 2160))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 3840;
+												presetDispositionHeight = 2160;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (changeres)
+											{
+
+												var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+												var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+												var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+												var resolutionAvailiable = list
+													.Where(d => d.BitCount == 32 && d.Orientation == 0)
+													.OrderBy(d => d.Width)
+													.ThenBy(d => d.Height)
+													.ThenBy(d => d.Frequency)
+													.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																		 d.Height == presetDispositionHeight &&
+																		 d.Frequency == presetDispositionFrequency);
+
+												if (resolutionAvailiable == null)
+												{
+													//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+													resolutionAvailiable = list
+													.Where(d => d.Width == presetDispositionWith &&
+																d.Height == presetDispositionHeight &&
+																d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency < presetDispositionFrequency &&
+																	d.Frequency >= presetDispositionFrequency - 1)
+													.OrderByDescending(d => d.Frequency)
+													.FirstOrDefault();
+												}
+												if (resolutionAvailiable == null)
+												{
+													// Chercher la résolution immédiatement au-dessus de 60 Hz
+													resolutionAvailiable = list
+														.Where(d => d.Width == presetDispositionWith &&
+																	d.Height == presetDispositionHeight &&
+																	d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency > presetDispositionFrequency)
+														.OrderBy(d => d.Frequency)
+														.FirstOrDefault();
+												}
+												// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+												if (resolutionAvailiable == null)
+												{
+													resolutionAvailiable = list
+														.Where(d => d.Width == presetDispositionWith &&
+																	d.Height == presetDispositionHeight &&
+																	d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency < presetDispositionFrequency)
+														.OrderByDescending(d => d.Frequency)
+														.FirstOrDefault();
+												}
+												if (resolutionAvailiable != null)
+												{
+													_dispositionToSwitch = "custom";
+													presetDispositionFrequency = resolutionAvailiable.Frequency;
+												}
+												else presetDispositionFrequency = 60;
+
+												Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (forceResSwitchFullscreen)");
+
+												Program.refreshRate = presetDispositionFrequency;
+												refreshrate_done = true;
+											}
+
+										}
+
+										if (TpSettingsManager.tags.Contains("windowed") && gameOptions.UseGlobalDisposition && Program.upscaleWindowed && Program.currentResX > 0)
+										{
+											int target_refreshrate = Program.refreshRate;
+											if (need60hz) target_refreshrate = 60;
+											int screenWidth = Program.currentResX;
+											int screenHeight = Program.currentResY;
+											//MessageBox.Show($"screenWidth = {screenWidth} screenHeight= {screenHeight}");
+											//if (Program.gpuResolution != 0) TpSettingsManager.tags.Add("!720p");
+											//if (Program.gpuResolution != 1) TpSettingsManager.tags.Add("!1080p");
+											//if (Program.gpuResolution != 2) TpSettingsManager.tags.Add("!2k");
+											//if (Program.gpuResolution != 3) TpSettingsManager.tags.Add("!4k");
+											bool changeres = false;
+											if (Program.gpuResolution == 0 && (screenWidth < 1280 || screenHeight < 720))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 1280;
+												presetDispositionHeight = 720;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 1 && (screenWidth < 1920 || screenHeight < 1080))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 1920;
+												presetDispositionHeight = 1080;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 2 && (screenWidth < 2560 || screenHeight < 1440))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 2560;
+												presetDispositionHeight = 1440;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (Program.gpuResolution == 3 && (screenWidth < 3840 || screenHeight < 2160))
+											{
+												usePresetDisposition = true;
+												presetDispositionWith = 3840;
+												presetDispositionHeight = 2160;
+												presetDispositionFrequency = target_refreshrate;
+												changeres = true;
+											}
+											if (changeres)
+											{
+
+												var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+												var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+												var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+												var resolutionAvailiable = list
+													.Where(d => d.BitCount == 32 && d.Orientation == 0)
+													.OrderBy(d => d.Width)
+													.ThenBy(d => d.Height)
+													.ThenBy(d => d.Frequency)
+													.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																		 d.Height == presetDispositionHeight &&
+																		 d.Frequency == presetDispositionFrequency);
+
+												if (resolutionAvailiable == null)
+												{
+													//Resolution juste en dessous mais sans decendre en dessous de 1, par exemple 59Hz au lieu de 60hz
+													resolutionAvailiable = list
+													.Where(d => d.Width == presetDispositionWith &&
+																d.Height == presetDispositionHeight &&
+																d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency < presetDispositionFrequency &&
+																	d.Frequency >= presetDispositionFrequency - 1)
+													.OrderByDescending(d => d.Frequency)
+													.FirstOrDefault();
+												}
+												if (resolutionAvailiable == null)
+												{
+													// Chercher la résolution immédiatement au-dessus de 60 Hz
+													resolutionAvailiable = list
+														.Where(d => d.Width == presetDispositionWith &&
+																	d.Height == presetDispositionHeight &&
+																	d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency > presetDispositionFrequency)
+														.OrderBy(d => d.Frequency)
+														.FirstOrDefault();
+												}
+												// Si aucune résolution n'est trouvée au-dessus, chercher la résolution immédiatement en dessous de 60 Hz
+												if (resolutionAvailiable == null)
+												{
+													resolutionAvailiable = list
+														.Where(d => d.Width == presetDispositionWith &&
+																	d.Height == presetDispositionHeight &&
+																	d.BitCount == 32 &&
+																	d.Orientation == 0 &&
+																	d.Frequency < presetDispositionFrequency)
+														.OrderByDescending(d => d.Frequency)
+														.FirstOrDefault();
+												}
+												if (resolutionAvailiable != null)
+												{
+													_dispositionToSwitch = "custom";
+													presetDispositionFrequency = resolutionAvailiable.Frequency;
+												}
+												else presetDispositionFrequency = 60;
+
+												Utils.LogMessage($"Change mainRes to {presetDispositionWith}x{presetDispositionHeight}:{presetDispositionFrequency} (upscaleWindowed)");
+
+												Program.refreshRate = presetDispositionFrequency;
+												refreshrate_done = true;
+											}
+
+
+										}
+
+
+
+										if (usePresetDisposition)
+										{
+											{
+												bool resolutionSwitchOk = true;
+												var devices = Westwind.SetResolution.DisplayManager.GetAllDisplayDevices();
+												var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+												var list = Westwind.SetResolution.DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
+												var set = list.FirstOrDefault(d => d.Width == presetDispositionWith &&
+																		d.Height == presetDispositionHeight &&
+																		d.Frequency == presetDispositionFrequency
+																		&& d.BitCount == 32 && d.Orientation == 0);
+
+												if (set != null)
+												{
+													// Initialisation du processus
+													Process process = new Process();
+													process.StartInfo.FileName = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "QRes", "QRes.exe");
+													process.StartInfo.Arguments = $"/x:{presetDispositionWith} /y:{presetDispositionHeight} /r:{presetDispositionFrequency}";
+													// Configuration de la sortie standard pour capturer l'output
+													process.StartInfo.RedirectStandardOutput = true;
+													process.StartInfo.UseShellExecute = false;
+													process.StartInfo.CreateNoWindow = true;
+
+													// Démarrage du processus
+													process.Start();
+
+													// Lecture de l'output
+													string output = process.StandardOutput.ReadToEnd();
+
+													// Attente de la fin du processus
+													process.WaitForExit();
+
+													Utils.LogMessage(output);
+
+													if (output.ToLower().Contains("error:")) resolutionSwitchOk = false;
+													/*
+													try
+													{
+														Westwind.SetResolution.DisplayManager.SetDisplaySettings(set, monitor.DriverDeviceName);
+													}
+													catch (Exception ex)
+													{
+														resolutionSwitchOk = false;
+													}
+													*/
+												}
+												else resolutionSwitchOk = false;
+
+
+												if (resolutionSwitchOk)
+												{
+													Thread.Sleep(1000);
+												}
+
+
+
+											}
+										}
+
+
+
+										//------------------
+
+
+
 									}
 
 								}
