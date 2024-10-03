@@ -199,6 +199,8 @@
 			cmb_gunA_type = new Krypton.Toolkit.KryptonComboBox();
 			chk_reasignGunPedal = new Krypton.Toolkit.KryptonCheckBox();
 			btn_Save = new Krypton.Toolkit.KryptonButton();
+			kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
+			cmb_patchlang = new Krypton.Toolkit.KryptonComboBox();
 			tabControl1.SuspendLayout();
 			tabGlobal.SuspendLayout();
 			groupBox17.SuspendLayout();
@@ -239,6 +241,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_com).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_patchlang).BeginInit();
 			SuspendLayout();
 			// 
 			// tabControl1
@@ -252,7 +255,7 @@
 			tabControl1.Location = new Point(12, 12);
 			tabControl1.Name = "tabControl1";
 			tabControl1.SelectedIndex = 0;
-			tabControl1.Size = new Size(807, 545);
+			tabControl1.Size = new Size(807, 567);
 			tabControl1.TabIndex = 50;
 			// 
 			// tabGlobal
@@ -473,6 +476,8 @@
 			// 
 			// tabPatch
 			// 
+			tabPatch.Controls.Add(kryptonLabel2);
+			tabPatch.Controls.Add(cmb_patchlang);
 			tabPatch.Controls.Add(chk_keepAspectRatio);
 			tabPatch.Controls.Add(chk_useCrt);
 			tabPatch.Controls.Add(chk_useBezel);
@@ -494,14 +499,14 @@
 			tabPatch.Location = new Point(4, 24);
 			tabPatch.Name = "tabPatch";
 			tabPatch.Padding = new Padding(3);
-			tabPatch.Size = new Size(799, 517);
+			tabPatch.Size = new Size(799, 539);
 			tabPatch.TabIndex = 5;
 			tabPatch.Text = "AutoSetup & Patchs";
 			tabPatch.UseVisualStyleBackColor = true;
 			// 
 			// chk_keepAspectRatio
 			// 
-			chk_keepAspectRatio.Location = new Point(199, 487);
+			chk_keepAspectRatio.Location = new Point(199, 514);
 			chk_keepAspectRatio.Name = "chk_keepAspectRatio";
 			chk_keepAspectRatio.Size = new Size(333, 20);
 			chk_keepAspectRatio.TabIndex = 182;
@@ -509,7 +514,7 @@
 			// 
 			// chk_useCrt
 			// 
-			chk_useCrt.Location = new Point(199, 466);
+			chk_useCrt.Location = new Point(199, 493);
 			chk_useCrt.Name = "chk_useCrt";
 			chk_useCrt.Size = new Size(305, 20);
 			chk_useCrt.TabIndex = 179;
@@ -517,7 +522,7 @@
 			// 
 			// chk_useBezel
 			// 
-			chk_useBezel.Location = new Point(199, 446);
+			chk_useBezel.Location = new Point(199, 473);
 			chk_useBezel.Name = "chk_useBezel";
 			chk_useBezel.Size = new Size(131, 20);
 			chk_useBezel.TabIndex = 178;
@@ -525,7 +530,7 @@
 			// 
 			// chk_forcevsync
 			// 
-			chk_forcevsync.Location = new Point(140, 396);
+			chk_forcevsync.Location = new Point(140, 423);
 			chk_forcevsync.Name = "chk_forcevsync";
 			chk_forcevsync.Size = new Size(88, 20);
 			chk_forcevsync.TabIndex = 174;
@@ -554,7 +559,7 @@
 			// 
 			// chk_patchResolutionFix
 			// 
-			chk_patchResolutionFix.Location = new Point(140, 344);
+			chk_patchResolutionFix.Location = new Point(140, 371);
 			chk_patchResolutionFix.Name = "chk_patchResolutionFix";
 			chk_patchResolutionFix.Size = new Size(234, 20);
 			chk_patchResolutionFix.TabIndex = 171;
@@ -584,7 +589,7 @@
 			// 
 			// chk_patchFFB
 			// 
-			chk_patchFFB.Location = new Point(140, 370);
+			chk_patchFFB.Location = new Point(140, 397);
 			chk_patchFFB.Name = "chk_patchFFB";
 			chk_patchFFB.Size = new Size(82, 20);
 			chk_patchFFB.TabIndex = 154;
@@ -593,7 +598,7 @@
 			// 
 			// chk_patchReshade
 			// 
-			chk_patchReshade.Location = new Point(140, 422);
+			chk_patchReshade.Location = new Point(140, 449);
 			chk_patchReshade.Name = "chk_patchReshade";
 			chk_patchReshade.Size = new Size(184, 20);
 			chk_patchReshade.TabIndex = 147;
@@ -1899,18 +1904,38 @@
 			// 
 			// btn_Save
 			// 
-			btn_Save.Location = new Point(725, 563);
+			btn_Save.Location = new Point(725, 585);
 			btn_Save.Name = "btn_Save";
 			btn_Save.Size = new Size(90, 25);
 			btn_Save.TabIndex = 51;
 			btn_Save.Values.Text = "Close";
 			btn_Save.Click += btn_Save_Click;
 			// 
+			// kryptonLabel2
+			// 
+			kryptonLabel2.Location = new Point(12, 343);
+			kryptonLabel2.Name = "kryptonLabel2";
+			kryptonLabel2.Size = new Size(110, 20);
+			kryptonLabel2.TabIndex = 184;
+			kryptonLabel2.Values.Text = "Translation patch :";
+			// 
+			// cmb_patchlang
+			// 
+			cmb_patchlang.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_patchlang.DropDownWidth = 242;
+			cmb_patchlang.IntegralHeight = false;
+			cmb_patchlang.Items.AddRange(new object[] { "No Translation", "English", "French" });
+			cmb_patchlang.Location = new Point(140, 342);
+			cmb_patchlang.Name = "cmb_patchlang";
+			cmb_patchlang.Size = new Size(219, 21);
+			cmb_patchlang.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_patchlang.TabIndex = 183;
+			// 
 			// Form1Simple
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(823, 594);
+			ClientSize = new Size(823, 618);
 			Controls.Add(btn_Save);
 			Controls.Add(tabControl1);
 			Name = "Form1Simple";
@@ -1975,6 +2000,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_com).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_patchlang).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -2151,5 +2177,7 @@
 		private Krypton.Toolkit.KryptonButton btn_tplicence_show;
 		private Krypton.Toolkit.KryptonCheckBox chk_tplicence_onstart;
 		private Krypton.Toolkit.KryptonCheckBox chk_keepAspectRatio;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel2;
+		private Krypton.Toolkit.KryptonComboBox cmb_patchlang;
 	}
 }

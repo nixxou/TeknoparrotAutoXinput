@@ -55,7 +55,7 @@ namespace TeknoparrotAutoXinput
 			chk_keepAspectRatio.Checked = ConfigurationManager.MainConfig.keepAspectRatio;
 			chk_patchReshade.Checked = ConfigurationManager.MainConfig.patchReshade;
 			chk_patchGameID.Checked = ConfigurationManager.MainConfig.patchGameID;
-
+			cmb_patchlang.SelectedIndex = ConfigurationManager.MainConfig.patchLang;
 
 			txt_apm3id.Text = ConfigurationManager.MainConfig.patch_apm3id;
 			txt_mariokartId.Text = ConfigurationManager.MainConfig.patch_mariokartId;
@@ -360,6 +360,7 @@ namespace TeknoparrotAutoXinput
 			if (chk_keepAspectRatio.Enabled) ConfigurationManager.MainConfig.keepAspectRatio = chk_keepAspectRatio.Checked;
 			ConfigurationManager.MainConfig.patchReshade = chk_patchReshade.Checked;
 			ConfigurationManager.MainConfig.patchGameID = chk_patchGameID.Checked;
+			ConfigurationManager.MainConfig.patchLang = cmb_patchlang.SelectedIndex;
 
 
 			ConfigurationManager.MainConfig.patch_apm3id = txt_apm3id.Text;

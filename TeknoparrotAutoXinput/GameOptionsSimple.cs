@@ -80,7 +80,7 @@ namespace TeknoparrotAutoXinput
 					}
 					if (type == "hotas")
 					{
-						hideHotasTab= false;
+						hideHotasTab = false;
 					}
 					if (type == "lightgun")
 					{
@@ -88,9 +88,9 @@ namespace TeknoparrotAutoXinput
 					}
 				}
 			}
-			if(hideWheelTab) tabInfo.TabPages.RemoveByKey("tabWheel");
-			if(hideHotasTab) tabInfo.TabPages.RemoveByKey("tabHotas");
-			if(hideGunTab) tabInfo.TabPages.RemoveByKey("tabLightgun");
+			if (hideWheelTab) tabInfo.TabPages.RemoveByKey("tabWheel");
+			if (hideHotasTab) tabInfo.TabPages.RemoveByKey("tabHotas");
+			if (hideGunTab) tabInfo.TabPages.RemoveByKey("tabLightgun");
 
 
 			/*
@@ -114,6 +114,12 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 			*/
+			kryptonLabel6.Visible = cmb_useBezel.Visible = false;
+			kryptonLabel7.Visible = cmb_useCrt.Visible = false;
+			kryptonLabel18.Visible = cmb_forcevsync.Visible = false;
+			kryptonLabel39.Visible = cmb_patchFFB.Visible = false;
+			kryptonLabel21.Visible = cmb_keepAspectRatio.Visible = false;
+			kryptonLabel22.Visible = cmb_patchlang.Visible = false;
 
 			var infoFile = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + ".info.json");
 			if (File.Exists(infoFile))
@@ -124,11 +130,23 @@ namespace TeknoparrotAutoXinput
 					var gameInfoParsedJson = JObject.Parse(txt_info.Text);
 					var gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
 					GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
-					if (GameInfo.ContainsKey("showGameOptionBezel") && GameInfo["showGameOptionBezel"].ToLower() == "false") kryptonLabel6.Visible = cmb_useBezel.Visible = false;
-					if (GameInfo.ContainsKey("showGameOptionCrt") && GameInfo["showGameOptionCrt"].ToLower() == "false") kryptonLabel7.Visible = cmb_useCrt.Visible = false;
-					if (GameInfo.ContainsKey("showGameOptionVsync") && GameInfo["showGameOptionVsync"].ToLower() == "false") kryptonLabel18.Visible = cmb_forcevsync.Visible = false;
-					if (GameInfo.ContainsKey("showGameOptionFFB") && GameInfo["showGameOptionFFB"].ToLower() == "false") kryptonLabel39.Visible = cmb_patchFFB.Visible = false;
-					if (GameInfo.ContainsKey("showGameOptionKeepAspectRatio") && GameInfo["showGameOptionKeepAspectRatio"].ToLower() == "false") kryptonLabel21.Visible = cmb_keepAspectRatio.Visible = false;
+					if (GameInfo.ContainsKey("showGameOptionBezel") && GameInfo["showGameOptionBezel"].ToLower() == "true") kryptonLabel6.Visible = cmb_useBezel.Visible = true;
+					if (GameInfo.ContainsKey("showGameOptionCrt") && GameInfo["showGameOptionCrt"].ToLower() == "true") kryptonLabel7.Visible = cmb_useCrt.Visible = true;
+					if (GameInfo.ContainsKey("showGameOptionVsync") && GameInfo["showGameOptionVsync"].ToLower() == "true") kryptonLabel18.Visible = cmb_forcevsync.Visible = true;
+					if (GameInfo.ContainsKey("showGameOptionFFB") && GameInfo["showGameOptionFFB"].ToLower() == "true") kryptonLabel39.Visible = cmb_patchFFB.Visible = true;
+					if (GameInfo.ContainsKey("showGameOptionKeepAspectRatio") && GameInfo["showGameOptionKeepAspectRatio"].ToLower() == "true") kryptonLabel21.Visible = cmb_keepAspectRatio.Visible = true;
+					if (GameInfo.ContainsKey("showGameOptionPatchLang") && (GameInfo["showGameOptionPatchLang"].ToLower() == "true" || GameInfo["showGameOptionPatchLang"].ToLower() == "french" | GameInfo["showGameOptionPatchLang"].ToLower() == "english"))
+					{
+						kryptonLabel22.Visible = cmb_patchlang.Visible = true;
+						if (GameInfo["showGameOptionPatchLang"].ToLower() == "french")
+						{
+							cmb_patchlang.Items[2] = "---";
+						}
+						if (GameInfo["showGameOptionPatchLang"].ToLower() == "english")
+						{
+							cmb_patchlang.Items[3] = "---";
+						}
+					}
 
 				}
 				catch (Exception ex) { MessageBox.Show("Invalid game.info json, please report the issue"); }
@@ -449,6 +467,9 @@ namespace TeknoparrotAutoXinput
 			radio_useDefaultStooze_Hotas.Checked = !radio_useCustomStooz_Hotas.Checked;
 
 			chk_group_monitorDisposition.Checked = gameSettings.UseGlobalDisposition;
+			chk_moveBackWindowToOriginalMonitor.Checked = gameSettings.moveBackWindowToOriginalMonitor;
+			chk_disableAllMonitorExceptPrimary.Checked = gameSettings.disableAllMonitorExceptPrimary;
+
 			chk_group_StoozZone_Gamepad.Checked = gameSettings.UseGlobalStoozZoneGamepad;
 			chk_group_StoozZone_Wheel.Checked = gameSettings.UseGlobalStoozZoneWheel;
 			chk_group_StoozZone_Hotas.Checked = gameSettings.UseGlobalStoozZoneHotas;
@@ -489,6 +510,8 @@ namespace TeknoparrotAutoXinput
 			cmb_useCrt.SelectedIndex = gameSettings.useCrt;
 			cmb_useBezel.SelectedIndex = gameSettings.useBezel;
 			cmb_keepAspectRatio.SelectedIndex = gameSettings.keepAspectRatio;
+			cmb_patchlang.SelectedIndex = gameSettings.patchLang;
+
 			SetBezelCmb();
 			SetCrtCmb();
 			SetKeepRatioCmb();
@@ -526,12 +549,13 @@ namespace TeknoparrotAutoXinput
 				if (!ConfigurationManager.MainConfig.patchReshade) enabled = false;
 			}
 			if (cmb_patchReshade.SelectedIndex == 2) enabled = false;
-
+			/*
 			if (cmb_performance.SelectedIndex == 0)
 			{
 				if (ConfigurationManager.MainConfig.performanceProfile == 1) enabled = false;
 			}
 			if (cmb_performance.SelectedIndex == 2) enabled = false;
+			*/
 			cmb_useCrt.Enabled = enabled;
 		}
 
@@ -611,6 +635,8 @@ namespace TeknoparrotAutoXinput
 			gameSettings.hotasStooz = radio_useCustomStooz_Hotas.Checked;
 
 			gameSettings.UseGlobalDisposition = chk_group_monitorDisposition.Checked;
+			gameSettings.moveBackWindowToOriginalMonitor = chk_moveBackWindowToOriginalMonitor.Checked;
+			gameSettings.disableAllMonitorExceptPrimary	= chk_disableAllMonitorExceptPrimary.Checked;
 			gameSettings.UseGlobalStoozZoneGamepad = chk_group_StoozZone_Gamepad.Checked;
 			gameSettings.UseGlobalStoozZoneWheel = chk_group_StoozZone_Wheel.Checked;
 			gameSettings.UseGlobalStoozZoneHotas = chk_group_StoozZone_Hotas.Checked;
@@ -653,6 +679,7 @@ namespace TeknoparrotAutoXinput
 			if (cmb_useCrt.Enabled) gameSettings.useCrt = cmb_useCrt.SelectedIndex;
 			if (cmb_useBezel.Enabled) gameSettings.useBezel = cmb_useBezel.SelectedIndex;
 			if (cmb_keepAspectRatio.Enabled) gameSettings.keepAspectRatio = cmb_keepAspectRatio.SelectedIndex;
+			gameSettings.patchLang = cmb_patchlang.SelectedIndex;
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;
@@ -1084,6 +1111,14 @@ namespace TeknoparrotAutoXinput
 		private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
 		{
 
+		}
+
+		private void cmb_patchlang_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (cmb_patchlang.SelectedItem.ToString().Contains("---"))
+			{
+				cmb_patchlang.SelectedIndex = gameSettings.patchLang; // Réinitialise la sélection
+			}
 		}
 	}
 }

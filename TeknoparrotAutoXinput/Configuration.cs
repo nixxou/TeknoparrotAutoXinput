@@ -205,6 +205,8 @@ namespace TeknoparrotAutoXinput
 		public bool forceVsync { get; set; } = true;
 		public bool keepAspectRatio { get; set; } = true;
 
+		public int patchLang { get; set; } = 1;
+
 		public Configuration()
 		{
 
@@ -357,6 +359,7 @@ namespace TeknoparrotAutoXinput
 				this.performanceProfile = DeserializeData.performanceProfile;
 				this.forceVsync = DeserializeData.forceVsync;
 				this.keepAspectRatio = DeserializeData.keepAspectRatio;
+				this.patchLang = DeserializeData.patchLang;
 
 
 			}

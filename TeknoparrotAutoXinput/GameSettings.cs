@@ -119,6 +119,9 @@ namespace TeknoparrotAutoXinput
 		public int keepAspectRatio { get; set; } = 0;
 		public int gpuType { get; set; } = 0;
 		public bool moveBackWindowToOriginalMonitor { get; set; } = false;
+		public bool disableAllMonitorExceptPrimary { get; set; } = false;
+
+		public int patchLang { get; set; } = 0;
 
 		public GameSettings() 
 		{
@@ -220,7 +223,8 @@ namespace TeknoparrotAutoXinput
 				this.keepAspectRatio = DeserializeData.keepAspectRatio;
 				this.gpuType = DeserializeData.gpuType;
 				this.moveBackWindowToOriginalMonitor = DeserializeData.moveBackWindowToOriginalMonitor;
-
+				this.disableAllMonitorExceptPrimary = DeserializeData.disableAllMonitorExceptPrimary;
+				this.patchLang = DeserializeData.patchLang;
 
 			}
 			catch (Exception ex)

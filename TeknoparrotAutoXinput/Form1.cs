@@ -68,6 +68,7 @@ namespace TeknoparrotAutoXinput
 			chk_keepAspectRatio.Checked = ConfigurationManager.MainConfig.keepAspectRatio;
 			chk_patchReshade.Checked = ConfigurationManager.MainConfig.patchReshade;
 			chk_patchGameID.Checked = ConfigurationManager.MainConfig.patchGameID;
+			cmb_patchlang.SelectedIndex = ConfigurationManager.MainConfig.patchLang;
 			chk_patchNetwork.Checked = ConfigurationManager.MainConfig.patchNetwork;
 			chk_patchOthersTPSettings.Checked = ConfigurationManager.MainConfig.patchOtherTPSettings;
 			chk_patchOthersGameOptions.Checked = ConfigurationManager.MainConfig.patchOthersGameOptions;
@@ -607,6 +608,7 @@ namespace TeknoparrotAutoXinput
 			if (chk_keepAspectRatio.Enabled) ConfigurationManager.MainConfig.keepAspectRatio = chk_keepAspectRatio.Checked;
 			ConfigurationManager.MainConfig.patchReshade = chk_patchReshade.Checked;
 			ConfigurationManager.MainConfig.patchGameID = chk_patchGameID.Checked;
+			ConfigurationManager.MainConfig.patchLang = cmb_patchlang.SelectedIndex;
 			ConfigurationManager.MainConfig.patchNetwork = chk_patchNetwork.Checked;
 			ConfigurationManager.MainConfig.patchOtherTPSettings = chk_patchOthersTPSettings.Checked;
 			ConfigurationManager.MainConfig.patchOthersGameOptions = chk_patchOthersGameOptions.Checked;

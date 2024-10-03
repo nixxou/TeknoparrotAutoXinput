@@ -256,6 +256,20 @@ namespace TeknoparrotAutoXinput
 	StringBuilder lpszShortPath,
 			uint cchBuffer);
 
+		[StructLayout(LayoutKind.Sequential)]
+		public struct FILE_ID_INFO
+		{
+			public ulong VolumeSerialNumber;
+			public ulong FileIdLow;
+			public ulong FileIdHigh;
+		}
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		private static extern bool GetFileInformationByHandleEx(
+			IntPtr hFile, int FileInformationClass, out FILE_ID_INFO lpFileInformation, uint dwBufferSize);
+
+		private const int FileIdInfo = 18;
+
 		public static string ShortFilenameFor(string longFilename)
 		{
 			// Add to the long filename a prefix to cause the API to handle filenames longer than 260 characters.
@@ -494,7 +508,6 @@ namespace TeknoparrotAutoXinput
 				RecurseSubdirectories = true
 			});
 
-
 			//Generate Patch
 			bool need_reload = false;
 			string patchJsonFile = Path.Combine(directorySource, "[!patch_generation!]", "patchdata.json");
@@ -539,7 +552,7 @@ namespace TeknoparrotAutoXinput
 									if (!File.Exists(bdfPatchFile)) continue;
 								}
 								//Start looking at the current game executable
-								if (sourceData.source_size == executableSize && sourceData.source_md5 == GetMd5HashAsString(executableGame))
+								if (sourceData.source_size == executableSize && sourceData.source_md5 == GetMd5HashAsString(executableGame,true))
 								{
 									originalFile = executableGame;
 								}
@@ -552,7 +565,7 @@ namespace TeknoparrotAutoXinput
 									foreach (var potentialFile in potentialFiles)
 									{
 										long potentialFileSize = new FileInfo(potentialFile).Length;
-										if (sourceData.source_size == potentialFileSize && sourceData.source_md5 == GetMd5HashAsString(potentialFile))
+										if (sourceData.source_size == potentialFileSize && sourceData.source_md5 == GetMd5HashAsString(potentialFile, true))
 										{
 											originalFile = potentialFile;
 											bdfPatchFile = Path.Combine(patchDir, sourceData.patch_name);
@@ -584,7 +597,7 @@ namespace TeknoparrotAutoXinput
 									if (!File.Exists(bdfPatchFile)) continue;
 								}
 								//Start looking at the current game executable
-								if (sourceData.source_size == mainPotentialFileSize && sourceData.source_md5 == GetMd5HashAsString(mainPotentialFile))
+								if (sourceData.source_size == mainPotentialFileSize && sourceData.source_md5 == GetMd5HashAsString(mainPotentialFile, true))
 								{
 									originalFile = mainPotentialFile;
 								}
@@ -596,7 +609,7 @@ namespace TeknoparrotAutoXinput
 									foreach (var potentialFile in potentialFiles)
 									{
 										long potentialFileSize = new FileInfo(potentialFile).Length;
-										if (sourceData.source_size == potentialFileSize && sourceData.source_md5 == GetMd5HashAsString(potentialFile))
+										if (sourceData.source_size == potentialFileSize && sourceData.source_md5 == GetMd5HashAsString(potentialFile, true))
 										{
 											originalFile = potentialFile;
 											bdfPatchFile = Path.Combine(patchDir, sourceData.patch_name);
@@ -1034,6 +1047,38 @@ namespace TeknoparrotAutoXinput
 					newfile = newfile.Replace(@"\[!not_high_perfprofile!]\", @"\");
 					if (Program.performanceProfile == 2) continue;
 				}
+
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!translation!]") && newfile.Contains(@"\[!translation!]\"))
+				{
+					newfile = newfile.Replace(@"\[!translation!]\", @"\");
+					if (Program.patchLang == 0) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!english!]") && newfile.Contains(@"\[!english!]\"))
+				{
+					newfile = newfile.Replace(@"\[!english!]\", @"\");
+					if (Program.patchLang != 1) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!french!]") && newfile.Contains(@"\[!french!]\"))
+				{
+					newfile = newfile.Replace(@"\[!french!]\", @"\");
+					if (Program.patchLang != 2) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_translation!]") && newfile.Contains(@"\[!no_translation!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_translation!]\", @"\");
+					if (Program.patchLang != 0) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_english!]") && newfile.Contains(@"\[!no_english!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_english!]\", @"\");
+					if (Program.patchLang == 1) continue;
+				}
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!no_french!]") && newfile.Contains(@"\[!no_french!]\"))
+				{
+					newfile = newfile.Replace(@"\[!no_french!]\", @"\");
+					if (Program.patchLang == 2) continue;
+				}
+
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!120hz!]") && newfile.Contains(@"\[!120hz!]\"))
 				{
 					//MessageBox.Show("ok");
@@ -1103,6 +1148,104 @@ namespace TeknoparrotAutoXinput
 					}
 					else continue;
 				}
+
+				var tagMd5Match = Regex.Match(newfile, @"\\\[!md5-[a-zA-Z0-9]+!\]\\", RegexOptions.IgnoreCase);
+				if (tagMd5Match.Success)
+				{
+					bool isSameMD5 = false;
+					string tagMd5MatchDir = tagMd5Match.Groups[0].Value;
+					string md5val = tagMd5Match.Groups[0].Value.Substring(7, tagMd5Match.Groups[0].Value.Length - 10);
+					if (executableGame != "" && File.Exists(executableGame))
+					{
+						var md5exec = Utils.GetMd5HashAsString(executableGame,true);
+						if (md5exec.ToUpper() == md5val.ToUpper())
+						{
+							isSameMD5 = true;
+						}
+					}
+					if (isSameMD5)
+					{
+						newfile = newfile.Replace(tagMd5MatchDir, @"\");
+					}
+					else continue;
+				}
+				tagMd5Match = Regex.Match(newfile, @"\\\[!md5-([a-zA-Z0-9]+)-([a-zA-Z0-9 #-_\.|]+)!\]\\", RegexOptions.IgnoreCase);
+				if (tagMd5Match.Success)
+				{
+					bool isSameMD5 = false;
+					string tagMd5MatchDir = tagMd5Match.Groups[0].Value;
+					string md5val = tagMd5Match.Groups[1].Value;
+					string filePathToVerify = executableGame; // Par défaut, utiliser executableGame
+					string relativeFileName = tagMd5Match.Groups[2].Value;
+					relativeFileName = relativeFileName.Replace('#', Path.DirectorySeparatorChar);
+					filePathToVerify = Path.Combine(Path.GetDirectoryName(executableGame), relativeFileName);
+					filePathToVerify = Path.GetFullPath(filePathToVerify);
+
+					if (File.Exists(filePathToVerify))
+					{
+						var md5exec = Utils.GetMd5HashAsString(filePathToVerify, true);
+						if (md5exec.ToUpper() == md5val.ToUpper())
+						{
+							isSameMD5 = true;
+						}
+					}
+					if (isSameMD5)
+					{
+						newfile = newfile.Replace(tagMd5MatchDir, @"\");
+					}
+					else continue;
+				}
+
+				var tagSizeMatch = Regex.Match(newfile, @"\\\[!size-[0-9]+!\]\\", RegexOptions.IgnoreCase);
+				if (tagSizeMatch.Success)
+				{
+					bool isSameSize = false;
+					string tagSizeMatchDir = tagSizeMatch.Groups[0].Value;
+					string Sizeval = tagSizeMatch.Groups[0].Value.Substring(8, tagSizeMatch.Groups[0].Value.Length - 11);
+					if (executableGame != "" && File.Exists(executableGame))
+					{
+						var sizeExec = new FileInfo(executableGame).Length.ToString();
+
+						if (Sizeval.ToUpper() == sizeExec.ToUpper())
+						{
+							isSameSize = true;
+						}
+					}
+					if (isSameSize)
+					{
+						newfile = newfile.Replace(tagSizeMatchDir, @"\");
+					}
+					else continue;
+				}
+				tagSizeMatch = Regex.Match(newfile, @"\\\[!size-([0-9]+)-([a-zA-Z0-9 #-_\.|]+)!\]\\", RegexOptions.IgnoreCase);
+				if (tagSizeMatch.Success)
+				{
+					bool isSameSize = false;
+					string tagSizeMatchDir = tagSizeMatch.Groups[0].Value;
+					string Sizeval = tagSizeMatch.Groups[1].Value;
+					string filePathToVerify = executableGame; // Par défaut, utiliser executableGame
+					string relativeFileName = tagSizeMatch.Groups[2].Value;
+					// Remplace les | par des / pour reconstruire le chemin
+					relativeFileName = relativeFileName.Replace('#', Path.DirectorySeparatorChar);
+					filePathToVerify = Path.Combine(Path.GetDirectoryName(executableGame), relativeFileName);
+					filePathToVerify = Path.GetFullPath(filePathToVerify);
+
+					if (File.Exists(filePathToVerify))
+					{
+						var sizeExec = new FileInfo(filePathToVerify).Length.ToString();
+
+						if (Sizeval.ToUpper() == sizeExec.ToUpper())
+						{
+							isSameSize = true;
+						}
+					}
+					if (isSameSize)
+					{
+						newfile = newfile.Replace(tagSizeMatchDir, @"\");
+					}
+					else continue;
+				}
+
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!cachereshade!]") && newfile.Contains(@"\[!cachereshade!]\"))
 				{
@@ -1951,6 +2094,30 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!not_high_perfprofile!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!translation!]") && file.Contains(@"\[!translation!]\"))
+				{
+					file = file.Replace(@"\[!translation!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!english!]") && file.Contains(@"\[!english!]\"))
+				{
+					file = file.Replace(@"\[!english!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!french!]") && file.Contains(@"\[!french!]\"))
+				{
+					file = file.Replace(@"\[!french!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_translation!]") && file.Contains(@"\[!no_translation!]\"))
+				{
+					file = file.Replace(@"\[!no_translation!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_english!]") && file.Contains(@"\[!no_english!]\"))
+				{
+					file = file.Replace(@"\[!no_english!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_french!]") && file.Contains(@"\[!no_french!]\"))
+				{
+					file = file.Replace(@"\[!no_french!]\", @"\");
+				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!120hz!]") && file.Contains(@"\[!120hz!]\"))
 				{
 					file = file.Replace(@"\[!120hz!]\", @"\");
@@ -1969,6 +2136,28 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(allTagMatch.Groups[0].Value, @"\");
 				}
+				var tagMd5Match = Regex.Match(file, @"\\\[!md5-[a-zA-Z0-9]+!\]\\", RegexOptions.IgnoreCase);
+				if (tagMd5Match.Success)
+				{
+					file = file.Replace(tagMd5Match.Groups[0].Value, @"\");
+				}
+				tagMd5Match = Regex.Match(file, @"\\\[!md5-([a-zA-Z0-9]+)-([a-zA-Z0-9 #-_\.|]+)!\]\\", RegexOptions.IgnoreCase);
+				if (tagMd5Match.Success)
+				{
+					file = file.Replace(tagMd5Match.Groups[0].Value, @"\");
+				}
+
+				var tagSizeMatch = Regex.Match(file, @"\\\[!size-[0-9+]+!\]\\", RegexOptions.IgnoreCase);
+				if (tagSizeMatch.Success)
+				{
+					file = file.Replace(tagSizeMatch.Groups[0].Value, @"\");
+				}
+				tagSizeMatch = Regex.Match(file, @"\\\[!size-([0-9]+)-([a-zA-Z0-9 #-_\.|]+)!\]\\", RegexOptions.IgnoreCase);
+				if (tagSizeMatch.Success)
+				{
+					file = file.Replace(tagSizeMatch.Groups[0].Value, @"\");
+				}
+
 
 				if (Path.GetDirectoryName(file) != null && Regex.IsMatch(Path.GetDirectoryName(file), @"\\\[!!([A-Za-z0-9 ]+)!!\]") && Regex.IsMatch(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\"))
 				{
@@ -2414,6 +2603,30 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(@"\[!not_high_perfprofile!]\", @"\");
 				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!translation!]") && file.Contains(@"\[!translation!]\"))
+				{
+					file = file.Replace(@"\[!translation!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!english!]") && file.Contains(@"\[!english!]\"))
+				{
+					file = file.Replace(@"\[!english!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!french!]") && file.Contains(@"\[!french!]\"))
+				{
+					file = file.Replace(@"\[!french!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_translation!]") && file.Contains(@"\[!no_translation!]\"))
+				{
+					file = file.Replace(@"\[!no_translation!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_english!]") && file.Contains(@"\[!no_english!]\"))
+				{
+					file = file.Replace(@"\[!no_english!]\", @"\");
+				}
+				if (Path.GetDirectoryName(file).Contains(@"\[!no_french!]") && file.Contains(@"\[!no_french!]\"))
+				{
+					file = file.Replace(@"\[!no_french!]\", @"\");
+				}
 				if (Path.GetDirectoryName(file).Contains(@"\[!120hz!]") && file.Contains(@"\[!120hz!]\"))
 				{
 					file = file.Replace(@"\[!120hz!]\", @"\");
@@ -2427,13 +2640,26 @@ namespace TeknoparrotAutoXinput
 				{
 					file = file.Replace(anyTagMatch.Groups[0].Value, @"\");
 				}
-				var allTagMatch = Regex.Match(file, @"\\\[!tag-all\{[a-zA-Z0-9+\-_]+\}!\]\\", RegexOptions.IgnoreCase);
-				if (allTagMatch.Success)
+				var tagMd5Match = Regex.Match(file, @"\\\[!md5-[a-zA-Z0-9]+!\]\\", RegexOptions.IgnoreCase);
+				if (tagMd5Match.Success)
 				{
-					file = file.Replace(allTagMatch.Groups[0].Value, @"\");
+					file = file.Replace(tagMd5Match.Groups[0].Value, @"\");
 				}
-
-
+				tagMd5Match = Regex.Match(file, @"\\\[!md5-([a-zA-Z0-9]+)-([a-zA-Z0-9 #-_\.|]+)!\]\\", RegexOptions.IgnoreCase);
+				if (tagMd5Match.Success)
+				{
+					file = file.Replace(tagMd5Match.Groups[0].Value, @"\");
+				}
+				var tagSizeMatch = Regex.Match(file, @"\\\[!size-[0-9+]+!\]\\", RegexOptions.IgnoreCase);
+				if (tagSizeMatch.Success)
+				{
+					file = file.Replace(tagSizeMatch.Groups[0].Value, @"\");
+				}
+				tagSizeMatch = Regex.Match(file, @"\\\[!size-([0-9]+)-([a-zA-Z0-9 #-_\.|]+)!\]\\", RegexOptions.IgnoreCase);
+				if (tagSizeMatch.Success)
+				{
+					file = file.Replace(tagSizeMatch.Groups[0].Value, @"\");
+				}
 
 				if (Path.GetDirectoryName(file) != null && Regex.IsMatch(Path.GetDirectoryName(file), @"\\\[!!([A-Za-z0-9 ]+)!!\]") && Regex.IsMatch(file, @"\\\[!!([A-Za-z0-9 ]+)!!\]\\"))
 				{
@@ -2672,9 +2898,10 @@ namespace TeknoparrotAutoXinput
 
 				try
 				{
-					bool isEmpty = Directory.GetFiles(rootDirectory).Length == 0;
+					bool isEmpty = Directory.GetFiles(rootDirectory, "*",SearchOption.AllDirectories).Length == 0;
 					if (isEmpty)
 					{
+						Console.WriteLine($"Delete {rootDirectory}");
 						Directory.Delete(rootDirectory,true);
 					}
 				}
@@ -3376,6 +3603,7 @@ namespace TeknoparrotAutoXinput
 					if(s.DeviceName == Program.originalMonitorDeviceName)
 					{
 						screen = s;
+						Utils.LogMessage($"Move back to {Program.originalMonitorDeviceName}");
 					}
 				}
 			}
@@ -3386,11 +3614,12 @@ namespace TeknoparrotAutoXinput
 
 			if (winWidth <= screen.Bounds.Width && winHeight <= screen.Bounds.Height)
 			{
+				Utils.LogMessage("Try move window1");
 				SetWindowPos(hWnd, IntPtr.Zero, screen.Bounds.X, screen.Bounds.Y, 0, 0, 0x0001 | 0x0004 | 0x0010);
 			}
 			else
 			{
-				Utils.LogMessage("Try move window");
+				Utils.LogMessage("Try move window2");
 				SetWindowPos(hWnd, IntPtr.Zero, screen.Bounds.X - (borderSizeWidth), screen.Bounds.Y - (diffHeight - borderSizeWidth), 0, 0, 0x0001 | 0x0004 | 0x0010);
 			}
 
@@ -3626,6 +3855,27 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 			return "";
+		}
+
+		public static string GetMd5HashAsString(string FileName, bool useCache)
+		{
+			if (!useCache) return GetMd5HashAsString(FileName);
+			else
+			{
+				string CacheDir = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "cachemd5");
+				string fileId = GetFileIdentifier(FileName);
+				if (File.Exists(Path.Combine(CacheDir, fileId)))
+				{
+					return File.ReadAllText(Path.Combine(Path.Combine(CacheDir, fileId)));
+				}
+				else
+				{
+					string md5 = GetMd5HashAsString(FileName);
+					File.WriteAllText(Path.Combine(CacheDir, fileId),md5);
+					return md5;
+				}
+			}
+
 		}
 
 		public static string getVjoyData()
@@ -3896,6 +4146,46 @@ namespace TeknoparrotAutoXinput
 				return 60;
 			}
 		}
+
+
+		public static string GetFileIdentifier(string filePath)
+		{
+			FileInfo fileInfo = new FileInfo(filePath);
+			string fileIdentifier = "";
+			try
+			{
+				// Tentative de récupération du FILE_ID_INFO
+				using (var fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				{
+					if (GetFileInformationByHandleEx(fs.SafeFileHandle.DangerousGetHandle(), FileIdInfo, out FILE_ID_INFO fileIdInfo, (uint)Marshal.SizeOf<FILE_ID_INFO>()))
+					{
+						// Construction de l'identifiant unique avec FILE_ID_INFO
+						fileIdentifier = $"{fileIdInfo.VolumeSerialNumber}-{fileIdInfo.FileIdHigh}-{fileIdInfo.FileIdLow}";
+					}
+					else
+					{
+						throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+					}
+				}
+			}
+			catch (Exception)
+			{
+			}
+			// Si FILE_ID_INFO n'est pas disponible, utiliser une concaténation classique
+			string lastModified = fileInfo.LastWriteTimeUtc.ToString("o"); // Format ISO 8601
+			long fileSize = fileInfo.Length;
+			string fullPath = fileInfo.FullName;
+			fileIdentifier += $"{lastModified}{fileSize}{fullPath}";
+			using (var md5 = MD5.Create())
+			{
+				byte[] inputBytes = Encoding.UTF8.GetBytes(fileIdentifier);
+				byte[] hashBytes = md5.ComputeHash(inputBytes);
+				fileIdentifier = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+			}
+
+			return fileIdentifier;
+		}
+
 
 	}
 

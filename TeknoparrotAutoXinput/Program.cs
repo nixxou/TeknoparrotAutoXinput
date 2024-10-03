@@ -23,10 +23,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using Westwind.SetResolution;
 using WiimoteLib;
+using WindowsDisplayAPI;
 using XInput.Wrapper;
 using XJoy;
 using static XInput.Wrapper.X;
@@ -162,6 +164,7 @@ namespace TeknoparrotAutoXinput
 		public static bool useBezel = ConfigurationManager.MainConfig.useBezel;
 		public static bool useCrt = ConfigurationManager.MainConfig.useCrt;
 		public static bool useKeepAspectRatio = ConfigurationManager.MainConfig.keepAspectRatio;
+		public static int patchLang = ConfigurationManager.MainConfig.patchLang;
 
 		public static string patch_networkIP = ConfigurationManager.MainConfig.patch_networkIP;
 		public static string patch_networkMask = ConfigurationManager.MainConfig.patch_networkMask;
@@ -207,6 +210,8 @@ namespace TeknoparrotAutoXinput
 
 		public static int forceResizeWidth = 0;
 		public static int forceResizeHeight = 0;
+
+		public static bool testMode = false;
 
 
 		//public static string xmlFileContent = "";
@@ -862,8 +867,8 @@ namespace TeknoparrotAutoXinput
 					catch (Exception ex)
 					{
 					}
-
-					if(moveWindowToOriginalMonitor) originalMonitorDeviceName = Screen.PrimaryScreen.DeviceName;
+					
+					
 
 
 					using (Mutex mutex = new Mutex(false, mutexName, out bool createdNew))
@@ -940,6 +945,11 @@ namespace TeknoparrotAutoXinput
 								{
 									nolink = true;
 									Utils.LogMessage($"CMDLINE Option : nolink = {nolink}");
+								}
+								if (arg.ToLower().Trim() == "--testmode")
+								{
+									testMode = true;
+									Utils.LogMessage($"CMDLINE Option : testmode = {testMode}");
 								}
 
 
@@ -1027,6 +1037,8 @@ namespace TeknoparrotAutoXinput
 							useBezel = gameOptions.useBezel > 0 ? (gameOptions.useBezel == 1 ? true : false) : useBezel;
 							useCrt = gameOptions.useCrt > 0 ? (gameOptions.useCrt == 1 ? true : false) : useCrt;
 							useKeepAspectRatio = gameOptions.keepAspectRatio > 0 ? (gameOptions.keepAspectRatio == 1 ? true : false) : useKeepAspectRatio;
+							patchLang = gameOptions.patchLang > 0 ? (gameOptions.patchLang - 1) : patchLang;
+
 							if (!patchReshade)
 							{
 								useBezel = false;
@@ -1034,7 +1046,7 @@ namespace TeknoparrotAutoXinput
 								useKeepAspectRatio = false;
 							}
 
-							if (performanceProfile == 1) useCrt = false;
+							//if (performanceProfile == 1) useCrt = false;
 
 							if (patchNetwork && ConfigurationManager.MainConfig.patch_networkAuto)
 							{
@@ -1138,7 +1150,6 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 							Utils.LogMessage($"Alt Config dir = {potentialAltConfigDir}");
-
 
 							bool refreshrate_done = false;
 							_dispositionToSwitch = ConfigurationManager.MainConfig.Disposition;
@@ -1263,7 +1274,11 @@ namespace TeknoparrotAutoXinput
 									{
 										Program.refreshRate = Utils.GetPrimaryMonitorRefreshRateFromXml(File.ReadAllText(cfg));
 										refreshrate_done = true;
-										if (gameOptions.moveBackWindowToOriginalMonitor) Program.moveWindowToOriginalMonitor = true;
+										if (gameOptions.moveBackWindowToOriginalMonitor)
+										{
+											Program.moveWindowToOriginalMonitor = true;
+											originalMonitorDeviceName = Screen.PrimaryScreen.DeviceName;
+										}
 									}
 									catch { }
 								}
@@ -1378,6 +1393,12 @@ namespace TeknoparrotAutoXinput
 							if (Program.useKeepAspectRatio) TpSettingsManager.tags.Add("keepaspectratio");
 							else TpSettingsManager.tags.Add("no_keepaspectratio");
 
+							if(Program.patchLang == 0) TpSettingsManager.tags.Add("no_translation");
+							else TpSettingsManager.tags.Add("translation");
+							if (Program.patchLang == 1) TpSettingsManager.tags.Add("english");
+							if (Program.patchLang == 2) TpSettingsManager.tags.Add("french");
+
+
 							//Tags that does not have equivalents on the file system
 							if (Program.patchGameID) TpSettingsManager.tags.Add("replace_gameid");
 							if (Program.patchNetwork) TpSettingsManager.tags.Add("replace_network");
@@ -1422,6 +1443,10 @@ namespace TeknoparrotAutoXinput
 								//GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
 							}
 
+							if (GameInfo.ContainsKey("canForceWindowed") && (GameInfo["canForceWindowed"].ToLower() == "true") && TpSettingsManager.tags.Contains("set_windowed"))
+							{
+								TpSettingsManager.ForceRegAsWindowed = true;
+							}
 
 							TpSettingsManager.UpdateXML();
 							if (TpSettingsManager.IsWindowed) TpSettingsManager.tags.Add("windowed");
@@ -1456,6 +1481,45 @@ namespace TeknoparrotAutoXinput
 							if (GameInfo.ContainsKey("forceResize2k") && GameInfo["forceResize2k"] != "" && Program.gpuResolution == 2) forceResizeCommand = GameInfo["forceResize2k"];
 							if (GameInfo.ContainsKey("forceResize4k") && GameInfo["forceResize4k"] != "" && Program.gpuResolution == 3) forceResizeCommand = GameInfo["forceResize4k"];
 							if (GameInfo.ContainsKey("forceResizeNative") && GameInfo["forceResizeNative"] != "" && Program.gpuResolution == 4) forceResizeCommand = GameInfo["forceResizeNative"];
+							var forceResizeCommands = forceResizeCommand.Split("||");
+							foreach (var command in forceResizeCommands)
+							{
+								var matchForceResize = Regex.Match(command, @"^([0-9]+)x([0-9]+)(\|(.+))?$");
+								if (matchForceResize.Success)
+								{
+									int forceResizeWidth = int.Parse(matchForceResize.Groups[1].Value);
+									int forceResizeHeight = int.Parse(matchForceResize.Groups[2].Value);
+									string forceResizeAfterBar = matchForceResize.Groups[4].Success ? matchForceResize.Groups[4].Value : string.Empty;
+
+									if (forceResizeAfterBar != "")
+									{
+										bool validForceResize = true;
+										foreach (var afterBarData in forceResizeAfterBar.Split("&"))
+										{
+											if (afterBarData.Trim() != "" && !TpSettingsManager.tags.Contains(afterBarData.Trim()))
+											{
+												validForceResize = false;
+												break;
+											}
+										}
+
+										if (!validForceResize)
+										{
+											forceResizeWidth = 0;
+											forceResizeHeight = 0;
+										}
+									}
+
+									// Appliquer la première résolution valide et sortir
+									if (forceResizeWidth > 0 && forceResizeHeight > 0)
+									{
+										Program.forceResizeWidth = forceResizeWidth;
+										Program.forceResizeHeight = forceResizeHeight;
+										break;
+									}
+								}
+							}
+							/*
 							var matchForceResize = Regex.Match(forceResizeCommand, @"^([0-9]+)x([0-9]+)(\|(.+))?$");
 							if (matchForceResize.Success)
 							{
@@ -1482,6 +1546,7 @@ namespace TeknoparrotAutoXinput
 								Program.forceResizeWidth = forceResizeWidth;
 								Program.forceResizeHeight = forceResizeHeight;
 							}
+							*/
 
 
 							if (!TpSettingsManager.IsWindowed && GameInfo.ContainsKey("forceResSwitchFullscreen") && GameInfo["forceResSwitchFullscreen"].ToLower().Split("x").Count() == 2)
@@ -5190,6 +5255,24 @@ namespace TeknoparrotAutoXinput
 									}
 
 								}
+								if (gameOptions.disableAllMonitorExceptPrimary)
+								{
+									if (!_restoreSwitch)
+									{
+										if (MonitorSwitcher.SaveDisplaySettings(Path.Combine(Path.GetFullPath(Program.DispositionFolder), "dispositionrestore_app.xml")))
+										{
+											_restoreSwitch = true;
+										}
+										var displays = Display.GetDisplays().ToArray();
+										string MainMonitorName = Screen.PrimaryScreen.DeviceName;
+										foreach (Display display in displays.Where(display => !display.IsGDIPrimary))
+										{
+											display.Disable(false);
+										}
+
+										DisplaySetting.ApplySavedSettings();
+									}
+								}
 
 								if (useDinputLightGun)
 								{
@@ -5744,7 +5827,7 @@ namespace TeknoparrotAutoXinput
 								string forceSindenCalibration = "";
 								string forcevjoyXformula = "";
 								string forcevjoyYformula = "";
-								
+
 								if ((TpSettingsManager.IsWindowed || forceMagpie) && useMagpie)
 								{
 									string magpieExe = ConfigurationManager.MainConfig.magpieExe;
@@ -5898,6 +5981,21 @@ namespace TeknoparrotAutoXinput
 
 												int screenWidth = 1920;
 												int screenHeight = 1080;
+
+												Screen monitorThatWillReceiveGameWindow = Screen.PrimaryScreen;
+												if (Program.moveWindowToOriginalMonitor)
+												{
+													foreach (var s in Screen.AllScreens)
+													{
+														if (s.DeviceName == Program.originalMonitorDeviceName)
+														{
+															monitorThatWillReceiveGameWindow = s;
+														}
+													}
+												}
+												screenWidth = monitorThatWillReceiveGameWindow.Bounds.Width;
+												screenHeight = monitorThatWillReceiveGameWindow.Bounds.Height;
+												/*
 												Screen[] screens = Screen.AllScreens;
 												for (int i = 0; i < screens.Length; i++)
 												{
@@ -5909,6 +6007,7 @@ namespace TeknoparrotAutoXinput
 														screenHeight = screen.Bounds.Height;
 													}
 												}
+												*/
 
 												Utils.RECT clientRect;
 												Utils.GetClientRect(windowHandle, out clientRect);
@@ -5976,16 +6075,16 @@ namespace TeknoparrotAutoXinput
 													magpieNoMoveWindow = true;
 													if (magpieNoLaunchIfSameRes)
 													{
-														if (forceResizeWidth != Screen.PrimaryScreen.Bounds.Width) magpieNoLaunchIfSameRes = false;
-														if (forceResizeHeight != Screen.PrimaryScreen.Bounds.Height) magpieNoLaunchIfSameRes = false;
+														if (forceResizeWidth != monitorThatWillReceiveGameWindow.Bounds.Width) magpieNoLaunchIfSameRes = false;
+														if (forceResizeHeight != monitorThatWillReceiveGameWindow.Bounds.Height) magpieNoLaunchIfSameRes = false;
 													}
 												}
 												else
 												{
 													if (magpieNoLaunchIfSameRes)
 													{
-														if (clientWidth != Screen.PrimaryScreen.Bounds.Width) magpieNoLaunchIfSameRes = false;
-														if (clientHeight != Screen.PrimaryScreen.Bounds.Height) magpieNoLaunchIfSameRes = false;
+														if (clientWidth != monitorThatWillReceiveGameWindow.Bounds.Width) magpieNoLaunchIfSameRes = false;
+														if (clientHeight != monitorThatWillReceiveGameWindow.Bounds.Height) magpieNoLaunchIfSameRes = false;
 													}
 													if (forceWindowResize) WindowResizer.ResizeWindowToClientRect(windowHandle, maxWindowWidth, maxWindowHeight);
 												}
@@ -6925,6 +7024,8 @@ _Translate=0.000000,0.000000
 								}
 
 								string argumentTpExe = "--profile=\"" + finalConfig + "\"";
+								if (testMode) argumentTpExe += " --test";
+
 								if (gameOptions.RunAsRoot)
 								{
 									Utils.LogMessage($"Force RunAsRoot");
@@ -6960,6 +7061,36 @@ _Translate=0.000000,0.000000
 									bool UseShellExecute = true;
 									if (GameInfo.ContainsKey("environmentVariables") && GameInfo["environmentVariables"].Trim() != "")
 									{
+										string value_environmentVariables = GameInfo["environmentVariables"].Trim().ToLower();
+										foreach (var environmentVariable in value_environmentVariables.Split("##"))
+										{
+
+											if (environmentVariable.Split(",,").Count() == 2)
+											{
+												var splited_environmentVariable = environmentVariable.Split(",,");
+												var environmentVariable_content = splited_environmentVariable[0];
+												var environmentVariable_tag = splited_environmentVariable[1].Trim().ToLower();
+												//if(magpieRegisterSizeTag_tag == "others" || TpSettingsManager.tags.Contains(magpieRegisterSizeTag_tag))
+												if (environmentVariable_tag == "others" || environmentVariable_tag.Replace(" ", "").Split('&').All(tag => TpSettingsManager.tags.Contains(tag)))
+												{
+													
+													var listEnvVariable = environmentVariable_content.Split("||");
+													foreach (var envVariable in listEnvVariable)
+													{
+														var envVariableData = envVariable.Split("==");
+														if (envVariableData.Count() == 2)
+														{
+															process.StartInfo.EnvironmentVariables[envVariableData[0]] = envVariableData[1];
+															UseShellExecute = false;
+														}
+													}
+
+												}
+											}
+										}
+
+
+										/*
 										var listEnvVariable = GameInfo["environmentVariables"].Split("||");
 										foreach (var envVariable in listEnvVariable)
 										{
@@ -6970,6 +7101,7 @@ _Translate=0.000000,0.000000
 												UseShellExecute = false;
 											}
 										}
+										*/
 									}
 									/*
 									process.StartInfo.EnvironmentVariables["NGLIDE_RESOLUTION"] = "1";
@@ -7180,8 +7312,8 @@ _Translate=0.000000,0.000000
 									}
 									catch { }
 								}
-
-								Utils.KillProcessById(Process.GetCurrentProcess().Id);
+								//removed self kill
+								//Utils.KillProcessById(Process.GetCurrentProcess().Id);
 							}
 
 						}

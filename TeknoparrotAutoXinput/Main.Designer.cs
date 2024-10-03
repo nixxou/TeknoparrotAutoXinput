@@ -78,6 +78,24 @@ namespace TeknoparrotAutoXinput
 			kryptonLabel9 = new Krypton.Toolkit.KryptonLabel();
 			btn_playgamedirect2 = new Krypton.Toolkit.KryptonButton();
 			kryptonButton1 = new Krypton.Toolkit.KryptonButton();
+			panel_ffb = new Panel();
+			label2 = new Label();
+			lbl_ffb = new Label();
+			panel_crt = new Panel();
+			label1 = new Label();
+			lbl_crt = new Label();
+			panel_bezel = new Panel();
+			label3 = new Label();
+			lbl_bezel = new Label();
+			panel_vsync = new Panel();
+			label6 = new Label();
+			lbl_vsync = new Label();
+			panel_aspectratio = new Panel();
+			label8 = new Label();
+			lbl_aspectratio = new Label();
+			flowLayoutPanel1 = new FlowLayoutPanel();
+			label10 = new Label();
+			lbl_translation = new Label();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox_gameControls).BeginInit();
 			flowLayoutPanelThumbs.SuspendLayout();
@@ -87,6 +105,12 @@ namespace TeknoparrotAutoXinput
 			((System.ComponentModel.ISupportInitialize)cmb_resolution).BeginInit();
 			groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_patchlink).BeginInit();
+			panel_ffb.SuspendLayout();
+			panel_crt.SuspendLayout();
+			panel_bezel.SuspendLayout();
+			panel_vsync.SuspendLayout();
+			panel_aspectratio.SuspendLayout();
+			flowLayoutPanel1.SuspendLayout();
 			SuspendLayout();
 			// 
 			// list_games
@@ -556,11 +580,233 @@ namespace TeknoparrotAutoXinput
 			kryptonButton1.Values.Text = "Setup Wizard";
 			kryptonButton1.Click += kryptonButton1_Click;
 			// 
+			// panel_ffb
+			// 
+			panel_ffb.BorderStyle = BorderStyle.FixedSingle;
+			panel_ffb.Controls.Add(label2);
+			panel_ffb.Controls.Add(lbl_ffb);
+			panel_ffb.Location = new Point(343, 416);
+			panel_ffb.Name = "panel_ffb";
+			panel_ffb.Size = new Size(67, 18);
+			panel_ffb.TabIndex = 218;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Dock = DockStyle.Left;
+			label2.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			label2.ForeColor = Color.MidnightBlue;
+			label2.Location = new Point(0, 0);
+			label2.Name = "label2";
+			label2.Size = new Size(28, 13);
+			label2.TabIndex = 23;
+			label2.Text = "FFB :";
+			label2.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// lbl_ffb
+			// 
+			lbl_ffb.AutoSize = true;
+			lbl_ffb.Dock = DockStyle.Right;
+			lbl_ffb.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			lbl_ffb.ForeColor = Color.Red;
+			lbl_ffb.Location = new Point(41, 0);
+			lbl_ffb.Name = "lbl_ffb";
+			lbl_ffb.Size = new Size(24, 13);
+			lbl_ffb.TabIndex = 22;
+			lbl_ffb.Text = "OFF";
+			lbl_ffb.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// panel_crt
+			// 
+			panel_crt.BorderStyle = BorderStyle.FixedSingle;
+			panel_crt.Controls.Add(label1);
+			panel_crt.Controls.Add(lbl_crt);
+			panel_crt.Location = new Point(416, 416);
+			panel_crt.Name = "panel_crt";
+			panel_crt.Size = new Size(114, 18);
+			panel_crt.TabIndex = 219;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Dock = DockStyle.Left;
+			label1.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			label1.ForeColor = Color.MidnightBlue;
+			label1.Location = new Point(0, 0);
+			label1.Name = "label1";
+			label1.Size = new Size(62, 13);
+			label1.TabIndex = 23;
+			label1.Text = "CRT EFFECT :";
+			label1.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// lbl_crt
+			// 
+			lbl_crt.AutoSize = true;
+			lbl_crt.Dock = DockStyle.Right;
+			lbl_crt.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			lbl_crt.ForeColor = Color.Red;
+			lbl_crt.Location = new Point(88, 0);
+			lbl_crt.Name = "lbl_crt";
+			lbl_crt.Size = new Size(24, 13);
+			lbl_crt.TabIndex = 22;
+			lbl_crt.Text = "OFF";
+			lbl_crt.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// panel_bezel
+			// 
+			panel_bezel.BorderStyle = BorderStyle.FixedSingle;
+			panel_bezel.Controls.Add(label3);
+			panel_bezel.Controls.Add(lbl_bezel);
+			panel_bezel.Location = new Point(536, 416);
+			panel_bezel.Name = "panel_bezel";
+			panel_bezel.Size = new Size(75, 18);
+			panel_bezel.TabIndex = 220;
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Dock = DockStyle.Left;
+			label3.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			label3.ForeColor = Color.MidnightBlue;
+			label3.Location = new Point(0, 0);
+			label3.Name = "label3";
+			label3.Size = new Size(38, 13);
+			label3.TabIndex = 23;
+			label3.Text = "BEZEL :";
+			label3.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// lbl_bezel
+			// 
+			lbl_bezel.AutoSize = true;
+			lbl_bezel.Dock = DockStyle.Right;
+			lbl_bezel.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			lbl_bezel.ForeColor = Color.Red;
+			lbl_bezel.Location = new Point(49, 0);
+			lbl_bezel.Name = "lbl_bezel";
+			lbl_bezel.Size = new Size(24, 13);
+			lbl_bezel.TabIndex = 22;
+			lbl_bezel.Text = "OFF";
+			lbl_bezel.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// panel_vsync
+			// 
+			panel_vsync.BorderStyle = BorderStyle.FixedSingle;
+			panel_vsync.Controls.Add(label6);
+			panel_vsync.Controls.Add(lbl_vsync);
+			panel_vsync.Location = new Point(617, 416);
+			panel_vsync.Name = "panel_vsync";
+			panel_vsync.Size = new Size(80, 18);
+			panel_vsync.TabIndex = 221;
+			// 
+			// label6
+			// 
+			label6.AutoSize = true;
+			label6.Dock = DockStyle.Left;
+			label6.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			label6.ForeColor = Color.MidnightBlue;
+			label6.Location = new Point(0, 0);
+			label6.Name = "label6";
+			label6.Size = new Size(43, 13);
+			label6.TabIndex = 23;
+			label6.Text = "VSYNC :";
+			label6.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// lbl_vsync
+			// 
+			lbl_vsync.AutoSize = true;
+			lbl_vsync.Dock = DockStyle.Right;
+			lbl_vsync.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			lbl_vsync.ForeColor = Color.Red;
+			lbl_vsync.Location = new Point(54, 0);
+			lbl_vsync.Name = "lbl_vsync";
+			lbl_vsync.Size = new Size(24, 13);
+			lbl_vsync.TabIndex = 22;
+			lbl_vsync.Text = "OFF";
+			lbl_vsync.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// panel_aspectratio
+			// 
+			panel_aspectratio.BorderStyle = BorderStyle.FixedSingle;
+			panel_aspectratio.Controls.Add(label8);
+			panel_aspectratio.Controls.Add(lbl_aspectratio);
+			panel_aspectratio.Location = new Point(703, 416);
+			panel_aspectratio.Name = "panel_aspectratio";
+			panel_aspectratio.Size = new Size(150, 18);
+			panel_aspectratio.TabIndex = 222;
+			// 
+			// label8
+			// 
+			label8.AutoSize = true;
+			label8.Dock = DockStyle.Left;
+			label8.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			label8.ForeColor = Color.MidnightBlue;
+			label8.Location = new Point(0, 0);
+			label8.Name = "label8";
+			label8.Size = new Size(99, 13);
+			label8.TabIndex = 23;
+			label8.Text = "KEEP ASPECT RATIO :";
+			label8.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// lbl_aspectratio
+			// 
+			lbl_aspectratio.AutoSize = true;
+			lbl_aspectratio.Dock = DockStyle.Right;
+			lbl_aspectratio.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			lbl_aspectratio.ForeColor = Color.Red;
+			lbl_aspectratio.Location = new Point(124, 0);
+			lbl_aspectratio.Name = "lbl_aspectratio";
+			lbl_aspectratio.Size = new Size(24, 13);
+			lbl_aspectratio.TabIndex = 22;
+			lbl_aspectratio.Text = "OFF";
+			lbl_aspectratio.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// flowLayoutPanel1
+			// 
+			flowLayoutPanel1.AutoSize = true;
+			flowLayoutPanel1.BorderStyle = BorderStyle.FixedSingle;
+			flowLayoutPanel1.Controls.Add(label10);
+			flowLayoutPanel1.Controls.Add(lbl_translation);
+			flowLayoutPanel1.Location = new Point(718, 448);
+			flowLayoutPanel1.Name = "flowLayoutPanel1";
+			flowLayoutPanel1.Padding = new Padding(0, 2, 0, 0);
+			flowLayoutPanel1.Size = new Size(127, 18);
+			flowLayoutPanel1.TabIndex = 223;
+			// 
+			// label10
+			// 
+			label10.AutoSize = true;
+			label10.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			label10.ForeColor = Color.MidnightBlue;
+			label10.Location = new Point(3, 2);
+			label10.Name = "label10";
+			label10.Size = new Size(75, 13);
+			label10.TabIndex = 23;
+			label10.Text = "TRANSLATION :";
+			label10.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// lbl_translation
+			// 
+			lbl_translation.AutoSize = true;
+			lbl_translation.Font = new Font("Calibri", 8.1F, FontStyle.Bold, GraphicsUnit.Point);
+			lbl_translation.ForeColor = Color.Red;
+			lbl_translation.Location = new Point(84, 2);
+			lbl_translation.Name = "lbl_translation";
+			lbl_translation.Size = new Size(33, 13);
+			lbl_translation.TabIndex = 22;
+			lbl_translation.Text = "NONE";
+			lbl_translation.TextAlign = ContentAlignment.MiddleLeft;
+			// 
 			// Main
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(999, 744);
+			Controls.Add(flowLayoutPanel1);
+			Controls.Add(panel_ffb);
+			Controls.Add(panel_crt);
+			Controls.Add(panel_bezel);
+			Controls.Add(panel_vsync);
+			Controls.Add(panel_aspectratio);
 			Controls.Add(kryptonButton1);
 			Controls.Add(btn_playgamedirect2);
 			Controls.Add(groupBox2);
@@ -593,6 +839,18 @@ namespace TeknoparrotAutoXinput
 			groupBox2.ResumeLayout(false);
 			groupBox2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)cmb_patchlink).EndInit();
+			panel_ffb.ResumeLayout(false);
+			panel_ffb.PerformLayout();
+			panel_crt.ResumeLayout(false);
+			panel_crt.PerformLayout();
+			panel_bezel.ResumeLayout(false);
+			panel_bezel.PerformLayout();
+			panel_vsync.ResumeLayout(false);
+			panel_vsync.PerformLayout();
+			panel_aspectratio.ResumeLayout(false);
+			panel_aspectratio.PerformLayout();
+			flowLayoutPanel1.ResumeLayout(false);
+			flowLayoutPanel1.PerformLayout();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -646,5 +904,23 @@ namespace TeknoparrotAutoXinput
 		private Krypton.Toolkit.KryptonComboBox cmb_patchlink;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel9;
 		private Krypton.Toolkit.KryptonButton kryptonButton1;
+		private Panel panel_ffb;
+		private Label label2;
+		private Label lbl_ffb;
+		private Panel panel_crt;
+		private Label label1;
+		private Label lbl_crt;
+		private Panel panel_bezel;
+		private Label label3;
+		private Label lbl_bezel;
+		private Panel panel_vsync;
+		private Label label6;
+		private Label lbl_vsync;
+		private Panel panel_aspectratio;
+		private Label label8;
+		private Label lbl_aspectratio;
+		private FlowLayoutPanel flowLayoutPanel1;
+		private Label label10;
+		private Label lbl_translation;
 	}
 }

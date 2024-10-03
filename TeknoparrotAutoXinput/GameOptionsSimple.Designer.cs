@@ -31,6 +31,10 @@
 			tableLayoutPanel1 = new TableLayoutPanel();
 			tabInfo = new TabControl();
 			tabGeneral = new TabPage();
+			kryptonLabel22 = new Krypton.Toolkit.KryptonLabel();
+			cmb_patchlang = new Krypton.Toolkit.KryptonComboBox();
+			cmb_keepAspectRatio = new Krypton.Toolkit.KryptonComboBox();
+			kryptonLabel21 = new Krypton.Toolkit.KryptonLabel();
 			cmb_forcevsync = new Krypton.Toolkit.KryptonComboBox();
 			kryptonLabel18 = new Krypton.Toolkit.KryptonLabel();
 			kryptonLabel17 = new Krypton.Toolkit.KryptonLabel();
@@ -60,6 +64,7 @@
 			cmb_patchReshade = new Krypton.Toolkit.KryptonComboBox();
 			cmb_patchFFB = new Krypton.Toolkit.KryptonComboBox();
 			grp_monitorDisposition = new GroupBox();
+			chk_moveBackWindowToOriginalMonitor = new Krypton.Toolkit.KryptonCheckBox();
 			txt_monitorswitch = new Krypton.Toolkit.KryptonTextBox();
 			btn_editMonitorSwitch = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel12 = new Krypton.Toolkit.KryptonLabel();
@@ -149,11 +154,12 @@
 			panel1 = new Panel();
 			btn_Save = new Krypton.Toolkit.KryptonButton();
 			btn_Cancel = new Krypton.Toolkit.KryptonButton();
-			cmb_keepAspectRatio = new Krypton.Toolkit.KryptonComboBox();
-			kryptonLabel21 = new Krypton.Toolkit.KryptonLabel();
+			chk_disableAllMonitorExceptPrimary = new Krypton.Toolkit.KryptonCheckBox();
 			tableLayoutPanel1.SuspendLayout();
 			tabInfo.SuspendLayout();
 			tabGeneral.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_patchlang).BeginInit();
+			((System.ComponentModel.ISupportInitialize)cmb_keepAspectRatio).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_forcevsync).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_performance).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_useCrt).BeginInit();
@@ -206,7 +212,6 @@
 			((System.ComponentModel.ISupportInitialize)pic_crosshairp1).BeginInit();
 			tabConfig.SuspendLayout();
 			panel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)cmb_keepAspectRatio).BeginInit();
 			SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -244,6 +249,8 @@
 			// 
 			// tabGeneral
 			// 
+			tabGeneral.Controls.Add(kryptonLabel22);
+			tabGeneral.Controls.Add(cmb_patchlang);
 			tabGeneral.Controls.Add(cmb_keepAspectRatio);
 			tabGeneral.Controls.Add(kryptonLabel21);
 			tabGeneral.Controls.Add(cmb_forcevsync);
@@ -274,6 +281,47 @@
 			tabGeneral.TabIndex = 4;
 			tabGeneral.Text = "General";
 			tabGeneral.UseVisualStyleBackColor = true;
+			// 
+			// kryptonLabel22
+			// 
+			kryptonLabel22.Location = new Point(12, 149);
+			kryptonLabel22.Name = "kryptonLabel22";
+			kryptonLabel22.Size = new Size(110, 20);
+			kryptonLabel22.TabIndex = 235;
+			kryptonLabel22.Values.Text = "Translation patch :";
+			// 
+			// cmb_patchlang
+			// 
+			cmb_patchlang.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_patchlang.DropDownWidth = 242;
+			cmb_patchlang.IntegralHeight = false;
+			cmb_patchlang.Items.AddRange(new object[] { "Use Global Settings", "No Translation", "English", "French" });
+			cmb_patchlang.Location = new Point(140, 148);
+			cmb_patchlang.Name = "cmb_patchlang";
+			cmb_patchlang.Size = new Size(169, 21);
+			cmb_patchlang.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_patchlang.TabIndex = 234;
+			cmb_patchlang.SelectedIndexChanged += cmb_patchlang_SelectedIndexChanged;
+			// 
+			// cmb_keepAspectRatio
+			// 
+			cmb_keepAspectRatio.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_keepAspectRatio.DropDownWidth = 242;
+			cmb_keepAspectRatio.IntegralHeight = false;
+			cmb_keepAspectRatio.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
+			cmb_keepAspectRatio.Location = new Point(447, 204);
+			cmb_keepAspectRatio.Name = "cmb_keepAspectRatio";
+			cmb_keepAspectRatio.Size = new Size(169, 21);
+			cmb_keepAspectRatio.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_keepAspectRatio.TabIndex = 232;
+			// 
+			// kryptonLabel21
+			// 
+			kryptonLabel21.Location = new Point(325, 205);
+			kryptonLabel21.Name = "kryptonLabel21";
+			kryptonLabel21.Size = new Size(112, 20);
+			kryptonLabel21.TabIndex = 233;
+			kryptonLabel21.Values.Text = "Keep AspectRatio :";
 			// 
 			// cmb_forcevsync
 			// 
@@ -322,7 +370,7 @@
 			cmb_useCrt.DropDownWidth = 242;
 			cmb_useCrt.IntegralHeight = false;
 			cmb_useCrt.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_useCrt.Location = new Point(447, 135);
+			cmb_useCrt.Location = new Point(447, 180);
 			cmb_useCrt.Name = "cmb_useCrt";
 			cmb_useCrt.Size = new Size(169, 21);
 			cmb_useCrt.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -330,7 +378,7 @@
 			// 
 			// kryptonLabel7
 			// 
-			kryptonLabel7.Location = new Point(325, 136);
+			kryptonLabel7.Location = new Point(325, 181);
 			kryptonLabel7.Name = "kryptonLabel7";
 			kryptonLabel7.Size = new Size(92, 20);
 			kryptonLabel7.TabIndex = 227;
@@ -342,7 +390,7 @@
 			cmb_useBezel.DropDownWidth = 242;
 			cmb_useBezel.IntegralHeight = false;
 			cmb_useBezel.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_useBezel.Location = new Point(447, 110);
+			cmb_useBezel.Location = new Point(447, 155);
 			cmb_useBezel.Name = "cmb_useBezel";
 			cmb_useBezel.Size = new Size(169, 21);
 			cmb_useBezel.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -350,7 +398,7 @@
 			// 
 			// kryptonLabel6
 			// 
-			kryptonLabel6.Location = new Point(325, 111);
+			kryptonLabel6.Location = new Point(325, 156);
 			kryptonLabel6.Name = "kryptonLabel6";
 			kryptonLabel6.Size = new Size(69, 20);
 			kryptonLabel6.TabIndex = 225;
@@ -518,7 +566,7 @@
 			// 
 			// kryptonLabel40
 			// 
-			kryptonLabel40.Location = new Point(316, 86);
+			kryptonLabel40.Location = new Point(316, 131);
 			kryptonLabel40.Name = "kryptonLabel40";
 			kryptonLabel40.Size = new Size(129, 20);
 			kryptonLabel40.TabIndex = 206;
@@ -530,7 +578,7 @@
 			cmb_patchReshade.DropDownWidth = 242;
 			cmb_patchReshade.IntegralHeight = false;
 			cmb_patchReshade.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_patchReshade.Location = new Point(447, 85);
+			cmb_patchReshade.Location = new Point(447, 130);
 			cmb_patchReshade.Name = "cmb_patchReshade";
 			cmb_patchReshade.Size = new Size(169, 21);
 			cmb_patchReshade.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -551,16 +599,28 @@
 			// 
 			// grp_monitorDisposition
 			// 
+			grp_monitorDisposition.Controls.Add(chk_disableAllMonitorExceptPrimary);
+			grp_monitorDisposition.Controls.Add(chk_moveBackWindowToOriginalMonitor);
 			grp_monitorDisposition.Controls.Add(txt_monitorswitch);
 			grp_monitorDisposition.Controls.Add(btn_editMonitorSwitch);
 			grp_monitorDisposition.Controls.Add(kryptonLabel12);
 			grp_monitorDisposition.Enabled = false;
 			grp_monitorDisposition.Location = new Point(318, 17);
 			grp_monitorDisposition.Name = "grp_monitorDisposition";
-			grp_monitorDisposition.Size = new Size(298, 64);
+			grp_monitorDisposition.Size = new Size(298, 101);
 			grp_monitorDisposition.TabIndex = 210;
 			grp_monitorDisposition.TabStop = false;
 			grp_monitorDisposition.Text = "Custom Monitor Disposition";
+			// 
+			// chk_moveBackWindowToOriginalMonitor
+			// 
+			chk_moveBackWindowToOriginalMonitor.Checked = true;
+			chk_moveBackWindowToOriginalMonitor.CheckState = CheckState.Checked;
+			chk_moveBackWindowToOriginalMonitor.Location = new Point(6, 62);
+			chk_moveBackWindowToOriginalMonitor.Name = "chk_moveBackWindowToOriginalMonitor";
+			chk_moveBackWindowToOriginalMonitor.Size = new Size(272, 20);
+			chk_moveBackWindowToOriginalMonitor.TabIndex = 50;
+			chk_moveBackWindowToOriginalMonitor.Values.Text = "Move back game window to Original Monitor";
 			// 
 			// txt_monitorswitch
 			// 
@@ -597,7 +657,7 @@
 			// 
 			// chk_runRivaTuner
 			// 
-			chk_runRivaTuner.Location = new Point(10, 149);
+			chk_runRivaTuner.Location = new Point(10, 181);
 			chk_runRivaTuner.Name = "chk_runRivaTuner";
 			chk_runRivaTuner.Size = new Size(204, 20);
 			chk_runRivaTuner.TabIndex = 209;
@@ -840,7 +900,7 @@
 			tabHotas.Controls.Add(groupBox4);
 			tabHotas.Location = new Point(4, 24);
 			tabHotas.Name = "tabHotas";
-			tabHotas.Size = new Size(621, 361);
+			tabHotas.Size = new Size(621, 384);
 			tabHotas.TabIndex = 2;
 			tabHotas.Text = "Hotas Options";
 			tabHotas.UseVisualStyleBackColor = true;
@@ -1488,25 +1548,15 @@
 			btn_Cancel.Values.Text = "Cancel";
 			btn_Cancel.Click += btn_Cancel_Click;
 			// 
-			// cmb_keepAspectRatio
+			// chk_disableAllMonitorExceptPrimary
 			// 
-			cmb_keepAspectRatio.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmb_keepAspectRatio.DropDownWidth = 242;
-			cmb_keepAspectRatio.IntegralHeight = false;
-			cmb_keepAspectRatio.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_keepAspectRatio.Location = new Point(447, 159);
-			cmb_keepAspectRatio.Name = "cmb_keepAspectRatio";
-			cmb_keepAspectRatio.Size = new Size(169, 21);
-			cmb_keepAspectRatio.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-			cmb_keepAspectRatio.TabIndex = 232;
-			// 
-			// kryptonLabel21
-			// 
-			kryptonLabel21.Location = new Point(325, 160);
-			kryptonLabel21.Name = "kryptonLabel21";
-			kryptonLabel21.Size = new Size(112, 20);
-			kryptonLabel21.TabIndex = 233;
-			kryptonLabel21.Values.Text = "Keep AspectRatio :";
+			chk_disableAllMonitorExceptPrimary.Checked = true;
+			chk_disableAllMonitorExceptPrimary.CheckState = CheckState.Checked;
+			chk_disableAllMonitorExceptPrimary.Location = new Point(6, 81);
+			chk_disableAllMonitorExceptPrimary.Name = "chk_disableAllMonitorExceptPrimary";
+			chk_disableAllMonitorExceptPrimary.Size = new Size(218, 20);
+			chk_disableAllMonitorExceptPrimary.TabIndex = 51;
+			chk_disableAllMonitorExceptPrimary.Values.Text = "Disable All Monitors except primary";
 			// 
 			// GameOptionsSimple
 			// 
@@ -1522,6 +1572,8 @@
 			tabInfo.ResumeLayout(false);
 			tabGeneral.ResumeLayout(false);
 			tabGeneral.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_patchlang).EndInit();
+			((System.ComponentModel.ISupportInitialize)cmb_keepAspectRatio).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_forcevsync).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_performance).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_useCrt).EndInit();
@@ -1589,7 +1641,6 @@
 			((System.ComponentModel.ISupportInitialize)pic_crosshairp1).EndInit();
 			tabConfig.ResumeLayout(false);
 			panel1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)cmb_keepAspectRatio).EndInit();
 			ResumeLayout(false);
 		}
 
@@ -1718,5 +1769,9 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel18;
 		private Krypton.Toolkit.KryptonComboBox cmb_keepAspectRatio;
 		private Krypton.Toolkit.KryptonLabel kryptonLabel21;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel22;
+		private Krypton.Toolkit.KryptonComboBox cmb_patchlang;
+		private Krypton.Toolkit.KryptonCheckBox chk_moveBackWindowToOriginalMonitor;
+		private Krypton.Toolkit.KryptonCheckBox chk_disableAllMonitorExceptPrimary;
 	}
 }

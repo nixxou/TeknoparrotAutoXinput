@@ -298,6 +298,8 @@
 			btn_magpieExe = new Krypton.Toolkit.KryptonButton();
 			kryptonLabel50 = new Krypton.Toolkit.KryptonLabel();
 			txt_magpieExe = new Krypton.Toolkit.KryptonTextBox();
+			kryptonLabel70 = new Krypton.Toolkit.KryptonLabel();
+			cmb_patchlang = new Krypton.Toolkit.KryptonComboBox();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Gamepad).BeginInit();
 			groupBox2.SuspendLayout();
@@ -346,6 +348,7 @@
 			tabWheel.SuspendLayout();
 			tabHotas.SuspendLayout();
 			tabLightgun.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_patchlang).BeginInit();
 			SuspendLayout();
 			// 
 			// chk_enableVirtualKeyboard
@@ -2227,6 +2230,8 @@
 			// 
 			// tabPatch
 			// 
+			tabPatch.Controls.Add(kryptonLabel70);
+			tabPatch.Controls.Add(cmb_patchlang);
 			tabPatch.Controls.Add(chk_keepAspectRatio);
 			tabPatch.Controls.Add(chk_useCrt);
 			tabPatch.Controls.Add(chk_useBezel);
@@ -2290,7 +2295,7 @@
 			// 
 			// chk_forcevsync
 			// 
-			chk_forcevsync.Location = new Point(230, 427);
+			chk_forcevsync.Location = new Point(604, 349);
 			chk_forcevsync.Name = "chk_forcevsync";
 			chk_forcevsync.Size = new Size(88, 20);
 			chk_forcevsync.TabIndex = 176;
@@ -2461,7 +2466,7 @@
 			// 
 			// chk_patchFFB
 			// 
-			chk_patchFFB.Location = new Point(138, 428);
+			chk_patchFFB.Location = new Point(512, 350);
 			chk_patchFFB.Name = "chk_patchFFB";
 			chk_patchFFB.Size = new Size(82, 20);
 			chk_patchFFB.TabIndex = 154;
@@ -2973,6 +2978,26 @@
 			txt_magpieExe.TabIndex = 82;
 			txt_magpieExe.Visible = false;
 			// 
+			// kryptonLabel70
+			// 
+			kryptonLabel70.Location = new Point(384, 323);
+			kryptonLabel70.Name = "kryptonLabel70";
+			kryptonLabel70.Size = new Size(110, 20);
+			kryptonLabel70.TabIndex = 186;
+			kryptonLabel70.Values.Text = "Translation patch :";
+			// 
+			// cmb_patchlang
+			// 
+			cmb_patchlang.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_patchlang.DropDownWidth = 242;
+			cmb_patchlang.IntegralHeight = false;
+			cmb_patchlang.Items.AddRange(new object[] { "No Translation", "English", "French" });
+			cmb_patchlang.Location = new Point(512, 322);
+			cmb_patchlang.Name = "cmb_patchlang";
+			cmb_patchlang.Size = new Size(219, 21);
+			cmb_patchlang.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_patchlang.TabIndex = 185;
+			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -3068,6 +3093,7 @@
 			tabWheel.ResumeLayout(false);
 			tabHotas.ResumeLayout(false);
 			tabLightgun.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)cmb_patchlang).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -3345,5 +3371,7 @@
 		private Krypton.Toolkit.KryptonCheckBox chk_useBezel;
 		private Krypton.Toolkit.KryptonCheckBox chk_useCrt;
 		private Krypton.Toolkit.KryptonCheckBox chk_keepAspectRatio;
+		private Krypton.Toolkit.KryptonLabel kryptonLabel70;
+		private Krypton.Toolkit.KryptonComboBox cmb_patchlang;
 	}
 }

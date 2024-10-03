@@ -47,4 +47,11 @@ Jeu : Friction et Farcry must be set in 4/3
 Jeu : After burner climax et Alien Arma : crc
 Jeu : Ghost Squad : crc
 
+JEU : Ghostbuster reversed coin fix
+
+Reverse Y axis on P2 : https://github.com/teknogods/TeknoParrotUI/commit/a37b3f77dce88ca00c69cb54c66c39b5d1a18014#diff-fdde73c86f9c7244794278a6d048379b6b2944a21e6209a18a135b098b615dd0L204
+
+
 If corrupted magpie setting, restore copie
+
+Keep Aspect ratio OFF on vertical shooter should make them tate mode

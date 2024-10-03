@@ -2047,6 +2047,7 @@ namespace TeknoparrotAutoXinput
 		public Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 		public bool isSupported = false;
 		public string DisplayName = "";
+		public bool TestMenuIsExecutable = false;
 
 		public bool haveWheelSupport = false;
 		public bool haveHotasSupport = false;

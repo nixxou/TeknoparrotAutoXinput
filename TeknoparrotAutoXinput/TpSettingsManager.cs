@@ -22,6 +22,7 @@ namespace TeknoparrotAutoXinput
 		private static Dictionary<string, Dictionary<string,string>> allSettings = new Dictionary<string, Dictionary<string,string>>();
 		public static bool IsWindowed = false;
 		public static bool IsPatreon = false;
+		public static bool ForceRegAsWindowed = false;
 
 
 
@@ -42,6 +43,13 @@ namespace TeknoparrotAutoXinput
 
 		public static void SetWindowedStatus()
 		{
+
+			if (ForceRegAsWindowed)
+			{
+				IsWindowed = true;
+				return;
+			}
+
 			string windowed_CategoryName = "";
 			string windowed_FieldName = "";
 			string windowed_FieldValue = "";
