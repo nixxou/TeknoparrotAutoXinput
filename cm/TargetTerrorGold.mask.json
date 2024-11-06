@@ -1,0 +1,10 @@
+{
+  "RemplaceBefore": {
+    "P{{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Gun X": "Aim",
+    "Gun Y": "Aim"
+  }
+}

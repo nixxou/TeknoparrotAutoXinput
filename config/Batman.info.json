@@ -1,5 +1,6 @@
 {
   "global": {
+    "_comment": "Reshade bind to F12 F11",
     "windowed": "General,Windowed,1",
     "originalRes": "1360x768",
     "showGameOptionBezel": "False",
@@ -7,14 +8,22 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "True",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
+    "disableCrtForLowPerf": "True",
     "upscaleFullscreen": "False",
-    "upscaleWindowed": "False",
+    "upscaleWindowed": "True",
     "need60hz": "True",
     "magpieClass": "Direct3DWindowClass",
     "magpie3DGameMode": "True",
     "magpieDisableDirectFlip": "False",
     "magpieAllowScalingMaximized": "False",
-    "magpieLaunchBefore": "False"
+    "magpieLaunchBefore": "False",
+    "forceResize720p": "1280x720|windowed & set_resolution",
+    "forceResize1080p": "1920x1080|windowed & set_resolution",
+    "forceResize2k": "2560x1440|windowed & set_resolution",
+    "forceResize4k": "3840x2160|windowed & set_resolution",
+    "magpieRegisterAsSize_tag": "1280x720,set_resolution&720p|1920x1080,set_resolution&1080p|2560x1440,set_resolution&2k|3840x2160,set_resolution&4k"
   },
   "tpoptions": {
     "set_displaymode_recommanded": {

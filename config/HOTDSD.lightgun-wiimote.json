@@ -10,5 +10,6 @@
     "Player 2 Gun Y": "GunB_LightgunY",
     "Player 2 Start": "GunB_LightgunStart,GunB_LightgunArcadeStartBis",
     "Player 2 Gun Trigger": "GunB_LightgunTrigger",
-    "Player 2 Controller Select": "GunB_LightgunPedalRight,GunB_LightgunPump,GunB_LightgunBackRightBtn,GunB_LightgunFrontLeftBtn,GunB_LightgunBackLeftBtn"
+    "Player 2 Controller Select": "GunB_LightgunPedalRight,GunB_LightgunPump,GunB_LightgunBackRightBtn,GunB_LightgunFrontLeftBtn,GunB_LightgunBackLeftBtn",
+    "Xtreme Audio": "GunA_LightgunArcade1"
 }

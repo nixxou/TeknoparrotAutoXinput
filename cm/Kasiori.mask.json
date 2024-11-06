@@ -1,0 +1,13 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button1": "CounterClockWise",
+    "Button2": "ClockWise",
+    "Button3": "Open Attack !"
+  }
+}

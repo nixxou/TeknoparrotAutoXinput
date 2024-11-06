@@ -4,19 +4,12 @@ using Newtonsoft.Json;
 using SerialPortLib2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Management;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using WiimoteLib;
 
 namespace TeknoparrotAutoXinput
@@ -300,9 +293,9 @@ namespace TeknoparrotAutoXinput
 
 		public static bool isValidGun4ir(string Config, int comPort)
 		{
-			if(string.IsNullOrEmpty(Config)) return false;
+			if (string.IsNullOrEmpty(Config)) return false;
 			var buttonData = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(Config);
-			if (buttonData.ContainsKey("LightgunX")) 
+			if (buttonData.ContainsKey("LightgunX"))
 			{
 				if (buttonData["LightgunX"].DeviceName.ToLower().Contains("gun4ir"))
 				{
@@ -315,7 +308,7 @@ namespace TeknoparrotAutoXinput
 
 		public static bool isValidGun4irPort(int comPort)
 		{
-			if(comPort <= 0) return false;
+			if (comPort <= 0) return false;
 			string comToSearch = "COM" + comPort.ToString();
 			var boardList = gun4irBoards;
 			for (int index = 0; index < boardList.GetUpperBound(0) + 1; ++index)
@@ -1070,7 +1063,7 @@ namespace TeknoparrotAutoXinput
 			string gunNameNew = gunName;
 			foreach (var vdata in Program.vjoyData)
 			{
-				if(vdata.Value.ToLower() == gunGuid.ToLower())
+				if (vdata.Value.ToLower() == gunGuid.ToLower())
 				{
 					gunNameNew = "vjoy" + vdata.Key.ToString();
 					break;

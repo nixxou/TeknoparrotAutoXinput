@@ -1,0 +1,13 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Analog X": "Move",
+    "Analog Y": "Move",
+    "Throttle": "Accelerate / Decelerate",
+    "Weapon Trigger": "Main Weapon",
+    "Weapon Button": "Alt Weapon",
+    "Menu Up": "Menu Controls",
+    "Menu Down": "Menu Controls"
+  }
+}

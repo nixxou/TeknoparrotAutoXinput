@@ -1,0 +1,18 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button1": "Summon",
+    "Button2": "Jump",
+    "Button3": "Previous Skill",
+    "Button4": "Next Skill",
+    "Button5": "Use Skill",
+    "Button6": "",
+    "Button7": "",
+    "Button8": ""
+  }
+}

@@ -8,8 +8,11 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "True",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "french",
+    "showGameOptionPerf": "True",
+    "disableCrtForLowPerf": "True",
     "upscaleFullscreen": "False",
-    "upscaleWindowed": "False",
+    "upscaleWindowed": "True",
     "need60hz": "True",
     "magpieNoLaunchIfSameRes": "True",
     "magpieClass": "NRT Application",
@@ -34,6 +37,12 @@
     },
     "recommanded_tp_settings": {
       "General||Hide Cursor": "1"
+    },
+    "recommanded_tp_settings & low_perfprofile": {
+      "General||MSAA4X Disable": "1"
+    },
+    "recommanded_tp_settings & not_low_perfprofile": {
+      "General||MSAA4X Disable": "0"
     }
   },
   "gameoptions": {}

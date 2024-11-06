@@ -1,0 +1,9 @@
+{
+  "RemplaceBefore": {
+    " Axis": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Wheel": "Move"
+  }
+}

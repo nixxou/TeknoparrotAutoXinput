@@ -1,59 +1,58 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"showGameOptionBezel": "False",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "False",
-		"upscaleFullscreen": "True",
-		"upscaleWindowed": "True",	
-		"canUseJoyInsteadOfDpad":"True",
-		"magpieClass": "SNK Heroines AC window",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_recommanded & dont_set_resolution": {
-            "General||Windowed": "1"
-        },
-		"set_displaymode_recommanded & set_resolution & 720p": {
-            "General||Windowed": "0"
-        },
-		"set_displaymode_recommanded & set_resolution & 1080p": {
-            "General||Windowed": "0"
-        },
-		"set_displaymode_recommanded & set_resolution & 2k": {
-            "General||Windowed": "1"
-        },
-		"set_displaymode_recommanded & set_resolution & 4k": {
-            "General||Windowed": "1"
-        },
-        "set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_windowed": {
-            "General||Windowed": "1"
-        },
-        "set_resolution & 720p": {
-            "General||Resolution": "720p"
-        },
-        "set_resolution & 1080p": {
-            "General||Resolution": "1080p"
-        },
-        "set_resolution & 2k": {
-            "General||Resolution": "1080p"
-        },
-        "set_resolution & 4k": {
-            "General||Resolution": "1080p"
-        }
-	},
-	"gameoptions": {
-		"recommanded_gameoptions": {
-			"runRivaTuner" : "True"
-		}
-	}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "need60hz": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "SNK Heroines AC window",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded & dont_set_resolution": {
+      "General||Windowed": "1"
+    },
+    "set_displaymode_recommanded & set_resolution & 720p": {
+      "General||Windowed": "0"
+    },
+    "set_displaymode_recommanded & set_resolution & 1080p": {
+      "General||Windowed": "0"
+    },
+    "set_displaymode_recommanded & set_resolution & 2k": {
+      "General||Windowed": "1"
+    },
+    "set_displaymode_recommanded & set_resolution & 4k": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution & 720p": {
+      "General||Resolution": "720p"
+    },
+    "set_resolution & 1080p": {
+      "General||Resolution": "1080p"
+    },
+    "set_resolution & 2k": {
+      "General||Resolution": "1080p"
+    },
+    "set_resolution & 4k": {
+      "General||Resolution": "1080p"
+    }
+  },
+  "gameoptions": {}
 }

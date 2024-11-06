@@ -1,31 +1,36 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"showGameOptionBezel": "True",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "False",
-		"upscaleFullscreen": "False",
-		"upscaleWindowed": "False",
-		"canUseJoyInsteadOfDpad":"False",
-		"magpieClass": "GLUT",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_windowed": {
-            "General||Windowed": "1"
-        }
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "This game do weird stuff with resolution, reducing aspect ratio depending on your monitor res, run it in 1080p if you want a 4/3 ratio or in 2K if you want a thiner ratio",
+    "windowed": "General,Windowed,1",
+    "originalRes": "???",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "forceResSwitchFullscreen": "True",
+    "canForceRegAsWindowed": "True",
+    "canUseJoyInsteadOfDpad": "False",
+    "magpieClass": "UnityWndClass",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {}
 }

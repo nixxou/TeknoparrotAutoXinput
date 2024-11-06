@@ -1,21 +1,13 @@
-﻿using Henooh.DeviceEmulator.Net;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using SerialPortLib2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Management;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace TeknoparrotAutoXinput
 {
@@ -521,7 +513,7 @@ namespace TeknoparrotAutoXinput
 			btn_sinden_configurekeys.Enabled = false;
 			btn_sinden_done.Enabled = false;
 
-			if(cmb_selectSinden.SelectedIndex >= 0)
+			if (cmb_selectSinden.SelectedIndex >= 0)
 			{
 				if (cmb_selectSinden.SelectedItem.ToString().StartsWith("SindenLightgun-Black")) gunSindenType = 1;
 				if (cmb_selectSinden.SelectedItem.ToString().StartsWith("SindenLightgun-Blue")) gunSindenType = 2;

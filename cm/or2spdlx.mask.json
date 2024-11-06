@@ -1,0 +1,11 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Wheel Axis": "Move",
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Gear Shift Down": "Shift Down",
+    "Gear Shift Up": "Shift Up"
+  }
+}

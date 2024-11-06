@@ -1,0 +1,116 @@
+{
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "800x600",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "need60hz": "True",
+    "magpieClass": "XWindow_",
+    "magpieTitle": "",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution & 720p & fullscreen": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "1280",
+      "General||Custom Resolution Height": "720"
+    },
+    "set_resolution & 1080p & fullscreen": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "1920",
+      "General||Custom Resolution Height": "1080"
+    },
+    "set_resolution & 2k & fullscreen": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "2560",
+      "General||Custom Resolution Height": "1440"
+    },
+    "set_resolution & 4k & fullscreen": {
+      "General||Remove Texture Size Limit": "1",
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "3840",
+      "General||Custom Resolution Height": "2160"
+    },
+    "set_resolution & 720p & keepaspectratio & windowed": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "960",
+      "General||Custom Resolution Height": "720"
+    },
+    "set_resolution & 1080p & keepaspectratio & windowed": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "1440",
+      "General||Custom Resolution Height": "1080"
+    },
+    "set_resolution & 2k & keepaspectratio & windowed": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "1920",
+      "General||Custom Resolution Height": "1440"
+    },
+    "set_resolution & 4k & keepaspectratio & windowed": {
+      "General||Remove Texture Size Limit": "1",
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "2880",
+      "General||Custom Resolution Height": "2160"
+    },
+    "set_resolution & 720p & no_keepaspectratio & windowed": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "1280",
+      "General||Custom Resolution Height": "720"
+    },
+    "set_resolution & 1080p & no_keepaspectratio & windowed": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "1920",
+      "General||Custom Resolution Height": "1080"
+    },
+    "set_resolution & 2k & no_keepaspectratio & windowed": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "2560",
+      "General||Custom Resolution Height": "1440"
+    },
+    "set_resolution & 4k & no_keepaspectratio & windowed": {
+      "General||Custom Resolution": "1",
+      "General||Custom Resolution Width": "3840",
+      "General||Custom Resolution Height": "2160"
+    },
+    "game_native_res": {
+      "General||Custom Resolution": "0",
+      "General||Custom Resolution Width": "800",
+      "General||Custom Resolution Height": "600"
+    },
+    "recommanded_tp_settings": {
+      "Postgres||Path": "{{patchdir}}\\[!dontlinkthis!]\\GoldenTeeAssistant\\8.3\\bin",
+      "Postgres||Address": "127.0.0.1",
+      "Postgres||Port": "5433",
+      "Postgres||DbName": "GameDB06",
+      "Postgres||User": "postgres",
+      "Postgres||Pass": "teknoparrot"
+    }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions": {
+      "WaitForExitAhkBefore": true,
+      "AhkBefore": "GTAssistant := A_Args[1] . \"\\[!dontlinkthis!]\\GoldenTeeAssistant.exe\"\nGTAssistantDir := A_Args[1] . \"\\[!dontlinkthis!]\"\n\ngameDir := A_WorkingDir\nSetWorkingDir, %GTAssistantDir% \nRunWait, %GTAssistant% --install \"%gameDir%\", , OutputVar\n\nif (ErrorLevel = 1)\n{\n    MsgBox, Error initializing database\n}"
+    }
+  }
+}

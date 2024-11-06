@@ -1,34 +1,15 @@
-﻿using Krypton.Toolkit;
-using Nefarius.ViGEm.Client.Exceptions;
-using Nefarius.ViGEm.Client;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml;
-using XJoy;
-using System.Diagnostics;
-using SharpDX.DirectInput;
-using vJoyInterfaceWrap;
+﻿using CliWrap;
+using Krypton.Toolkit;
 using Newtonsoft.Json;
-using System.Security.Cryptography;
-using TeknoParrotUi.Common;
-using SevenZip;
-using System.Text.RegularExpressions;
-using CliWrap;
-using SharpDX.Multimedia;
-using TeknoparrotAutoXinput;
-using WiimoteLib;
-using XInput.Wrapper;
-using System.Reflection;
-using Microsoft.Win32;
-using SerialPortLib2;
 using SDL2;
+using SevenZip;
+using System.Data;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using System.Xml;
+using TeknoParrotUi.Common;
+using XInput.Wrapper;
 
 namespace TeknoparrotAutoXinput
 {
@@ -438,7 +419,7 @@ namespace TeknoparrotAutoXinput
 
 				if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
 				{
-					
+
 					if (!Utils.IsEligibleHardLink(fbd.SelectedPath) && !Utils.RealTestHardLinkEligible(fbd.SelectedPath))
 					{
 						MessageBox.Show("The drive does not seems eligible for hardlink (Must be NTFS and Windows 10 or newer)");
@@ -2728,11 +2709,11 @@ namespace TeknoparrotAutoXinput
 
 		private void btn_finalize_Click(object sender, EventArgs e)
 		{
-			if(chk_installpatch.Checked)
+			if (chk_installpatch.Checked)
 			{
 				string autoXinputPatchDir = Path.Combine(txt_tpfolder.Text, "AutoXinputLinks");
 				string gamePatchDir = txt_linksourcefolderexe.Text;
-				if(string.IsNullOrEmpty(autoXinputPatchDir) || !Directory.Exists(Directory.GetParent(autoXinputPatchDir).FullName))
+				if (string.IsNullOrEmpty(autoXinputPatchDir) || !Directory.Exists(Directory.GetParent(autoXinputPatchDir).FullName))
 				{
 					MessageBox.Show("Invalid dir : " + autoXinputPatchDir);
 					return;
@@ -2789,24 +2770,24 @@ namespace TeknoparrotAutoXinput
 				NewConfig.useDinputWheel = true;
 				NewConfig.ffbDinputWheel = ffbWheel.Guid;
 			}
-			if(selectController_wheel == 2)
+			if (selectController_wheel == 2)
 			{
 				NewConfig.bindingDinputShifter = dshifter_config;
-				NewConfig.useDinputShifter= true;
+				NewConfig.useDinputShifter = true;
 			}
-			if(selectController_hotas == 1)
+			if (selectController_hotas == 1)
 			{
 				NewConfig.useDinputHotas = true;
 				NewConfig.bindingDinputHotas = dhotas_config;
 				NewConfig.ffbDinputHotas = ffbHotas.Guid;
-				if(selectController_wheel > 0)
+				if (selectController_wheel > 0)
 				{
 					NewConfig.useHotasWithWheel = true;
 				}
 			}
 
 			int gun_sinden_set = 0;
-			if(selectController_lightgun > 0)
+			if (selectController_lightgun > 0)
 			{
 				string typeGunTxt = "";
 				int gunType = cmb_gunA_type.SelectedIndex;
@@ -2825,17 +2806,17 @@ namespace TeknoparrotAutoXinput
 				if (typeGunTxt == "sinden") NewConfig.bindingDinputGunASinden = gunA_json;
 				if (typeGunTxt == "wiimote") NewConfig.bindingDinputGunAWiimote = gunA_json;
 
-				if(gunType == 0 || gunType == 1)
+				if (gunType == 0 || gunType == 1)
 				{
 					NewConfig.gunARecoil = "gun4ir";
 					NewConfig.gunAComPort = gunA_comport;
 					NewConfig.gunAdomagerumble = true;
 					NewConfig.gunAAutoJoy = true;
 				}
-				if(gunType == 2)
+				if (gunType == 2)
 				{
 					gun_sinden_set++;
-					if(gun_sinden_set == 1) NewConfig.gunARecoil = "sinden-gun1";
+					if (gun_sinden_set == 1) NewConfig.gunARecoil = "sinden-gun1";
 					else NewConfig.gunARecoil = "sinden-gun2";
 				}
 				if (vjoy_installed) NewConfig.gunAvjoy = true;
@@ -3080,7 +3061,7 @@ public class WizardSettings
 	{
 
 	}
-	public WizardSettings(string filename) 
+	public WizardSettings(string filename)
 	{
 		if (File.Exists(filename))
 		{
@@ -3091,7 +3072,7 @@ public class WizardSettings
 				this.tpfolder = DeserializeData.tpfolder;
 				this.linksourcefolderexe = DeserializeData.linksourcefolderexe;
 				this.dwheel_config = DeserializeData.dwheel_config;
-				this.dshifter_config= DeserializeData.dshifter_config;
+				this.dshifter_config = DeserializeData.dshifter_config;
 				this.dhotas_config = DeserializeData.dhotas_config;
 				this.arcadeXinputData = DeserializeData.arcadeXinputData;
 
@@ -3130,7 +3111,7 @@ public class WizardSettings
 				this.apm3id = DeserializeData.apm3id;
 				this.mariokartId = DeserializeData.mariokartId;
 				this.customName = DeserializeData.customName;
-			
+
 
 			}
 			catch (Exception ex)
@@ -3148,8 +3129,8 @@ public class WizardSettings
 
 	public void Save(string filename)
 	{
-		
-		if(!disableSave) File.WriteAllText(filename, this.Serialize());
+
+		if (!disableSave) File.WriteAllText(filename, this.Serialize());
 	}
 
 

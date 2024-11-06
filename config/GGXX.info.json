@@ -7,8 +7,12 @@
     "showGameOptionVsync": "True",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
+    "disableCrtForLowPerf": "True",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
+    "need60hz": "True",
     "canUseJoyInsteadOfDpad": "True",
     "magpieClass": "TeknoParrot - GUILTY GEAR XX ACORE",
     "magpie3DGameMode": "False",
@@ -32,9 +36,6 @@
   "gameoptions": {
     "recommanded_gameoptions & crtfilter": {
       "magpieScaling": "6"
-    },
-    "recommanded_gameoptions": {
-      "runRivaTuner": "True"
     }
   }
 }

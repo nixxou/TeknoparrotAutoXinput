@@ -2,22 +2,13 @@
 using Newtonsoft.Json;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace TeknoparrotAutoXinput
 {
 	public partial class dinputgun : Form
 	{
-		public int GunIndex;       
+		public int GunIndex;
 		public string GunType;
 		public int GunCom = 0;
 
@@ -140,7 +131,7 @@ namespace TeknoparrotAutoXinput
 
 		private void cmb_devicelist_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(cmb_devicelist.SelectedIndex >= 0) lbl_warning.Visible = false;
+			if (cmb_devicelist.SelectedIndex >= 0) lbl_warning.Visible = false;
 			foreach (Control control in this.Controls)
 			{
 				if (control is KryptonTextBox)

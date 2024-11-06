@@ -1,0 +1,10 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Wheel Axis": "Move",
+    "Menu Toggle Manual-Auto": "Toggle Manual-Auto",
+    "Nitro / Cancel PIN / Neon Color": "Nitro",
+    "Start / Accept PIN": "Start"
+  }
+}

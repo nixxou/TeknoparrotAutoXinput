@@ -1,24 +1,13 @@
 using Krypton.Toolkit;
-using Nefarius.ViGEm.Client;
-using Nefarius.ViGEm.Client.Exceptions;
 using Newtonsoft.Json;
 using SDL2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Buffers.Text;
-using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using TestVgme;
-using vJoyInterfaceWrap;
-using Westwind.SetResolution.CommandLine;
 using Westwind.SetResolution;
-using XJoy;
 
 namespace TeknoparrotAutoXinput
 {
@@ -910,7 +899,7 @@ namespace TeknoparrotAutoXinput
 				string gamepadConfig = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "config", Path.GetFileNameWithoutExtension(gameProfileFile) + ".gamepad.txt");
 				if (File.Exists(gamepadConfig))
 				{
-					string gamepadConfigContent = File.ReadAllText(gamepadConfig);
+					string gamepadConfigContent = Utils.ReadAllText(gamepadConfig);
 					// Utiliser une expression régulière pour extraire les valeurs des éléments <ButtonName>
 					var buttonNameMatches = Regex.Matches(gamepadConfigContent, "<ButtonName>(.*?)</ButtonName>")
 												 .Cast<Match>()

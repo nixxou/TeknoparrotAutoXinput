@@ -194,15 +194,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>64</ButtonCode>
+        <ButtonCode>128</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>ExtensionOne17</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 LeftThumb</BindNameXi>
-      <BindName>Input Device 0 LeftThumb</BindName>
+      <BindNameXi>Input Device 0 RightThumb</BindNameXi>
+      <BindName>Input Device 0 RightThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>

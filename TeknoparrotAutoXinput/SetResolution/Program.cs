@@ -1,39 +1,35 @@
-﻿using System;
-using System.Data;
-using System.IO;
-using System.Reflection;
-using System.Threading;
+﻿using System.Reflection;
 using Westwind.SetResolution.CommandLine;
 
 namespace Westwind.SetResolution
 {
-    public class Program
-    {
-        public static string StartupPath { get; set; }
+	public class Program
+	{
+		public static string StartupPath { get; set; }
 
-        static void MainOld(string[] args)
-        {
-            StartupPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            AppConfiguration.Load();
+		static void MainOld(string[] args)
+		{
+			StartupPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+			AppConfiguration.Load();
 
-            var cmdLine = new SetResolutionCommandLineParser();
-            cmdLine.Parse();
+			var cmdLine = new SetResolutionCommandLineParser();
+			cmdLine.Parse();
 
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            var ver = version.Major + "." + version.Minor + (version.Build > 0 ? "." + version.Build : string.Empty);
+			var version = Assembly.GetExecutingAssembly().GetName().Version;
+			var ver = version.Major + "." + version.Minor + (version.Build > 0 ? "." + version.Build : string.Empty);
 
-            string text = $"Set Resolution v{ver}";
-            ColorConsole.WriteLine(text, ConsoleColor.Yellow);
-            ColorConsole.WriteLine(new string('-',text.Length), ConsoleColor.Yellow);
-            ColorConsole.WriteLine("(c) West Wind Technologies, 2022-2024", ConsoleColor.DarkGray);
-            
-            if (args == null || args.Length == 0 || args[0] == "HELP" || args[0] == "/?")
-            {
+			string text = $"Set Resolution v{ver}";
+			ColorConsole.WriteLine(text, ConsoleColor.Yellow);
+			ColorConsole.WriteLine(new string('-', text.Length), ConsoleColor.Yellow);
+			ColorConsole.WriteLine("(c) West Wind Technologies, 2022-2024", ConsoleColor.DarkGray);
 
-                Console.WriteLine("\nSet Monitor Display Resolution to any available machine display mode.");
+			if (args == null || args.Length == 0 || args[0] == "HELP" || args[0] == "/?")
+			{
+
+				Console.WriteLine("\nSet Monitor Display Resolution to any available machine display mode.");
 
 
-                string options = $@"
+				string options = $@"
 [cyan]Syntax[/cyan]
 ------
 [yellow]SetResolution  <ProfileName>|SET|LIST|PROFILES|CREATEPROFILE
@@ -48,7 +44,7 @@ SET                 Sets Display Settings -
 LIST                Lists all available display modes and monitors
 PROFILES            Lists all saved profiles (stored in SetResolution.xml)
 CREATEPROFILE       Creates a new profile by specifying name and display options
-                    - {Path.Combine(StartupPath,"SetResolution.xml")}
+                    - {Path.Combine(StartupPath, "SetResolution.xml")}
 
 [cyan]Display Settings[/cyan]
 ----------------
@@ -74,20 +70,20 @@ SetResolution LIST -m2
 SetResolution PROFILES
 SetResolution CREATEPROFILE -p ""My Profile"" -w 1920 -h 1080 -f 60
 ";
-                ColorConsole.WriteEmbeddedColorLine(options);
-            }
-            else
-            {
-                Console.WriteLine();
+				ColorConsole.WriteEmbeddedColorLine(options);
+			}
+			else
+			{
+				Console.WriteLine();
 
-                var processor = new SetResolutionProcessor(cmdLine);
-                processor.Process();
+				var processor = new SetResolutionProcessor(cmdLine);
+				processor.Process();
 
-                Console.WriteLine();
-            }
+				Console.WriteLine();
+			}
 
 
-            AppConfiguration.Save();
-        }
-    }
+			AppConfiguration.Save();
+		}
+	}
 }

@@ -1,34 +1,37 @@
 {
-	"global": {
-		"windowed": "General,DisplayMode,Windowed",
-		"showGameOptionBezel": "False",
-		"showGameOptionCrt": "True",
-		"showGameOptionVsync": "True",
-		"showGameOptionFFB": "False",
-		"upscaleFullscreen": "True",
-		"upscaleWindowed": "False",	
-		"canUseJoyInsteadOfDpad":"True",
-		"magpieClass": "SkullGirlsClassName",
-		"magpie3DGameMode": "False",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-        "set_displaymode_recommanded": {
-            "General||DisplayMode": "Fullscreen"
-        },		
-        "set_fullscreen": {
-            "General||DisplayMode": "Fullscreen"
-        },
-        "set_windowed": {
-            "General||DisplayMode": "Windowed"
-        },
-		"replace_gameid": {
-			"General||Player Name for new cards (P1)": "{{customname}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,DisplayMode,Windowed",
+    "originalRes": "1280x768",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "True",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
+    "forceResSwitchFullscreen": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "SkullGirlsClassName",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||DisplayMode": "Fullscreen"
+    },
+    "set_fullscreen": {
+      "General||DisplayMode": "Fullscreen"
+    },
+    "set_windowed": {
+      "General||DisplayMode": "Windowed"
+    },
+    "replace_gameid": {
+      "General||Player Name for new cards (P1)": "{{customname}}"
+    }
+  },
+  "gameoptions": {}
 }

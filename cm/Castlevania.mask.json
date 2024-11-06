@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Whip X": "Aim/Whip",
+    "Whip Y": "Aim/Whip",
+    "Whip Yellow": "Sub-Weapon",
+    "Whip Red": ""
+  }
+}

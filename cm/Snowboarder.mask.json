@@ -1,0 +1,10 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Swing Axis": "Move",
+    "Edge Axis": "Move",
+    "Coin1": "Coin",
+    "Coin2": "Coin"
+  }
+}

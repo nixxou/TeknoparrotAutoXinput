@@ -8,6 +8,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "magpieNoLaunchIfSameRes": "True",
@@ -55,5 +57,9 @@
       "General||ResolutionHeight": "768"
     }
   },
-  "gameoptions": {}
+  "gameoptions": {
+    "recommanded_gameoptions": {
+      "runRivaTuner": "True"
+    }	  
+  }
 }

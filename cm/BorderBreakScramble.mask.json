@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Joystick Analog X": "Move",
+    "Joystick Analog Y": "Move",
+    "Up (Digital)": "Move",
+    "Down (Digital)": "Move",
+    "Left (Digital)": "Move",
+    "Right (Digital)": "Move"
+  }
+}

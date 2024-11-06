@@ -1,0 +1,33 @@
+{
+  "global": {
+    "windowed": "",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "High",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "canForceRegAsWindowed": "True",
+    "forceResSwitchFullscreen": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "UnrealWindow",
+    "magpie3DGameMode": "False",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1",
+      "General||RegAsWindowed": "1"
+    }
+  },
+  "gameoptions": {}
+}

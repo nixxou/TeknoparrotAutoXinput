@@ -1,51 +1,79 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"showGameOptionBezel": "True",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "False",
-		"upscaleFullscreen": "False",
-		"upscaleWindowed": "True",
-		"canUseJoyInsteadOfDpad":"True",
-		"magpieClass": "SonicDash | Release_Ring",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_windowed": {
-            "General||Windowed": "1"
-        },
-        "set_resolution & 720p & windowed": {
-			"General||Use Custom Resolution": "1",
-            "General||Custom Resolution Width": "405",
-            "General||Custom Resolution Height": "720"
-        },
-        "set_resolution & 1080p & windowed": {
-			"General||Use Custom Resolution": "1",
-            "General||Custom Resolution Width": "603",
-            "General||Custom Resolution Height": "1072"
-        },
-        "set_resolution & 2k & windowed": {
-			"General||Use Custom Resolution": "1",
-            "General||Custom Resolution Width": "810",
-            "General||Custom Resolution Height": "1440"
-        },
-        "set_resolution & 4k & windowed": {
-			"General||Use Custom Resolution": "1",
-            "General||Custom Resolution Width": "1215",
-            "General||Custom Resolution Height": "2160"
-        }
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1080x1920",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "french",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "magpieClass": "SonicDash | Release_Ring",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution & 720p & windowed": {
+      "General||Use Custom Resolution": "1",
+      "General||Custom Resolution Width": "405",
+      "General||Custom Resolution Height": "720"
+    },
+    "set_resolution & 1080p & windowed": {
+      "General||Use Custom Resolution": "1",
+      "General||Custom Resolution Width": "603",
+      "General||Custom Resolution Height": "1072"
+    },
+    "set_resolution & 2k & windowed": {
+      "General||Use Custom Resolution": "1",
+      "General||Custom Resolution Width": "810",
+      "General||Custom Resolution Height": "1440"
+    },
+    "set_resolution & 4k & windowed": {
+      "General||Use Custom Resolution": "1",
+      "General||Custom Resolution Width": "1215",
+      "General||Custom Resolution Height": "2160"
+    },
+    "set_resolution & 720p & fullscreen": {
+      "General||Use Custom Resolution": "1",
+      "General||Custom Resolution Width": "1280",
+      "General||Custom Resolution Height": "720"
+    },
+    "set_resolution & 1080p & fullscreen": {
+      "General||Use Custom Resolution": "1",
+      "General||Custom Resolution Width": "1920",
+      "General||Custom Resolution Height": "1080"
+    },
+    "set_resolution & 2k & fullscreen": {
+      "General||Use Custom Resolution": "1",
+      "General||Custom Resolution Width": "2560",
+      "General||Custom Resolution Height": "1440"
+    },
+    "set_resolution & 4k & fullscreen": {
+      "General||Use Custom Resolution": "1",
+      "General||Custom Resolution Width": "3840",
+      "General||Custom Resolution Height": "2160"
+    },
+    "game_native_res": {
+      "General||Use Custom Resolution": "0",
+      "General||Custom Resolution Width": "1080",
+      "General||Custom Resolution Height": "1920"
+    }
+  },
+  "gameoptions": {}
 }

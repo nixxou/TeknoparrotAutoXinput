@@ -7,9 +7,14 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "True",
+    "showGameOptionPerf": "False",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "canUseJoyInsteadOfDpad": "True",
+    "canForceRegAsWindowed": "True",
+	"forceResSwitchFullscreen": "1920x1080",
+    "magpieNoLaunchIfSameRes": "True",
     "magpieClass": "UnityWndClass",
     "magpie3DGameMode": "False",
     "magpieDisableDirectFlip": "False",
@@ -19,13 +24,18 @@
     "magpieNoLateFocus": "False"
   },
   "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||RegAsWindowed": "1"
+    },
+    "set_fullscreen": {
+      "General||RegAsWindowed": "0"
+    },
+    "set_windowed": {
+      "General||RegAsWindowed": "1"
+    },
     "replace_gameid": {
       "General||APM3ID": "{{apm3id}}"
     }
   },
-  "gameoptions": {
-    "recommanded_gameoptions & no_1080p": {
-      "useMagpie": "3"
-    }
-  }
+  "gameoptions": {}
 }

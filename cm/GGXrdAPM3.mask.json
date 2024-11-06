@@ -1,0 +1,18 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button 1": "K-Kick",
+    "Button 2": "S-Slash",
+    "Button 3": "HS-Heavy Slash",
+    "Button 5": "P-Punch",
+    "Button 6": "SP-Special (Stylish)",
+    "Button 7": "D-Dust",
+    "Button 4": "",
+    "Button 8": ""
+  }
+}

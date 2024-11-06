@@ -1,14 +1,19 @@
 {
   "global": {
+    "comment": "For fullscreen on my amd gpu, i had to create a custom res of 1280x768 60hz",
     "windowed": "General,DisplayMode,Windowed",
     "originalRes": "1280x768",
     "showGameOptionBezel": "False",
     "showGameOptionCrt": "True",
-    "showGameOptionVsync": "False",
+    "showGameOptionVsync": "True",
     "showGameOptionFFB": "False",
-    "showGameOptionKeepAspectRatio": "False",
-    "upscaleFullscreen": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
+    "disableCrtForLowPerf": "False",
+    "upscaleFullscreen": "True",
     "upscaleWindowed": "False",
+    "forceResSwitchFullscreen": "True",
     "canUseJoyInsteadOfDpad": "True",
     "magpieClass": "CrimzonClover for NESiCAxLive",
     "magpie3DGameMode": "False",
@@ -32,8 +37,13 @@
     }
   },
   "gameoptions": {
-    "recommanded_gameoptions": {
-      "magpieScaling": "7"
+    "recommanded_gameoptions & crtfilter": {
+      "magpieScaling": "6"
+    },
+    "recommanded_gameoptions & fullscreen & set_resolution & optional_reshade": {
+      "useInjector": "true",
+      "injectorDllList": "dxgi.dll.inject",
+      "injectorDelay": "0"
     }
   }
 }

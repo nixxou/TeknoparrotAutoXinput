@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin Chute 1": "Coin",
+    "Start Button": "Start",
+    "View Button": "View",
+    "Shift Down / Menu Down": "Shift Down",
+    "Shift Up / Menu Up": "Shift Up",
+    "Wheel Axis": "Move"
+  }
+}

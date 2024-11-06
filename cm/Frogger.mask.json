@@ -1,0 +1,7 @@
+{
+  "RemplaceBefore": {
+    " P{{PlayerIndex}}": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {}
+}

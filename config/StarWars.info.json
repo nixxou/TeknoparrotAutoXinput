@@ -1,36 +1,38 @@
 {
-	"global": {
-		"_comment": "This game tend to popup on the wrong monitor, so i use windowed",
-		"forceResSwitchWindowed": "True",
-		"showGameOptionBezel": "False",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "False",
-		"upscaleFullscreen": "True",
-		"upscaleWindowed": "True",
-		"windowed": "General,Windowed,1",
-		"magpieNoLaunchIfSameRes": "True",
-		"magpieClass": "LaunchUnrealUWindowsClient",
-		"magpieTitle": "",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False",
-		"magpieExecutable": "../Binaries/Win64/SWArcGame-Win64-Shipping.exe"
-	},
-	"tpoptions": {
-		"set_displaymode_recommanded": {
-            "General||Windowed": "1",
-            "General||Borderless Fullscreen": "0"
-        },
-        "set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_windowed": {
-            "General||Windowed": "1"
-        }
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "This game tend to popup on the wrong monitor, so i use windowed, if you have multiple gpu and the game launch in a monitor plugged to the wrong one, you may need to enable the game option : Disable All Monitor except primary",
+    "originalRes": "1920x1080",
+    "forceResSwitchWindowed": "True",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "windowed": "General,Windowed,1",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "LaunchUnrealUWindowsClient",
+    "magpieTitle": "",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False",
+    "magpieExecutable": "../Binaries/Win64/SWArcGame-Win64-Shipping.exe"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1",
+      "General||Borderless Fullscreen": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {}
 }

@@ -77,11 +77,24 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Xtreme Audio</ButtonName>
+      <XInputButton>
+        <IsLeftThumbX>false</IsLeftThumbX>
+        <IsRightThumbX>false</IsRightThumbX>
+        <IsLeftThumbY>false</IsLeftThumbY>
+        <IsRightThumbY>false</IsRightThumbY>
+        <IsAxisMinus>false</IsAxisMinus>
+        <IsLeftTrigger>false</IsLeftTrigger>
+        <IsRightTrigger>false</IsRightTrigger>
+        <ButtonCode>128</ButtonCode>
+        <IsButton>true</IsButton>
+        <ButtonIndex>0</ButtonIndex>
+        <XInputIndex>0</XInputIndex>
+      </XInputButton>
       <InputMapping>P1Button4</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi />
+      <BindNameXi>Input Device 0 RightThumb</BindNameXi>
       <BindNameRi />
-      <BindName />
+      <BindName>Input Device 0 RightThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>

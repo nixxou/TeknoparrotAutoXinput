@@ -1,13 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SharpDX;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
 using System.Xml;
-using System.Xml.XPath;
 
 namespace TeknoparrotAutoXinput
 {
@@ -19,12 +11,12 @@ namespace TeknoparrotAutoXinput
 		public static XmlDocument xmlDoc = null;
 		public static string windowed_search = "";
 		public static List<string> tags = new List<string>();
-		private static Dictionary<string, Dictionary<string,string>> allSettings = new Dictionary<string, Dictionary<string,string>>();
+		private static Dictionary<string, Dictionary<string, string>> allSettings = new Dictionary<string, Dictionary<string, string>>();
 		public static bool IsWindowed = false;
 		public static bool IsPatreon = false;
 		public static bool ForceRegAsWindowed = false;
-
-
+		public static bool ForceRegAsFullscreen = false;
+		public static string tempLinkSourceFolderExe = "";
 
 		public static void setOriginalXML(string xmlFile)
 		{
@@ -47,6 +39,11 @@ namespace TeknoparrotAutoXinput
 			if (ForceRegAsWindowed)
 			{
 				IsWindowed = true;
+				return;
+			}
+			if (ForceRegAsFullscreen)
+			{
+				IsWindowed = false;
 				return;
 			}
 
@@ -102,7 +99,7 @@ namespace TeknoparrotAutoXinput
 		{
 			try
 			{
-				allSettings = tpSection.ToObject<Dictionary<string, Dictionary<string,string>>>();
+				allSettings = tpSection.ToObject<Dictionary<string, Dictionary<string, string>>>();
 
 			}
 			catch { }
@@ -173,7 +170,7 @@ namespace TeknoparrotAutoXinput
 				XmlNode fieldValueNode = fieldNode.SelectSingleNode("FieldValue");
 
 				if (categoryNameNode != null && fieldNameNode != null && fieldValueNode != null)
-				
+
 				{
 					string keyToSearch = categoryNameNode.InnerText.Trim().ToLower() + "||" + fieldNameNode.InnerText.Trim().ToLower();
 					if (TpSettings.ContainsKey(keyToSearch))
@@ -187,7 +184,7 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		private static void ApplySettings(Dictionary<string,string> settings)
+		private static void ApplySettings(Dictionary<string, string> settings)
 		{
 			foreach (var setting in settings)
 			{
@@ -205,8 +202,11 @@ namespace TeknoparrotAutoXinput
 				if (value.ToLower() == "{{networkdns2}}") value = Program.patch_networkDns2;
 				if (value.ToLower() == "{{refreshrate}}") value = Program.refreshRate.ToString();
 
+				value = value.Replace("{{patchdir}}", tempLinkSourceFolderExe);
+
+
 				TpSettings[key] = value;
-				
+
 			}
 		}
 

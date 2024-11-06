@@ -1,0 +1,14 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Gun X": "Aim",
+    "Gun Y": "Aim",
+    "Hyperenergy Tech Lever Forward (Attack)": "Hyperenergy Attack",
+    "Hyperenergy Tech Lever Backwards (Defense)": "Hyperenergy Defense"
+  }
+}

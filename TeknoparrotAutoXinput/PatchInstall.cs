@@ -2,20 +2,11 @@
 using Krypton.Toolkit;
 using Newtonsoft.Json;
 using SevenZip;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace TeknoparrotAutoXinput
@@ -90,11 +81,11 @@ namespace TeknoparrotAutoXinput
 
 						foreach (var entry in extractor.ArchiveFileData)
 						{
-							if(!entry.IsDirectory && entry.FileName.StartsWith(@"files\"))
+							if (!entry.IsDirectory && entry.FileName.StartsWith(@"files\"))
 							{
 								if (!fileSizeDic.ContainsKey(Path.GetFileName(entry.FileName))) fileSizeDic.Add(Path.GetFileName(entry.FileName), (long)entry.Size);
 							}
-							
+
 						}
 					}
 				}
@@ -108,24 +99,24 @@ namespace TeknoparrotAutoXinput
 					valid = false;
 				}
 				if (valid)
-                {
+				{
 					patchInfoJson = JsonConvert.DeserializeObject<PatchArchive>(fileContent);
 					isBothPathDirInSameDrive = Utils.IsEligibleHardLink(PathAutoXinputLinks, PathTeknoparrotPatchs);
 
 					long fixArchiveSize = 0;
-					foreach(var fa in patchInfoJson.FixesArchive)
+					foreach (var fa in patchInfoJson.FixesArchive)
 					{
 						fixArchiveSize += fa.Value.source_size;
 					}
 
 					List<string> alreadyAdded = new List<string>();
 					long sizeRequiredAutoXinput = 0;
-					foreach(var entry in patchInfoJson.autoXinputLinksFiles)
+					foreach (var entry in patchInfoJson.autoXinputLinksFiles)
 					{
 						if (fileSizeDic.ContainsKey(entry.Key))
 						{
 							long size = fileSizeDic[entry.Key];
-							foreach(var link in entry.Value)
+							foreach (var link in entry.Value)
 							{
 								if (!alreadyAdded.Contains(entry.Key))
 								{
@@ -137,7 +128,7 @@ namespace TeknoparrotAutoXinput
 									bool useHardlink = true;
 									if (size < (300 * 1024) && !link.EndsWith(".fx") && !link.EndsWith(".fxh") && !link.EndsWith(".png") && !link.EndsWith(".jpg")) useHardlink = false;
 									if (useHardlink && link.EndsWith(".cfg") || link.EndsWith(".json") || link.EndsWith(".xml") || link.EndsWith(".txt")) useHardlink = false;
-									if(!useHardlink) sizeRequiredAutoXinput += size;
+									if (!useHardlink) sizeRequiredAutoXinput += size;
 								}
 							}
 						}
@@ -169,7 +160,7 @@ namespace TeknoparrotAutoXinput
 					//MessageBox.Show($"{sizeRequiredAutoXinput} and {sizeRequiredPatchLinkExe}");
 					if (isBothPathDirInSameDrive)
 					{
-						long needed_space_AutoXinputLinks = sizeRequiredAutoXinput + sizeRequiredPatchLinkExe + (fixArchiveSize*3);
+						long needed_space_AutoXinputLinks = sizeRequiredAutoXinput + sizeRequiredPatchLinkExe + (fixArchiveSize * 3);
 						//Check free space
 						ulong FreeBytesAvailable;
 						ulong TotalNumberOfBytes;
@@ -221,7 +212,7 @@ namespace TeknoparrotAutoXinput
 						if (!Directory.Exists(PathAutoXinputLinks)) Directory.CreateDirectory(PathAutoXinputLinks);
 						if (!Directory.Exists(PathTeknoparrotPatchs)) Directory.CreateDirectory(PathTeknoparrotPatchs);
 					}
-					
+
 				}
 
 			}

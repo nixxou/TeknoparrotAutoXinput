@@ -1,0 +1,10 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Spray X": "Aim",
+    "Spray Y": "Aim"
+  }
+}

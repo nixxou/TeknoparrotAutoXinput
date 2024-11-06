@@ -1,17 +1,9 @@
 ﻿using BrightIdeasSoftware;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml;
 using TeknoParrotUi.Common;
 
@@ -80,7 +72,7 @@ namespace TeknoparrotAutoXinput
 						byte[] hashBytes = md5.ComputeHash(inputBytes);
 						fileIdentifier = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
 					}
-					if(fileIdentifier != "" && File.Exists(Path.Combine(CacheDir, fileIdentifier)))
+					if (fileIdentifier != "" && File.Exists(Path.Combine(CacheDir, fileIdentifier)))
 					{
 						MainExecutableMD5 = File.ReadAllText(Path.Combine(CacheDir, fileIdentifier));
 					}
@@ -395,7 +387,7 @@ namespace TeknoparrotAutoXinput
 			{
 				Parallel.ForEach(UserProfiles.Values, new ParallelOptions { MaxDegreeOfParallelism = 4 }, (u) =>
 				{
-					if(u.Status == 0)
+					if (u.Status == 0)
 					{
 						u.CalculateHash();
 						u.Status = 1;
@@ -440,7 +432,7 @@ namespace TeknoparrotAutoXinput
 		private void objectListViewGameList_FormatRow(object sender, FormatRowEventArgs e)
 		{
 			UserProfileGame upg = (UserProfileGame)e.Model;
-			if(upg.Status == 2)
+			if (upg.Status == 2)
 			{
 				e.Item.BackColor = ColorTranslator.FromHtml("#ffe6e6");
 			}

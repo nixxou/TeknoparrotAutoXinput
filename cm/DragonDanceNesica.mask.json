@@ -1,0 +1,15 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "",
+    "Up": "Move Cursor",
+    "Down": "Move Cursor",
+    "Left": "Move Cursor",
+    "Right": "Move Cursor",
+    "Button 1": "Action"
+  }
+}

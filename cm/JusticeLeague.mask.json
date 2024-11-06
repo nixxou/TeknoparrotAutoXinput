@@ -1,0 +1,14 @@
+{
+  "RemplaceBefore": {
+    "P{{PlayerIndex}}Button": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Left-Right Move (Axis X)": "Move",
+    "Up-Down Move (Axis Y)": "Move",
+    "1": "Special",
+    "2": "Parry / Dodge",
+    "3": "Attack 1",
+    "4": "Attack 2"
+  }
+}

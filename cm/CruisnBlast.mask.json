@@ -1,0 +1,16 @@
+{
+  "RemplaceBefore": {
+    "Button": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Brake Pedal": "Brake",
+    "View": "View 1",
+    "View2": "View 2",
+    "Wheel Axis": "Move",
+    "TestMenu Up": "TestMenu Controls",
+    "TestMenu Back": "TestMenu Controls",
+    "TestMenu OK": "TestMenu Controls",
+    "TestMenu Down": "TestMenu Controls"
+  }
+}

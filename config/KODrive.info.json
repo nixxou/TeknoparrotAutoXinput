@@ -1,14 +1,18 @@
 {
   "global": {
+    "_comment": "I did not found a way to have the game not look like shit, so i leave it as it",
     "windowed": "General,Windowed,1",
     "originalRes": "1024x600",
-    "showGameOptionBezel": "True",
-    "showGameOptionCrt": "True",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
     "showGameOptionVsync": "True",
     "showGameOptionFFB": "True",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "High",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "False",
+    "forceResSwitchFullscreen": "True",
     "magpieNoLaunchIfSameRes": "True",
     "magpieClass": "M-Drive(NNDXG20-WIN)",
     "magpie3DGameMode": "True",
@@ -39,9 +43,5 @@
       "Network||BroadcastIP": "{{broadcastaddress}}"
     }
   },
-  "gameoptions": {
-    "recommanded_gameoptions & crtfilter": {
-      "magpieScaling": "6"
-    }
-  }
+  "gameoptions": {}
 }

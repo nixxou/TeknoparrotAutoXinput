@@ -8,6 +8,9 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "True",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
+    "need60hzForLowPerf": "True",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "magpieNoLaunchIfSameRes": "True",
@@ -49,7 +52,7 @@
       "General||Custom Resolution": "1920x1080"
     },
     "ffb": {
-      "General||Enable Outputs": "1",
+      "General||Enable Outputs": "0",
       "General||Allow FFB Plugin": "1"
     },
     "recommanded_tp_settings": {
@@ -57,5 +60,17 @@
       "General||Enable Higher Res Shadows": "1"
     }
   },
-  "gameoptions": {}
+  "gameoptions": {
+    "60hz": {
+      "runRivaTuner": "True"
+    },
+	"low_perfprofile": {
+      "runRivaTuner": "True"	
+	},
+    "recommanded_gameoptions & optional_reshade": {
+      "useInjector": "true",
+      "injectorDllList": "Reshade32.dll",
+      "injectorDelay": "0"
+    }
+  }
 }

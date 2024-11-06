@@ -6,7 +6,9 @@
     "showGameOptionCrt": "False",
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
-    "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "rom": "eai",
@@ -119,6 +121,10 @@
     "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
       "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
       "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
-    }
+    },
+    "recommanded_gameoptions & fullscreen & no_keepaspectratio": {
+      "tmpGunXFormula": "[X]+(([X]-(32767/2))*-0.68)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0)"
+    }	
   }
 }

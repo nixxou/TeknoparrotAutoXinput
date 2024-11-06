@@ -4,7 +4,6 @@
       <InputMapping>Coin1</InputMapping>
       <AnalogType>None</AnalogType>
       <BindNameXi />
-      <BindNameRi />
       <BindName />
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
@@ -26,11 +25,23 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Coin 2</ButtonName>
+      <XInputButton>
+        <IsLeftThumbX>false</IsLeftThumbX>
+        <IsRightThumbX>false</IsRightThumbX>
+        <IsLeftThumbY>false</IsLeftThumbY>
+        <IsRightThumbY>false</IsRightThumbY>
+        <IsAxisMinus>false</IsAxisMinus>
+        <IsLeftTrigger>false</IsLeftTrigger>
+        <IsRightTrigger>false</IsRightTrigger>
+        <ButtonCode>32</ButtonCode>
+        <IsButton>true</IsButton>
+        <ButtonIndex>0</ButtonIndex>
+        <XInputIndex>1</XInputIndex>
+      </XInputButton>
       <InputMapping>Coin2</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi />
-      <BindNameRi />
-      <BindName />
+      <BindNameXi>Input Device 1 Back</BindNameXi>
+      <BindName>Input Device 1 Back</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -67,7 +78,6 @@
       <InputMapping>Test</InputMapping>
       <AnalogType>None</AnalogType>
       <BindNameXi>Input Device 0 Back</BindNameXi>
-      <BindNameRi />
       <BindName>Input Device 0 Back</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
@@ -105,7 +115,6 @@
       <InputMapping>P1Button5</InputMapping>
       <AnalogType>None</AnalogType>
       <BindNameXi>Input Device 0 DPadUp</BindNameXi>
-      <BindNameRi />
       <BindName>Input Device 0 DPadUp</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
@@ -143,7 +152,6 @@
       <InputMapping>P1Button6</InputMapping>
       <AnalogType>None</AnalogType>
       <BindNameXi>Input Device 0 DPadDown</BindNameXi>
-      <BindNameRi />
       <BindName>Input Device 0 DPadDown</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
@@ -343,7 +351,6 @@
       <InputMapping>P1ButtonStart</InputMapping>
       <AnalogType>None</AnalogType>
       <BindNameXi>Input Device 0 Start</BindNameXi>
-      <BindNameRi />
       <BindName>Input Device 0 Start</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
@@ -365,15 +372,8 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Player 1 Light Gun</ButtonName>
-      <RawInputButton>
-        <DevicePath>None</DevicePath>
-        <DeviceType>None</DeviceType>
-        <MouseButton>None</MouseButton>
-        <KeyboardKey>None</KeyboardKey>
-      </RawInputButton>
       <InputMapping>P1LightGun</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameRi>None</BindNameRi>
       <HideWithDirectInput>true</HideWithDirectInput>
       <HideWithXInput>true</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -410,45 +410,6 @@
       <InputMapping>P1Button1</InputMapping>
       <AnalogType>None</AnalogType>
       <BindNameXi>Input Device 0 B</BindNameXi>
-      <BindNameRi />
-      <BindName>Input Device 0 B</BindName>
-      <HideWithDirectInput>false</HideWithDirectInput>
-      <HideWithXInput>false</HideWithXInput>
-      <HideWithRawInput>false</HideWithRawInput>
-      <HideWithKeyboardForAxis>false</HideWithKeyboardForAxis>
-      <HideWithoutKeyboardForAxis>false</HideWithoutKeyboardForAxis>
-      <HideWithRelativeAxis>false</HideWithRelativeAxis>
-      <HideWithoutRelativeAxis>false</HideWithoutRelativeAxis>
-      <HideWithUseDPadForGUN1Stick>false</HideWithUseDPadForGUN1Stick>
-      <HideWithoutUseDPadForGUN1Stick>false</HideWithoutUseDPadForGUN1Stick>
-      <HideWithUseDPadForGUN2Stick>false</HideWithUseDPadForGUN2Stick>
-      <HideWithoutUseDPadForGUN2Stick>false</HideWithoutUseDPadForGUN2Stick>
-      <HideWithUseAnalogAxisToAimGUN1>false</HideWithUseAnalogAxisToAimGUN1>
-      <HideWithoutUseAnalogAxisToAimGUN1>false</HideWithoutUseAnalogAxisToAimGUN1>
-      <HideWithUseAnalogAxisToAimGUN2>false</HideWithUseAnalogAxisToAimGUN2>
-      <HideWithoutUseAnalogAxisToAimGUN2>false</HideWithoutUseAnalogAxisToAimGUN2>
-      <HideWithoutProMode>false</HideWithoutProMode>
-      <HideWithProMode>false</HideWithProMode>
-    </JoystickButtons>
-    <JoystickButtons>
-      <ButtonName>Player 1 Trigger</ButtonName>
-      <XInputButton>
-        <IsLeftThumbX>false</IsLeftThumbX>
-        <IsRightThumbX>false</IsRightThumbX>
-        <IsLeftThumbY>false</IsLeftThumbY>
-        <IsRightThumbY>false</IsRightThumbY>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsLeftTrigger>false</IsLeftTrigger>
-        <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>8192</ButtonCode>
-        <IsButton>true</IsButton>
-        <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
-      </XInputButton>
-      <InputMapping>P1Button1</InputMapping>
-      <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 B</BindNameXi>
-      <BindNameRi />
       <BindName>Input Device 0 B</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>

@@ -1,0 +1,19 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button 1": "Light Attack",
+    "Button 2": "Medium Attack",
+    "Button 3": "Heavy Attack",
+    "Button 4": "Homing Attack",
+    "Button 5": "Arcana"
+  }
+}

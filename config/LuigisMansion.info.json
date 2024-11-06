@@ -8,8 +8,11 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "french",
+    "showGameOptionPerf": "False",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
+    "forceResSwitchFullscreen": "1920x1080",
     "rom": "lma",
     "target": "seganu",
     "64bits": "True",
@@ -18,7 +21,7 @@
     "magpieDisableDirectFlip": "False",
     "magpieAllowScalingMaximized": "True",
     "magpieLaunchBefore": "False",
-    "magpieNoMoveWindow": "True",
+    "magpieNoMoveWindow": "False",
     "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
     "recommanded_vjoy_windowed": "sinden_and_notsinden"
   },
@@ -33,5 +36,14 @@
       "General||Windowed": "1"
     }
   },
-  "gameoptions": {}
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[OX]+(([OX]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[OY]+(([OY]-(32767/2))*0.03093)"
+    }
+  }
 }

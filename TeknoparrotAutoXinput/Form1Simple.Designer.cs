@@ -53,6 +53,8 @@
 			kryptonLabel12 = new Krypton.Toolkit.KryptonLabel();
 			btn_editMonitorSwitch = new Krypton.Toolkit.KryptonButton();
 			tabPatch = new TabPage();
+			kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
+			cmb_patchlang = new Krypton.Toolkit.KryptonComboBox();
 			chk_keepAspectRatio = new Krypton.Toolkit.KryptonCheckBox();
 			chk_useCrt = new Krypton.Toolkit.KryptonCheckBox();
 			chk_useBezel = new Krypton.Toolkit.KryptonCheckBox();
@@ -199,8 +201,6 @@
 			cmb_gunA_type = new Krypton.Toolkit.KryptonComboBox();
 			chk_reasignGunPedal = new Krypton.Toolkit.KryptonCheckBox();
 			btn_Save = new Krypton.Toolkit.KryptonButton();
-			kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
-			cmb_patchlang = new Krypton.Toolkit.KryptonComboBox();
 			tabControl1.SuspendLayout();
 			tabGlobal.SuspendLayout();
 			groupBox17.SuspendLayout();
@@ -209,6 +209,7 @@
 			((System.ComponentModel.ISupportInitialize)cmb_showStartup).BeginInit();
 			groupBox7.SuspendLayout();
 			tabPatch.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_patchlang).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_performance).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_displayMode).BeginInit();
 			groupBox16.SuspendLayout();
@@ -241,7 +242,6 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_com).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).BeginInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).BeginInit();
-			((System.ComponentModel.ISupportInitialize)cmb_patchlang).BeginInit();
 			SuspendLayout();
 			// 
 			// tabControl1
@@ -266,7 +266,7 @@
 			tabGlobal.Controls.Add(groupBox7);
 			tabGlobal.Location = new Point(4, 24);
 			tabGlobal.Name = "tabGlobal";
-			tabGlobal.Size = new Size(799, 517);
+			tabGlobal.Size = new Size(799, 539);
 			tabGlobal.TabIndex = 4;
 			tabGlobal.Text = "Global Settings";
 			tabGlobal.UseVisualStyleBackColor = true;
@@ -396,7 +396,7 @@
 			cmb_showStartup.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmb_showStartup.DropDownWidth = 242;
 			cmb_showStartup.IntegralHeight = false;
-			cmb_showStartup.Items.AddRange(new object[] { "Grab TP Console Into Startup Screen", "Minimize it", "Hide It", "Do Nothing" });
+			cmb_showStartup.Items.AddRange(new object[] { "Grab TP Console Into Startup Screen", "Move it to bottom right", "Move it to bottom right + Hide Taskbar", "Minimize it", "Hide It", "Do Nothing" });
 			cmb_showStartup.Location = new Point(262, 22);
 			cmb_showStartup.Name = "cmb_showStartup";
 			cmb_showStartup.Size = new Size(284, 21);
@@ -503,6 +503,26 @@
 			tabPatch.TabIndex = 5;
 			tabPatch.Text = "AutoSetup & Patchs";
 			tabPatch.UseVisualStyleBackColor = true;
+			// 
+			// kryptonLabel2
+			// 
+			kryptonLabel2.Location = new Point(12, 343);
+			kryptonLabel2.Name = "kryptonLabel2";
+			kryptonLabel2.Size = new Size(110, 20);
+			kryptonLabel2.TabIndex = 184;
+			kryptonLabel2.Values.Text = "Translation patch :";
+			// 
+			// cmb_patchlang
+			// 
+			cmb_patchlang.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmb_patchlang.DropDownWidth = 242;
+			cmb_patchlang.IntegralHeight = false;
+			cmb_patchlang.Items.AddRange(new object[] { "No Translation", "English", "French" });
+			cmb_patchlang.Location = new Point(140, 342);
+			cmb_patchlang.Name = "cmb_patchlang";
+			cmb_patchlang.Size = new Size(219, 21);
+			cmb_patchlang.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+			cmb_patchlang.TabIndex = 183;
 			// 
 			// chk_keepAspectRatio
 			// 
@@ -867,7 +887,7 @@
 			tabGamepad.Location = new Point(4, 24);
 			tabGamepad.Name = "tabGamepad";
 			tabGamepad.Padding = new Padding(3);
-			tabGamepad.Size = new Size(799, 517);
+			tabGamepad.Size = new Size(799, 539);
 			tabGamepad.TabIndex = 0;
 			tabGamepad.Text = "Gamepad & Xinputs";
 			tabGamepad.UseVisualStyleBackColor = true;
@@ -962,7 +982,7 @@
 			tabWheel.Location = new Point(4, 24);
 			tabWheel.Name = "tabWheel";
 			tabWheel.Padding = new Padding(3);
-			tabWheel.Size = new Size(799, 517);
+			tabWheel.Size = new Size(799, 539);
 			tabWheel.TabIndex = 1;
 			tabWheel.Text = "Wheel settings";
 			tabWheel.UseVisualStyleBackColor = true;
@@ -1124,7 +1144,7 @@
 			tabHotas.Controls.Add(groupBox9);
 			tabHotas.Location = new Point(4, 24);
 			tabHotas.Name = "tabHotas";
-			tabHotas.Size = new Size(799, 517);
+			tabHotas.Size = new Size(799, 539);
 			tabHotas.TabIndex = 2;
 			tabHotas.Text = "Hotas Settings";
 			tabHotas.UseVisualStyleBackColor = true;
@@ -1258,7 +1278,7 @@
 			tabLightgun.Controls.Add(groupBox10);
 			tabLightgun.Location = new Point(4, 24);
 			tabLightgun.Name = "tabLightgun";
-			tabLightgun.Size = new Size(799, 517);
+			tabLightgun.Size = new Size(799, 539);
 			tabLightgun.TabIndex = 3;
 			tabLightgun.Text = "Lightgun settings";
 			tabLightgun.UseVisualStyleBackColor = true;
@@ -1911,26 +1931,6 @@
 			btn_Save.Values.Text = "Close";
 			btn_Save.Click += btn_Save_Click;
 			// 
-			// kryptonLabel2
-			// 
-			kryptonLabel2.Location = new Point(12, 343);
-			kryptonLabel2.Name = "kryptonLabel2";
-			kryptonLabel2.Size = new Size(110, 20);
-			kryptonLabel2.TabIndex = 184;
-			kryptonLabel2.Values.Text = "Translation patch :";
-			// 
-			// cmb_patchlang
-			// 
-			cmb_patchlang.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmb_patchlang.DropDownWidth = 242;
-			cmb_patchlang.IntegralHeight = false;
-			cmb_patchlang.Items.AddRange(new object[] { "No Translation", "English", "French" });
-			cmb_patchlang.Location = new Point(140, 342);
-			cmb_patchlang.Name = "cmb_patchlang";
-			cmb_patchlang.Size = new Size(219, 21);
-			cmb_patchlang.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-			cmb_patchlang.TabIndex = 183;
-			// 
 			// Form1Simple
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1955,6 +1955,7 @@
 			groupBox7.PerformLayout();
 			tabPatch.ResumeLayout(false);
 			tabPatch.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)cmb_patchlang).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_performance).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_displayMode).EndInit();
 			groupBox16.ResumeLayout(false);
@@ -2000,7 +2001,6 @@
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_com).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_recoil).EndInit();
 			((System.ComponentModel.ISupportInitialize)cmb_gunA_type).EndInit();
-			((System.ComponentModel.ISupportInitialize)cmb_patchlang).EndInit();
 			ResumeLayout(false);
 		}
 

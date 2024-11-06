@@ -1,43 +1,49 @@
 {
-	"global": {
-		"showGameOptionBezel": "False",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "True",
-		"showGameOptionFFB": "False",
-		"upscaleFullscreen": "True",
-		"upscaleWindowed": "False",
-		"rom": "sgg",
-		"target": "ringwide",
-		"64bits": "False",
-		"windowed": "General,Windowed,1",
-		"magpieClass": "Ring Gun",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
-		"recommanded_vjoy_windowed": "all"
-	},
-	"tpoptions": {
-		"set_displaymode_recommanded": {
-            "General||Windowed": "0"
-        },
-        "set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_windowed": {
-            "General||Windowed": "1"
-        }
-	},
-    "gameoptions": {
-        "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
-            "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
-            "gun_useExtraSinden": "True"
-        },
-        "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
-            "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
-            "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
-        }
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1360x768",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "canForceRegAsWindowed": "True",
+    "rom": "sgg",
+    "target": "ringwide",
+    "64bits": "False",
+    "magpieClass": "Ring Gun",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "recommanded_vjoy_fullscreen": "sinden_and_notsinden",
+    "recommanded_vjoy_windowed": "all"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "0"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed & dont_set_resolution": {
+      "General||Windowed": "1"
+    },
+    "set_windowed & set_resolution": {
+      "General||Windowed": "0"
     }
+  },
+  "gameoptions": {
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {
+      "gun_ExtraSinden": "-action \"set-offsets -1.5,1.03,-1.5,1.03\"",
+      "gun_useExtraSinden": "True"
+    },
+    "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
+      "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
+    }
+  }
 }

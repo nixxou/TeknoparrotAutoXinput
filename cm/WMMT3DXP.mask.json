@@ -1,0 +1,11 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Wheel Axis": "Move",
+    "Gear Shift Down": "Shift Down",
+    "Gear Shift Up": "Shift Up",
+    "Perspective Switch Button": "Change View",
+    "Interuption Switch Button": "Interuption"
+  }
+}

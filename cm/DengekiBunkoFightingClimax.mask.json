@@ -1,0 +1,18 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Button1": "Light Attack",
+    "Button2": "Medium Attack",
+    "Button3": "Heavy Attack",
+    "Button4": "",
+    "Button5": "Support",
+    "Button6": "",
+    "Button7": "",
+    "Button8": "",
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "global": {
+    "_comment": "",
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
+    "disableCrtForLowPerf": "True",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "True",
+	"magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "FREEGLUT",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "forceResize720p": "1280x720|windowed & set_resolution",
+    "forceResize1080p": "1920x1080|windowed & set_resolution",
+    "forceResize2k": "2560x1440|windowed & set_resolution",
+    "forceResize4k": "3840x2160|windowed & set_resolution"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {}
+}

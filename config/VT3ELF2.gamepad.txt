@@ -83,15 +83,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>256</ButtonCode>
+        <ButtonCode>512</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>10</XInputIndex>
       </XInputButton>
       <InputMapping>Service2</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 10 LeftShoulder</BindNameXi>
-      <BindName>Input Device 10 LeftShoulder</BindName>
+      <BindNameXi>Input Device 10 RightShoulder</BindNameXi>
+      <BindName>Input Device 10 RightShoulder</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -379,15 +379,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>16384</ButtonCode>
+        <ButtonCode>8192</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 X</BindNameXi>
-      <BindName>Input Device 0 X</BindName>
+      <BindNameXi>Input Device 0 B</BindNameXi>
+      <BindName>Input Device 0 B</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -451,17 +451,17 @@
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
         <IsAxisMinus>false</IsAxisMinus>
-        <IsLeftTrigger>false</IsLeftTrigger>
+        <IsLeftTrigger>true</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>128</ButtonCode>
-        <IsButton>true</IsButton>
+        <ButtonCode>0</ButtonCode>
+        <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button4</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 RightThumb</BindNameXi>
-      <BindName>Input Device 0 RightThumb</BindName>
+      <BindNameXi>Input Device 0 LeftTrigger</BindNameXi>
+      <BindName>Input Device 0 LeftTrigger</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -675,15 +675,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>16384</ButtonCode>
+        <ButtonCode>8192</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>1</XInputIndex>
       </XInputButton>
       <InputMapping>P2Button1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 1 X</BindNameXi>
-      <BindName>Input Device 1 X</BindName>
+      <BindNameXi>Input Device 1 B</BindNameXi>
+      <BindName>Input Device 1 B</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -747,8 +747,8 @@
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
         <IsAxisMinus>false</IsAxisMinus>
-        <IsLeftTrigger>false</IsLeftTrigger>
-        <IsRightTrigger>true</IsRightTrigger>
+        <IsLeftTrigger>true</IsLeftTrigger>
+        <IsRightTrigger>false</IsRightTrigger>
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
@@ -756,8 +756,8 @@
       </XInputButton>
       <InputMapping>P2Button4</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 1 RightTrigger</BindNameXi>
-      <BindName>Input Device 1 RightTrigger</BindName>
+      <BindNameXi>Input Device 1 LeftTrigger</BindNameXi>
+      <BindName>Input Device 1 LeftTrigger</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>

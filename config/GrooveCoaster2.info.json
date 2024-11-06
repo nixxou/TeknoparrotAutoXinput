@@ -1,12 +1,14 @@
 {
   "global": {
     "windowed": "General,Windowed,1",
-    "originalRes": "726x1309",
+    "originalRes": "720x1280",
     "showGameOptionBezel": "False",
     "showGameOptionCrt": "False",
-    "showGameOptionVsync": "False",
+    "showGameOptionVsync": "True",
     "showGameOptionFFB": "False",
-    "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "need60hz": "True",
@@ -16,11 +18,12 @@
     "magpieAllowScalingMaximized": "False",
     "magpieLaunchBefore": "False",
     "magpieNoMoveWindow": "False",
-    "magpieNoLateFocus": "False"
+    "magpieNoLateFocus": "False",
+    "forceResize": "720x1280|windowed"
   },
   "tpoptions": {
     "set_displaymode_recommanded": {
-      "General||Windowed": "1"
+      "General||Windowed": "0"
     },
     "set_fullscreen": {
       "General||Windowed": "0"

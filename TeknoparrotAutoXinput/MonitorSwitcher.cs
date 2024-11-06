@@ -2,10 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml;
 
@@ -38,7 +34,7 @@ namespace MonitorSwitcherGUI
 
 
 
-		private static Boolean debug = true;
+		private static Boolean debug = false;
 		private static Boolean noIDMatch;
 
 		public static void DebugOutput(String text)

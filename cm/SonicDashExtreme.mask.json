@@ -1,0 +1,14 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Service": "Service/Coin",
+    "Start": "Dash/Start",
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move"
+  }
+}

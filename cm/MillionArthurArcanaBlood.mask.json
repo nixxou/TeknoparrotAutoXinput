@@ -1,0 +1,20 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Button 1 / Light Attack": "A-Light Attack",
+    "Button 2 / Medium Attack": "B-Medium Attack",
+    "Button 3 / Heavy Attack": "C-Heavy Attack",
+    "Button 4 / Elemental Attack": "D-Elemental Attack",
+    "Button 5": "",
+    "Button 6": "",
+    "Button 7": "",
+    "Button 8": "",
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move"
+  }
+}

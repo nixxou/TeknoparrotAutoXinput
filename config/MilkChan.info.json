@@ -8,6 +8,8 @@
     "showGameOptionFFB": "False",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
     "canUseJoyInsteadOfDpad": "True",
     "magpieClass": "rr::win32::Window",
     "magpie3DGameMode": "False",

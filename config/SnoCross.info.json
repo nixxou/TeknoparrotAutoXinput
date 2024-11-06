@@ -1,7 +1,8 @@
 {
 	"global": {
-		"_comment": "Game random crash if i try to upscale it",
+		"_comment": "the windowed upscale work differently than the fullscreen one",
 		"windowed": "General,Windowed,1",
+    "showGameOptionPatchLang": "french",
 		"magpieClass": "RawApp",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",
@@ -11,7 +12,7 @@
 	},
 	"tpoptions": {
 		"set_displaymode_recommanded": {
-            "General||Windowed": "1"
+            "General||Windowed": "0"
         },
         "set_fullscreen": {
             "General||Windowed": "0"

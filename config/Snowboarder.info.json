@@ -2,6 +2,13 @@
 	"global": {
 		"_comment": "Game crash if i try to play fullscreen on my amd gpu setup, also i had to remove the D3D8.dll included in my dump",
 		"windowed": "General,Windowed,1",
+		    "originalRes": "1360x768",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "False",
 		"magpieClass": "RawApp",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",

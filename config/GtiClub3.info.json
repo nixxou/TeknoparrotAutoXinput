@@ -1,6 +1,6 @@
 {
   "global": {
-    "_comment": "Run only at 30 fps, so if you find a way to unlock it, keep us in the loop",
+    "_comment": "Run only at 30 fps, so if you find a way to unlock it, keep us in the loop, French is unlockable in test menu if needed",
     "windowed": "General,Windowed,1",
     "originalRes": "1376x807",
     "showGameOptionBezel": "False",
@@ -8,8 +8,11 @@
     "showGameOptionVsync": "True",
     "showGameOptionFFB": "True",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "French",
+    "showGameOptionPerf": "High",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "False",
+    "forceResSwitchFullscreen": "True",
     "magpieClass": "GTI Club - Supermini Festa!",
     "magpie3DGameMode": "True",
     "magpieDisableDirectFlip": "False",

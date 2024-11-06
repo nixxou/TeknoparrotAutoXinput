@@ -1,0 +1,18 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "LeftPad Up": "Left Joystick",
+    "LeftPad Down": "Left Joystick",
+    "LeftPad Left": "Left Joystick",
+    "LeftPad Right": "Left Joystick",
+    "RightPad Up": "Right Joystick",
+    "RightPad Down": "Right Joystick",
+    "RightPad Left": "RightJoystick",
+    "RightPad Right": "Right Joystick",
+    "LeftPad Press": "Left Booster",
+    "RightPad Press": "Right Booster",
+    "Coin 1": "Coin",
+    "Coin 2": "Coin"
+  }
+}

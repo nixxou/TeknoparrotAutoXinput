@@ -1,10 +1,10 @@
 {
 	"global": {
 		"_comment": "To disable crosshair, you need to go to service and change reticule to default",
+		"windowed": "General,Windowed,1",
 		"rom": "ts",
 		"target": "rawthrill",
 		"64bits": "False",
-		"windowed": "General,Windowed,1",
 		"magpieClass": "FREEGLUT",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",

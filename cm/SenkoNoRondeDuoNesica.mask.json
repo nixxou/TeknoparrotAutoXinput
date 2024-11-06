@@ -1,0 +1,18 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "M": "M-Main Weapon",
+    "S": "S-Sub Weapon",
+    "C": "C-Barrage",
+    "A": "A-Action"
+  }
+}

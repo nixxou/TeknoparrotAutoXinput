@@ -1,0 +1,14 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Gun X": "Aim",
+    "Gun Y": "Aim",
+    "Start Button": "Start",
+    "Cutscenes Skip (also skips game)": "Cutscenes Skip"
+  }
+}

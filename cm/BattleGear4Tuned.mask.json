@@ -1,0 +1,8 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Gear 3 / Shift Up": "Shift Up",
+    "Gear 4 / Shift Down": "Shift Down"
+  }
+}

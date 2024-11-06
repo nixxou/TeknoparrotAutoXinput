@@ -1,22 +1,13 @@
-﻿using NCalc;
-using Gma.System.MouseKeyHook;
-using Henooh.DeviceEmulator.Net;
+﻿using Gma.System.MouseKeyHook;
 using Krypton.Toolkit;
+using NCalc;
 using Newtonsoft.Json;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using WiimoteLib;
-using XJoy;
 using System.IO.Pipes;
+using System.Text;
+using XJoy;
 
 namespace TeknoparrotAutoXinput
 {
@@ -221,7 +212,7 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true, string formulaX = "", string formulaY = "", string gunAMinMax = "", string gunBMinMax = "", string formula_AX_before = "", string formula_AY_before = "", string formula_BX_before = "", string formula_BY_before = "", int vjoyIndex=0)
+		public VjoyControl(bool isDialog, string game = "", GameSettings gameOptions = null, bool enableGunA = true, bool enableGunB = true, string formulaX = "", string formulaY = "", string gunAMinMax = "", string gunBMinMax = "", string formula_AX_before = "", string formula_AY_before = "", string formula_BX_before = "", string formula_BY_before = "", int vjoyIndex = 0)
 		{
 			_enableGunA = enableGunA;
 			_enableGunB = enableGunB;
@@ -267,7 +258,7 @@ namespace TeknoparrotAutoXinput
 				catch (Exception ex) { }
 			}
 
-			
+
 
 
 			InitializeComponent();
@@ -830,7 +821,7 @@ namespace TeknoparrotAutoXinput
 			chk_alterManual_B.Checked = _settingsGunB.alterManual;
 			chk_enableNumpadB.Checked = _settingsGunB.enableNumpad;
 
-			if(FormulaAXBefore != "")
+			if (FormulaAXBefore != "")
 			{
 				expAXBefore = new Expression(FormulaAXBefore);
 				if (expAXBefore.HasErrors())
@@ -1444,7 +1435,7 @@ namespace TeknoparrotAutoXinput
 								_GunB_Y_change = false;
 							}
 						}
-						if(new_Ax >= 0)
+						if (new_Ax >= 0)
 						{
 
 						}
@@ -2644,11 +2635,11 @@ namespace TeknoparrotAutoXinput
 		{
 			ConfigurationVjoyControl DeserializeData = JsonConvert.DeserializeObject<ConfigurationVjoyControl>(json);
 			this.min_x = DeserializeData.min_x;
-			this.max_x= DeserializeData.max_x;
+			this.max_x = DeserializeData.max_x;
 			this.offset_x = DeserializeData.offset_x;
 			this.formula_x = DeserializeData.formula_x;
 			this.min_y = DeserializeData.min_y;
-			this.max_y= DeserializeData.max_y;
+			this.max_y = DeserializeData.max_y;
 			this.offset_y = DeserializeData.offset_y;
 			this.formula_y = DeserializeData.formula_y;
 			this.alterManual = DeserializeData.alterManual;

@@ -4,6 +4,7 @@
 		"target": "es3",
 		"64bits": "True",
 		"windowed": "General,Windowed,1",
+		    "showGameOptionPatchLang": "french",
 		"magpieClass": "LaunchUnrealUWindowsClient",
 		"magpie3DGameMode": "True",
 		"magpieDisableDirectFlip": "False",

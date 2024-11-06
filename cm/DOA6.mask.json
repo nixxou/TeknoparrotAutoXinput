@@ -1,0 +1,16 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Extra1": "Special",
+    "Extra5": "Taunt",
+    "Extra3": "Throw",
+    "Guard": "Hold (Guard)",
+    "Extra4": "Strong Punch (H+K)",
+    "Extra2": "Strong Kick (P+K)"
+  }
+}

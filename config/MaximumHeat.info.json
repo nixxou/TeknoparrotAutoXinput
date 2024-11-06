@@ -8,6 +8,9 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
+    "need60hzForLowPerf": "True",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "need60hzFullscreen": "True",
@@ -22,7 +25,7 @@
     "magpieNoLateFocus": "False"
   },
   "tpoptions": {
-    "set_displaymode_recommanded & 60hz": {
+    "set_displaymode_recommanded": {
       "General||Windowed": "0"
     },
     "set_displaymode_recommanded & 120hz": {

@@ -12,12 +12,12 @@
         <ButtonCode>32</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>1</XInputIndex>
+        <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>Coin1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 1 Back</BindNameXi>
-      <BindName>Input Device 1 Back</BindName>
+      <BindNameXi>Input Device 0 Back</BindNameXi>
+      <BindName>Input Device 0 Back</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -49,12 +49,12 @@
         <ButtonCode>16</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>1</XInputIndex>
+        <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1ButtonStart</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 1 Start</BindNameXi>
-      <BindName>Input Device 1 Start</BindName>
+      <BindNameXi>Input Device 0 Start</BindNameXi>
+      <BindName>Input Device 0 Start</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -108,12 +108,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>1</XInputIndex>
+        <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>Analog0</InputMapping>
       <AnalogType>AnalogJoystick</AnalogType>
-      <BindNameXi>Input Device 1 LeftThumbInput Device 1 X+</BindNameXi>
-      <BindName>Input Device 1 LeftThumbInput Device 1 X+</BindName>
+      <BindNameXi>Input Device 0 LeftThumbInput Device 0 X+</BindNameXi>
+      <BindName>Input Device 0 LeftThumbInput Device 0 X+</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>true</HideWithRawInput>
@@ -145,12 +145,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>1</XInputIndex>
+        <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>Analog2</InputMapping>
       <AnalogType>AnalogJoystickReverse</AnalogType>
-      <BindNameXi>Input Device 1 LeftThumbInput Device 1 Y+</BindNameXi>
-      <BindName>Input Device 1 LeftThumbInput Device 1 Y+</BindName>
+      <BindNameXi>Input Device 0 LeftThumbInput Device 0 Y+</BindNameXi>
+      <BindName>Input Device 0 LeftThumbInput Device 0 Y+</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>true</HideWithRawInput>
@@ -270,12 +270,12 @@
         <ButtonCode>8192</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>1</XInputIndex>
+        <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 1 B</BindNameXi>
-      <BindName>Input Device 1 B</BindName>
+      <BindNameXi>Input Device 0 B</BindNameXi>
+      <BindName>Input Device 0 B</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -307,12 +307,12 @@
         <ButtonCode>16</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>1</XInputIndex>
       </XInputButton>
       <InputMapping>P2ButtonStart</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 Start</BindNameXi>
-      <BindName>Input Device 0 Start</BindName>
+      <BindNameXi>Input Device 1 Start</BindNameXi>
+      <BindName>Input Device 1 Start</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -366,12 +366,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>1</XInputIndex>
       </XInputButton>
       <InputMapping>Analog4</InputMapping>
       <AnalogType>AnalogJoystick</AnalogType>
-      <BindNameXi>Input Device 0 LeftThumbInput Device 0 X+</BindNameXi>
-      <BindName>Input Device 0 LeftThumbInput Device 0 X+</BindName>
+      <BindNameXi>Input Device 1 LeftThumbInput Device 1 X+</BindNameXi>
+      <BindName>Input Device 1 LeftThumbInput Device 1 X+</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>true</HideWithRawInput>
@@ -403,12 +403,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>1</XInputIndex>
       </XInputButton>
       <InputMapping>Analog6</InputMapping>
       <AnalogType>AnalogJoystickReverse</AnalogType>
-      <BindNameXi>Input Device 0 LeftThumbInput Device 0 Y+</BindNameXi>
-      <BindName>Input Device 0 LeftThumbInput Device 0 Y+</BindName>
+      <BindNameXi>Input Device 1 LeftThumbInput Device 1 Y+</BindNameXi>
+      <BindName>Input Device 1 LeftThumbInput Device 1 Y+</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>true</HideWithRawInput>
@@ -528,12 +528,12 @@
         <ButtonCode>8192</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>1</XInputIndex>
       </XInputButton>
       <InputMapping>P2Button1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 B</BindNameXi>
-      <BindName>Input Device 0 B</BindName>
+      <BindNameXi>Input Device 1 B</BindNameXi>
+      <BindName>Input Device 1 B</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>

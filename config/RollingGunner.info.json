@@ -1,24 +1,33 @@
 {
-	"global": {
-		"windowed": "",
-		"showGameOptionBezel": "False",
-		"showGameOptionCrt": "True",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "False",
-		"upscaleFullscreen": "True",
-		"upscaleWindowed": "False",
-		"canUseJoyInsteadOfDpad":"True",
-		"magpieClass": "SDL_App",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False"
-	},
-	"tpoptions": {
-		"replace_gameid": {
-			"General||APM3ID": "{{apm3id}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "True",
+    "showGameOptionFFB": "False",
+    "showGameOptionPatchLang": "True",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "canForceRegAsWindowed": "True",
+    "canUseJoyInsteadOfDpad": "True",
+    "need60hz": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieTitle": "ROLLING",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1",
+      "General||RegAsWindowed": "1"
+    },
+    "replace_gameid": {
+      "General||APM3ID": "{{apm3id}}"
+    }
+  },
+  "gameoptions": {}
 }

@@ -1,0 +1,15 @@
+{
+  "RemplaceBefore": {
+    " P{{PlayerIndex}}": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "P{{PlayerIndex}} Gun X": "Aim",
+    "P{{PlayerIndex}} Gun Y": "Aim",
+    "Start Button": "Start",
+    "TestMenu Up": "TestMenu Controls",
+    "TestMenu Down": "TestMenu Controls",
+    "TestMenu OK": "TestMenu Controls",
+    "TestMenu Back": "TestMenu Controls"
+  }
+}

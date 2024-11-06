@@ -8,6 +8,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "canUseJoyInsteadOfDpad": "True",

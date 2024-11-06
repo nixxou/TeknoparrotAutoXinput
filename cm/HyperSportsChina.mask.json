@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "BLUE Button": "Blue",
+    "GREEN Button": "Green",
+    "RED Button": "Red",
+    "Service": "Service/Coin"
+  }
+}

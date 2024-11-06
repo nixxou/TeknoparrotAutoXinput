@@ -7,9 +7,12 @@
     "showGameOptionCrt": "False",
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
-    "showGameOptionKeepAspectRatio": "False",
-    "upscaleFullscreen": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
+    "upscaleFullscreen": "True",
     "upscaleWindowed": "False",
+    "forceResSwitchFullscreen": "True",
     "rom": "eadp",
     "target": "ttx",
     "64bits": "False",
@@ -36,12 +39,17 @@
       "General||Hide Shoot the display msg": "1",
       "Attraction Doors||Enable": "1"
     },
-    "bezel": {
+    "bezel & fullscreen": {
       "Bezel||Enable": "1",
       "Border||Enable": "1",
       "Attraction Doors||Enable": "1"
     },
     "no_bezel": {
+      "Bezel||Enable": "0",
+      "Border||Enable": "0",
+      "Attraction Doors||Enable": "0"
+    },
+    "windowed": {
       "Bezel||Enable": "0",
       "Border||Enable": "0",
       "Attraction Doors||Enable": "0"
@@ -65,6 +73,10 @@
     "recommanded_gameoptions & fullscreen & at_least_one_sinden": {
       "tmpGunXFormula": "[X]+(([X]-(32767/2))*0.03093)",
       "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0.03093)"
-    }
+    },
+    "recommanded_gameoptions & fullscreen & no_keepaspectratio": {
+      "tmpGunXFormula": "[X]+(([X]-(32767/2))*-0.68)",
+      "tmpGunYFormula": "[Y]+(([Y]-(32767/2))*0)"
+    }	
   }
 }

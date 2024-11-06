@@ -7,6 +7,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "english",
+    "showGameOptionPerf": "True",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "need60hz": "True",
@@ -22,6 +24,9 @@
     "amd": {
       "General||EnableAmdFix": "1"
     },
+    "no_amd": {
+      "General||EnableAmdFix": "0"
+    },
     "set_displaymode_recommanded": {
       "General||Windowed": "1"
     },
@@ -33,10 +38,16 @@
     },
     "recommanded_tp_settings": {
       "General||HideCursor": "1",
-      "General||OriginalDualScreen": "0",
+      "General||OriginalDualScreen": "0"
+    },
+    "translation":{
       "General||DongleRegion": "USA",
-      "General||PcbRegion": "USA"
-    }
+      "General||PcbRegion": "USA"		
+	},
+    "no_translation":{
+      "General||DongleRegion": "JAPAN",
+      "General||PcbRegion": "JAPAN"		
+	}
   },
   "gameoptions": {
     "recommanded_gameoptions & !at_least_one_sinden & gun1_is_gun4ir_without_vjoy & keepaspectratio": {

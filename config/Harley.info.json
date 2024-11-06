@@ -1,0 +1,65 @@
+{
+  "global": {
+    "_comment": "Crash on amd",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1280x768",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "English",
+    "showGameOptionPerf": "True",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "XWindow_",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "set_resolution & 720p": {
+      "General||Custom Resolution": "1",
+      "General||Resolution Width": "1280",
+      "General||Resolution Height": "720"
+    },
+    "set_resolution & 1080p": {
+      "General||Custom Resolution": "1",
+      "General||Resolution Width": "1920",
+      "General||Resolution Height": "1080"
+    },
+    "set_resolution & 2k": {
+      "General||Custom Resolution": "1",
+      "General||Resolution Width": "2560",
+      "General||Resolution Height": "1440"
+    },
+    "set_resolution & 4k": {
+      "General||Custom Resolution": "1",
+      "General||Resolution Width": "3840",
+      "General||Resolution Height": "2160"
+    },
+    "game_native_res": {
+      "General||Custom Resolution": "0",
+      "General||Resolution Width": "1280",
+      "General||Resolution Height": "768"
+    },
+    "translation": {
+      "General||PcbRegion": "USA"
+    },
+    "no_translation": {
+      "General||PcbRegion": "JAPAN"
+    },
+  },
+  "gameoptions": {}
+}

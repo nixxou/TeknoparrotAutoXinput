@@ -1,0 +1,18 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": "",
+    "Button 1": "Shoot",
+    "Button 2": "Magic Circle",
+    "Button 3": "Weapon Card",
+    "Button 4": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move"
+  }
+}

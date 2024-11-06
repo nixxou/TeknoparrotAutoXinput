@@ -1,0 +1,16 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Analog X": "Move",
+    "Analog Y": "Move",
+    "Button 1": "Switch Character 1",
+    "Button 2": "Switch Character 2",
+    "Button 3": "Switch Character 3",
+    "Button 4": "Dash",
+    "Button 5": "Guard",
+    "Button 6": "",
+    "Button 7": "",
+    "Button 8": ""
+  }
+}

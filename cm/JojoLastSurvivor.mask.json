@@ -1,0 +1,20 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Left Analog X": "Move",
+    "Left Analog Y": "Move",
+    "Right Analog X": "Camera Move",
+    "Right Analog Y": "Camera Move",
+    "L1": "Ultimate Skill",
+    "L2": "Stand ON",
+    "R1": "Skill",
+    "R2": "Attack",
+    "R3": "Decide Pose",
+    "L3": "",
+    "Y": "Map",
+    "X": "Examine",
+    "B": "Crouch",
+    "A": "Jump"
+  }
+}

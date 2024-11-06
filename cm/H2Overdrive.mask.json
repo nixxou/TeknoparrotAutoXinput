@@ -1,0 +1,9 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Wheel Axis": "Move",
+    "Throttle Up Axis (Gas)": "Gas",
+    "Throttle Down Axis (Brake)": "Brake"
+  }
+}

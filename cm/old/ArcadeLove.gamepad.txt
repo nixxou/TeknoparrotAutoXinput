@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {
+    "Player 1 ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move"
+  }
+}

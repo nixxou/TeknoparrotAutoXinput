@@ -1,15 +1,6 @@
   <JoystickButtons>
     <JoystickButtons>
       <ButtonName>Test</ButtonName>
-      <DirectInputButton>
-        <Button>56</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>5a48a2a0-59d1-11ed-8001-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -25,7 +16,7 @@
       </XInputButton>
       <InputMapping>Test</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Gamepad Buttons8</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 10 LeftThumb</BindNameXi>
       <BindName>Input Device 10 LeftThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -48,15 +39,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Service</ButtonName>
-      <DirectInputButton>
-        <Button>57</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>5a48a2a0-59d1-11ed-8001-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -72,9 +54,9 @@
       </XInputButton>
       <InputMapping>Service1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Gamepad Buttons9</BindNameDi>
-      <BindNameXi>Input Device 0 RightThumb</BindNameXi>
-      <BindName>Input Device 0 RightThumb</BindName>
+      <BindNameDi />
+      <BindNameXi>Input Device 10 RightThumb</BindNameXi>
+      <BindName>Input Device 10 RightThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -95,15 +77,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Coin</ButtonName>
-      <DirectInputButton>
-        <Button>54</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>5a48a2a0-59d1-11ed-8001-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -119,7 +92,7 @@
       </XInputButton>
       <InputMapping>Coin1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Gamepad Buttons6</BindNameDi>
+      <BindNameDi />
       <BindNameXi>Input Device 0 Back</BindNameXi>
       <BindName>Input Device 0 Back</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
@@ -142,15 +115,6 @@
     </JoystickButtons>
     <JoystickButtons>
       <ButtonName>Insert AIME Card</ButtonName>
-      <DirectInputButton>
-        <Button>52</Button>
-        <IsAxis>false</IsAxis>
-        <IsAxisMinus>false</IsAxisMinus>
-        <IsFullAxis>false</IsFullAxis>
-        <PovDirection>0</PovDirection>
-        <IsReverseAxis>false</IsReverseAxis>
-        <JoystickGuid>5a48a2a0-59d1-11ed-8001-444553540000</JoystickGuid>
-      </DirectInputButton>
       <XInputButton>
         <IsLeftThumbX>false</IsLeftThumbX>
         <IsRightThumbX>false</IsRightThumbX>
@@ -159,16 +123,16 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>64</ButtonCode>
+        <ButtonCode>128</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>0</XInputIndex>
       </XInputButton>
       <InputMapping>ExtensionOne13</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameDi>Gamepad Buttons4</BindNameDi>
-      <BindNameXi>Input Device 0 LeftThumb</BindNameXi>
-      <BindName>Input Device 0 LeftThumb</BindName>
+      <BindNameDi />
+      <BindNameXi>Input Device 0 RightThumb</BindNameXi>
+      <BindName>Input Device 0 RightThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>

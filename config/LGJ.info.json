@@ -8,6 +8,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "english",
+    "showGameOptionPerf": "True",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "need60hz": "True",
@@ -22,6 +24,9 @@
     "amd": {
       "General||EnableAmdFix": "1"
     },
+    "no_amd": {
+      "General||EnableAmdFix": "0"
+    },
     "set_displaymode_recommanded": {
       "General||Windowed": "1"
     },
@@ -32,10 +37,16 @@
       "General||Windowed": "1"
     },
     "recommanded_tp_settings": {
-      "General||HideCursor": "1",
+      "General||HideCursor": "1"
+    },
+    "translation":{
       "General||DongleRegion": "USA",
-      "General||PcbRegion": "USA"
-    }
+      "General||PcbRegion": "USA"		
+	},
+    "no_translation":{
+      "General||DongleRegion": "JAPAN",
+      "General||PcbRegion": "JAPAN"		
+	}
   },
   "gameoptions": {
     "recommanded_gameoptions": {

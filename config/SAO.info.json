@@ -1,6 +1,7 @@
 {
 	"global": {
 		"windowed": "General,Windowed,1",
+		    "showGameOptionPatchLang": "true",
 		"magpieClass": "UnityWndClass",
 		"magpieTitle": "",
 		"magpie3DGameMode": "False",

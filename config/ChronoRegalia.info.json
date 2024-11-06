@@ -1,5 +1,6 @@
 {
   "global": {
+    "_comment": "Perf profile only apply with english translation on",
     "windowed": "General,Windowed,1",
     "originalRes": "1920x1080",
     "showGameOptionBezel": "False",
@@ -7,6 +8,9 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "True",
+    "showGameOptionPerf": "True",
+    "disableCrtForLowPerf": "True",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "forceResSwitchFullscreen": "1920x1080",
@@ -15,7 +19,8 @@
     "magpieDisableDirectFlip": "False",
     "magpieAllowScalingMaximized": "True",
     "magpieLaunchBefore": "False",
-    "magpieNoMoveWindow": "True"
+    "magpieNoMoveWindow": "False",
+	"magpieShowCursor": "True"
   },
   "tpoptions": {
     "set_displaymode_recommanded": {

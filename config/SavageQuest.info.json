@@ -1,31 +1,37 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"showGameOptionBezel": "True",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "False",
-		"upscaleFullscreen": "True",
-		"upscaleWindowed": "True",
-		"magpieClass": "SQ",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieShowCursor": "True",
-		"environmentVariables" : "NGLIDE_RESOLUTION==1||NGLIDE_ASPECT==2"
-	},
-	"tpoptions": {
-		"set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_windowed": {
-            "General||Windowed": "1"
-        }
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "False",
+    "showGameOptionKeepAspectRatio": "True",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "magpieClass": "SQ",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieShowCursor": "True",
+    "environmentVariables": "NGLIDE_RESOLUTION==7||NGLIDE_ASPECT==1,,keepaspectratio & set_resolution & 720p##NGLIDE_RESOLUTION==7||NGLIDE_ASPECT==0,,no_keepaspectratio & set_resolution & 720p##NGLIDE_RESOLUTION==21||NGLIDE_ASPECT==1,,keepaspectratio & set_resolution & 1080p##NGLIDE_RESOLUTION==21||NGLIDE_ASPECT==0,,no_keepaspectratio & set_resolution & 1080p##NGLIDE_RESOLUTION==25||NGLIDE_ASPECT==1,,keepaspectratio & set_resolution & 2k##NGLIDE_RESOLUTION==25||NGLIDE_ASPECT==0,,no_keepaspectratio & set_resolution & 2k##NGLIDE_RESOLUTION==27||NGLIDE_ASPECT==1,,keepaspectratio & set_resolution & 4k##NGLIDE_RESOLUTION==27||NGLIDE_ASPECT==0,,no_keepaspectratio & set_resolution & 4k##NGLIDE_RESOLUTION==0||NGLIDE_ASPECT==1,,keepaspectratio & game_native_res##NGLIDE_RESOLUTION==0||NGLIDE_ASPECT==0,,no_keepaspectratio & game_native_res",
+    "forceResize720p": "1280x720|windowed & set_resolution",
+    "forceResize1080p": "1920x1080|windowed & set_resolution",
+    "forceResize2k": "2560x1440|windowed & set_resolution",
+    "forceResize4k": "3840x2160|windowed & set_resolution"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {}
 }

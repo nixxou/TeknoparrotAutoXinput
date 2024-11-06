@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {
+    " (Digital)": ""
+  },
+  "ChangeKeys": {
+    "Gun Trigger": "Gun",
+    "Missile Trigger": "Missile",
+    "Joystick Analog X": "Move",
+    "Joystick Analog Y": "Move"
+  }
+}

@@ -1,20 +1,13 @@
 ﻿using AryMem;
 using Henooh.DeviceEmulator.Net;
-using Krypton.Toolkit;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace TeknoparrotAutoXinput
 {
-	
+
 	public class ShifterHack
 	{
 		static public Dictionary<string, bool> supportedGames = new Dictionary<string, bool>()
@@ -28,7 +21,7 @@ namespace TeknoparrotAutoXinput
 			{ "SWDC", false },
 			{ "segartv", false },
 			{ "FNFSC", false }
-			
+
 		};
 
 		private static bool _stopListening;
@@ -66,7 +59,7 @@ namespace TeknoparrotAutoXinput
 		[DllImport("kernel32.dll")]
 		public static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
 
-		
+
 
 		bool shiftUp = false;
 		bool shiftDown = false;
@@ -162,7 +155,7 @@ namespace TeknoparrotAutoXinput
 					if (current_gear < 0 || current_gear > 7) return -1;
 					if (current_gear == 1) return -1;
 					if (current_gear > 1 && current_gear <= 7) current_gear--;
-					
+
 					return current_gear;
 				}
 				if (_game == "SWDC")
@@ -227,7 +220,7 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		public void SetGear(int targetGear,bool doublecheck=false)
+		public void SetGear(int targetGear, bool doublecheck = false)
 		{
 			if (_ary == null) return;
 			bool validTarget = false;
@@ -283,9 +276,9 @@ namespace TeknoparrotAutoXinput
 
 			foreach (var bind in bindingDinputShifter)
 			{
-				if(bind.Key == "InputDeviceGear1" || bind.Key == "InputDeviceGear2" || bind.Key == "InputDeviceGear3" || bind.Key == "InputDeviceGear4" || bind.Key == "InputDeviceGear5" || bind.Key == "InputDeviceGear6" || bind.Key == "InputDeviceGearR")
+				if (bind.Key == "InputDeviceGear1" || bind.Key == "InputDeviceGear2" || bind.Key == "InputDeviceGear3" || bind.Key == "InputDeviceGear4" || bind.Key == "InputDeviceGear5" || bind.Key == "InputDeviceGear6" || bind.Key == "InputDeviceGearR")
 				{
-					if(!_keysShifter.ContainsKey(bind.Key)) _keysShifter.Add(bind.Value.Title, bind.Key);
+					if (!_keysShifter.ContainsKey(bind.Key)) _keysShifter.Add(bind.Value.Title, bind.Key);
 				}
 			}
 
@@ -296,19 +289,19 @@ namespace TeknoparrotAutoXinput
 			int index_wheel = 0;
 			foreach (var device in devices)
 			{
-				if(device.InstanceGuid.ToString() == shifterGuid)
+				if (device.InstanceGuid.ToString() == shifterGuid)
 				{
 					found_shifter = true;
 					index_shifter = i;
 				}
-				if(device.InstanceGuid.ToString() == wheelGuid)
+				if (device.InstanceGuid.ToString() == wheelGuid)
 				{
 					found_wheel = true;
 					index_wheel = i;
 				}
 				i++;
 			}
-			
+
 
 			if (found_shifter && found_wheel)
 			{
@@ -358,14 +351,14 @@ namespace TeknoparrotAutoXinput
 			Utils.LogMessage("Game Start");
 			Process processGame = processes.First();
 
-			
+
 			//Wait 20 secs
 			for (int i = 0; i < 200; i++)
 			{
 				Thread.Sleep(100);
 				if (_stopListening) return;
 			}
-			
+
 			bool found_shifter = false;
 			bool found_wheel = false;
 			int z = 0;
@@ -402,12 +395,12 @@ namespace TeknoparrotAutoXinput
 
 			while (!processGame.HasExited && !_stopListening)
 			{
-				if(_target_gear != -1 && _ary == null)
+				if (_target_gear != -1 && _ary == null)
 				{
 					_ary = new Ary(_execWithoutExt);
 				}
 
-				if(_ary != null)
+				if (_ary != null)
 				{
 					int current_gear = GetCurrentGear();
 					//Utils.LogMessage($"current_gear = {current_gear}, _target_gear = {_target_gear}");
@@ -419,14 +412,14 @@ namespace TeknoparrotAutoXinput
 
 					if (_current_gear != _target_gear && _target_gear >= 0)
 					{
-						SetGear(_target_gear,true);
+						SetGear(_target_gear, true);
 					}
 
 				}
 
 				Thread.Sleep(100);
 			}
-			
+
 
 			Utils.LogMessage("Game Stop");
 		}

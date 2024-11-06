@@ -8,6 +8,9 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
+    "disableCrtForLowPerf": "False",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "False",
     "forceResSwitchFullscreen": "True",
@@ -21,11 +24,8 @@
 	"forceResize": "640x480|windowed",
   },
   "tpoptions": {
-    "set_displaymode_recommanded & not_low_perfprofile": {
+    "set_displaymode_recommanded": {
       "General||Windowed": "0"
-    },
-    "set_displaymode_recommanded & low_perfprofile": {
-      "General||Windowed": "1"
     },
     "set_fullscreen": {
       "General||Windowed": "0"

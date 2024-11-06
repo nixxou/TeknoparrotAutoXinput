@@ -1,15 +1,8 @@
-﻿using Antlr4.Runtime.Tree;
-using Henooh.DeviceEmulator.Net;
+﻿using Henooh.DeviceEmulator.Net;
 using Henooh.DeviceEmulator.Net.Native;
 using SDL2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.Xml;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TeknoparrotAutoXinput
 {
@@ -36,7 +29,7 @@ namespace TeknoparrotAutoXinput
 			{"N", (VirtualKeyCode.VK_N,Key.N)},
 			{"P", (VirtualKeyCode.VK_P,Key.P)}
 		};
-		public Dictionary<string, List<(string, string)>> assignedKeys = new Dictionary<string, List<(string,string)>>();
+		public Dictionary<string, List<(string, string)>> assignedKeys = new Dictionary<string, List<(string, string)>>();
 
 		private int keyNbAssigned = 0;
 		private List<Thread> threadJoystick = new List<Thread>();
@@ -144,11 +137,11 @@ namespace TeknoparrotAutoXinput
 					_joystick1_offscreen = value;
 					if (_joystick1_offscreen && EnableGunAOffscreenReload)
 					{
-						if(GunA_reloadKey != "" && keyToAssign.ContainsKey(GunA_reloadKey))
+						if (GunA_reloadKey != "" && keyToAssign.ContainsKey(GunA_reloadKey))
 						{
 							keyboardController.Press(keyToAssign[GunA_reloadKey].Item1, new TimeSpan(0, 0, 0, 0, 50));
 						}
-							
+
 					}
 				}
 			}
@@ -180,7 +173,7 @@ namespace TeknoparrotAutoXinput
 
 		public string GetFreeKey()
 		{
-			foreach(var keyA in keyToAssign)
+			foreach (var keyA in keyToAssign)
 			{
 				string keyvalue = keyA.Key;
 				if (!assignedKeys.ContainsKey(keyA.Key))
@@ -192,7 +185,7 @@ namespace TeknoparrotAutoXinput
 			return "";
 		}
 
-		public void Assign(string newKey, string OriginalGuid, string OriginalLabel, int coinOrStart=0)
+		public void Assign(string newKey, string OriginalGuid, string OriginalLabel, int coinOrStart = 0)
 		{
 			Console.WriteLine($"Assign({newKey}, {OriginalGuid}, {OriginalLabel}, {coinOrStart})");
 			if (coinOrStart == 11) GunA_coinKey = newKey;
@@ -205,17 +198,17 @@ namespace TeknoparrotAutoXinput
 
 			if (!assignedKeys.ContainsKey(newKey))
 			{
-				assignedKeys.Add(newKey, new List<(string,string)>());
+				assignedKeys.Add(newKey, new List<(string, string)>());
 			}
 			bool found = false;
-			foreach(var tuple in assignedKeys[newKey])
+			foreach (var tuple in assignedKeys[newKey])
 			{
-				if(tuple.Item1 == OriginalGuid && tuple.Item2 == OriginalLabel)
+				if (tuple.Item1 == OriginalGuid && tuple.Item2 == OriginalLabel)
 				{
 					found = true;
 				}
 			}
-			if(!found) assignedKeys[newKey].Add((OriginalGuid, OriginalLabel));
+			if (!found) assignedKeys[newKey].Add((OriginalGuid, OriginalLabel));
 			if (!guids.Contains(OriginalGuid))
 			{
 				guids.Add(OriginalGuid);
@@ -224,11 +217,11 @@ namespace TeknoparrotAutoXinput
 
 		public string ContainAssigned(string guid, string label)
 		{
-			foreach(var k in assignedKeys)
+			foreach (var k in assignedKeys)
 			{
-				foreach(var tuple in k.Value)
+				foreach (var tuple in k.Value)
 				{
-					if(tuple.Item1 == guid && tuple.Item2 == label)
+					if (tuple.Item1 == guid && tuple.Item2 == label)
 					{
 						return k.Key;
 					}
@@ -242,13 +235,13 @@ namespace TeknoparrotAutoXinput
 			if (assignedKeys.Count == 0) return;
 
 			//Add joystick GUID
-			foreach(var originalJoystick in originalJoystickPerGun)
+			foreach (var originalJoystick in originalJoystickPerGun)
 			{
-				if(originalJoystick.Value.Item1 != null && originalJoystick.Value.Item2 != null)
+				if (originalJoystick.Value.Item1 != null && originalJoystick.Value.Item2 != null)
 				{
-					if(originalJoystick.Value.Item1.JoystickGuid != Guid.Empty && originalJoystick.Value.Item2.JoystickGuid != Guid.Empty)
+					if (originalJoystick.Value.Item1.JoystickGuid != Guid.Empty && originalJoystick.Value.Item2.JoystickGuid != Guid.Empty)
 					{
-						if(originalJoystick.Key == 1)
+						if (originalJoystick.Key == 1)
 						{
 							joystick1X = (originalJoystick.Value.Item1.JoystickGuid.ToString(), originalJoystick.Value.Item1.Button);
 							joystick1Y = (originalJoystick.Value.Item2.JoystickGuid.ToString(), originalJoystick.Value.Item2.Button);
@@ -271,12 +264,12 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 
-			foreach(var assignedKey in assignedKeys)
+			foreach (var assignedKey in assignedKeys)
 			{
 				KeyPressedStatus.Add(assignedKey.Key, 0);
 			}
 
-			foreach(var guid in guids)
+			foreach (var guid in guids)
 			{
 				threadJoystick.Add(new Thread(() => SpawnDirectInputListener(guid)));
 			}
@@ -294,9 +287,9 @@ namespace TeknoparrotAutoXinput
 			if (_stopListening == false && threadJoystick != null)
 			{
 				_stopListening = true;
-				foreach(var t in threadJoystick)
+				foreach (var t in threadJoystick)
 				{
-					if(t.IsAlive)
+					if (t.IsAlive)
 					{
 						t.Join();
 					}
@@ -308,18 +301,18 @@ namespace TeknoparrotAutoXinput
 		{
 			var LabelState = new Dictionary<string, bool>();
 			var LabelToMonitor = new Dictionary<string, string>();
-			foreach(var ak in assignedKeys)
+			foreach (var ak in assignedKeys)
 			{
-				foreach(var tuple in ak.Value)
+				foreach (var tuple in ak.Value)
 				{
-					if(tuple.Item1 == joyGuid)
+					if (tuple.Item1 == joyGuid)
 					{
-						LabelToMonitor.Add(tuple.Item2,ak.Key);
+						LabelToMonitor.Add(tuple.Item2, ak.Key);
 						LabelState.Add(tuple.Item2, false);
 					}
 				}
 			}
-			
+
 
 
 
@@ -356,13 +349,13 @@ namespace TeknoparrotAutoXinput
 			//var info2 = joystick.GetObjectInfoByOffset((int)JoystickOffset.Y);
 			//var info3 = joystick.GetObjectInfoByOffset((int)JoystickOffset.RotationZ);
 
-			
+
 
 			while (!_stopListening)
 			{
 				try
 				{
-					Dictionary<string,int> keyPressedValue = new Dictionary<string,int>();
+					Dictionary<string, int> keyPressedValue = new Dictionary<string, int>();
 					joystick.Poll();
 					var datas = joystick.GetBufferedData();
 					foreach (var key in datas)
@@ -408,7 +401,7 @@ namespace TeknoparrotAutoXinput
 								key.Offset == JoystickOffset.AccelerationZ)
 						{
 
-							if(joyGuid == joystick1X.Item1 && (int)key.Offset == joystick1X.Item2)
+							if (joyGuid == joystick1X.Item1 && (int)key.Offset == joystick1X.Item2)
 							{
 								//Utils.LogMessage("JOY1 X=" + key.Value);
 								GunA_X = key.Value;
@@ -445,11 +438,12 @@ namespace TeknoparrotAutoXinput
 								inputText = key.Offset + " -";
 								pressed = 1;
 							}
-							else {
+							else
+							{
 								inputText = key.Offset + " =";
-								pressed = 0; 
+								pressed = 0;
 							}
-							
+
 						}
 						// Digital input
 						else
@@ -462,7 +456,7 @@ namespace TeknoparrotAutoXinput
 									inputText = key.Offset.ToString();
 								pressed = 1;
 							}
-							if(key.Value == 0)
+							if (key.Value == 0)
 							{
 								if (deviceInstance.Type == DeviceType.Keyboard)
 									inputText = "Button " + ((Key)key.Offset - 47).ToString();
@@ -478,11 +472,11 @@ namespace TeknoparrotAutoXinput
 							inputText = inputText.Substring(0, inputText.Length - 4) + "+";
 						}
 						*/
-						
+
 						if (!string.IsNullOrEmpty(inputText))
 						{
 							inputText = deviceInstance.Type + " " + inputText;
-							if(inputText.StartsWith("Button")) Utils.LogMessage(inputText + " : " + key.Value + " : " + pressed);
+							if (inputText.StartsWith("Button")) Utils.LogMessage(inputText + " : " + key.Value + " : " + pressed);
 
 							if (inputText.EndsWith(" ="))
 							{
@@ -564,7 +558,7 @@ namespace TeknoparrotAutoXinput
 						}
 						*/
 					}
-					foreach(var keyPressed in keyPressedValue)
+					foreach (var keyPressed in keyPressedValue)
 					{
 						string assignedKey = ContainAssigned(joyGuid, keyPressed.Key);
 						if (assignedKey != "")
@@ -593,7 +587,7 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 
-					foreach(var ltomonitor in LabelToMonitor)
+					foreach (var ltomonitor in LabelToMonitor)
 					{
 						string strKey = ltomonitor.Value;
 						string label = ltomonitor.Key;
@@ -618,7 +612,7 @@ namespace TeknoparrotAutoXinput
 									if (newStateKey)
 									{
 										string targetKey = strKey;
-										if(strKey == GunA_startKey && joystick1_offscreen)
+										if (strKey == GunA_startKey && joystick1_offscreen)
 										{
 											targetKey = GunA_coinKey;
 										}
@@ -635,7 +629,7 @@ namespace TeknoparrotAutoXinput
 										{
 											keyboardController.Up(keyToAssign[GunA_coinKey].Item1);
 										}
-										if (strKey == GunB_startKey )
+										if (strKey == GunB_startKey)
 										{
 											keyboardController.Up(keyToAssign[GunB_coinKey].Item1);
 										}
@@ -725,7 +719,7 @@ namespace TeknoparrotAutoXinput
 					ushort vendorId = SDL2.SDL.SDL_JoystickGetVendor(currentJoy);
 					ushort productId = SDL2.SDL.SDL_JoystickGetProduct(currentJoy);
 					bool isSuspect = false;
-					if(vendorId == v_id && productId == p_id)
+					if (vendorId == v_id && productId == p_id)
 					{
 						const int bufferSize = 256; // La taille doit être au moins 33 pour stocker le GUID sous forme de chaîne (32 caractères + le caractère nul)
 						byte[] guidBuffer = new byte[bufferSize];
@@ -735,16 +729,16 @@ namespace TeknoparrotAutoXinput
 						listsuspectIndex.Add(i);
 						isSuspect = true;
 					}
-					
+
 
 					SDL.SDL_JoystickClose(currentJoy);
 				}
 			}
 			//SDL2.SDL.SDL_Quit();
 			if (suspectDevice.Count == 0) return "";
-			if(suspectDevice.Count == 1) return suspectDevice[0];
+			if (suspectDevice.Count == 1) return suspectDevice[0];
 
-			if(suspectDevice.Count > 1)
+			if (suspectDevice.Count > 1)
 			{
 				bool found = false;
 				JoystickState stato = new JoystickState();
@@ -775,14 +769,14 @@ namespace TeknoparrotAutoXinput
 					Utils.LogMessage($"DSharp GUID = {joyGuid}, X={stato.X}");
 					List<int> nearTarget = new List<int>();
 					int i = 0;
-					foreach(var g in gameControllers)
+					foreach (var g in gameControllers)
 					{
 						SDL.SDL_GameControllerUpdate();
 						int valSDL = SDL.SDL_GameControllerGetAxis(g, 0) + 32767;
 
 						Utils.LogMessage($"SDL {i} = {valSDL}");
 
-						if (Math.Abs(valSDL-stato.X) < 1000) nearTarget.Add(i);
+						if (Math.Abs(valSDL - stato.X) < 1000) nearTarget.Add(i);
 						//MessageBox.Show(i.ToString() + "=" + valSDL.ToString());
 						i++;
 					}
@@ -798,11 +792,11 @@ namespace TeknoparrotAutoXinput
 						return suspectDevice[nearTarget[0]];
 					}
 
-					
+
 
 					Thread.Sleep(100);
 				}
-				
+
 			}
 
 			return "";

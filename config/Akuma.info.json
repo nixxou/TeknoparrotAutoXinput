@@ -1,5 +1,6 @@
 {
   "global": {
+	"_comment": "To make it work, i had to move the game to C:\\data",
     "windowed": "General,Windowed,1",
     "originalRes": "640x480 (Scaled)",
     "showGameOptionBezel": "True",
@@ -7,6 +8,9 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
+    "disableCrtForLowPerf": "True",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "need60hz": "True",

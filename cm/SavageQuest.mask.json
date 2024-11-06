@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Joystick Analog X": "Move",
+    "Joystick Analog Y": "Move",
+    "Start Button": "Start",
+    "Panel Button": "Roar",
+    "Trigger Button": "Attack",
+    "Thumb Button": "Run"
+  }
+}

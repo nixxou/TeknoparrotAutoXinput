@@ -1,0 +1,16 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Vacuum X": "Aim",
+    "Vacuum Y": "Aim",
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Vacuum Screen Out": "Screen Out",
+    "Start": "Start/Grenade",
+    "Vacuum Button": "Trigger FlashLight",
+    "Vacuum Lever": "Vacuum"
+  }
+}

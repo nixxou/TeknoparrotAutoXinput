@@ -12,12 +12,12 @@
         <ButtonCode>64</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>10</XInputIndex>
       </XInputButton>
       <InputMapping>Test</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 LeftThumb</BindNameXi>
-      <BindName>Input Device 0 LeftThumb</BindName>
+      <BindNameXi>Input Device 10 LeftThumb</BindNameXi>
+      <BindName>Input Device 10 LeftThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -49,12 +49,12 @@
         <ButtonCode>128</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>10</XInputIndex>
       </XInputButton>
       <InputMapping>Service1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 RightThumb</BindNameXi>
-      <BindName>Input Device 0 RightThumb</BindName>
+      <BindNameXi>Input Device 10 RightThumb</BindNameXi>
+      <BindName>Input Device 10 RightThumb</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -86,12 +86,12 @@
         <ButtonCode>256</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>1</XInputIndex>
+        <XInputIndex>10</XInputIndex>
       </XInputButton>
       <InputMapping>Service2</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 1 LeftShoulder</BindNameXi>
-      <BindName>Input Device 1 LeftShoulder</BindName>
+      <BindNameXi>Input Device 10 LeftShoulder</BindNameXi>
+      <BindName>Input Device 10 LeftShoulder</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>

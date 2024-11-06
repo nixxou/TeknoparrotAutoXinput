@@ -1,0 +1,8 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Wheel Axis": "Move",
+    "View (Reverse on Track Select)": "View"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Steer Axis": "Move",
+    "Coin1": "Coin",
+    "Throttle": "Gas",
+    "Start Button": "Start"
+  }
+}

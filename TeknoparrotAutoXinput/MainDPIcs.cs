@@ -1,24 +1,13 @@
 ﻿using BrightIdeasSoftware;
 using Krypton.Toolkit;
-using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SerialPortLib2;
 using SevenZip;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing.Printing;
-using System.Globalization;
-using System.IO.Pipes;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 using TeknoParrotUi.Common;
 using WiimoteLib;
 using XInput.Wrapper;
@@ -81,14 +70,14 @@ namespace TeknoparrotAutoXinput
 				if (_isPlaying)
 				{
 					btn_playgame.Enabled = false;
-					btn_playgamedirect.Enabled = false;
-					btn_playgamedirect2.Enabled = false;
+					//btn_playgamedirect.Enabled = false;
+					//btn_playgamedirect2.Enabled = false;
 				}
 				else
 				{
 					if (_playAutoEnabled) btn_playgame.Enabled = true;
-					if (_playDirectEnabled) btn_playgamedirect.Enabled = true;
-					if (_playDirectEnabled) btn_playgamedirect2.Enabled = true;
+					//if (_playDirectEnabled) btn_playgamedirect.Enabled = true;
+					//if (_playDirectEnabled) btn_playgamedirect2.Enabled = true;
 				}
 
 			}
@@ -113,8 +102,8 @@ namespace TeknoparrotAutoXinput
 
 			if (dpiVal > 120)
 			{
-				lbl_bezel.Font = lbl_bezel_desc.Font = lbl_ffb.Font = lbl_desc_ffb.Font = lbl_desc_crt.Font = lbl_crt.Font = lbl_aspectratio_desc.Font = lbl_aspectratio.Font = lbl_vsync_desc.Font = lbl_vsync.Font = lbl_translation_desc.Font = lbl_translation.Font = lbl_joystick_desc.Font = lbl_joystick.Font = lbl_cross1.Font = lbl_cross1_desc.Font = lbl_cross2.Font = lbl_cross2_desc.Font = new Font(lbl_bezel.Font.Name, 8.0f * 0.70f, lbl_bezel.Font.Style, lbl_bezel.Font.Unit, lbl_bezel.Font.GdiCharSet, lbl_bezel.Font.GdiVerticalFont);
-				fontComboBox = new Font(fontComboBox.Name, 9.5f * 0.85f, fontComboBox.Style, fontComboBox.Unit, fontComboBox.GdiCharSet, fontComboBox.GdiVerticalFont);
+				lbl_perf_desc.Font = lbl_perf_high.Font = lbl_perf_low.Font = lbl_perf_normal.Font = lbl_overrideTpController.Font = lbl_overrideTpController_desc.Font = lbl_overrideTpGameSettings.Font = lbl_overrideTpGameSettings_desc.Font = lbl_applyPatches.Font = lbl_applyPatches_desc.Font = lbl_useThirdParty.Font = lbl_useThirdParty_desc.Font = lbl_bezel.Font = lbl_bezel_desc.Font = lbl_ffb.Font = lbl_desc_ffb.Font = lbl_desc_crt.Font = lbl_crt.Font = lbl_aspectratio_desc.Font = lbl_aspectratio.Font = lbl_vsync_desc.Font = lbl_vsync.Font = lbl_translation_desc.Font = lbl_translation_none.Font = lbl_translation_english.Font = lbl_translation_french.Font = lbl_joystick_desc.Font = lbl_joystick.Font = lbl_cross1.Font = lbl_cross1_desc.Font = lbl_cross2.Font = lbl_cross2_desc.Font = lbl_nativeCrosshair.Font = lbl_nativeCrosshair_desc.Font = new Font(lbl_bezel.Font.Name, 8.0f * 0.70f, lbl_bezel.Font.Style, lbl_bezel.Font.Unit, lbl_bezel.Font.GdiCharSet, lbl_bezel.Font.GdiVerticalFont);
+				fontComboBox = new Font(fontComboBox.Name, 9.5f * 0.80f, fontComboBox.Style, fontComboBox.Unit, fontComboBox.GdiCharSet, fontComboBox.GdiVerticalFont);
 			}
 
 			//cmb_displayMode.Font = new Font(cmb_displayMode.Font.Name, 8.25f * 0.15f, cmb_displayMode.Font.Style, cmb_displayMode.Font.Unit, cmb_displayMode.Font.GdiCharSet, cmb_displayMode.Font.GdiVerticalFont);
@@ -123,7 +112,7 @@ namespace TeknoparrotAutoXinput
 			cmb_nativeRes.StateActive.ComboBox.Content.Font = fontComboBox;
 			cmb_resolution.StateActive.ComboBox.Content.Font = fontComboBox;
 			cmb_patchReshade.StateActive.ComboBox.Content.Font = fontComboBox;
-			cmb_patchlink.StateActive.ComboBox.Content.Font = fontComboBox;
+			//cmb_patchlink.StateActive.ComboBox.Content.Font = fontComboBox;
 			cmb_testMode.StateActive.ComboBox.Content.Font = fontComboBox;
 
 
@@ -134,23 +123,106 @@ namespace TeknoparrotAutoXinput
 			this.Activated += VotreForm_Activated;
 			this.Deactivate += VotreForm_Deactivate;
 
+			fpanel_perf.DoubleClick += fpanel_perf_DoubleClick;
+			lbl_perf_desc.DoubleClick += fpanel_perf_DoubleClick;
+			lbl_perf_normal.DoubleClick += fpanel_perf_DoubleClick;
+			lbl_perf_high.DoubleClick += fpanel_perf_DoubleClick;
+			lbl_perf_low.DoubleClick += fpanel_perf_DoubleClick;
+
+			fpanel_ffb.DoubleClick += fpanel_ffb_DoubleClick;
 			lbl_ffb.DoubleClick += fpanel_ffb_DoubleClick;
 			lbl_desc_ffb.DoubleClick += fpanel_ffb_DoubleClick;
+
+			fpanel_crt.DoubleClick += fpanel_crt_DoubleClick;
 			lbl_crt.DoubleClick += fpanel_crt_DoubleClick;
 			lbl_desc_crt.DoubleClick += fpanel_crt_DoubleClick;
+
+			fpanel_bezel.DoubleClick += fpanel_bezel_DoubleClick;
 			lbl_bezel.DoubleClick += fpanel_bezel_DoubleClick;
+			lbl_bezel_desc.DoubleClick += fpanel_bezel_DoubleClick;
+
+			fpanel_vsync.DoubleClick += fpanel_vsync_DoubleClick;
 			lbl_vsync.DoubleClick += fpanel_vsync_DoubleClick;
 			lbl_vsync_desc.DoubleClick += fpanel_vsync_DoubleClick;
+
+			fpanel_aspectratio.DoubleClick += fpanel_aspectratio_DoubleClick;
 			lbl_aspectratio.DoubleClick += fpanel_aspectratio_DoubleClick;
 			lbl_aspectratio_desc.DoubleClick += fpanel_aspectratio_DoubleClick;
-			lbl_translation.DoubleClick += fpanel_translation_DoubleClick;
+
+			fpanel_translation.DoubleClick += fpanel_translation_DoubleClick;
+			lbl_translation_none.DoubleClick += fpanel_translation_DoubleClick;
+			lbl_translation_english.DoubleClick += fpanel_translation_DoubleClick;
+			lbl_translation_french.DoubleClick += fpanel_translation_DoubleClick;
 			lbl_translation_desc.DoubleClick += fpanel_translation_DoubleClick;
+
+			fpanel_joystick.DoubleClick += fpanel_joystick_DoubleClick;
 			lbl_joystick.DoubleClick += fpanel_joystick_DoubleClick;
 			lbl_joystick_desc.DoubleClick += fpanel_joystick_DoubleClick;
+
+			fpanel_cross1.DoubleClick += fpanel_cross1_DoubleClick;
 			lbl_cross1.DoubleClick += fpanel_cross1_DoubleClick;
 			lbl_cross1_desc.DoubleClick += fpanel_cross1_DoubleClick;
+
+			fpanel_cross2.DoubleClick += fpanel_cross2_DoubleClick;
 			lbl_cross2.DoubleClick += fpanel_cross2_DoubleClick;
 			lbl_cross2_desc.DoubleClick += fpanel_cross2_DoubleClick;
+
+			fpanel_nativeCrosshair.DoubleClick += fpanel_nativeCrosshair_DoubleClick;
+			lbl_nativeCrosshair.DoubleClick += fpanel_nativeCrosshair_DoubleClick;
+			lbl_nativeCrosshair_desc.DoubleClick += fpanel_nativeCrosshair_DoubleClick;
+
+			fpanel_overrideTpController.DoubleClick += fpanel_overrideTpController_DoubleClick;
+			lbl_overrideTpController.DoubleClick += fpanel_overrideTpController_DoubleClick;
+			lbl_overrideTpController_desc.DoubleClick += fpanel_overrideTpController_DoubleClick;
+
+			fpanel_overrideTpGameSettings.DoubleClick += fpanel_overrideTpGameSettings_DoubleClick;
+			lbl_overrideTpGameSettings.DoubleClick += fpanel_overrideTpGameSettings_DoubleClick;
+			lbl_overrideTpGameSettings_desc.DoubleClick += fpanel_overrideTpGameSettings_DoubleClick;
+
+			fpanel_applyPatches.DoubleClick += fpanel_applyPatches_DoubleClick;
+			lbl_applyPatches.DoubleClick += fpanel_applyPatches_DoubleClick;
+			lbl_applyPatches_desc.DoubleClick += fpanel_applyPatches_DoubleClick;
+
+			fpanel_useThirdParty.DoubleClick += fpanel_useThirdParty_DoubleClick;
+			lbl_useThirdParty.DoubleClick += fpanel_useThirdParty_DoubleClick;
+			lbl_useThirdParty_desc.DoubleClick += fpanel_useThirdParty_DoubleClick;
+
+
+			// Supposons que tu as plusieurs FlowLayoutPanel : flowLayoutPanel1, flowLayoutPanel2, flowLayoutPanel3
+			var flowPanels = new[] { fpanel_perf, fpanel_ffb, fpanel_crt, fpanel_bezel, fpanel_vsync, fpanel_aspectratio, fpanel_translation, fpanel_joystick, fpanel_cross1, fpanel_cross2, fpanel_overrideTpController, fpanel_overrideTpGameSettings, fpanel_overrideTpGameSettings, fpanel_applyPatches, fpanel_useThirdParty, fpanel_nativeCrosshair };
+			foreach (var panel in flowPanels)
+			{
+				panel.MouseEnter += (sender, e) =>
+				{
+					((FlowLayoutPanel)sender).BackColor = Color.LightYellow; // Changer la couleur de fond au survol
+					((FlowLayoutPanel)sender).Cursor = Cursors.Hand; // Changer le curseur de la souris
+				};
+
+				panel.MouseLeave += (sender, e) =>
+				{
+					((FlowLayoutPanel)sender).BackColor = SystemColors.Control; // Remettre la couleur par défaut
+					((FlowLayoutPanel)sender).Cursor = Cursors.Default; // Remettre le pointeur par défaut
+				};
+
+				// Associer les événements pour chaque Label dans le FlowLayoutPanel
+				foreach (Control control in panel.Controls)
+				{
+					if (control is Label label) // Vérifier si le contrôle est un Label
+					{
+						label.MouseEnter += (sender, e) =>
+						{
+							panel.BackColor = Color.LightYellow; // Changer la couleur de fond
+							panel.Cursor = Cursors.Hand; // Changer le pointeur de la souris
+						};
+
+						label.MouseLeave += (sender, e) =>
+						{
+							panel.BackColor = SystemColors.Control; // Remettre la couleur par défaut
+							panel.Cursor = Cursors.Default; // Remettre le pointeur par défaut
+						};
+					}
+				}
+			}
 
 			//chk_showAll.Checked = ConfigurationManager.MainConfig.ShowAllGames;
 
@@ -222,9 +294,11 @@ namespace TeknoparrotAutoXinput
 
 						if (!_gameList.ContainsKey(gameName))
 						{
+							string infoFilePath = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "config", Path.GetFileNameWithoutExtension(profile) + ".info.json");
 							var newGame = new Game();
 							newGame.Name = gameName;
 							newGame.UserConfigFile = profile;
+							newGame.InfoFile = File.Exists(infoFilePath) ? infoFilePath : "";
 							newGame.FileName = Path.GetFileName(profile);
 							newGame.Metadata = DeSerializeMetadata(profile);
 							newGame.TestMenuIsExecutable = ExtractTestMenuIsExecutable(profile);
@@ -283,7 +357,8 @@ namespace TeknoparrotAutoXinput
 							else
 							{
 								newGame.isSupported = false;
-								newGame.DisplayName = newGame.Name + " [NOT SUPPORTED]";
+								if (newGame.InfoFile == "") newGame.DisplayName = newGame.Name + " [NOT SUPPORTED]";
+								else newGame.DisplayName = newGame.Name + " [NO AUTO CONTROLS]";
 							}
 
 							if (newGame.Name == selectedGameName) gameToSelect = newGame;
@@ -519,7 +594,7 @@ namespace TeknoparrotAutoXinput
 
 		}
 
-		static string ExtractGameNameInternal(string cheminFichierXml)
+		public static string ExtractGameNameInternal(string cheminFichierXml)
 		{
 			string DefaultName = Path.GetFileName(cheminFichierXml);
 			DefaultName = DefaultName.Substring(0, DefaultName.Length - 4);
@@ -587,7 +662,7 @@ namespace TeknoparrotAutoXinput
 			{
 				try
 				{
-					return JsonConvert.DeserializeObject<Metadata>(File.ReadAllText(metadataPath));
+					return JsonConvert.DeserializeObject<Metadata>(Utils.ReadAllText(metadataPath));
 				}
 				catch
 				{
@@ -607,8 +682,7 @@ namespace TeknoparrotAutoXinput
 			cmb_displayMode.SelectedIndex = 0;
 			cmb_patchReshade.SelectedIndex = 0;
 			cmb_resolution.SelectedIndex = 0;
-			cmb_patchlink.SelectedIndex = 0;
-
+			//cmb_patchlink.SelectedIndex = 0;
 
 		}
 
@@ -836,8 +910,8 @@ namespace TeknoparrotAutoXinput
 			string finalConfig = "";
 			if (_selectedGame != null)
 			{
-				btn_playgamedirect.Enabled = true;
-				btn_playgamedirect2.Enabled = true;
+				//btn_playgamedirect.Enabled = true;
+				//btn_playgamedirect2.Enabled = true;
 
 				finalConfig = _selectedGame.UserConfigFile;
 
@@ -849,7 +923,7 @@ namespace TeknoparrotAutoXinput
 			if (cmb_displayMode.SelectedIndex > 0) arguments += $" --displayMode={cmb_displayMode.SelectedIndex}";
 			if (cmb_resolution.SelectedIndex > 0) arguments += $" --resolution={cmb_resolution.SelectedIndex}";
 			if (cmb_patchReshade.SelectedIndex > 0) arguments += $" --reshade={cmb_patchReshade.SelectedIndex}";
-			if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
+			//if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
 			if (cmb_testMode.SelectedIndex > 0) arguments += $" --testmode";
 
 			arguments += $" \"{finalConfig}\"";
@@ -901,8 +975,8 @@ namespace TeknoparrotAutoXinput
 			string finalConfig = "";
 			if (_selectedGame != null)
 			{
-				btn_playgamedirect.Enabled = true;
-				btn_playgamedirect2.Enabled = true;
+				//btn_playgamedirect.Enabled = true;
+				//btn_playgamedirect2.Enabled = true;
 
 				finalConfig = _selectedGame.UserConfigFile;
 
@@ -913,7 +987,7 @@ namespace TeknoparrotAutoXinput
 			if (cmb_displayMode.SelectedIndex > 0) arguments += $" --displayMode={cmb_displayMode.SelectedIndex}";
 			if (cmb_resolution.SelectedIndex > 0) arguments += $" --resolution={cmb_resolution.SelectedIndex}";
 			if (cmb_patchReshade.SelectedIndex > 0) arguments += $" --reshade={cmb_patchReshade.SelectedIndex}";
-			if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
+			//if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
 			if (cmb_testMode.SelectedIndex > 0) arguments += $" --testmode";
 			arguments += $" \"{finalConfig}\"";
 			arguments = arguments.Trim();
@@ -1063,8 +1137,8 @@ namespace TeknoparrotAutoXinput
 			string finalConfig = "";
 			if (_selectedGame != null)
 			{
-				btn_playgamedirect.Enabled = true;
-				btn_playgamedirect2.Enabled = true;
+				//btn_playgamedirect.Enabled = true;
+				//btn_playgamedirect2.Enabled = true;
 
 				finalConfig = _selectedGame.UserConfigFile;
 
@@ -1075,7 +1149,7 @@ namespace TeknoparrotAutoXinput
 			if (cmb_displayMode.SelectedIndex > 0) arguments += $" --displayMode={cmb_displayMode.SelectedIndex}";
 			if (cmb_resolution.SelectedIndex > 0) arguments += $" --resolution={cmb_resolution.SelectedIndex}";
 			if (cmb_patchReshade.SelectedIndex > 0) arguments += $" --reshade={cmb_patchReshade.SelectedIndex}";
-			if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
+			//if (cmb_patchlink.SelectedIndex > 0) arguments += $" --nolink";
 			if (cmb_testMode.SelectedIndex > 0) arguments += $" --testmode";
 			arguments += $" \"{finalConfig}\"";
 			arguments = arguments.Trim();
@@ -1125,8 +1199,9 @@ namespace TeknoparrotAutoXinput
 			if (IsReloading) return;
 
 			cmb_testMode.SelectedIndex = 0;
-		//	cmb_testMode.Enabled = false;
+			//	cmb_testMode.Enabled = false;
 
+			fpanel_perf.Visible = false;
 			fpanel_ffb.Visible = false;
 			fpanel_crt.Visible = false;
 			fpanel_bezel.Visible = false;
@@ -1136,10 +1211,11 @@ namespace TeknoparrotAutoXinput
 			fpanel_joystick.Visible = false;
 			fpanel_cross1.Visible = false;
 			fpanel_cross2.Visible = false;
+			fpanel_nativeCrosshair.Visible = false;
 
 			btn_playgame.Enabled = false;
-			btn_playgamedirect.Enabled = false;
-			btn_playgamedirect2.Enabled = false;
+			//btn_playgamedirect.Enabled = false;
+			//btn_playgamedirect2.Enabled = false;
 			btn_gameoptions.Enabled = false;
 			btn_tpsettings.Enabled = false;
 
@@ -1155,8 +1231,8 @@ namespace TeknoparrotAutoXinput
 			pictureBox_gameControls.Image = null;
 			if (fastObjectListView1.SelectedIndex >= 0)
 			{
-				btn_playgamedirect.Enabled = true;
-				btn_playgamedirect2.Enabled = true;
+				//btn_playgamedirect.Enabled = true;
+				//btn_playgamedirect2.Enabled = true;
 
 				Game DataGame = (Game)fastObjectListView1.SelectedObject;
 				_selectedGame = DataGame;
@@ -1176,7 +1252,7 @@ namespace TeknoparrotAutoXinput
 				string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
 				if (File.Exists(optionFile))
 				{
-					_selectedGameSettings = new GameSettings(File.ReadAllText(optionFile));
+					_selectedGameSettings = new GameSettings(Utils.ReadAllText(optionFile));
 					gpuResolution = _selectedGameSettings.gpuResolution > 0 ? (_selectedGameSettings.gpuResolution - 1) : gpuResolution;
 					displayMode = _selectedGameSettings.displayMode > 0 ? (_selectedGameSettings.displayMode - 1) : displayMode;
 					patchReshade = _selectedGameSettings.patchReshade > 0 ? (_selectedGameSettings.patchReshade == 1 ? true : false) : patchReshade;
@@ -1212,7 +1288,7 @@ namespace TeknoparrotAutoXinput
 				{
 					try
 					{
-						JObject gameInfoParsedJson = JObject.Parse(File.ReadAllText(infoFile));
+						JObject gameInfoParsedJson = JObject.Parse(Utils.ReadAllText(infoFile));
 						JObject gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
 						_selectedGameOption = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
 						{
@@ -1222,15 +1298,31 @@ namespace TeknoparrotAutoXinput
 							var allSettings = tpInfoGlobalSection.ToObject<Dictionary<string, Dictionary<string, string>>>();
 							if (allSettings.ContainsKey("set_displaymode_recommanded"))
 							{
-								string TargetWindowedString = allSettings["set_displaymode_recommanded"].First().Key.Trim().ToLower().Replace("||", ",") + "," + allSettings["set_displaymode_recommanded"].First().Value.Trim().ToLower();
-								if (TargetWindowedString == WindowedString)
+								int found_recommanded_display = -1;
+								if (allSettings["set_displaymode_recommanded"].ContainsKey("General||RegAsWindowed"))
 								{
-									if (displayMode == 0) cmb_displayMode.Items[0] = "Recommanded Windowed" + $" ({displayModeSource})";
+									if (allSettings["set_displaymode_recommanded"]["General||RegAsWindowed"] == "0") found_recommanded_display = 0;
+									if (allSettings["set_displaymode_recommanded"]["General||RegAsWindowed"] == "1") found_recommanded_display = 1;
+								}
+								if (found_recommanded_display == -1)
+								{
+									string TargetWindowedString = allSettings["set_displaymode_recommanded"].First().Key.Trim().ToLower().Replace("||", ",") + "," + allSettings["set_displaymode_recommanded"].First().Value.Trim().ToLower();
+									if (TargetWindowedString == WindowedString)
+									{
+										if (displayMode == 0) found_recommanded_display = 1;
+
+									}
+									else
+									{
+										if (displayMode == 0) found_recommanded_display = 0;
+									}
 
 								}
-								else
+								if (found_recommanded_display != -1)
 								{
-									if (displayMode == 0) cmb_displayMode.Items[0] = "Recommanded FS" + $" ({displayModeSource})";
+
+									if (found_recommanded_display == 0) cmb_displayMode.Items[0] = "Recommanded FS" + $" ({displayModeSource})";
+									if (found_recommanded_display == 1) cmb_displayMode.Items[0] = "Recommanded Windowed" + $" ({displayModeSource})";
 								}
 
 
@@ -1311,6 +1403,36 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 
+
+
+
+						if (_selectedGameOption.ContainsKey("showGameOptionPerf") && (_selectedGameOption["showGameOptionPerf"].ToLower() == "true" || _selectedGameOption["showGameOptionPerf"].ToLower() == "high"))
+						{
+							fpanel_perf.BorderStyle = BorderStyle.FixedSingle;
+							int perf = ConfigurationManager.MainConfig.performanceProfile;
+							if (_selectedGameSettings != null)
+							{
+								if (_selectedGameSettings.performanceProfile > 0) fpanel_perf.BorderStyle = BorderStyle.Fixed3D;
+								perf = _selectedGameSettings.performanceProfile > 0 ? (_selectedGameSettings.performanceProfile - 1) : perf;
+							}
+							if (_selectedGameOption["showGameOptionPerf"].ToLower() != "high")
+							{
+								if (perf == 2) perf = 0;
+								lbl_perf_high.Visible = false;
+							}
+							else lbl_perf_high.Visible = true;
+
+							lbl_perf_normal.ForeColor = Color.DarkGray;
+							lbl_perf_low.ForeColor = Color.DarkGray;
+							lbl_perf_high.ForeColor = Color.DarkGray;
+
+							if (perf == 0) lbl_perf_normal.ForeColor = Color.DarkGreen;
+							if (perf == 1) lbl_perf_low.ForeColor = Color.DarkOrange;
+							if (perf == 2) lbl_perf_high.ForeColor = Color.DarkRed;
+
+							fpanel_perf.Visible = true;
+						}
+
 						if (_selectedGameOption.ContainsKey("showGameOptionFFB") && _selectedGameOption["showGameOptionFFB"].ToLower() == "true")
 						{
 							fpanel_ffb.BorderStyle = BorderStyle.FixedSingle;
@@ -1353,6 +1475,17 @@ namespace TeknoparrotAutoXinput
 								lbl_crt.Text = "OFF";
 							}
 							fpanel_crt.Visible = true;
+							fpanel_crt.Enabled = true;
+							if (_selectedGameOption.ContainsKey("disableCrtForLowPerf") && _selectedGameOption["disableCrtForLowPerf"].ToLower() == "true")
+							{
+								int perf = _selectedGameSettings.performanceProfile > 0 ? (_selectedGameSettings.performanceProfile - 1) : ConfigurationManager.MainConfig.performanceProfile;
+								if (perf == 1)
+								{
+									fpanel_crt.Enabled = false;
+									lbl_crt.Text = "DISABLED";
+								}
+							}
+
 						}
 						if (_selectedGameOption.ContainsKey("showGameOptionBezel") && _selectedGameOption["showGameOptionBezel"].ToLower() == "true")
 						{
@@ -1417,6 +1550,7 @@ namespace TeknoparrotAutoXinput
 							}
 							fpanel_aspectratio.Visible = true;
 						}
+						/*
 						if (_selectedGameOption.ContainsKey("showGameOptionPatchLang") && _selectedGameOption["showGameOptionPatchLang"].ToLower() != "false")
 						{
 							fpanel_translation.BorderStyle = BorderStyle.FixedSingle;
@@ -1428,36 +1562,66 @@ namespace TeknoparrotAutoXinput
 							}
 							if (patchLang == 0)
 							{
-								lbl_translation.ForeColor = Color.Red;
-								lbl_translation.Text = "NONE";
+								lbl_translation_none.ForeColor = Color.Red;
+								lbl_translation_none.Text = "NONE";
 							}
 							if (patchLang == 1)
 							{
 								if (_selectedGameOption["showGameOptionPatchLang"].ToLower() == "french")
 								{
-									lbl_translation.ForeColor = Color.Red;
-									lbl_translation.Text = "NONE";
+									lbl_translation_none.ForeColor = Color.Red;
+									lbl_translation_none.Text = "NONE";
 								}
 								else
 								{
-									lbl_translation.ForeColor = Color.DarkGreen;
-									lbl_translation.Text = "ENGLISH";
+									lbl_translation_none.ForeColor = Color.DarkGreen;
+									lbl_translation_none.Text = "ENGLISH";
 								}
 							}
 							if (patchLang == 2)
 							{
 								if (_selectedGameOption["showGameOptionPatchLang"].ToLower() == "english")
 								{
-									lbl_translation.ForeColor = Color.DarkGreen;
-									lbl_translation.Text = "ENGLISH";
+									lbl_translation_none.ForeColor = Color.DarkGreen;
+									lbl_translation_none.Text = "ENGLISH";
 								}
 								else
 								{
-									lbl_translation.ForeColor = Color.DarkBlue;
-									lbl_translation.Text = "FRENCH";
+									lbl_translation_none.ForeColor = Color.DarkBlue;
+									lbl_translation_none.Text = "FRENCH";
 								}
 
 							}
+							fpanel_translation.Visible = true;
+						}
+						*/
+						if (_selectedGameOption.ContainsKey("showGameOptionPatchLang") && _selectedGameOption["showGameOptionPatchLang"].ToLower() != "false")
+						{
+							fpanel_translation.BorderStyle = BorderStyle.FixedSingle;
+							lbl_translation_english.Visible = true;
+							lbl_translation_none.Visible = true;
+							lbl_translation_french.Visible = true;
+
+							int patchLang = ConfigurationManager.MainConfig.patchLang;
+							if (_selectedGameSettings != null)
+							{
+								if (_selectedGameSettings.patchLang > 0) fpanel_translation.BorderStyle = BorderStyle.Fixed3D;
+								patchLang = _selectedGameSettings.patchLang > 0 ? (_selectedGameSettings.patchLang - 1) : patchLang;
+							}
+							if (_selectedGameOption["showGameOptionPatchLang"].ToLower() == "french") lbl_translation_english.Visible = false;
+							if (_selectedGameOption["showGameOptionPatchLang"].ToLower() == "english") lbl_translation_french.Visible = false;
+
+							lbl_translation_none.ForeColor = Color.DarkGray;
+							lbl_translation_english.ForeColor = Color.DarkGray;
+							lbl_translation_french.ForeColor = Color.DarkGray;
+
+							if (patchLang == 1 && (_selectedGameOption["showGameOptionPatchLang"].ToLower() == "french")) patchLang = 0;
+							if (patchLang == 2 && (_selectedGameOption["showGameOptionPatchLang"].ToLower() == "english")) patchLang = 1;
+
+							if (patchLang == 0) lbl_translation_none.ForeColor = Color.DarkRed;
+							if (patchLang == 1) lbl_translation_english.ForeColor = Color.DarkGreen;
+							if (patchLang == 2) lbl_translation_french.ForeColor = Color.DarkGreen;
+
 							fpanel_translation.Visible = true;
 						}
 						if (_selectedGameOption.ContainsKey("canUseJoyInsteadOfDpad") && _selectedGameOption["canUseJoyInsteadOfDpad"].ToLower() == "true")
@@ -1481,56 +1645,261 @@ namespace TeknoparrotAutoXinput
 							}
 							fpanel_joystick.Visible = true;
 						}
-						if (_selectedGame.existingConfig.ContainsKey("lightgun") && _dinputLightgunAFound)
+
+						/*
+						if (_selectedGameOption.ContainsKey("nativeCrosshair") && _selectedGameOption["nativeCrosshair"].ToLower() == "true" && (_dinputLightgunAFound || _dinputLightgunBFound))
 						{
-							fpanel_cross1.BorderStyle = BorderStyle.FixedSingle;
-							bool gunACrosshair = ConfigurationManager.MainConfig.gunACrosshair;
-							if (_selectedGameSettings != null)
+							if (_selectedGame.existingConfig.ContainsKey("lightgun") && (_dinputLightgunAFound || _dinputLightgunBFound))
 							{
-								if (_selectedGameSettings.gunA_crosshair > 0)
+								bool hideCrosshair = true;
+								fpanel_nativeCrosshair.BorderStyle = BorderStyle.FixedSingle;
+								bool gunACrosshair = false;
+								if (_dinputLightgunAFound)
 								{
-									fpanel_cross1.BorderStyle = BorderStyle.Fixed3D;
-									if (_selectedGameSettings.gunA_crosshair == 1) gunACrosshair = true;
-									if (_selectedGameSettings.gunA_crosshair == 2) gunACrosshair = false;
+									gunACrosshair = ConfigurationManager.MainConfig.gunACrosshair;
+									if (_selectedGameSettings != null)
+									{
+										if (_selectedGameSettings.gunA_crosshair > 0)
+										{
+											fpanel_nativeCrosshair.BorderStyle = BorderStyle.Fixed3D;
+											if (_selectedGameSettings.gunA_crosshair == 1) gunACrosshair = true;
+											if (_selectedGameSettings.gunA_crosshair == 2) gunACrosshair = false;
+										}
+									}
 								}
+								bool gunBCrosshair = false;
+								if (_dinputLightgunBFound)
+								{
+									gunBCrosshair = ConfigurationManager.MainConfig.gunBCrosshair;
+									if (_selectedGameSettings != null)
+									{
+										if (_selectedGameSettings.gunB_crosshair > 0)
+										{
+											fpanel_nativeCrosshair.BorderStyle = BorderStyle.Fixed3D;
+											if (_selectedGameSettings.gunB_crosshair == 1) gunBCrosshair = true;
+											if (_selectedGameSettings.gunB_crosshair == 2) gunBCrosshair = false;
+										}
+									}
+								}
+
+								if (_dinputLightgunAFound && gunACrosshair) hideCrosshair = false;
+								if (_dinputLightgunBFound && gunBCrosshair) hideCrosshair = false;
+
+
+
+
+								if (!hideCrosshair)
+								{
+									lbl_nativeCrosshair.ForeColor = Color.DarkGreen;
+									lbl_nativeCrosshair.Text = "ON";
+								}
+								else
+								{
+									lbl_nativeCrosshair.ForeColor = Color.Red;
+									lbl_nativeCrosshair.Text = "OFF";
+								}
+								fpanel_nativeCrosshair.Visible = true;
 							}
-							if (gunACrosshair)
+
+						}
+						else
+						{
+
+							string linkSourceFolderExe = "";
+							if (_selectedGameSettings != null && _selectedGameSettings.CustomPerGameLinkFolder != null && _selectedGameSettings.CustomPerGameLinkFolder != "")
 							{
-								lbl_cross1.ForeColor = Color.DarkGreen;
-								lbl_cross1.Text = "ON";
+								string lastFolder = Path.GetFileName(_selectedGameSettings.CustomPerGameLinkFolder);
+								if (lastFolder == Path.GetFileNameWithoutExtension(_selectedGame.FileName))
+								{
+									linkSourceFolderExe = _selectedGameSettings.CustomPerGameLinkFolder;
+								}
 							}
 							else
 							{
-								lbl_cross1.ForeColor = Color.Red;
-								lbl_cross1.Text = "OFF";
+								linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, Path.GetFileNameWithoutExtension(_selectedGame.FileName));
 							}
-							fpanel_cross1.Visible = true;
-						}
-						if (_selectedGame.existingConfig.ContainsKey("lightgun") && _dinputLightgunAFound && _dinputLightgunBFound)
-						{
-							fpanel_cross2.BorderStyle = BorderStyle.FixedSingle;
-							bool gunBCrosshair = ConfigurationManager.MainConfig.gunBCrosshair;
-							if (_selectedGameSettings != null)
+							if (linkSourceFolderExe != "" && Directory.Exists(Path.Combine(linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")))
 							{
-								if (_selectedGameSettings.gunA_crosshair > 0)
+								if (_selectedGame.existingConfig.ContainsKey("lightgun") && _dinputLightgunAFound)
 								{
-									fpanel_cross2.BorderStyle = BorderStyle.Fixed3D;
-									if (_selectedGameSettings.gunB_crosshair == 1) gunBCrosshair = true;
-									if (_selectedGameSettings.gunB_crosshair == 2) gunBCrosshair = false;
+									fpanel_cross1.BorderStyle = BorderStyle.FixedSingle;
+									bool gunACrosshair = ConfigurationManager.MainConfig.gunACrosshair;
+									if (_selectedGameSettings != null)
+									{
+										if (_selectedGameSettings.gunA_crosshair > 0)
+										{
+											fpanel_cross1.BorderStyle = BorderStyle.Fixed3D;
+											if (_selectedGameSettings.gunA_crosshair == 1) gunACrosshair = true;
+											if (_selectedGameSettings.gunA_crosshair == 2) gunACrosshair = false;
+										}
+									}
+									if (gunACrosshair)
+									{
+										lbl_cross1.ForeColor = Color.DarkGreen;
+										lbl_cross1.Text = "ON";
+									}
+									else
+									{
+										lbl_cross1.ForeColor = Color.Red;
+										lbl_cross1.Text = "OFF";
+									}
+									fpanel_cross1.Visible = true;
+								}
+								if (_selectedGame.existingConfig.ContainsKey("lightgun") && _dinputLightgunAFound && _dinputLightgunBFound)
+								{
+									fpanel_cross2.BorderStyle = BorderStyle.FixedSingle;
+									bool gunBCrosshair = ConfigurationManager.MainConfig.gunBCrosshair;
+									if (_selectedGameSettings != null)
+									{
+										if (_selectedGameSettings.gunA_crosshair > 0)
+										{
+											fpanel_cross2.BorderStyle = BorderStyle.Fixed3D;
+											if (_selectedGameSettings.gunB_crosshair == 1) gunBCrosshair = true;
+											if (_selectedGameSettings.gunB_crosshair == 2) gunBCrosshair = false;
+										}
+									}
+									if (gunBCrosshair)
+									{
+										lbl_cross2.ForeColor = Color.DarkGreen;
+										lbl_cross2.Text = "ON";
+									}
+									else
+									{
+										lbl_cross2.ForeColor = Color.Red;
+										lbl_cross2.Text = "OFF";
+									}
+									fpanel_cross2.Visible = true;
 								}
 							}
-							if (gunBCrosshair)
+						}
+						*/
+						if (_selectedGame.existingConfig.ContainsKey("lightgun") && (_dinputLightgunAFound || _dinputLightgunBFound))
+						{
+							string linkSourceFolderExe = "";
+							if (_selectedGameSettings != null && _selectedGameSettings.CustomPerGameLinkFolder != null && _selectedGameSettings.CustomPerGameLinkFolder != "")
 							{
-								lbl_cross2.ForeColor = Color.DarkGreen;
-								lbl_cross2.Text = "ON";
+								string lastFolder = Path.GetFileName(_selectedGameSettings.CustomPerGameLinkFolder);
+								if (lastFolder == Path.GetFileNameWithoutExtension(_selectedGame.FileName))
+								{
+									linkSourceFolderExe = _selectedGameSettings.CustomPerGameLinkFolder;
+								}
 							}
 							else
 							{
-								lbl_cross2.ForeColor = Color.Red;
-								lbl_cross2.Text = "OFF";
+								linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, Path.GetFileNameWithoutExtension(_selectedGame.FileName));
 							}
-							fpanel_cross1.Visible = true;
+							if (linkSourceFolderExe != "" && Directory.Exists(Path.Combine(linkSourceFolderExe, "[!!crosshair!!]", "[!crosshair_gun1_and_gun2!]")))
+							{
+								if (_selectedGame.existingConfig.ContainsKey("lightgun") && _dinputLightgunAFound)
+								{
+									fpanel_cross1.BorderStyle = BorderStyle.FixedSingle;
+									bool gunACrosshair = ConfigurationManager.MainConfig.gunACrosshair;
+									if (_selectedGameSettings != null)
+									{
+										if (_selectedGameSettings.gunA_crosshair > 0)
+										{
+											fpanel_cross1.BorderStyle = BorderStyle.Fixed3D;
+											if (_selectedGameSettings.gunA_crosshair == 1) gunACrosshair = true;
+											if (_selectedGameSettings.gunA_crosshair == 2) gunACrosshair = false;
+										}
+									}
+									if (gunACrosshair)
+									{
+										lbl_cross1.ForeColor = Color.DarkGreen;
+										lbl_cross1.Text = "ON";
+									}
+									else
+									{
+										lbl_cross1.ForeColor = Color.Red;
+										lbl_cross1.Text = "OFF";
+									}
+									fpanel_cross1.Visible = true;
+								}
+								if (_selectedGame.existingConfig.ContainsKey("lightgun") && _dinputLightgunAFound && _dinputLightgunBFound)
+								{
+									fpanel_cross2.BorderStyle = BorderStyle.FixedSingle;
+									bool gunBCrosshair = ConfigurationManager.MainConfig.gunBCrosshair;
+									if (_selectedGameSettings != null)
+									{
+										if (_selectedGameSettings.gunA_crosshair > 0)
+										{
+											fpanel_cross2.BorderStyle = BorderStyle.Fixed3D;
+											if (_selectedGameSettings.gunB_crosshair == 1) gunBCrosshair = true;
+											if (_selectedGameSettings.gunB_crosshair == 2) gunBCrosshair = false;
+										}
+									}
+									if (gunBCrosshair)
+									{
+										lbl_cross2.ForeColor = Color.DarkGreen;
+										lbl_cross2.Text = "ON";
+									}
+									else
+									{
+										lbl_cross2.ForeColor = Color.Red;
+										lbl_cross2.Text = "OFF";
+									}
+									fpanel_cross2.Visible = true;
+								}
+
+							}
+							else
+							{
+								if (_selectedGame.existingConfig.ContainsKey("lightgun") && (_dinputLightgunAFound || _dinputLightgunBFound))
+								{
+									bool hideCrosshair = true;
+									fpanel_nativeCrosshair.BorderStyle = BorderStyle.FixedSingle;
+									bool gunACrosshair = false;
+									if (_dinputLightgunAFound)
+									{
+										gunACrosshair = ConfigurationManager.MainConfig.gunACrosshair;
+										if (_selectedGameSettings != null)
+										{
+											if (_selectedGameSettings.gunA_crosshair > 0)
+											{
+												fpanel_nativeCrosshair.BorderStyle = BorderStyle.Fixed3D;
+												if (_selectedGameSettings.gunA_crosshair == 1) gunACrosshair = true;
+												if (_selectedGameSettings.gunA_crosshair == 2) gunACrosshair = false;
+											}
+										}
+									}
+									bool gunBCrosshair = false;
+									if (_dinputLightgunBFound)
+									{
+										gunBCrosshair = ConfigurationManager.MainConfig.gunBCrosshair;
+										if (_selectedGameSettings != null)
+										{
+											if (_selectedGameSettings.gunB_crosshair > 0)
+											{
+												fpanel_nativeCrosshair.BorderStyle = BorderStyle.Fixed3D;
+												if (_selectedGameSettings.gunB_crosshair == 1) gunBCrosshair = true;
+												if (_selectedGameSettings.gunB_crosshair == 2) gunBCrosshair = false;
+											}
+										}
+									}
+
+									if (_dinputLightgunAFound && gunACrosshair) hideCrosshair = false;
+									if (_dinputLightgunBFound && gunBCrosshair) hideCrosshair = false;
+
+
+
+
+									if (!hideCrosshair)
+									{
+										lbl_nativeCrosshair.ForeColor = Color.DarkGreen;
+										lbl_nativeCrosshair.Text = "ON";
+									}
+									else
+									{
+										lbl_nativeCrosshair.ForeColor = Color.Red;
+										lbl_nativeCrosshair.Text = "OFF";
+									}
+									fpanel_nativeCrosshair.Visible = true;
+								}
+
+							}
+
 						}
+
 
 
 
@@ -1538,6 +1907,94 @@ namespace TeknoparrotAutoXinput
 					catch { }
 
 
+				}
+
+				{
+					fpanel_overrideTpController.BorderStyle = BorderStyle.FixedSingle;
+					bool overrideTpController = false;
+					if (_selectedGame.isSupported)
+					{
+						overrideTpController = true;
+						if (_selectedGameSettings != null)
+						{
+							overrideTpController = _selectedGameSettings.overrideTpController;
+							if (!_selectedGameSettings.overrideTpController) fpanel_overrideTpController.BorderStyle = BorderStyle.Fixed3D;
+						}
+					}
+					if (overrideTpController)
+					{
+						lbl_overrideTpController.ForeColor = Color.DarkGreen;
+						lbl_overrideTpController.Text = "ON";
+						btn_playgame.Text = "PLAY GAME !";
+					}
+					else
+					{
+						lbl_overrideTpController.ForeColor = Color.Red;
+						lbl_overrideTpController.Text = "OFF";
+						btn_playgame.Text = "PLAY GAME ! (NO AUTO CONTROLS !)";
+
+					}
+				}
+				{
+					fpanel_overrideTpGameSettings.BorderStyle = BorderStyle.FixedSingle;
+					bool overrideTpGameSettings = false;
+					if (_selectedGame.InfoFile != "")
+					{
+						overrideTpGameSettings = true;
+						if (_selectedGameSettings != null)
+						{
+							overrideTpGameSettings = _selectedGameSettings.overrideTpGameSettings;
+							if (!_selectedGameSettings.overrideTpGameSettings) fpanel_overrideTpGameSettings.BorderStyle = BorderStyle.Fixed3D;
+						}
+					}
+					if (overrideTpGameSettings)
+					{
+						lbl_overrideTpGameSettings.ForeColor = Color.DarkGreen;
+						lbl_overrideTpGameSettings.Text = "ON";
+					}
+					else
+					{
+						lbl_overrideTpGameSettings.ForeColor = Color.Red;
+						lbl_overrideTpGameSettings.Text = "OFF";
+					}
+				}
+				{
+					fpanel_applyPatches.BorderStyle = BorderStyle.FixedSingle;
+					bool applyPatches = true;
+					if (_selectedGameSettings != null)
+					{
+						applyPatches = _selectedGameSettings.applyPatches;
+						if (!_selectedGameSettings.applyPatches) fpanel_applyPatches.BorderStyle = BorderStyle.Fixed3D;
+					}
+					if (applyPatches)
+					{
+						lbl_applyPatches.ForeColor = Color.DarkGreen;
+						lbl_applyPatches.Text = "ON";
+					}
+					else
+					{
+						lbl_applyPatches.ForeColor = Color.Red;
+						lbl_applyPatches.Text = "OFF";
+					}
+				}
+				{
+					fpanel_useThirdParty.BorderStyle = BorderStyle.FixedSingle;
+					bool useThirdParty = true;
+					if (_selectedGameSettings != null)
+					{
+						useThirdParty = _selectedGameSettings.useThirdParty;
+						if (!_selectedGameSettings.useThirdParty) fpanel_useThirdParty.BorderStyle = BorderStyle.Fixed3D;
+					}
+					if (useThirdParty)
+					{
+						lbl_useThirdParty.ForeColor = Color.DarkGreen;
+						lbl_useThirdParty.Text = "ON";
+					}
+					else
+					{
+						lbl_useThirdParty.ForeColor = Color.Red;
+						lbl_useThirdParty.Text = "OFF";
+					}
 				}
 
 
@@ -1825,7 +2282,7 @@ namespace TeknoparrotAutoXinput
 				}
 				else
 				{
-					_playAutoEnabled = false;
+					_playAutoEnabled = true;
 					_playDirectEnabled = true;
 					isPlaying = isPlaying;
 					btn_gameoptions.Enabled = true;
@@ -1850,7 +2307,38 @@ namespace TeknoparrotAutoXinput
 
 					}
 
+					lbl_player1.Text = "No Auto-Controller Binding";
+					lbl_player2.Text = "Define and use your own control within Teknoparrot UI";
+					lbl_player3.Text = "";
+					lbl_player4.Text = "";
 
+				}
+
+				if (_selectedGameSettings != null && _selectedGameSettings.overrideTpController == false)
+				{
+					lbl_player1.Text = "No Auto-Controller Binding";
+					lbl_player2.Text = "Define and use your own control within Teknoparrot UI";
+					lbl_player3.Text = "";
+					lbl_player4.Text = "";
+
+					string fileDirectory = Path.GetDirectoryName(DataGame.UserConfigFile);
+					fileDirectory = Path.GetDirectoryName(fileDirectory);
+					string iconFile = string.Empty;
+					if (DataGame.Metadata != null)
+					{
+						iconFile = DataGame.Metadata.icon_name;
+					}
+					else
+					{
+						iconFile = Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".png";
+					}
+					iconFile = Path.Combine(fileDirectory, "Icons", iconFile);
+					if (File.Exists(iconFile))
+					{
+						Image originalImage = System.Drawing.Image.FromFile(iconFile);
+						pictureBox_gameControls.Image = ResizeImageBest(originalImage, pictureBox_gameControls.Size);
+
+					}
 
 				}
 
@@ -2023,8 +2511,8 @@ namespace TeknoparrotAutoXinput
 		{
 			if (fastObjectListView1.SelectedIndex >= 0)
 			{
-				btn_playgamedirect.Enabled = true;
-				btn_playgamedirect2.Enabled = true;
+				//btn_playgamedirect.Enabled = true;
+				//btn_playgamedirect2.Enabled = true;
 
 				Game DataGame = (Game)fastObjectListView1.SelectedObject;
 
@@ -2693,14 +3181,14 @@ namespace TeknoparrotAutoXinput
 			if (_selectedGame != null)
 			{
 				string exeNotepad = "notepad";
-				
+
 				string notepadPath = Utils.checkInstalled("Notepad++");
 				if (notepadPath != null)
 				{
 					notepadPath = Path.Combine(Path.GetDirectoryName(notepadPath), "notepad++.exe");
-					if(File.Exists(notepadPath)) exeNotepad = notepadPath;
+					if (File.Exists(notepadPath)) exeNotepad = notepadPath;
 				}
-				
+
 				string basePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
 
 				var infoFile = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".info.json");
@@ -2849,6 +3337,21 @@ namespace TeknoparrotAutoXinput
 
 		}
 
+		private void fpanel_perf_DoubleClick(object sender, EventArgs e)
+		{
+			if (_selectedGame != null)
+			{
+				var PerGameConfigFile = Path.Combine(Program.GameOptionsFolder, Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".json");
+				if (_selectedGameSettings == null) _selectedGameSettings = new GameSettings();
+				int newVal = _selectedGameSettings.performanceProfile + 1;
+				if (_selectedGameOption.ContainsKey("showGameOptionPerf") && _selectedGameOption["showGameOptionPerf"].ToLower() != "high" && newVal == 3) newVal++;
+				if (newVal > 3) newVal = 0;
+				_selectedGameSettings.performanceProfile = newVal;
+				_selectedGameSettings.Save(PerGameConfigFile);
+				fastObjectListView1_SelectedIndexChanged(null, null);
+			}
+		}
+
 		private void fpanel_ffb_DoubleClick(object sender, EventArgs e)
 		{
 			if (_selectedGame != null)
@@ -2977,6 +3480,96 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
+		private void fpanel_nativeCrosshair_DoubleClick(object sender, EventArgs e)
+		{
+			if (_selectedGame != null)
+			{
+				var PerGameConfigFile = Path.Combine(Program.GameOptionsFolder, Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".json");
+				if (_selectedGameSettings == null) _selectedGameSettings = new GameSettings();
+				if (_selectedGameSettings == null) _selectedGameSettings = new GameSettings();
+				int newVal = _selectedGameSettings.gunA_crosshair + 1;
+				if (newVal > 2) newVal = 0;
+				_selectedGameSettings.gunA_crosshair = newVal;
+				_selectedGameSettings.gunB_crosshair = newVal;
+				_selectedGameSettings.Save(PerGameConfigFile);
+				fastObjectListView1_SelectedIndexChanged(null, null);
+			}
+		}
+
+
+
+		private void fpanel_overrideTpController_DoubleClick(object sender, EventArgs e)
+		{
+			if (_selectedGame != null)
+			{
+				var PerGameConfigFile = Path.Combine(Program.GameOptionsFolder, Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".json");
+				if (_selectedGameSettings == null) _selectedGameSettings = new GameSettings();
+				_selectedGameSettings.overrideTpController = !_selectedGameSettings.overrideTpController;
+				_selectedGameSettings.Save(PerGameConfigFile);
+				fastObjectListView1_SelectedIndexChanged(null, null);
+			}
+		}
+
+		private void fpanel_overrideTpGameSettings_DoubleClick(object sender, EventArgs e)
+		{
+			if (_selectedGame != null)
+			{
+				var PerGameConfigFile = Path.Combine(Program.GameOptionsFolder, Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".json");
+				if (_selectedGameSettings == null) _selectedGameSettings = new GameSettings();
+				_selectedGameSettings.overrideTpGameSettings = !_selectedGameSettings.overrideTpGameSettings;
+				_selectedGameSettings.Save(PerGameConfigFile);
+				fastObjectListView1_SelectedIndexChanged(null, null);
+			}
+		}
+
+		private void fpanel_applyPatches_DoubleClick(object sender, EventArgs e)
+		{
+			if (_selectedGame != null)
+			{
+				var PerGameConfigFile = Path.Combine(Program.GameOptionsFolder, Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".json");
+				if (_selectedGameSettings == null) _selectedGameSettings = new GameSettings();
+				_selectedGameSettings.applyPatches = !_selectedGameSettings.applyPatches;
+				_selectedGameSettings.Save(PerGameConfigFile);
+				fastObjectListView1_SelectedIndexChanged(null, null);
+			}
+		}
+
+		private void fpanel_useThirdParty_DoubleClick(object sender, EventArgs e)
+		{
+			if (_selectedGame != null)
+			{
+				var PerGameConfigFile = Path.Combine(Program.GameOptionsFolder, Path.GetFileNameWithoutExtension(_selectedGame.UserConfigFile) + ".json");
+				if (_selectedGameSettings == null) _selectedGameSettings = new GameSettings();
+				_selectedGameSettings.useThirdParty = !_selectedGameSettings.useThirdParty;
+				_selectedGameSettings.Save(PerGameConfigFile);
+				fastObjectListView1_SelectedIndexChanged(null, null);
+			}
+		}
+
+		private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+		{
+
+		}
+
+		private void flowLayoutPanel5_Paint(object sender, PaintEventArgs e)
+		{
+
+		}
+
+		private void lbl_joystick_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void label2_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void lbl_nativeCrosshair_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 
 	public class UpdatePatchArchive

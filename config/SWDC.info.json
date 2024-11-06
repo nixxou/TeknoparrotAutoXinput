@@ -1,60 +1,72 @@
 {
-	"global": {
-		"windowed": "General,DisplayMode,Windowed",
-		"showGameOptionBezel": "False",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "True",
-		"upscaleFullscreen": "True",
-		"upscaleWindowed": "True",
-		"magpieClass": "UnrealWindow",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "True",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "True",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-        "set_displaymode_recommanded": {
-            "General||DisplayMode": "Windowed"
-        },
-        "set_fullscreen": {
-            "General||DisplayMode": "Fullscreen"
-        },
-        "set_windowed": {
-            "General||DisplayMode": "Windowed"
-        },
-        "set_resolution & 720p": {
-			"Graphics||Use Custom Resolution": "1",
-            "Graphics||Resolution Width": "1280",
-            "Graphics||Resolution Height": "720"
-        },
-        "set_resolution & 1080p": {
-			"Graphics||Use Custom Resolution": "1",
-            "Graphics||Resolution Width": "1920",
-            "Graphics||Resolution Height": "1080"
-        },
-        "set_resolution & 2k": {														
-			"Graphics||Use Custom Resolution": "1",
-            "Graphics||Resolution Width": "2560",
-            "Graphics||Resolution Height": "1440",
-			"Graphics||Resize UI on high res displays": "1"
-        },
-        "set_resolution & 4k": {
-			"Graphics||Use Custom Resolution": "1",
-            "Graphics||Resolution Width": "3840",
-            "Graphics||Resolution Height": "2160",
-			"Graphics||Resize UI on high res displays": "1"
-        },
-		"replace_gameid": {
-			"General||OnlineID": "{{apm3id}}"
-		},
-        "recommanded_tp_settings": {},
-		"replace_network": {
-			"Network||Force Specific Network Adapter": "1",
-			"Network||Network Adapter IP": "{{networkip}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,DisplayMode,Windowed",
+    "originalRes": "1920x1080",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "True",
+    "upscaleWindowed": "True",
+    "magpieNoLaunchIfSameRes": "True",
+    "magpieClass": "UnrealWindow",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "True",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "True",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||DisplayMode": "Windowed"
+    },
+    "set_fullscreen": {
+      "General||DisplayMode": "Fullscreen"
+    },
+    "set_windowed": {
+      "General||DisplayMode": "Windowed"
+    },
+    "set_resolution & 720p": {
+      "Graphics||Use Custom Resolution": "1",
+      "Graphics||Resolution Width": "1280",
+      "Graphics||Resolution Height": "720"
+    },
+    "set_resolution & 1080p": {
+      "Graphics||Use Custom Resolution": "1",
+      "Graphics||Resolution Width": "1920",
+      "Graphics||Resolution Height": "1080"
+    },
+    "set_resolution & 2k": {
+      "Graphics||Use Custom Resolution": "1",
+      "Graphics||Resolution Width": "2560",
+      "Graphics||Resolution Height": "1440",
+      "Graphics||Resize UI on high res displays": "1"
+    },
+    "set_resolution & 4k": {
+      "Graphics||Use Custom Resolution": "1",
+      "Graphics||Resolution Width": "3840",
+      "Graphics||Resolution Height": "2160",
+      "Graphics||Resize UI on high res displays": "1"
+    },
+    "game_native_res": {
+      "Graphics||Use Custom Resolution": "0",
+      "Graphics||Resolution Width": "1920",
+      "Graphics||Resolution Height": "1080"
+    },
+    "replace_gameid": {
+      "General||OnlineID": "{{apm3id}}"
+    },
+    "recommanded_tp_settings": {},
+    "replace_network": {
+      "Network||Force Specific Network Adapter": "1",
+      "Network||Network Adapter IP": "{{networkip}}"
+    }
+  },
+  "gameoptions": {
+    "shifter_found": {
+      "EnableGearChange": "True"
+    }
+  }
 }

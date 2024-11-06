@@ -8,8 +8,11 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "True",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "High",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
+    "forceWindowResize": "True",
     "magpieNoLaunchIfSameRes": "True",
     "magpieClass": "FREEGLUT",
     "magpie3DGameMode": "True",
@@ -134,6 +137,54 @@
       "General||GlareWidth": "400",
       "General||GlareHeight": "300"
     },
+    "set_resolution & 720p & low_perfprofile": {
+      "General||FrameBufferWidth": "900",
+      "General||FrameBufferHeight": "720",
+    },
+    "set_resolution & 1080p & low_perfprofile": {
+      "General||FrameBufferWidth": "1350",
+      "General||FrameBufferHeight": "1080",
+    },
+    "set_resolution & 2k & low_perfprofile": {
+      "General||FrameBufferWidth": "1800",
+      "General||FrameBufferHeight": "1440",
+    },
+    "set_resolution & 4k & low_perfprofile": {
+      "General||FrameBufferWidth": "2700",
+      "General||FrameBufferHeight": "2160",
+    },
+    "set_resolution & 720p & normal_perfprofile": {
+      "General||FrameBufferWidth": "1280",
+      "General||FrameBufferHeight": "720",
+    },
+    "set_resolution & 1080p & normal_perfprofile": {
+      "General||FrameBufferWidth": "1920",
+      "General||FrameBufferHeight": "1080",
+    },
+    "set_resolution & 2k & normal_perfprofile": {
+      "General||FrameBufferWidth": "2560",
+      "General||FrameBufferHeight": "1440",
+    },
+    "set_resolution & 4k & normal_perfprofile": {
+      "General||FrameBufferWidth": "3840",
+      "General||FrameBufferHeight": "2160",
+    },	
+    "set_resolution & 720p & high_perfprofile": {
+      "General||FrameBufferWidth": "1600",
+      "General||FrameBufferHeight": "900",
+    },
+    "set_resolution & 1080p & high_perfprofile": {
+      "General||FrameBufferWidth": "2400",
+      "General||FrameBufferHeight": "1350",
+    },
+    "set_resolution & 2k & high_perfprofile": {
+      "General||FrameBufferWidth": "3200",
+      "General||FrameBufferHeight": "1800",
+    },
+    "set_resolution & 4k & high_perfprofile": {
+      "General||FrameBufferWidth": "4800",
+      "General||FrameBufferHeight": "2700",
+    },
     "shifter_found": {
       "General||RealGearshift": "1"
     },
@@ -163,5 +214,9 @@
       "Network||BroadcastIP": "{{broadcastaddress}}"
     }
   },
-  "gameoptions": {}
+  "gameoptions": {
+    "recommanded_gameoptions & windowed & low_perfprofile": {
+      "runRivaTuner": "True",
+    }
+  }
 }

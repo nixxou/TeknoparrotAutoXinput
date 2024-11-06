@@ -1,28 +1,23 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
-using SharpDX.Multimedia;
-using System.Diagnostics;
+﻿using BsDiff;
+using Microsoft.Win32;
+using Microsoft.Win32.SafeHandles;
 using Microsoft.Win32.TaskScheduler;
+using Newtonsoft.Json;
+using SharpDX.DirectInput;
+using SharpDX.Multimedia;
+using System.Collections.Concurrent;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Security.Principal;
-using System.Xml.Linq;
-using System.ComponentModel;
-using Newtonsoft.Json;
-using System.Security.AccessControl;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Net.NetworkInformation;
-using BsDiff;
-using Microsoft.Win32;
-using System.Reflection;
-using SharpDX.DirectInput;
+using System.Xml.Linq;
 using XJoy;
-using System.Data.SqlTypes;
+using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 
 namespace TeknoparrotAutoXinput
@@ -30,7 +25,7 @@ namespace TeknoparrotAutoXinput
 
 	public static class Utils
 	{
-		public static Dictionary<string,string> md5Cache = new Dictionary<string,string>();
+		public static Dictionary<string, string> md5Cache = new Dictionary<string, string>();
 
 
 		[DllImport("kernel32.dll", SetLastError = true)]
@@ -189,6 +184,18 @@ namespace TeknoparrotAutoXinput
 		const int WS_CAPTION = 0x00C00000;
 		const int WS_SYSMENU = 0x00080000;
 
+		public static ConcurrentDictionary<string, string> CacheAllText = new ConcurrentDictionary<string, string>();
+		public static string ReadAllText(string fileName)
+		{
+			if (CacheAllText.ContainsKey(fileName)) return CacheAllText[fileName];
+			else
+			{
+				string content = File.ReadAllText(fileName);
+				CacheAllText.TryAdd(fileName, content);
+				return content;
+			}
+		}
+
 		public static int GetFileLinkCount(string filepath)
 		{
 			int result = 0;
@@ -231,7 +238,8 @@ namespace TeknoparrotAutoXinput
 			{
 				result = CreateHardLink(target, source, IntPtr.Zero);
 			}
-			catch {
+			catch
+			{
 				return false;
 			}
 			return result;
@@ -457,7 +465,7 @@ namespace TeknoparrotAutoXinput
 		}
 
 
-		public static void HardLinkFiles(string directorySource, string directoryDest, string executableGame = "",bool useSoftLink = false)
+		public static void HardLinkFiles(string directorySource, string directoryDest, string executableGame = "", bool useSoftLink = false)
 		{
 			/*
 			if (!Directory.Exists(directorySource)) return;
@@ -552,15 +560,15 @@ namespace TeknoparrotAutoXinput
 									if (!File.Exists(bdfPatchFile)) continue;
 								}
 								//Start looking at the current game executable
-								if (sourceData.source_size == executableSize && sourceData.source_md5 == GetMd5HashAsString(executableGame,true))
+								if (sourceData.source_size == executableSize && sourceData.source_md5 == GetMd5HashAsString(executableGame, true))
 								{
 									originalFile = executableGame;
 								}
 
-								if(originalFile == "") //Uf the game executable dont match
+								if (originalFile == "") //Uf the game executable dont match
 								{
 									//Verify all files in the game dir until we found a match
-										
+
 									var potentialFiles = Directory.GetFiles(dirGameExec, "*");
 									foreach (var potentialFile in potentialFiles)
 									{
@@ -575,20 +583,20 @@ namespace TeknoparrotAutoXinput
 								}
 
 								if (originalFile != "") break;
-								
+
 							}
 						}
-						if(patch.source_path == "secondaryexecutable")
+						if (patch.source_path == "secondaryexecutable")
 						{
 
 						}
-						if(patch.source_path != "mainexecutable" &&  patch.source_path != "secondaryexecutable" && patch.source_path != "")
+						if (patch.source_path != "mainexecutable" && patch.source_path != "secondaryexecutable" && patch.source_path != "")
 						{
 							string mainPotentialFile = Path.Combine(dirGameExec, patch.source_path);
 							string mainPotentialFileDir = Path.GetDirectoryName(mainPotentialFile);
 
 							long mainPotentialFileSize = -1;
-							if(File.Exists(mainPotentialFile)) mainPotentialFileSize = new FileInfo(mainPotentialFile).Length;
+							if (File.Exists(mainPotentialFile)) mainPotentialFileSize = new FileInfo(mainPotentialFile).Length;
 							foreach (var sourceData in patch.source_data)
 							{
 								if (patch.bdf)
@@ -620,18 +628,18 @@ namespace TeknoparrotAutoXinput
 
 								if (originalFile != "") break;
 							}
-							
+
 
 
 						}
 
 						//Now we apply patch
-						if(originalFile != "" && expectedPatchFile != "" && File.Exists(originalFile) && !File.Exists(expectedPatchFile))
+						if (originalFile != "" && expectedPatchFile != "" && File.Exists(originalFile) && !File.Exists(expectedPatchFile))
 						{
 							Utils.LogMessage($"{originalFile} => {expectedPatchFile} ({bdfPatchFile})");
 
 							string expectedPatchFileDir = Path.GetDirectoryName(expectedPatchFile);
-							if(!Directory.Exists(expectedPatchFileDir)) Directory.CreateDirectory(expectedPatchFileDir);
+							if (!Directory.Exists(expectedPatchFileDir)) Directory.CreateDirectory(expectedPatchFileDir);
 
 							if (patch.bdf && bdfPatchFile != "" && File.Exists(bdfPatchFile))
 							{
@@ -643,11 +651,11 @@ namespace TeknoparrotAutoXinput
 									using (var output = new FileStream(newFile, FileMode.Create))
 										BinaryPatch.Apply(input, () => new FileStream(bdfPatchFile, FileMode.Open, FileAccess.Read, FileShare.Read), output);
 								}
-								catch(Exception ex) { }
+								catch (Exception ex) { }
 							}
 							if (!patch.bdf)
 							{
-								File.Copy(originalFile,expectedPatchFile, true);
+								File.Copy(originalFile, expectedPatchFile, true);
 							}
 						}
 					}
@@ -656,15 +664,17 @@ namespace TeknoparrotAutoXinput
 			//End Apply Patch
 
 			string reshadeiniFile = "";
+			string reshadeiniFileSource = "";
+			Dictionary<string, string> reshadeShaderPossibleDir = new Dictionary<string, string>();
 
 			foreach (var file in filePaths)
 			{
 				string originalFileName = file;
 				string newfile = directoryDest + file.Remove(0, directorySource.Length);
 				newfile = newfile.Replace("[..]", "..");
-				
 
-				
+
+
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!windowed!]") && newfile.Contains(@"\[!windowed!]\"))
 				{
@@ -679,7 +689,7 @@ namespace TeknoparrotAutoXinput
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!amd!]") && newfile.Contains(@"\[!amd!]\"))
 				{
 					newfile = newfile.Replace(@"\[!amd!]\", @"\");
-					if(!Program.patchGpuFix || Program.gpuType <= 1) continue;
+					if (!Program.patchGpuFix || Program.gpuType <= 1) continue;
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!amdold!]") && newfile.Contains(@"\[!amdold!]\"))
 				{
@@ -1088,16 +1098,16 @@ namespace TeknoparrotAutoXinput
 					{
 						string filedata = File.ReadAllText(file);
 						string newContent = filedata.Replace("{refreshRate}", Program.refreshRate.ToString());
-						File.WriteAllText(Path.Combine(Path.GetDirectoryName(file),Path.GetFileNameWithoutExtension(file)),newContent);
+						File.WriteAllText(Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file)), newContent);
 						originalFileName = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file));
 						newfile = Path.Combine(Path.GetDirectoryName(newfile), Path.GetFileNameWithoutExtension(newfile));
 					}
-					if(File.Exists(file+ ".remplacerefreshrate"))
+					if (File.Exists(file + ".remplacerefreshrate"))
 					{
 						continue;
 					}
 
-					
+
 				}
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!60hz!]") && newfile.Contains(@"\[!60hz!]\"))
 				{
@@ -1111,7 +1121,7 @@ namespace TeknoparrotAutoXinput
 					string anyTagDir = anyTagMatch.Groups[0].Value;
 					string anyTagFlags = anyTagMatch.Groups[0].Value.Substring(11, anyTagMatch.Groups[0].Value.Length - 15);
 					bool anyFlagsValid = false;
-					foreach(var flag in anyTagFlags.Split(","))
+					foreach (var flag in anyTagFlags.Split(","))
 					{
 						if (flag.Trim() == "") continue;
 						if (TpSettingsManager.tags.Contains(flag.Trim().ToLower()))
@@ -1157,7 +1167,7 @@ namespace TeknoparrotAutoXinput
 					string md5val = tagMd5Match.Groups[0].Value.Substring(7, tagMd5Match.Groups[0].Value.Length - 10);
 					if (executableGame != "" && File.Exists(executableGame))
 					{
-						var md5exec = Utils.GetMd5HashAsString(executableGame,true);
+						var md5exec = Utils.GetMd5HashAsString(executableGame, true);
 						if (md5exec.ToUpper() == md5val.ToUpper())
 						{
 							isSameMD5 = true;
@@ -1257,6 +1267,11 @@ namespace TeknoparrotAutoXinput
 					continue;
 				}
 
+				if (Path.GetDirectoryName(newfile).Contains(@"\[!dontlinkthis!]") && newfile.Contains(@"\[!dontlinkthis!]\"))
+				{
+					continue;
+				}
+
 				if (Path.GetFileName(newfile).ToLower() == "dgvoodoo.conf.custom")
 				{
 					continue;
@@ -1270,7 +1285,7 @@ namespace TeknoparrotAutoXinput
 				newfile = Path.GetFullPath(newfile);
 
 
-				
+
 				if (Path.GetFileName(newfile).ToLower() == "dgvoodoo.conf")
 				{
 					try
@@ -1286,12 +1301,13 @@ namespace TeknoparrotAutoXinput
 							int dgvAntialiasingValue = 0;
 							int.TryParse(dgvAntialiasing.Trim('x'), out dgvAntialiasingValue);
 							string dgvForceVerticalSync = dgvodooIni.Read("ForceVerticalSync", "DirectX");
-							if(Program.performanceProfile == 1)
+							if (Program.performanceProfile == 1)
 							{
 								dgvodooIni.Write("Antialiasing", "appdriven", "DirectX");
 								dgvodooIni.Write("Filtering", "appdriven", "DirectX");
 							}
-							if(Program.performanceProfile == 2) {
+							if (Program.performanceProfile == 2)
+							{
 								dgvodooIni.Write("Antialiasing", "8x", "DirectX");
 								dgvodooIni.Write("Filtering", "16", "DirectX");
 							}
@@ -1302,16 +1318,33 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 					catch { }
-					
 
 
 
 
-					
+
+
 				}
 
 				if (Path.GetFileName(newfile).ToLower() == "reshade.ini")
 				{
+					reshadeiniFile = newfile;
+					reshadeiniFileSource = originalFileName;
+				}
+
+				if (Path.GetDirectoryName(newfile).ToLower().Contains(@"\reshade-shaders\"))
+				{
+
+					var reshadeShaderDir = newfile.ToLower().Split(@"\reshade-shaders\")[0] + @"\reshade-shaders";
+					var reshadeShaderDirSource = originalFileName.ToLower().Split(@"\reshade-shaders\")[0] + @"\reshade-shaders";
+					if (!reshadeShaderPossibleDir.ContainsKey(reshadeShaderDir)) reshadeShaderPossibleDir.Add(reshadeShaderDir, reshadeShaderDirSource);
+
+				}
+
+				/*
+				if (Path.GetFileName(newfile).ToLower() == "reshade.ini")
+				{
+					MessageBox.Show("debug rewrite reshade");
 					reshadeiniFile = newfile;
 					string currentDir = Path.GetDirectoryName(reshadeiniFile);
 					string reshadePath = Path.Combine(currentDir, "reshade-shaders");
@@ -1326,11 +1359,13 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 				}
+				*/
+
 
 				if (Path.GetDirectoryName(newfile).Contains(@"\[!moveto!]") && newfile.Contains(@"\[!moveto!]\"))
 				{
 					string fileName = Path.GetFileName(file);
-					if(moveToDest == "")
+					if (moveToDest == "")
 					{
 						string dir = Path.GetDirectoryName(file);
 						string destFile = Path.Combine(dir, "destination.txt");
@@ -1351,7 +1386,7 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 					}
-					if(fileName != "destination.txt" && moveToDest != "")
+					if (fileName != "destination.txt" && moveToDest != "")
 					{
 						string dest = Path.Combine(moveToDest, fileName);
 						if (moveNeedAdmin)
@@ -1363,12 +1398,20 @@ namespace TeknoparrotAutoXinput
 							try
 							{
 								File.Copy(file, dest, true);
+								if (!Program.movetoFiles.ContainsKey(dest))
+								{
+									Program.movetoFiles[dest] = file;
+								}
+								else
+								{
+									Program.movetoFiles.Add(dest, file);
+								}
 							}
 							catch { }
 						}
 
 					}
-					
+
 					continue;
 				}
 
@@ -1470,8 +1513,8 @@ namespace TeknoparrotAutoXinput
 				}
 				if (File.Exists(newfile))
 				{
-					if(File.Exists(newfile + ".filetorestore")) File.Delete(newfile + ".filetorestore");
-					File.Move(newfile, newfile + ".filetorestore",true);
+					if (File.Exists(newfile + ".filetorestore")) File.Delete(newfile + ".filetorestore");
+					File.Move(newfile, newfile + ".filetorestore", true);
 				}
 				if (useSoftLink) CreateSoftlink(originalFileName, newfile);
 				else MakeLink(originalFileName, newfile);
@@ -1479,11 +1522,24 @@ namespace TeknoparrotAutoXinput
 				Utils.LogMessage($"{originalFileName}");
 			}
 
-			if(reshadeiniFile != "" && File.Exists(reshadeiniFile))
+			if (reshadeiniFile != "" && File.Exists(reshadeiniFile))
 			{
 				Utils.LogMessage($"found reshade ici : {reshadeiniFile}");
 				string currentDir = Path.GetDirectoryName(reshadeiniFile);
 				IniFile reshadeIniFile = new IniFile(reshadeiniFile);
+				string reshadePath = Path.Combine(currentDir, "reshade-shaders");
+
+				if (reshadeShaderPossibleDir.ContainsKey(reshadePath.ToLower()))
+				{
+					string reshadeTemp = Path.GetFullPath(GetExactPathName(reshadeShaderPossibleDir[reshadePath.ToLower()]));
+					reshadeTemp = Path.Combine(reshadeTemp, "[!cachereshade!]");
+					if (!Directory.Exists(reshadeTemp))
+					{
+						Directory.CreateDirectory(reshadeTemp);
+					}
+					reshadeIniFile.Write("IntermediateCachePath", reshadeTemp, "GENERAL");
+				}
+
 				string presetStr = "PresetPath";
 				string reshadePreset = reshadeIniFile.Read("PresetPath", "GENERAL").Trim();
 				if (reshadePreset == "")
@@ -1508,9 +1564,9 @@ namespace TeknoparrotAutoXinput
 					if (!Path.IsPathRooted(reshadePreset))
 					{
 						reshadePresetFile = Path.Combine(currentDir, reshadePreset);
-						reshadePresetFileBase = Path.Combine(currentDir, reshadePresetBase + ".ini");
-						reshadePresetFileLow = Path.Combine(currentDir, reshadePresetBase + "-low.ini");
-						reshadePresetFileHigh = Path.Combine(currentDir, reshadePresetBase + "-high.ini");
+						reshadePresetFileBase = Path.GetFullPath(Path.Combine(currentDir, reshadePresetBase + ".ini"));
+						reshadePresetFileLow = Path.GetFullPath(Path.Combine(currentDir, reshadePresetBase + "-low.ini"));
+						reshadePresetFileHigh = Path.GetFullPath(Path.Combine(currentDir, reshadePresetBase + "-high.ini"));
 					}
 
 					Utils.LogMessage($"check for : {reshadePresetFileBase} {reshadePresetFileLow} {reshadePresetFileHigh}");
@@ -1529,7 +1585,7 @@ namespace TeknoparrotAutoXinput
 							reshadeIniFile.Write(presetStr, reshadePresetBase + "-low.ini", "GENERAL");
 							Utils.LogMessage($"write2 : " + reshadePresetBase + "-low.ini");
 						}
-						else if(reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
+						else if (reshadePresetFile.ToLower() != reshadePresetFileBase.ToLower())
 						{
 							reshadeIniFile.Write(presetStr, reshadePresetBase + ".ini", "GENERAL");
 							Utils.LogMessage($"write2 : " + reshadePresetBase + ".ini");
@@ -1557,7 +1613,7 @@ namespace TeknoparrotAutoXinput
 					}
 
 
-					
+
 				}
 
 
@@ -1566,10 +1622,10 @@ namespace TeknoparrotAutoXinput
 			if (DirectoryList.Count() > 0)
 			{
 				string json = JsonConvert.SerializeObject(DirectoryList, Formatting.Indented);
-				File.WriteAllText(Path.Combine(directoryDest,"tempDirList.json"), json);
+				File.WriteAllText(Path.Combine(directoryDest, "tempDirList.json"), json);
 			}
 
-			if(moveAhkCode != "")
+			if (moveAhkCode != "")
 			{
 				File.WriteAllText(Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "moveadmin.tmp.ahk"), moveAhkCode);
 				string selfExe = Process.GetCurrentProcess().MainModule.FileName;
@@ -1615,7 +1671,8 @@ namespace TeknoparrotAutoXinput
 				{
 					File.WriteAllText(linktest1, "todelete");
 				}
-				catch {
+				catch
+				{
 					if (File.Exists(linktest1)) { File.Delete(linktest1); }
 					return false;
 
@@ -1624,7 +1681,7 @@ namespace TeknoparrotAutoXinput
 				string sourceLinkTest = linktest1;
 				if (!string.IsNullOrEmpty(source))
 				{
-					if(File.Exists(source)) sourceLinkTest = source;
+					if (File.Exists(source)) sourceLinkTest = source;
 					else if (Directory.Exists(source))
 					{
 						try
@@ -1680,7 +1737,7 @@ namespace TeknoparrotAutoXinput
 
 			bool CanUseHardLink = true;
 			if (!AreFoldersOnSameDrive(directoryToClean, originalLinkDir)) CanUseHardLink = false;
-			if(!Program.linkAutoHardLink) CanUseHardLink = false;
+			if (!Program.linkAutoHardLink) CanUseHardLink = false;
 
 			bool CanUseSoftLink = Program.linkAutoSoftLink;
 
@@ -1700,14 +1757,14 @@ namespace TeknoparrotAutoXinput
 					{
 						File.Delete(file);
 					}
-					catch(Exception ex)
+					catch (Exception ex)
 					{
 						if (File.Exists(file))
 						{
 							try
 							{
 								FileInfo finfo = new FileInfo(file);
-								if(finfo.IsReadOnly)
+								if (finfo.IsReadOnly)
 								{
 									finfo.IsReadOnly = false;
 									finfo.Delete();
@@ -1718,7 +1775,7 @@ namespace TeknoparrotAutoXinput
 
 					}
 				}
-				else if(CanUseSoftLink && IsSoftLink(file, originalLinkDir))
+				else if (CanUseSoftLink && IsSoftLink(file, originalLinkDir))
 				{
 					if (Program.DebugMode) Utils.LogMessage($"{file} is Softlink, delete it");
 					try
@@ -1762,7 +1819,7 @@ namespace TeknoparrotAutoXinput
 				try
 				{
 					List<string> DirList = (List<string>)JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(tempDirFile));
-					foreach(var dir in DirList)
+					foreach (var dir in DirList)
 					{
 						CleanTemporaryDirectories(dir);
 					}
@@ -2175,14 +2232,14 @@ namespace TeknoparrotAutoXinput
 
 				file = Path.GetFullPath(file);
 				if (!File.Exists(file)) continue;
-				if(!filesToCheck.Contains(file)) filesToCheck.Add(file);
+				if (!filesToCheck.Contains(file)) filesToCheck.Add(file);
 
 				//Utils.LogMessage("check rights for " + file);
 
 			}
 			List<string> errorList = new List<string>();
 			bool valid = true;
-			foreach(var file in filesToCheck)
+			foreach (var file in filesToCheck)
 			{
 				if (!verifyRightFile(file))
 				{
@@ -2221,7 +2278,7 @@ namespace TeknoparrotAutoXinput
 		{
 			if (File.Exists(filePath))
 			{
-				
+
 				try
 				{
 					bool valid1 = false;
@@ -2238,7 +2295,7 @@ namespace TeknoparrotAutoXinput
 						valid2 = true;
 					}
 
-					if(valid1 && valid2) { return true; }
+					if (valid1 && valid2) { return true; }
 				}
 				catch (UnauthorizedAccessException)
 				{
@@ -2668,6 +2725,7 @@ namespace TeknoparrotAutoXinput
 
 
 
+				/*
 				file = Path.GetFullPath(file);
 				if (Path.GetDirectoryName(file).Contains(@"\[!moveto!]") && file.Contains(@"\[!moveto!]\"))
 				{
@@ -2716,7 +2774,7 @@ namespace TeknoparrotAutoXinput
 					continue;
 					//file = file.Replace(@"\[!intel!]\", @"\");
 				}
-
+				*/
 
 				if (!File.Exists(file)) continue;
 
@@ -2778,12 +2836,12 @@ namespace TeknoparrotAutoXinput
 					if (Program.DebugMode) Utils.LogMessage($"{file} must be restored");
 					string newFilePath = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(fileToRestore));
 					if (File.Exists(newFilePath)) File.Delete(newFilePath);
-					File.Move(fileToRestore, newFilePath,true);
+					File.Move(fileToRestore, newFilePath, true);
 					restauredFiles.Add(newFilePath);
 				}
 			}
 
-			if (executableGameFile != "" &&  File.Exists(executableGameFile))
+			if (executableGameFile != "" && File.Exists(executableGameFile))
 			{
 				string file = executableGameFile;
 				if (CanUseHardLink && IsHardLink(file, originalLinkDir))
@@ -2862,6 +2920,20 @@ namespace TeknoparrotAutoXinput
 				File.Delete(tempDirFile);
 			}
 
+			foreach (var fileToMoveBack in Program.movetoFiles)
+			{
+				if (File.Exists(fileToMoveBack.Key))
+				{
+					try
+					{
+						File.Copy(fileToMoveBack.Key, fileToMoveBack.Value, true);
+						Utils.LogMessage($"CopyBack [!moveto!] {fileToMoveBack.Key} => {fileToMoveBack.Value}");
+					}
+					catch { }
+				}
+			}
+
+			/*
 			if (moveAhkCode != "")
 			{
 				File.WriteAllText(Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "moveadmin.tmp.ahk"), moveAhkCode);
@@ -2882,6 +2954,7 @@ namespace TeknoparrotAutoXinput
 				Utils.ExecuteTask(Utils.ExeToTaskName(selfExe, "--moveadmin"), -1);
 
 			}
+			*/
 
 		}
 
@@ -2898,17 +2971,17 @@ namespace TeknoparrotAutoXinput
 
 				try
 				{
-					bool isEmpty = Directory.GetFiles(rootDirectory, "*",SearchOption.AllDirectories).Length == 0;
+					bool isEmpty = Directory.GetFiles(rootDirectory, "*", SearchOption.AllDirectories).Length == 0;
 					if (isEmpty)
 					{
 						Console.WriteLine($"Delete {rootDirectory}");
-						Directory.Delete(rootDirectory,true);
+						Directory.Delete(rootDirectory, true);
 					}
 				}
 				catch (Exception ex)
 				{
 				}
-				
+
 			}
 			catch (Exception ex)
 			{
@@ -3067,7 +3140,7 @@ namespace TeknoparrotAutoXinput
 			}
 		}
 
-		public static void ExecuteAHK(string ahkCode, bool waitForExit, string workingdir = "")
+		public static void ExecuteAHK(string ahkCode, bool waitForExit, string workingdir = "", string repertoireLinkExe = "")
 		{
 			try
 			{
@@ -3080,10 +3153,11 @@ namespace TeknoparrotAutoXinput
 				{
 					Process process = new Process();
 					process.StartInfo.FileName = ahkExe;
-					process.StartInfo.Arguments = tempFilePath;
+					if (repertoireLinkExe != "") process.StartInfo.Arguments = $"{tempFilePath} \"{repertoireLinkExe}\"";
+					else process.StartInfo.Arguments = tempFilePath;
 					process.StartInfo.UseShellExecute = false;
 					process.StartInfo.CreateNoWindow = true;
-					if(workingdir != "") process.StartInfo.WorkingDirectory = workingdir;
+					if (workingdir != "") process.StartInfo.WorkingDirectory = workingdir;
 
 					// Démarrer le processus
 					process.Start();
@@ -3122,18 +3196,34 @@ namespace TeknoparrotAutoXinput
 
 		public static void CleanAndKillAhk()
 		{
-			foreach(var ahkpid in Program.ProcessToKill) 
+			foreach (var ahkpid in Program.ProcessToKill)
 			{
 				KillProcessById(ahkpid);
 			}
 			Thread.Sleep(100);
-			foreach(var ahkfile in Program.FilesToDelete)
+			foreach (var ahkfile in Program.FilesToDelete)
 			{
 				if (File.Exists(ahkfile))
 				{
 					File.Delete(ahkfile);
 				}
 			}
+		}
+
+		public static string GetExactPathName(string path)
+		{
+			if (!File.Exists(path) && !Directory.Exists(path))
+			{
+				throw new FileNotFoundException("The specified path does not exist.");
+			}
+
+			DirectoryInfo dirInfo = new DirectoryInfo(path);
+			if (dirInfo.Parent == null)
+			{
+				return dirInfo.Name;
+			}
+
+			return Path.Combine(GetExactPathName(dirInfo.Parent.FullName), dirInfo.Parent.GetFileSystemInfos(dirInfo.Name)[0].Name);
 		}
 
 		public static bool CheckTaskExist(string taskName)
@@ -3160,7 +3250,7 @@ namespace TeknoparrotAutoXinput
 
 		public static void RegisterTask(string taskExe, string taskArgument)
 		{
-			string taskName = ExeToTaskName(taskExe,taskArgument);
+			string taskName = ExeToTaskName(taskExe, taskArgument);
 			using (TaskService ts = new TaskService())
 			{
 				if (ts.GetTask(taskName) == null)
@@ -3385,7 +3475,7 @@ namespace TeknoparrotAutoXinput
 
 		public static bool IsEligibleHardLink(string path)
 		{
-			if(!Directory.Exists(path)) return false;
+			if (!Directory.Exists(path)) return false;
 
 			bool isWindows10OrNewer = (Environment.OSVersion.Version.Major >= 10);
 			if (!isWindows10OrNewer) return false;
@@ -3428,7 +3518,7 @@ namespace TeknoparrotAutoXinput
 			try
 			{
 				DriveInfo driveInfo = new DriveInfo(Path.GetPathRoot(source));
-				if(!driveInfo.DriveFormat.Equals("NTFS", StringComparison.OrdinalIgnoreCase)) return false;
+				if (!driveInfo.DriveFormat.Equals("NTFS", StringComparison.OrdinalIgnoreCase)) return false;
 			}
 			catch (Exception ex)
 			{
@@ -3482,7 +3572,7 @@ namespace TeknoparrotAutoXinput
 					{
 						IsWow64Process(process.Handle, out is64bit);
 					}
-					catch{}
+					catch { }
 					if (is64bit) return "64";
 					return "32";
 				}
@@ -3589,7 +3679,7 @@ namespace TeknoparrotAutoXinput
 				clientHeight = (clientRect.Bottom - clientRect.Top);
 				Utils.LogMessage($"{clientWidth}x{clientHeight}");
 			}
-			
+
 
 			int borderSizeWidth = (int)Math.Floor(((double)winWidth - (double)clientWidth) / 2.0);
 			int diffHeight = (winHeight - clientHeight);
@@ -3598,16 +3688,16 @@ namespace TeknoparrotAutoXinput
 			Screen screen = Screen.PrimaryScreen;
 			if (Program.moveWindowToOriginalMonitor)
 			{
-				foreach(var s in Screen.AllScreens)
+				foreach (var s in Screen.AllScreens)
 				{
-					if(s.DeviceName == Program.originalMonitorDeviceName)
+					if (s.DeviceName == Program.originalMonitorDeviceName)
 					{
 						screen = s;
 						Utils.LogMessage($"Move back to {Program.originalMonitorDeviceName}");
 					}
 				}
 			}
-			
+
 			//int style = GetWindowLong(hWnd, GWL_STYLE);
 			//SetWindowLong(hWnd, GWL_STYLE, style & ~WS_CAPTION & ~WS_SYSMENU);
 
@@ -3648,7 +3738,7 @@ namespace TeknoparrotAutoXinput
 
 		public static void ClickOnPrimaryScreen(int x, int y)
 		{
-			
+
 			// Obtenir l'écran principal
 			Screen primaryScreen = Screen.PrimaryScreen;
 
@@ -3727,7 +3817,7 @@ namespace TeknoparrotAutoXinput
 				}
 			}
 			catch (Exception ex)
-			{}
+			{ }
 			return null;
 		}
 
@@ -3871,7 +3961,7 @@ namespace TeknoparrotAutoXinput
 				else
 				{
 					string md5 = GetMd5HashAsString(FileName);
-					File.WriteAllText(Path.Combine(CacheDir, fileId),md5);
+					File.WriteAllText(Path.Combine(CacheDir, fileId), md5);
 					return md5;
 				}
 			}
@@ -3940,7 +4030,7 @@ namespace TeknoparrotAutoXinput
 
 						}
 					}
-						
+
 					foreach (var joy in joyList)
 					{
 						joy.Value.Dispose();
@@ -4028,7 +4118,7 @@ namespace TeknoparrotAutoXinput
 							{
 								InstallPath = subkey.GetValue("UninstallString", ".").ToString();
 								InstallPath = InstallPath.Trim('"');
-								if(!string.IsNullOrEmpty(InstallPath) && File.Exists(InstallPath)) return InstallPath; //or displayName
+								if (!string.IsNullOrEmpty(InstallPath) && File.Exists(InstallPath)) return InstallPath; //or displayName
 							}
 							catch { }
 
@@ -4190,7 +4280,7 @@ namespace TeknoparrotAutoXinput
 					catch { }
 
 
-					if (previousModeInfo !=null)
+					if (previousModeInfo != null)
 					{
 
 

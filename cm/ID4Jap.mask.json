@@ -1,0 +1,11 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Menu Up": "Menu Controls",
+    "Menu Down": "Menu Controls",
+    "Menu Left": "Menu Controls",
+    "Menu Right": "Menu Controls",
+    "Wheel Axis": "Move"
+  }
+}

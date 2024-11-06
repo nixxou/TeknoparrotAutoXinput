@@ -1,17 +1,6 @@
 ﻿using Krypton.Toolkit;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Xml;
 
 namespace TeknoparrotAutoXinput
@@ -29,6 +18,8 @@ namespace TeknoparrotAutoXinput
 		private string _linkSourceFolderExe = "";
 
 		public string PerGameConfigFile = "";
+
+		public bool _disableCrtForLowPerf = false;
 
 		private List<string> dllPathList = new List<string>();
 		private Dictionary<string, string> GameInfo = new Dictionary<string, string>();
@@ -53,7 +44,7 @@ namespace TeknoparrotAutoXinput
 			PerGameConfigFile = Path.Combine(Program.GameOptionsFolder, Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + ".json");
 			if (File.Exists(PerGameConfigFile))
 			{
-				gameSettings = new GameSettings(File.ReadAllText(PerGameConfigFile));
+				gameSettings = new GameSettings(Utils.ReadAllText(PerGameConfigFile));
 			}
 
 			if (ShifterHack.supportedGames.ContainsKey(Path.GetFileNameWithoutExtension(GameData.UserConfigFile))) chk_enableGearChange.Enabled = true;
@@ -147,6 +138,15 @@ namespace TeknoparrotAutoXinput
 							cmb_patchlang.Items[3] = "---";
 						}
 					}
+					if (GameInfo.ContainsKey("showGameOptionPerf") && (GameInfo["showGameOptionPerf"].ToLower() == "true" || GameInfo["showGameOptionPerf"].ToLower() == "high"))
+					{
+						kryptonLabel17.Visible = cmb_performance.Visible = true;
+						if (GameInfo["showGameOptionPerf"].ToLower() == "high")
+						{
+							cmb_performance.Items[3] = "---";
+						}
+					}
+					if (GameInfo.ContainsKey("disableCrtForLowPerf") && GameInfo["disableCrtForLowPerf"].ToLower() == "true") _disableCrtForLowPerf = true;
 
 				}
 				catch (Exception ex) { MessageBox.Show("Invalid game.info json, please report the issue"); }
@@ -455,7 +455,7 @@ namespace TeknoparrotAutoXinput
 			chk_group_StoozZone_Wheel.Location = new Point(chk_group_StoozZone_Wheel.Location.X, chk_group_StoozZone_Wheel.Location.Y + 15);
 			chk_group_StoozZone_Gamepad.Location = new Point(chk_group_StoozZone_Gamepad.Location.X, chk_group_StoozZone_Gamepad.Location.Y + 15);
 			chk_group_StoozZone_Hotas.Location = new Point(chk_group_StoozZone_Hotas.Location.X, chk_group_StoozZone_Hotas.Location.Y + 15);
-			chk_group_monitorDisposition.Location = new Point(chk_group_monitorDisposition.Location.X, chk_group_monitorDisposition.Location.Y + 15);
+			//chk_group_monitorDisposition.Location = new Point(chk_group_monitorDisposition.Location.X, chk_group_monitorDisposition.Location.Y + 15);
 
 			LinkLoad();
 
@@ -515,6 +515,11 @@ namespace TeknoparrotAutoXinput
 			SetBezelCmb();
 			SetCrtCmb();
 			SetKeepRatioCmb();
+
+			chk_overrideTpController.Checked = gameSettings.overrideTpController;
+			chk_overrideTpGameSettings.Checked = gameSettings.overrideTpGameSettings;
+			chk_applyPatches.Checked = gameSettings.applyPatches;
+			chk_useThirdParty.Checked = gameSettings.useThirdParty;
 
 		}
 
@@ -636,7 +641,7 @@ namespace TeknoparrotAutoXinput
 
 			gameSettings.UseGlobalDisposition = chk_group_monitorDisposition.Checked;
 			gameSettings.moveBackWindowToOriginalMonitor = chk_moveBackWindowToOriginalMonitor.Checked;
-			gameSettings.disableAllMonitorExceptPrimary	= chk_disableAllMonitorExceptPrimary.Checked;
+			gameSettings.disableAllMonitorExceptPrimary = chk_disableAllMonitorExceptPrimary.Checked;
 			gameSettings.UseGlobalStoozZoneGamepad = chk_group_StoozZone_Gamepad.Checked;
 			gameSettings.UseGlobalStoozZoneWheel = chk_group_StoozZone_Wheel.Checked;
 			gameSettings.UseGlobalStoozZoneHotas = chk_group_StoozZone_Hotas.Checked;
@@ -680,6 +685,12 @@ namespace TeknoparrotAutoXinput
 			if (cmb_useBezel.Enabled) gameSettings.useBezel = cmb_useBezel.SelectedIndex;
 			if (cmb_keepAspectRatio.Enabled) gameSettings.keepAspectRatio = cmb_keepAspectRatio.SelectedIndex;
 			gameSettings.patchLang = cmb_patchlang.SelectedIndex;
+
+
+			gameSettings.overrideTpController = chk_overrideTpController.Checked;
+			gameSettings.overrideTpGameSettings = chk_overrideTpGameSettings.Checked;
+			gameSettings.applyPatches = chk_applyPatches.Checked;
+			gameSettings.useThirdParty = chk_useThirdParty.Checked;
 
 			gameSettings.Save(PerGameConfigFile);
 			this.DialogResult = DialogResult.OK;
@@ -1100,6 +1111,10 @@ namespace TeknoparrotAutoXinput
 
 		private void cmb_performance_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			if (cmb_performance.SelectedItem.ToString().Contains("---"))
+			{
+				cmb_performance.SelectedIndex = gameSettings.performanceProfile; // Réinitialise la sélection
+			}
 			SetCrtCmb();
 		}
 

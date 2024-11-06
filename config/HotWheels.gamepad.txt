@@ -356,15 +356,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>512</ButtonCode>
+        <ButtonCode>256</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>2</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 0 RightShoulder</BindNameXi>
-      <BindName>Input Device 0 RightShoulder</BindName>
+      <BindNameXi>Input Device 2 LeftShoulder</BindNameXi>
+      <BindName>Input Device 2 LeftShoulder</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -386,8 +386,8 @@
     <JoystickButtons>
       <ButtonName>P3 Wheel Axis</ButtonName>
       <XInputButton>
-        <IsLeftThumbX>false</IsLeftThumbX>
-        <IsRightThumbX>true</IsRightThumbX>
+        <IsLeftThumbX>true</IsLeftThumbX>
+        <IsRightThumbX>false</IsRightThumbX>
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
         <IsAxisMinus>false</IsAxisMinus>
@@ -396,12 +396,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>2</XInputIndex>
       </XInputButton>
       <InputMapping>Analog8</InputMapping>
       <AnalogType>Wheel</AnalogType>
-      <BindNameXi>Input Device 0 RightThumbInput Device 0 X+</BindNameXi>
-      <BindName>Input Device 0 RightThumbInput Device 0 X+</BindName>
+      <BindNameXi>Input Device 2 LeftThumbInput Device 2 X+</BindNameXi>
+      <BindName>Input Device 2 LeftThumbInput Device 2 X+</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -472,17 +472,17 @@
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
         <IsAxisMinus>false</IsAxisMinus>
-        <IsLeftTrigger>false</IsLeftTrigger>
-        <IsRightTrigger>true</IsRightTrigger>
+        <IsLeftTrigger>true</IsLeftTrigger>
+        <IsRightTrigger>false</IsRightTrigger>
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>0</XInputIndex>
+        <XInputIndex>2</XInputIndex>
       </XInputButton>
       <InputMapping>Analog10</InputMapping>
       <AnalogType>Gas</AnalogType>
-      <BindNameXi>Input Device 0 RightTrigger</BindNameXi>
-      <BindName>Input Device 0 RightTrigger</BindName>
+      <BindNameXi>Input Device 2 LeftTrigger</BindNameXi>
+      <BindName>Input Device 2 LeftTrigger</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -511,15 +511,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>512</ButtonCode>
+        <ButtonCode>256</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>1</XInputIndex>
+        <XInputIndex>3</XInputIndex>
       </XInputButton>
       <InputMapping>P2Button1</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 1 RightShoulder</BindNameXi>
-      <BindName>Input Device 1 RightShoulder</BindName>
+      <BindNameXi>Input Device 3 LeftShoulder</BindNameXi>
+      <BindName>Input Device 3 LeftShoulder</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -541,8 +541,8 @@
     <JoystickButtons>
       <ButtonName>P4 Wheel Axis</ButtonName>
       <XInputButton>
-        <IsLeftThumbX>false</IsLeftThumbX>
-        <IsRightThumbX>true</IsRightThumbX>
+        <IsLeftThumbX>true</IsLeftThumbX>
+        <IsRightThumbX>false</IsRightThumbX>
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
         <IsAxisMinus>false</IsAxisMinus>
@@ -551,12 +551,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>1</XInputIndex>
+        <XInputIndex>3</XInputIndex>
       </XInputButton>
       <InputMapping>Analog12</InputMapping>
       <AnalogType>Wheel</AnalogType>
-      <BindNameXi>Input Device 1 RightThumbInput Device 1 X+</BindNameXi>
-      <BindName>Input Device 1 RightThumbInput Device 1 X+</BindName>
+      <BindNameXi>Input Device 3 LeftThumbInput Device 3 X+</BindNameXi>
+      <BindName>Input Device 3 LeftThumbInput Device 3 X+</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -632,12 +632,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>2</XInputIndex>
+        <XInputIndex>3</XInputIndex>
       </XInputButton>
       <InputMapping>Analog14</InputMapping>
       <AnalogType>Gas</AnalogType>
-      <BindNameXi>Input Device 2 LeftTrigger</BindNameXi>
-      <BindName>Input Device 2 LeftTrigger</BindName>
+      <BindNameXi>Input Device 3 LeftTrigger</BindNameXi>
+      <BindName>Input Device 3 LeftTrigger</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -666,15 +666,15 @@
         <IsAxisMinus>false</IsAxisMinus>
         <IsLeftTrigger>false</IsLeftTrigger>
         <IsRightTrigger>false</IsRightTrigger>
-        <ButtonCode>256</ButtonCode>
+        <ButtonCode>512</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
         <XInputIndex>2</XInputIndex>
       </XInputButton>
       <InputMapping>P1Button2</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 2 LeftShoulder</BindNameXi>
-      <BindName>Input Device 2 LeftShoulder</BindName>
+      <BindNameXi>Input Device 2 RightShoulder</BindNameXi>
+      <BindName>Input Device 2 RightShoulder</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -696,8 +696,8 @@
     <JoystickButtons>
       <ButtonName>P5 Wheel Axis</ButtonName>
       <XInputButton>
-        <IsLeftThumbX>true</IsLeftThumbX>
-        <IsRightThumbX>false</IsRightThumbX>
+        <IsLeftThumbX>false</IsLeftThumbX>
+        <IsRightThumbX>true</IsRightThumbX>
         <IsLeftThumbY>false</IsLeftThumbY>
         <IsRightThumbY>false</IsRightThumbY>
         <IsAxisMinus>false</IsAxisMinus>
@@ -710,8 +710,8 @@
       </XInputButton>
       <InputMapping>Analog16</InputMapping>
       <AnalogType>Wheel</AnalogType>
-      <BindNameXi>Input Device 2 LeftThumbInput Device 2 X+</BindNameXi>
-      <BindName>Input Device 2 LeftThumbInput Device 2 X+</BindName>
+      <BindNameXi>Input Device 2 RightThumbInput Device 2 X+</BindNameXi>
+      <BindName>Input Device 2 RightThumbInput Device 2 X+</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -824,12 +824,12 @@
         <ButtonCode>512</ButtonCode>
         <IsButton>true</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>2</XInputIndex>
+        <XInputIndex>3</XInputIndex>
       </XInputButton>
       <InputMapping>P2Button2</InputMapping>
       <AnalogType>None</AnalogType>
-      <BindNameXi>Input Device 2 RightShoulder</BindNameXi>
-      <BindName>Input Device 2 RightShoulder</BindName>
+      <BindNameXi>Input Device 3 RightShoulder</BindNameXi>
+      <BindName>Input Device 3 RightShoulder</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -861,12 +861,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>2</XInputIndex>
+        <XInputIndex>3</XInputIndex>
       </XInputButton>
       <InputMapping>Analog20</InputMapping>
       <AnalogType>Wheel</AnalogType>
-      <BindNameXi>Input Device 2 RightThumbInput Device 2 X+</BindNameXi>
-      <BindName>Input Device 2 RightThumbInput Device 2 X+</BindName>
+      <BindNameXi>Input Device 3 RightThumbInput Device 3 X+</BindNameXi>
+      <BindName>Input Device 3 RightThumbInput Device 3 X+</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>
@@ -942,12 +942,12 @@
         <ButtonCode>0</ButtonCode>
         <IsButton>false</IsButton>
         <ButtonIndex>0</ButtonIndex>
-        <XInputIndex>2</XInputIndex>
+        <XInputIndex>3</XInputIndex>
       </XInputButton>
       <InputMapping>Analog22</InputMapping>
       <AnalogType>Gas</AnalogType>
-      <BindNameXi>Input Device 2 RightTrigger</BindNameXi>
-      <BindName>Input Device 2 RightTrigger</BindName>
+      <BindNameXi>Input Device 3 RightTrigger</BindNameXi>
+      <BindName>Input Device 3 RightTrigger</BindName>
       <HideWithDirectInput>false</HideWithDirectInput>
       <HideWithXInput>false</HideWithXInput>
       <HideWithRawInput>false</HideWithRawInput>

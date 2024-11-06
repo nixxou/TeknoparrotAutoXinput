@@ -3,19 +3,10 @@ using Newtonsoft.Json;
 using SDL2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml.Linq;
-using TestVgme;
 
 namespace TeknoparrotAutoXinput
 {
@@ -594,7 +585,7 @@ namespace TeknoparrotAutoXinput
 				string gamepadConfig = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "config", Path.GetFileNameWithoutExtension(gameProfileFile) + ".gamepad.txt");
 				if (File.Exists(gamepadConfig))
 				{
-					string gamepadConfigContent = File.ReadAllText(gamepadConfig);
+					string gamepadConfigContent = Utils.ReadAllText(gamepadConfig);
 					// Utiliser une expression régulière pour extraire les valeurs des éléments <ButtonName>
 					var buttonNameMatches = Regex.Matches(gamepadConfigContent, "<ButtonName>(.*?)</ButtonName>")
 												 .Cast<Match>()

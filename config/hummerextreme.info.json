@@ -7,6 +7,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "True",
     "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "forceResSwitchFullscreen": "True",

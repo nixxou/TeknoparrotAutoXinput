@@ -2,16 +2,7 @@
 using Newtonsoft.Json;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 using DeviceType = SharpDX.DirectInput.DeviceType;
 using Key = SharpDX.DirectInput.Key;
@@ -263,7 +254,7 @@ namespace TeknoparrotAutoXinput
 			if (txt_InputDevice0RightTrigger.Text == "") IsConfigured = false;
 
 			string json = JsonConvert.SerializeObject(buttonDataFinal, Newtonsoft.Json.Formatting.Indented);
-			if(Dialogconfig != null)
+			if (Dialogconfig != null)
 			{
 				Dialogconfig = json;
 				return;

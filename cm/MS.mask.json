@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Enter Switch": "Start",
+    "Analog X": "Move",
+    "Analog Y": "Move",
+    "Throttle": "Accelerate / Decelerate",
+    "Start Button": "Start",
+    "Machine Gun": "Gun"
+  }
+}

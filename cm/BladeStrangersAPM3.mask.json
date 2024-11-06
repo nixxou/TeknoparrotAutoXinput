@@ -1,0 +1,14 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button 1": "L-Light Attack",
+    "Button 2": "H-Heavy Attack",
+    "Button 3": "S-Skill",
+    "Button 4": "E-Special"
+  }
+}

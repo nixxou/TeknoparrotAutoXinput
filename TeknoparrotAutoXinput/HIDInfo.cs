@@ -1,12 +1,10 @@
-﻿using System.Text;
-using Newtonsoft.Json;
-using XInput.Wrapper;
-using System.Security.Cryptography;
-using SharpDX.DirectInput;
+﻿using Newtonsoft.Json;
 using SDL2;
-using static XInput.Wrapper.X.Gamepad;
-using System;
+using SharpDX.DirectInput;
+using System.Security.Cryptography;
+using System.Text;
 using TeknoparrotAutoXinput;
+using XInput.Wrapper;
 
 public static class HIDInfo
 {
@@ -122,7 +120,7 @@ public static class HIDInfo
 			string json = JsonConvert.SerializeObject(caps, Newtonsoft.Json.Formatting.None);
 			string signature = GetMD5Short(json);
 			string extra = "\r\n";
-			
+
 
 			var capsEx = XExt.GetExtraData(slot);
 			string controllerName = Program.GetJoyId(capsEx.vendorId, capsEx.productId);

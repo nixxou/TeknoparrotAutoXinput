@@ -1,0 +1,18 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button1": "Attack A",
+    "Button2": "Attack B",
+    "Button3": "Clash",
+    "Button4": "",
+    "Button5": "Change",
+    "Button6": "",
+    "Button7": "Partner",
+    "Button8": ""
+  }
+}

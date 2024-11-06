@@ -1,53 +1,68 @@
 {
-	"global": {
-		"windowed": "General,Windowed,1",
-		"showGameOptionBezel": "True",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "True",
-		"upscaleFullscreen": "True",
-		"upscaleWindowed": "True",
-		"magpieClass": "FREEGLUT",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False"
-	},
-	"tpoptions": {
-		"set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_windowed": {
-            "General||Windowed": "1"
-        },
-		"nvidia": {
-			"Graphics||GPU Fix": "None"
-		},
-		"amdold": {
-			"Graphics||GPU Fix": "AMD"
-		},
-		"amdnew": {
-			"Graphics||GPU Fix": "New AMD Driver"
-		},
-		"amdrid": {
-			"Graphics||GPU Fix": "New AMD Driver"
-		},
-		"intel": {
-			"Graphics||GPU Fix": "INTEL"
-		},
-		"replace_network": {
-			"Network||Dhcp": "0",
-			"Network||Ip": "{{networkip}}",
-			"Network||Mask": "{{networkmask}}",
-			"Network||Gateway": "{{networkgateway}}",
-			"Network||Dns1": "{{networkdns1}}",
-			"Network||Dns2": "{{networkdns2}}"
-		}
-	},
-	"gameoptions": {}
+  "global": {
+    "windowed": "General,Windowed,1",
+    "originalRes": "640x480",
+    "showGameOptionBezel": "True",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "english",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "True",
+    "magpieClass": "FREEGLUT",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False"
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    },
+    "nvidia": {
+      "Graphics||GPU Fix": "None"
+    },
+    "amdold": {
+      "Graphics||GPU Fix": "AMD"
+    },
+    "amdnew": {
+      "Graphics||GPU Fix": "New AMD Driver"
+    },
+    "amdrid": {
+      "Graphics||GPU Fix": "New AMD Driver"
+    },
+    "intel": {
+      "Graphics||GPU Fix": "INTEL"
+    },
+    "replace_network": {
+      "Network||Dhcp": "0",
+      "Network||Ip": "{{networkip}}",
+      "Network||Mask": "{{networkmask}}",
+      "Network||Gateway": "{{networkgateway}}",
+      "Network||Dns1": "{{networkdns1}}",
+      "Network||Dns2": "{{networkdns2}}"
+    },
+    "translation": {
+      "General||DongleRegion": "EXPORT",
+      "General||PcbRegion": "EXPORT"
+    },
+    "no_translation": {
+      "General||DongleRegion": "JAPAN",
+      "General||PcbRegion": "JAPAN"
+    }
+  },
+  "gameoptions": {
+    "shifter_found": {
+      "EnableGearChange": "True"
+    }
+  }
 }

@@ -7,8 +7,11 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "True",
+    "showGameOptionPerf": "False",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
+    "need60hz": "True",
     "canUseJoyInsteadOfDpad": "True",
     "magpieClass": "LaunchUnrealUWindowsClient",
     "magpie3DGameMode": "False",
@@ -48,8 +51,11 @@
       "General||ResolutionWidth": "1280",
       "General||ResolutionHeight": "720"
     },
-    "recommanded_tp_settings": {
+    "translation": {
       "General||EnglishHack": "1"
+    },
+    "no_translation": {
+      "General||EnglishHack": "0"
     }
   },
   "gameoptions": {}

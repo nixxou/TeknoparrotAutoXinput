@@ -118,8 +118,38 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="arcade-p1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arcade-p1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arcade-p2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arcade-p2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arcade-p3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arcade-p3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arcade-p4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arcade-p4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="brake" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\brake.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="console_bezel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\console_bezel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gamepad" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gamepad.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gamepad-p1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gamepad-p1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gamepad-p2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gamepad-p2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gamepad-p3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gamepad-p3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gamepad-p4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gamepad-p4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="gun" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gun.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,8 +184,44 @@
   <data name="hotas" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\hotas.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="hotas-p1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hotas-p1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hotas-p2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hotas-p2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hotas-p3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hotas-p3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hotas-p4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hotas-p4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lightgun-p1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lightgun-p1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lightgun-p2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lightgun-p2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lightgun-p3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lightgun-p3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lightgun-p4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lightgun-p4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="low_high" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\low-high.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="P1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\P1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="P2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\P2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="P3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\P3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="P4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\P4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="shifter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\shifter.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -165,6 +231,18 @@
   </data>
   <data name="Wheel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Wheel.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheel-p1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wheel-p1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheel-p2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wheel-p2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheel-p3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wheel-p3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheel-p4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wheel-p4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="wiimote" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wiimote.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

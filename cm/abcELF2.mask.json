@@ -1,0 +1,16 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Missile Trigger": "Missile",
+    "Gun Trigger": "Gun",
+    "Climax Switch": "Climax Mode",
+    "Joystick Analog X": "Move",
+    "Joystick Analog Y": "Move",
+    "Up (Digital)": "",
+    "Down (Digital)": "",
+    "Left (Digital)": "",
+    "Right (Digital)": ""
+  }
+}

@@ -7,9 +7,11 @@
     "showGameOptionVsync": "True",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPerf": "High",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "False",
     "canUseJoyInsteadOfDpad": "True",
+    "forceResSwitchFullscreen": "True",
     "magpieClass": "KOF@MAXIMUM@IMPACT@regulation gAh",
     "magpie3DGameMode": "True",
     "magpieDisableDirectFlip": "False",
@@ -31,7 +33,8 @@
   },
   "gameoptions": {
     "recommanded_gameoptions & fullscreen & keepaspectratio": {
-      "useMagpie": "3"
+      "useMagpie": "3",
+      "magpieDelay": "3"
     }
   }
 }

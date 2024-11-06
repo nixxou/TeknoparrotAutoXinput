@@ -1,11 +1,5 @@
-﻿using Antlr4.Runtime.Tree.Xpath;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TeknoparrotAutoXinput
 {
@@ -19,9 +13,9 @@ namespace TeknoparrotAutoXinput
 			string exePath = Process.GetCurrentProcess().MainModule.FileName;
 			string exeDir = Path.GetDirectoryName(exePath);
 			string TeknoparrotAutoXinputConfigFile = Path.Combine(exeDir, "TeknoparrotAutoXinput.json");
-			if(File.Exists(TeknoparrotAutoXinputConfigFile)) 
+			if (File.Exists(TeknoparrotAutoXinputConfigFile))
 			{
-				MainConfig = new Configuration(File.ReadAllText(TeknoparrotAutoXinputConfigFile));
+				MainConfig = new Configuration(Utils.ReadAllText(TeknoparrotAutoXinputConfigFile));
 			}
 		}
 
@@ -30,7 +24,7 @@ namespace TeknoparrotAutoXinput
 			string exePath = Process.GetCurrentProcess().MainModule.FileName;
 			string exeDir = Path.GetDirectoryName(exePath);
 			string TeknoparrotAutoXinputConfigFile = Path.Combine(exeDir, "TeknoparrotAutoXinput.json");
-			File.WriteAllText(TeknoparrotAutoXinputConfigFile,MainConfig.Serialize());
+			File.WriteAllText(TeknoparrotAutoXinputConfigFile, MainConfig.Serialize());
 		}
 	}
 	public class Configuration
@@ -201,7 +195,7 @@ namespace TeknoparrotAutoXinput
 
 		public bool tpLicenceShow { get; set; } = false;
 
-		public int performanceProfile {  get; set; } = 0;
+		public int performanceProfile { get; set; } = 0;
 		public bool forceVsync { get; set; } = true;
 		public bool keepAspectRatio { get; set; } = true;
 
@@ -291,9 +285,9 @@ namespace TeknoparrotAutoXinput
 				this.gunA_sindenRecoil1 = DeserializeData.gunA_sindenRecoil1;
 				this.gunA_sindenRecoil2 = DeserializeData.gunA_sindenRecoil2;
 				this.gunA_sindenRecoil3 = DeserializeData.gunA_sindenRecoil3;
-				this.gunB_sindenRecoil1 = DeserializeData .gunB_sindenRecoil1;
-				this.gunB_sindenRecoil2 = DeserializeData .gunB_sindenRecoil2;
-				this.gunB_sindenRecoil3 = DeserializeData .gunB_sindenRecoil3;
+				this.gunB_sindenRecoil1 = DeserializeData.gunB_sindenRecoil1;
+				this.gunB_sindenRecoil2 = DeserializeData.gunB_sindenRecoil2;
+				this.gunB_sindenRecoil3 = DeserializeData.gunB_sindenRecoil3;
 				this.reversePedals = DeserializeData.reversePedals;
 				this.alwaysRunMamehooker = DeserializeData.alwaysRunMamehooker;
 				this.rivatunerExe = DeserializeData.rivatunerExe;
@@ -312,7 +306,7 @@ namespace TeknoparrotAutoXinput
 				this.magpieGunCalibration = DeserializeData.magpieGunCalibration;
 				this.magpieBorderSize = DeserializeData.magpieBorderSize;
 				this.useXenos = DeserializeData.useXenos;
-				
+
 				this.magpieFsrSharp = DeserializeData.magpieFsrSharp;
 				this.magpieExclusiveFullscreen = DeserializeData.magpieExclusiveFullscreen;
 

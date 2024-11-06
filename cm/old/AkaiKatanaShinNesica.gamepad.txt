@@ -1,0 +1,16 @@
+{
+  "RemplaceBefore": {
+    "Player 1 ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button 3": "Normal Shoot",
+    "Button 1": "Focus Shoot",
+    "Button 4": "Switch",
+    "Button 2": "Bomb"
+  }
+}

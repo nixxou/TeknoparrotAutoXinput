@@ -1,0 +1,8 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Player 1 Gun X": "Aim",
+    "Player 1 Gun Y": "Aim"
+  }
+}

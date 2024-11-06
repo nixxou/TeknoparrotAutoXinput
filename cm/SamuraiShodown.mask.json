@@ -1,0 +1,22 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Button 1 / Light Slash": "Light Slash",
+    "Button 2 / Medium Slash": "Medium Slash",
+    "Button 3 / Light + Medium Slash": "Light + Medium Slash",
+    "Button 4 / Kick": "Kick",
+    "Button 5 / Heavy Slash": "Heavy Slash",
+    "Button 6 / Heavy Slash + Kick": "Heavy Slash + Kick",
+    "Button 7": "",
+    "Button 8": "",
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move"
+  }
+}

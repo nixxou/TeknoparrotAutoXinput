@@ -1,44 +1,19 @@
-﻿using Henooh.DeviceEmulator.Net;
-using Krypton.Toolkit;
-using Microsoft.VisualBasic.ApplicationServices;
-using Microsoft.Win32.TaskScheduler;
+﻿using Krypton.Toolkit;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SDL2;
 using SerialPortLib2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.IO.Pipes;
-using System.IO.Ports;
-using System.Linq;
-using System.Management;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics.X86;
-using System.Security.Cryptography.Xml;
-using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Media.Effects;
 using System.Xml;
-using System.Xml.Linq;
-using TeknoparrotAutoXinput.Properties;
 using TeknoParrotUi.Common;
 using WiimoteLib;
 using XInput.Wrapper;
-using XJoy;
-using static SDL2.SDL;
 using Image = System.Drawing.Image;
 
 namespace TeknoparrotAutoXinput
@@ -153,7 +128,7 @@ namespace TeknoparrotAutoXinput
 			//Font = new Font(Font.Name, Font.Size * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
 
 			InitializeComponent();
-			
+
 			this.Activated += VotreForm_Activated;
 			this.Deactivate += VotreForm_Deactivate;
 
@@ -210,9 +185,11 @@ namespace TeknoparrotAutoXinput
 						string gameName = ExtractGameNameInternal(profile);
 						if (!_gameList.ContainsKey(gameName))
 						{
+							string infoFilePath = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "config", Path.GetFileNameWithoutExtension(profile) + ".info.json");
 							var newGame = new Game();
 							newGame.Name = gameName;
 							newGame.UserConfigFile = profile;
+							newGame.InfoFile = File.Exists(infoFilePath) ? infoFilePath : "";
 							newGame.FileName = Path.GetFileName(profile);
 							newGame.Metadata = DeSerializeMetadata(profile);
 							if (newGame.Metadata != null)
@@ -513,7 +490,7 @@ namespace TeknoparrotAutoXinput
 			{
 				try
 				{
-					return JsonConvert.DeserializeObject<Metadata>(File.ReadAllText(metadataPath));
+					return JsonConvert.DeserializeObject<Metadata>(Utils.ReadAllText(metadataPath));
 				}
 				catch
 				{
@@ -658,7 +635,7 @@ namespace TeknoparrotAutoXinput
 					string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
 					if (File.Exists(optionFile))
 					{
-						gameOptions = new GameSettings(File.ReadAllText(optionFile));
+						gameOptions = new GameSettings(Utils.ReadAllText(optionFile));
 						gpuResolution = gameOptions.gpuResolution > 0 ? (gameOptions.gpuResolution - 1) : gpuResolution;
 						displayMode = gameOptions.displayMode > 0 ? (gameOptions.displayMode - 1) : displayMode;
 						patchReshade = gameOptions.patchReshade > 0 ? (gameOptions.patchReshade == 1 ? true : false) : patchReshade;
@@ -962,7 +939,7 @@ namespace TeknoparrotAutoXinput
 					}
 					else
 					{
-						_playAutoEnabled = false;
+						_playAutoEnabled = true;
 						_playDirectEnabled = true;
 						isPlaying = isPlaying;
 						btn_gameoptions.Enabled = true;
@@ -1472,50 +1449,50 @@ namespace TeknoparrotAutoXinput
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-				/*
-				string finalConfig = "";
-				if (list_games.SelectedItems.Count > 0)
+			/*
+			string finalConfig = "";
+			if (list_games.SelectedItems.Count > 0)
+			{
+				string GameSelected = list_games.SelectedItems[0].ToString();
+				GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
+				if (_gameList.ContainsKey(GameSelected))
 				{
-					string GameSelected = list_games.SelectedItems[0].ToString();
-					GameSelected = GameSelected.Replace(" [NOT SUPPORTED]", "");
-					if (_gameList.ContainsKey(GameSelected))
-					{
-						finalConfig = _gameList[GameSelected].UserConfigFile;
-					}
+					finalConfig = _gameList[GameSelected].UserConfigFile;
 				}
-				if (string.IsNullOrEmpty(finalConfig)) return;
-				Dictionary<string, string> XiToDi = new Dictionary<string, string>();
-				//finalConfig = finalConfig.Replace("UserProfiles", "GameProfiles");
-				if (File.Exists(finalConfig))
-				{
-					string finalConfigData = File.ReadAllText(finalConfig);
-					XmlDocument xmlDoc = new XmlDocument();
-					xmlDoc.LoadXml(finalConfigData);
-					XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
-					string result = "";
-					foreach (XmlNode node in joystickButtonsNodes)
-					{
-						XmlNode buttonNameNodeXi = node.SelectSingleNode("BindNameXi");
-						string buttonNameXi = "";
-						if (buttonNameNodeXi != null && !string.IsNullOrEmpty(buttonNameNodeXi.InnerText)) buttonNameXi = buttonNameNodeXi.InnerText;
-
-						XmlNode buttonNameNodeDi = node.SelectSingleNode("BindNameDi");
-						string buttonNameDi = "";
-						if (buttonNameNodeDi != null && !string.IsNullOrEmpty(buttonNameNodeDi.InnerText)) buttonNameDi = buttonNameNodeDi.InnerText;
-
-						result += $"{buttonNameXi} => {buttonNameDi} \n";
-						if (buttonNameXi != "")
-						{
-							XiToDi[buttonNameXi] = buttonNameDi;
-						}
-
-					}
-					string json = JsonConvert.SerializeObject(XiToDi, Newtonsoft.Json.Formatting.Indented);
-					File.WriteAllText("XiToDi.json", json);
-					MessageBox.Show(json);
-				}
-				*/
 			}
+			if (string.IsNullOrEmpty(finalConfig)) return;
+			Dictionary<string, string> XiToDi = new Dictionary<string, string>();
+			//finalConfig = finalConfig.Replace("UserProfiles", "GameProfiles");
+			if (File.Exists(finalConfig))
+			{
+				string finalConfigData = File.ReadAllText(finalConfig);
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.LoadXml(finalConfigData);
+				XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");
+				string result = "";
+				foreach (XmlNode node in joystickButtonsNodes)
+				{
+					XmlNode buttonNameNodeXi = node.SelectSingleNode("BindNameXi");
+					string buttonNameXi = "";
+					if (buttonNameNodeXi != null && !string.IsNullOrEmpty(buttonNameNodeXi.InnerText)) buttonNameXi = buttonNameNodeXi.InnerText;
+
+					XmlNode buttonNameNodeDi = node.SelectSingleNode("BindNameDi");
+					string buttonNameDi = "";
+					if (buttonNameNodeDi != null && !string.IsNullOrEmpty(buttonNameNodeDi.InnerText)) buttonNameDi = buttonNameNodeDi.InnerText;
+
+					result += $"{buttonNameXi} => {buttonNameDi} \n";
+					if (buttonNameXi != "")
+					{
+						XiToDi[buttonNameXi] = buttonNameDi;
+					}
+
+				}
+				string json = JsonConvert.SerializeObject(XiToDi, Newtonsoft.Json.Formatting.Indented);
+				File.WriteAllText("XiToDi.json", json);
+				MessageBox.Show(json);
+			}
+			*/
+		}
 
 		private static SDL.SDL_HapticEffect INTERNAL_effect = new SDL.SDL_HapticEffect
 		{
@@ -1574,31 +1551,31 @@ namespace TeknoparrotAutoXinput
 							SDL.SDL_Quit();
 							return;
 						}
-/*
-						// Créer l'effet constant
-						// Créer l'effet constant
-						// Initialiser l'effet constant
-						// Créer l'effet constant
-						SDL2.SDL.SDL_HapticEffect effect = new SDL_HapticEffect
-						{
-							type = SDL.SDL_HAPTIC_CONSTANT,
-							constant = new SDL_HapticConstant
-							{
-								type = SDL.SDL_HAPTIC_CONSTANT,
-								direction = new SDL_HapticDirection
-								{
-									type = SDL.SDL_HAPTIC_CARTESIAN,
-									dir = new int[3] { 0, 1, 0 }
-								},
-								length = SDL.SDL_HAPTIC_INFINITY,
-								level = 0x6000,  // Force de l'effet
-								attack_length = 0,
-								attack_level = 0,
-								fade_length = 0,
-								fade_level = 0
-							}
-						};
-*/
+						/*
+												// Créer l'effet constant
+												// Créer l'effet constant
+												// Initialiser l'effet constant
+												// Créer l'effet constant
+												SDL2.SDL.SDL_HapticEffect effect = new SDL_HapticEffect
+												{
+													type = SDL.SDL_HAPTIC_CONSTANT,
+													constant = new SDL_HapticConstant
+													{
+														type = SDL.SDL_HAPTIC_CONSTANT,
+														direction = new SDL_HapticDirection
+														{
+															type = SDL.SDL_HAPTIC_CARTESIAN,
+															dir = new int[3] { 0, 1, 0 }
+														},
+														length = SDL.SDL_HAPTIC_INFINITY,
+														level = 0x6000,  // Force de l'effet
+														attack_length = 0,
+														attack_level = 0,
+														fade_length = 0,
+														fade_level = 0
+													}
+												};
+						*/
 						int effectId = SDL.SDL_HapticNewEffect(haptic, ref INTERNAL_effect);
 						if (effectId < 0)
 						{
@@ -2043,6 +2020,7 @@ namespace TeknoparrotAutoXinput
 		public string Name;
 		public string FileName;
 		public string UserConfigFile;
+		public string InfoFile;
 		public Metadata Metadata;
 		public Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 		public bool isSupported = false;

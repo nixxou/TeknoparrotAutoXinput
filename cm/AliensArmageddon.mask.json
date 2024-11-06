@@ -1,0 +1,13 @@
+{
+  "RemplaceBefore": {
+    "P{{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Gun X": "Aim",
+    "Gun Y": "Aim",
+    "Toggle Cursor": "",
+    "Volume Up": "",
+    "Volume Down": ""
+  }
+}

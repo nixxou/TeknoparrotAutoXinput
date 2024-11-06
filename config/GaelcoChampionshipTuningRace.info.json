@@ -8,6 +8,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "magpieNoLaunchIfSameRes": "True",

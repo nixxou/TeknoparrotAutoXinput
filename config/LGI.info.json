@@ -7,6 +7,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "english",
+    "showGameOptionPerf": "High",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "rom": "lgi",
@@ -34,10 +36,16 @@
     },
     "recommanded_tp_settings": {
       "General||HideCursor": "1",
-      "General||Enable Outputs": "1",
+      "General||Enable Outputs": "1"
+    },
+    "translation":{
       "General||DongleRegion": "USA",
-      "General||PcbRegion": "USA"
-    }
+      "General||PcbRegion": "USA"		
+	},
+    "no_translation":{
+      "General||DongleRegion": "JAPAN",
+      "General||PcbRegion": "JAPAN"		
+	}
   },
   "gameoptions": {
     "recommanded_gameoptions & fullscreen & at_least_one_sinden & no_sinden_using_vjoy": {

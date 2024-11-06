@@ -34,10 +34,12 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			BackColor = Color.FromArgb(47, 45, 46);
+			BackColor = Color.FromArgb(54, 56, 55);
 			ClientSize = new Size(800, 450);
 			Name = "Startup";
 			Text = "Startup";
+			FormClosing += Startup_FormClosing;
+			Resize += Startup_Resize;
 			ResumeLayout(false);
 		}
 

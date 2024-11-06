@@ -1,0 +1,23 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Joystick Analog X": "Change Target",
+    "Joystick Analog Y": "Change Target",
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button 1": "Guard",
+    "Button 2": "Attack",
+    "Button 3": "Statue Skill",
+    "Button 4": "Shoot",
+    "Button 5": "Jump",
+    "Button 6": "Free Camera",
+    "Button 7": "Miracle Button",
+    "Button 8": "",
+    "Button 9": ""
+  }
+}

@@ -7,6 +7,9 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
+    "disableCrtForLowPerf": "True",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "need60hz": "True",
@@ -71,7 +74,7 @@
       "General||CustomResolution": "1",
       "General||CustomWidth": "1920",
       "General||CustomHeight": "1080"
-    }
+    },
     "ffb": {
       "General||Enable Outputs": "1"
     }

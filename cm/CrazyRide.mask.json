@@ -1,0 +1,10 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Service / Test Menu Down": "Service / Coin",
+    "Enter": "Test Menu Enter",
+    "Start": "Boost / Start",
+    "Wheel Axis": "Move"
+  }
+}

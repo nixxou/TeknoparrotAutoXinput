@@ -10,23 +10,14 @@ using Newtonsoft.Json.Linq;
 using SDL2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
-using System;
-using System.Configuration;
-using System.Data.SqlTypes;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO.Pipes;
-using System.Management;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using Westwind.SetResolution;
 using WiimoteLib;
 using WindowsDisplayAPI;
 using XInput.Wrapper;
@@ -39,6 +30,8 @@ namespace TeknoparrotAutoXinput
 	internal static class Program
 	{
 		public static float version = 0.90f;
+
+		public static Dictionary<string, string> cacheFile = new Dictionary<string, string>();
 
 		// Importer la fonction AllocConsole depuis Kernel32.dll
 		[DllImport("kernel32.dll")]
@@ -190,6 +183,8 @@ namespace TeknoparrotAutoXinput
 		public static bool linkExeSoftLink = false;
 		public static bool linkExePrecheck = false;
 
+		public static string linkSourceFolderExe = "";
+
 		public static Dictionary<int, string> vjoyData = new Dictionary<int, string>();
 
 		public static bool usePresetDisposition = false;
@@ -213,6 +208,7 @@ namespace TeknoparrotAutoXinput
 
 		public static bool testMode = false;
 
+		public static Dictionary<string, string> movetoFiles = new Dictionary<string, string>();
 
 		//public static string xmlFileContent = "";
 		[DllImport("User32.dll")]
@@ -341,7 +337,7 @@ namespace TeknoparrotAutoXinput
 							// Afficher les noms de toutes les sous-clés
 							foreach (string subKeyName in subKeyNames)
 							{
-								if(subKeyName == XenosDir)
+								if (subKeyName == XenosDir)
 								{
 									MessageBox.Show("Directory already added in the exclusion list");
 									return;
@@ -465,7 +461,7 @@ namespace TeknoparrotAutoXinput
 					string exeDir = Path.GetDirectoryName(exePath);
 					Process process = new Process();
 					process.StartInfo.FileName = exePath;
-					if(DemulshooterManager.TargetProcess != "") process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -pname=\"{DemulshooterManager.TargetProcess}\" -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
+					if (DemulshooterManager.TargetProcess != "") process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -pname=\"{DemulshooterManager.TargetProcess}\" -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 					else process.StartInfo.Arguments = $"-target={DemulshooterManager.Target} -rom={DemulshooterManager.Rom} -noinput" + (DemulshooterManager.HideCrosshair ? " -nocrosshair" : "");
 
 					/*
@@ -556,7 +552,7 @@ namespace TeknoparrotAutoXinput
 						Thread.Sleep(100);
 					}
 
-					if(Directory.Exists(profileDir)) Directory.Move(profileDir, profileDirBack);
+					if (Directory.Exists(profileDir)) Directory.Move(profileDir, profileDirBack);
 					Directory.CreateDirectory(profileDir);
 					File.Copy(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "thirdparty", "rivaconfig", "Config"), Path.Combine(profileDir, "Config"));
 					File.Copy(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "thirdparty", "rivaconfig", "Global"), Path.Combine(profileDir, "Global"));
@@ -616,7 +612,7 @@ namespace TeknoparrotAutoXinput
 
 				if (gunOption == "gunA") enableGunA = true;
 				if (gunOption == "gunB") enableGunB = true;
-				if(gunOption == "all")
+				if (gunOption == "all")
 				{
 					enableGunA = true;
 					enableGunB = true;
@@ -652,7 +648,7 @@ namespace TeknoparrotAutoXinput
 					formula_BY_before = args[10];
 				}
 
-				ConfigurationManager.LoadConfig();			
+				ConfigurationManager.LoadConfig();
 				string xmlFile = args.Last();
 				if (xmlFile.ToLower().EndsWith(".xml") && File.Exists(xmlFile))
 				{
@@ -665,7 +661,7 @@ namespace TeknoparrotAutoXinput
 					if (File.Exists(optionFile))
 					{
 						gameOptions = new GameSettings(File.ReadAllText(optionFile));
-						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions,enableGunA,enableGunB, formula_X, formula_Y,gunAMinMax,gunBMinMax, formula_AX_before, formula_AY_before, formula_BX_before, formula_BY_before, vjoyindexvalue);;
+						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions, enableGunA, enableGunB, formula_X, formula_Y, gunAMinMax, gunBMinMax, formula_AX_before, formula_AY_before, formula_BX_before, formula_BY_before, vjoyindexvalue); ;
 						Application.Run(frm);
 					}
 					else
@@ -688,8 +684,8 @@ namespace TeknoparrotAutoXinput
 			string runtimedir = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "runtimes");
 			if (Directory.Exists(runtimedir))
 			{
-				var oldsdl2 = Directory.GetFiles(runtimedir,"*sdl2*",SearchOption.AllDirectories);
-				foreach(var oldsdl in oldsdl2) { File.Delete(oldsdl); }
+				var oldsdl2 = Directory.GetFiles(runtimedir, "*sdl2*", SearchOption.AllDirectories);
+				foreach (var oldsdl in oldsdl2) { File.Delete(oldsdl); }
 				//Directory.Delete(runtimedir, true);
 			}
 
@@ -859,7 +855,7 @@ namespace TeknoparrotAutoXinput
 				Dictionary<string, string> existingConfig = new Dictionary<string, string>();
 				if (args.Length > 0)
 				{
-					
+
 					try
 					{
 						int result = SetProcessDpiAwareness(ProcessDpiAwareness.PerMonitorDpiAware);
@@ -867,9 +863,27 @@ namespace TeknoparrotAutoXinput
 					catch (Exception ex)
 					{
 					}
-					
-					
+					/*
+					string xmlFile1 = args.Last();
+					Startup.tpBasePath = Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile1))).FullName;
+					Startup.gameTitle = "Ceci est un tres tres tres long test car je test le maximum POSSIBLE pour le titre et voila voila c'est bon je pense";
+					Startup.gameTitle = "Akuma : The Game";
+					Startup.xmlFile = xmlFile1;
+					Startup.logoPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile1))).FullName, "Icons", Path.GetFileNameWithoutExtension(xmlFile1) + ".png");
+					Startup.playerAttributionDesc = "";
+					Startup.imagePaths = new List<string>();
+					Startup.playerAttributionDesc += $"P1=GAMEPAD\n";
+					var imgPath2 = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "img", Path.GetFileNameWithoutExtension(xmlFile1) + "." + "gamepad" + ".jpg");
+					Startup.imagePaths.Add(imgPath2);
+					Startup.imagePaths.Add(imgPath2);
+					Startup.imagePaths.Add(imgPath2);
+					Startup.playerAttributionDesc.TrimEnd('\n');
+					startupForm = new Startup();
+					Application.Run(startupForm);
 
+					Thread.Sleep(2000);
+					return;
+					*/
 
 					using (Mutex mutex = new Mutex(false, mutexName, out bool createdNew))
 					{
@@ -998,6 +1012,26 @@ namespace TeknoparrotAutoXinput
 								useXenos = false;
 							}
 
+							if (!gameOptions.overrideTpController) passthrough = true;
+							if (!gameOptions.overrideTpGameSettings) fullpassthrough = true;
+							if (!gameOptions.useThirdParty)
+							{
+								gameOptions.useMagpie = 2;
+								gameOptions.runRivaTuner = false;
+								useXenos = false;
+								gameOptions.AhkBefore = "";
+								gameOptions.AhkAfter = "";
+								gameOptions.gunA_recoil = 1;
+								gameOptions.gunB_recoil = 1;
+								gameOptions.gunA_useVjoy = 1;
+								gameOptions.gunB_useVjoy = 1;
+							}
+							if (!gameOptions.applyPatches)
+							{
+								gameOptions.EnableLink = false;
+								gameOptions.EnableLinkExe = false;
+							}
+
 							patchGpuFix = gameOptions.patchGpuFix > 0 ? (gameOptions.patchGpuFix == 1 ? true : false) : patchGpuFix;
 							patchGpuTP = gameOptions.patchGpuTP > 0 ? (gameOptions.patchGpuTP == 1 ? true : false) : patchGpuTP;
 
@@ -1031,7 +1065,7 @@ namespace TeknoparrotAutoXinput
 								}
 							}
 
-							performanceProfile = gameOptions.performanceProfile > 0 ? (gameOptions.performanceProfile-1) : performanceProfile;
+							performanceProfile = gameOptions.performanceProfile > 0 ? (gameOptions.performanceProfile - 1) : performanceProfile;
 							forceVsync = gameOptions.forceVsync > 0 ? (gameOptions.patchDisplayModeFix == 1 ? true : false) : forceVsync;
 
 							useBezel = gameOptions.useBezel > 0 ? (gameOptions.useBezel == 1 ? true : false) : useBezel;
@@ -1063,7 +1097,7 @@ namespace TeknoparrotAutoXinput
 							gpuResolution = forced_resolution > 0 ? (forced_resolution - 1) : gpuResolution;
 							patchReshade = forced_reshade > 0 ? (forced_reshade == 1 ? true : false) : patchReshade;
 
-							if(gpuResolution == 4)
+							if (gpuResolution == 4)
 							{
 								patchResolutionFix = false;
 								patchResolutionTP = false;
@@ -1151,13 +1185,40 @@ namespace TeknoparrotAutoXinput
 							}
 							Utils.LogMessage($"Alt Config dir = {potentialAltConfigDir}");
 
+							string gameInfoContent = "";
+							JObject gameInfoParsedJson = null;
+							JObject gameInfoGOSection = null;
+							JObject gameInfoTpSection = null;
+							JObject gameInfoGlobalSection = null;
+							GameInfo = new Dictionary<string, string>();
+							string gameInfoFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "info" + ".json");
+							if (potentialAltConfigDir != "")
+							{
+								var gameInfoFileAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + "info" + ".json");
+								if (File.Exists(gameInfoFileAlt)) gameInfoFile = gameInfoFileAlt;
+							}
+							if (File.Exists(gameInfoFile) && !fullpassthrough)
+							{
+								Utils.LogMessage($"info file found : " + gameInfoFile);
+								gameInfoContent = File.ReadAllText(gameInfoFile);
+								gameInfoParsedJson = JObject.Parse(gameInfoContent);
+								gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
+								GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
+								gameInfoGOSection = (JObject)gameInfoParsedJson["gameoptions"];
+								//gameOptions.Overwrite(gameInfoGOSection, TpSettingsManager.tags);
+								gameInfoTpSection = (JObject)gameInfoParsedJson["tpoptions"];
+							}
+
+							if (performanceProfile == 1 && GameInfo.ContainsKey("disableCrtForLowPerf") && GameInfo["disableCrtForLowPerf"].ToLower() == "true") useCrt = false;
+
+
 							bool refreshrate_done = false;
 							_dispositionToSwitch = ConfigurationManager.MainConfig.Disposition;
 							if (gameOptions.UseGlobalDisposition == false) _dispositionToSwitch = gameOptions.Disposition;
 
 							if (!string.IsNullOrEmpty(_dispositionToSwitch))
 							{
-								if(_dispositionToSwitch == "MainMonitor:720p 60hz")
+								if (_dispositionToSwitch == "MainMonitor:720p 60hz")
 								{
 									usePresetDisposition = true;
 									presetDispositionWith = 1280;
@@ -1286,7 +1347,6 @@ namespace TeknoparrotAutoXinput
 									try
 									{
 										Program.refreshRate = Utils.GetPrimaryMonitorRefreshRateFromXml(File.ReadAllText(cfg));
-										MessageBox.Show($"Refres = {Program.refreshRate}");
 										refreshrate_done = true;
 										if (gameOptions.moveBackWindowToOriginalMonitor)
 										{
@@ -1364,10 +1424,10 @@ namespace TeknoparrotAutoXinput
 							if (Program.gpuResolution == 3) TpSettingsManager.tags.Add("4k");
 							if (Program.gpuResolution == 4) TpSettingsManager.tags.Add("game_native_res");
 
-							if(Program.gpuResolution != 4 && Program.gpuResolution >=0) TpSettingsManager.tags.Add("720p+");
-							if(Program.gpuResolution != 4 && Program.gpuResolution >=1) TpSettingsManager.tags.Add("1080p+");
-							if(Program.gpuResolution != 4 && Program.gpuResolution >=2) TpSettingsManager.tags.Add("2k+");
-							if(Program.gpuResolution != 4 && Program.gpuResolution >=3) TpSettingsManager.tags.Add("4k+");
+							if (Program.gpuResolution != 4 && Program.gpuResolution >= 0) TpSettingsManager.tags.Add("720p+");
+							if (Program.gpuResolution != 4 && Program.gpuResolution >= 1) TpSettingsManager.tags.Add("1080p+");
+							if (Program.gpuResolution != 4 && Program.gpuResolution >= 2) TpSettingsManager.tags.Add("2k+");
+							if (Program.gpuResolution != 4 && Program.gpuResolution >= 3) TpSettingsManager.tags.Add("4k+");
 
 							if (Program.gpuResolution != 4 && Program.gpuResolution <= 0) TpSettingsManager.tags.Add("720p-");
 							if (Program.gpuResolution != 4 && Program.gpuResolution <= 1) TpSettingsManager.tags.Add("1080p-");
@@ -1397,8 +1457,8 @@ namespace TeknoparrotAutoXinput
 
 
 							if (Program.patchFFB) TpSettingsManager.tags.Add("ffb");
-							
-							if(Program.useBezel) TpSettingsManager.tags.Add("bezel");
+
+							if (Program.useBezel) TpSettingsManager.tags.Add("bezel");
 							else TpSettingsManager.tags.Add("no_bezel");
 
 							if (Program.useCrt) TpSettingsManager.tags.Add("crtfilter");
@@ -1407,7 +1467,7 @@ namespace TeknoparrotAutoXinput
 							if (Program.useKeepAspectRatio) TpSettingsManager.tags.Add("keepaspectratio");
 							else TpSettingsManager.tags.Add("no_keepaspectratio");
 
-							if(Program.patchLang == 0) TpSettingsManager.tags.Add("no_translation");
+							if (Program.patchLang == 0) TpSettingsManager.tags.Add("no_translation");
 							else TpSettingsManager.tags.Add("translation");
 							if (Program.patchLang == 1) TpSettingsManager.tags.Add("english");
 							if (Program.patchLang == 2) TpSettingsManager.tags.Add("french");
@@ -1423,32 +1483,8 @@ namespace TeknoparrotAutoXinput
 							if (Program.patchResolutionFix) TpSettingsManager.tags.Add("set_resolution_patches");
 							else TpSettingsManager.tags.Add("dont_set_resolution_patches");
 
-							string gameInfoContent = "";
-							JObject gameInfoParsedJson = null;
-							JObject gameInfoGOSection = null;
-							JObject gameInfoTpSection = null;
-							JObject gameInfoGlobalSection = null;
-							GameInfo = new Dictionary<string, string>();
-							string gameInfoFile = Path.Combine(basePath, "config", originalConfigFileNameWithoutExt + "." + "info" + ".json");
-							if (potentialAltConfigDir != "")
+							if (GameInfo.Count > 0)
 							{
-								var gameInfoFileAlt = Path.Combine(potentialAltConfigDir, originalConfigFileNameWithoutExt + "." + "info" + ".json");
-								if (File.Exists(gameInfoFileAlt)) gameInfoFile = gameInfoFileAlt;
-							}
-							if (File.Exists(gameInfoFile) && !fullpassthrough)
-							{
-								Utils.LogMessage($"info file found : " + gameInfoFile);
-								gameInfoContent = File.ReadAllText(gameInfoFile);
-
-								gameInfoParsedJson = JObject.Parse(gameInfoContent);
-
-								gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
-								GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
-
-								gameInfoGOSection = (JObject)gameInfoParsedJson["gameoptions"];
-								//gameOptions.Overwrite(gameInfoGOSection, TpSettingsManager.tags);
-
-								gameInfoTpSection = (JObject)gameInfoParsedJson["tpoptions"];
 								TpSettingsManager.SetSettings(gameInfoTpSection);
 								if (GameInfo.ContainsKey("windowed"))
 								{
@@ -1457,21 +1493,73 @@ namespace TeknoparrotAutoXinput
 								//GameInfo = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(gameInfoFile));
 							}
 
-							if (GameInfo.ContainsKey("canForceWindowed") && (GameInfo["canForceWindowed"].ToLower() == "true") && TpSettingsManager.tags.Contains("set_windowed"))
+							if (GameInfo.ContainsKey("canForceRegAsWindowed") && (GameInfo["canForceRegAsWindowed"].ToLower() == "true"))
 							{
-								TpSettingsManager.ForceRegAsWindowed = true;
+								if (TpSettingsManager.tags.Contains("set_windowed"))
+								{
+									TpSettingsManager.ForceRegAsWindowed = true;
+								}
+								if (TpSettingsManager.tags.Contains("set_displaymode_recommanded"))
+								{
+									var allSettings = gameInfoTpSection.ToObject<Dictionary<string, Dictionary<string, string>>>();
+									if (allSettings.ContainsKey("set_displaymode_recommanded") && allSettings["set_displaymode_recommanded"].ContainsKey("General||RegAsWindowed") && allSettings["set_displaymode_recommanded"]["General||RegAsWindowed"] == "1")
+									{
+										TpSettingsManager.ForceRegAsWindowed = true;
+									}
+								}
+							}
+
+							if (GameInfo.ContainsKey("canForceRegAsFullscreen") && (GameInfo["canForceRegAsFullscreen"].ToLower() == "true"))
+							{
+								if (TpSettingsManager.tags.Contains("set_fullscreen"))
+								{
+									TpSettingsManager.ForceRegAsFullscreen = true;
+								}
+								if (TpSettingsManager.tags.Contains("set_displaymode_recommanded"))
+								{
+									var allSettings = gameInfoTpSection.ToObject<Dictionary<string, Dictionary<string, string>>>();
+									if (allSettings.ContainsKey("set_displaymode_recommanded") && allSettings["set_displaymode_recommanded"].ContainsKey("General||RegAsWindowed") && allSettings["set_displaymode_recommanded"]["General||RegAsWindowed"] == "0")
+									{
+										TpSettingsManager.ForceRegAsFullscreen = true;
+									}
+								}
+							}
+
+							//Rustine pour avoir le link source folder avant d'update le xml
+							TpSettingsManager.tempLinkSourceFolderExe = "";
+							if (!string.IsNullOrEmpty(ConfigurationManager.MainConfig.perGameLinkFolderExe))
+							{
+								TpSettingsManager.tempLinkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, originalConfigFileNameWithoutExt);
+								if (gameOptions.CustomPerGameLinkFolder != null && gameOptions.CustomPerGameLinkFolder != "")
+								{
+									string lastFolder = Path.GetFileName(gameOptions.CustomPerGameLinkFolder);
+									if (lastFolder == originalConfigFileNameWithoutExt)
+									{
+										TpSettingsManager.tempLinkSourceFolderExe = gameOptions.CustomPerGameLinkFolder;
+									}
+								}
 							}
 
 							TpSettingsManager.UpdateXML();
 							if (TpSettingsManager.IsWindowed) TpSettingsManager.tags.Add("windowed");
 							else TpSettingsManager.tags.Add("fullscreen");
+							TpSettingsManager.UpdateXML();
 
+							if (Program.DebugMode)
+							{
+								string taglist = "TagList = ";
+								foreach (var tag in TpSettingsManager.tags)
+								{
+									taglist = taglist + tag + " ,";
+								}
+								Utils.LogMessage(taglist);
+							}
 
-							
 
 							if (GameInfo.ContainsKey("upscaleFullscreen") && (GameInfo["upscaleFullscreen"].ToLower() == "true" || (GameInfo["upscaleFullscreen"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["upscaleFullscreen"].Trim())))) Program.upscaleFullscreen = true;
 							if (GameInfo.ContainsKey("upscaleWindowed") && (GameInfo["upscaleWindowed"].ToLower() == "true" || (GameInfo["upscaleWindowed"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["upscaleWindowed"].Trim())))) Program.upscaleWindowed = true;
 							if (GameInfo.ContainsKey("need60hz") && (GameInfo["need60hz"].ToLower() == "true" || (GameInfo["need60hz"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["need60hz"].Trim())))) Program.need60hz = true;
+							if (performanceProfile == 1 && GameInfo.ContainsKey("need60hzForLowPerf") && GameInfo["need60hzForLowPerf"].ToLower() == "true") Program.need60hz = true;
 							if (GameInfo.ContainsKey("need60hzFullscreen") && (GameInfo["need60hzFullscreen"].ToLower() == "true" || (GameInfo["need60hzFullscreen"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["need60hzFullscreen"].Trim())))) Program.need60hzFullscreen = true;
 							if (GameInfo.ContainsKey("need60hzWindowed") && (GameInfo["need60hzWindowed"].ToLower() == "true" || (GameInfo["need60hzWindowed"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["need60hzWindowed"].Trim())))) Program.need60hzWindowed = true;
 							if (GameInfo.ContainsKey("forceResSwitchFullscreen") && (GameInfo["forceResSwitchFullscreen"].ToLower() == "true" || (GameInfo["forceResSwitchFullscreen"].Trim() != "" && TpSettingsManager.tags.Contains(GameInfo["forceResSwitchFullscreen"].Trim())))) Program.forceResSwitchFullscreen = true;
@@ -1562,7 +1650,7 @@ namespace TeknoparrotAutoXinput
 							}
 							*/
 
-							if (usePresetDisposition || string.IsNullOrEmpty(_dispositionToSwitch) || _dispositionToSwitch == "<none>") 
+							if (usePresetDisposition || string.IsNullOrEmpty(_dispositionToSwitch) || _dispositionToSwitch == "<none>")
 							{
 
 								if (!TpSettingsManager.IsWindowed && GameInfo.ContainsKey("forceResSwitchFullscreen") && GameInfo["forceResSwitchFullscreen"].ToLower().Split("x").Count() == 2)
@@ -2032,7 +2120,7 @@ namespace TeknoparrotAutoXinput
 							string linkSourceFolder = Path.Combine(perGameLinkFolder, originalConfigFileNameWithoutExt);
 							string linkTargetFolder = "";
 
-							string linkSourceFolderExe = "";
+
 							string linkTargetFolderExe = "";
 
 							string executableGame = "";
@@ -2278,7 +2366,7 @@ namespace TeknoparrotAutoXinput
 
 								if (!nolink && ((Utils.IsEligibleHardLink(linkTargetFolderExe) && linkExeHardLink) || linkExeSoftLink) && linkExeWritable)
 								{
-									if(Utils.PrecheckLinksFile(linkTargetFolderExe, linkSourceFolderExe, executableGameFile))
+									if (Utils.PrecheckLinksFile(linkTargetFolderExe, linkSourceFolderExe, executableGameFile))
 									{
 										linkExePrecheck = true;
 										Utils.LogMessage("Pre clean linkTargetFolderExe");
@@ -2523,7 +2611,7 @@ namespace TeknoparrotAutoXinput
 										if (LightgunA_Type == "wiimote") bindingDinputLightgunAJson = ConfigurationManager.MainConfig.bindingDinputGunAWiimote;
 										bindingDinputLightGunA = (Dictionary<string, JoystickButtonData>)JsonConvert.DeserializeObject<Dictionary<string, JoystickButtonData>>(bindingDinputLightgunAJson);
 
-										if(LightgunA_Type == "wiimote")
+										if (LightgunA_Type == "wiimote")
 										{
 											if (bindingDinputLightGunA != null && bindingDinputLightGunA.ContainsKey("LightgunX"))
 											{
@@ -2876,7 +2964,7 @@ namespace TeknoparrotAutoXinput
 												}
 											}
 										}
-										if(GameInfo[key_vjoy_info].Trim() == "not_all_sinden")
+										if (GameInfo[key_vjoy_info].Trim() == "not_all_sinden")
 										{
 											if (all_sinden)
 											{
@@ -3569,7 +3657,6 @@ namespace TeknoparrotAutoXinput
 										catch (VigemBusNotFoundException e) { }
 
 										Utils.LogMessage($"VigemInstalled : {VigemInstalled}");
-
 										if (VigemInstalled)
 										{
 											if (availableSlot == 0) gamepad = X.Gamepad_1;
@@ -3578,8 +3665,17 @@ namespace TeknoparrotAutoXinput
 											if (availableSlot == 3) gamepad = X.Gamepad_4;
 
 											controller = client.CreateXbox360Controller();
+											Thread.Sleep(500);
 											controller.AutoSubmitReport = false;
-											controller.Connect();
+											try
+											{
+												controller.Connect();
+											}
+											catch (Exception ex)
+											{
+												Utils.LogMessage(ex.Message);
+											}
+
 											Thread.Sleep(1000);
 											try
 											{
@@ -4122,7 +4218,7 @@ namespace TeknoparrotAutoXinput
 										{
 											if (emptyJoystickButtonDictionary.ContainsKey(buttonData.Key))
 											{
-												if(ConfigType=="gamepad") emptyJoystickButtonDictionary[buttonData.Key] = buttonData.Value.RemapButtonData(newXinputSlot, Program.favorJoystick);
+												if (ConfigType == "gamepad") emptyJoystickButtonDictionary[buttonData.Key] = buttonData.Value.RemapButtonData(newXinputSlot, Program.favorJoystick);
 												else emptyJoystickButtonDictionary[buttonData.Key] = buttonData.Value.RemapButtonData(newXinputSlot);
 
 											}
@@ -4947,7 +5043,6 @@ namespace TeknoparrotAutoXinput
 															{
 																coinOrStart = 23;
 															}
-
 															var bindData = bindingDinputLightGun[bindkey];
 															ButtonToKeyManager.buttonToKey.Assign(key, bindData.JoystickGuid.ToString(), bindData.Title, coinOrStart);
 														}
@@ -5137,11 +5232,16 @@ namespace TeknoparrotAutoXinput
 									TpSettingsManager.xmlDoc.Save(xmlWriter);
 									finalConfig = xmlFile + ".custom.xml";
 								}
+								var startupMetadata = MainDPIcs.DeSerializeMetadata(xmlFile);
 
 								Startup.tpBasePath = Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName;
-								Startup.gameTitle = originalConfigFileNameWithoutExt;
-								Startup.logoPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "Icons", originalConfigFileNameWithoutExt + ".png");
+								Startup.gameTitle = startupMetadata.game_name;
+								Startup.xmlFile = xmlFile;
+								Startup.logoPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Path.GetFullPath(xmlFile))).FullName, "Icons", startupMetadata.icon_name);
 								Startup.playerAttributionDesc = "";
+								Startup.ExecutableDir = executableGameDir;
+								Startup.ExecutableGame = executableGame;
+								/*
 								int playernum = 0;
 								Startup.imagePaths = new List<string>();
 								foreach (var ConfigPlayer in ConfigPerPlayer)
@@ -5184,6 +5284,55 @@ namespace TeknoparrotAutoXinput
 									Startup.imagePaths.Add(imgPath);
 								}
 								Startup.playerAttributionDesc.TrimEnd('\n');
+								*/
+								List<string> playersDevices = new List<string>();
+
+								List<Image> startupImageLogo = new List<Image>();
+								int playernum = 0;
+								Startup.imagePaths = new List<string>();
+								foreach (var ConfigPlayer in ConfigPerPlayer)
+								{
+									playernum++;
+									string variante = "";
+									string upperType = char.ToUpper(ConfigPlayer.Value.Item1[0]) + ConfigPlayer.Value.Item1.Substring(1);
+									Startup.playersDevices.Add(ConfigPlayer.Value.Item1.ToLower());
+
+
+									Startup.playerAttributionDesc += $"P{playernum}={upperType}\n";
+									string configname = ConfigPlayer.Value.Item1;
+									if (configname == "gamepad" && usealtgamepad) configname = "gamepadalt";
+
+									if (configname == "lightgun" && dinputLightgunAFound && playernum == 1)
+									{
+										configname = "lightgun-" + LightgunA_Type;
+
+										if (LightgunA_Type == "sinden")
+										{
+											int sindenPump = ConfigurationManager.MainConfig.gunASidenPump;
+											if (gameOptions.gunA_pump > 0) sindenPump = gameOptions.gunA_pump;
+											variante = sindenPump.ToString();
+										}
+
+									}
+									if (configname == "lightgun" && dinputLightgunBFound && playernum == 2)
+									{
+										configname = "lightgun-" + LightgunB_Type;
+										if (LightgunB_Type == "sinden")
+										{
+											int sindenPump = ConfigurationManager.MainConfig.gunBSidenPump;
+											if (gameOptions.gunB_pump > 0) sindenPump = gameOptions.gunB_pump;
+											variante = sindenPump.ToString();
+										}
+									}
+
+									var imgPath = Path.Combine(basePath, "img", originalConfigFileNameWithoutExt + "." + configname + variante + ".jpg");
+
+									Utils.LogMessage($"AddToImgPath : {imgPath}");
+
+									Startup.imagePaths.Add(imgPath);
+								}
+								Startup.playerAttributionDesc.TrimEnd('\n');
+
 							}
 							else
 							{
@@ -5259,7 +5408,7 @@ namespace TeknoparrotAutoXinput
 											{
 												// Initialisation du processus
 												Process process = new Process();
-												process.StartInfo.FileName = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "QRes", "QRes.exe"); 
+												process.StartInfo.FileName = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)), "thirdparty", "QRes", "QRes.exe");
 												process.StartInfo.Arguments = $"/x:{presetDispositionWith} /y:{presetDispositionHeight} /r:{presetDispositionFrequency}";
 
 												// Configuration de la sortie standard pour capturer l'output
@@ -5291,7 +5440,7 @@ namespace TeknoparrotAutoXinput
 												*/
 											}
 											else resolutionSwitchOk = false;
-											
+
 
 											if (resolutionSwitchOk)
 											{
@@ -5319,7 +5468,6 @@ namespace TeknoparrotAutoXinput
 											}
 										}
 										//------------------
-										MessageBox.Show("ici");
 
 										if (gameOptions.UseGlobalDisposition && Program.need60hz && Program.refreshRate != 60 && Program.currentResX > 0)
 										{
@@ -5351,7 +5499,7 @@ namespace TeknoparrotAutoXinput
 															d.BitCount == 32 &&
 																d.Orientation == 0 &&
 																d.Frequency < presetDispositionFrequency &&
-																d.Frequency >= presetDispositionFrequency-1)
+																d.Frequency >= presetDispositionFrequency - 1)
 												.OrderByDescending(d => d.Frequency)
 												.FirstOrDefault();
 											}
@@ -5379,7 +5527,7 @@ namespace TeknoparrotAutoXinput
 													.OrderByDescending(d => d.Frequency)
 													.FirstOrDefault();
 											}
-											
+
 											if (resolutionAvailiable != null)
 											{
 												_dispositionToSwitch = "custom";
@@ -6167,14 +6315,45 @@ namespace TeknoparrotAutoXinput
 								if (gameOptions.AhkBefore.Trim() != "")
 								{
 									Utils.LogMessage($"Execute AHK Before");
-									Utils.ExecuteAHK(gameOptions.AhkBefore, gameOptions.WaitForExitAhkBefore, gameDir);
+									Utils.ExecuteAHK(gameOptions.AhkBefore, gameOptions.WaitForExitAhkBefore, gameDir, linkSourceFolderExe);
 								}
 
+								Thread NoStartupThread = null;
 								if (showStartup)
 								{
 									Utils.LogMessage($"showStartup");
 									cancellationTokenSource = new CancellationTokenSource();
 									Task.Run(() => ShowFormAsync(cancellationTokenSource.Token));
+								}
+								else
+								{
+									NoStartupThread = new Thread(() =>
+										{
+											bool NoStartupThreadDone = false;
+											while (!NoStartupThreadDone)
+											{
+												Process[] processes = Process.GetProcessesByName("TeknoParrotUi"); // Remplacez par le nom de l'exécutable de l'application cible
+												if (processes.Length > 0)
+												{
+													Process targetProcess = processes[0];
+													if (!targetProcess.HasExited) //&& Startup.IsWinVisible(targetProcess.MainWindowHandle))
+													{
+														//ShowWindow(targetProcess.MainWindowHandle, SW_MINIMIZE);
+														Startup.MoveBottom(targetProcess.MainWindowHandle);
+														//NoStartupThreadDone = true;
+													}
+												}
+												else
+												{
+													Thread.Sleep(30);
+												}
+											}
+
+
+											return;
+										});
+									//NoStartupThread.Start();
+
 								}
 
 
@@ -6502,7 +6681,7 @@ namespace TeknoparrotAutoXinput
 													windowHandle = Utils.FindWindowByMultipleCriteria(magpieClass, Path.GetFileNameWithoutExtension(magpieExecutableGame), magpieTitle, out trueClassName);
 													Thread.Sleep(500);
 													Utils.LogMessage("Search Window ...");
-													if(windowHandle != IntPtr.Zero)
+													if (windowHandle != IntPtr.Zero)
 													{
 														Utils.RECT clientRectTest;
 														Utils.GetClientRect(windowHandle, out clientRectTest);
@@ -6574,10 +6753,10 @@ namespace TeknoparrotAutoXinput
 												if (GameInfo.ContainsKey("magpieRegisterAsSize_tag") && GameInfo["magpieRegisterAsSize_tag"].Trim().ToLower() != "")
 												{
 													string value_magpieRegisterAsSize_tag = GameInfo["magpieRegisterAsSize_tag"].Trim().ToLower();
-													foreach(var magpieRegisterSizeTag in value_magpieRegisterAsSize_tag.Split('|'))
+													foreach (var magpieRegisterSizeTag in value_magpieRegisterAsSize_tag.Split('|'))
 													{
-														
-														if(magpieRegisterSizeTag.Split(',').Count()==2 && magpieRegisterSizeTag.Split(',')[0].Split('x').Count() == 2)
+
+														if (magpieRegisterSizeTag.Split(',').Count() == 2 && magpieRegisterSizeTag.Split(',')[0].Split('x').Count() == 2)
 														{
 															var splited_magpieRegisterSizeTag = magpieRegisterSizeTag.Split(',');
 															var magpieRegisterSizeTag_tailleReg = splited_magpieRegisterSizeTag[0];
@@ -6849,19 +7028,24 @@ namespace TeknoparrotAutoXinput
 
 												Thread.Sleep(1000 + (magpieDelay * 1000));
 
+
 												int screenWidth = 1920;
 												int screenHeight = 1080;
-												Screen[] screens = Screen.AllScreens;
-												for (int i = 0; i < screens.Length; i++)
+
+												Screen monitorThatWillReceiveGameWindow = Screen.PrimaryScreen;
+												if (Program.moveWindowToOriginalMonitor)
 												{
-													Screen screen = screens[i];
-													string DeviceName = screen.DeviceName.Trim('\\').Trim('.').Trim('\\');
-													if (screen.Primary)
+													foreach (var s in Screen.AllScreens)
 													{
-														screenWidth = screen.Bounds.Width;
-														screenHeight = screen.Bounds.Height;
+														if (s.DeviceName == Program.originalMonitorDeviceName)
+														{
+															monitorThatWillReceiveGameWindow = s;
+														}
 													}
 												}
+												screenWidth = monitorThatWillReceiveGameWindow.Bounds.Width;
+												screenHeight = monitorThatWillReceiveGameWindow.Bounds.Height;
+
 
 												Utils.RECT clientRect;
 												Utils.GetClientRect(windowHandle, out clientRect);
@@ -7020,7 +7204,7 @@ namespace TeknoparrotAutoXinput
 														if (gameOptions.tmpGunYFormula != "") forcevjoyYformula = gameOptions.tmpGunYFormula;
 
 														Utils.LogMessage("Vjoy forced formula X : " + forcevjoyXformula);
-														Utils.LogMessage("Vjoy forced formula Y : " + forcevjoyYformula); 
+														Utils.LogMessage("Vjoy forced formula Y : " + forcevjoyYformula);
 
 														try
 														{
@@ -7036,7 +7220,7 @@ namespace TeknoparrotAutoXinput
 																	writer.Flush();
 																	if (gameOptions.tmpGunAXFormulaBefore != "" || gameOptions.tmpGunAYFormulaBefore != "")
 																	{
-																		
+
 																		writer.Write(@$"beforeformula1={gameOptions.tmpGunAXFormulaBefore}<-->{gameOptions.tmpGunAYFormulaBefore}");
 																		writer.Flush();
 																	}
@@ -7593,7 +7777,7 @@ _Translate=0.000000,0.000000
 									Utils.LogMessage($"Starting {teknoparrotExe} {argumentTpExe}");
 									Process process = new Process();
 									process.StartInfo.FileName = teknoparrotExe;
-									process.StartInfo.Arguments = argumentTpExe;
+									process.StartInfo.Arguments = "--startMinimized " + argumentTpExe;
 
 									bool UseShellExecute = true;
 									if (GameInfo.ContainsKey("environmentVariables") && GameInfo["environmentVariables"].Trim() != "")
@@ -7610,7 +7794,7 @@ _Translate=0.000000,0.000000
 												//if(magpieRegisterSizeTag_tag == "others" || TpSettingsManager.tags.Contains(magpieRegisterSizeTag_tag))
 												if (environmentVariable_tag == "others" || environmentVariable_tag.Replace(" ", "").Split('&').All(tag => TpSettingsManager.tags.Contains(tag)))
 												{
-													
+
 													var listEnvVariable = environmentVariable_content.Split("||");
 													foreach (var envVariable in listEnvVariable)
 													{
@@ -7705,6 +7889,12 @@ _Translate=0.000000,0.000000
 								}
 								*/
 
+								if (gameOptions.AhkAfter.Trim() != "")
+								{
+									Utils.LogMessage($"Execute AhkAfter");
+									Utils.ExecuteAHK(gameOptions.AhkAfter, true, gameDir, linkSourceFolderExe);
+								}
+
 								if (!nolink)
 								{
 									if (gameOptions.EnableLink && !String.IsNullOrEmpty(linkTargetFolder) && !String.IsNullOrEmpty(linkSourceFolder) && Directory.Exists(linkSourceFolder) && linkAutoWritable)
@@ -7728,11 +7918,7 @@ _Translate=0.000000,0.000000
 								}
 
 
-								if (gameOptions.AhkAfter.Trim() != "")
-								{
-									Utils.LogMessage($"Execute AhkAfter");
-									Utils.ExecuteAHK(gameOptions.AhkAfter, true, gameDir);
-								}
+
 
 								Utils.LogMessage($"CleanAndKillAhk");
 								Utils.CleanAndKillAhk();
@@ -7884,8 +8070,8 @@ _Translate=0.000000,0.000000
 			*/
 		}
 
-		
-		private static XmlNode NodeFromKey(Key value,XmlDocument xmlDoc)
+
+		private static XmlNode NodeFromKey(Key value, XmlDocument xmlDoc)
 		{
 			var keyData = new JoystickButtonData();
 			keyData.Button = (int)value + 47;
@@ -7934,7 +8120,7 @@ _Translate=0.000000,0.000000
 
 			return newDirectInputButtonNode;
 		}
-		
+
 		private static async Task ShowFormAsync(CancellationToken cancellationToken)
 		{
 			startupForm = new Startup();
@@ -8043,8 +8229,8 @@ _Translate=0.000000,0.000000
 
 			if (virtualKeyboardXinputSlot > -1)
 			{
-				try{controller.Disconnect();}catch { }
-				try{client.Dispose();}catch { }
+				try { controller.Disconnect(); } catch { }
+				try { client.Dispose(); } catch { }
 			}
 		}
 
@@ -8275,7 +8461,7 @@ _Translate=0.000000,0.000000
 
 		public int XinputSlot { get; set; }
 
-		public JoystickButton RemapButtonData(int newXinputSlot,bool changeDpadToJoy=false)
+		public JoystickButton RemapButtonData(int newXinputSlot, bool changeDpadToJoy = false)
 		{
 			var button = new JoystickButton();
 			button.ButtonName = this.ButtonName;
@@ -8371,7 +8557,7 @@ _Translate=0.000000,0.000000
 			Gamepad = null;
 		}
 
-		public XinputGamepad(X.Gamepad gamepad, int xinputSlot, bool useForceType=true, string MatchListWheel = null, string MatchListArcade = null, string MatchListGamepad = null)
+		public XinputGamepad(X.Gamepad gamepad, int xinputSlot, bool useForceType = true, string MatchListWheel = null, string MatchListArcade = null, string MatchListGamepad = null)
 		{
 			Gamepad = gamepad;
 			XinputSlot = xinputSlot;
@@ -8399,8 +8585,8 @@ _Translate=0.000000,0.000000
 				}
 			}
 
-			
-			if(Type == "")
+
+			if (Type == "")
 			{
 				string MatchListWheelTxt = MatchListWheel == null ? Program.wheelXinputData : MatchListWheel;
 				var MatchList = MatchListWheelTxt.ToLower().Trim().Split(',');

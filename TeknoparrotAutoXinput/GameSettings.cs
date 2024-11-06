@@ -1,18 +1,15 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TeknoparrotAutoXinput
 {
 	public class GameSettings
 	{
+		public bool overrideTpController { get; set; } = true;
+		public bool overrideTpGameSettings { get; set; } = true;
+		public bool applyPatches { get; set; } = true;
+		public bool useThirdParty { get; set; } = true;
 		public bool RunAsRoot { get; set; } = false;
 		public bool UseGlobalDisposition { get; set; } = true;
 		public bool UseGlobalStoozZoneWheel { get; set; } = true;
@@ -24,7 +21,7 @@ namespace TeknoparrotAutoXinput
 		public bool enableStoozZone_Wheel { get; set; } = false;
 		public int valueStooz_Wheel { get; set; } = 10;
 		public string Disposition { get; set; } = "";
-		public bool EnableLink {  get; set; } = true;
+		public bool EnableLink { get; set; } = true;
 		public string AhkBefore { get; set; } = string.Empty;
 		public string AhkAfter { get; set; } = string.Empty;
 		public bool WaitForExitAhkBefore { get; set; } = true;
@@ -123,9 +120,9 @@ namespace TeknoparrotAutoXinput
 
 		public int patchLang { get; set; } = 0;
 
-		public GameSettings() 
+		public GameSettings()
 		{
-			
+
 
 		}
 
@@ -134,6 +131,11 @@ namespace TeknoparrotAutoXinput
 			try
 			{
 				GameSettings DeserializeData = JsonConvert.DeserializeObject<GameSettings>(json);
+				this.overrideTpController = DeserializeData.overrideTpController;
+				this.overrideTpGameSettings = DeserializeData.overrideTpGameSettings;
+				this.applyPatches = DeserializeData.applyPatches;
+				this.useThirdParty = DeserializeData.useThirdParty;
+
 				this.RunAsRoot = DeserializeData.RunAsRoot;
 				this.UseGlobalDisposition = DeserializeData.UseGlobalDisposition;
 				this.UseGlobalStoozZoneWheel = DeserializeData.UseGlobalStoozZoneWheel;
@@ -285,7 +287,7 @@ namespace TeknoparrotAutoXinput
 		public void Overwrite(JObject tpSection, List<string> tags)
 		{
 			var tagsTrim = new List<string>();
-			foreach(string tag in tags)
+			foreach (string tag in tags)
 			{
 				tagsTrim.Add(tag.ToLower().Trim());
 			}
@@ -345,7 +347,7 @@ namespace TeknoparrotAutoXinput
 			{
 				Console.WriteLine("Error during overwrite: " + ex.Message);
 			}
-			
+
 		}
 
 		private void ApplySettings(Dictionary<string, string> settings)
@@ -392,7 +394,12 @@ namespace TeknoparrotAutoXinput
 
 		public void Save(string filename)
 		{
-			File.WriteAllText(filename, this.Serialize());
+			string data = this.Serialize();
+
+			if (Utils.CacheAllText.ContainsKey(filename)) { Utils.CacheAllText[filename] = data; }
+			else Utils.CacheAllText.TryAdd(filename, data);
+
+			File.WriteAllText(filename, data);
 		}
 
 	}

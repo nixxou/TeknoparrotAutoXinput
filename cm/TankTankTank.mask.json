@@ -1,0 +1,12 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Wheel Axis": "Move",
+    "Menu Up": "Menu Controls",
+    "Menu Down": "Menu Controls",
+    "Pedal L": "Reverse",
+    "Pedal R": "Gas",
+    "Safety Button": ""
+  }
+}

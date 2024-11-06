@@ -7,6 +7,8 @@
     "showGameOptionVsync": "True",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "False",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "False",
     "canUseJoyInsteadOfDpad": "True",
@@ -20,7 +22,7 @@
   },
   "tpoptions": {
     "set_displaymode_recommanded": {
-      "General||DisplayMode": "Fullscreen"
+      "General||DisplayMode": "Windowed"
     },
     "set_fullscreen": {
       "General||DisplayMode": "Fullscreen"
@@ -39,5 +41,6 @@
       "General||Player Name for new cards (P1)": "{{customname}}"
     }
   },
-  "gameoptions": {}
+  "gameoptions": {
+  }
 }

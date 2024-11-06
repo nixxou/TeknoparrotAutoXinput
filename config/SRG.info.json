@@ -1,33 +1,35 @@
 {
-	"global": {
-		"_comment": "Cant upscale this game on my amd setup and my nvidia potato pc cant use the recommanded settings (x3 with dgvodoo), so i m letting this as windowed for now",
-		"windowed": "General,Windowed,1",
-		"showGameOptionBezel": "False",
-		"showGameOptionCrt": "False",
-		"showGameOptionVsync": "False",
-		"showGameOptionFFB": "True",
-		"upscaleFullscreen": "False",
-		"upscaleWindowed": "False",
-		"magpieClass": "WindowClass",
-		"magpieTitle": "",
-		"magpie3DGameMode": "True",
-		"magpieDisableDirectFlip": "False",
-		"magpieAllowScalingMaximized": "False",
-		"magpieLaunchBefore": "False",
-		"magpieNoMoveWindow": "False",
-		"magpieNoLateFocus": "False",
-		"magpieExecutable": ""
-	},
-	"tpoptions": {
-		"set_displaymode_recommanded": {
-            "General||Windowed": "1"
-        },
-        "set_fullscreen": {
-            "General||Windowed": "0"
-        },
-        "set_windowed": {
-            "General||Windowed": "1"
-        }
-	},
-	"gameoptions": {}
+  "global": {
+    "_comment": "Cant upscale this game on my amd setup and my nvidia potato pc cant use the recommanded settings (x3 with dgvodoo), so i m letting this as windowed for now, for fullscreen on amd you need a custom res of 1360x768",
+    "windowed": "General,Windowed,1",
+    "originalRes": "1360x768",
+    "showGameOptionBezel": "False",
+    "showGameOptionCrt": "False",
+    "showGameOptionVsync": "False",
+    "showGameOptionFFB": "True",
+    "showGameOptionKeepAspectRatio": "False",
+    "upscaleFullscreen": "False",
+    "upscaleWindowed": "False",
+    "magpieClass": "WindowClass",
+    "magpieTitle": "",
+    "magpie3DGameMode": "True",
+    "magpieDisableDirectFlip": "False",
+    "magpieAllowScalingMaximized": "False",
+    "magpieLaunchBefore": "False",
+    "magpieNoMoveWindow": "False",
+    "magpieNoLateFocus": "False",
+    "magpieExecutable": ""
+  },
+  "tpoptions": {
+    "set_displaymode_recommanded": {
+      "General||Windowed": "1"
+    },
+    "set_fullscreen": {
+      "General||Windowed": "0"
+    },
+    "set_windowed": {
+      "General||Windowed": "1"
+    }
+  },
+  "gameoptions": {}
 }

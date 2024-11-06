@@ -1,0 +1,16 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Coin 2": "Coin",
+    "Left Lever Up": "Left Lever",
+    "Left Lever Down": "Left Lever",
+    "Left Lever Left": "Left Lever",
+    "Left Lever Right": "Left Lever",
+    "Right Lever Up": "Right Lever",
+    "Right Lever Down": "Right Lever",
+    "Right Lever Left": "Right Lever",
+    "Right Lever Right": "Right Lever"
+  }
+}

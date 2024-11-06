@@ -1,0 +1,8 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Handlebar Axis": "Move",
+    "Accl": "Gas"
+  }
+}

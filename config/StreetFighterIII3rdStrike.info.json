@@ -17,11 +17,11 @@
 		"magpieLaunchBefore": "False",
 		"magpieNoMoveWindow": "True",
 		"magpieNoLateFocus": "False",
-		"magpieExecutable": ""
+		"magpieExecutable": "",
 	},
 	"tpoptions": {
 		"set_displaymode_recommanded": {
-            "General||Windowed": "0"
+            "General||Windowed": "1"
         },
         "set_fullscreen": {
             "General||Windowed": "0"
@@ -30,5 +30,9 @@
             "General||Windowed": "1"
         }
 	},
-	"gameoptions": {}
+  "gameoptions": {
+    "recommanded_gameoptions & crtfilter": {
+      "magpieScaling": "6"
+    }
+  }
 }

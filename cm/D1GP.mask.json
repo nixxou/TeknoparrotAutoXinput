@@ -1,0 +1,10 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Wheel Axis": "Move",
+    "Shift Down / Test Menu Down": "Shift Down",
+    "Shift Up / Test Menu Up": "Shift Up",
+    "Save Card Insert/Remove": "Insert Card"
+  }
+}

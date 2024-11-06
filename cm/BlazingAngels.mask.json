@@ -1,0 +1,17 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Coin 1": "Coin",
+    "Hat Up": "Squad Commands",
+    "Hat Down": "Squad Commands",
+    "Hat Left": "Squad Commands",
+    "Hat Right": "Squad Commands",
+    "Missiles (Secondary Fire)": "Missiles",
+    "Trigger (Primary Fire) / Start": "Fire / Start",
+    "Joystick Analog X": "Move",
+    "Joystick Analog Y": "Move",
+    "Throttle Axis": "Accelerate / Decelerate",
+    "Throttle Button (Closest Threat / Next Target)": "Find Next Target"
+  }
+}

@@ -1,5 +1,6 @@
 {
   "global": {
+    "_comment": "Some weird thing with this game, either on fullscreen or windowed, it force res switch to 1280x768, so i had to use a wrapper in fullscreen that force windowed mode and apply reshade effect on magpie",
     "windowed": "General,Windowed,1",
     "originalRes": "1280x720",
     "showGameOptionBezel": "False",
@@ -7,32 +8,40 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "True",
-    "upscaleFullscreen": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
+    "disableCrtForLowPerf": "False",
+    "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "canUseJoyInsteadOfDpad": "True",
     "need60hz": "True",
-    "forceResSwitchFullscreen": "True",
     "magpieClass": "MT FRAMEWORK",
     "magpie3DGameMode": "False",
     "magpieDisableDirectFlip": "False",
     "magpieAllowScalingMaximized": "True",
     "magpieLaunchBefore": "False",
     "magpieNoMoveWindow": "True",
-    "magpieNoLateFocus": "False"
+    "magpieNoLateFocus": "False",
+	"magpieCrop": "0x28x0x28,windowed&optional_reshade&keepaspectratio|0x0x0x0,windowed&optional_reshade&no_keepaspectratio",
   },
   "tpoptions": {
     "set_displaymode_recommanded": {
-      "General||Windowed": "0"
+      "General||Windowed": "1",
     },
     "set_fullscreen": {
-      "General||Windowed": "0"
+      "General||Windowed": "0",
     },
     "set_windowed": {
       "General||Windowed": "1"
     }
   },
   "gameoptions": {
-    "recommanded_gameoptions & crtfilter": {
+    "recommanded_gameoptions & windowed": {
+      "useMagpie": "3",
+      "magpieScaling": "7"
+    },
+    "recommanded_gameoptions & windowed & crtfilter & low_perfprofile": {
+      "useMagpie": "3",
       "magpieScaling": "6"
     }
   }

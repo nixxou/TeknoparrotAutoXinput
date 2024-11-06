@@ -50,6 +50,7 @@
 			radio_useCustomStooz_Gamepad = new Krypton.Toolkit.KryptonRadioButton();
 			chk_enableStoozZone_Gamepad = new Krypton.Toolkit.KryptonCheckBox();
 			grp_monitorDisposition = new GroupBox();
+			chk_disableAllMonitorExceptPrimary = new Krypton.Toolkit.KryptonCheckBox();
 			chk_moveBackWindowToOriginalMonitor = new Krypton.Toolkit.KryptonCheckBox();
 			chk_group_monitorDisposition = new Krypton.Toolkit.KryptonCheckBox();
 			txt_ahkbefore = new Krypton.Toolkit.KryptonRichTextBox();
@@ -239,7 +240,11 @@
 			pic_crosshairp2 = new Krypton.Toolkit.KryptonPictureBox();
 			pic_crosshairp1 = new Krypton.Toolkit.KryptonPictureBox();
 			kryptonLabel45 = new Krypton.Toolkit.KryptonLabel();
-			chk_disableAllMonitorExceptPrimary = new Krypton.Toolkit.KryptonCheckBox();
+			chk_useThirdParty = new Krypton.Toolkit.KryptonCheckBox();
+			chk_applyPatches = new Krypton.Toolkit.KryptonCheckBox();
+			chk_overrideTpGameSettings = new Krypton.Toolkit.KryptonCheckBox();
+			chk_overrideTpController = new Krypton.Toolkit.KryptonCheckBox();
+			groupBox9 = new GroupBox();
 			groupBox2.SuspendLayout();
 			grp_StoozZone_Wheel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)trk_useCustomStooz_Wheel).BeginInit();
@@ -329,6 +334,7 @@
 			((System.ComponentModel.ISupportInitialize)trk_crosshairp1Size).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pic_crosshairp2).BeginInit();
 			((System.ComponentModel.ISupportInitialize)pic_crosshairp1).BeginInit();
+			groupBox9.SuspendLayout();
 			SuspendLayout();
 			// 
 			// btn_editMonitorSwitch
@@ -549,6 +555,16 @@
 			grp_monitorDisposition.TabIndex = 46;
 			grp_monitorDisposition.TabStop = false;
 			grp_monitorDisposition.Text = "Custom Monitor Disposition";
+			// 
+			// chk_disableAllMonitorExceptPrimary
+			// 
+			chk_disableAllMonitorExceptPrimary.Checked = true;
+			chk_disableAllMonitorExceptPrimary.CheckState = CheckState.Checked;
+			chk_disableAllMonitorExceptPrimary.Location = new Point(357, 49);
+			chk_disableAllMonitorExceptPrimary.Name = "chk_disableAllMonitorExceptPrimary";
+			chk_disableAllMonitorExceptPrimary.Size = new Size(218, 20);
+			chk_disableAllMonitorExceptPrimary.TabIndex = 50;
+			chk_disableAllMonitorExceptPrimary.Values.Text = "Disable All Monitors except primary";
 			// 
 			// chk_moveBackWindowToOriginalMonitor
 			// 
@@ -1488,7 +1504,7 @@
 			tabControl1.Controls.Add(tabWheel);
 			tabControl1.Controls.Add(tabHotas);
 			tabControl1.Controls.Add(tabLightgun);
-			tabControl1.Location = new Point(12, 52);
+			tabControl1.Location = new Point(12, 105);
 			tabControl1.Name = "tabControl1";
 			tabControl1.SelectedIndex = 0;
 			tabControl1.Size = new Size(557, 377);
@@ -1563,10 +1579,10 @@
 			// 
 			tabControl2.Controls.Add(tabPage1);
 			tabControl2.Controls.Add(tabPage2);
-			tabControl2.Location = new Point(16, 435);
+			tabControl2.Location = new Point(16, 481);
 			tabControl2.Name = "tabControl2";
 			tabControl2.SelectedIndex = 0;
-			tabControl2.Size = new Size(553, 323);
+			tabControl2.Size = new Size(553, 277);
 			tabControl2.TabIndex = 71;
 			// 
 			// tabPage1
@@ -1577,7 +1593,7 @@
 			tabPage1.Location = new Point(4, 24);
 			tabPage1.Name = "tabPage1";
 			tabPage1.Padding = new Padding(3);
-			tabPage1.Size = new Size(545, 295);
+			tabPage1.Size = new Size(545, 249);
 			tabPage1.TabIndex = 0;
 			tabPage1.Text = "AHK Before";
 			tabPage1.UseVisualStyleBackColor = true;
@@ -1589,7 +1605,7 @@
 			tabPage2.Location = new Point(4, 24);
 			tabPage2.Name = "tabPage2";
 			tabPage2.Padding = new Padding(3);
-			tabPage2.Size = new Size(545, 295);
+			tabPage2.Size = new Size(545, 249);
 			tabPage2.TabIndex = 1;
 			tabPage2.Text = "AHK After";
 			tabPage2.UseVisualStyleBackColor = true;
@@ -1896,7 +1912,7 @@
 			cmb_patchGameID.DropDownWidth = 242;
 			cmb_patchGameID.IntegralHeight = false;
 			cmb_patchGameID.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_patchGameID.Location = new Point(173, 361);
+			cmb_patchGameID.Location = new Point(190, 361);
 			cmb_patchGameID.Name = "cmb_patchGameID";
 			cmb_patchGameID.Size = new Size(139, 21);
 			cmb_patchGameID.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1916,7 +1932,7 @@
 			cmb_patchNetwork.DropDownWidth = 242;
 			cmb_patchNetwork.IntegralHeight = false;
 			cmb_patchNetwork.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_patchNetwork.Location = new Point(173, 387);
+			cmb_patchNetwork.Location = new Point(190, 387);
 			cmb_patchNetwork.Name = "cmb_patchNetwork";
 			cmb_patchNetwork.Size = new Size(139, 21);
 			cmb_patchNetwork.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1926,9 +1942,9 @@
 			// 
 			kryptonLabel43.Location = new Point(17, 309);
 			kryptonLabel43.Name = "kryptonLabel43";
-			kryptonLabel43.Size = new Size(131, 20);
+			kryptonLabel43.Size = new Size(170, 20);
 			kryptonLabel43.TabIndex = 186;
-			kryptonLabel43.Values.Text = "Overwride TP Settings";
+			kryptonLabel43.Values.Text = "Overwride Others TP Settings";
 			// 
 			// cmb_patchOthersTPSettings
 			// 
@@ -1936,7 +1952,7 @@
 			cmb_patchOthersTPSettings.DropDownWidth = 242;
 			cmb_patchOthersTPSettings.IntegralHeight = false;
 			cmb_patchOthersTPSettings.Items.AddRange(new object[] { "Use Global Settings", "Yes", "No" });
-			cmb_patchOthersTPSettings.Location = new Point(173, 308);
+			cmb_patchOthersTPSettings.Location = new Point(190, 308);
 			cmb_patchOthersTPSettings.Name = "cmb_patchOthersTPSettings";
 			cmb_patchOthersTPSettings.Size = new Size(139, 21);
 			cmb_patchOthersTPSettings.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1956,7 +1972,7 @@
 			cmb_patchOthersGameOptions.DropDownWidth = 242;
 			cmb_patchOthersGameOptions.IntegralHeight = false;
 			cmb_patchOthersGameOptions.Items.AddRange(new object[] { "Use Global Settings", "Yes (Overwride Global Settings)", "Yes (Overwride Game Settings)", "No" });
-			cmb_patchOthersGameOptions.Location = new Point(173, 335);
+			cmb_patchOthersGameOptions.Location = new Point(190, 335);
 			cmb_patchOthersGameOptions.Name = "cmb_patchOthersGameOptions";
 			cmb_patchOthersGameOptions.Size = new Size(139, 21);
 			cmb_patchOthersGameOptions.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
@@ -1997,10 +2013,10 @@
 			// 
 			tabControl3.Controls.Add(tabPage3);
 			tabControl3.Controls.Add(tabPage4);
-			tabControl3.Location = new Point(575, 52);
+			tabControl3.Location = new Point(575, 37);
 			tabControl3.Name = "tabControl3";
 			tabControl3.SelectedIndex = 0;
-			tabControl3.Size = new Size(619, 706);
+			tabControl3.Size = new Size(619, 721);
 			tabControl3.TabIndex = 192;
 			// 
 			// tabPage3
@@ -2037,7 +2053,7 @@
 			tabPage3.Location = new Point(4, 24);
 			tabPage3.Name = "tabPage3";
 			tabPage3.Padding = new Padding(3);
-			tabPage3.Size = new Size(611, 678);
+			tabPage3.Size = new Size(611, 693);
 			tabPage3.TabIndex = 0;
 			tabPage3.Text = "Patch Settings";
 			tabPage3.UseVisualStyleBackColor = true;
@@ -2401,7 +2417,7 @@
 			tabPage4.Location = new Point(4, 24);
 			tabPage4.Name = "tabPage4";
 			tabPage4.Padding = new Padding(3);
-			tabPage4.Size = new Size(611, 678);
+			tabPage4.Size = new Size(611, 693);
 			tabPage4.TabIndex = 1;
 			tabPage4.Text = "Others Options";
 			tabPage4.UseVisualStyleBackColor = true;
@@ -2555,21 +2571,62 @@
 			kryptonLabel45.TabIndex = 192;
 			kryptonLabel45.Values.Text = "If Overwrite GameOptions is set, \r\nsome game option can be lock :";
 			// 
-			// chk_disableAllMonitorExceptPrimary
+			// chk_useThirdParty
 			// 
-			chk_disableAllMonitorExceptPrimary.Checked = true;
-			chk_disableAllMonitorExceptPrimary.CheckState = CheckState.Checked;
-			chk_disableAllMonitorExceptPrimary.Location = new Point(357, 49);
-			chk_disableAllMonitorExceptPrimary.Name = "chk_disableAllMonitorExceptPrimary";
-			chk_disableAllMonitorExceptPrimary.Size = new Size(218, 20);
-			chk_disableAllMonitorExceptPrimary.TabIndex = 50;
-			chk_disableAllMonitorExceptPrimary.Values.Text = "Disable All Monitors except primary";
+			chk_useThirdParty.LabelStyle = Krypton.Toolkit.LabelStyle.BoldControl;
+			chk_useThirdParty.Location = new Point(282, 40);
+			chk_useThirdParty.Name = "chk_useThirdParty";
+			chk_useThirdParty.Size = new Size(293, 20);
+			chk_useThirdParty.TabIndex = 243;
+			chk_useThirdParty.Values.Text = "Use thirdparty (magpie, demulshooter, riva ...)";
+			// 
+			// chk_applyPatches
+			// 
+			chk_applyPatches.LabelStyle = Krypton.Toolkit.LabelStyle.BoldControl;
+			chk_applyPatches.Location = new Point(282, 22);
+			chk_applyPatches.Name = "chk_applyPatches";
+			chk_applyPatches.Size = new Size(135, 20);
+			chk_applyPatches.TabIndex = 242;
+			chk_applyPatches.Values.Text = "Apply/Link patches";
+			// 
+			// chk_overrideTpGameSettings
+			// 
+			chk_overrideTpGameSettings.LabelStyle = Krypton.Toolkit.LabelStyle.BoldControl;
+			chk_overrideTpGameSettings.Location = new Point(18, 40);
+			chk_overrideTpGameSettings.Name = "chk_overrideTpGameSettings";
+			chk_overrideTpGameSettings.Size = new Size(237, 20);
+			chk_overrideTpGameSettings.TabIndex = 241;
+			chk_overrideTpGameSettings.Values.Text = "Override Teknoparrot Game Settings";
+			// 
+			// chk_overrideTpController
+			// 
+			chk_overrideTpController.LabelStyle = Krypton.Toolkit.LabelStyle.BoldControl;
+			chk_overrideTpController.Location = new Point(18, 22);
+			chk_overrideTpController.Name = "chk_overrideTpController";
+			chk_overrideTpController.Size = new Size(249, 20);
+			chk_overrideTpController.TabIndex = 240;
+			chk_overrideTpController.Values.Text = "Override Teknoparrot Controller Setup";
+			// 
+			// groupBox9
+			// 
+			groupBox9.BackColor = Color.FromArgb(255, 240, 240);
+			groupBox9.Controls.Add(chk_applyPatches);
+			groupBox9.Controls.Add(chk_useThirdParty);
+			groupBox9.Controls.Add(chk_overrideTpController);
+			groupBox9.Controls.Add(chk_overrideTpGameSettings);
+			groupBox9.Location = new Point(12, 37);
+			groupBox9.Name = "groupBox9";
+			groupBox9.Size = new Size(561, 68);
+			groupBox9.TabIndex = 244;
+			groupBox9.TabStop = false;
+			groupBox9.Text = "Options Principales";
 			// 
 			// GameOptions
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(1479, 796);
+			Controls.Add(groupBox9);
 			Controls.Add(tabControl3);
 			Controls.Add(tabControl2);
 			Controls.Add(tabControl1);
@@ -2695,6 +2752,8 @@
 			((System.ComponentModel.ISupportInitialize)trk_crosshairp1Size).EndInit();
 			((System.ComponentModel.ISupportInitialize)pic_crosshairp2).EndInit();
 			((System.ComponentModel.ISupportInitialize)pic_crosshairp1).EndInit();
+			groupBox9.ResumeLayout(false);
+			groupBox9.PerformLayout();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -2913,5 +2972,10 @@
 		private Krypton.Toolkit.KryptonLabel kryptonLabel58;
 		private Krypton.Toolkit.KryptonComboBox cmb_patchlang;
 		private Krypton.Toolkit.KryptonCheckBox chk_disableAllMonitorExceptPrimary;
+		private Krypton.Toolkit.KryptonCheckBox chk_useThirdParty;
+		private Krypton.Toolkit.KryptonCheckBox chk_applyPatches;
+		private Krypton.Toolkit.KryptonCheckBox chk_overrideTpGameSettings;
+		private Krypton.Toolkit.KryptonCheckBox chk_overrideTpController;
+		private GroupBox groupBox9;
 	}
 }

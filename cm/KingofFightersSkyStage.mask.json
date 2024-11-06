@@ -1,0 +1,17 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button 1": "A-Shoot",
+    "Button 2": "B-Special",
+    "Button 3": "C-Bomb",
+    "Coin 1": "Coin",
+    "Coin 2": "Coin"
+  }
+}

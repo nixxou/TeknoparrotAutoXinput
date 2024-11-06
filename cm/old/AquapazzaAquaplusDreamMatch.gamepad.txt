@@ -1,0 +1,16 @@
+{
+  "RemplaceBefore": {
+    "Player 1 ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "B": "Medium Attack",
+    "A": "Light Attack",
+    "C": "Heavy Attack",
+    "D": "Partner Button"
+  }
+}

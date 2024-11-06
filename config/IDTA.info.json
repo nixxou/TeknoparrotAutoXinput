@@ -7,6 +7,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "True",
     "showGameOptionKeepAspectRatio": "False",
+    "showGameOptionPatchLang": "English",
+    "showGameOptionPerf": "High",
     "upscaleFullscreen": "True",
     "upscaleWindowed": "True",
     "magpieNoLaunchIfSameRes": "True",
@@ -68,7 +70,13 @@
     },
     "replace_gameid": {
       "General||OnlineID": "{{apm3id}}"
-    }
+    },
+    "translation": {
+      "General||Region": "EXPORT"
+    },
+    "no_translation": {
+      "General||Region": "JAPAN"
+    },
   },
   "gameoptions": {}
 }

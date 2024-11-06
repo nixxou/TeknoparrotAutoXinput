@@ -1,0 +1,14 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Up": "Move",
+    "Down": "Move",
+    "Left": "Move",
+    "Right": "Move",
+    "Button 1": "Counter-Clockwise",
+    "Button 2": "Clockwise",
+    "Button 3": "",
+    "Button 4": ""
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "RemplaceBefore": {
+    "Player {{PlayerIndex}} ": ""
+  },
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Gun X": "Aim",
+    "Gun Y": "Aim",
+    "Gun Trigger": "Trigger",
+    "Sub Trigger": "Switch Weapon",
+    "Controller Select": "Switch Weapon"
+  }
+}

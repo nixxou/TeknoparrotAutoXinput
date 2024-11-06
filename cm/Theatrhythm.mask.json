@@ -1,0 +1,14 @@
+{
+  "RemplaceBefore": {},
+  "RemplaceAfter": {},
+  "ChangeKeys": {
+    "Left Stick Right": "Left Stick",
+    "Left Stick Left": "Left Stick",
+    "Left Stick Up": "Left Stick",
+    "Left Stick Down": "Left Stick",
+    "Right Stick Right": "Right Stick",
+    "Right Stick Left": "Right Stick",
+    "Right Stick Up": "Right Stick",
+    "Right Stick Down": "Right Stick"
+  }
+}

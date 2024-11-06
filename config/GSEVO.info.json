@@ -8,6 +8,8 @@
     "showGameOptionVsync": "False",
     "showGameOptionFFB": "False",
     "showGameOptionKeepAspectRatio": "True",
+    "showGameOptionPatchLang": "False",
+    "showGameOptionPerf": "True",
     "upscaleFullscreen": "False",
     "upscaleWindowed": "False",
     "rom": "",
@@ -27,6 +29,9 @@
   "tpoptions": {
     "amd": {
       "General||EnableAmdFix": "1"
+    },
+    "no_amd": {
+      "General||EnableAmdFix": "0"
     },
     "set_displaymode_recommanded": {
       "General||Windowed": "1"

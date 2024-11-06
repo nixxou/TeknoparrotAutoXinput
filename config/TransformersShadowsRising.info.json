@@ -1,16 +1,17 @@
 {
 	"global": {
-		"_comment": "To use resolution upscale you need my custom demulshooter",
+		"_comment": "To use resolution upscale you need my custom demulshooter, i now use directly the game executable now that tp is able to launch it without using the shell",
 		"rom": "tsr",
 		"target": "ringedge2",
 		"64bits": "False",
 		"windowed": "General,Windowed,1",
+		    "showGameOptionPatchLang": "french",
 		"magpieClass": "TF2_Gun | Release",
 		"magpie3DGameMode": "False",
 		"magpieDisableDirectFlip": "False",
 		"magpieAllowScalingMaximized": "True",
 		"magpieLaunchBefore": "False",
-		"magpieExecutable": "../Transformers2/Transformers2.exe",
+		"magpieExecutable": "Transformers2.exe",
 		"recommanded_vjoy_fullscreen": "sinden_and_notsinden",
 		"recommanded_vjoy_windowed": "sinden_and_notsinden"
 	},

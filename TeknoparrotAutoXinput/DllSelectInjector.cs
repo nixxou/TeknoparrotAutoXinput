@@ -1,13 +1,4 @@
 ﻿using Krypton.Toolkit;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 
 namespace TeknoparrotAutoXinput
@@ -19,9 +10,9 @@ namespace TeknoparrotAutoXinput
 		{
 			InitializeComponent();
 			List<string> dlls = new List<string>();
-			foreach(string path in paths) 
+			foreach (string path in paths)
 			{
-				if(Directory.Exists(path))
+				if (Directory.Exists(path))
 				{
 					var files = Directory.EnumerateFiles(path, "*.dll", new EnumerationOptions
 					{
@@ -56,7 +47,7 @@ namespace TeknoparrotAutoXinput
 						}
 					}
 				}
-				for(int i= 0; i < kryptonCheckedListBox1.Items.Count; i++)
+				for (int i = 0; i < kryptonCheckedListBox1.Items.Count; i++)
 				{
 					var dllName = kryptonCheckedListBox1.Items[i].ToString();
 					if (dllchecked.Contains(dllName))
@@ -83,7 +74,7 @@ namespace TeknoparrotAutoXinput
 			selectedDll = new List<string>();
 			for (int i = 0; i < kryptonCheckedListBox1.Items.Count; i++)
 			{
-				if(kryptonCheckedListBox1.GetItemChecked(i) == true)
+				if (kryptonCheckedListBox1.GetItemChecked(i) == true)
 				{
 					string dllName = kryptonCheckedListBox1.Items[i].ToString();
 					selectedDll.Add(dllName);
