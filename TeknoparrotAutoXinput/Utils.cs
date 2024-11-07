@@ -8,6 +8,7 @@ using SharpDX.Multimedia;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
@@ -187,11 +188,15 @@ namespace TeknoparrotAutoXinput
 		public static ConcurrentDictionary<string, string> CacheAllText = new ConcurrentDictionary<string, string>();
 		public static string ReadAllText(string fileName)
 		{
-			if (CacheAllText.ContainsKey(fileName)) return CacheAllText[fileName];
+			FileInfo fileInfo = new FileInfo(fileName);
+
+			string fileIdentifier = $"{fileInfo.LastWriteTimeUtc:yyyy-MM-ddTHH:mm:ssZ}{fileInfo.Length}{fileInfo.FullName}";
+
+			if (CacheAllText.ContainsKey(fileIdentifier)) return CacheAllText[fileIdentifier];
 			else
 			{
 				string content = File.ReadAllText(fileName);
-				CacheAllText.TryAdd(fileName, content);
+				CacheAllText.TryAdd(fileIdentifier, content);
 				return content;
 			}
 		}
@@ -524,7 +529,7 @@ namespace TeknoparrotAutoXinput
 			{
 				Utils.LogMessage("Checking patches");
 				bool missing_patch = false;
-				string jsonData = File.ReadAllText(patchJsonFile);
+				string jsonData = Utils.ReadAllText(patchJsonFile);
 				List<PatchInfoJsonElement> patchInfoJson = JsonConvert.DeserializeObject<List<PatchInfoJsonElement>>(jsonData);
 				foreach (var patch in patchInfoJson)
 				{
@@ -3929,7 +3934,11 @@ namespace TeknoparrotAutoXinput
 		public static string GetMd5HashAsString(string FileName)
 		{
 			FileName = Path.GetFullPath(FileName);
-			if (md5Cache.ContainsKey(FileName)) return md5Cache[FileName];
+
+			FileInfo fileInfo = new FileInfo(FileName);
+			string fileIdentifier = $"{fileInfo.LastWriteTimeUtc:yyyy-MM-ddTHH:mm:ssZ}{fileInfo.Length}{fileInfo.FullName}";
+
+			if (md5Cache.ContainsKey(fileIdentifier)) return md5Cache[fileIdentifier];
 
 			if (File.Exists(FileName))
 			{
@@ -3939,7 +3948,7 @@ namespace TeknoparrotAutoXinput
 					{
 						var hash = md5.ComputeHash(stream);
 						string md5val = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant().ToUpper();
-						md5Cache[FileName] = md5val;
+						md5Cache[fileIdentifier] = md5val;
 						return md5val;
 					}
 				}

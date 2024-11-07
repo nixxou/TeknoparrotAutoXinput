@@ -2,18 +2,15 @@
   "RemplaceBefore": {},
   "RemplaceAfter": {},
   "ChangeKeys": {
-    "Joystick Analog X": "Move",
-    "Joystick Analog Y": "Move",
-    "Up (Digital)": "Move",
-    "Down (Digital)": "Move",
-    "Left (Digital)": "Move",
-    "Right (Digital)": "Move",
     "Move Mouse X": "Move Mouse",
     "Move Mouse Y": "Move Mouse",	
   },
   "GamepadExtra": {
 	 "RightThumbInput Device 0 X+": "Move Mouse X",
 	 "RightThumbInput Device 0 Y+": "Move Mouse Y",
-	 "RightShoulder": "Fire (Right Click)"
+	 "B": "Right Click"
+  },
+  "ArcadeExtra": {
+	 "X": "Right Click"
   }
 }

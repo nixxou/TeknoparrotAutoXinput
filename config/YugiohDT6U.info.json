@@ -8,7 +8,10 @@
 		"magpieAllowScalingMaximized": "False",
 		"magpieLaunchBefore": "False",
 		"magpieNoMoveWindow": "False",
-		"magpieShowCursor": "True"
+		"magpieShowCursor": "True",
+		"MouseKeyboardToFirstXinputGamepad" : "True",
+		"MouseLeftJoySpeed" : "0.02",
+		"MouseBindGamepad" : "A=Left"
 	},
 	"tpoptions": {
 		"set_displaymode_recommanded": {

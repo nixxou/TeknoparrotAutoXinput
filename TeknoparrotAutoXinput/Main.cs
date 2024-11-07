@@ -1410,7 +1410,7 @@ namespace TeknoparrotAutoXinput
 			finalConfig = finalConfig.Replace("UserProfiles", "GameProfiles");
 			if (File.Exists(finalConfig))
 			{
-				string finalConfigData = File.ReadAllText(finalConfig);
+				string finalConfigData = Utils.ReadAllText(finalConfig);
 				XmlDocument xmlDoc = new XmlDocument();
 				xmlDoc.LoadXml(finalConfigData);
 				XmlNodeList joystickButtonsNodes = xmlDoc.SelectNodes("/GameProfile/JoystickButtons/JoystickButtons");

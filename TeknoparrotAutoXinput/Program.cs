@@ -1,3 +1,4 @@
+using ControllerToMouseMapper.Input;
 using Gma.System.MouseKeyHook;
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
@@ -11,6 +12,7 @@ using SDL2;
 using SharpDX.DirectInput;
 using SharpDX.Multimedia;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -21,6 +23,8 @@ using System.Xml.Linq;
 using WiimoteLib;
 using WindowsDisplayAPI;
 using XInput.Wrapper;
+using XInputium.ModifierFunctions;
+using XInputium.XInput;
 using XJoy;
 using static XInput.Wrapper.X;
 
@@ -209,6 +213,9 @@ namespace TeknoparrotAutoXinput
 		public static bool testMode = false;
 
 		public static Dictionary<string, string> movetoFiles = new Dictionary<string, string>();
+
+		public static int firstPlayerIsXinputGamepad = -1;
+		public static int firstPlayerIsXinputArcade = -1;
 
 		//public static string xmlFileContent = "";
 		[DllImport("User32.dll")]
@@ -660,7 +667,7 @@ namespace TeknoparrotAutoXinput
 					string optionFile = Path.Combine(GameOptionsFolder, originalConfigFileNameWithoutExt + ".json");
 					if (File.Exists(optionFile))
 					{
-						gameOptions = new GameSettings(File.ReadAllText(optionFile));
+						gameOptions = new GameSettings(Utils.ReadAllText(optionFile));
 						var frm = new VjoyControl(false, originalConfigFileNameWithoutExt, gameOptions, enableGunA, enableGunB, formula_X, formula_Y, gunAMinMax, gunBMinMax, formula_AX_before, formula_AY_before, formula_BX_before, formula_BY_before, vjoyindexvalue); ;
 						Application.Run(frm);
 					}
@@ -695,7 +702,7 @@ namespace TeknoparrotAutoXinput
 			string markerFilePath = Path.Combine(Path.GetTempPath(), "list_vjoy.json");
 			if (File.Exists(markerFilePath))
 			{
-				vjoyData = JsonConvert.DeserializeObject<Dictionary<int, string>>(File.ReadAllText(markerFilePath));
+				vjoyData = JsonConvert.DeserializeObject<Dictionary<int, string>>(Utils.ReadAllText(markerFilePath));
 			}
 
 			wheelXinputData = ConfigurationManager.MainConfig.wheelXinputData;
@@ -1002,7 +1009,7 @@ namespace TeknoparrotAutoXinput
 							if (File.Exists(optionFile))
 							{
 								Utils.LogMessage($"gameoveride file found : " + optionFile);
-								gameOptions = new GameSettings(File.ReadAllText(optionFile));
+								gameOptions = new GameSettings(Utils.ReadAllText(optionFile));
 							}
 
 							if (fullpassthrough)
@@ -1200,7 +1207,7 @@ namespace TeknoparrotAutoXinput
 							if (File.Exists(gameInfoFile) && !fullpassthrough)
 							{
 								Utils.LogMessage($"info file found : " + gameInfoFile);
-								gameInfoContent = File.ReadAllText(gameInfoFile);
+								gameInfoContent = Utils.ReadAllText(gameInfoFile);
 								gameInfoParsedJson = JObject.Parse(gameInfoContent);
 								gameInfoGlobalSection = (JObject)gameInfoParsedJson["global"];
 								GameInfo = gameInfoGlobalSection.ToObject<Dictionary<string, string>>();
@@ -1346,7 +1353,7 @@ namespace TeknoparrotAutoXinput
 								{
 									try
 									{
-										Program.refreshRate = Utils.GetPrimaryMonitorRefreshRateFromXml(File.ReadAllText(cfg));
+										Program.refreshRate = Utils.GetPrimaryMonitorRefreshRateFromXml(Utils.ReadAllText(cfg));
 										refreshrate_done = true;
 										if (gameOptions.moveBackWindowToOriginalMonitor)
 										{
@@ -2461,7 +2468,7 @@ namespace TeknoparrotAutoXinput
 							}
 							if (File.Exists(shifterPath))
 							{
-								shifterData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(shifterPath));
+								shifterData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(Utils.ReadAllText(shifterPath));
 							}
 
 
@@ -2473,7 +2480,7 @@ namespace TeknoparrotAutoXinput
 							}
 							if (File.Exists(throttlePath))
 							{
-								throttleData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(throttlePath));
+								throttleData = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(Utils.ReadAllText(throttlePath));
 							}
 
 
@@ -3166,7 +3173,7 @@ namespace TeknoparrotAutoXinput
 										Utils.LogMessage($"LightGunConfigA = {LightgunConfigAFile}");
 										if (File.Exists(LightgunConfigAFile))
 										{
-											LightgunConfigA = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(LightgunConfigAFile));
+											LightgunConfigA = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(Utils.ReadAllText(LightgunConfigAFile));
 										}
 										else
 										{
@@ -3194,7 +3201,7 @@ namespace TeknoparrotAutoXinput
 										Utils.LogMessage($"LightGunConfigB = {LightgunConfigBFile}");
 										if (File.Exists(LightgunConfigBFile))
 										{
-											LightgunConfigB = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(LightgunConfigBFile));
+											LightgunConfigB = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(Utils.ReadAllText(LightgunConfigBFile));
 										}
 										else
 										{
@@ -3798,7 +3805,7 @@ namespace TeknoparrotAutoXinput
 											}
 										}
 									}
-									if (haveArcade && existingConfig.ContainsKey("arcade"))
+									if (haveArcade && existingConfig.ContainsKey("arcade") && (!GameInfo.ContainsKey("priorityGamepadOverArcade") || GameInfo["priorityGamepadOverArcade"].Trim().ToLower() != "true"))
 									{
 										Utils.LogMessage($"Assign Arcade");
 										joystickButtonArcade = ParseConfig(existingConfig["arcade"]);
@@ -3860,6 +3867,35 @@ namespace TeknoparrotAutoXinput
 											}
 										}
 									}
+									if (haveArcade && existingConfig.ContainsKey("arcade") && GameInfo.ContainsKey("priorityGamepadOverArcade") && GameInfo["priorityGamepadOverArcade"].Trim().ToLower() == "true")
+									{
+										Utils.LogMessage($"Assign Arcade");
+										joystickButtonArcade = ParseConfig(existingConfig["arcade"]);
+										var PlayerList = GetPlayersList(joystickButtonArcade);
+										int nb_arcade = connectedGamePad.Values.Where(c => c.Type == "arcade").Count();
+										int currentlyAttributed = 0;
+										List<XinputGamepad> gamepadList = new List<XinputGamepad>();
+										foreach (var cgp in connectedGamePad.Values)
+										{
+											if (cgp.Type == "arcade")
+											{
+												gamepadList.Add(cgp);
+											}
+										}
+
+										foreach (var PlayerXinputSlot in PlayerList)
+										{
+											if (currentlyAttributed < nb_arcade)
+											{
+												if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
+												{
+													ConfigPerPlayer.Add(PlayerXinputSlot, ("arcade", gamepadList[currentlyAttributed]));
+													currentlyAttributed++;
+												}
+											}
+										}
+									}
+
 								}
 								else
 								{
@@ -5296,7 +5332,14 @@ namespace TeknoparrotAutoXinput
 									string variante = "";
 									string upperType = char.ToUpper(ConfigPlayer.Value.Item1[0]) + ConfigPlayer.Value.Item1.Substring(1);
 									Startup.playersDevices.Add(ConfigPlayer.Value.Item1.ToLower());
-
+									if(playernum == 1 && ConfigPlayer.Value.Item1.ToLower() == "gamepad")
+									{
+										firstPlayerIsXinputGamepad = ConfigPlayer.Value.Item2.XinputSlot;
+									}
+									if (playernum == 1 && ConfigPlayer.Value.Item1.ToLower() == "arcade")
+									{
+										firstPlayerIsXinputArcade = ConfigPlayer.Value.Item2.XinputSlot;
+									}
 
 									Startup.playerAttributionDesc += $"P{playernum}={upperType}\n";
 									string configname = ConfigPlayer.Value.Item1;
@@ -6861,7 +6904,7 @@ namespace TeknoparrotAutoXinput
 
 													}
 
-													string jsonText = File.ReadAllText(magpieConfig);
+													string jsonText = Utils.ReadAllText(magpieConfig);
 													JObject jsonObject = JObject.Parse(jsonText);
 													jsonObject["allowScalingMaximized"] = magpieAllowScalingMaximized;
 													jsonObject["simulateExclusiveFullscreen"] = magpieExclusiveFullscreen;
@@ -7247,7 +7290,7 @@ namespace TeknoparrotAutoXinput
 													string magpieIniContent = "";
 													if (Program.magpieIni != "")
 													{
-														magpieIniContent = File.ReadAllText(Program.magpieIni);
+														magpieIniContent = Utils.ReadAllText(Program.magpieIni);
 													}
 
 													if (magpieIniContent != "")
@@ -7392,7 +7435,7 @@ _Translate=0.000000,0.000000
 
 													}
 
-													string jsonText = File.ReadAllText(magpieConfig);
+													string jsonText = Utils.ReadAllText(magpieConfig);
 													JObject jsonObject = JObject.Parse(jsonText);
 													jsonObject["allowScalingMaximized"] = magpieAllowScalingMaximized;
 													jsonObject["simulateExclusiveFullscreen"] = magpieExclusiveFullscreen;
@@ -7744,6 +7787,352 @@ _Translate=0.000000,0.000000
 									}
 								}
 
+								InputLoop inputLoop = null;
+								//MessageBox.Show($"firstPlayerIsXinputGamepad={firstPlayerIsXinputGamepad}, firstPlayerIsXinputArcade={firstPlayerIsXinputArcade}");
+								if (firstPlayerIsXinputGamepad >= 0)
+								{
+									if (GameInfo.ContainsKey("mouseKeyboardToFirstXinputGamepad") && GameInfo["mouseKeyboardToFirstXinputGamepad"].ToLower() == "true")
+									{
+										XGamepad gamepad = new((XInputUserIndex)firstPlayerIsXinputGamepad);
+										XInputDeviceManager deviceManager = new();  // We will use this to monitor all physical XInput devices.
+										deviceManager.DeviceStateChanged += (_, e) =>
+										{
+											if (e.Device.IsConnected)
+												gamepad.Device = e.Device;
+										};
+
+										if(GameInfo.ContainsKey("mouseDpadGamepad") && GameInfo["mouseDpadGamepad"].ToLower() == "true")
+										{
+											TimeSpan buttonRepeatDelayX = TimeSpan.FromMilliseconds(25);  // When a button is held, how long until it starts repeating?
+											TimeSpan buttonRepeatIntervalX = TimeSpan.FromMilliseconds(10);  // While a held button is repeating, how long is the interval?
+											gamepad.RegisterButtonRepeatEvent(XButtons.DPadRight, buttonRepeatDelayX, buttonRepeatIntervalX, (_, _) =>
+											{
+												TimeSpan duration = gamepad.Buttons.DPadRight.Duration;
+												double accelerationFactor = 1.0;
+												if (duration.TotalSeconds > 3) accelerationFactor = 3.0;
+												else accelerationFactor = 1.0 + (duration.TotalSeconds / 2.0);
+												ControllerToMouseMapper.Input.Mouse.MoveBy(0.0002 * accelerationFactor, 0);
+											});
+											gamepad.RegisterButtonRepeatEvent(XButtons.DPadLeft, buttonRepeatDelayX, buttonRepeatIntervalX, (_, _) =>
+											{
+												TimeSpan duration = gamepad.Buttons.DPadLeft.Duration;
+												double accelerationFactor = 1.0;
+												if (duration.TotalSeconds > 3) accelerationFactor = 3.0;
+												else accelerationFactor = 1.0 + (duration.TotalSeconds / 2.0);
+												ControllerToMouseMapper.Input.Mouse.MoveBy(-0.0002 * accelerationFactor, 0);
+											});
+											gamepad.RegisterButtonRepeatEvent(XButtons.DPadDown, buttonRepeatDelayX, buttonRepeatIntervalX, (_, _) =>
+											{
+												TimeSpan duration = gamepad.Buttons.DPadDown.Duration;
+												double accelerationFactor = 1.0;
+												if (duration.TotalSeconds > 3) accelerationFactor = 3.0;
+												else accelerationFactor = 1.0 + (duration.TotalSeconds / 2.0);
+												ControllerToMouseMapper.Input.Mouse.MoveBy(0, 0.0002 * accelerationFactor);
+											});
+											gamepad.RegisterButtonRepeatEvent(XButtons.DPadUp, buttonRepeatDelayX, buttonRepeatIntervalX, (_, _) =>
+											{
+												TimeSpan duration = gamepad.Buttons.DPadUp.Duration;
+												double accelerationFactor = 1.0;
+												if (duration.TotalSeconds > 3) accelerationFactor = 3.0;
+												else accelerationFactor = 1.0 + (duration.TotalSeconds / 2.0);
+												ControllerToMouseMapper.Input.Mouse.MoveBy(0, -0.0002 * accelerationFactor);
+											});
+										}
+
+										if (GameInfo.ContainsKey("mouseLeftJoySpeed") && GameInfo["mouseLeftJoySpeed"].Trim() != "")
+										{
+											double mouseLeftJoySpeed = 0.015;
+											double.TryParse(GameInfo["mouseLeftJoySpeed"].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out mouseLeftJoySpeed);
+
+											var mouseJoystickLeft = gamepad.LeftJoystick;
+											float mouseLeftJoyDeadZone = 0.2f;
+											if (GameInfo.ContainsKey("mouseLeftJoyDeadZone") && GameInfo["mouseLeftJoyDeadZone"].Trim() != "") float.TryParse(GameInfo["mouseLeftJoyDeadZone"].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out mouseLeftJoyDeadZone);
+											mouseJoystickLeft.InnerDeadZone = mouseLeftJoyDeadZone;  // Let's use a circular dead zone.
+											mouseJoystickLeft.RadiusModifierFunction = NonLinearFunctions.QuadraticEaseIn;  // Make the joystick more precise near the center.
+											mouseJoystickLeft.Updated += (_, _) =>
+											{
+												if (mouseJoystickLeft.IsPushed)
+												{
+													ControllerToMouseMapper.Input.Mouse.MoveBy(
+														mouseJoystickLeft.X * mouseLeftJoySpeed * mouseJoystickLeft.FrameTime.TotalSeconds,
+														-mouseJoystickLeft.Y * mouseLeftJoySpeed * mouseJoystickLeft.FrameTime.TotalSeconds);
+												}
+											};
+										}
+										if (GameInfo.ContainsKey("mouseRightJoySpeed") && GameInfo["mouseRightJoySpeed"].Trim() != "")
+										{
+											double mouseRightJoySpeed = 0.015;
+											double.TryParse(GameInfo["mouseRightJoySpeed"].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out mouseRightJoySpeed);
+
+											var mouseJoystickRight = gamepad.RightJoystick;
+											float mouseRightJoyDeadZone = 0.2f;
+											if (GameInfo.ContainsKey("mouseRightJoyDeadZone") && GameInfo["mouseRightJoyDeadZone"].Trim() != "") float.TryParse(GameInfo["mouseRightJoyDeadZone"].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out mouseRightJoyDeadZone);
+											mouseJoystickRight.InnerDeadZone = mouseRightJoyDeadZone;
+											mouseJoystickRight.RadiusModifierFunction = NonLinearFunctions.QuadraticEaseIn;
+											mouseJoystickRight.Updated += (_, _) =>
+											{
+												if (mouseJoystickRight.IsPushed)
+												{
+													ControllerToMouseMapper.Input.Mouse.MoveBy(
+														mouseJoystickRight.X * mouseRightJoySpeed * mouseJoystickRight.FrameTime.TotalSeconds,
+														-mouseJoystickRight.Y * mouseRightJoySpeed * mouseJoystickRight.FrameTime.TotalSeconds);
+												}
+											};
+										}
+
+										if (GameInfo.ContainsKey("mouseBindGamepad") && GameInfo["mouseBindGamepad"].Trim() != "")
+										{
+											string mouseBind_txt = GameInfo["mouseBindGamepad"].Trim();
+											foreach (var mouseBind_elem in mouseBind_txt.Split(","))
+											{
+												var mouseBind_items = mouseBind_elem.Split("=");
+												if(mouseBind_items.Count() == 2)
+												{
+													string mouseBind_trigger = mouseBind_items[0].Trim().ToLower();
+													string mouseBind_action = mouseBind_items[1].Trim();
+													XInputButton mouseTrigger;
+													ControllerToMouseMapper.Input.MouseButton mouseAction;
+
+													if (mouseBind_trigger == "dpadup") mouseTrigger = gamepad.Buttons.DPadUp;
+													else if (mouseBind_trigger == "dpaddown") mouseTrigger = gamepad.Buttons.DPadDown;
+													else if (mouseBind_trigger == "dpadleft") mouseTrigger = gamepad.Buttons.DPadLeft;
+													else if (mouseBind_trigger == "dpadright") mouseTrigger = gamepad.Buttons.DPadRight;
+													else if (mouseBind_trigger == "start") mouseTrigger = gamepad.Buttons.Start;
+													else if (mouseBind_trigger == "back") mouseTrigger = gamepad.Buttons.Back;
+													else if (mouseBind_trigger == "a") mouseTrigger = gamepad.Buttons.A;
+													else if (mouseBind_trigger == "b") mouseTrigger = gamepad.Buttons.B;
+													else if (mouseBind_trigger == "x") mouseTrigger = gamepad.Buttons.X;
+													else if (mouseBind_trigger == "y") mouseTrigger = gamepad.Buttons.Y;
+													else if (mouseBind_trigger == "lb") mouseTrigger = gamepad.Buttons.LB;
+													else if (mouseBind_trigger == "rb") mouseTrigger = gamepad.Buttons.RB;
+													else if (mouseBind_trigger == "ls") mouseTrigger = gamepad.Buttons.LS;
+													else if (mouseBind_trigger == "rs") mouseTrigger = gamepad.Buttons.RS;
+													else
+													{
+														continue;
+													}
+
+													try
+													{
+														mouseAction = (ControllerToMouseMapper.Input.MouseButton)Enum.Parse(typeof(ControllerToMouseMapper.Input.MouseButton), mouseBind_action);
+													}
+													catch
+													{
+														continue;
+													}
+													mouseTrigger.Pressed += (_, _) => ControllerToMouseMapper.Input.Mouse.PressButton(mouseAction);
+													mouseTrigger.Released += (_, _) => ControllerToMouseMapper.Input.Mouse.ReleaseButton(mouseAction);
+												}
+											}
+										}
+										if (GameInfo.ContainsKey("keyboardBindGamepad") && GameInfo["keyboardBindGamepad"].Trim() != "")
+										{
+											string mouseBind_txt = GameInfo["keyboardBindGamepad"].Trim();
+											foreach (var mouseBind_elem in mouseBind_txt.Split(","))
+											{
+												var mouseBind_items = mouseBind_elem.Split("=");
+												if (mouseBind_items.Count() == 2)
+												{
+													string mouseBind_trigger = mouseBind_items[0].Trim().ToLower();
+													string mouseBind_action = mouseBind_items[1].Trim();
+													XInputButton mouseTrigger;
+													ControllerToMouseMapper.Input.KeyboardVirtualKey mouseAction;
+
+													if (mouseBind_trigger == "dpadup") mouseTrigger = gamepad.Buttons.DPadUp;
+													else if (mouseBind_trigger == "dpaddown") mouseTrigger = gamepad.Buttons.DPadDown;
+													else if (mouseBind_trigger == "dpadleft") mouseTrigger = gamepad.Buttons.DPadLeft;
+													else if (mouseBind_trigger == "dpadright") mouseTrigger = gamepad.Buttons.DPadRight;
+													else if (mouseBind_trigger == "start") mouseTrigger = gamepad.Buttons.Start;
+													else if (mouseBind_trigger == "back") mouseTrigger = gamepad.Buttons.Back;
+													else if (mouseBind_trigger == "a") mouseTrigger = gamepad.Buttons.A;
+													else if (mouseBind_trigger == "b") mouseTrigger = gamepad.Buttons.B;
+													else if (mouseBind_trigger == "x") mouseTrigger = gamepad.Buttons.X;
+													else if (mouseBind_trigger == "y") mouseTrigger = gamepad.Buttons.Y;
+													else if (mouseBind_trigger == "lb") mouseTrigger = gamepad.Buttons.LB;
+													else if (mouseBind_trigger == "rb") mouseTrigger = gamepad.Buttons.RB;
+													else if (mouseBind_trigger == "ls") mouseTrigger = gamepad.Buttons.LS;
+													else if (mouseBind_trigger == "rs") mouseTrigger = gamepad.Buttons.RS;
+													else
+													{
+														continue;
+													}
+
+													try
+													{
+														mouseAction = (ControllerToMouseMapper.Input.KeyboardVirtualKey)Enum.Parse(typeof(ControllerToMouseMapper.Input.KeyboardVirtualKey), mouseBind_action);
+													}
+													catch
+													{
+														continue;
+													}
+													mouseTrigger.Pressed += (_, _) => ControllerToMouseMapper.Input.Keyboard.TapKey(mouseAction);
+												}
+											}
+										}
+
+										inputLoop = new(time =>
+										{
+											deviceManager.Update();  // All input events will fire here.
+										});
+										inputLoop.Start();  // Start our input loop, to listen for input events.
+
+									}
+
+
+								}
+								if (firstPlayerIsXinputArcade >= 0)
+								{
+									if (GameInfo.ContainsKey("mouseKeyboardToFirstXinputArcade") && GameInfo["mouseKeyboardToFirstXinputArcade"].ToLower() == "true")
+									{
+										XGamepad gamepad = new((XInputUserIndex)firstPlayerIsXinputArcade);
+										XInputDeviceManager deviceManager = new();  // We will use this to monitor all physical XInput devices.
+										deviceManager.DeviceStateChanged += (_, e) =>
+										{
+											if (e.Device.IsConnected)
+												gamepad.Device = e.Device;
+										};
+
+										if (GameInfo.ContainsKey("mouseDpadArcade") && GameInfo["mouseDpadArcade"].ToLower() == "true")
+										{
+											TimeSpan buttonRepeatDelayX = TimeSpan.FromMilliseconds(25);  // When a button is held, how long until it starts repeating?
+											TimeSpan buttonRepeatIntervalX = TimeSpan.FromMilliseconds(10);  // While a held button is repeating, how long is the interval?
+											gamepad.RegisterButtonRepeatEvent(XButtons.DPadRight, buttonRepeatDelayX, buttonRepeatIntervalX, (_, _) =>
+											{
+												TimeSpan duration = gamepad.Buttons.DPadRight.Duration;
+												double accelerationFactor = 1.0;
+												if (duration.TotalSeconds > 3) accelerationFactor = 3.0;
+												else accelerationFactor = 1.0 + (duration.TotalSeconds / 2.0);
+												ControllerToMouseMapper.Input.Mouse.MoveBy(0.0002 * accelerationFactor, 0);
+											});
+											gamepad.RegisterButtonRepeatEvent(XButtons.DPadLeft, buttonRepeatDelayX, buttonRepeatIntervalX, (_, _) =>
+											{
+												TimeSpan duration = gamepad.Buttons.DPadLeft.Duration;
+												double accelerationFactor = 1.0;
+												if (duration.TotalSeconds > 3) accelerationFactor = 3.0;
+												else accelerationFactor = 1.0 + (duration.TotalSeconds / 2.0);
+												ControllerToMouseMapper.Input.Mouse.MoveBy(-0.0002 * accelerationFactor, 0);
+											});
+											gamepad.RegisterButtonRepeatEvent(XButtons.DPadDown, buttonRepeatDelayX, buttonRepeatIntervalX, (_, _) =>
+											{
+												TimeSpan duration = gamepad.Buttons.DPadDown.Duration;
+												double accelerationFactor = 1.0;
+												if (duration.TotalSeconds > 3) accelerationFactor = 3.0;
+												else accelerationFactor = 1.0 + (duration.TotalSeconds / 2.0);
+												ControllerToMouseMapper.Input.Mouse.MoveBy(0, 0.0002 * accelerationFactor);
+											});
+											gamepad.RegisterButtonRepeatEvent(XButtons.DPadUp, buttonRepeatDelayX, buttonRepeatIntervalX, (_, _) =>
+											{
+												TimeSpan duration = gamepad.Buttons.DPadUp.Duration;
+												double accelerationFactor = 1.0;
+												if (duration.TotalSeconds > 3) accelerationFactor = 3.0;
+												else accelerationFactor = 1.0 + (duration.TotalSeconds / 2.0);
+												ControllerToMouseMapper.Input.Mouse.MoveBy(0, -0.0002 * accelerationFactor);
+											});
+
+										}
+
+										if (GameInfo.ContainsKey("mouseBindArcade") && GameInfo["mouseBindArcade"].Trim() != "")
+										{
+											string mouseBind_txt = GameInfo["mouseBindArcade"].Trim();
+											foreach (var mouseBind_elem in mouseBind_txt.Split(","))
+											{
+												var mouseBind_items = mouseBind_elem.Split("=");
+												if (mouseBind_items.Count() == 2)
+												{
+													string mouseBind_trigger = mouseBind_items[0].Trim().ToLower();
+													string mouseBind_action = mouseBind_items[1].Trim();
+													XInputButton mouseTrigger;
+													ControllerToMouseMapper.Input.MouseButton mouseAction;
+
+													if (mouseBind_trigger == "dpadup") mouseTrigger = gamepad.Buttons.DPadUp;
+													else if (mouseBind_trigger == "dpaddown") mouseTrigger = gamepad.Buttons.DPadDown;
+													else if (mouseBind_trigger == "dpadleft") mouseTrigger = gamepad.Buttons.DPadLeft;
+													else if (mouseBind_trigger == "dpadright") mouseTrigger = gamepad.Buttons.DPadRight;
+													else if (mouseBind_trigger == "start") mouseTrigger = gamepad.Buttons.Start;
+													else if (mouseBind_trigger == "back") mouseTrigger = gamepad.Buttons.Back;
+													else if (mouseBind_trigger == "a") mouseTrigger = gamepad.Buttons.A;
+													else if (mouseBind_trigger == "b") mouseTrigger = gamepad.Buttons.B;
+													else if (mouseBind_trigger == "x") mouseTrigger = gamepad.Buttons.X;
+													else if (mouseBind_trigger == "y") mouseTrigger = gamepad.Buttons.Y;
+													else if (mouseBind_trigger == "lb") mouseTrigger = gamepad.Buttons.LB;
+													else if (mouseBind_trigger == "rb") mouseTrigger = gamepad.Buttons.RB;
+													else if (mouseBind_trigger == "ls") mouseTrigger = gamepad.Buttons.LS;
+													else if (mouseBind_trigger == "rs") mouseTrigger = gamepad.Buttons.RS;
+													else
+													{
+														continue;
+													}
+
+													try
+													{
+														mouseAction = (ControllerToMouseMapper.Input.MouseButton)Enum.Parse(typeof(ControllerToMouseMapper.Input.MouseButton), mouseBind_action);
+													}
+													catch
+													{
+														continue;
+													}
+													mouseTrigger.Pressed += (_, _) => ControllerToMouseMapper.Input.Mouse.PressButton(mouseAction);
+													mouseTrigger.Released += (_, _) => ControllerToMouseMapper.Input.Mouse.ReleaseButton(mouseAction);
+												}
+											}
+										}
+
+										if (GameInfo.ContainsKey("keyboardBindArcade") && GameInfo["keyboardBindArcade"].Trim() != "")
+										{
+											string mouseBind_txt = GameInfo["keyboardBindArcade"].Trim();
+											foreach (var mouseBind_elem in mouseBind_txt.Split(","))
+											{
+												var mouseBind_items = mouseBind_elem.Split("=");
+												if (mouseBind_items.Count() == 2)
+												{
+													string mouseBind_trigger = mouseBind_items[0].Trim().ToLower();
+													string mouseBind_action = mouseBind_items[1].Trim();
+													XInputButton mouseTrigger;
+													ControllerToMouseMapper.Input.KeyboardVirtualKey mouseAction;
+
+													if (mouseBind_trigger == "dpadup") mouseTrigger = gamepad.Buttons.DPadUp;
+													else if (mouseBind_trigger == "dpaddown") mouseTrigger = gamepad.Buttons.DPadDown;
+													else if (mouseBind_trigger == "dpadleft") mouseTrigger = gamepad.Buttons.DPadLeft;
+													else if (mouseBind_trigger == "dpadright") mouseTrigger = gamepad.Buttons.DPadRight;
+													else if (mouseBind_trigger == "start") mouseTrigger = gamepad.Buttons.Start;
+													else if (mouseBind_trigger == "back") mouseTrigger = gamepad.Buttons.Back;
+													else if (mouseBind_trigger == "a") mouseTrigger = gamepad.Buttons.A;
+													else if (mouseBind_trigger == "b") mouseTrigger = gamepad.Buttons.B;
+													else if (mouseBind_trigger == "x") mouseTrigger = gamepad.Buttons.X;
+													else if (mouseBind_trigger == "y") mouseTrigger = gamepad.Buttons.Y;
+													else if (mouseBind_trigger == "lb") mouseTrigger = gamepad.Buttons.LB;
+													else if (mouseBind_trigger == "rb") mouseTrigger = gamepad.Buttons.RB;
+													else if (mouseBind_trigger == "ls") mouseTrigger = gamepad.Buttons.LS;
+													else if (mouseBind_trigger == "rs") mouseTrigger = gamepad.Buttons.RS;
+													else
+													{
+														continue;
+													}
+
+													try
+													{
+														mouseAction = (ControllerToMouseMapper.Input.KeyboardVirtualKey)Enum.Parse(typeof(ControllerToMouseMapper.Input.KeyboardVirtualKey), mouseBind_action);
+													}
+													catch
+													{
+														continue;
+													}
+													mouseTrigger.Pressed += (_, _) => ControllerToMouseMapper.Input.Keyboard.TapKey(mouseAction);
+												}
+											}
+										}
+
+										inputLoop = new(time =>
+										{
+											deviceManager.Update();  // All input events will fire here.
+										});
+										inputLoop.Start();  // Start our input loop, to listen for input events.
+
+									}
+
+
+								}
+
 								string argumentTpExe = "--profile=\"" + finalConfig + "\"";
 								if (testMode) argumentTpExe += " --test";
 
@@ -7843,6 +8232,8 @@ _Translate=0.000000,0.000000
 								Thread.Sleep(500);
 								Utils.LogMessage($"End Execution");
 								isExiting = true;
+
+								if(inputLoop != null) inputLoop.Stop();
 
 								ButtonToKeyManager.buttonToKey.StopMonitor();
 								DemulshooterManager.Stop();

@@ -85,7 +85,7 @@ namespace TeknoparrotAutoXinput
 			var infoFile = Path.Combine(basePath, "config", Path.GetFileNameWithoutExtension(GameData.UserConfigFile) + ".info.json");
 			if (File.Exists(infoFile))
 			{
-				txt_info.Text = File.ReadAllText(infoFile);
+				txt_info.Text = Utils.ReadAllText(infoFile);
 				try
 				{
 					var gameInfoParsedJson = JObject.Parse(txt_info.Text);

@@ -2048,7 +2048,8 @@ namespace TeknoparrotAutoXinput
 							}
 						}
 					}
-					if (_haveArcade && DataGame.existingConfig.ContainsKey("arcade"))
+					int debugtest = 3;
+					if (_haveArcade && DataGame.existingConfig.ContainsKey("arcade") && (!_selectedGameInfo.ContainsKey("priorityGamepadOverArcade") || _selectedGameInfo["priorityGamepadOverArcade"].Trim().ToLower() != "true"))
 					{
 						var joystickButtonArcade = Program.ParseConfig(DataGame.existingConfig["arcade"]);
 						var PlayerList = Program.GetPlayersList(joystickButtonArcade);
@@ -2105,6 +2106,33 @@ namespace TeknoparrotAutoXinput
 								if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
 								{
 									ConfigPerPlayer.Add(PlayerXinputSlot, ("gamepad", gamepadList[currentlyAttributed]));
+									currentlyAttributed++;
+								}
+							}
+						}
+					}
+					if (_haveArcade && DataGame.existingConfig.ContainsKey("arcade") && _selectedGameInfo.ContainsKey("priorityGamepadOverArcade") && _selectedGameInfo["priorityGamepadOverArcade"].Trim().ToLower() == "true")
+					{
+						var joystickButtonArcade = Program.ParseConfig(DataGame.existingConfig["arcade"]);
+						var PlayerList = Program.GetPlayersList(joystickButtonArcade);
+						int nb_arcade = _connectedGamePad.Values.Where(c => c.Type == "arcade").Count();
+						int currentlyAttributed = 0;
+						List<XinputGamepad> gamepadList = new List<XinputGamepad>();
+						foreach (var cgp in _connectedGamePad.Values)
+						{
+							if (cgp.Type == "arcade")
+							{
+								gamepadList.Add(cgp);
+							}
+						}
+
+						foreach (var PlayerXinputSlot in PlayerList)
+						{
+							if (currentlyAttributed < nb_arcade)
+							{
+								if (!ConfigPerPlayer.ContainsKey(PlayerXinputSlot))
+								{
+									ConfigPerPlayer.Add(PlayerXinputSlot, ("arcade", gamepadList[currentlyAttributed]));
 									currentlyAttributed++;
 								}
 							}
@@ -2593,7 +2621,7 @@ namespace TeknoparrotAutoXinput
 								{
 									string directorySource = Path.GetDirectoryName(patchJsonFile);
 									directorySource = Path.GetDirectoryName(directorySource);
-									string jsonData = File.ReadAllText(patchJsonFile);
+									string jsonData = Utils.ReadAllText(patchJsonFile);
 									List<PatchInfoJsonElement> patchInfoJson = JsonConvert.DeserializeObject<List<PatchInfoJsonElement>>(jsonData);
 									foreach (var patch in patchInfoJson)
 									{
@@ -2634,7 +2662,7 @@ namespace TeknoparrotAutoXinput
 							string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", Path.GetFileNameWithoutExtension(DataGame.UserConfigFile) + ".json");
 							if (File.Exists(optionFile))
 							{
-								gameOptionsSelectedGame = new GameSettings(File.ReadAllText(optionFile));
+								gameOptionsSelectedGame = new GameSettings(Utils.ReadAllText(optionFile));
 							}
 							string linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, Path.GetFileNameWithoutExtension(DataGame.FileName));
 							if (gameOptionsSelectedGame != null && gameOptionsSelectedGame.CustomPerGameLinkFolder != null && gameOptionsSelectedGame.CustomPerGameLinkFolder != "")
@@ -2654,7 +2682,7 @@ namespace TeknoparrotAutoXinput
 								{
 									string directorySource = Path.GetDirectoryName(patchJsonFile);
 									directorySource = Path.GetDirectoryName(directorySource);
-									string jsonData = File.ReadAllText(patchJsonFile);
+									string jsonData = Utils.ReadAllText(patchJsonFile);
 									List<PatchInfoJsonElement> patchInfoJson = JsonConvert.DeserializeObject<List<PatchInfoJsonElement>>(jsonData);
 									foreach (var patch in patchInfoJson)
 									{
@@ -2732,7 +2760,7 @@ namespace TeknoparrotAutoXinput
 								{
 									foreach (var file in magpieReshadeFile)
 									{
-										var content = File.ReadAllText(file);
+										var content = Utils.ReadAllText(file);
 										string existingTechniques = Regex.Match(content, @"^Techniques=(.*)", RegexOptions.Multiline).Groups[1].Value.Trim('\n').Trim('\r').Trim('\n');
 										foreach (var technique in existingTechniques.Split(','))
 										{
@@ -2768,7 +2796,7 @@ namespace TeknoparrotAutoXinput
 											if (file.ToLower().EndsWith(".png")) continue;
 											if (usedShaders.Contains(Path.GetFileName(file).ToLower()))
 											{
-												string fileContent = File.ReadAllText(file);
+												string fileContent = Utils.ReadAllText(file);
 												string pattern = "\"[^\"]*\\.(png|fx|fxh)\"";
 												MatchCollection matches = Regex.Matches(fileContent, pattern);
 												foreach (Match match in matches)
@@ -2946,7 +2974,7 @@ namespace TeknoparrotAutoXinput
 							string optionFile = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "gameoptions", patchInfoJson.Game + ".json");
 							if (File.Exists(optionFile))
 							{
-								gameOptionsSelectedGame = new GameSettings(File.ReadAllText(optionFile));
+								gameOptionsSelectedGame = new GameSettings(Utils.ReadAllText(optionFile));
 							}
 							string linkSourceFolderExe = Path.Combine(ConfigurationManager.MainConfig.perGameLinkFolderExe, patchInfoJson.Game);
 							if (gameOptionsSelectedGame != null && gameOptionsSelectedGame.CustomPerGameLinkFolder != null && gameOptionsSelectedGame.CustomPerGameLinkFolder != "")

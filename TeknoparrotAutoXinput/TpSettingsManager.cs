@@ -20,7 +20,7 @@ namespace TeknoparrotAutoXinput
 
 		public static void setOriginalXML(string xmlFile)
 		{
-			OriginalXML = File.ReadAllText(xmlFile);
+			OriginalXML = Utils.ReadAllText(xmlFile);
 			xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(OriginalXML);
 			XmlNode patreonNode = xmlDoc.SelectSingleNode("//GameProfile/Patreon");

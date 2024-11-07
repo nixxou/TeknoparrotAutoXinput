@@ -20,7 +20,14 @@
     "magpieAllowScalingMaximized": "True",
     "magpieLaunchBefore": "False",
     "magpieNoMoveWindow": "False",
-	"magpieShowCursor": "True"
+    "magpieShowCursor": "True",
+    "mouseKeyboardToFirstXinputGamepad": "True",
+    "mouseLeftJoySpeed": "0.02",
+    "mouseBindGamepad": "B=Left",
+    "mouseKeyboardToFirstXinputArcade": "True",
+    "mouseDpadArcade": "True",
+    "mouseBindArcade": "X=Left",
+    "priorityGamepadOverArcade": "True"
   },
   "tpoptions": {
     "set_displaymode_recommanded": {

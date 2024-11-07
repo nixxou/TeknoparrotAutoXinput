@@ -18,7 +18,10 @@
     "magpieDisableDirectFlip": "False",
     "magpieAllowScalingMaximized": "False",
     "magpieLaunchBefore": "False",
-    "magpieNoMoveWindow": "False"
+    "magpieNoMoveWindow": "False",
+    "MouseKeyboardToFirstXinputGamepad" : "True",
+    "MouseRightJoySpeed" : "0.02",
+    "MouseBindGamepad" : "RB=Left"
   },
   "tpoptions": {
     "set_displaymode_recommanded": {
